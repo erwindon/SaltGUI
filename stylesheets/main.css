@@ -1,0 +1,115 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #263238;
+  font-family: Roboto, Helvectia, Arial, sans-serif;
+}
+
+.route {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s; /* Can be used to add transitions between views */
+  position: absolute;
+}
+
+.route.current {
+  opacity: 1;
+  pointer-events: all;
+  z-index: 2;
+}
+
+.run-command {
+  z-index: 3;
+  background-color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 1px;
+}
+
+.popup {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.popup::before {
+  position: absolute;
+  display: block;
+  content: '';
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.86);
+}
+
+.popup h1 {
+  font-weight: normal;
+  font-size: 30px;
+  margin: 0;
+  margin-bottom: 20px;
+}
+
+input {
+  display: block;
+  padding: 7px 10px;
+  margin-bottom: 15px;
+  border-radius: 2px;
+  border: 2px solid #e2e2e2;
+  font-size: 14px;
+  color: #272727;
+}
+
+input:focus {
+  outline: none;
+  border: 2px solid rgba(76, 175, 80, 0.53);
+}
+
+input[type='submit'] {
+  background-color: #4CAF50;
+  color: white;
+  border: 0;
+  margin-top: 25px;
+  cursor: pointer;
+  box-shadow: 0px 4px 2px rgba(33, 33, 33, 0.2);
+  transition: box-shadow 0.2s;
+  margin-bottom: 0;
+}
+
+input[type='submit']:active:not([disabled]) {
+  transform: scale(0.98);
+  box-shadow: 0px 3px 1px rgba(33, 33, 33, 0.2);
+}
+
+input[disabled] {
+  background-color: #292929;
+  opacity: 0.2;
+  cursor: default;
+}
+
+.run-command {
+  padding: 30px;
+  max-width: calc(100% - 90px);
+}
+
+.run-command input[type='submit'] {
+  margin-bottom: 20px;
+}
+
+.run-command pre {
+  background-color: #272727;
+  color: white;
+  margin: 0;
+  padding: 10px;
+  width: 400px;
+  border-radius: 2px;
+  height: 200px;
+  overflow-y: scroll;
+  white-space: normal;
+  max-width: calc(100% - 10px);
+}
+
+*:focus {
+  outline: none;
+}

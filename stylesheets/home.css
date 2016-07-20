@@ -1,0 +1,233 @@
+#home {
+  width: 100%;
+  min-height: 100%;
+}
+
+#home header {
+  border-top: 2px solid #4CAF50;
+  background-color: white;
+  margin-top: 0;
+  padding: 12px 24px 14px 24px;
+  margin-bottom: 5px;
+}
+
+#home h1 {
+  font-weight: lighter;
+  font-size: 30px;
+  margin: 0;
+}
+
+#home .dashboard {
+  display: flex;
+  align-items: flex-start;
+  margin: 10px;
+}
+
+.panel {
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  border-radius: 1px;
+  width: 100%;
+  margin-right: 10px;
+}
+
+.panel:last-of-type {
+  margin-right: 0;
+}
+
+.panel h1 {
+  font-size: 20px;
+}
+
+.minions, .jobs {
+  padding: 0px;
+}
+
+.minions li {
+  list-style: none;
+  border-bottom: 1px solid #4caf50;
+  padding: 10px 0px;
+}
+
+.minions li:last-of-type {
+  border-bottom: 0;
+}
+
+.minions li div {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.minions li div:last-of-type {
+  margin-right: 0;
+}
+
+.run-highstate {
+  color: #263238;
+  float: right;
+  cursor: pointer;
+}
+
+.run-highstate:hover {
+  color: #2E7D32;
+}
+
+.minions li .hostname {
+  font-weight: 500;
+  font-size: 17px;
+}
+
+.minions li .address {
+  color: #3F51B5;
+  cursor: pointer;
+  position: relative;
+
+  /* Screw browser prefixes, am I right?! */
+  user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+
+.minions li .address:before,
+.minions li .address:after {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.minions li .address:before {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin: 0px 0px 5px -50px;
+  padding: 5px 7px;
+  border-radius: 3px;
+  background-color: hsla(0, 0%, 20%, 0.9);
+  color: #fff;
+  content: "Click to copy";
+  text-align: center;
+  font-size: 14px;
+}
+
+.minions li .address:focus:before {
+  content: "Copied!";
+  left: 68%;
+}
+
+.minions li .address:after {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  width: 0;
+  border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+  content: " ";
+}
+
+.minions li .address:hover:before,
+.minions li .address:hover:after {
+  opacity: 1;
+}
+
+.minions li {
+  position: relative;
+}
+
+pre .hostname {
+  color: #4caf50;
+  display: inline-block;
+  margin-top: 12px;
+}
+
+pre .hostname:first-of-type {
+  margin-top: 0;
+}
+
+#run-command-popup {
+  display: none;
+}
+
+#home .fab {
+  background-color: #4caf50;
+  padding: 5px 18px 17px 14px;
+  display: inline-block;
+  position: fixed;
+  right: 1px;
+  font-weight: bold;
+  top: 4px;
+  font-size: 30px;
+  border-radius: 50%;
+  color: white;
+  transform: scale(0.8);
+  cursor: pointer;
+}
+
+#home .fab:hover {
+  opacity: 0.95;
+}
+
+#home .jobs li {
+  list-style: none;
+  border-bottom: 1px solid #4caf50;
+  padding: 10px 18px;
+}
+
+#home .jobs li:last-of-type {
+  border: 0;
+}
+
+#home .jobs li .function {
+  font-weight: 500;
+  font-size: 18px;
+  color: #3a3a3a;
+  display: inline-block;
+}
+
+#home .jobs li .target {
+  font-weight: 500;
+  font-size: 18px;
+  color: #505050;
+  display: inline-block;
+  transform: translateY(4px);
+  margin-left: 7px;
+}
+
+#home .jobs li .time {
+  font-size: 11px;
+  margin-top: 3px;
+}
+
+#home .jobs li:hover {
+  background-color: whitesmoke;
+  cursor: pointer;
+}
+
+.job-list {
+  flex-basis: 50%;
+}
+
+@media(max-width: 1200px) {
+
+  .minions li .run-highstate {
+    display: inline-block;
+    float: none;
+  }
+
+}
+
+@media(max-width: 800px) {
+
+  #home .dashboard {
+    display: block;
+  }
+
+  .panel {
+    width: auto;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+}

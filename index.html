@@ -1,0 +1,64 @@
+<html>
+
+  <head>
+    <title>SaltGUI</title>
+    <link rel='stylesheet' type='text/css' href='stylesheets/main.css' />
+    <link rel='stylesheet' type='text/css' href='stylesheets/login.css' />
+    <link rel='stylesheet' type='text/css' href='stylesheets/home.css' />
+  </head>
+
+  <body>
+    <div class='route-container'>
+
+      <div class='route' id='login'>
+        <form method='post' id='login-form'>
+          <h1>SaltGUI</h1>
+          <div class='notice-wrapper'>
+            <div class='notice'>Authentication failed.</div>
+          </div>
+          <input id='username' type='text' placeholder='Username' />
+          <input id='password' type='password' placeholder='Password' />
+          <input type='submit' value='Login'/>
+          <div class='attribution'>
+            <img src='images/github.png' />SaltGUI v1.0
+          </div>
+        </form>
+      </div>
+
+      <div class='route' id='home'>
+        <header>
+          <h1 class='logo'>SaltGUI</h1>
+        </header>
+        <div class='dashboard'>
+          <div class='panel minion-list'>
+            <h1>Your Minions</h1>
+            <ul class='minions'></ul>
+          </div>
+          <div class='panel job-list'>
+            <h1>Recent Jobs</h1>
+            <ul class='jobs'></ul>
+          </div>
+        </div>
+        <div class='fab'>&gt;_</div>
+      </div>
+
+    </div>
+
+    <div class='popup' id='run-command-popup'>
+      <div class='run-command'>
+        <h1>Manual Run</h1>
+        <input id='target' type='text' placeholder="Target"/>
+        <input id='command' type='text' placeholder="Command"/>
+        <input type='submit' value="Run command"/>
+        <pre class='output'>Waiting for command...</pre>
+      </div>
+    </div>
+
+    <script src='scripts/api.js'></script>
+    <script src='scripts/routes/route.js'></script>
+    <script src='scripts/routes/login.js'></script>
+    <script src='scripts/routes/home.js'></script>
+    <script src='scripts/router.js'></script>
+  </body>
+
+</html>
