@@ -139,7 +139,7 @@ class HomeRoute extends Route {
       return minutes + " minutes ago";
     }
 
-    if(econdsPassed < 60 * 60 * 24) {
+    if(secondsPassed < 60 * 60 * 24) {
       var hours = Math.round(secondsPassed / 60 / 60);
       return hours + " hours ago";
     }
