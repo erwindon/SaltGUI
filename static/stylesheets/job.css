@@ -1,0 +1,52 @@
+#job .job-info {
+  margin: 10px;
+}
+
+#job .job-info h1 {
+  font-size: 30px;
+}
+
+#job .time {
+  font-size: 15px;
+  margin-top: 3px;
+  font-weight: normal;
+}
+
+#job .task {
+  color: white;
+  padding: 3px 8px;
+  border-radius: 2px;
+  margin-top: 10px;
+  background-color: #4caf50;
+  cursor: default;
+  display: block;
+}
+
+#job .task.failure {
+  background-color: rgba(218, 41, 28, 0.31);
+  color: black;
+}
+
+#job .host {
+  background-color: #f9f9f9;
+  padding: 12px 20px 12px 20px;
+  margin-top: 10px;
+  cursor: pointer;
+  border: 1px solid #e6e6e6;
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+#job .host:hover {
+  background-color: #efefef;
+}
+
+#job .host h1 {
+  font-size: 18px;
+  font-weight: normal;
+}
+
+#job .task .comment,
+#job .task .duration {
+  font-size: 12px;
+}

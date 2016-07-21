@@ -3,70 +3,21 @@ class HomeRoute extends Route {
   constructor(router) {
     super("^[\/]$", "Home", "#home");
     this.router = router;
+    this.minionsLoaded = false;
+    this.jobsLoaded = false;
 
     this._updateMinions = this._updateMinions.bind(this);
     this._updateJobs = this._updateJobs.bind(this);
-    this._onRun = this._onRun.bind(this);
-    this._onRunReturn = this._onRunReturn.bind(this);
-    this.registerEventListeners();
-  }
-
-  registerEventListeners() {
-    document.querySelector(".run-command input[type='submit']")
-      .addEventListener('click', this._onRun);
-    document.querySelector("#run-command-popup")
-      .addEventListener('click', this._toggleManualRun);
-    document.querySelector("#home .fab")
-      .addEventListener('click', this._toggleManualRun);
-  }
-
-  _toggleManualRun(evt) {
-    var manualRun = document.querySelector("#run-command-popup");
-    var isShowing = manualRun.style.display !== "none"
-      && manualRun.style.display !== "";
-
-    //Don't close if they click inside the window
-    if(isShowing && evt.target.className !== "popup") return;
-    manualRun.style.display = isShowing ? "none" : "block";
-  }
-
-  _onRun() {
-    var button = document.querySelector(".run-command input[type='submit']");
-    var output = document.querySelector(".run-command pre");
-    if(button.disabled) return;
-
-    var target = document.querySelector(".run-command #target").value;
-    var command = document.querySelector(".run-command #command").value;
-    if(target === "" || command === "") return;
-
-    button.disabled = true;
-    output.innerHTML = "Loading...";
-
-    this.router.api.runFunction(target, command)
-    .then(this._onRunReturn, this._onRunReturn);
-  }
-
-  _onRunReturn(data) {
-    var response = data.return[0];
-    var hostnames = Object.keys(response);
-
-    var outputContainer = document.querySelector(".run-command pre");
-    outputContainer.innerHTML = "";
-
-    for(var i = 0; i < hostnames.length; i++) {
-      var hostname = hostnames[i];
-      var output = response[hostname];
-      outputContainer.innerHTML +=
-        `<div class='hostname'>${hostname}</div>: ${output}<br>`;
-    }
-
-    var button = document.querySelector(".run-command input[type='submit']");
-    button.disabled = false;
   }
 
   onShow() {
-    this.router.api.getMinions().then(this._updateMinions);
-    this.router.api.getJobs().then(this._updateJobs);
+    var home = this;
+    return new Promise(function(resolve, reject) {
+      home.resolvePromise = resolve;
+      if(home.minionsLoaded && home.jobsLoaded) resolve();
+      home.router.api.getMinions().then(home._updateMinions);
+      home.router.api.getJobs().then(home._updateJobs);
+    });
   }
 
   _updateMinions(data) {
@@ -81,6 +32,8 @@ class HomeRoute extends Route {
       minion.hostname = hostnames[i];
       this._addMinion(list, minion);
     }
+    this.minionsLoaded = true;
+    if(this.minionsLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
   _addMinion(container, minion) {
@@ -102,6 +55,7 @@ class HomeRoute extends Route {
 
   _updateJobs(data) {
     var jobContainer = document.querySelector("#home .jobs");
+    jobContainer.innerHTML = "";
     var jobs = this._jobsToArray(data.return[0]);
     this._sortJobs(jobs);
 
@@ -117,43 +71,27 @@ class HomeRoute extends Route {
       this._addJob(jobContainer, job);
       shown = shown + 1;
     }
+    this.jobsLoaded = true;
+    if(this.minionsLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
   _addJob(container, job) {
     var element = document.createElement('li');
+    element.id = job.id;
 
     element.appendChild(this._createDiv("function", job.Function));
     element.appendChild(this._createDiv("target", job.Target));
     element.appendChild(this._createDiv("time",
-      this._elapsedString(new Date(job.StartTime))));
+      elapsedToString(new Date(job.StartTime))));
     container.appendChild(element);
+    element.addEventListener('click', this._createJobListener(job.id));
   }
 
-  _elapsedString(date) {
-    var secondsPassed = (new Date().getTime() / 1000) - (date.getTime() / 1000);
-    if(secondsPassed < 20) return "A few moments ago";
-    if(secondsPassed < 120) return "A few minutes ago";
-
-    if(secondsPassed < 60 * 60) {
-      var minutes = Math.round(secondsPassed / 60);
-      return minutes + " minutes ago";
-    }
-
-    if(secondsPassed < 60 * 60 * 24) {
-      var hours = Math.round(secondsPassed / 60 / 60);
-      return hours + " hours ago";
-    }
-
-    if(secondsPassed < 60 * 60 * 24 * 2) {
-      return "Yesterday";
-    }
-
-    if(secondsPassed < 60 * 60 * 24 * 30) {
-      var days = Math.round(secondsPassed / 60 / 60 / 24);
-      return days + " days ago";
-    }
-
-    return "A long time ago, in a galaxy far, far away";
+  _createJobListener(id) {
+    var router = this.router;
+    return function() {
+      router.goTo("/job?id=" + id);
+    };
   }
 
   _jobsToArray(jobs) {

@@ -1,8 +1,11 @@
 #login {
   display: flex;
   justify-content: center;
-  height: 100%;
   width: 100%;
+  background-color: #263238;
+  position: absolute;
+  height: 100%;
+  top: 0;
 }
 
 #login-form {

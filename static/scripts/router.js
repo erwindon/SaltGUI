@@ -6,8 +6,19 @@ class Router {
     this.routes = [];
     this.registerRoute(new LoginRoute(this, this.api));
     this.registerRoute(new HomeRoute(this, this.api));
+    this.registerRoute(new JobRoute(this, this.api));
 
-    this.goTo("/login"); //Default page
+    this._registerEventListeners();
+    this.goTo(this.api.isAuthenticated() ?
+      window.location.pathname + window.location.search : "/login");
+  }
+
+  _registerEventListeners() {
+    var router = this;
+    document.querySelector('.logo').addEventListener('click', _ => {
+      if(window.location.pathname === "/login") return;
+      router.goTo("/");
+    });
   }
 
   registerRoute(route) {
@@ -16,26 +27,38 @@ class Router {
   }
 
   goTo(path) {
+    if(this.switchingRoute) return;
+    if(window.location.pathname === path && this.currentRoute) return;
     for(var i = 0; i < this.routes.length; i++) {
       var route = this.routes[i];
-      if(!route.getPath().test(path)) continue;
+      if(!route.getPath().test(path.split("?")[0])) continue;
 
-      this.showRoute(route);
       window.history.pushState({}, undefined, path);
+      this.showRoute(route);
       return;
     }
   }
 
   showRoute(route) {
+    var router = this;
+    router.switchingRoute = true;
 
-    if(this.currentRoute !== undefined) {
-      this.hideRoute(this.currentRoute);
-    }
+    var afterLoad = function() {
+      if(router.currentRoute !== undefined) {
+        router.hideRoute(router.currentRoute);
+      }
 
-    this.currentRoute = route;
-    document.title = "SaltGUI - " + this.currentRoute.getName();
-    this.currentRoute.getElement().className = 'route current';
-    if(this.currentRoute.onShow) this.currentRoute.onShow();
+      router.currentRoute = route;
+      document.title = "SaltGUI - " + router.currentRoute.getName();
+      router.currentRoute.getElement().className = 'route current';
+      router.switchingRoute = false;
+    };
+
+    var response = undefined;
+    if(route.onShow) response = route.onShow();
+
+    if(response && response.then) response.then(afterLoad);
+    else afterLoad();
   }
 
   hideRoute(route) {

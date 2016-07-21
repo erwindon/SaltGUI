@@ -5,9 +5,15 @@
     <link rel='stylesheet' type='text/css' href='static/stylesheets/main.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/login.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/home.css' />
+    <link rel='stylesheet' type='text/css' href='static/stylesheets/job.css' />
   </head>
 
   <body>
+    <header>
+      <h1 class='logo'>SaltGUI</h1>
+      <div class='fab'>&gt;_</div>
+    </header>
+
     <div class='route-container'>
 
       <div class='route' id='login'>
@@ -26,9 +32,6 @@
       </div>
 
       <div class='route' id='home'>
-        <header>
-          <h1 class='logo'>SaltGUI</h1>
-        </header>
         <div class='dashboard'>
           <div class='panel minion-list'>
             <h1>Your Minions</h1>
@@ -39,7 +42,14 @@
             <ul class='jobs'></ul>
           </div>
         </div>
-        <div class='fab'>&gt;_</div>
+      </div>
+
+      <div class='route' id='job'>
+        <div class='panel job-info'>
+          <h1 class='function'></h1>
+          <h2 class='time'></h2>
+          <div class='hosts'></div>
+        </div>
       </div>
 
     </div>
@@ -54,10 +64,12 @@
       </div>
     </div>
 
+    <script src='static/scripts/utils.js'></script>
     <script src='static/scripts/api.js'></script>
     <script src='static/scripts/routes/route.js'></script>
     <script src='static/scripts/routes/login.js'></script>
     <script src='static/scripts/routes/home.js'></script>
+    <script src='static/scripts/routes/job.js'></script>
     <script src='static/scripts/router.js'></script>
   </body>
 

@@ -1,6 +1,6 @@
 class LoginRoute extends Route{
 
-  constructor(router, api) {
+  constructor(router) {
     super("^[\/]login$", "Login", "#login");
     this.router = router;
 
