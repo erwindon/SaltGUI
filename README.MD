@@ -21,7 +21,7 @@ A new open source web interface for managing a SaltStack server. Built using van
       - .*
       - '@runner'
       - '@wheel'
-      - '@jobs'
+      - '@jobs'```
 - Make sure to create this user, and set a password via the command line
 - At the bottom of this file, also setup the rest_cherrypi server:
 - ```rest_cherrypy:
@@ -30,7 +30,7 @@ A new open source web interface for managing a SaltStack server. Built using van
   disable_ssl: true
   app: /srv/salt-gui/index.html
   static: /srv/salt-gui/static
-  static_path: /static
+  static_path: /static```
 - Replace `/srv/salt-gui` in the above config with a directory containing SaltGUI.
 - Restart everything with ``pkill salt-master && pkill salt-api && salt-master -d && salt-api -d``
 - You should be good to go. If you have any problems, open a GitHub issue. As always, SSL is recommended wherever possible but setup is beyond the scope of this guide.
