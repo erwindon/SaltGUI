@@ -12,10 +12,27 @@ A new open source web interface for managing a SaltStack server. Built using van
 - Manually run any Salt function and see the output
 
 ## Installation
-- Documentation to be added soon (want to write it properly before publishing anything)
-- For now, the suggested method for trying SaltGUI is to run it as a rest_cherrypi app. Running the client on a separate domain is possible, but requires NGINX in order to add headers allowing the browser to make requests.
-- Open an issue if you can't figure something out, but https://github.com/Lothiraldan/saltpad/blob/master/docs/installation/salt-api-cherrypy-embedded.md may be a good place to start if you're willing to pick and choose which bits are relevent (of course, use SaltGUI rather than the SaltPad files).
-- If you plan to use the API on a different domain, set this.APIURL in scripts/API.js to http://yourdomain.com
-
+- Install `salt-api` - this is available in the Salt PPA package which should already been installed if you're using Salt
+- Open the master config /etc/salt/master
+- Find `external_auth` and add a user as follows:
+- ```external_auth:
+  pam:
+    desiredSaltpadUsername:
+      - .*
+      - '@runner'
+      - '@wheel'
+      - '@jobs'
+- Make sure to create this user, and set a password via the command line
+- At the bottom of this file, also setup the rest_cherrypi server:
+- ```rest_cherrypy:
+  port: 8000
+  host: 0.0.0.0
+  disable_ssl: true
+  app: /srv/salt-gui/index.html
+  static: /srv/salt-gui/static
+  static_path: /static
+- Replace `/srv/salt-gui` in the above config with a directory containing SaltGUI.
+- Restart everything with ``pkill salt-master && pkill salt-api && salt-master -d && salt-api -d``
+- You should be good to go. If you have any problems, open a GitHub issue. As always, SSL is recommended wherever possible but setup is beyond the scope of this guide.
 ## Contributing
 - Just open a PR! Try to use no dependencies where possible, as vanilla JS is the aim. Any libraries will need to be heavily considered first.
