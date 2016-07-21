@@ -41,6 +41,7 @@ class Router {
 
   showRoute(route) {
     var router = this;
+    route.getElement().style.display = "";
     router.switchingRoute = true;
 
     var afterLoad = function() {
@@ -63,6 +64,10 @@ class Router {
 
   hideRoute(route) {
     route.getElement().className = 'route';
+    setTimeout(function() {
+      //Hide element after fade, so it does not expand the body
+      route.getElement().style.display = "none";
+    }, 500);
     if(route.onHide) route.onHide();
   }
 
