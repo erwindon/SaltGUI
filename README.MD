@@ -15,22 +15,25 @@ A new open source web interface for managing a SaltStack server. Built using van
 - Install `salt-api` - this is available in the Salt PPA package which should already been installed if you're using Salt
 - Open the master config /etc/salt/master
 - Find `external_auth` and add a user as follows:
-- ```external_auth:
+```
+external_auth:
   pam:
     desiredSaltpadUsername:
       - .*
       - '@runner'
       - '@wheel'
-      - '@jobs'```
+      - '@jobs'
+```
 - Make sure to create this user, and set a password via the command line
 - At the bottom of this file, also setup the rest_cherrypi server:
-- ```rest_cherrypy:
+```rest_cherrypy:
   port: 8000
   host: 0.0.0.0
   disable_ssl: true
   app: /srv/salt-gui/index.html
   static: /srv/salt-gui/static
-  static_path: /static```
+  static_path: /static
+```
 - Replace `/srv/salt-gui` in the above config with a directory containing SaltGUI.
 - Restart everything with ``pkill salt-master && pkill salt-api && salt-master -d && salt-api -d``
 - You should be good to go. If you have any problems, open a GitHub issue. As always, SSL is recommended wherever possible but setup is beyond the scope of this guide.
