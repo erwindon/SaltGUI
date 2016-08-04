@@ -39,5 +39,6 @@ external_auth:
 - Replace `/srv/salt-gui` in the above config with a directory containing SaltGUI.
 - Restart everything with ``pkill salt-master && pkill salt-api && salt-master -d && salt-api -d``
 - You should be good to go. If you have any problems, open a GitHub issue. As always, SSL is recommended wherever possible but setup is beyond the scope of this guide.
+
 ## Contributing
 - Just open a PR! Try to use no dependencies where possible, as vanilla JS is the aim. Any libraries will need to be heavily considered first.
