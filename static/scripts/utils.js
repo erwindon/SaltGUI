@@ -44,7 +44,7 @@ window.getQueryParam = function(name) {
 }
 
 window.escape = function(input) {
-  let div = document.createElement('div');
+  var div = document.createElement('div');
   div.appendChild(document.createTextNode(input));
   return div.innerHTML;
 }

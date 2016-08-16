@@ -29,7 +29,7 @@ class JobRoute extends Route {
 
     var hostnames = Object.keys(info.Result);
     hostnames.forEach(function(hostname) {
-      var result = info.Result[hostname].return;
+      var result = window.escape(info.Result[hostname].return);
       job._addHost(job.getElement().querySelector(".hosts"), hostname, result);
     });
     this.resolvePromise();
