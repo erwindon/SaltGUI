@@ -44,7 +44,10 @@ class API {
 
     for(var i = 0; i < hostnames.length; i++) {
       var hostname = hostnames[i];
+
       var output = response[hostname];
+      output = window.escape(output);
+
       outputContainer.innerHTML +=
         `<div class='hostname'>${hostname}</div>: ${output}<br>`;
     }
