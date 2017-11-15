@@ -79,6 +79,7 @@ h1 {
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 1px;
+  white-space: pre-wrap;
 }
 
 .popup {
@@ -146,6 +147,7 @@ input[disabled] {
 .run-command {
   padding: 30px;
   max-width: calc(100% - 90px);
+  width: calc(90% - 90px);;
 }
 
 .run-command input[type='submit'] {
@@ -157,12 +159,12 @@ input[disabled] {
   color: white;
   margin: 0;
   padding: 10px;
-  width: 400px;
   border-radius: 2px;
   height: 200px;
   overflow-y: scroll;
-  white-space: normal;
+  white-space: pre-wrap;
   max-width: calc(100% - 10px);
+  width: calc(100% - 10px);
 }
 
 *:focus {

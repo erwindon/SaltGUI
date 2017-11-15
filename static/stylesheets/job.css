@@ -14,12 +14,14 @@
 
 #job .task {
   color: white;
+  font-family: monospace;
   padding: 3px 8px;
   border-radius: 2px;
   margin-top: 10px;
   background-color: #4caf50;
   cursor: default;
   display: block;
+  white-space: pre-wrap;
 }
 
 #job .task.failure {
