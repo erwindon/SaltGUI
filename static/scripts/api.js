@@ -46,7 +46,12 @@ class API {
       var hostname = hostnames[i];
 
       var output = response[hostname];
-      output = window.escape(output);
+
+      // when you do a salt.apply for example you get a json response.
+      // let's format it nicely here
+      if (typeof(output) == 'object') {
+        output = JSON.stringify(output, null, 2);
+      }
 
       outputContainer.innerHTML +=
         `<div class='hostname'>${hostname}</div>: ${output}<br>`;
