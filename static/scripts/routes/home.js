@@ -8,6 +8,7 @@ class HomeRoute extends Route {
 
     this._updateMinions = this._updateMinions.bind(this);
     this._updateJobs = this._updateJobs.bind(this);
+    this._runHighState = this._runHighState.bind(this);
   }
 
   onShow() {
@@ -49,7 +50,13 @@ class HomeRoute extends Route {
     address.addEventListener('click', this._copyAddress);
 
     element.appendChild(this._createDiv("os", minion.lsb_distrib_description));
-    element.appendChild(this._createDiv("run-highstate", "Sync state &#9658;"));
+    var highStateButton = this._createDiv("run-highstate", "Sync state &#9658;");
+
+    highStateButton.addEventListener('click', evt => {
+      this._runHighState(minion.hostname, evt);
+    });
+
+    element.appendChild(highStateButton);
     container.appendChild(element);
   }
 
@@ -137,4 +144,11 @@ class HomeRoute extends Route {
     document.execCommand("copy");
   }
 
+  _runHighState(hostname, evt) {
+    this.router.api._toggleManualRun(evt);
+    var target = document.querySelector("#target");
+    var command = document.querySelector("#command");
+    target.value = hostname;
+    command.value = "state.apply";
+  }
 }
