@@ -29,12 +29,30 @@ class HomeRoute extends Route {
     var hostnames = Object.keys(minions);
 
     for(var i = 0; i < hostnames.length; i++) {
-      var minion = minions[hostnames[i]];
-      minion.hostname = hostnames[i];
-      this._addMinion(list, minion);
+      var minion_info = minions[hostnames[i]];
+
+      // minions can be offline, then the info will be false
+      if (minion_info === false) {
+        this._addOfflineMinion(list, hostnames[i]);
+      } else {
+        var minion = minions[hostnames[i]];
+        minion.hostname = hostnames[i];
+        this._addMinion(list, minion);
+      }
     }
     this.minionsLoaded = true;
     if(this.minionsLoaded && this.jobsLoaded) this.resolvePromise();
+  }
+
+  _addOfflineMinion(container, hostname) {
+    var element = document.createElement('li');
+
+    element.appendChild(this._createDiv("hostname", hostname));
+
+    var offline = this._createDiv("offline", "offline");
+
+    element.appendChild(offline);
+    container.appendChild(element);
   }
 
   _addMinion(container, minion) {
