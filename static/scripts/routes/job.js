@@ -39,6 +39,12 @@ class JobRoute extends Route {
     var host = createElement("div", "host", `<h1>${hostname}</h1>`);
     host.addEventListener('click', this._onHostClick);
 
+    // when you do a salt.apply for example you get a json response.
+    // let's format it nicely here
+    if (typeof result  === "object") {
+      result = JSON.stringify(result, null, 2);
+    }
+
     if(typeof result === "string") {
       var task = createElement("div", "task", "");
       task.appendChild(createElement("div", "name", result));
