@@ -14,7 +14,6 @@ class JobRoute extends Route {
       job.router.api.getJob(window.getQueryParam("id"))
       .then(job._onJobData);
     });
-    return promise;
   }
 
   _onJobData(data) {
@@ -33,7 +32,7 @@ class JobRoute extends Route {
       // when you do a salt.apply for example you get a json response.
       // let's format it nicely here
       var result = info.Result[hostname].return
-      if (typeof(result) == "object") {
+      if (typeof result === "object") {
         result = JSON.stringify(result, null, 2);
       } else {
         result = window.escape(result);

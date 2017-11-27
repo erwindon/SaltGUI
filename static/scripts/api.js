@@ -49,7 +49,7 @@ class API {
 
       // when you do a salt.apply for example you get a json response.
       // let's format it nicely here
-      if (typeof(output) == 'object') {
+      if (typeof output === 'object') {
         output = JSON.stringify(output, null, 2);
       }
 
