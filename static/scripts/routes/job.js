@@ -29,7 +29,15 @@ class JobRoute extends Route {
 
     var hostnames = Object.keys(info.Result);
     hostnames.forEach(function(hostname) {
-      var result = window.escape(info.Result[hostname].return);
+      
+      // when you do a salt.apply for example you get a json response.
+      // let's format it nicely here
+      var result = info.Result[hostname].return
+      if (typeof(result) == "object") {
+        result = JSON.stringify(result, null, 2);
+      } else {
+        result = window.escape(result);
+      }
       job._addHost(job.getElement().querySelector(".hosts"), hostname, result);
     });
     this.resolvePromise();
@@ -38,12 +46,6 @@ class JobRoute extends Route {
   _addHost(container, hostname, result) {
     var host = createElement("div", "host", `<h1>${hostname}</h1>`);
     host.addEventListener('click', this._onHostClick);
-
-    // when you do a salt.apply for example you get a json response.
-    // let's format it nicely here
-    if (typeof result  === "object") {
-      result = JSON.stringify(result, null, 2);
-    }
 
     if(typeof result === "string") {
       var task = createElement("div", "task", "");
