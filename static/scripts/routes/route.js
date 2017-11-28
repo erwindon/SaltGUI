@@ -18,4 +18,11 @@ class Route {
     return this.element;
   }
 
+  _createDiv(className, content) {
+    var div = document.createElement('div');
+    div.className = className;
+    div.innerHTML = content;
+    return div;
+  }
+
 }

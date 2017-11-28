@@ -144,13 +144,6 @@ class HomeRoute extends Route {
     });
   }
 
-  _createDiv(className, content) {
-    var div = document.createElement('div');
-    div.className = className;
-    div.innerHTML = content;
-    return div;
-  }
-
   _copyAddress(evt) {
     var target = evt.target;
     var selection = window.getSelection();
