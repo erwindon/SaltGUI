@@ -23,8 +23,7 @@ class JobRoute extends Route {
 
     var container = this.getElement().querySelector(".job-info");
     container.querySelector('.function').innerHTML = info.Function;
-    container.querySelector('.time').innerHTML =
-      elapsedToString(new Date(info.StartTime));
+    container.querySelector('.time').innerHTML = info.StartTime;
 
     var hostnames = Object.keys(info.Result);
     hostnames.forEach(function(hostname) {

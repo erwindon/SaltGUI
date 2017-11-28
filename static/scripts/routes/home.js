@@ -106,8 +106,7 @@ class HomeRoute extends Route {
 
     element.appendChild(this._createDiv("function", job.Function));
     element.appendChild(this._createDiv("target", job.Target));
-    element.appendChild(this._createDiv("time",
-      elapsedToString(new Date(job.StartTime))));
+    element.appendChild(this._createDiv("time", job.StartTime));
     container.appendChild(element);
     element.addEventListener('click', this._createJobListener(job.id));
   }
