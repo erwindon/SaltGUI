@@ -48,12 +48,14 @@
 .minions li .hostname {
   font-weight: 500;
   font-size: 17px;
+  min-width: 200px;
 }
 
 .minions li .address {
   color: #3F51B5;
   cursor: pointer;
   position: relative;
+  min-width: 80px;
 
   /* Screw browser prefixes, am I right?! */
   user-select: none;
