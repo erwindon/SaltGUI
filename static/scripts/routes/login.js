@@ -31,6 +31,17 @@ class LoginRoute extends Route{
 
   onLoginSuccess() {
     this.toggleForm(true);
+
+    var notice = document.querySelector('.notice-wrapper');
+
+    var success = this._createDiv("notice", "Please wait...");
+    success.style.backgroundColor = "#4CAF50"
+    notice.replaceChild(success, notice.firstChild);
+
+    notice.className = 'notice-wrapper';
+    notice.focus(); //Used to trigger a reflow (to restart animation)
+    notice.className = 'notice-wrapper show';
+
     this.router.goTo("/");
   }
 
@@ -39,6 +50,11 @@ class LoginRoute extends Route{
     this.toggleForm(true);
 
     var notice = document.querySelector('.notice-wrapper');
+
+    var authFailed = this._createDiv("notice", "Authentication failed");
+    authFailed.style.backgroundColor = "#F44336"
+
+    notice.replaceChild(authFailed, notice.firstChild);
     notice.className = 'notice-wrapper';
     notice.focus(); //Used to trigger a reflow (to restart animation)
     notice.className = 'notice-wrapper show';

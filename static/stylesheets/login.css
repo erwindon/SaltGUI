@@ -53,7 +53,7 @@
 .notice-wrapper.show {
   animation-name: shownotice;
   animation-iteration-count: 1;
-  animation-duration: 3s;
+  animation-duration: 5s;
 }
 
 @keyframes shownotice {
@@ -64,10 +64,10 @@
 }
 
 .notice {
-  background-color: #F44336;
   color: white;
   padding: 9px 0px;
   border-radius: 2px;
   text-align: center;
   font-size: 15px;
+  width:200px;
 }
