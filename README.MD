@@ -42,3 +42,11 @@ external_auth:
 
 ## Contributing
 - Just open a PR! Try to use no dependencies where possible, as vanilla JS is the aim. Any libraries will need to be heavily considered first.
+
+## Credits
+This excellent frontend is originally written by [Oliver Dunk](https://github.com/oliverdunk).
+
+## Changelog
+
+## 1.0.0 (2018-03-07)
+Original release with some styling fixes and with enabled the highstate functionality.
