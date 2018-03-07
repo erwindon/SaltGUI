@@ -1,0 +1,32 @@
+version: '3'
+services:
+  saltmaster-local:
+    build:
+        context: . 
+        dockerfile: ./dockerfiles/dockerfile-saltmaster
+    ports: 
+      - 4505:4505
+      - 4506:4506
+      - 3333:3333
+    volumes:
+    - ./salt:/srv/salt
+    - ../:/saltgui
+    entrypoint: /usr/bin/supervisord
+
+  saltminion-ubuntu:
+    build:
+        context: . 
+        dockerfile: ./dockerfiles/dockerfile-saltminion-ubuntu
+    depends_on:
+      - "saltmaster-local"
+    entrypoint: /usr/local/bin/wait-for-saltmaster.sh saltmaster-local 4505
+    command: /usr/bin/salt-minion
+
+  saltminion-debian:
+    build:
+        context: . 
+        dockerfile: ./dockerfiles/dockerfile-saltminion-debian
+    depends_on:
+      - "saltmaster-local"
+    entrypoint: /usr/local/bin/wait-for-saltmaster.sh saltmaster-local 4505
+    command: /usr/bin/salt-minion

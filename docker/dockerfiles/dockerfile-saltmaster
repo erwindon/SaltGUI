@@ -1,0 +1,27 @@
+FROM ubuntu
+MAINTAINER Martijn Jacobs <martijn@devopsconsulting.nl>
+
+ENV REFRESHED_ON "7 Mar 2018"
+ENV DEBIAN_FRONTEND noninteractive
+
+# add saltstack key
+RUN apt-get update && apt-get install curl --yes
+RUN curl --fail --silent --show-error --location https://repo.saltstack.com/apt/ubuntu/16.04/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
+RUN echo 'deb http://repo.saltstack.com/apt/ubuntu/16.04/amd64/latest xenial main' > /etc/apt/sources.list.d/saltstack.list
+
+# install salt-master and salt-api
+RUN apt-get update && apt-get install salt-master --yes && apt-get install salt-api --yes
+
+# add a user for the frontend salt:salt
+RUN useradd -m -s/bin/bash -p  $(openssl passwd -1 salt) salt
+
+# copy the master configuration
+ADD ./conf/master /etc/salt/master
+
+# install supervisor
+RUN apt-get install -y supervisor
+ADD ./conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf 
+
+# some volume configuration for the saltmaster
+VOLUME ["/pki","/var/cache/salt","/var/log/salt"]
+EXPOSE 3333 4505 4506

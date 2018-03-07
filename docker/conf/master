@@ -1,0 +1,21 @@
+# /etc/salt/master
+
+file_roots:
+  base:
+    - /srv/salt/
+
+external_auth:
+  pam:
+    salt:
+      - .*
+      - '@runner'
+      - '@wheel'
+      - '@jobs'
+
+rest_cherrypy:
+    port: 3333
+    host: 0.0.0.0
+    disable_ssl: true
+    app: /saltgui/index.html
+    static: /saltgui/static
+    static_path: /static
