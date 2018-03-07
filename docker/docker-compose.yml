@@ -10,7 +10,7 @@ services:
       - 3333:3333
     volumes:
     - ./salt:/srv/salt
-    - ../:/saltgui
+    - ../saltgui:/saltgui
     entrypoint: /usr/bin/supervisord
 
   saltminion-ubuntu:

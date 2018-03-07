@@ -36,7 +36,7 @@ external_auth:
   static: /srv/salt-gui/static
   static_path: /static
 ```
-- Replace `/srv/salt-gui` in the above config with a directory containing SaltGUI.
+- Replace `/srv/salt-gui` in the above config with the directory containing the saltgui html/js source files.
 - Restart everything with ``pkill salt-master && pkill salt-api && salt-master -d && salt-api -d``
 - You should be good to go. If you have any problems, open a GitHub issue. As always, SSL is recommended wherever possible but setup is beyond the scope of this guide.
 
