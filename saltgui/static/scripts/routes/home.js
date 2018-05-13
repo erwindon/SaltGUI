@@ -84,7 +84,7 @@ class HomeRoute extends Route {
     var jobs = this._jobsToArray(data.return[0]);
     this._sortJobs(jobs);
 
-    //Add five most recent jobs
+    //Add seven most recent jobs
     var shown = 0;
     var i = 0;
     while(shown < 7 && jobs[i] !== undefined) {
