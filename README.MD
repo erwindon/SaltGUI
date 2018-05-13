@@ -28,7 +28,8 @@ external_auth:
 ```
 - Make sure to create this user, and set a password via the command line
 - At the bottom of this file, also setup the rest_cherrypi server:
-```rest_cherrypy:
+```
+rest_cherrypy:
   port: 8000
   host: 0.0.0.0
   disable_ssl: true
