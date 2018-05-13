@@ -67,7 +67,7 @@ class HomeRoute extends Route {
     element.appendChild(address);
     address.addEventListener('click', this._copyAddress);
 
-    element.appendChild(this._createDiv("os", minion.lsb_distrib_description));
+    element.appendChild(this._createDiv("os", minion.os + " " + minion.osrelease));
     var highStateButton = this._createDiv("run-highstate", "Sync state &#9658;");
 
     highStateButton.addEventListener('click', evt => {
