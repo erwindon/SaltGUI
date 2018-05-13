@@ -26,7 +26,7 @@ class HomeRoute extends Route {
 
     var list = this.getElement().querySelector('.minions');
     list.innerHTML = "";
-    var hostnames = Object.keys(minions);
+    var hostnames = Object.keys(minions).sort();
 
     for(var i = 0; i < hostnames.length; i++) {
       var minion_info = minions[hostnames[i]];
