@@ -26,7 +26,7 @@ class HomeRoute extends Route {
 
     var list = this.getElement().querySelector('.minions');
     list.innerHTML = "";
-    var hostnames = Object.keys(minions);
+    var hostnames = Object.keys(minions).sort();
 
     for(var i = 0; i < hostnames.length; i++) {
       var minion_info = minions[hostnames[i]];
@@ -67,7 +67,7 @@ class HomeRoute extends Route {
     element.appendChild(address);
     address.addEventListener('click', this._copyAddress);
 
-    element.appendChild(this._createDiv("os", minion.lsb_distrib_description));
+    element.appendChild(this._createDiv("os", minion.os + " " + minion.osrelease));
     var highStateButton = this._createDiv("run-highstate", "Sync state &#9658;");
 
     highStateButton.addEventListener('click', evt => {
@@ -84,7 +84,7 @@ class HomeRoute extends Route {
     var jobs = this._jobsToArray(data.return[0]);
     this._sortJobs(jobs);
 
-    //Add five most recent jobs
+    //Add seven most recent jobs
     var shown = 0;
     var i = 0;
     while(shown < 7 && jobs[i] !== undefined) {

@@ -9,7 +9,7 @@ A new open source web interface for managing a SaltStack server. Built using van
 ## Features
 - Login via PAM to an external API
 - View minions and easily copy IPs
-- Run state.highstate for a particular minion (button is present but not currenntly implemented)
+- Run state.highstate for a particular minion (button is present but not currently implemented)
 - View the six most recent jobs run on Salt
 - Manually run any Salt function and see the output
 
@@ -28,7 +28,8 @@ external_auth:
 ```
 - Make sure to create this user, and set a password via the command line
 - At the bottom of this file, also setup the rest_cherrypi server:
-```rest_cherrypy:
+```
+rest_cherrypy:
   port: 8000
   host: 0.0.0.0
   disable_ssl: true
