@@ -33,8 +33,8 @@ rest_cherrypy:
   port: 8000
   host: 0.0.0.0
   disable_ssl: true
-  app: /srv/salt-gui/index.html
-  static: /srv/salt-gui/static
+  app: /srv/saltgui/index.html
+  static: /srv/saltgui/static
   static_path: /static
 ```
 - Replace `/srv/salt-gui` in the above config with the directory containing the saltgui html/js source files.
