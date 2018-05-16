@@ -60,6 +60,7 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## 1.0.1 (2018-05-16)
 - Fixed position of popup when main window has scrolled (erwindon)
+- Sort minions by hostname (erwindon)
 - Fixed OS description in minion overview (No lsb_distrib_description) [#5](https://github.com/maerteijn/SaltGUI/issues/5) (erwindon)
 - Now sort the jobs correctly on StartDate in the overview window [#6](https://github.com/maerteijn/SaltGUI/issues/6)
 
