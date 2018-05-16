@@ -3,8 +3,8 @@
 A new open source web interface for managing a SaltStack server. Built using vanilla ES6 and implemented as a wrapper around the rest_cherrypy server.
 
 ## Screenshots
-![job](http://i.imgur.com/cY8hoLL.png)
-![dashboard](http://i.imgur.com/rNNLGIk.png)
+![overview](/docs/overview.png)
+![job](/docs/job.png)
 
 ## Features
 - Login via PAM to an external API
