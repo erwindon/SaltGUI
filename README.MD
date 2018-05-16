@@ -10,7 +10,7 @@ A new open source web interface for managing a SaltStack server. Built using van
 - Login via PAM to an external API
 - View minions and easily copy IPs
 - Run state.highstate for a particular minion (button is present but not currently implemented)
-- View the six most recent jobs run on Salt
+- View the seven most recent jobs run on Salt
 - Manually run any Salt function and see the output
 
 ## Installation
