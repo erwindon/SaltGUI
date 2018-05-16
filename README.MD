@@ -58,5 +58,11 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.0.1 (2018-05-16)
+- Fixed position of popup when main window has scrolled (erwindon)
+- Fixed OS description in minion overview (No lsb_distrib_description) #5 (erwindon)
+- Now sort the jobs correctly on StartDate in the overview window #6
+
+
 ## 1.0.0 (2018-03-07)
 Original release with some styling fixes and with enabled the highstate functionality.
