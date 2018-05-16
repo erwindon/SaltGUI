@@ -134,12 +134,11 @@ class HomeRoute extends Route {
 
   _sortJobs(jobs) {
     jobs.sort(function(a, b){
-      var startTimeA = new Date(a.StartTime);
-      var startTimeB = new Date(b.StartTime);
-
-      if(startTimeA.getTime() < startTimeB.getTime()) return 1;
-      if(startTimeA.getTime() > startTimeB.getTime()) return -1;
-      return 0;
+      // The id is already a integer value based on the date, let's use
+      // it to sort the jobs
+      if (a.id < b.id) return 1;
+      if (a.id > b.id) return -1;
+      return 0
     });
   }
 
