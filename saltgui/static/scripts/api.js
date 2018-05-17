@@ -98,6 +98,10 @@ class API {
     return this._callMethod("GET", "/minions", {});
   }
 
+  getKeys() {
+    return this._callMethod("GET", "/keys", {});
+  }
+
   getJobs() {
     return this._callMethod("GET", "/jobs", {});
   }
