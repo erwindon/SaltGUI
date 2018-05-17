@@ -56,10 +56,6 @@ class HomeRoute extends Route {
     // never mind the keys.minions list
     // it should be the same as the minions list
     // which we already have
-    //var hostnames = keys.minions.sort();
-    //for(var i = 0; i < hostnames.length; i++) {
-    //    this._addRejectedMinion(list, hostnames[i]);
-    //}
 
     var hostnames = keys.minions_denied.sort();
     for(var i = 0; i < hostnames.length; i++) {
