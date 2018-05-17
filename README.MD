@@ -3,8 +3,8 @@
 A new open source web interface for managing a SaltStack server. Built using vanilla ES6 and implemented as a wrapper around the rest_cherrypy server.
 
 ## Screenshots
-![job](http://i.imgur.com/cY8hoLL.png)
-![dashboard](http://i.imgur.com/rNNLGIk.png)
+![overview](/docs/overview.png)
+![job](/docs/job.png)
 
 ## Features
 - Login via PAM to an external API
@@ -33,8 +33,8 @@ rest_cherrypy:
   port: 8000
   host: 0.0.0.0
   disable_ssl: true
-  app: /srv/salt-gui/index.html
-  static: /srv/salt-gui/static
+  app: /srv/saltgui/index.html
+  static: /srv/saltgui/static
   static_path: /static
 ```
 - Replace `/srv/salt-gui` in the above config with the directory containing the saltgui html/js source files.
@@ -57,6 +57,12 @@ Then browse to [http://localhost:3333/](http://localhost:3333/), you can login w
 This excellent frontend is originally written by [Oliver Dunk](https://github.com/oliverdunk).
 
 ## Changelog
+
+## 1.0.1 (2018-05-16)
+- Fixed position of popup when main window has scrolled (erwindon)
+- Sort minions by hostname (erwindon)
+- Fixed OS description in minion overview (No lsb_distrib_description) [#5](https://github.com/maerteijn/SaltGUI/issues/5) (erwindon)
+- Now sort the jobs correctly on StartDate in the overview window [#6](https://github.com/maerteijn/SaltGUI/issues/6)
 
 ## 1.0.0 (2018-03-07)
 Original release with some styling fixes and with enabled the highstate functionality.
