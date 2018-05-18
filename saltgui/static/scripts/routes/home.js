@@ -4,9 +4,11 @@ class HomeRoute extends Route {
     super("^[\/]$", "Home", "#home");
     this.router = router;
     this.minionsLoaded = false;
+    this.keysLoaded = false;
     this.jobsLoaded = false;
 
     this._updateMinions = this._updateMinions.bind(this);
+    this._updateKeys = this._updateKeys.bind(this);
     this._updateJobs = this._updateJobs.bind(this);
     this._runHighState = this._runHighState.bind(this);
   }
@@ -15,8 +17,9 @@ class HomeRoute extends Route {
     var home = this;
     return new Promise(function(resolve, reject) {
       home.resolvePromise = resolve;
-      if(home.minionsLoaded && home.jobsLoaded) resolve();
+      if(home.minionsLoaded && home.keysLoaded && home.jobsLoaded) resolve();
       home.router.api.getMinions().then(home._updateMinions);
+      home.router.api.getKeys().then(home._updateKeys);
       home.router.api.getJobs().then(home._updateJobs);
     });
   }
@@ -24,7 +27,7 @@ class HomeRoute extends Route {
   _updateMinions(data) {
     var minions = data.return[0];
 
-    var list = this.getElement().querySelector('.minions');
+    var list = this.getElement().querySelector('#minions');
     list.innerHTML = "";
     var hostnames = Object.keys(minions).sort();
 
@@ -41,7 +44,36 @@ class HomeRoute extends Route {
       }
     }
     this.minionsLoaded = true;
-    if(this.minionsLoaded && this.jobsLoaded) this.resolvePromise();
+    if(this.minionsLoaded && this.keysLoaded && this.jobsLoaded) this.resolvePromise();
+  }
+
+  _updateKeys(data) {
+    var keys = data.return;
+
+    var list = this.getElement().querySelector('#keys');
+    list.innerHTML = "";
+
+    // never mind the keys.minions list
+    // it should be the same as the minions list
+    // which we already have
+
+    var hostnames = keys.minions_denied.sort();
+    for(var i = 0; i < hostnames.length; i++) {
+        this._addDeniedMinion(list, hostnames[i]);
+    }
+
+    var hostnames = keys.minions_pre.sort();
+    for(var i = 0; i < hostnames.length; i++) {
+        this._addPreMinion(list, hostnames[i]);
+    }
+
+    var hostnames = keys.minions_rejected.sort();
+    for(var i = 0; i < hostnames.length; i++) {
+        this._addRejectedMinion(list, hostnames[i]);
+    }
+
+    this.keysLoaded = true;
+    if(this.minionsLoaded && this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
   _addOfflineMinion(container, hostname) {
@@ -78,6 +110,39 @@ class HomeRoute extends Route {
     container.appendChild(element);
   }
 
+  _addRejectedMinion(container, hostname) {
+    var element = document.createElement('li');
+
+    element.appendChild(this._createDiv("hostname", hostname));
+
+    var rejected = this._createDiv("denied", "denied");
+
+    element.appendChild(rejected);
+    container.appendChild(element);
+  }
+
+  _addDeniedMinion(container, hostname) {
+    var element = document.createElement('li');
+
+    element.appendChild(this._createDiv("hostname", hostname));
+
+    var denied = this._createDiv("rejected", "rejected");
+
+    element.appendChild(denied);
+    container.appendChild(element);
+  }
+
+  _addPreMinion(container, hostname) {
+    var element = document.createElement('li');
+
+    element.appendChild(this._createDiv("hostname", hostname));
+
+    var pre = this._createDiv("unaccepted", "unaccepted");
+
+    element.appendChild(pre);
+    container.appendChild(element);
+  }
+
   _updateJobs(data) {
     var jobContainer = document.querySelector("#home .jobs");
     jobContainer.innerHTML = "";
@@ -97,7 +162,7 @@ class HomeRoute extends Route {
       shown = shown + 1;
     }
     this.jobsLoaded = true;
-    if(this.minionsLoaded && this.jobsLoaded) this.resolvePromise();
+    if(this.minionsLoaded && this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
   _addJob(container, job) {
