@@ -10,7 +10,7 @@ A new open source web interface for managing a SaltStack server. Built using van
 - Login via PAM to an external API
 - View minions and easily copy IPs
 - Run state.highstate for a particular minion (button is present but not currently implemented)
-- View the six most recent jobs run on Salt
+- View the seven most recent jobs run on Salt
 - Manually run any Salt function and see the output
 
 ## Installation
@@ -37,7 +37,7 @@ rest_cherrypy:
   static: /srv/saltgui/static
   static_path: /static
 ```
-- Replace `/srv/salt-gui` in the above config with the directory containing the saltgui html/js source files.
+- Replace `/srv/saltgui` in the above config with the directory containing the saltgui html/js source files.
 - Restart everything with ``pkill salt-master && pkill salt-api && salt-master -d && salt-api -d``
 - You should be good to go. If you have any problems, open a GitHub issue. As always, SSL is recommended wherever possible but setup is beyond the scope of this guide.
 
