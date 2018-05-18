@@ -88,7 +88,7 @@ class HomeRoute extends Route {
   }
 
   _addMinion(container, minion) {
-    var ip = minion.ipv4[minion.ipv4.length - 1];
+    var ip = minion.fqdn_ip4;
 
     var element = document.createElement('li');
 
