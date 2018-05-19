@@ -115,7 +115,7 @@ class HomeRoute extends Route {
 
     element.appendChild(this._createDiv("hostname", hostname));
 
-    var rejected = this._createDiv("denied", "denied");
+    var rejected = this._createDiv("rejected", "rejected");
 
     element.appendChild(rejected);
     container.appendChild(element);
@@ -126,7 +126,7 @@ class HomeRoute extends Route {
 
     element.appendChild(this._createDiv("hostname", hostname));
 
-    var denied = this._createDiv("rejected", "rejected");
+    var denied = this._createDiv("denied", "denied");
 
     element.appendChild(denied);
     container.appendChild(element);
