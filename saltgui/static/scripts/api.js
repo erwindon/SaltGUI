@@ -13,8 +13,10 @@ class API {
   _registerEventListeners() {
     document.querySelector("#run-command-popup")
       .addEventListener('click', this._toggleManualRun);
-    document.querySelector(".fab")
+    document.querySelector("#button_manualrun")
       .addEventListener('click', this._toggleManualRun);
+    document.querySelector("#button_logout")
+      .addEventListener('click', this._logout);
     document.querySelector(".run-command input[type='submit']")
       .addEventListener('click', this._onRun);
   }
@@ -74,6 +76,11 @@ class API {
 
   isAuthenticated() {
     return window.sessionStorage.getItem("token") !== null;
+  }
+
+  _logout() {
+    window.sessionStorage.removeItem("token");
+    window.location.replace("/");
   }
 
   login(username, password) {
