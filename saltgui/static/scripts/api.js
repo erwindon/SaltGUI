@@ -16,7 +16,9 @@ class API {
     document.querySelector("#button_manualrun")
       .addEventListener('click', this._toggleManualRun);
     document.querySelector("#button_logout")
-      .addEventListener('click', this._logout);
+      .addEventListener('click', _ => {
+        this._logout(this);
+    } );
     document.querySelector(".run-command input[type='submit']")
       .addEventListener('click', this._onRun);
   }
@@ -78,9 +80,18 @@ class API {
     return window.sessionStorage.getItem("token") !== null;
   }
 
-  _logout() {
-    window.sessionStorage.removeItem("token");
-    window.location.replace("/");
+  _logout(api) {
+    var params = {
+    };
+
+    return new Promise(function(resolve, reject) {
+      api._callMethod("POST", "/logout", params)
+      .then(function(data) {
+        window.sessionStorage.removeItem("token");
+        window.location.replace("/");
+        resolve();
+      }, reject);
+    });
   }
 
   login(username, password) {
