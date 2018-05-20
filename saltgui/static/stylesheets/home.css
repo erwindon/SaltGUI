@@ -35,13 +35,13 @@
   margin-right: 0;
 }
 
-.run-highstate {
+.run-command {
   color: #263238;
   float: right;
   cursor: pointer;
 }
 
-.run-highstate:hover {
+.run-command:hover {
   color: #2E7D32;
 }
 
@@ -188,7 +188,7 @@ pre .hostname:first-of-type {
 
 @media(max-width: 1200px) {
 
-  .minions li .run-highstate {
+  .minions li .run-command {
     display: inline-block;
     float: none;
   }

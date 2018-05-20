@@ -133,13 +133,19 @@ class API {
     var functionToRun = args[0];
     args.shift();
 
-    var params = {
-      tgt: target,
-      fun: functionToRun,
-      client: "local"
-    };
+    var params = {}
 
-    if(args.length !== 0) params.arg = args.join(" ");
+    if(functionToRun.startsWith("salt.wheel.")) {
+      params.client = "wheel";
+      params.fun = functionToRun.substring(11);
+      params.kwarg = {}
+      params.args = args;
+    } else {
+      params.client = "local";
+      params.fun = functionToRun;
+      params.tgt = target;
+      if(args.length !== 0) params.arg = args.join(" ");
+    }
 
     return this._callMethod("POST", "/", params);
   }

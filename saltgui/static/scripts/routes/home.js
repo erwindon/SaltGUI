@@ -10,6 +10,7 @@ class HomeRoute extends Route {
     this._updateKeys = this._updateKeys.bind(this);
     this._updateJobs = this._updateJobs.bind(this);
     this._runHighState = this._runHighState.bind(this);
+    this._runAccept = this._runAccept.bind(this);
   }
 
   onShow() {
@@ -115,16 +116,15 @@ class HomeRoute extends Route {
 
     var address = this._createDiv("address", ip);
     address.setAttribute("tabindex", -1);
-    element.appendChild(address);
     address.addEventListener('click', this._copyAddress);
+    element.appendChild(address);
 
     element.appendChild(this._createDiv("os", minion.os + " " + minion.osrelease));
-    var highStateButton = this._createDiv("run-highstate", "Sync state &#9658;");
 
+    var highStateButton = this._createDiv("run-command", "Sync state &#9658;");
     highStateButton.addEventListener('click', evt => {
       this._runHighState(minion.hostname, evt);
     });
-
     element.appendChild(highStateButton);
   }
 
@@ -157,8 +157,8 @@ class HomeRoute extends Route {
 
     var rejected = this._createDiv("rejected", "rejected");
     rejected.id = "status";
-
     element.appendChild(rejected);
+
     container.appendChild(element);
   }
 
@@ -169,8 +169,8 @@ class HomeRoute extends Route {
 
     var denied = this._createDiv("denied", "denied");
     denied.id = "status";
-
     element.appendChild(denied);
+
     container.appendChild(element);
   }
 
@@ -181,8 +181,14 @@ class HomeRoute extends Route {
 
     var pre = this._createDiv("unaccepted", "unaccepted");
     pre.id = "status";
-
     element.appendChild(pre);
+
+    var acceptButton = this._createDiv("run-command", "Accept &#9658;");
+    acceptButton.addEventListener('click', evt => {
+      this._runAccept(hostname, evt);
+    });
+    element.appendChild(acceptButton);
+
     container.appendChild(element);
   }
 
@@ -269,5 +275,13 @@ class HomeRoute extends Route {
     var command = document.querySelector("#command");
     target.value = hostname;
     command.value = "state.apply";
+  }
+
+  _runAccept(hostname, evt) {
+    this.router.api._toggleManualRun(evt);
+    var target = document.querySelector("#target");
+    var command = document.querySelector("#command");
+    target.value = "N/A";
+    command.value = "salt.wheel.key.accept " + hostname;
   }
 }
