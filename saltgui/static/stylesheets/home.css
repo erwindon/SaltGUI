@@ -28,20 +28,19 @@
 
 .minions li div {
   display: inline-block;
+  margin-left: 0;
   margin-right: 20px;
 }
 
-.minions li div:last-of-type {
-  margin-right: 0;
-}
-
-.run-command-button {
+.minions li .run-command-button {
   color: #263238;
   float: right;
   cursor: pointer;
+  margin-right: 0;
+  margin-left: 20px;
 }
 
-.run-command-button:hover {
+.minions li .run-command-button:hover {
   color: #2E7D32;
 }
 
