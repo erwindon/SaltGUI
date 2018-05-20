@@ -135,10 +135,10 @@ class API {
 
     var params = {}
 
-    if(functionToRun.startsWith("salt.wheel.")) {
+    if(functionToRun == "salt.wheel.key.accept") {
       params.client = "wheel";
       params.fun = functionToRun.substring(11);
-      params.kwarg = {}
+      params.kwarg = {"include_rejected": true, "include_denied": true};
       params.args = args;
     } else {
       params.client = "local";
