@@ -35,13 +35,13 @@
   margin-right: 0;
 }
 
-.run-command {
+.run-command-button {
   color: #263238;
   float: right;
   cursor: pointer;
 }
 
-.run-command:hover {
+.run-command-button:hover {
   color: #2E7D32;
 }
 
@@ -188,7 +188,7 @@ pre .hostname:first-of-type {
 
 @media(max-width: 1200px) {
 
-  .minions li .run-command {
+  .minions li .run-command-button {
     display: inline-block;
     float: none;
   }

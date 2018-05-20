@@ -121,7 +121,7 @@ class HomeRoute extends Route {
 
     element.appendChild(this._createDiv("os", minion.os + " " + minion.osrelease));
 
-    var highStateButton = this._createDiv("run-command", "Sync state &#9658;");
+    var highStateButton = this._createDiv("run-command-button", "Sync state &#9658;");
     highStateButton.addEventListener('click', evt => {
       this._runHighState(minion.hostname, evt);
     });
@@ -159,6 +159,12 @@ class HomeRoute extends Route {
     rejected.id = "status";
     element.appendChild(rejected);
 
+    var acceptButton = this._createDiv("run-command-button", "Accept &#9658;");
+    acceptButton.addEventListener('click', evt => {
+      this._runAccept(hostname, evt);
+    });
+    element.appendChild(acceptButton);
+
     container.appendChild(element);
   }
 
@@ -170,6 +176,12 @@ class HomeRoute extends Route {
     var denied = this._createDiv("denied", "denied");
     denied.id = "status";
     element.appendChild(denied);
+
+    var acceptButton = this._createDiv("run-command-button", "Accept &#9658;");
+    acceptButton.addEventListener('click', evt => {
+      this._runAccept(hostname, evt);
+    });
+    element.appendChild(acceptButton);
 
     container.appendChild(element);
   }
@@ -183,7 +195,7 @@ class HomeRoute extends Route {
     pre.id = "status";
     element.appendChild(pre);
 
-    var acceptButton = this._createDiv("run-command", "Accept &#9658;");
+    var acceptButton = this._createDiv("run-command-button", "Accept &#9658;");
     acceptButton.addEventListener('click', evt => {
       this._runAccept(hostname, evt);
     });
