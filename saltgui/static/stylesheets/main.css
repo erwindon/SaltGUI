@@ -46,7 +46,7 @@ h1 {
   display: inline-block;
   font-weight: bold;
   font-size: 30px;
-  border-radius: 50%;
+  border-radius: 2px;
   color: white;
   transform: scale(0.8) translate(23px, -11px);
   cursor: pointer;
