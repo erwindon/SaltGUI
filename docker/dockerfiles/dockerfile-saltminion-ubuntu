@@ -4,8 +4,8 @@ MAINTAINER Martijn Jacobs <martijn@devopsconsulting.nl>
 ENV REFRESHED_ON "7 Mar 2018"
 ENV DEBIAN_FRONTEND noninteractive
 
-# some handy stuff to have
-RUN apt-get update && apt-get install curl --yes && apt-get install iproute2 --yes && apt-get install netcat-openbsd -y 
+# some handy stuff to have and install gnupg2
+RUN apt-get update && apt-get install curl --yes && apt-get install iproute2 --yes && apt-get install netcat-openbsd -y && apt-get install gnupg2 --yes
 
 # add saltstack key
 RUN curl --fail --silent --show-error --location https://repo.saltstack.com/apt/ubuntu/16.04/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -

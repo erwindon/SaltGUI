@@ -4,13 +4,13 @@ MAINTAINER Martijn Jacobs <martijn@devopsconsulting.nl>
 ENV REFRESHED_ON "7 Mar 2018"
 ENV DEBIAN_FRONTEND noninteractive
 
-# add saltstack key
-RUN apt-get update && apt-get install curl --yes
+# add saltstack key and install gnupg2
+RUN apt-get update && apt-get install curl --yes && apt-get install gnupg2 --yes
 RUN curl --fail --silent --show-error --location https://repo.saltstack.com/apt/ubuntu/16.04/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
 RUN echo 'deb http://repo.saltstack.com/apt/ubuntu/16.04/amd64/latest xenial main' > /etc/apt/sources.list.d/saltstack.list
 
-# install salt-master and salt-api
-RUN apt-get update && apt-get install salt-master --yes && apt-get install salt-api --yes
+# install salt-master and salt-api, dependencies
+RUN apt-get update && apt-get install salt-master --yes && apt-get install salt-api --yes 
 
 # add a user for the frontend salt:salt
 RUN useradd -m -s/bin/bash -p  $(openssl passwd -1 salt) salt
