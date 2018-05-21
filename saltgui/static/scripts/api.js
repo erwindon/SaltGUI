@@ -74,6 +74,14 @@ class API {
     if(isShowing && evt.target.className !== "popup") return;
     manualRun.style.display = isShowing ? "none" : "block";
     document.body.style["overflow-y"] = isShowing ? "scroll" : "hidden";
+
+    // test whether the command may have caused an update to the list
+    // the user may have altered the text after running the command, just ignore that
+    var command = document.querySelector(".run-command #command").value;
+    var output = document.querySelector(".run-command pre").innerHTML;
+    if(isShowing && command.startsWith("salt.wheel.key.") && output != "Waiting for command...") {
+      location.reload(); 
+    }
   }
 
   isAuthenticated() {

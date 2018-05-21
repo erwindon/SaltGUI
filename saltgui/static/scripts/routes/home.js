@@ -10,7 +10,9 @@ class HomeRoute extends Route {
     this._updateKeys = this._updateKeys.bind(this);
     this._updateJobs = this._updateJobs.bind(this);
     this._runHighState = this._runHighState.bind(this);
-    this._runAccept = this._runAccept.bind(this);
+    this._runAcceptKey = this._runAcceptKey.bind(this);
+    this._runRejectKey = this._runRejectKey.bind(this);
+    this._runDeleteKey = this._runDeleteKey.bind(this);
   }
 
   onShow() {
@@ -93,8 +95,21 @@ class HomeRoute extends Route {
 
     var offline = this._createDiv("offline", "offline");
     offline.id = "status";
-
     element.appendChild(offline);
+
+    var deleteButton = this._createDiv("run-command-button", "Delete &#9658;");
+    deleteButton.addEventListener('click', evt => {
+      this._runDeleteKey(hostname, evt);
+    });
+    element.appendChild(deleteButton);
+
+    var acceptButton = this._createDiv("run-command-button", "Accept &#9658;");
+    acceptButton.addEventListener('click', evt => {
+      this._runAcceptKey(hostname, evt);
+    });
+    element.appendChild(acceptButton);
+
+    container.appendChild(element);
   }
 
   _updateMinion(container, minion) {
@@ -147,6 +162,18 @@ class HomeRoute extends Route {
 
     element.appendChild(this._createDiv("os", "Loading..."));
 
+    var rejectButton = this._createDiv("run-command-button", "Reject &#9658;");
+    rejectButton.addEventListener('click', evt => {
+      this._runRejectKey(minion.hostname, evt);
+    });
+    element.appendChild(rejectButton);
+
+    var deleteButton = this._createDiv("run-command-button", "Delete &#9658;");
+    deleteButton.addEventListener('click', evt => {
+      this._runDeleteKey(minion.hostname, evt);
+    });
+    element.appendChild(deleteButton);
+
     container.appendChild(element);
   }
 
@@ -159,9 +186,15 @@ class HomeRoute extends Route {
     rejected.id = "status";
     element.appendChild(rejected);
 
+    var deleteButton = this._createDiv("run-command-button", "Delete &#9658;");
+    deleteButton.addEventListener('click', evt => {
+      this._runDeleteKey(hostname, evt);
+    });
+    element.appendChild(deleteButton);
+
     var acceptButton = this._createDiv("run-command-button", "Accept &#9658;");
     acceptButton.addEventListener('click', evt => {
-      this._runAccept(hostname, evt);
+      this._runAcceptKey(hostname, evt);
     });
     element.appendChild(acceptButton);
 
@@ -177,9 +210,21 @@ class HomeRoute extends Route {
     denied.id = "status";
     element.appendChild(denied);
 
+    var rejectButton = this._createDiv("run-command-button", "Reject &#9658;");
+    rejectButton.addEventListener('click', evt => {
+      this._runRejectKey(hostname, evt);
+    });
+    element.appendChild(rejectButton);
+
+    var deleteButton = this._createDiv("run-command-button", "Delete &#9658;");
+    deleteButton.addEventListener('click', evt => {
+      this._runDeleteKey(hostname, evt);
+    });
+    element.appendChild(deleteButton);
+
     var acceptButton = this._createDiv("run-command-button", "Accept &#9658;");
     acceptButton.addEventListener('click', evt => {
-      this._runAccept(hostname, evt);
+      this._runAcceptKey(hostname, evt);
     });
     element.appendChild(acceptButton);
 
@@ -195,9 +240,21 @@ class HomeRoute extends Route {
     pre.id = "status";
     element.appendChild(pre);
 
+    var rejectButton = this._createDiv("run-command-button", "Reject &#9658;");
+    rejectButton.addEventListener('click', evt => {
+      this._runRejectKey(hostname, evt);
+    });
+    element.appendChild(rejectButton);
+
+    var deleteButton = this._createDiv("run-command-button", "Delete &#9658;");
+    deleteButton.addEventListener('click', evt => {
+      this._runDeleteKey(hostname, evt);
+    });
+    element.appendChild(deleteButton);
+
     var acceptButton = this._createDiv("run-command-button", "Accept &#9658;");
     acceptButton.addEventListener('click', evt => {
-      this._runAccept(hostname, evt);
+      this._runAcceptKey(hostname, evt);
     });
     element.appendChild(acceptButton);
 
@@ -289,11 +346,27 @@ class HomeRoute extends Route {
     command.value = "state.apply";
   }
 
-  _runAccept(hostname, evt) {
+  _runAcceptKey(hostname, evt) {
     this.router.api._toggleManualRun(evt);
     var target = document.querySelector("#target");
     var command = document.querySelector("#command");
     target.value = "N/A";
     command.value = "salt.wheel.key.accept " + hostname;
+  }
+
+  _runRejectKey(hostname, evt) {
+    this.router.api._toggleManualRun(evt);
+    var target = document.querySelector("#target");
+    var command = document.querySelector("#command");
+    target.value = "N/A";
+    command.value = "salt.wheel.key.reject " + hostname;
+  }
+
+  _runDeleteKey(hostname, evt) {
+    this.router.api._toggleManualRun(evt);
+    var target = document.querySelector("#target");
+    var command = document.querySelector("#command");
+    target.value = "N/A";
+    command.value = "salt.wheel.key.delete " + hostname;
   }
 }
