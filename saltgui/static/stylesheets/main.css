@@ -46,7 +46,7 @@ h1 {
   display: inline-block;
   font-weight: bold;
   font-size: 30px;
-  border-radius: 2px;
+  border-radius: 50%;
   color: white;
   transform: scale(0.8) translate(23px, -11px);
   cursor: pointer;
@@ -55,6 +55,21 @@ h1 {
 
 .fab:hover {
   opacity: 0.95;
+}
+
+.logout {
+  display: inline-block;
+  padding-top: 20px;
+  float: right; 
+  opacity: 0.3;
+  font-size: 15px;
+  font-weight: lighter;
+}
+
+.logout:hover {
+  color: #4CAF50;
+  opacity: 0.95;
+  cursor: pointer;
 }
 
 .route {
