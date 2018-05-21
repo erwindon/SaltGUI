@@ -123,8 +123,10 @@ class HomeRoute extends Route {
 
     var minion = this._createDiv("accepted", "accepted");
     minion.id = "status";
-
     element.appendChild(minion);
+
+    element.appendChild(this._createDiv("os", "Loading..."));
+
     container.appendChild(element);
   }
 
