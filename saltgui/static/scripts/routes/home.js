@@ -78,6 +78,10 @@ class HomeRoute extends Route {
 
   _updateOfflineMinion(container, hostname) {
     var element = document.getElementById(hostname);
+    if(element == null) {
+       console.log("offline minion not found on screen:", hostname);
+       return;
+    }
     while(element.firstChild) {
       element.removeChild(element.firstChild);
     }
@@ -94,6 +98,10 @@ class HomeRoute extends Route {
     var ip = minion.fqdn_ip4;
 
     var element = document.getElementById(minion.hostname);
+    if(element == null) {
+       console.log("online minion not found on screen:", minion.hostname);
+       return;
+    }
     while(element.firstChild) {
       element.removeChild(element.firstChild);
     }
