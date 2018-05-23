@@ -27,7 +27,7 @@ class HomeRoute extends Route {
     var minions = data.return[0];
 
     var list = this.getElement().querySelector('#minions');
-    var hostnames = Object.keys(minions);
+    var hostnames = Object.keys(minions).sort();
 
     for(var i = 0; i < hostnames.length; i++) {
       var minion_info = minions[hostnames[i]];
@@ -47,7 +47,6 @@ class HomeRoute extends Route {
     var keys = data.return;
 
     var list = this.getElement().querySelector('#minions');
-    list.innerHTML = "";
 
     var hostnames = keys.minions.sort();
     for(var i = 0; i < hostnames.length; i++) {
@@ -79,8 +78,11 @@ class HomeRoute extends Route {
   _updateOfflineMinion(container, hostname) {
     var element = document.getElementById(hostname);
     if(element == null) {
-       console.log("offline minion not found on screen:", hostname);
-       return;
+      console.log("offline minion not found on screen:", hostname);
+      // construct a basic element that can be updated here
+      element = document.createElement('li');
+      element.id = hostname;
+      container.appendChild(element);
     }
     while(element.firstChild) {
       element.removeChild(element.firstChild);
@@ -99,8 +101,11 @@ class HomeRoute extends Route {
 
     var element = document.getElementById(minion.hostname);
     if(element == null) {
-       console.log("online minion not found on screen:", minion.hostname);
-       return;
+      console.log("online minion not found on screen:", minion.hostname);
+      // construct a basic element that can be updated here
+      element = document.createElement('li');
+      element.id = minion.hostname;
+      container.appendChild(element);
     }
     while(element.firstChild) {
       element.removeChild(element.firstChild);
@@ -124,6 +129,13 @@ class HomeRoute extends Route {
   }
 
   _addMinion(container, hostname) {
+
+    var element = document.getElementById(hostname);
+    if(element != null) {
+      console.log("minion already on screen:", hostname);
+      return;
+    }
+
     var element = document.createElement('li');
     element.id = hostname;
 
