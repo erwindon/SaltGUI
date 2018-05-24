@@ -176,6 +176,13 @@ class API {
   }
 
   _onFetchResponse(response, resolve, reject) {
+    if(response.status == 401) {
+      // sesion has expired
+      // redirect to login screen
+      window.sessionStorage.removeItem("token");
+      document.location.replace("/");
+      return;
+    }
     if(response.status !== 200) {
       reject();
       return;
