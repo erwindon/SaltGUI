@@ -176,7 +176,7 @@ class API {
   }
 
   _onFetchResponse(response, resolve, reject) {
-    if(response.status == 401) {
+    if(response.status == 401 && document.location.pathname != "/login") {
       // sesion has expired
       // redirect to login screen
       window.sessionStorage.removeItem("token");
