@@ -59,6 +59,17 @@ class HomeRoute extends Route {
     var list = this.getElement().querySelector('#keys');
     list.innerHTML = "";
 
+    // never mind the keys.minions list
+    // it should be the same as the minions list
+    // which we already have
+
+    var keyshdr = this.getElement().querySelector('#keyshdr');
+    if(keys.minions_denied.length || keys.minions_pre.length || keys.minions_rejected.length) {
+      keyshdr.style.display = "block";
+    } else {
+      keyshdr.style.display = "none";
+    }
+
     var hostnames = keys.minions_denied.sort();
     for(var i = 0; i < hostnames.length; i++) {
         this._addDeniedMinion(list, hostnames[i]);
