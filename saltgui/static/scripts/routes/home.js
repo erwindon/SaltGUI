@@ -97,17 +97,17 @@ class HomeRoute extends Route {
     offline.id = "status";
     element.appendChild(offline);
 
+    var rejectButton = this._createDiv("run-command-button", "Reject &#9658;");
+    rejectButton.addEventListener('click', evt => {
+      this._runRejectKey(hostname, evt);
+    });
+    element.appendChild(rejectButton);
+
     var deleteButton = this._createDiv("run-command-button", "Delete &#9658;");
     deleteButton.addEventListener('click', evt => {
       this._runDeleteKey(hostname, evt);
     });
     element.appendChild(deleteButton);
-
-    var acceptButton = this._createDiv("run-command-button", "Accept &#9658;");
-    acceptButton.addEventListener('click', evt => {
-      this._runAcceptKey(hostname, evt);
-    });
-    element.appendChild(acceptButton);
 
     container.appendChild(element);
   }
