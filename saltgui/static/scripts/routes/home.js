@@ -119,8 +119,6 @@ class HomeRoute extends Route {
       this._runDeleteKey(hostname, evt);
     });
     element.appendChild(deleteButton);
-
-    container.appendChild(element);
   }
 
   _updateMinion(container, minion) {
