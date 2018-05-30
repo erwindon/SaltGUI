@@ -144,10 +144,24 @@ class API {
     var params = {}
 
     if(functionToRun == "salt.wheel.key.accept") {
+      // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.accept
       params.client = "wheel";
       params.fun = functionToRun.substring(11);
-      params.kwarg = {"include_rejected": true, "include_denied": true};
-      params.args = args;
+      params.match = target;
+      params.include_denied = true;
+      params.include_rejected = true;
+    } else if(functionToRun == "salt.wheel.key.reject") {
+      // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.reject
+      params.client = "wheel";
+      params.fun = functionToRun.substring(11);
+      params.match = target;
+      params.include_accepted = true;
+      params.include_denied = true;
+    } else if(functionToRun == "salt.wheel.key.delete") {
+      // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.delete
+      params.client = "wheel";
+      params.fun = functionToRun.substring(11);
+      params.match = target;
     } else {
       params.client = "local";
       params.fun = functionToRun;

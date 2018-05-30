@@ -13,6 +13,7 @@ class HomeRoute extends Route {
     this._runAcceptKey = this._runAcceptKey.bind(this);
     this._runRejectKey = this._runRejectKey.bind(this);
     this._runDeleteKey = this._runDeleteKey.bind(this);
+    this._runCommand = this._runCommand.bind(this);
   }
 
   onShow() {
@@ -150,6 +151,18 @@ class HomeRoute extends Route {
       this._runHighState(minion.hostname, evt);
     });
     element.appendChild(highStateButton);
+
+    var rejectButton = this._createDiv("run-command-button", "Reject &#9658;");
+    rejectButton.addEventListener('click', evt => {
+      this._runRejectKey(minion.hostname, evt);
+    });
+    element.appendChild(rejectButton);
+
+    var deleteButton = this._createDiv("run-command-button", "Delete &#9658;");
+    deleteButton.addEventListener('click', evt => {
+      this._runDeleteKey(minion.hostname, evt);
+    });
+    element.appendChild(deleteButton);
   }
 
   _addMinion(container, hostname) {
@@ -347,35 +360,27 @@ class HomeRoute extends Route {
     document.execCommand("copy");
   }
 
-  _runHighState(hostname, evt) {
+  _runCommand(evt, targetString, commandString) {
     this.router.api._toggleManualRun(evt);
     var target = document.querySelector("#target");
     var command = document.querySelector("#command");
-    target.value = hostname;
-    command.value = "state.apply";
+    target.value = targetString;
+    command.value = commandString;
+  }
+
+  _runHighState(hostname, evt) {
+    this._runCommand(evt, hostname, "state.apply");
   }
 
   _runAcceptKey(hostname, evt) {
-    this.router.api._toggleManualRun(evt);
-    var target = document.querySelector("#target");
-    var command = document.querySelector("#command");
-    target.value = "N/A";
-    command.value = "salt.wheel.key.accept " + hostname;
+    this._runCommand(evt, hostname, "salt.wheel.key.accept");
   }
 
   _runRejectKey(hostname, evt) {
-    this.router.api._toggleManualRun(evt);
-    var target = document.querySelector("#target");
-    var command = document.querySelector("#command");
-    target.value = "N/A";
-    command.value = "salt.wheel.key.reject " + hostname;
+    this._runCommand(evt, hostname, "salt.wheel.key.reject");
   }
 
   _runDeleteKey(hostname, evt) {
-    this.router.api._toggleManualRun(evt);
-    var target = document.querySelector("#target");
-    var command = document.querySelector("#command");
-    target.value = "N/A";
-    command.value = "salt.wheel.key.delete " + hostname;
+    this._runCommand(evt, hostname, "salt.wheel.key.delete");
   }
 }
