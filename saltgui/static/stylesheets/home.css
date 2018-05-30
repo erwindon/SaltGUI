@@ -135,7 +135,6 @@ pre .hostname {
   color: #4caf50;
   display: inline-block;
   margin-top: 12px;
-  border: solid red 1px;
 }
 
 pre .hostname:first-of-type {
