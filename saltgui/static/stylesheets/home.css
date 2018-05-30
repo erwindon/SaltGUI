@@ -106,6 +106,10 @@
   opacity: 1;
 }
 
+.minions li .os {
+  min-width: 120px;
+}
+
 .minions li .accepted {
   color: #00A000;
 }
@@ -113,6 +117,7 @@
 .minions li .denied {
   color: #FF00FF;
 }
+
 
 .minions li .unaccepted {
   color: #FF0000;
@@ -130,6 +135,7 @@ pre .hostname {
   color: #4caf50;
   display: inline-block;
   margin-top: 12px;
+  border: solid red 1px;
 }
 
 pre .hostname:first-of-type {
