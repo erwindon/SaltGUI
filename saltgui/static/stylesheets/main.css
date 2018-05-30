@@ -158,7 +158,6 @@ input[type='submit']:active:not([disabled]) {
 }
 
 input[disabled] {
-  background-color: #292929;
   opacity: 0.2;
   cursor: default;
 }
