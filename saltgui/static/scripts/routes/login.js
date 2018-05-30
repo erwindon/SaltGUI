@@ -38,6 +38,9 @@ class LoginRoute extends Route{
     success.style.backgroundColor = "#4CAF50"
     notice.replaceChild(success, notice.firstChild);
 
+    document.querySelector("#username").disabled = true;
+    document.querySelector("#password").disabled = true;
+
     notice.className = 'notice-wrapper';
     notice.focus(); //Used to trigger a reflow (to restart animation)
     notice.className = 'notice-wrapper show';
