@@ -172,6 +172,10 @@ class API {
     return this._callMethod("GET", "/jobs/" + id, {});
   }
 
+  getRunningJobs() {
+    return this._getRunParams(null, "runners.jobs.active");
+  }
+
   _showError(errorMessage) {
     const errLabel = document.querySelector("#cmd_error");
     errLabel.innerText = errorMessage;

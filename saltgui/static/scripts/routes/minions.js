@@ -21,6 +21,7 @@ class MinionsRoute extends PageRoute {
       minions.router.api.getMinions().then(minions._updateMinions);
       minions.router.api.getKeys().then(minions._updateKeys);
       minions.router.api.getJobs().then(minions._updateJobs);
+      minions.router.api.getRunningJobs().then(minions._runningJobs);
     });
   }
 

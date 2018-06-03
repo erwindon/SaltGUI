@@ -132,18 +132,46 @@ class PageRoute extends Route {
     while(shown < 7 && jobs[i] !== undefined) {
       const job = jobs[i];
       i = i + 1;
-      if(job.Function === "saltutil.find_job") continue;
       if(job.Function === "grains.items") continue;
-      if(job.Function === "wheel.key.list_all") continue;
+      if(job.Function === "runner.jobs.active") continue;
       if(job.Function === "runner.jobs.list_job") continue;
       if(job.Function === "runner.jobs.list_jobs") continue;
+      if(job.Function === "saltutil.find_job") continue;
+      if(job.Function === "saltutil.running") continue;
       if(job.Function === "sys.doc") continue;
+      if(job.Function === "wheel.key.list_all") continue;
 
       this._addJob(jobContainer, job);
       shown = shown + 1;
     }
     this.jobsLoaded = true;
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
+  }
+
+  _runningJobs(data) {
+    const jobs = data.return[0];
+    for(const k in jobs)
+    {
+      const job = jobs[k];
+
+      // start with same text as for _addJob
+      let targetText = job.Target;
+      if(job["Target-type"] !== "glob" && job["Target-type"] !== "list") {
+        // note that due to bug in 2018.3, all finished jobs
+        // will be shown as if of type 'list'
+        // therefore we suppress that one
+        targetText = job["Target-type"] + " " + targetText;
+      }
+
+      // then add the operational statistics
+      if(job.Running.length > 0)
+        targetText = targetText + ", " + job.Running.length + " running";
+      if(job.Returned.length > 0)
+        targetText = targetText + ", " + job.Returned.length + " returned";
+
+      const targetField = document.querySelector(".jobs #job" + k + " .target");
+      targetField.innerText = targetText;
+    }
   }
 
   _addJob(container, job) {
