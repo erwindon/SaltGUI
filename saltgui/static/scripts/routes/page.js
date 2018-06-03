@@ -148,12 +148,25 @@ class PageRoute extends Route {
 
   _addJob(container, job) {
     const element = document.createElement('li');
-    element.id = job.id;
+    element.id = "job" + job.id;
 
-    element.appendChild(Route._createDiv("target", job.Target));
-    element.appendChild(Route._createDiv("function", job.Function));
-    element.appendChild(Route._createDiv("time", job.StartTime));
+    let targetText = job.Target;
+    if(job["Target-type"] !== "glob" && job["Target-type"] !== "list") {
+      // note that due to bug in 2018.3, all finished jobs
+      // will be shown as if of type 'list'
+      // therefore we suppress that one
+      targetText = job["Target-type"] + " " + targetText;
+    }
+    element.appendChild(Route._createDiv("target", targetText));
+
+    const functionText = job.Function;
+    element.appendChild(Route._createDiv("function", functionText));
+
+    const startTimeText = job.StartTime;
+    element.appendChild(Route._createDiv("time", startTimeText));
+
     container.appendChild(element);
+
     element.addEventListener('click', this._createJobListener(job.id));
   }
 
