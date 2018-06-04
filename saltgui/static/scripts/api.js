@@ -143,22 +143,7 @@ class API {
 
     var params = {}
 
-    if(functionToRun == "salt.wheel.key.accept") {
-      // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.accept
-      params.client = "wheel";
-      params.fun = functionToRun.substring(11);
-      params.match = target;
-      params.include_denied = true;
-      params.include_rejected = true;
-    } else if(functionToRun == "salt.wheel.key.reject") {
-      // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.reject
-      params.client = "wheel";
-      params.fun = functionToRun.substring(11);
-      params.match = target;
-      params.include_accepted = true;
-      params.include_denied = true;
-    } else if(functionToRun == "salt.wheel.key.delete") {
-      // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.delete
+    if(functionToRun.startsWith("salt.wheel.key.")) {
       params.client = "wheel";
       params.fun = functionToRun.substring(11);
       params.match = target;
@@ -167,6 +152,19 @@ class API {
       params.fun = functionToRun;
       params.tgt = target;
       if(args.length !== 0) params.arg = args.join(" ");
+    }
+
+    if(functionToRun == "salt.wheel.key.accept") {
+      // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.accept
+      params.include_denied = true;
+      params.include_rejected = true;
+    } else if(functionToRun == "salt.wheel.key.reject") {
+      // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.reject
+      params.include_accepted = true;
+      params.include_denied = true;
+    } else if(functionToRun == "salt.wheel.key.delete") {
+      // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.delete
+      // no special parameters needed here
     }
 
     return this._callMethod("POST", "/", params);
