@@ -90,6 +90,51 @@ class HomeRoute extends Route {
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
+  _addMenu(element) {
+    var menuDropdown = this._createDiv("run-command-button", "");
+    var menuButton = this._createDiv("menu-dropdown", "&#9658;");
+    menuDropdown.appendChild(menuButton);
+    var menuDropdownContent = this._createDiv("menu-dropdown-content", "");
+    //menuDropdownContent.appendChild(this._createDiv("run-command-button", "x1"));
+    //menuDropdownContent.appendChild(this._createDiv("run-command-button", "x2"));
+    //menuDropdownContent.appendChild(this._createDiv("run-command-button", "x3"));
+    menuDropdown.appendChild(menuDropdownContent);
+    element.appendChild(menuDropdown);
+    return menuDropdownContent;
+  }
+
+  _addMenuItemAccept(hostname) {
+    var acceptButton = this._createDiv("run-command-button", "Accept&nbsp;key");
+    acceptButton.addEventListener('click', evt => {
+      this._runAcceptKey(hostname, evt);
+    });
+    return acceptButton;
+  }
+
+  _addMenuItemDelete(hostname) {
+    var deleteButton = this._createDiv("run-command-button", "Delete&nbsp;key");
+    deleteButton.addEventListener('click', evt => {
+      this._runDeleteKey(hostname, evt);
+    });
+    return deleteButton;
+  }
+
+  _addMenuItemReject(hostname) {
+    var rejectButton = this._createDiv("run-command-button", "Reject&nbsp;key");
+    rejectButton.addEventListener('click', evt => {
+      this._runRejectKey(hostname, evt);
+    });
+    return rejectButton;
+  }
+
+  _addMenuItemSyncState(hostname) {
+    var highStateButton = this._createDiv("run-command-button", "Sync&nbsp;state");
+    highStateButton.addEventListener('click', evt => {
+      this._runHighState(hostname, evt);
+    });
+    return highStateButton;
+  }
+
   _updateOfflineMinion(container, hostname) {
     var element = document.getElementById(hostname);
     if(element == null) {
@@ -109,17 +154,9 @@ class HomeRoute extends Route {
     offline.id = "status";
     element.appendChild(offline);
 
-    var rejectButton = this._createDiv("run-command-button", "Reject &#9658;");
-    rejectButton.addEventListener('click', evt => {
-      this._runRejectKey(hostname, evt);
-    });
-    element.appendChild(rejectButton);
-
-    var deleteButton = this._createDiv("run-command-button", "Delete &#9658;");
-    deleteButton.addEventListener('click', evt => {
-      this._runDeleteKey(hostname, evt);
-    });
-    element.appendChild(deleteButton);
+    var menu = this._addMenu(element);
+    menu.appendChild(this._addMenuItemReject(hostname));
+    menu.appendChild(this._addMenuItemDelete(hostname));
   }
 
   _updateMinion(container, minion) {
@@ -146,23 +183,10 @@ class HomeRoute extends Route {
 
     element.appendChild(this._createDiv("os", minion.os + " " + minion.osrelease));
 
-    var highStateButton = this._createDiv("run-command-button", "Sync state &#9658;");
-    highStateButton.addEventListener('click', evt => {
-      this._runHighState(minion.hostname, evt);
-    });
-    element.appendChild(highStateButton);
-
-    var rejectButton = this._createDiv("run-command-button", "Reject &#9658;");
-    rejectButton.addEventListener('click', evt => {
-      this._runRejectKey(minion.hostname, evt);
-    });
-    element.appendChild(rejectButton);
-
-    var deleteButton = this._createDiv("run-command-button", "Delete &#9658;");
-    deleteButton.addEventListener('click', evt => {
-      this._runDeleteKey(minion.hostname, evt);
-    });
-    element.appendChild(deleteButton);
+    var menu = this._addMenu(element);
+    menu.appendChild(this._addMenuItemSyncState(minion.hostname));
+    menu.appendChild(this._addMenuItemReject(minion.hostname));
+    menu.appendChild(this._addMenuItemDelete(minion.hostname));
   }
 
   _addMinion(container, hostname) {
@@ -184,17 +208,9 @@ class HomeRoute extends Route {
 
     element.appendChild(this._createDiv("os", "Loading..."));
 
-    var rejectButton = this._createDiv("run-command-button", "Reject &#9658;");
-    rejectButton.addEventListener('click', evt => {
-      this._runRejectKey(minion.hostname, evt);
-    });
-    element.appendChild(rejectButton);
-
-    var deleteButton = this._createDiv("run-command-button", "Delete &#9658;");
-    deleteButton.addEventListener('click', evt => {
-      this._runDeleteKey(minion.hostname, evt);
-    });
-    element.appendChild(deleteButton);
+    var menu = this._addMenu(element);
+    menu.appendChild(this._addMenuItemReject(hostname));
+    menu.appendChild(this._addMenuItemDelete(hostname));
 
     container.appendChild(element);
   }
@@ -208,17 +224,9 @@ class HomeRoute extends Route {
     rejected.id = "status";
     element.appendChild(rejected);
 
-    var deleteButton = this._createDiv("run-command-button", "Delete &#9658;");
-    deleteButton.addEventListener('click', evt => {
-      this._runDeleteKey(hostname, evt);
-    });
-    element.appendChild(deleteButton);
-
-    var acceptButton = this._createDiv("run-command-button", "Accept &#9658;");
-    acceptButton.addEventListener('click', evt => {
-      this._runAcceptKey(hostname, evt);
-    });
-    element.appendChild(acceptButton);
+    var menu = this._addMenu(element);
+    menu.appendChild(this._addMenuItemDelete(hostname));
+    menu.appendChild(this._addMenuItemAccept(hostname));
 
     container.appendChild(element);
   }
@@ -232,23 +240,10 @@ class HomeRoute extends Route {
     denied.id = "status";
     element.appendChild(denied);
 
-    var rejectButton = this._createDiv("run-command-button", "Reject &#9658;");
-    rejectButton.addEventListener('click', evt => {
-      this._runRejectKey(hostname, evt);
-    });
-    element.appendChild(rejectButton);
-
-    var deleteButton = this._createDiv("run-command-button", "Delete &#9658;");
-    deleteButton.addEventListener('click', evt => {
-      this._runDeleteKey(hostname, evt);
-    });
-    element.appendChild(deleteButton);
-
-    var acceptButton = this._createDiv("run-command-button", "Accept &#9658;");
-    acceptButton.addEventListener('click', evt => {
-      this._runAcceptKey(hostname, evt);
-    });
-    element.appendChild(acceptButton);
+    var menu = this._addMenu(element);
+    menu.appendChild(this._addMenuItemReject(hostname));
+    menu.appendChild(this._addMenuItemDelete(hostname));
+    menu.appendChild(this._addMenuItemAccept(hostname));
 
     container.appendChild(element);
   }
@@ -262,23 +257,10 @@ class HomeRoute extends Route {
     pre.id = "status";
     element.appendChild(pre);
 
-    var rejectButton = this._createDiv("run-command-button", "Reject &#9658;");
-    rejectButton.addEventListener('click', evt => {
-      this._runRejectKey(hostname, evt);
-    });
-    element.appendChild(rejectButton);
-
-    var deleteButton = this._createDiv("run-command-button", "Delete &#9658;");
-    deleteButton.addEventListener('click', evt => {
-      this._runDeleteKey(hostname, evt);
-    });
-    element.appendChild(deleteButton);
-
-    var acceptButton = this._createDiv("run-command-button", "Accept &#9658;");
-    acceptButton.addEventListener('click', evt => {
-      this._runAcceptKey(hostname, evt);
-    });
-    element.appendChild(acceptButton);
+    var menu = this._addMenu(element);
+    menu.appendChild(this._addMenuItemReject(hostname));
+    menu.appendChild(this._addMenuItemDelete(hostname));
+    menu.appendChild(this._addMenuItemAccept(hostname));
 
     container.appendChild(element);
   }
