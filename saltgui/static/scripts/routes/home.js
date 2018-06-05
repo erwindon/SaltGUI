@@ -91,17 +91,17 @@ class HomeRoute extends Route {
   }
 
   _addMenu(element) {
-    var menuDropdown = this._createDiv("run-command-button", "");
-    var menuButton = this._createDiv("menu-dropdown", "&#9658;");
+    var menuDropdown = Route._createDiv("run-command-button", "");
+    var menuButton = Route._createDiv("menu-dropdown", "&#9658;");
     menuDropdown.appendChild(menuButton);
-    var menuDropdownContent = this._createDiv("menu-dropdown-content", "");
+    var menuDropdownContent = Route._createDiv("menu-dropdown-content", "");
     menuDropdown.appendChild(menuDropdownContent);
     element.appendChild(menuDropdown);
     return menuDropdownContent;
   }
 
   _addMenuItemAccept(hostname) {
-    var acceptButton = this._createDiv("run-command-button", "Accept&nbsp;key");
+    var acceptButton = Route._createDiv("run-command-button", "Accept&nbsp;key");
     acceptButton.addEventListener('click', evt => {
       this._runAcceptKey(hostname, evt);
     });
@@ -109,7 +109,7 @@ class HomeRoute extends Route {
   }
 
   _addMenuItemDelete(hostname) {
-    var deleteButton = this._createDiv("run-command-button", "Delete&nbsp;key");
+    var deleteButton = Route._createDiv("run-command-button", "Delete&nbsp;key");
     deleteButton.addEventListener('click', evt => {
       this._runDeleteKey(hostname, evt);
     });
@@ -117,7 +117,7 @@ class HomeRoute extends Route {
   }
 
   _addMenuItemReject(hostname) {
-    var rejectButton = this._createDiv("run-command-button", "Reject&nbsp;key");
+    var rejectButton = Route._createDiv("run-command-button", "Reject&nbsp;key");
     rejectButton.addEventListener('click', evt => {
       this._runRejectKey(hostname, evt);
     });
@@ -125,7 +125,7 @@ class HomeRoute extends Route {
   }
 
   _addMenuItemSyncState(hostname) {
-    var highStateButton = this._createDiv("run-command-button", "Sync&nbsp;state");
+    var highStateButton = Route._createDiv("run-command-button", "Sync&nbsp;state");
     highStateButton.addEventListener('click', evt => {
       this._runHighState(hostname, evt);
     });
@@ -145,9 +145,9 @@ class HomeRoute extends Route {
       element.removeChild(element.firstChild);
     }
 
-    element.appendChild(this._createDiv("hostname", hostname));
+    element.appendChild(Route._createDiv("hostname", hostname));
 
-    var offline = this._createDiv("offline", "offline");
+    var offline = Route._createDiv("offline", "offline");
     offline.id = "status";
     element.appendChild(offline);
 
@@ -171,14 +171,14 @@ class HomeRoute extends Route {
       element.removeChild(element.firstChild);
     }
 
-    element.appendChild(this._createDiv("hostname", minion.hostname));
+    element.appendChild(Route._createDiv("hostname", minion.hostname));
 
-    var address = this._createDiv("address", ip);
+    var address = Route._createDiv("address", ip);
     address.setAttribute("tabindex", -1);
     address.addEventListener('click', this._copyAddress);
     element.appendChild(address);
 
-    element.appendChild(this._createDiv("os", minion.os + " " + minion.osrelease));
+    element.appendChild(Route._createDiv("os", minion.os + " " + minion.osrelease));
 
     var menu = this._addMenu(element);
     menu.appendChild(this._addMenuItemSyncState(minion.hostname));
@@ -197,13 +197,13 @@ class HomeRoute extends Route {
     var element = document.createElement('li');
     element.id = hostname;
 
-    element.appendChild(this._createDiv("hostname", hostname));
+    element.appendChild(Route._createDiv("hostname", hostname));
 
-    var minion = this._createDiv("accepted", "accepted");
+    var minion = Route._createDiv("accepted", "accepted");
     minion.id = "status";
     element.appendChild(minion);
 
-    element.appendChild(this._createDiv("os", "Loading..."));
+    element.appendChild(Route._createDiv("os", "Loading..."));
 
     var menu = this._addMenu(element);
     menu.appendChild(this._addMenuItemReject(hostname));
@@ -215,9 +215,9 @@ class HomeRoute extends Route {
   _addRejectedMinion(container, hostname) {
     var element = document.createElement('li');
 
-    element.appendChild(this._createDiv("hostname", hostname));
+    element.appendChild(Route._createDiv("hostname", hostname));
 
-    var rejected = this._createDiv("rejected", "rejected");
+    var rejected = Route._createDiv("rejected", "rejected");
     rejected.id = "status";
     element.appendChild(rejected);
 
@@ -231,9 +231,9 @@ class HomeRoute extends Route {
   _addDeniedMinion(container, hostname) {
     var element = document.createElement('li');
 
-    element.appendChild(this._createDiv("hostname", hostname));
+    element.appendChild(Route._createDiv("hostname", hostname));
 
-    var denied = this._createDiv("denied", "denied");
+    var denied = Route._createDiv("denied", "denied");
     denied.id = "status";
     element.appendChild(denied);
 
@@ -248,9 +248,9 @@ class HomeRoute extends Route {
   _addPreMinion(container, hostname) {
     var element = document.createElement('li');
 
-    element.appendChild(this._createDiv("hostname", hostname));
+    element.appendChild(Route._createDiv("hostname", hostname));
 
-    var pre = this._createDiv("unaccepted", "unaccepted");
+    var pre = Route._createDiv("unaccepted", "unaccepted");
     pre.id = "status";
     element.appendChild(pre);
 
@@ -290,9 +290,9 @@ class HomeRoute extends Route {
     var element = document.createElement('li');
     element.id = job.id;
 
-    element.appendChild(this._createDiv("function", job.Function));
-    element.appendChild(this._createDiv("target", job.Target));
-    element.appendChild(this._createDiv("time", job.StartTime));
+    element.appendChild(Route._createDiv("function", job.Function));
+    element.appendChild(Route._createDiv("target", job.Target));
+    element.appendChild(Route._createDiv("time", job.StartTime));
     container.appendChild(element);
     element.addEventListener('click', this._createJobListener(job.id));
   }
