@@ -6,7 +6,6 @@
 /* Dropdown Content (Hidden by Default) */
 .run-command-button .menu-dropdown-content {
     display: none;
-    font-size: 120%;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
     position: absolute;
     background-color: #e0e0e0;
