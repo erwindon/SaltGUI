@@ -135,7 +135,7 @@ class HomeRoute extends Route {
   _updateOfflineMinion(container, hostname) {
     var element = document.getElementById(hostname);
     if(element == null) {
-      console.log("offline minion not found on screen:", hostname);
+      // offline minion not found on screen...
       // construct a basic element that can be updated here
       element = document.createElement('li');
       element.id = hostname;
@@ -161,7 +161,7 @@ class HomeRoute extends Route {
 
     var element = document.getElementById(minion.hostname);
     if(element == null) {
-      console.log("online minion not found on screen:", minion.hostname);
+      // online minion not found on screen...
       // construct a basic element that can be updated here
       element = document.createElement('li');
       element.id = minion.hostname;
