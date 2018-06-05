@@ -95,9 +95,6 @@ class HomeRoute extends Route {
     var menuButton = this._createDiv("menu-dropdown", "&#9658;");
     menuDropdown.appendChild(menuButton);
     var menuDropdownContent = this._createDiv("menu-dropdown-content", "");
-    //menuDropdownContent.appendChild(this._createDiv("run-command-button", "x1"));
-    //menuDropdownContent.appendChild(this._createDiv("run-command-button", "x2"));
-    //menuDropdownContent.appendChild(this._createDiv("run-command-button", "x3"));
     menuDropdown.appendChild(menuDropdownContent);
     element.appendChild(menuDropdown);
     return menuDropdownContent;
