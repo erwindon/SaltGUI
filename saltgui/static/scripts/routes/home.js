@@ -90,46 +90,28 @@ class HomeRoute extends Route {
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
-  _addMenu(element) {
-    var menuDropdown = Route._createDiv("run-command-button", "");
-    var menuButton = Route._createDiv("menu-dropdown", "&#9658;");
-    menuDropdown.appendChild(menuButton);
-    var menuDropdownContent = Route._createDiv("menu-dropdown-content", "");
-    menuDropdown.appendChild(menuDropdownContent);
-    element.appendChild(menuDropdown);
-    return menuDropdownContent;
-  }
-
-  _addMenuItemAccept(hostname) {
-    var acceptButton = Route._createDiv("run-command-button", "Accept&nbsp;key");
-    acceptButton.addEventListener('click', evt => {
+  _addMenuItemAccept(menu, hostname) {
+    menu.addMenuItem("Accept&nbsp;key", function(evt) {
       this._runAcceptKey(evt, hostname);
-    });
-    return acceptButton;
+    }.bind(this));
   }
 
-  _addMenuItemDelete(hostname) {
-    var deleteButton = Route._createDiv("run-command-button", "Delete&nbsp;key");
-    deleteButton.addEventListener('click', evt => {
+  _addMenuItemDelete(menu, hostname) {
+    menu.addMenuItem("Delete&nbsp;key", function(evt) {
       this._runDeleteKey(evt, hostname);
-    });
-    return deleteButton;
+    }.bind(this));
   }
 
-  _addMenuItemReject(hostname) {
-    var rejectButton = Route._createDiv("run-command-button", "Reject&nbsp;key");
-    rejectButton.addEventListener('click', evt => {
+  _addMenuItemReject(menu, hostname) {
+    menu.addMenuItem("Reject&nbsp;key", function(evt) {
       this._runRejectKey(evt, hostname);
-    });
-    return rejectButton;
+    }.bind(this));
   }
 
-  _addMenuItemSyncState(hostname) {
-    var highStateButton = Route._createDiv("run-command-button", "Sync&nbsp;state");
-    highStateButton.addEventListener('click', evt => {
+  _addMenuItemSyncState(menu, hostname) {
+    menu.addMenuItem("Sync&nbsp;state", function(evt) {
       this._runHighState(evt, hostname);
-    });
-    return highStateButton;
+    }.bind(this));
   }
 
   _updateOfflineMinion(container, hostname) {
@@ -151,9 +133,9 @@ class HomeRoute extends Route {
     offline.id = "status";
     element.appendChild(offline);
 
-    var menu = this._addMenu(element);
-    menu.appendChild(this._addMenuItemReject(hostname));
-    menu.appendChild(this._addMenuItemDelete(hostname));
+    var menu = new DropDownMenu(element);
+    this._addMenuItemReject(menu, hostname);
+    this._addMenuItemDelete(menu, hostname);
   }
 
   _updateMinion(container, minion) {
@@ -180,10 +162,10 @@ class HomeRoute extends Route {
 
     element.appendChild(Route._createDiv("os", minion.os + " " + minion.osrelease));
 
-    var menu = this._addMenu(element);
-    menu.appendChild(this._addMenuItemSyncState(minion.hostname));
-    menu.appendChild(this._addMenuItemReject(minion.hostname));
-    menu.appendChild(this._addMenuItemDelete(minion.hostname));
+    var menu = new DropDownMenu(element);
+    this._addMenuItemSyncState(menu, minion.hostname);
+    this._addMenuItemReject(menu, minion.hostname);
+    this._addMenuItemDelete(menu, minion.hostname);
   }
 
   _addMinion(container, hostname) {
@@ -205,9 +187,9 @@ class HomeRoute extends Route {
 
     element.appendChild(Route._createDiv("os", "Loading..."));
 
-    var menu = this._addMenu(element);
-    menu.appendChild(this._addMenuItemReject(hostname));
-    menu.appendChild(this._addMenuItemDelete(hostname));
+    var menu = new DropDownMenu(element);
+    this._addMenuItemReject(menu, hostname);
+    this._addMenuItemDelete(menu, hostname);
 
     container.appendChild(element);
   }
@@ -221,9 +203,9 @@ class HomeRoute extends Route {
     rejected.id = "status";
     element.appendChild(rejected);
 
-    var menu = this._addMenu(element);
-    menu.appendChild(this._addMenuItemDelete(hostname));
-    menu.appendChild(this._addMenuItemAccept(hostname));
+    var menu = new DropDownMenu(element);
+    this._addMenuItemDelete(menu, hostname);
+    this._addMenuItemAccept(menu, hostname);
 
     container.appendChild(element);
   }
@@ -237,10 +219,10 @@ class HomeRoute extends Route {
     denied.id = "status";
     element.appendChild(denied);
 
-    var menu = this._addMenu(element);
-    menu.appendChild(this._addMenuItemAccept(hostname));
-    menu.appendChild(this._addMenuItemReject(hostname));
-    menu.appendChild(this._addMenuItemDelete(hostname));
+    var menu = new DropDownMenu(element);
+    this._addMenuItemAccept(menu, hostname);
+    this._addMenuItemReject(menu, hostname);
+    this._addMenuItemDelete(menu, hostname);
 
     container.appendChild(element);
   }
@@ -254,10 +236,10 @@ class HomeRoute extends Route {
     pre.id = "status";
     element.appendChild(pre);
 
-    var menu = this._addMenu(element);
-    menu.appendChild(this._addMenuItemAccept(hostname));
-    menu.appendChild(this._addMenuItemReject(hostname));
-    menu.appendChild(this._addMenuItemDelete(hostname));
+    var menu = new DropDownMenu(element);
+    this._addMenuItemAccept(menu, hostname);
+    this._addMenuItemReject(menu, hostname);
+    this._addMenuItemDelete(menu, hostname);
 
     container.appendChild(element);
   }
