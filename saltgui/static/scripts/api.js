@@ -155,17 +155,21 @@ class API {
       if(args.length !== 0) params.arg = args.join(" ");
     }
 
-    if(functionToRun == "salt.wheel.key.accept") {
+    switch(functionToRun) {
+    case "salt.wheel.key.accept":
       // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.accept
       params.include_denied = true;
       params.include_rejected = true;
-    } else if(functionToRun == "salt.wheel.key.reject") {
+      break;
+    case "salt.wheel.key.reject":
       // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.reject
       params.include_accepted = true;
       params.include_denied = true;
-    } else if(functionToRun == "salt.wheel.key.delete") {
+      break;
+    case "salt.wheel.key.delete":
       // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.delete
       // no special parameters needed here
+      break;
     }
 
     return this._callMethod("POST", "/", params);
