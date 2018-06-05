@@ -145,6 +145,7 @@ class API {
 
     if(functionToRun.startsWith("salt.wheel.key.")) {
       params.client = "wheel";
+      // use only the part after "salt.wheel." (11 chars)
       params.fun = functionToRun.substring(11);
       params.match = target;
     } else {
