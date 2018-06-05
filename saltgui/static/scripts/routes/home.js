@@ -103,7 +103,7 @@ class HomeRoute extends Route {
   _addMenuItemAccept(hostname) {
     var acceptButton = Route._createDiv("run-command-button", "Accept&nbsp;key");
     acceptButton.addEventListener('click', evt => {
-      this._runAcceptKey(hostname, evt);
+      this._runAcceptKey(evt, hostname);
     });
     return acceptButton;
   }
@@ -111,7 +111,7 @@ class HomeRoute extends Route {
   _addMenuItemDelete(hostname) {
     var deleteButton = Route._createDiv("run-command-button", "Delete&nbsp;key");
     deleteButton.addEventListener('click', evt => {
-      this._runDeleteKey(hostname, evt);
+      this._runDeleteKey(evt, hostname);
     });
     return deleteButton;
   }
@@ -119,7 +119,7 @@ class HomeRoute extends Route {
   _addMenuItemReject(hostname) {
     var rejectButton = Route._createDiv("run-command-button", "Reject&nbsp;key");
     rejectButton.addEventListener('click', evt => {
-      this._runRejectKey(hostname, evt);
+      this._runRejectKey(evt, hostname);
     });
     return rejectButton;
   }
@@ -127,7 +127,7 @@ class HomeRoute extends Route {
   _addMenuItemSyncState(hostname) {
     var highStateButton = Route._createDiv("run-command-button", "Sync&nbsp;state");
     highStateButton.addEventListener('click', evt => {
-      this._runHighState(hostname, evt);
+      this._runHighState(evt, hostname);
     });
     return highStateButton;
   }
@@ -347,19 +347,19 @@ class HomeRoute extends Route {
     command.value = commandString;
   }
 
-  _runHighState(hostname, evt) {
+  _runHighState(evt, hostname) {
     this._runCommand(evt, hostname, "state.apply");
   }
 
-  _runAcceptKey(hostname, evt) {
+  _runAcceptKey(evt, hostname) {
     this._runCommand(evt, hostname, "salt.wheel.key.accept");
   }
 
-  _runRejectKey(hostname, evt) {
+  _runRejectKey(evt, hostname) {
     this._runCommand(evt, hostname, "salt.wheel.key.reject");
   }
 
-  _runDeleteKey(hostname, evt) {
+  _runDeleteKey(evt, hostname) {
     this._runCommand(evt, hostname, "salt.wheel.key.delete");
   }
 }
