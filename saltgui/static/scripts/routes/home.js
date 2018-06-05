@@ -238,9 +238,9 @@ class HomeRoute extends Route {
     element.appendChild(denied);
 
     var menu = this._addMenu(element);
+    menu.appendChild(this._addMenuItemAccept(hostname));
     menu.appendChild(this._addMenuItemReject(hostname));
     menu.appendChild(this._addMenuItemDelete(hostname));
-    menu.appendChild(this._addMenuItemAccept(hostname));
 
     container.appendChild(element);
   }
@@ -255,9 +255,9 @@ class HomeRoute extends Route {
     element.appendChild(pre);
 
     var menu = this._addMenu(element);
+    menu.appendChild(this._addMenuItemAccept(hostname));
     menu.appendChild(this._addMenuItemReject(hostname));
     menu.appendChild(this._addMenuItemDelete(hostname));
-    menu.appendChild(this._addMenuItemAccept(hostname));
 
     container.appendChild(element);
   }
