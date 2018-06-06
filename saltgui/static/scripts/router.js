@@ -55,7 +55,7 @@ class Router {
       router.switchingRoute = false;
     };
 
-    var response = undefined;
+    var response;
     if(route.onShow) response = route.onShow();
 
     if(response && response.then) response.then(afterLoad);

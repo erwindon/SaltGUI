@@ -67,8 +67,7 @@ class API {
 
   _toggleManualRun(evt) {
     var manualRun = document.querySelector("#run-command-popup");
-    var isShowing = manualRun.style.display !== "none"
-      && manualRun.style.display !== "";
+    var isShowing = manualRun.style.display !== "none" && manualRun.style.display !== "";
 
     //Don't close if they click inside the window
     if(isShowing && evt.target.className !== "popup") return;
@@ -141,7 +140,7 @@ class API {
     var functionToRun = args[0];
     args.shift();
 
-    var params = {}
+    var params = {};
 
     if(functionToRun.startsWith("salt.wheel.key.")) {
       params.client = "wheel";
