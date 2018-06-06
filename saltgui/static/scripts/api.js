@@ -74,6 +74,14 @@ class API {
     if(isShowing && evt.target.className !== "popup") return;
     manualRun.style.display = isShowing ? "none" : "block";
     document.body.style["overflow-y"] = isShowing ? "scroll" : "hidden";
+
+    // test whether the command may have caused an update to the list
+    // the user may have altered the text after running the command, just ignore that
+    var command = document.querySelector(".run-command #command").value;
+    var output = document.querySelector(".run-command pre").innerHTML;
+    if(isShowing && command.startsWith("salt.wheel.key.") && output != "Waiting for command...") {
+      location.reload(); 
+    }
   }
 
   isAuthenticated() {
@@ -133,13 +141,36 @@ class API {
     var functionToRun = args[0];
     args.shift();
 
-    var params = {
-      tgt: target,
-      fun: functionToRun,
-      client: "local"
-    };
+    var params = {}
 
-    if(args.length !== 0) params.arg = args.join(" ");
+    if(functionToRun.startsWith("salt.wheel.key.")) {
+      params.client = "wheel";
+      // use only the part after "salt.wheel." (11 chars)
+      params.fun = functionToRun.substring(11);
+      params.match = target;
+    } else {
+      params.client = "local";
+      params.fun = functionToRun;
+      params.tgt = target;
+      if(args.length !== 0) params.arg = args.join(" ");
+    }
+
+    switch(functionToRun) {
+    case "salt.wheel.key.accept":
+      // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.accept
+      params.include_denied = true;
+      params.include_rejected = true;
+      break;
+    case "salt.wheel.key.reject":
+      // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.reject
+      params.include_accepted = true;
+      params.include_denied = true;
+      break;
+    case "salt.wheel.key.delete":
+      // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.delete
+      // no special parameters needed here
+      break;
+    }
 
     return this._callMethod("POST", "/", params);
   }

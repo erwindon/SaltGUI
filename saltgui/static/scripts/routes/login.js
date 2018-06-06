@@ -34,7 +34,7 @@ class LoginRoute extends Route{
 
     var notice = document.querySelector('.notice-wrapper');
 
-    var success = this._createDiv("notice", "Please wait...");
+    var success = Route._createDiv("notice", "Please wait...");
     success.style.backgroundColor = "#4CAF50"
     notice.replaceChild(success, notice.firstChild);
 
@@ -54,7 +54,7 @@ class LoginRoute extends Route{
 
     var notice = document.querySelector('.notice-wrapper');
 
-    var authFailed = this._createDiv("notice", "Authentication failed");
+    var authFailed = Route._createDiv("notice", "Authentication failed");
     authFailed.style.backgroundColor = "#F44336"
 
     notice.replaceChild(authFailed, notice.firstChild);

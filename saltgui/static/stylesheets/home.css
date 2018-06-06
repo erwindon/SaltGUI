@@ -28,20 +28,19 @@
 
 .minions li div {
   display: inline-block;
+  margin-left: 0;
   margin-right: 20px;
 }
 
-.minions li div:last-of-type {
-  margin-right: 0;
-}
-
-.run-highstate {
+.minions li .run-command-button {
   color: #263238;
   float: right;
   cursor: pointer;
+  margin-right: 0;
+  margin-left: 20px;
 }
 
-.run-highstate:hover {
+.minions li .run-command-button:hover {
   color: #2E7D32;
 }
 
@@ -188,7 +187,7 @@ pre .hostname:first-of-type {
 
 @media(max-width: 1200px) {
 
-  .minions li .run-highstate {
+  .minions li .run-command-button {
     display: inline-block;
     float: none;
   }

@@ -10,6 +10,10 @@ class HomeRoute extends Route {
     this._updateKeys = this._updateKeys.bind(this);
     this._updateJobs = this._updateJobs.bind(this);
     this._runHighState = this._runHighState.bind(this);
+    this._runAcceptKey = this._runAcceptKey.bind(this);
+    this._runRejectKey = this._runRejectKey.bind(this);
+    this._runDeleteKey = this._runDeleteKey.bind(this);
+    this._runCommand = this._runCommand.bind(this);
   }
 
   onShow() {
@@ -56,6 +60,17 @@ class HomeRoute extends Route {
     var list = this.getElement().querySelector('#keys');
     list.innerHTML = "";
 
+    // never mind the keys.minions list
+    // it should be the same as the minions list
+    // which we already have
+
+    var keyshdr = this.getElement().querySelector('#keyshdr');
+    if(keys.minions_denied.length || keys.minions_pre.length || keys.minions_rejected.length) {
+      keyshdr.style.display = "block";
+    } else {
+      keyshdr.style.display = "none";
+    }
+
     var hostnames = keys.minions_denied.sort();
     for(var i = 0; i < hostnames.length; i++) {
         this._addDeniedMinion(list, hostnames[i]);
@@ -75,10 +90,34 @@ class HomeRoute extends Route {
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
+  _addMenuItemAccept(menu, hostname) {
+    menu.addMenuItem("Accept&nbsp;key", function(evt) {
+      this._runAcceptKey(evt, hostname);
+    }.bind(this));
+  }
+
+  _addMenuItemDelete(menu, hostname) {
+    menu.addMenuItem("Delete&nbsp;key", function(evt) {
+      this._runDeleteKey(evt, hostname);
+    }.bind(this));
+  }
+
+  _addMenuItemReject(menu, hostname) {
+    menu.addMenuItem("Reject&nbsp;key", function(evt) {
+      this._runRejectKey(evt, hostname);
+    }.bind(this));
+  }
+
+  _addMenuItemSyncState(menu, hostname) {
+    menu.addMenuItem("Sync&nbsp;state", function(evt) {
+      this._runHighState(evt, hostname);
+    }.bind(this));
+  }
+
   _updateOfflineMinion(container, hostname) {
     var element = document.getElementById(hostname);
     if(element == null) {
-      console.log("offline minion not found on screen:", hostname);
+      // offline minion not found on screen...
       // construct a basic element that can be updated here
       element = document.createElement('li');
       element.id = hostname;
@@ -88,12 +127,15 @@ class HomeRoute extends Route {
       element.removeChild(element.firstChild);
     }
 
-    element.appendChild(this._createDiv("hostname", hostname));
+    element.appendChild(Route._createDiv("hostname", hostname));
 
-    var offline = this._createDiv("offline", "offline");
+    var offline = Route._createDiv("offline", "offline");
     offline.id = "status";
-
     element.appendChild(offline);
+
+    var menu = new DropDownMenu(element);
+    this._addMenuItemReject(menu, hostname);
+    this._addMenuItemDelete(menu, hostname);
   }
 
   _updateMinion(container, minion) {
@@ -101,7 +143,7 @@ class HomeRoute extends Route {
 
     var element = document.getElementById(minion.hostname);
     if(element == null) {
-      console.log("online minion not found on screen:", minion.hostname);
+      // online minion not found on screen...
       // construct a basic element that can be updated here
       element = document.createElement('li');
       element.id = minion.hostname;
@@ -111,21 +153,19 @@ class HomeRoute extends Route {
       element.removeChild(element.firstChild);
     }
 
-    element.appendChild(this._createDiv("hostname", minion.hostname));
+    element.appendChild(Route._createDiv("hostname", minion.hostname));
 
-    var address = this._createDiv("address", ip);
+    var address = Route._createDiv("address", ip);
     address.setAttribute("tabindex", -1);
-    element.appendChild(address);
     address.addEventListener('click', this._copyAddress);
+    element.appendChild(address);
 
-    element.appendChild(this._createDiv("os", minion.os + " " + minion.osrelease));
-    var highStateButton = this._createDiv("run-highstate", "Sync state &#9658;");
+    element.appendChild(Route._createDiv("os", minion.os + " " + minion.osrelease));
 
-    highStateButton.addEventListener('click', evt => {
-      this._runHighState(minion.hostname, evt);
-    });
-
-    element.appendChild(highStateButton);
+    var menu = new DropDownMenu(element);
+    this._addMenuItemSyncState(menu, minion.hostname);
+    this._addMenuItemReject(menu, minion.hostname);
+    this._addMenuItemDelete(menu, minion.hostname);
   }
 
   _addMinion(container, hostname) {
@@ -139,13 +179,17 @@ class HomeRoute extends Route {
     var element = document.createElement('li');
     element.id = hostname;
 
-    element.appendChild(this._createDiv("hostname", hostname));
+    element.appendChild(Route._createDiv("hostname", hostname));
 
-    var minion = this._createDiv("accepted", "accepted");
+    var minion = Route._createDiv("accepted", "accepted");
     minion.id = "status";
     element.appendChild(minion);
 
-    element.appendChild(this._createDiv("os", "Loading..."));
+    element.appendChild(Route._createDiv("os", "Loading..."));
+
+    var menu = new DropDownMenu(element);
+    this._addMenuItemReject(menu, hostname);
+    this._addMenuItemDelete(menu, hostname);
 
     container.appendChild(element);
   }
@@ -153,36 +197,50 @@ class HomeRoute extends Route {
   _addRejectedMinion(container, hostname) {
     var element = document.createElement('li');
 
-    element.appendChild(this._createDiv("hostname", hostname));
+    element.appendChild(Route._createDiv("hostname", hostname));
 
-    var rejected = this._createDiv("rejected", "rejected");
+    var rejected = Route._createDiv("rejected", "rejected");
     rejected.id = "status";
-
     element.appendChild(rejected);
+
+    var menu = new DropDownMenu(element);
+    this._addMenuItemDelete(menu, hostname);
+    this._addMenuItemAccept(menu, hostname);
+
     container.appendChild(element);
   }
 
   _addDeniedMinion(container, hostname) {
     var element = document.createElement('li');
 
-    element.appendChild(this._createDiv("hostname", hostname));
+    element.appendChild(Route._createDiv("hostname", hostname));
 
-    var denied = this._createDiv("denied", "denied");
+    var denied = Route._createDiv("denied", "denied");
     denied.id = "status";
-
     element.appendChild(denied);
+
+    var menu = new DropDownMenu(element);
+    this._addMenuItemAccept(menu, hostname);
+    this._addMenuItemReject(menu, hostname);
+    this._addMenuItemDelete(menu, hostname);
+
     container.appendChild(element);
   }
 
   _addPreMinion(container, hostname) {
     var element = document.createElement('li');
 
-    element.appendChild(this._createDiv("hostname", hostname));
+    element.appendChild(Route._createDiv("hostname", hostname));
 
-    var pre = this._createDiv("unaccepted", "unaccepted");
+    var pre = Route._createDiv("unaccepted", "unaccepted");
     pre.id = "status";
-
     element.appendChild(pre);
+
+    var menu = new DropDownMenu(element);
+    this._addMenuItemAccept(menu, hostname);
+    this._addMenuItemReject(menu, hostname);
+    this._addMenuItemDelete(menu, hostname);
+
     container.appendChild(element);
   }
 
@@ -214,9 +272,9 @@ class HomeRoute extends Route {
     var element = document.createElement('li');
     element.id = job.id;
 
-    element.appendChild(this._createDiv("function", job.Function));
-    element.appendChild(this._createDiv("target", job.Target));
-    element.appendChild(this._createDiv("time", job.StartTime));
+    element.appendChild(Route._createDiv("function", job.Function));
+    element.appendChild(Route._createDiv("target", job.Target));
+    element.appendChild(Route._createDiv("time", job.StartTime));
     container.appendChild(element);
     element.addEventListener('click', this._createJobListener(job.id));
   }
@@ -263,11 +321,27 @@ class HomeRoute extends Route {
     document.execCommand("copy");
   }
 
-  _runHighState(hostname, evt) {
+  _runCommand(evt, targetString, commandString) {
     this.router.api._toggleManualRun(evt);
     var target = document.querySelector("#target");
     var command = document.querySelector("#command");
-    target.value = hostname;
-    command.value = "state.apply";
+    target.value = targetString;
+    command.value = commandString;
+  }
+
+  _runHighState(evt, hostname) {
+    this._runCommand(evt, hostname, "state.apply");
+  }
+
+  _runAcceptKey(evt, hostname) {
+    this._runCommand(evt, hostname, "salt.wheel.key.accept");
+  }
+
+  _runRejectKey(evt, hostname) {
+    this._runCommand(evt, hostname, "salt.wheel.key.reject");
+  }
+
+  _runDeleteKey(evt, hostname) {
+    this._runCommand(evt, hostname, "salt.wheel.key.delete");
   }
 }
