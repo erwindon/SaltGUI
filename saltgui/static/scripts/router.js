@@ -4,9 +4,9 @@ class Router {
     this.api = new API();
     this.currentRoute = undefined;
     this.routes = [];
-    this.registerRoute(new LoginRoute(this, this.api));
-    this.registerRoute(new HomeRoute(this, this.api));
-    this.registerRoute(new JobRoute(this, this.api));
+    this.registerRoute(new LoginRoute(this));
+    this.registerRoute(new HomeRoute(this));
+    this.registerRoute(new JobRoute(this));
 
     this._registerEventListeners();
     this.goTo(this.api.isAuthenticated() ?
