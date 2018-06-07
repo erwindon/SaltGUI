@@ -15,6 +15,8 @@ class API {
       .addEventListener('click', this._toggleManualRun);
     document.querySelector("#button_manualrun")
       .addEventListener('click', this._toggleManualRun);
+    document.querySelector("#button_close_cmd")
+      .addEventListener('click', this._toggleManualRun);
     document.querySelector("#button_logout")
       .addEventListener('click', _ => {
         this._logout(this);
@@ -70,7 +72,7 @@ class API {
     var isShowing = manualRun.style.display !== "none" && manualRun.style.display !== "";
 
     //Don't close if they click inside the window
-    if(isShowing && evt.target.className !== "popup") return;
+    if(isShowing && evt.target.className !== "popup" && evt.target.className !== "nearlyvisiblebutton") return;
     manualRun.style.display = isShowing ? "none" : "block";
     document.body.style["overflow-y"] = isShowing ? "scroll" : "hidden";
 
@@ -81,6 +83,7 @@ class API {
     if(isShowing && command.startsWith("salt.wheel.key.") && output != "Waiting for command...") {
       location.reload(); 
     }
+    evt.stopPropagation();
   }
 
   isAuthenticated() {
