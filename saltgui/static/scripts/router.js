@@ -4,9 +4,9 @@ class Router {
     this.api = new API();
     this.currentRoute = undefined;
     this.routes = [];
-    this.registerRoute(new LoginRoute(this, this.api));
-    this.registerRoute(new HomeRoute(this, this.api));
-    this.registerRoute(new JobRoute(this, this.api));
+    this.registerRoute(new LoginRoute(this));
+    this.registerRoute(new HomeRoute(this));
+    this.registerRoute(new JobRoute(this));
 
     this._registerEventListeners();
     this.goTo(this.api.isAuthenticated() ?
@@ -55,7 +55,7 @@ class Router {
       router.switchingRoute = false;
     };
 
-    var response = undefined;
+    var response;
     if(route.onShow) response = route.onShow();
 
     if(response && response.then) response.then(afterLoad);

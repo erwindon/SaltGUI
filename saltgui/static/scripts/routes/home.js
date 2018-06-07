@@ -57,7 +57,7 @@ class HomeRoute extends Route {
         this._addMinion(list, hostnames[i]);
     }
 
-    var list = this.getElement().querySelector('#keys');
+    list = this.getElement().querySelector('#keys');
     list.innerHTML = "";
 
     // never mind the keys.minions list
@@ -71,18 +71,18 @@ class HomeRoute extends Route {
       keyshdr.style.display = "none";
     }
 
-    var hostnames = keys.minions_denied.sort();
-    for(var i = 0; i < hostnames.length; i++) {
+    hostnames = keys.minions_denied.sort();
+    for(i = 0; i < hostnames.length; i++) {
         this._addDeniedMinion(list, hostnames[i]);
     }
 
-    var hostnames = keys.minions_pre.sort();
-    for(var i = 0; i < hostnames.length; i++) {
+    hostnames = keys.minions_pre.sort();
+    for(i = 0; i < hostnames.length; i++) {
         this._addPreMinion(list, hostnames[i]);
     }
 
-    var hostnames = keys.minions_rejected.sort();
-    for(var i = 0; i < hostnames.length; i++) {
+    hostnames = keys.minions_rejected.sort();
+    for(i = 0; i < hostnames.length; i++) {
         this._addRejectedMinion(list, hostnames[i]);
     }
 
@@ -176,7 +176,7 @@ class HomeRoute extends Route {
       return;
     }
 
-    var element = document.createElement('li');
+    element = document.createElement('li');
     element.id = hostname;
 
     element.appendChild(Route._createDiv("hostname", hostname));
@@ -306,7 +306,7 @@ class HomeRoute extends Route {
       // it to sort the jobs
       if (a.id < b.id) return 1;
       if (a.id > b.id) return -1;
-      return 0
+      return 0;
     });
   }
 

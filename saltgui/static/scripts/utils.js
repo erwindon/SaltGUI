@@ -41,10 +41,10 @@ window.getQueryParam = function(name) {
       if(hash[0] === name) return hash[1];
   }
   return undefined;
-}
+};
 
 window.escape = function(input) {
   var div = document.createElement('div');
   div.appendChild(document.createTextNode(input));
   return div.innerHTML;
-}
+};
