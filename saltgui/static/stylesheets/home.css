@@ -1,14 +1,14 @@
-#home {
+#page_home {
   width: 100%;
 }
 
-#home .dashboard {
+#page_home .dashboard {
   display: flex;
   align-items: flex-start;
   margin: 10px;
 }
 
-#home .dashboard .panel {
+#page_home .dashboard .panel {
   width: 100%;
 }
 
@@ -140,28 +140,28 @@ pre .hostname:first-of-type {
   margin-top: 0;
 }
 
-#run-command-popup {
+#popup_runcommand {
   display: none;
 }
 
-#home .jobs li {
+#page_home .jobs li {
   list-style: none;
   border-bottom: 1px solid #4caf50;
   padding: 10px 18px;
 }
 
-#home .jobs li:last-of-type {
+#page_home .jobs li:last-of-type {
   border: 0;
 }
 
-#home .jobs li .function {
+#page_home .jobs li .function {
   font-weight: 500;
   font-size: 18px;
   color: #3a3a3a;
   display: inline-block;
 }
 
-#home .jobs li .target {
+#page_home .jobs li .target {
   font-weight: 500;
   font-size: 18px;
   color: #505050;
@@ -171,12 +171,12 @@ pre .hostname:first-of-type {
   float: right;
 }
 
-#home .jobs li .time {
+#page_home .jobs li .time {
   font-size: 11px;
   margin-top: 3px;
 }
 
-#home .jobs li:hover {
+#page_home .jobs li:hover {
   background-color: whitesmoke;
   cursor: pointer;
 }
@@ -196,11 +196,11 @@ pre .hostname:first-of-type {
 
 @media(max-width: 800px) {
 
-  #home .dashboard {
+  #page_home .dashboard {
     display: block;
   }
 
-  #home .dashboard .panel {
+  #page_home .dashboard .panel {
     width: auto;
     margin-right: 0;
     margin-bottom: 10px;

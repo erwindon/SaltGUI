@@ -11,7 +11,7 @@ class API {
   }
 
   _registerEventListeners() {
-    document.querySelector("#run-command-popup")
+    document.querySelector("#popup_runcommand")
       .addEventListener('click', this._toggleManualRun);
     document.querySelector("#button_manualrun")
       .addEventListener('click', this._toggleManualRun);
@@ -68,7 +68,7 @@ class API {
   }
 
   _toggleManualRun(evt) {
-    var manualRun = document.querySelector("#run-command-popup");
+    var manualRun = document.querySelector("#popup_runcommand");
     var isShowing = manualRun.style.display !== "none" && manualRun.style.display !== "";
 
     //Don't close if they click inside the window

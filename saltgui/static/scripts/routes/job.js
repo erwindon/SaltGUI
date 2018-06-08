@@ -1,7 +1,7 @@
 class JobRoute extends Route {
 
   constructor(router) {
-    super("^[\/]job$", "Job", "#job");
+    super("^[\/]job$", "Job", "#page_job");
     this.router = router;
 
     this._onJobData = this._onJobData.bind(this);

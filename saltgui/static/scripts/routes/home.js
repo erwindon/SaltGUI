@@ -1,7 +1,7 @@
 class HomeRoute extends Route {
 
   constructor(router) {
-    super("^[\/]$", "Home", "#home");
+    super("^[\/]$", "Home", "#page_home");
     this.router = router;
     this.keysLoaded = false;
     this.jobsLoaded = false;
@@ -245,7 +245,7 @@ class HomeRoute extends Route {
   }
 
   _updateJobs(data) {
-    var jobContainer = document.querySelector("#home .jobs");
+    var jobContainer = document.querySelector("#page_home .jobs");
     jobContainer.innerHTML = "";
     var jobs = this._jobsToArray(data.return[0]);
     this._sortJobs(jobs);
