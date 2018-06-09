@@ -69,7 +69,7 @@ class PageRoute extends Route {
 
     var element = document.getElementById(hostname);
     if(element != null) {
-      // minion already on screen
+      // minion already on screen...
       return;
     }
 
