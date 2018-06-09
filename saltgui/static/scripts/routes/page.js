@@ -17,13 +17,13 @@ class MinionsRoute extends Route {
   }
 
   onShow() {
-    var home = this;
+    var minions = this;
     return new Promise(function(resolve, reject) {
-      home.resolvePromise = resolve;
-      if(home.keysLoaded && home.jobsLoaded) resolve();
-      home.router.api.getMinions().then(home._updateMinions);
-      home.router.api.getKeys().then(home._updateKeys);
-      home.router.api.getJobs().then(home._updateJobs);
+      minions.resolvePromise = resolve;
+      if(minions.keysLoaded && minions.jobsLoaded) resolve();
+      minions.router.api.getMinions().then(minions._updateMinions);
+      minions.router.api.getKeys().then(minions._updateKeys);
+      minions.router.api.getJobs().then(minions._updateJobs);
     });
   }
 
