@@ -1,14 +1,14 @@
-#page_home {
+#page_minions {
   width: 100%;
 }
 
-#page_home .dashboard {
+#page_minions .dashboard {
   display: flex;
   align-items: flex-start;
   margin: 10px;
 }
 
-#page_home .dashboard .panel {
+#page_minions .dashboard .panel {
   width: 100%;
 }
 
@@ -144,24 +144,24 @@ pre .hostname:first-of-type {
   display: none;
 }
 
-#page_home .jobs li {
+#page_minions .jobs li {
   list-style: none;
   border-bottom: 1px solid #4caf50;
   padding: 10px 18px;
 }
 
-#page_home .jobs li:last-of-type {
+#page_minions .jobs li:last-of-type {
   border: 0;
 }
 
-#page_home .jobs li .function {
+#page_minions .jobs li .function {
   font-weight: 500;
   font-size: 18px;
   color: #3a3a3a;
   display: inline-block;
 }
 
-#page_home .jobs li .target {
+#page_minions .jobs li .target {
   font-weight: 500;
   font-size: 18px;
   color: #505050;
@@ -171,12 +171,12 @@ pre .hostname:first-of-type {
   float: right;
 }
 
-#page_home .jobs li .time {
+#page_minions .jobs li .time {
   font-size: 11px;
   margin-top: 3px;
 }
 
-#page_home .jobs li:hover {
+#page_minions .jobs li:hover {
   background-color: whitesmoke;
   cursor: pointer;
 }
@@ -196,11 +196,11 @@ pre .hostname:first-of-type {
 
 @media(max-width: 800px) {
 
-  #page_home .dashboard {
+  #page_minions .dashboard {
     display: block;
   }
 
-  #page_home .dashboard .panel {
+  #page_minions .dashboard .panel {
     width: auto;
     margin-right: 0;
     margin-bottom: 10px;

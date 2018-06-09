@@ -1,7 +1,7 @@
-class HomeRoute extends Route {
+class MinionsRoute extends Route {
 
   constructor(router) {
-    super("^[\/]$", "Home", "#page_home");
+    super("^[\/]$", "Minions", "#page_minions", "#button_minions");
     this.router = router;
     this.keysLoaded = false;
     this.jobsLoaded = false;
@@ -30,7 +30,7 @@ class HomeRoute extends Route {
   _updateMinions(data) {
     var minions = data.return[0];
 
-    var list = this.getElement().querySelector('#minions');
+    var list = this.getPageElement().querySelector('#minions');
     var hostnames = Object.keys(minions).sort();
 
     for(var i = 0; i < hostnames.length; i++) {
@@ -50,21 +50,21 @@ class HomeRoute extends Route {
   _updateKeys(data) {
     var keys = data.return;
 
-    var list = this.getElement().querySelector('#minions');
+    var list = this.getPageElement().querySelector('#minions');
 
     var hostnames = keys.minions.sort();
     for(var i = 0; i < hostnames.length; i++) {
         this._addMinion(list, hostnames[i]);
     }
 
-    list = this.getElement().querySelector('#keys');
+    list = this.getPageElement().querySelector('#keys');
     list.innerHTML = "";
 
     // never mind the keys.minions list
     // it should be the same as the minions list
     // which we already have
 
-    var keyshdr = this.getElement().querySelector('#keyshdr');
+    var keyshdr = this.getPageElement().querySelector('#keyshdr');
     if(keys.minions_denied.length || keys.minions_pre.length || keys.minions_rejected.length) {
       keyshdr.style.display = "block";
     } else {
@@ -245,7 +245,7 @@ class HomeRoute extends Route {
   }
 
   _updateJobs(data) {
-    var jobContainer = document.querySelector("#page_home .jobs");
+    var jobContainer = document.querySelector("#page_minions .jobs");
     jobContainer.innerHTML = "";
     var jobs = this._jobsToArray(data.return[0]);
     this._sortJobs(jobs);

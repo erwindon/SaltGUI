@@ -21,6 +21,14 @@ class API {
       .addEventListener('click', _ => {
         this._logout(this);
     } );
+    document.querySelector("#button_minions")
+      .addEventListener('click', _ => {
+        window.location.replace("/");
+    } );
+    document.querySelector("#button_keys")
+      .addEventListener('click', _ => {
+        window.location.replace("/keys");
+    } );
     document.querySelector(".run-command input[type='submit']")
       .addEventListener('click', this._onRun);
   }
