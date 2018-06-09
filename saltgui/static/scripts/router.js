@@ -6,6 +6,7 @@ class Router {
     this.routes = [];
     this.registerRoute(new LoginRoute(this));
     this.registerRoute(new MinionsRoute(this));
+    this.registerRoute(new KeysRoute(this));
     this.registerRoute(new JobRoute(this));
 
     this._registerEventListeners();

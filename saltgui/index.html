@@ -5,9 +5,9 @@
     <link rel='stylesheet' type='text/css' href='static/stylesheets/main.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/login.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/page.css' />
+    <link rel='stylesheet' type='text/css' href='static/stylesheets/job.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/minions.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/keys.css' />
-    <link rel='stylesheet' type='text/css' href='static/stylesheets/job.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/dropdown.css' />
 
     <link rel='shortcut icon' href='static/images/icon.png' />
@@ -60,10 +60,27 @@
       <div class='route' id='page_minions'>
         <div class='dashboard'>
           <div class='panel minion-list'>
-            <h1>Active Minions</h1>
+            <h1>Minions</h1>
             <ul id="minions" class='minions'></ul>
-            <h1 id="keyshdr">Inactive Minions</h1>
-            <ul id="keys" class='minions'></ul>
+          </div>
+          <div class='panel job-list'>
+            <h1>Recent Jobs</h1>
+            <ul class='jobs'></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class='route' id='page_keys'>
+        <div class='dashboard'>
+          <div class='panel minion-list'>
+            <h1>Accepted Keys</h1>
+            <ul id="minions" class='minions'></ul>
+            <h1>Denied Keys</h1>
+            <ul id="keys_denied" class='minions'></ul>
+            <h1>Unaccepted Keys</h1>
+            <ul id="keys_unaccepted" class='minions'></ul>
+            <h1>Rejected Keys</h1>
+            <ul id="keys_rejected" class='minions'></ul>
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
@@ -99,9 +116,9 @@
     <script src='static/scripts/routes/route.js'></script>
     <script src='static/scripts/routes/login.js'></script>
     <script src='static/scripts/routes/page.js'></script>
+    <script src='static/scripts/routes/job.js'></script>
     <script src='static/scripts/routes/minions.js'></script>
     <script src='static/scripts/routes/keys.js'></script>
-    <script src='static/scripts/routes/job.js'></script>
     <script src='static/scripts/dropdown.js'></script>
     <script src='static/scripts/router.js'></script>
   </body>

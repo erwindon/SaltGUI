@@ -1,31 +1,4 @@
-class MinionsRoute extends Route {
-
-  constructor(router) {
-    super("^[\/]$", "Minions", "#page_minions", "#button_minions");
-    this.router = router;
-    this.keysLoaded = false;
-    this.jobsLoaded = false;
-
-    this._updateMinions = this._updateMinions.bind(this);
-    this._updateKeys = this._updateKeys.bind(this);
-    this._updateJobs = this._updateJobs.bind(this);
-    this._runHighState = this._runHighState.bind(this);
-    this._runAcceptKey = this._runAcceptKey.bind(this);
-    this._runRejectKey = this._runRejectKey.bind(this);
-    this._runDeleteKey = this._runDeleteKey.bind(this);
-    this._runCommand = this._runCommand.bind(this);
-  }
-
-  onShow() {
-    var minions = this;
-    return new Promise(function(resolve, reject) {
-      minions.resolvePromise = resolve;
-      if(minions.keysLoaded && minions.jobsLoaded) resolve();
-      minions.router.api.getMinions().then(minions._updateMinions);
-      minions.router.api.getKeys().then(minions._updateKeys);
-      minions.router.api.getJobs().then(minions._updateJobs);
-    });
-  }
+class PageRoute extends Route {
 
   _updateMinions(data) {
     var minions = data.return[0];
@@ -47,73 +20,6 @@ class MinionsRoute extends Route {
     }
   }
 
-  _updateKeys(data) {
-    var keys = data.return;
-
-    var list = this.getPageElement().querySelector('#minions');
-
-    var hostnames = keys.minions.sort();
-    for(var i = 0; i < hostnames.length; i++) {
-        this._addMinion(list, hostnames[i]);
-    }
-
-    list = this.getPageElement().querySelector('#keys');
-    list.innerHTML = "";
-
-    // never mind the keys.minions list
-    // it should be the same as the minions list
-    // which we already have
-
-    var keyshdr = this.getPageElement().querySelector('#keyshdr');
-    if(keys.minions_denied.length || keys.minions_pre.length || keys.minions_rejected.length) {
-      keyshdr.style.display = "block";
-    } else {
-      keyshdr.style.display = "none";
-    }
-
-    hostnames = keys.minions_denied.sort();
-    for(i = 0; i < hostnames.length; i++) {
-        this._addDeniedMinion(list, hostnames[i]);
-    }
-
-    hostnames = keys.minions_pre.sort();
-    for(i = 0; i < hostnames.length; i++) {
-        this._addPreMinion(list, hostnames[i]);
-    }
-
-    hostnames = keys.minions_rejected.sort();
-    for(i = 0; i < hostnames.length; i++) {
-        this._addRejectedMinion(list, hostnames[i]);
-    }
-
-    this.keysLoaded = true;
-    if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
-  }
-
-  _addMenuItemAccept(menu, hostname) {
-    menu.addMenuItem("Accept&nbsp;key...", function(evt) {
-      this._runAcceptKey(evt, hostname);
-    }.bind(this));
-  }
-
-  _addMenuItemDelete(menu, hostname) {
-    menu.addMenuItem("Delete&nbsp;key...", function(evt) {
-      this._runDeleteKey(evt, hostname);
-    }.bind(this));
-  }
-
-  _addMenuItemReject(menu, hostname) {
-    menu.addMenuItem("Reject&nbsp;key...", function(evt) {
-      this._runRejectKey(evt, hostname);
-    }.bind(this));
-  }
-
-  _addMenuItemSyncState(menu, hostname) {
-    menu.addMenuItem("Sync&nbsp;state...", function(evt) {
-      this._runHighState(evt, hostname);
-    }.bind(this));
-  }
-
   _updateOfflineMinion(container, hostname) {
     var element = document.getElementById(hostname);
     if(element == null) {
@@ -132,10 +38,6 @@ class MinionsRoute extends Route {
     var offline = Route._createDiv("offline", "offline");
     offline.id = "status";
     element.appendChild(offline);
-
-    var menu = new DropDownMenu(element);
-    this._addMenuItemReject(menu, hostname);
-    this._addMenuItemDelete(menu, hostname);
   }
 
   _updateMinion(container, minion) {
@@ -161,11 +63,6 @@ class MinionsRoute extends Route {
     element.appendChild(address);
 
     element.appendChild(Route._createDiv("os", minion.os + " " + minion.osrelease));
-
-    var menu = new DropDownMenu(element);
-    this._addMenuItemSyncState(menu, minion.hostname);
-    this._addMenuItemReject(menu, minion.hostname);
-    this._addMenuItemDelete(menu, minion.hostname);
   }
 
   _addMinion(container, hostname) {
@@ -187,65 +84,20 @@ class MinionsRoute extends Route {
 
     element.appendChild(Route._createDiv("os", "loading..."));
 
-    var menu = new DropDownMenu(element);
-    this._addMenuItemReject(menu, hostname);
-    this._addMenuItemDelete(menu, hostname);
-
     container.appendChild(element);
   }
 
-  _addRejectedMinion(container, hostname) {
+  _addNone(container) {
+
     var element = document.createElement('li');
 
-    element.appendChild(Route._createDiv("hostname", hostname));
-
-    var rejected = Route._createDiv("rejected", "rejected");
-    rejected.id = "status";
-    element.appendChild(rejected);
-
-    var menu = new DropDownMenu(element);
-    this._addMenuItemDelete(menu, hostname);
-    this._addMenuItemAccept(menu, hostname);
-
-    container.appendChild(element);
-  }
-
-  _addDeniedMinion(container, hostname) {
-    var element = document.createElement('li');
-
-    element.appendChild(Route._createDiv("hostname", hostname));
-
-    var denied = Route._createDiv("denied", "denied");
-    denied.id = "status";
-    element.appendChild(denied);
-
-    var menu = new DropDownMenu(element);
-    this._addMenuItemAccept(menu, hostname);
-    this._addMenuItemReject(menu, hostname);
-    this._addMenuItemDelete(menu, hostname);
-
-    container.appendChild(element);
-  }
-
-  _addPreMinion(container, hostname) {
-    var element = document.createElement('li');
-
-    element.appendChild(Route._createDiv("hostname", hostname));
-
-    var pre = Route._createDiv("unaccepted", "unaccepted");
-    pre.id = "status";
-    element.appendChild(pre);
-
-    var menu = new DropDownMenu(element);
-    this._addMenuItemAccept(menu, hostname);
-    this._addMenuItemReject(menu, hostname);
-    this._addMenuItemDelete(menu, hostname);
+    element.appendChild(Route._createDiv("hostname", "none"));
 
     container.appendChild(element);
   }
 
   _updateJobs(data) {
-    var jobContainer = document.querySelector("#page_minions .jobs");
+    var jobContainer = this.getPageElement().querySelector(".jobs");
     jobContainer.innerHTML = "";
     var jobs = this._jobsToArray(data.return[0]);
     this._sortJobs(jobs);
