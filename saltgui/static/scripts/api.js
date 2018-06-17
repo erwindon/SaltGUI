@@ -286,6 +286,31 @@ class API {
 
     var params = {};
 
+    while(args.length > 0) {
+      var str = args[0];
+      var parts = str.split("=");
+      if(parts.length != 2)
+        break;
+      str = args.shift();
+      var name = parts[0];
+      var value = parts[1];
+      
+      if(value === "true" || value === "false") {
+        value = value === "true";
+      } else if(patInteger.test(value)) {
+        value = parseInt(value);
+      } else if(patFloat.test(value)) {
+        value = parseFloat(value);
+        if(!isFinite(value)) {
+          var errLabel = document.querySelector("#cmd_error");
+          errLabel.innerText = "Numeric argument has overflowed or is infinity";
+          errLabel.style.display = "block";
+          return null;
+        }
+      }
+      params[name] = value;
+    }
+
     if(functionToRun.startsWith("salt.wheel.key.")) {
       params.client = "wheel";
       // use only the part after "salt.wheel." (11 chars)
@@ -302,23 +327,6 @@ class API {
       params.fun = functionToRun;
       params.tgt = target;
       if(args.length !== 0) params.arg = args;
-    }
-
-    switch(functionToRun) {
-    case "salt.wheel.key.accept":
-      // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.accept
-      params.include_denied = true;
-      params.include_rejected = true;
-      break;
-    case "salt.wheel.key.reject":
-      // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.reject
-      params.include_accepted = true;
-      params.include_denied = true;
-      break;
-    case "salt.wheel.key.delete":
-      // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.delete
-      // no special parameters needed here
-      break;
     }
 
     return this._callMethod("POST", "/", params);
