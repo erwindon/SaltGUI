@@ -5,6 +5,7 @@ class API {
 
     this._callMethod = this._callMethod.bind(this);
     this._fetch = this._fetch.bind(this);
+    this._getRunParams = this._getRunParams.bind(this);
     this._onRun = this._onRun.bind(this);
     this._onRunReturn = this._onRunReturn.bind(this);
     this._registerEventListeners();
@@ -40,13 +41,14 @@ class API {
 
     var target = document.querySelector(".run-command #target").value;
     var command = document.querySelector(".run-command #command").value;
-    if(target === "" || command === "") return;
+
+    var func = this._getRunParams(target, command);
+    if(func == null) return;
 
     button.disabled = true;
     output.innerHTML = "Loading...";
 
-    this.runFunction(target, command)
-    .then(this._onRunReturn, this._onRunReturn);
+    func.then(this._onRunReturn, this._onRunReturn);
   }
 
   _onRunReturn(data) {
@@ -153,10 +155,134 @@ class API {
     return this._callMethod("GET", "/jobs/" + id, {});
   }
 
-  runFunction(target, toRun) {
-    var args = toRun.split(" ");
-    var functionToRun = args[0];
-    args.shift();
+  _getRunParams(target, toRun) {
+ 
+    var errLabel = document.querySelector("#cmd_error");
+    errLabel.innerText = "";
+    errLabel.style.display = "none";
+
+    if(target === "") {
+      var errLabel = document.querySelector("#cmd_error");
+      errLabel.innerText = "'Target' field cannot be empty";
+      errLabel.style.display = "block";
+      return null;
+    }
+
+    if(toRun === "") {
+      var errLabel = document.querySelector("#cmd_error");
+      errLabel.innerText = "'Command' field cannot be empty";
+      errLabel.style.display = "block";
+      return null;
+    }
+
+    var args = [ ];
+
+    // just in case the user typed some extra whitespace
+    toRun = toRun.trim();
+
+    var patInteger = new RegExp("^[-]?[1-9][0-9]*$");
+    var patFloat = new RegExp("^[-]?(([0-9]+[.][0-9]*)|([0-9]*[.][0-9]+))([eE][-+]?[0-9]+)?$");
+
+    while(toRun.length > 0)
+    {
+      // Determine whether the JSON string starts with a known
+      // character for a JSON type
+      var endChar = undefined;
+      var objType = undefined;
+      if(toRun[0] === '{') {
+        endChar = '}';
+        objType = "dictionary";
+      } else if(toRun[0] === '[') {
+        endChar = ']';
+        objType = "array";
+      } else if(toRun[0] === '"') {
+        endChar = '"';
+        objType = "double-quoted-string";
+      } else if(toRun[0] === '\'') {
+        endChar = '\'';
+        objType = "single-quoted-string";
+      }
+        
+      if(endChar && objType) {
+        // The string starts with a character for a known JSON type
+        var p = 1;
+        while(true) {
+          // Try until the next closing character
+          var n = toRun.indexOf(endChar, p);
+          if(n < 0) {
+            var errLabel = document.querySelector("#cmd_error");
+            errLabel.innerText = "No valid " + objType + " found";
+            errLabel.style.display = "block";
+            return null;
+          }
+
+          // parse what we have found so far
+          // the string ends with a closing character
+          // but that may not be enough, e.g. "{a:{}"
+          var s = toRun.substring(0, n + 1);
+          try {
+            var o = JSON.parse(s);
+          }
+          catch(err) {
+            // the string that we tried to parse is not valid json
+            // continue to add more text from the input
+            p = n + 1;
+            continue;
+          }
+
+          // the first part of the string is valid JSON
+          n = n + 1;
+          if(n < toRun.length && toRun[n] !== ' ') {
+            console.log("valid " + objType + ", but followed by text:" + toRun.substring(n) + "...");
+            return null;
+          }
+
+          // valid JSON and not followed by strange characters
+          var o = JSON.parse(s);
+          args.push(o);
+          toRun = toRun.substring(n);
+          break;
+        }
+      } else {
+        // everything else is a string (without quotes)
+        // when we are done, we'll see whether it actually is a number
+        var str = "";
+        while(toRun.length > 0 && toRun[0] != ' ') {
+          str += toRun[0];
+          toRun = toRun.substring(1);
+        }
+
+        // try to find whether the string is actually boolean, integer or float
+        if(str === "true" || str === "false") {
+          var b = str === "true";
+          args.push(b);
+        } else if(patInteger.test(str)) {
+          var i = parseInt(str);
+          args.push(i);
+        } else if(patFloat.test(str)) {
+          var f = parseFloat(str);
+          if(!isFinite(f)) {
+            var errLabel = document.querySelector("#cmd_error");
+            errLabel.innerText = "Numeric argument has overflowed or is infinity";
+            errLabel.style.display = "block";
+            return null;
+          }
+          args.push(f);
+        } else {
+          args.push(str);
+        }
+      }
+      toRun = toRun.trim();
+    }
+
+    var functionToRun = args.shift();
+
+    if(typeof functionToRun != typeof "dummy") {
+      var errLabel = document.querySelector("#cmd_error");
+      errLabel.innerText = "First parameter is the function name, it must be a string, not a " + typeof functionToRun;
+      errLabel.style.display = "block";
+      return null;
+    }
 
     var params = {};
 
@@ -165,11 +291,17 @@ class API {
       // use only the part after "salt.wheel." (11 chars)
       params.fun = functionToRun.substring(11);
       params.match = target;
+      if(args.length !== 0) {
+        var errLabel = document.querySelector("#cmd_error");
+        errLabel.innerText = "Parameters for salt.wheel.key functions are not allowed";
+        errLabel.style.display = "block";
+        return null;
+      }
     } else {
       params.client = "local";
       params.fun = functionToRun;
       params.tgt = target;
-      if(args.length !== 0) params.arg = args.join(" ");
+      if(args.length !== 0) params.arg = args;
     }
 
     switch(functionToRun) {
