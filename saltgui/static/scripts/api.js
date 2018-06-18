@@ -8,6 +8,7 @@ class API {
     this._getRunParams = this._getRunParams.bind(this);
     this._onRun = this._onRun.bind(this);
     this._onRunReturn = this._onRunReturn.bind(this);
+
     this._registerEventListeners();
   }
 
@@ -155,27 +156,28 @@ class API {
     return this._callMethod("GET", "/jobs/" + id, {});
   }
 
+  _showError(errorMessage) {
+    var errLabel = document.querySelector("#cmd_error");
+    errLabel.innerText = errorMessage;
+    if(errorMessage)
+      errLabel.style.display = "block";
+    else
+      errLabel.style.display = "none";
+  }
+
   _getRunParams(target, toRun) {
  
-    var errLabel = document.querySelector("#cmd_error");
-    errLabel.innerText = "";
-    errLabel.style.display = "none";
+    this._showError("");
 
     if(target === "") {
-      var errLabel = document.querySelector("#cmd_error");
-      errLabel.innerText = "'Target' field cannot be empty";
-      errLabel.style.display = "block";
+      this._showError("'Target' field cannot be empty");
       return null;
     }
 
     if(toRun === "") {
-      var errLabel = document.querySelector("#cmd_error");
-      errLabel.innerText = "'Command' field cannot be empty";
-      errLabel.style.display = "block";
+      this._showError("'Command' field cannot be empty");
       return null;
     }
-
-    var args = [ ];
 
     // just in case the user typed some extra whitespace
     toRun = toRun.trim();
@@ -183,8 +185,30 @@ class API {
     var patInteger = new RegExp("^[-]?[1-9][0-9]*$");
     var patFloat = new RegExp("^[-]?(([0-9]+[.][0-9]*)|([0-9]*[.][0-9]+))([eE][-+]?[0-9]+)?$");
 
+    // collection for unnamed parameters
+    var args = [ ];
+
+    // collection for named parameters
+    var params = {};
+
     while(toRun.length > 0)
     {
+      var name = null;
+
+      var firstSpaceChar = toRun.indexOf(" ");
+      if(firstSpaceChar < 0)
+        firstSpaceChar = toRun.length;
+      var firstEqualSign = toRun.indexOf("=");
+      if(firstEqualSign >= 0 && firstEqualSign < firstSpaceChar) {
+        // we have a named parameter
+        name = toRun.substr(0, firstEqualSign);
+        toRun = toRun.substr(firstEqualSign + 1);
+        if(toRun === "" || toRun[0] === " ") {
+          this._showError("Must have value for named parameter '" + name + "'");
+          return null;
+        }
+      }
+
       // Determine whether the JSON string starts with a known
       // character for a JSON type
       var endChar = undefined;
@@ -203,6 +227,7 @@ class API {
         objType = "single-quoted-string";
       }
         
+      var value;
       if(endChar && objType) {
         // The string starts with a character for a known JSON type
         var p = 1;
@@ -210,9 +235,7 @@ class API {
           // Try until the next closing character
           var n = toRun.indexOf(endChar, p);
           if(n < 0) {
-            var errLabel = document.querySelector("#cmd_error");
-            errLabel.innerText = "No valid " + objType + " found";
-            errLabel.style.display = "block";
+            this._showError("No valid " + objType + " found");
             return null;
           }
 
@@ -238,8 +261,7 @@ class API {
           }
 
           // valid JSON and not followed by strange characters
-          var o = JSON.parse(s);
-          args.push(o);
+          value = JSON.parse(s);
           toRun = toRun.substring(n);
           break;
         }
@@ -252,63 +274,45 @@ class API {
           toRun = toRun.substring(1);
         }
 
-        // try to find whether the string is actually boolean, integer or float
-        if(str === "true" || str === "false") {
-          var b = str === "true";
-          args.push(b);
+        // try to find whether the string is actually boolean, null/none, integer or float
+        if(str === "null") {
+          value = null;
+        } else if(str === "true" || str === "false") {
+          value = str === "true";
         } else if(patInteger.test(str)) {
-          var i = parseInt(str);
-          args.push(i);
+          value = parseInt(str);
         } else if(patFloat.test(str)) {
-          var f = parseFloat(str);
+          value = parseFloat(str);
           if(!isFinite(f)) {
-            var errLabel = document.querySelector("#cmd_error");
-            errLabel.innerText = "Numeric argument has overflowed or is infinity";
-            errLabel.style.display = "block";
+            this._showError("Numeric argument has overflowed or is infinity");
             return null;
           }
-          args.push(f);
         } else {
-          args.push(str);
+          value = str;
         }
       }
+      
+      if(name !== null) {
+        // named parameter
+    	params[name] = value;
+      } else {
+        // anonymous parameter
+        args.push(value);
+      }
+
       toRun = toRun.trim();
+    }
+
+    if(args.length === 0) {
+      this._showError("First (unnamed) parameter is the function name, it is mandatory");
+      return null;
     }
 
     var functionToRun = args.shift();
 
     if(typeof functionToRun != typeof "dummy") {
-      var errLabel = document.querySelector("#cmd_error");
-      errLabel.innerText = "First parameter is the function name, it must be a string, not a " + typeof functionToRun;
-      errLabel.style.display = "block";
+      this._showError("First (unnamed) parameter is the function name, it must be a string, not a " + typeof functionToRun);
       return null;
-    }
-
-    var params = {};
-
-    while(args.length > 0) {
-      var str = args[0];
-      var parts = str.split("=");
-      if(parts.length != 2)
-        break;
-      str = args.shift();
-      var name = parts[0];
-      var value = parts[1];
-      
-      if(value === "true" || value === "false") {
-        value = value === "true";
-      } else if(patInteger.test(value)) {
-        value = parseInt(value);
-      } else if(patFloat.test(value)) {
-        value = parseFloat(value);
-        if(!isFinite(value)) {
-          var errLabel = document.querySelector("#cmd_error");
-          errLabel.innerText = "Numeric argument has overflowed or is infinity";
-          errLabel.style.display = "block";
-          return null;
-        }
-      }
-      params[name] = value;
     }
 
     if(functionToRun.startsWith("salt.wheel.key.")) {
@@ -317,9 +321,7 @@ class API {
       params.fun = functionToRun.substring(11);
       params.match = target;
       if(args.length !== 0) {
-        var errLabel = document.querySelector("#cmd_error");
-        errLabel.innerText = "Parameters for salt.wheel.key functions are not allowed";
-        errLabel.style.display = "block";
+        this._showError("Parameters for salt.wheel.key functions are not allowed");
         return null;
       }
     } else {
