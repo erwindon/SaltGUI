@@ -6,8 +6,38 @@ class API {
     this._callMethod = this._callMethod.bind(this);
     this._fetch = this._fetch.bind(this);
     this._getRunParams = this._getRunParams.bind(this);
+    this._manualRunMenuHtmlDoc0Run = this._manualRunMenuHtmlDoc0Run.bind(this);
+    this._manualRunMenuHtmlDoc1Prepare = this._manualRunMenuHtmlDoc1Prepare.bind(this);
+    this._manualRunMenuHtmlDoc1Run = this._manualRunMenuHtmlDoc1Run.bind(this);
+    this._manualRunMenuHtmlDoc2Prepare = this._manualRunMenuHtmlDoc2Prepare.bind(this);
+    this._manualRunMenuHtmlDoc2Run = this._manualRunMenuHtmlDoc2Run.bind(this);
+    this._manualRunMenuHtmlDoc3Prepare = this._manualRunMenuHtmlDoc3Prepare.bind(this);
+    this._manualRunMenuHtmlDoc3Run = this._manualRunMenuHtmlDoc3Run.bind(this);
+    this._manualRunMenuSysDocPrepare = this._manualRunMenuSysDocPrepare.bind(this);
+    this._manualRunMenuSysDocRun = this._manualRunMenuSysDocRun.bind(this);
     this._onRun = this._onRun.bind(this);
     this._onRunReturn = this._onRunReturn.bind(this);
+    this._toggleManualRun = this._toggleManualRun.bind(this);
+
+    this.documentationUrl = "https://docs.saltstack.com/en/latest/ref/";
+    this.externalLink = "&nbsp;<img src='static/images/externallink.png' style='width:12px'>";
+
+    var cmdbox = document.querySelector(".run-command #cmdbox");
+    var menu = new DropDownMenu(cmdbox);
+    menu.addMenuItem(
+      this._manualRunMenuSysDocPrepare,
+      this._manualRunMenuSysDocRun);
+    menu.addMenuItem("Module&nbsp;reference" + this.externalLink,
+      this._manualRunMenuHtmlDoc0Run);
+    menu.addMenuItem(
+      this._manualRunMenuHtmlDoc1Prepare,
+      this._manualRunMenuHtmlDoc1Run);
+    menu.addMenuItem(
+      this._manualRunMenuHtmlDoc2Prepare,
+      this._manualRunMenuHtmlDoc2Run);
+    menu.addMenuItem(
+      this._manualRunMenuHtmlDoc3Prepare,
+      this._manualRunMenuHtmlDoc3Run);
 
     this._registerEventListeners();
   }
@@ -35,12 +65,49 @@ class API {
       .addEventListener('click', this._onRun);
   }
 
+  _getKeywordFragments() {
+    var command = document.querySelector(".run-command #command").value;
+    // remove the command arguments
+    command = command.trim().replace(/ .*/, "");
+    // remove trailing ".", typically found between categoryname and function name
+    // but user wants to lookup the commands from the category
+    command = command.trim().replace(/[.]*$/, "");
+    var cmd = command.split(".");
+
+    // re-organize the command with its formal category
+    switch(cmd[0]){
+    case "":
+      cmd = ["modules"];
+      break;
+    case "runners":
+      // we recognize this category
+      break;
+    case "wheel":
+      // we recognize this category
+      break;
+    case "modules":
+      // we recognize this category
+      break;
+    default:
+      // all unknown categories are actually modules
+      cmd.unshift("modules");
+    }
+
+    if(cmd.length >= 2 && cmd[0] === "modules" && cmd[1] === "sys") {
+      // e.g. sys.doc actually is available as sysmod.doc on website
+      cmd[1] = "sysmod";
+    }
+
+    return cmd;
+  }
+
   _onRun() {
     var button = document.querySelector(".run-command input[type='submit']");
-    var output = document.querySelector(".run-command pre");
     if(button.disabled) return;
+    var output = document.querySelector(".run-command pre");
 
     var target = document.querySelector(".run-command #target").value;
+    if(target === "") return;
     var command = document.querySelector(".run-command #command").value;
 
     var func = this._getRunParams(target, command);
@@ -49,33 +116,252 @@ class API {
     button.disabled = true;
     output.innerHTML = "Loading...";
 
-    func.then(this._onRunReturn, this._onRunReturn);
+    this._getRunParams(target, command)
+      .then(this._onRunReturn, this._onRunReturn);
   }
 
   _onRunReturn(data) {
     var response = data.return[0];
-    var hostnames = Object.keys(response);
+    var hostnames = Object.keys(response).sort();
 
     var outputContainer = document.querySelector(".run-command pre");
     outputContainer.innerHTML = "";
 
-    for(var i = 0; i < hostnames.length; i++) {
-      var hostname = hostnames[i];
-
+    for(let i = 0; i < hostnames.length; i++) {
+      let hostname = hostnames[i];
       var output = response[hostname];
+      if(typeof output !== 'object') {
+        continue;
+      }
+      if(!output) {
+        // some commands do not have help-text
+        // e.g. wheel.key.get_key
+        continue;
+      }
+      let isSysDocOutput = true;
+      for(let key of Object.keys(output)) {
 
-      // when you do a state.apply for example you get a json response.
-      // let's format it nicely here
+        // e.g. for "test.rand_str"
+        if(output[key] === null)
+          continue;
+
+        if(typeof output[key] !== 'string') {
+          isSysDocOutput = false;
+          break;
+        }
+      }
+      if(!isSysDocOutput)
+        break;
+
+      // some commands do not exist anywhere
+      // prevent an empty display by still using
+      // the standard output form when that happens
+      var cnt = 0;
+
+      for(let key of Object.keys(output).sort()) {
+        let out = output[key];
+        if(out === null) continue;
+        // the output is already pre-ed
+        out = out.replace(/\n[ \t]*<[\/]?pre>[ \t]*\n/g, "\n");
+        // turn text into html
+        out = out.replace(/&/g, "&amp;");
+        out = out.replace(/</g, "&lt;");
+        out = out.replace(/>/g, "&gt;");
+        out = out.trimEnd();
+        outputContainer.innerHTML +=
+          `<span class='hostname'>${key}</span>:<br>` +
+          '<pre style="height: initial; overflow-y: initial;">' + out + '</pre>';
+        cnt += 1;
+      }
+
+      if(cnt) {
+        // sabotage any further output
+        hostnames = [];
+        break;
+      }
+    }
+
+    for(let i = 0; i < hostnames.length; i++) {
+      let hostname = hostnames[i];
+      let output = response[hostname];
+
       if (typeof output === 'object') {
+        // when you do a state.apply for example you get a json response.
+        // let's format it nicely here
         output = JSON.stringify(output, null, 2);
+      }
+      else if (typeof output === 'string') {
+        // Or when it is documentation, strip trailing whitespace
+        output = output.replace(/[ \r\n]+$/g, "");
       }
 
       outputContainer.innerHTML +=
-        `<div class='hostname'>${hostname}</div>: ${output}<br>`;
+        `<span class='hostname'>${hostname}</span>: ${output}<br>`;
     }
 
     var button = document.querySelector(".run-command input[type='submit']");
     button.disabled = false;
+  }
+
+  _manualRunMenuSysDocPrepare(menuitem) {
+    var target = document.querySelector(".run-command #target").value;
+    target = target ? "target" : "all minions";
+    var command = document.querySelector(".run-command #command").value;
+    // remove the command arguments
+    command = command.trim().replace(/ .*/, "");
+    if(!command) {
+      menuitem.innerText = "Run 'sys.doc' (slow) on " + target;
+    } else if(command === "runners" || command.startsWith("runners.")) {
+      // actually 'command' is not passed, but we select that part of the actual result
+      // too complicated to explain that here
+      command = command.substring(8);
+      if(command) command = " " + command;
+      menuitem.innerText = "Run 'runners.doc.runner" + command + "'";
+    } else if(command === "wheel" || command.startsWith("wheel.")) {
+      // actually 'command' is not passed, but we select that part of the actual result
+      // too complicated to explain that here
+      command = command.substring(6);
+      if(command) command = " " + command;
+      menuitem.innerText = "Run 'runners.doc.wheel" + command + "'";
+    } else {
+      menuitem.innerText = "Run 'sys.doc " + command + "' on " + target;
+    }
+  }
+
+  _fixDocuReturn(response, visualKey, filterKey) {
+    if(!response || typeof response !== "object") {
+      // strange --> don't try to fix anything
+      return;
+    }
+
+    for(let hostname of Object.keys(response)) {
+      if(typeof response[hostname] !== "object") {
+        // make sure it is an object (instead of e.g. "false" for an offline minion)
+        response[hostname] = { };
+      }
+
+      let hostReponse = response[hostname];
+      for(let key of Object.keys(hostResponse)) {
+        if(key === filterKey) continue;
+        if(!filterKey || key.startsWith(filterKey + ".")) continue;
+        delete hostResponse[key];
+      }
+
+      if(Object.keys(hostResponse).length == 0) {
+        // no documentation found (or left)
+        hostResponse[visualKey] = "no documentation found";
+      }
+    }
+  }
+
+  _manualRunMenuSysDocRun() {
+    var button = document.querySelector(".run-command input[type='submit']");
+    if(button.disabled) return;
+    var output = document.querySelector(".run-command pre");
+
+    var target = document.querySelector(".run-command #target").value;
+    // the help text is taken from the first minion that answers
+    // when no target is selectes, just ask all minions
+    if(target === "") target = "*";
+
+    // do not use the command-parser
+    var command = document.querySelector(".run-command #command").value;
+    command = command.trim().replace(/ .*/, "");
+    // command can be empty here
+
+    button.disabled = true;
+    output.innerHTML = "Loading...";
+
+    if(command === "runners" || command.startsWith("runners.")) {
+      command = command.substring(8);
+      this._getRunParams(target, "runners.doc.runner")
+        .then(
+          arg => {
+            arg.return[0] = {"master": arg.return[0]};
+            this._fixDocuReturn(arg.return[0], "runners." + command, command);
+            this._onRunReturn(arg); },
+          this._onRunReturn);
+    } else if(command === "wheel" || command.startsWith("wheel.")) {
+      command = command.substring(6);
+      this._getRunParams(target, "runners.doc.wheel")
+        .then(
+          arg => {
+            arg.return[0] = {"master": arg.return[0]};
+            this._fixDocuReturn(arg.return[0], "wheel." + command, command);
+            this._onRunReturn(arg); },
+          this._onRunReturn);
+    } else {
+      // regular command
+      this._getRunParams(target, "sys.doc " + command)
+        .then(
+          arg => {
+            this._fixDocuReturn(arg.return[0], command, command);
+            this._onRunReturn(arg); },
+          this._onRunReturn);
+    }
+  }
+
+  _manualRunMenuHtmlDoc0Run(menuitem) {
+    var url = this.documentationUrl;
+    window.open(url);
+  }
+
+  _manualRunMenuHtmlDoc1Prepare(menuitem) {
+    var cmd = this._getKeywordFragments();
+    if(cmd.length >= 1 && cmd[0] === "modules") {
+      // match the web page title
+      menuitem.innerHTML = "'execution' modules" + this.externalLink;
+      menuitem.style.display = "inline-block";
+    } else if(cmd.length >= 1) {
+      menuitem.innerHTML = "'" + cmd[0] + "' modules" + this.externalLink;
+      menuitem.style.display = "inline-block";
+    } else {
+      menuitem.innerText = "'XXX' modules (disabled)";
+      menuitem.style.display = "none";
+    }
+  }
+
+  _manualRunMenuHtmlDoc1Run(menuitem) {
+    var cmd = this._getKeywordFragments();
+    var url = this.documentationUrl + cmd[0] + "/all/index.html";
+    window.open(url);
+  }
+
+  _manualRunMenuHtmlDoc2Prepare(menuitem) {
+    var cmd = this._getKeywordFragments();
+    if(cmd.length >= 2) {
+      menuitem.innerHTML = "'" + cmd[0] + "." + cmd[1] + "' functions'" + this.externalLink;
+      menuitem.style.display = "inline-block";
+    } else {
+      menuitem.innerText = "'xxx.xxx' functions' (disabled)";
+      menuitem.style.display = "none";
+    }
+  }
+
+  _manualRunMenuHtmlDoc2Run(menuitem) {
+    var cmd = this._getKeywordFragments();
+    // e.g. "modules.test"
+    var url = this.documentationUrl + cmd[0] + "/all/salt." + cmd[0] + "." + cmd[1] + ".html";
+    window.open(url);
+  }
+
+  _manualRunMenuHtmlDoc3Prepare(menuitem) {
+    var cmd = this._getKeywordFragments();
+    if(cmd.length >= 3) {
+      menuitem.innerHTML = "'" + cmd[0] + "." + cmd[1] + "." + cmd[2] + "' function'" + this.externalLink;
+      menuitem.style.display = "inline-block";
+    } else {
+      menuitem.innerText = "'xxx.xxx.xxx' function' (disabled)";
+      menuitem.style.display = "none";
+    }
+  }
+
+  _manualRunMenuHtmlDoc3Run(menuitem) {
+    var cmd = this._getKeywordFragments();
+    // 3 and more (use only first 3)
+    // e.g. "modules.test.ping"
+    var url = this.documentationUrl + cmd[0] + "/all/salt." + cmd[0] + "." + cmd[1] + ".html#salt." + cmd[0] + "." + cmd[1] + "." + cmd[2];
+    window.open(url);
   }
 
   _toggleManualRun(evt) {

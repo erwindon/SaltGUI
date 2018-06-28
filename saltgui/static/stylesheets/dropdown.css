@@ -1,6 +1,7 @@
 /* The container <div> - needed to position the menu-dropdown content */
 .menu-dropdown {
   padding: 5px 20px 5px 20px;
+  cursor: pointer;
 }
 
 header .menu-dropdown {
@@ -21,6 +22,7 @@ header .menu-dropdown-content {
   background-color: #e0e0e0;
   border: 10px solid #e0e0e0;
   z-index: 5;
+  cursor: pointer;
 }
 
 /* Links inside the menu-dropdown */

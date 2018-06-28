@@ -18,13 +18,29 @@ class DropDownMenu {
     this.menuDropdown.appendChild(menuButton);
     this.menuDropdownContent = Route._createDiv("menu-dropdown-content", "");
     this.menuDropdown.appendChild(this.menuDropdownContent);
+    let here = this;
+    this.menuDropdown.addEventListener('mouseenter', function(evt) {
+      for(let chld of here.menuDropdownContent.children) {
+        var verifyCallback = chld.verifyCallback;
+        if(!verifyCallback) continue;
+        verifyCallback(chld);
+      }
+    }.bind(this));
     element.appendChild(this.menuDropdown);
   }
 
   // Add a menu item at the end of this dropdown menu
   // Runs the given callback function when selected
+  // When the title is actually a function then this
+  // function is called each time the menu opens
+  // This allows dynamic menuitem titles (use menuitem.innerText/innerHTML)
+  // or visibility (use menuitem.style.display = "none"/"inline-block")
   addMenuItem(title, callback) {
-    var button = Route._createDiv("run-command-button", title);
+    var button = Route._createDiv("run-command-button", "...");
+    if(typeof title === typeof "xyz")
+      button.innerHTML = title;
+    else
+      button.verifyCallback = title;
     button.addEventListener('click', evt => callback(evt));
     this.menuDropdownContent.appendChild(button);
     if(this.menuDropdown.parentElement.id !== "header") {
