@@ -172,7 +172,7 @@ class HomeRoute extends Route {
 
     var element = document.getElementById(hostname);
     if(element != null) {
-      console.log("minion already on screen:", hostname);
+      // minion already on screen
       return;
     }
 
