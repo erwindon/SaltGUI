@@ -185,7 +185,7 @@ class HomeRoute extends Route {
     minion.id = "status";
     element.appendChild(minion);
 
-    element.appendChild(Route._createDiv("os", "Loading..."));
+    element.appendChild(Route._createDiv("os", "loading..."));
 
     var menu = new DropDownMenu(element);
     this._addMenuItemReject(menu, hostname);
