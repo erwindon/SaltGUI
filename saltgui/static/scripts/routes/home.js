@@ -91,25 +91,25 @@ class HomeRoute extends Route {
   }
 
   _addMenuItemAccept(menu, hostname) {
-    menu.addMenuItem("Accept&nbsp;key", function(evt) {
+    menu.addMenuItem("Accept&nbsp;key...", function(evt) {
       this._runAcceptKey(evt, hostname);
     }.bind(this));
   }
 
   _addMenuItemDelete(menu, hostname) {
-    menu.addMenuItem("Delete&nbsp;key", function(evt) {
+    menu.addMenuItem("Delete&nbsp;key...", function(evt) {
       this._runDeleteKey(evt, hostname);
     }.bind(this));
   }
 
   _addMenuItemReject(menu, hostname) {
-    menu.addMenuItem("Reject&nbsp;key", function(evt) {
+    menu.addMenuItem("Reject&nbsp;key...", function(evt) {
       this._runRejectKey(evt, hostname);
     }.bind(this));
   }
 
   _addMenuItemSyncState(menu, hostname) {
-    menu.addMenuItem("Sync&nbsp;state", function(evt) {
+    menu.addMenuItem("Sync&nbsp;state...", function(evt) {
       this._runHighState(evt, hostname);
     }.bind(this));
   }
