@@ -198,7 +198,8 @@ class API {
 
     var headers = {
       "Accept": "application/json",
-      "X-Auth-Token": token !== null ? token : ""
+      "X-Auth-Token": token !== null ? token : "",
+      "Cache-Control": "no-cache"
     };
 
     return this._fetch(method, location, headers, params);
