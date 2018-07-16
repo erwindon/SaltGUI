@@ -58,6 +58,17 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.1.0 (2018-07-16)
+- Shows inactive minions as well (erwindon)
+- Switch to a more reliable grain indicating the ip-number (erwindon)
+- Added a logout button (erwindon)
+- Improved minion loading page: first the keys and update them according to their status (erwindon)
+- Fixed issue with session timeout (erwindon)
+- Added keymanagement functionality (erwindon)
+- Created a nice dropdown menu (erwindon)
+- Improved ES6 code (erwindon)
+- Added a close button to the command popup (erwindon)
+
 ## 1.0.1 (2018-05-16)
 - Fixed position of popup when main window has scrolled (erwindon)
 - Sort minions by hostname (erwindon)
