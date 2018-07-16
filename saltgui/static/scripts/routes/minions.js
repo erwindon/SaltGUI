@@ -39,7 +39,7 @@ class MinionsRoute extends PageRoute {
   }
 
   _addMenuItemSyncState(menu, hostname) {
-    menu.addMenuItem("Sync&nbsp;state", function(evt) {
+    menu.addMenuItem("Sync&nbsp;state...", function(evt) {
       this._runHighState(evt, hostname);
     }.bind(this));
   }
