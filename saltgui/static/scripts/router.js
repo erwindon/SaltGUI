@@ -45,7 +45,7 @@ class Router {
     route.getPageElement().style.display = "";
 
     document.querySelectorAll(".menu_item_active").forEach(
-	function (e){e.classList.remove("menu_item_active")}
+	function (e){ e.classList.remove("menu_item_active"); }
 	);
 
     var elem = route.getMenuItemElement();
