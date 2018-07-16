@@ -21,6 +21,10 @@ class JobRoute extends Route {
     var info = data.info[0];
     job.getElement().querySelector(".hosts").innerHTML = "";
 
+    document.querySelector('#button_close_job').addEventListener('click', _ => {
+      this.router.goTo("/");
+    });
+
     var container = this.getElement().querySelector(".job-info");
     container.querySelector('.function').innerHTML = info.Function;
     container.querySelector('.time').innerHTML = info.StartTime;
