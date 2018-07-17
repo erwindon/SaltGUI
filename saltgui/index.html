@@ -28,18 +28,21 @@
           <input id='username' type='text' placeholder='Username' />
           <input id='password' type='password' placeholder='Password' />
           <select id='eauth'>
+            <!-- see https://docs.saltstack.com/en/latest/ref/auth/all/index.html -->
             <option id='eauth_default' value="default">Type</option>
             <optgroup label="standard" />
               <option value="pam">pam</option>
             </optgroup>
             <optgroup label="supported" />
-              <option value="ldap">ldap</option>
+              <!-- move items to this optgroup when at least -->
+              <!-- one user reports a succesful use -->
+              <option value="auto">auto</option>
             </optgroup>
             <optgroup label="experimental" />
-              <option value="auto">auto</option>
               <option value="django">django</option>
               <option value="file">file</option>
               <option value="keystone">keystone</option>
+              <option value="ldap">ldap</option>
               <option value="mysql">mysql</option>
               <option value="pki">pki</option>
               <option value="rest">rest</option>
