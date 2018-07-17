@@ -27,9 +27,29 @@
           </div>
           <input id='username' type='text' placeholder='Username' />
           <input id='password' type='password' placeholder='Password' />
+          <select id='eauth'>
+            <option id='eauth_default' value="default">Type</option>
+            <optgroup label="standard" />
+              <option value="pam">pam</option>
+            </optgroup>
+            <optgroup label="supported" />
+              <option value="ldap">ldap</option>
+            </optgroup>
+            <optgroup label="experimental" />
+              <option value="auto">auto</option>
+              <option value="django">django</option>
+              <option value="file">file</option>
+              <option value="keystone">keystone</option>
+              <option value="mysql">mysql</option>
+              <option value="pki">pki</option>
+              <option value="rest">rest</option>
+              <option value="sharedsecret">sharedsecret</option>
+              <option value="yubico">yubico</option>
+            </optgroup>
+          </select>
           <input type='submit' value='Login'/>
           <div class='attribution'>
-            <img src='static/images/github.png' />SaltGUI v1.1.0
+            <img src='static/images/github.png' />SaltGUI v1.2.0
           </div>
         </form>
       </div>
@@ -51,7 +71,7 @@
 
       <div class='route' id='job'>
         <div class='panel job-info'>
-	  <div class='nearlyvisiblebutton' id='button_close_job'>close</div>
+          <div class='nearlyvisiblebutton' id='button_close_job'>close</div>
           <h1 class='function'></h1>
           <h2 class='time'></h2>
           <div class='hosts'></div>
@@ -62,7 +82,7 @@
 
     <div class='popup' id='run-command-popup'>
       <div class='run-command'>
-	<div class='nearlyvisiblebutton' id='button_close_cmd'>close</div>
+        <div class='nearlyvisiblebutton' id='button_close_cmd'>close</div>
         <h1>Manual Run</h1>
         <input id='target' type='text' placeholder="Target"/>
         <input id='command' type='text' placeholder="Command"/>

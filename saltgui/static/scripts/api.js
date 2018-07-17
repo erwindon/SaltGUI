@@ -113,6 +113,12 @@ class API {
       eauth: "pam"
     };
 
+    // overrule the eauth method when one is selected
+    var type = document.querySelector("#login-form #eauth");
+    if(type.value !== "default")
+      params.eauth = type.value;
+    localStorage.setItem('logintype', type.value);
+
     return new Promise(function(resolve, reject) {
       api._callMethod("POST", "/login", params)
       .then(function(data) {

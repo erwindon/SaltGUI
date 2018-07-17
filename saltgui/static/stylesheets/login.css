@@ -22,14 +22,34 @@
   margin-bottom: 23px;
   font-weight: lighter;
   font-size: 60px;
+  width: 100%;
 }
 
 #login-form input {
+  width: 100%;
   font-size: 18px;
+}
+
+#login-form select {
+  width: 100%;
+  font-size: 14px;
 }
 
 #login-form input[type='success'] {
   width: 100%;
+}
+
+#login-form select {
+  color: black;
+}
+#login-form select option#eauth_default {
+  color: gray;
+}
+#login-form select option {
+  color: black;
+}
+#login-form select optgroup {
+  color: black;
 }
 
 .attribution {
@@ -69,5 +89,4 @@
   border-radius: 2px;
   text-align: center;
   font-size: 15px;
-  width:200px;
 }

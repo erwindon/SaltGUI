@@ -121,7 +121,8 @@ h1 {
   margin-bottom: 20px;
 }
 
-input {
+input,
+select {
   display: block;
   padding: 7px 10px;
   margin-bottom: 15px;

@@ -12,6 +12,29 @@ class LoginRoute extends Route{
     this.registerEventListeners();
   }
 
+  updateTypeColor() {
+    var typeItem = document.querySelector("#login-form #eauth");
+    // make it look like a hint
+    if(typeItem.value === "default")
+      typeItem.style.color = "gray";
+    else
+      typeItem.style.color = "black";
+  }
+
+  onShow() {
+
+    var typeItem = document.querySelector("#login-form #eauth");
+
+    // restore login type
+    let typeValue = localStorage.getItem('logintype');
+    if(!typeValue) typeValue = "default";
+    typeItem.value = typeValue;
+
+    this.updateTypeColor();
+
+    typeItem.addEventListener('change', this.updateTypeColor);
+  }
+  
   registerEventListeners() {
     var submit = document.querySelector("#login-form");
     submit.addEventListener('submit', this.onLogin);
@@ -49,7 +72,6 @@ class LoginRoute extends Route{
   }
 
   onLoginFailure() {
-    //TODO: Show error
     this.toggleForm(true);
 
     var notice = document.querySelector('.notice-wrapper');
