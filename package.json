@@ -10,6 +10,6 @@
     "esversion": 6
   },
   "scripts": {
-    "test": "jshint "
+    "test": "jshint saltgui/"
   }
 }
