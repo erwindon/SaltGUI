@@ -12,6 +12,8 @@ class CommandBox {
     this.menu = new DropDownMenu(cmdbox);
     this.documentation = new Documentation(this);
     this._registerEventListeners();
+
+    RunType._registerEventListeners();
   }
 
   _registerEventListeners() {
@@ -53,7 +55,15 @@ class CommandBox {
     output.innerHTML = "Loading...";
 
     func.then(response => {
-      this._onRunReturn(response.return[0], command);
+      // The data.return array may contain the answer from several minion groups
+      // combine these first into one group for easier processing
+      const allResponses = { };
+      for(const group of response.return) {
+        for(const host in group) {
+          allResponses[host] = group[host];
+        }
+      }
+      this._onRunReturn(allResponses, command);
     });
   }
 
@@ -82,6 +92,9 @@ class CommandBox {
     manualRun.style.display = "none";
 
     document.body.style["overflow-y"] = "scroll";
+
+    // reset to default, so that its value is initially hidden
+    RunType.setRunTypeDefault();
 
     // test whether the command may have caused an update to the list
     // the user may have altered the text after running the command, just ignore that
@@ -162,6 +175,13 @@ class CommandBox {
       params.fun = functionToRun;
       params.tgt = target;
       if(args.length !== 0) params.arg = args;
+    }
+
+    const runType = RunType.getRunType();
+    if(params.client === "local" && runType === "async") {
+      params.client = "local_async";
+      // return looks like:
+      // { "jid": "20180718173942195461", "minions": [ ... ] }
     }
 
     return this.api.apiRequest("POST", "/", params)
