@@ -33,8 +33,8 @@
             <optgroup label="standard" />
               <option value="pam">pam</option>
             </optgroup>
-            <optgroup label="supported" />
-              <!-- move items to this optgroup when at least -->
+            <optgroup label="other" />
+              <!-- move items to this optgroup only when at least -->
               <!-- one user reports a succesful use -->
               <option value="auto">auto</option>
               <option value="file">file</option>
@@ -42,13 +42,11 @@
               <option value="yubico">yubico</option>
             </optgroup>
             <optgroup label="experimental" />
-              <option value="django">django</option>
-              <option value="keystone">keystone</option>
               <option value="ldap">ldap</option>
-              <option value="mysql">mysql</option>
-              <option value="pki">pki</option>
-              <option value="rest">rest</option>
             </optgroup>
+            <!-- other values are: django, keystone, mysql, pki, rest -->
+            <!-- these can be added after testing to optgroup 'other' -->
+            <!-- or to optgroup 'experimental' on explicit user request -->
           </select>
           <input type='submit' value='Login'/>
           <div class='attribution'>
