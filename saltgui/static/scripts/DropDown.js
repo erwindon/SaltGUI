@@ -201,15 +201,11 @@ export class DropDownMenu {
     this.menuButton.innerText = DropDownMenu._sanitizeMenuItemTitle(pTitle);
   }
 
-  __showMenu () {
-    // Currently unused but present in preparation for branch zzz-batch
-    // This method is then called by CommandBox
+  showMenu () {
     this.menuDropdown.style.display = "inline-block";
   }
 
-  __hideMenu () {
-    // Currently unused but present in preparation for branch zzz-batch
-    // This method is then called by CommandBox
+  hideMenu () {
     this.menuDropdown.style.display = "none";
   }
 }
