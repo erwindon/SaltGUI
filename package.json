@@ -9,3 +9,4 @@
   "scripts": {
     "test": "jshint --config .jshint"
   }
+}
