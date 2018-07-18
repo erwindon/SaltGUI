@@ -7,28 +7,29 @@ class DropDownMenu {
     this.verifyAll = this.verifyAll.bind(this);
 
     this.menuDropdown = Route._createDiv("run-command-button", "");
-    let menuButton;
 
     switch (element.id) {
     case "header":
       // 8801 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
-      menuButton = Route._createDiv("menu-dropdown", "&#8801;");
+      this.menuButton = Route._createDiv("menu-dropdown", "&#8801;");
       this.menuDropdown.classList.add("hamburger");
       break;
+
     case "cmdbox":
       // 128214 = A BOOK
-      menuButton = Route._createDiv("menu-dropdown", "&#128214;");
+      this.menuButton = Route._createDiv("menu-dropdown", "&#128214;");
       // hide the menu until it receives menu-items
       this.verifyAll();
       break;
 
     default:
       // 9658 = BLACK RIGHT-POINTING POINTER
-      menuButton = Route._createDiv("menu-dropdown", "&#9658;");
+      // assume it will be a command menu
+      this.menuButton = Route._createDiv("menu-dropdown", "&#9658;");
       // hide the menu until it receives menu-items
       this.verifyAll();
     }
-    this.menuDropdown.appendChild(menuButton);
+    this.menuDropdown.appendChild(this.menuButton);
     this.menuDropdownContent = Route._createDiv("menu-dropdown-content", "");
     this.menuDropdown.appendChild(this.menuDropdownContent);
     this.menuDropdown.addEventListener('mouseenter', this.verifyAll);
@@ -67,6 +68,22 @@ class DropDownMenu {
       // css code which will otherwise be overruled
       this.verifyAll();
     }
+  }
+
+  setTitle(title) {
+    // Setting the title implies that we are interested
+    // in the menu values, rather than their actions.
+    // Use a slightly different clue for that.
+    // 9660 = BLACK DOWN-POINTING TRIANGLE
+    this.menuButton.innerHTML = title + "&nbsp;&#9660;";
+  }
+
+  showMenu() {
+    this.menuDropdown.style.display = "inline-block";
+  }
+
+  hideMenu() {
+    this.menuDropdown.style.display = "none";
   }
 
 }

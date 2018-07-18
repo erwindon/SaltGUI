@@ -40,19 +40,7 @@ class API {
     document.querySelector(".run-command input[type='submit']")
       .addEventListener('click', this._onRun);
 
-    // keydown is too early, keypress also does not work
-    document.querySelector("#command")
-      .addEventListener('keyup', this.menu.verifyAll);
-    // cut/paste do not work everywhere
-    document.querySelector("#command")
-      .addEventListener('cut', this.menu.verifyAll);
-    document.querySelector("#command")
-      .addEventListener('paste', this.menu.verifyAll);
-    // blur/focus should not be needed but are a valueable fallback
-    document.querySelector("#command")
-      .addEventListener('blur', this.menu.verifyAll);
-    document.querySelector("#command")
-      .addEventListener('focus', this.menu.verifyAll);
+    RunType._registerEventListeners();
   }
 
   _onRun() {
@@ -103,6 +91,9 @@ class API {
     manualRun.style.display = "none";
 
     document.body.style["overflow-y"] = "scroll";
+
+    // reset to default, so that its value is initially hidden
+    RunType._setRunTypeDefault();
 
     // test whether the command may have caused an update to the list
     // the user may have altered the text after running the command, just ignore that
@@ -242,6 +233,24 @@ class API {
       params.fun = functionToRun;
       params.tgt = target;
       if(args.length !== 0) params.arg = args;
+    }
+
+    var jobRunType = document.querySelector(".jobRunType");
+    if(params.client === "local" && jobRunType.innerText === "async") {
+      params.client = "local_async";
+      // return looks like:
+      // { "jid": "20180718173942195461", "minions": [ ... ] }
+    }
+    else if(params.client === "local" && jobRunType.innerText === "batch") {
+      params.client = "local_batch";
+
+      var batchSize = document.querySelector(".batchSize");
+      params.batch = batchSize.innerText;
+
+      var batchWait = document.querySelector(".batchWait");
+      params.batch_wait = parseInt(batchWait.innerText);
+
+      // it returns the actual output in a group of batches
     }
 
     return this._callMethod("POST", "/", params);

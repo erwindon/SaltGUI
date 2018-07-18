@@ -32,6 +32,7 @@ header .menu-dropdown-content {
   clear: both;
   margin: 3px;
   padding: 5px 20px 5px 20px;
+  cursor: pointer;
 }
 
 /* Change color of menu-dropdown links on hover */
