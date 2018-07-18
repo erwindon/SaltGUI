@@ -23,7 +23,7 @@ export class CommandBox {
     this.documentation = new Documentation(this.router, this);
     this._registerCommandBoxEventListeners();
 
-    RunType.createMenu();
+    RunType.createMenus();
     TargetType.createMenu();
 
     const manualRun = document.getElementById("popup-run-command");
@@ -392,8 +392,16 @@ export class CommandBox {
     }
 
     func.then((pResponse) => {
+      // The data.return array may contain the answer from several minion groups
+      // combine these first into one group for easier processing
+      const allResponses = { };
+      for (const group of pResponse.return) {
+        for (const host in group) {
+          allResponses[host] = group[host];
+        }
+      }
       if (pResponse) {
-        CommandBox.onRunReturn(pResponse.return[0], commandValue);
+        CommandBox.onRunReturn(allResponses, commandValue);
         CommandBox._prepareForAsyncResults(pResponse);
       } else {
         CommandBox._showError("null response");
@@ -629,6 +637,11 @@ export class CommandBox {
         CommandBox._showError("Async is not supported for '" + functionToRun + "'");
         return null;
       }
+    } else if (params.client === "local" && runType === "batch") {
+      params.client = "local_batch";
+      params.batch = RunType.getBatchSize();
+      params["batch_wait"] = RunType.getBatchWait();
+      // it returns the actual output in a list of batches
     }
 
     return this.api.apiRequest("POST", "/", params);
