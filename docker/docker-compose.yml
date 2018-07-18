@@ -22,7 +22,6 @@ services:
     restart: on-failure
     command: /usr/bin/salt-minion
 
-
   saltminion-debian:
     build:
         context: . 
