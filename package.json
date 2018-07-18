@@ -7,6 +7,6 @@
     "jshint": "^2.9.5"
   },
   "scripts": {
-    "test": "jshint --config .jshint"
+    "test": "jshint --config ~/.jshint"
   }
 }
