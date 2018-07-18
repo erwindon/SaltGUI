@@ -23,7 +23,7 @@ export class CommandBox {
     this.documentation = new Documentation(this.router, this);
     this._registerCommandBoxEventListeners();
 
-    RunType.createMenu();
+    RunType.createMenus();
     TargetType.createMenu();
 
     const manualRun = document.getElementById("popup-run-command");
@@ -379,10 +379,18 @@ export class CommandBox {
     const command = commandValue.split(" ")[0];
     CommandBox._markPanelsForRefresh(command);
 
-    func.then((ok_response) => {
-      if (ok_response) {
-        CommandBox.onRunReturn(ok_response.return[0], commandValue);
-        CommandBox._prepareForAsyncResults(ok_response);
+    func.then((ok_Response) => {
+      // The data.return array may contain the answer from several minion groups
+      // combine these first into one group for easier processing
+      const allResponses = { };
+      for (const group of ok_Response.return) {
+        for (const host in group) {
+          allResponses[host] = group[host];
+        }
+      }
+      if (ok_Response) {
+        CommandBox.onRunReturn(allResponses, commandValue);
+        CommandBox._prepareForAsyncResults(ok_Response);
       } else {
         CommandBox._showError("null response");
       }
@@ -788,6 +796,13 @@ export class CommandBox {
       if (Object.keys(pArgsObject).length > 0) {
         params.kwarg = pArgsObject;
       }
+    }
+
+    if (params.client === "local" && RunType.getRunType() === "batch") {
+      params.client = "local_batch";
+      params.batch = RunType.getBatchSize();
+      params["batch_wait"] = RunType.getBatchWait();
+      // it returns the actual output in a list of batches
     }
 
     return params;
