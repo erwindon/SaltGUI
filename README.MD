@@ -58,9 +58,6 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
-## 1.2.0 (2018-07-17)
-- Added support for alternative eauth methods (erwindon)
-
 ## 1.1.0 (2018-07-16)
 - Shows inactive minions as well (erwindon)
 - Switch to a more reliable grain indicating the ip-number (erwindon)
