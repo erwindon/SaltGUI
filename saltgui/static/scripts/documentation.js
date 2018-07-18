@@ -57,7 +57,7 @@ class Documentation {
 
     let target = document.querySelector(".run-command #target").value;
     // the help text is taken from the first minion that answers
-    // when no target is selectes, just ask all minions
+    // when no target is selected, just ask all minions
     if(target === "") target = "*";
 
     // do not use the command-parser
