@@ -5,7 +5,7 @@ ENV REFRESHED_ON "7 Mar 2018"
 ENV DEBIAN_FRONTEND noninteractive
 
 # some handy stuff to have
-RUN apt-get update && apt-get install curl --yes && apt-get install gnupg --yes && apt-get install netcat-openbsd -y 
+RUN apt-get update && apt-get install curl --yes && apt-get install gnupg --yes
 
 # add saltstack key
 RUN curl --fail --silent --show-error --location https://repo.saltstack.com/apt/debian/9/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
@@ -16,6 +16,3 @@ RUN apt-get update && apt-get install salt-minion --yes
 
 # copy the minion configuration
 ADD ./conf/minion /etc/salt/minion
-
-# copy the wait for saltmaster script to /usr/local/bin
-ADD ./scripts/wait-for-saltmaster.sh /usr/local/bin/wait-for-saltmaster.sh

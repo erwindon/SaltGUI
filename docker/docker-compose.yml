@@ -18,15 +18,16 @@ services:
         context: . 
         dockerfile: ./dockerfiles/dockerfile-saltminion-ubuntu
     depends_on:
-      - "saltmaster-local"
-    entrypoint: /usr/local/bin/wait-for-saltmaster.sh saltmaster-local 4505
+       - saltmaster-local
+    restart: on-failure
     command: /usr/bin/salt-minion
+
 
   saltminion-debian:
     build:
         context: . 
         dockerfile: ./dockerfiles/dockerfile-saltminion-debian
     depends_on:
-      - "saltmaster-local"
-    entrypoint: /usr/local/bin/wait-for-saltmaster.sh saltmaster-local 4505
+       - saltmaster-local
+    restart: on-failure
     command: /usr/bin/salt-minion
