@@ -7,13 +7,13 @@ A new open source web interface for managing a SaltStack server. Built using van
 ![job](/docs/job.png)
 
 ## Features
-- Login via PAM to an external API
+- Login via PAM or any other supported authentication by Salt
 - View minions and easily copy IPs
 - Run state.highstate for a particular minion
 - View the seven most recent jobs run on Salt
 - Manually run any Salt function and see the output
 
-## Installation
+## Quick start using PAM as authentication method
 - Install `salt-api` - this is available in the Salt PPA package which should already been installed if you're using Salt
 - Open the master config /etc/salt/master
 - Find `external_auth` and add a user as follows:
