@@ -38,15 +38,13 @@
               <!-- one user reports a succesful use -->
               <option value="auto">auto</option>
               <option value="file">file</option>
+              <option value="ldap">ldap</option>
               <option value="sharedsecret">sharedsecret</option>
               <option value="yubico">yubico</option>
             </optgroup>
-            <optgroup label="experimental" />
-              <option value="ldap">ldap</option>
-            </optgroup>
             <!-- other values are: django, keystone, mysql, pki, rest -->
             <!-- these can be added after testing to optgroup 'other' -->
-            <!-- or to optgroup 'experimental' on explicit user request -->
+            <!-- or to (new) optgroup 'experimental' on explicit user request -->
           </select>
           <input type='submit' value='Login'/>
           <div class='attribution'>
