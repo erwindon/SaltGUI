@@ -35,8 +35,8 @@ class PageRoute extends Route {
 
     element.appendChild(Route._createDiv("hostname", hostname));
 
-    var offline = Route._createDiv("offline", "offline");
-    offline.id = "status";
+    var offline = Route._createDiv("status", "offline");
+    offline.classList.add("offline");
     element.appendChild(offline);
   }
 
@@ -57,7 +57,8 @@ class PageRoute extends Route {
 
     element.appendChild(Route._createDiv("hostname", minion.hostname));
 
-    var address = Route._createDiv("address", ip);
+    var address = Route._createDiv("status", ip);
+    address.classList.add("address");
     address.setAttribute("tabindex", -1);
     address.addEventListener('click', this._copyAddress);
     element.appendChild(address);
@@ -78,8 +79,8 @@ class PageRoute extends Route {
 
     element.appendChild(Route._createDiv("hostname", hostname));
 
-    var minion = Route._createDiv("accepted", "accepted");
-    minion.id = "status";
+    var minion = Route._createDiv("status", "accepted");
+    minion.classList.add("accepted");
     element.appendChild(minion);
 
     element.appendChild(Route._createDiv("os", "loading..."));

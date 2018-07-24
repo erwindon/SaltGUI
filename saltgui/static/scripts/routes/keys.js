@@ -106,8 +106,8 @@ class KeysRoute extends PageRoute {
 
     element.appendChild(Route._createDiv("hostname", hostname));
 
-    var rejected = Route._createDiv("rejected", "rejected");
-    rejected.id = "status";
+    var rejected = Route._createDiv("status", "rejected");
+    rejected.classList.add("rejected");
     element.appendChild(rejected);
 
     var menu = new DropDownMenu(element);
@@ -122,8 +122,8 @@ class KeysRoute extends PageRoute {
 
     element.appendChild(Route._createDiv("hostname", hostname));
 
-    var denied = Route._createDiv("denied", "denied");
-    denied.id = "status";
+    var denied = Route._createDiv("status", "denied");
+    denied.classList.add("denied");
     element.appendChild(denied);
 
     var menu = new DropDownMenu(element);
@@ -139,8 +139,8 @@ class KeysRoute extends PageRoute {
 
     element.appendChild(Route._createDiv("hostname", hostname));
 
-    var pre = Route._createDiv("unaccepted", "unaccepted");
-    pre.id = "status";
+    var pre = Route._createDiv("status", "unaccepted");
+    pre.classList.add("unaccepted");
     element.appendChild(pre);
 
     var menu = new DropDownMenu(element);

@@ -50,11 +50,14 @@
   min-width: 240px;
 }
 
+.minions li .status {
+  min-width: 120px;
+}
+
 .minions li .address {
   color: #3F51B5;
   cursor: pointer;
   position: relative;
-  min-width: 120px;
 
   /* Screw browser prefixes, am I right?! */
   user-select: none;
@@ -116,7 +119,6 @@
 .minions li .denied {
   color: #FF00FF;
 }
-
 
 .minions li .unaccepted {
   color: #FF0000;
