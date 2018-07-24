@@ -18,7 +18,7 @@ class DropDownMenu {
     var button = Route._createDiv("run-command-button", title);
     button.addEventListener('click', evt => callback(evt));
     this.menuDropdownContent.appendChild(button);
-    this.menuDropdown.style.display = "block";
+    this.menuDropdown.style.display = "inline-block";
   }
 
 }
