@@ -4,7 +4,6 @@ class DropDownMenu {
   // The visual clue for the menu is added to the given element
   constructor(element) {
     this.menuDropdown = Route._createDiv("run-command-button", "");
-    this.menuDropdown.style.display = "none";
     var menuButton;
     if(element.id === "header") {
       // 8801 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
@@ -13,6 +12,8 @@ class DropDownMenu {
     } else {
       // 9658 = BLACK RIGHT-POINTING POINTER
       menuButton = Route._createDiv("menu-dropdown", "&#9658;");
+      // hide the menu until it receives menu-items
+      this.menuDropdown.style.display = "none";
     }
     this.menuDropdown.appendChild(menuButton);
     this.menuDropdownContent = Route._createDiv("menu-dropdown-content", "");
@@ -26,7 +27,12 @@ class DropDownMenu {
     var button = Route._createDiv("run-command-button", title);
     button.addEventListener('click', evt => callback(evt));
     this.menuDropdownContent.appendChild(button);
-    this.menuDropdown.style.display = "inline-block";
+    if(this.menuDropdown.parentElement.id !== "header") {
+      // this shows the menu button as soon as it has a menu-item
+      // don't mess with the toplevel menu, as that has separate
+      // css code which will otherwise be overruled
+      this.menuDropdown.style.display = "inline-block";
+    }
   }
 
 }
