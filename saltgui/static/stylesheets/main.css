@@ -45,10 +45,10 @@ h1 {
   padding: 5px 18px 17px 14px;
   display: inline-block;
   font-weight: bold;
-  font-size: 30px;
+  font-size: 18px;
   border-radius: 50%;
   color: white;
-  transform: scale(0.8) translate(23px, -11px);
+  transform: scale(0.8) translate(23px, -2px);
   cursor: pointer;
   float: right;
 }
@@ -71,6 +71,17 @@ h1 {
   cursor: pointer;
 }
 
+.menubar {
+  display: inline-block;
+}
+
+@media(max-width: 800px) {
+  .menubar {
+    display: none;
+  }
+}
+
+
 .menu_item {
   display: inline-block;
   padding-left: 20px;
@@ -86,6 +97,25 @@ h1 {
   color: #4CAF50;
   cursor: pointer;
 }
+
+.hamburger {
+    display: none;
+    float: right;
+}
+
+@media(max-width: 800px) {
+  .hamburger {
+    display: inline-block;
+  }
+}
+
+.hamburger div {
+  width: 35px;
+  height: 5px;
+  background-color: black;
+  margin: 6px 0;
+}
+
 
 .route {
   opacity: 0;
