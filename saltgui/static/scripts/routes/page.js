@@ -1,5 +1,25 @@
 class PageRoute extends Route {
 
+  constructor(path, name, page_selector, menuitem_selector) {
+    super(path, name, page_selector, menuitem_selector);
+
+    if(PageRoute.hasMenu == undefined) {
+      var header = document.getElementById("header");
+      var menu = new DropDownMenu(header);
+      menu.addMenuItem("minions", function(evt) {
+        window.location.replace("/");
+      });
+      menu.addMenuItem("keys", function(evt) {
+        window.location.replace("/keys");
+      });
+      menu.addMenuItem("logout", function(evt) {
+        let api = new API();
+        api._logout(api);
+      });
+      PageRoute.hasMenu = true;
+    }
+  }
+
   _updateMinions(data) {
     var minions = data.return[0];
 

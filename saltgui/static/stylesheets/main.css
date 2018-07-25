@@ -100,22 +100,14 @@ h1 {
 
 .hamburger {
     display: none;
-    float: right;
 }
 
 @media(max-width: 800px) {
   .hamburger {
     display: inline-block;
+    float: right;
   }
 }
-
-.hamburger div {
-  width: 35px;
-  height: 5px;
-  background-color: black;
-  margin: 6px 0;
-}
-
 
 .route {
   opacity: 0;

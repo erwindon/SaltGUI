@@ -3,6 +3,10 @@
     padding: 5px 20px 5px 20px;
 }
 
+header .menu-dropdown {
+    font-size: 28px;
+}
+
 /* Dropdown Content (Hidden by Default) */
 .run-command-button .menu-dropdown-content {
     display: none;
@@ -10,14 +14,14 @@
     position: absolute;
     background-color: #e0e0e0;
     border: 10px solid #e0e0e0;
-    z-index: 1;
+    z-index: 5;
 }
-
 
 /* Links inside the menu-dropdown */
 .run-command-button .menu-dropdown-content div {
     display: block;
     float: left;
+    clear: both;
     margin: 3px;
     padding: 5px 20px 5px 20px;
 }

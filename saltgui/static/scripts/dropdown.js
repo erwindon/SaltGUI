@@ -5,7 +5,15 @@ class DropDownMenu {
   constructor(element) {
     this.menuDropdown = Route._createDiv("run-command-button", "");
     this.menuDropdown.style.display = "none";
-    var menuButton = Route._createDiv("menu-dropdown", "&#9658;");
+    var menuButton;
+    if(element.id === "header") {
+      // 8801 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
+      menuButton = Route._createDiv("menu-dropdown", "&#8801;");
+      this.menuDropdown.classList.add("hamburger");
+    } else {
+      // 9658 = BLACK RIGHT-POINTING POINTER
+      menuButton = Route._createDiv("menu-dropdown", "&#9658;");
+    }
     this.menuDropdown.appendChild(menuButton);
     this.menuDropdownContent = Route._createDiv("menu-dropdown-content", "");
     this.menuDropdown.appendChild(this.menuDropdownContent);
