@@ -9,9 +9,12 @@ header .menu-dropdown {
     padding: 5px 10px 5px 10px;
 }
 
+header .menu-dropdown-content {
+    transform: translate(-12px, -14px);
+}
+
 /* Dropdown Content (Hidden by Default) */
 .run-command-button .menu-dropdown-content {
-    transform: translate(-12px, -14px);
     display: none;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
     position: absolute;
