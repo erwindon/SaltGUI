@@ -12,6 +12,10 @@
   width: 100%;
 }
 
+.minions {
+  min-width: 620px;
+}
+
 .minions, .jobs {
   padding: 0px;
 }
@@ -34,10 +38,8 @@
 
 .minions li .run-command-button {
   color: #263238;
-  float: right;
   cursor: pointer;
   margin-right: 0;
-  margin-left: 20px;
 }
 
 .minions li .run-command-button:hover {
@@ -187,16 +189,11 @@ pre .hostname:first-of-type {
   flex-basis: 50%;
 }
 
-@media(max-width: 1200px) {
-
-  .minions li .run-command-button {
-    display: inline-block;
-    float: none;
-  }
-
-}
-
 @media(max-width: 800px) {
+  
+  .minions {
+    min-width:0;
+  }
 
   .dashboard {
     display: block;
