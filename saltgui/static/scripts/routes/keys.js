@@ -87,6 +87,10 @@ class KeysRoute extends PageRoute {
     super._updateOfflineMinion(container, hostname);
 
     var element = document.getElementById(hostname);
+
+    // force same columns on all rows
+    element.appendChild(Route._createDiv("os", ""));
+
     var menu = new DropDownMenu(element);
     this._addMenuItemReject(menu, hostname);
     this._addMenuItemDelete(menu, hostname);
@@ -96,6 +100,7 @@ class KeysRoute extends PageRoute {
     super._updateMinion(container, minion);
 
     var element = document.getElementById(minion.hostname);
+
     var menu = new DropDownMenu(element);
     this._addMenuItemReject(menu, minion.hostname);
     this._addMenuItemDelete(menu, minion.hostname);
@@ -109,6 +114,9 @@ class KeysRoute extends PageRoute {
     var rejected = Route._createDiv("status", "rejected");
     rejected.classList.add("rejected");
     element.appendChild(rejected);
+
+    // force same columns on all rows
+    element.appendChild(Route._createDiv("os", ""));
 
     var menu = new DropDownMenu(element);
     this._addMenuItemDelete(menu, hostname);
@@ -126,6 +134,9 @@ class KeysRoute extends PageRoute {
     denied.classList.add("denied");
     element.appendChild(denied);
 
+    // force same columns on all rows
+    element.appendChild(Route._createDiv("os", ""));
+
     var menu = new DropDownMenu(element);
     this._addMenuItemAccept(menu, hostname);
     this._addMenuItemReject(menu, hostname);
@@ -142,6 +153,9 @@ class KeysRoute extends PageRoute {
     var pre = Route._createDiv("status", "unaccepted");
     pre.classList.add("unaccepted");
     element.appendChild(pre);
+
+    // force same columns on all rows
+    element.appendChild(Route._createDiv("os", ""));
 
     var menu = new DropDownMenu(element);
     this._addMenuItemAccept(menu, hostname);
