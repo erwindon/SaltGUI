@@ -107,7 +107,7 @@ class KeysRoute extends PageRoute {
   }
 
   _addRejectedMinion(container, hostname) {
-    var element = document.createElement('li');
+    var element = this._getElement(container, hostname);
 
     element.appendChild(Route._createDiv("hostname", hostname));
 
@@ -126,7 +126,7 @@ class KeysRoute extends PageRoute {
   }
 
   _addDeniedMinion(container, hostname) {
-    var element = document.createElement('li');
+    var element = this._getElement(container, hostname);
 
     element.appendChild(Route._createDiv("hostname", hostname));
 
@@ -146,7 +146,7 @@ class KeysRoute extends PageRoute {
   }
 
   _addPreMinion(container, hostname) {
-    var element = document.createElement('li');
+    var element = this._getElement(container, hostname);
 
     element.appendChild(Route._createDiv("hostname", hostname));
 

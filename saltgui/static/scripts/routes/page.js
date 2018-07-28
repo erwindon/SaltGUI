@@ -20,18 +20,33 @@ class PageRoute extends Route {
     }
   }
 
-  _updateOfflineMinion(container, hostname) {
-    var element = document.getElementById(hostname);
+  _getElement(container, id) {
+    var element = document.getElementById(id);
+
     if(element == null) {
-      // offline minion not found on screen...
-      // construct a basic element that can be updated here
+      // minion not found on screen...
+      // construct a basic element that can be updated
       element = document.createElement('li');
-      element.id = hostname;
+      element.id = id;
+      container.appendChild(element);
+      return element;
+    }
+
+    if(element.parentElement !== container) {
+      // item is not the expected list, move it
       container.appendChild(element);
     }
+
+    // remove existing content
     while(element.firstChild) {
       element.removeChild(element.firstChild);
     }
+
+    return element;
+  }
+
+  _updateOfflineMinion(container, hostname) {
+    var element = this._getElement(container, hostname);
 
     element.appendChild(Route._createDiv("hostname", hostname));
 
@@ -43,17 +58,7 @@ class PageRoute extends Route {
   _updateMinion(container, minion) {
     var ip = minion.fqdn_ip4;
 
-    var element = document.getElementById(minion.hostname);
-    if(element == null) {
-      // online minion not found on screen...
-      // construct a basic element that can be updated here
-      element = document.createElement('li');
-      element.id = minion.hostname;
-      container.appendChild(element);
-    }
-    while(element.firstChild) {
-      element.removeChild(element.firstChild);
-    }
+    var element = this._getElement(container, minion.hostname);
 
     element.appendChild(Route._createDiv("hostname", minion.hostname));
 
