@@ -55,21 +55,25 @@ class API {
     m.addMenuItem("Normal", this._setRunTypeNormal);
     m.addMenuItem("Async", this._setRunTypeAsync);
     m.addMenuItem("Batch", this._setRunTypeBatch);
-    m.addMenuItem("BatchWaitNone", this._setRunTypeBatchWaitNone);
-    m.addMenuItem("BatchWait1s", this._setRunTypeBatchWait1);
-    m.addMenuItem("BatchWait2s", this._setRunTypeBatchWait2);
-    m.addMenuItem("BatchWait3s", this._setRunTypeBatchWait3);
-    m.addMenuItem("BatchWait5s", this._setRunTypeBatchWait5);
-    m.addMenuItem("BatchWait10s", this._setRunTypeBatchWait10);
-    m.addMenuItem("BatchWait30s", this._setRunTypeBatchWait30);
-    m.addMenuItem("BatchWait60s", this._setRunTypeBatchWait60);
-    m.addMenuItem("BatchSize1", this._setRunTypeBatchSize1);
-    m.addMenuItem("BatchSize2", this._setRunTypeBatchSize2);
-    m.addMenuItem("BatchSize3", this._setRunTypeBatchSize3);
-    m.addMenuItem("BatchSize5", this._setRunTypeBatchSize5);
-    m.addMenuItem("BatchSize10", this._setRunTypeBatchSize10);
-    m.addMenuItem("BatchSize10%", this._setRunTypeBatchSize10p);
-    m.addMenuItem("BatchSize25%", this._setRunTypeBatchSize25p);
+
+    var mw = new DropDownMenu(runblock);
+    mw.addMenuItem("BatchWaitNone", this._setRunTypeBatchWaitNone);
+    mw.addMenuItem("BatchWait1s", this._setRunTypeBatchWait1);
+    mw.addMenuItem("BatchWait2s", this._setRunTypeBatchWait2);
+    mw.addMenuItem("BatchWait3s", this._setRunTypeBatchWait3);
+    mw.addMenuItem("BatchWait5s", this._setRunTypeBatchWait5);
+    mw.addMenuItem("BatchWait10s", this._setRunTypeBatchWait10);
+    mw.addMenuItem("BatchWait30s", this._setRunTypeBatchWait30);
+    mw.addMenuItem("BatchWait60s", this._setRunTypeBatchWait60);
+
+    var ms = new DropDownMenu(runblock);
+    ms.addMenuItem("BatchSize1", this._setRunTypeBatchSize1);
+    ms.addMenuItem("BatchSize2", this._setRunTypeBatchSize2);
+    ms.addMenuItem("BatchSize3", this._setRunTypeBatchSize3);
+    ms.addMenuItem("BatchSize5", this._setRunTypeBatchSize5);
+    ms.addMenuItem("BatchSize10", this._setRunTypeBatchSize10);
+    ms.addMenuItem("BatchSize10%", this._setRunTypeBatchSize10p);
+    ms.addMenuItem("BatchSize25%", this._setRunTypeBatchSize25p);
 
     var jobRunType = Route._createDiv("jobRunType", "normal");
     jobRunType.style.display = "none";
