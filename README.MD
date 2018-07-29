@@ -20,7 +20,7 @@ A new open source web interface for managing a SaltStack server. Built using van
 ```
 external_auth:
   pam:
-    desiredSaltpadUsername:
+    desiredSaltGuiUsername:
       - .*
       - '@runner'
       - '@wheel'
