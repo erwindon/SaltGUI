@@ -67,6 +67,11 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.2.0 (2018-07-30)
+- Addition of menu bar; separation of minion vs keys (erwindon)
+- Added mysql as authentication method and retired auto and sharedsecret (erwindon)
+- Added some responsive improvements
+
 ## 1.1.1 (2018-07-23)
 - Support for several EAUTH authentication methods (erwindon)
 
