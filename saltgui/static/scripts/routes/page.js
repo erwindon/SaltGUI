@@ -151,8 +151,8 @@ class PageRoute extends Route {
     var element = document.createElement('li');
     element.id = job.id;
 
-    element.appendChild(Route._createDiv("function", job.Function));
     element.appendChild(Route._createDiv("target", job.Target));
+    element.appendChild(Route._createDiv("function", job.Function));
     element.appendChild(Route._createDiv("time", job.StartTime));
     container.appendChild(element);
     element.addEventListener('click', this._createJobListener(job.id));
