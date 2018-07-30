@@ -63,6 +63,7 @@ class LoginRoute extends Route{
 
     document.querySelector("#username").disabled = true;
     document.querySelector("#password").disabled = true;
+    document.querySelector("#eauth").disabled = true;
 
     notice.className = 'notice-wrapper';
     notice.focus(); //Used to trigger a reflow (to restart animation)
