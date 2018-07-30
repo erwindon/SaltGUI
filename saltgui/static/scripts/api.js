@@ -11,7 +11,7 @@ class API {
   }
 
   _registerEventListeners() {
-    document.querySelector("#run-command-popup")
+    document.querySelector("#popup_runcommand")
       .addEventListener('click', this._toggleManualRun);
     document.querySelector("#button_manualrun")
       .addEventListener('click', this._toggleManualRun);
@@ -20,6 +20,14 @@ class API {
     document.querySelector("#button_logout")
       .addEventListener('click', _ => {
         this._logout(this);
+    } );
+    document.querySelector("#button_minions")
+      .addEventListener('click', _ => {
+        window.location.replace("/");
+    } );
+    document.querySelector("#button_keys")
+      .addEventListener('click', _ => {
+        window.location.replace("/keys");
     } );
     document.querySelector(".run-command input[type='submit']")
       .addEventListener('click', this._onRun);
@@ -68,7 +76,7 @@ class API {
   }
 
   _toggleManualRun(evt) {
-    var manualRun = document.querySelector("#run-command-popup");
+    var manualRun = document.querySelector("#popup_runcommand");
     var isShowing = manualRun.style.display !== "none" && manualRun.style.display !== "";
 
     //Don't close if they click inside the window
@@ -190,7 +198,8 @@ class API {
 
     var headers = {
       "Accept": "application/json",
-      "X-Auth-Token": token !== null ? token : ""
+      "X-Auth-Token": token !== null ? token : "",
+      "Cache-Control": "no-cache"
     };
 
     return this._fetch(method, location, headers, params);

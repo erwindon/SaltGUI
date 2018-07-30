@@ -1,18 +1,18 @@
-#job .job-info {
+#page_job .job-info {
   margin: 10px;
 }
 
-#job .job-info h1 {
+#page_job .job-info h1 {
   font-size: 30px;
 }
 
-#job .time {
+#page_job .time {
   font-size: 15px;
   margin-top: 3px;
   font-weight: normal;
 }
 
-#job .task {
+#page_job .task {
   color: white;
   font-family: monospace;
   padding: 3px 8px;
@@ -24,12 +24,12 @@
   white-space: pre-wrap;
 }
 
-#job .task.failure {
+#page_job .task.failure {
   background-color: rgba(218, 41, 28, 0.31);
   color: black;
 }
 
-#job .host {
+#page_job .host {
   background-color: #f9f9f9;
   padding: 12px 20px 12px 20px;
   margin-top: 10px;
@@ -39,16 +39,16 @@
   overflow-y: scroll;
 }
 
-#job .host:hover {
+#page_job .host:hover {
   background-color: #efefef;
 }
 
-#job .host h1 {
+#page_job .host h1 {
   font-size: 18px;
   font-weight: normal;
 }
 
-#job .task .comment,
-#job .task .duration {
+#page_job .task .comment,
+#page_job .task .duration {
   font-size: 12px;
 }

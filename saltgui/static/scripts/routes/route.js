@@ -1,9 +1,11 @@
 class Route {
 
-  constructor(path, name, selector) {
+  constructor(path, name, page_selector, menuitem_selector) {
     this.path = new RegExp(path);
     this.name = name;
-    this.element = document.querySelector(selector);
+    this.page_element = document.querySelector(page_selector);
+    if(menuitem_selector)
+      this.menuitem_element = document.querySelector(menuitem_selector);
   }
 
   getName() {
@@ -14,8 +16,12 @@ class Route {
     return this.path;
   }
 
-  getElement() {
-    return this.element;
+  getPageElement() {
+    return this.page_element;
+  }
+
+  getMenuItemElement() {
+    return this.menuitem_element;
   }
 
   static _createDiv(className, content) {

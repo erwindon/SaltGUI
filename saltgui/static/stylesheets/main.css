@@ -71,6 +71,22 @@ h1 {
   cursor: pointer;
 }
 
+.menu_item {
+  display: inline-block;
+  padding-left: 20px;
+  font-size: 18px;
+  font-weight: lighter;
+}
+
+.menu_item_active {
+  font-weight: bold;
+}
+
+.menu_item:hover {
+  color: #4CAF50;
+  cursor: pointer;
+}
+
 .route {
   opacity: 0;
   pointer-events: none;
@@ -131,7 +147,7 @@ select {
   font-size: 14px;
   color: #272727;
   width: 60%;
-  min-width:200px;
+  min-width: 200px;
 }
 
 input:focus {
@@ -149,7 +165,7 @@ input[type='submit'] {
   transition: box-shadow 0.2s;
   margin-bottom: 0;
   width: 20%;
-  min-width:200px;
+  min-width: 200px;
 }
 
 input[type='submit']:active:not([disabled]) {
@@ -182,7 +198,7 @@ input[disabled] {
   white-space: pre-wrap;
   max-width: calc(100% - 10px);
   width: calc(100% - 10px);
-  height:250px;
+  height: 250px;
 }
 
 *:focus {

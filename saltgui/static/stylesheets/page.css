@@ -1,14 +1,14 @@
-#home {
+#page_minions, #page_keys {
   width: 100%;
 }
 
-#home .dashboard {
+.dashboard {
   display: flex;
   align-items: flex-start;
   margin: 10px;
 }
 
-#home .dashboard .panel {
+.dashboard .panel {
   width: 100%;
 }
 
@@ -50,11 +50,14 @@
   min-width: 240px;
 }
 
+.minions li .status {
+  min-width: 120px;
+}
+
 .minions li .address {
   color: #3F51B5;
   cursor: pointer;
   position: relative;
-  min-width: 120px;
 
   /* Screw browser prefixes, am I right?! */
   user-select: none;
@@ -117,7 +120,6 @@
   color: #FF00FF;
 }
 
-
 .minions li .unaccepted {
   color: #FF0000;
 }
@@ -140,28 +142,28 @@ pre .hostname:first-of-type {
   margin-top: 0;
 }
 
-#run-command-popup {
+#popup_runcommand {
   display: none;
 }
 
-#home .jobs li {
+.jobs li {
   list-style: none;
   border-bottom: 1px solid #4caf50;
   padding: 10px 18px;
 }
 
-#home .jobs li:last-of-type {
+.jobs li:last-of-type {
   border: 0;
 }
 
-#home .jobs li .function {
+.jobs li .function {
   font-weight: 500;
   font-size: 18px;
   color: #3a3a3a;
   display: inline-block;
 }
 
-#home .jobs li .target {
+.jobs li .target {
   font-weight: 500;
   font-size: 18px;
   color: #505050;
@@ -171,12 +173,12 @@ pre .hostname:first-of-type {
   float: right;
 }
 
-#home .jobs li .time {
+.jobs li .time {
   font-size: 11px;
   margin-top: 3px;
 }
 
-#home .jobs li:hover {
+.jobs li:hover {
   background-color: whitesmoke;
   cursor: pointer;
 }
@@ -196,11 +198,11 @@ pre .hostname:first-of-type {
 
 @media(max-width: 800px) {
 
-  #home .dashboard {
+  .dashboard {
     display: block;
   }
 
-  #home .dashboard .panel {
+  .dashboard .panel {
     width: auto;
     margin-right: 0;
     margin-bottom: 10px;

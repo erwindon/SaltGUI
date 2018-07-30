@@ -5,7 +5,8 @@ class Router {
     this.currentRoute = undefined;
     this.routes = [];
     this.registerRoute(new LoginRoute(this));
-    this.registerRoute(new HomeRoute(this));
+    this.registerRoute(new MinionsRoute(this));
+    this.registerRoute(new KeysRoute(this));
     this.registerRoute(new JobRoute(this));
 
     this._registerEventListeners();
@@ -41,7 +42,14 @@ class Router {
 
   showRoute(route) {
     var router = this;
-    route.getElement().style.display = "";
+    route.getPageElement().style.display = "";
+
+    document.querySelectorAll(".menu_item_active").forEach(
+	function (e){ e.classList.remove("menu_item_active"); }
+	);
+
+    var elem = route.getMenuItemElement();
+    if(elem) elem.classList.add("menu_item_active");
     router.switchingRoute = true;
 
     var afterLoad = function() {
@@ -51,7 +59,7 @@ class Router {
 
       router.currentRoute = route;
       document.title = "SaltGUI - " + router.currentRoute.getName();
-      router.currentRoute.getElement().className = 'route current';
+      router.currentRoute.getPageElement().className = 'route current';
       router.switchingRoute = false;
     };
 
@@ -63,10 +71,10 @@ class Router {
   }
 
   hideRoute(route) {
-    route.getElement().className = 'route';
+    route.getPageElement().className = 'route';
     setTimeout(function() {
       //Hide element after fade, so it does not expand the body
-      route.getElement().style.display = "none";
+      route.getPageElement().style.display = "none";
     }, 500);
     if(route.onHide) route.onHide();
   }

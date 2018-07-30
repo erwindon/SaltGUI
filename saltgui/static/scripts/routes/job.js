@@ -1,7 +1,7 @@
 class JobRoute extends Route {
 
   constructor(router) {
-    super("^[\/]job$", "Job", "#job");
+    super("^[\/]job$", "Job", "#page_job", "");
     this.router = router;
 
     this._onJobData = this._onJobData.bind(this);
@@ -19,13 +19,13 @@ class JobRoute extends Route {
   _onJobData(data) {
     var job = this;
     var info = data.info[0];
-    job.getElement().querySelector(".hosts").innerHTML = "";
+    job.getPageElement().querySelector(".hosts").innerHTML = "";
 
     document.querySelector('#button_close_job').addEventListener('click', _ => {
       this.router.goTo("/");
     });
 
-    var container = this.getElement().querySelector(".job-info");
+    var container = this.getPageElement().querySelector(".job-info");
     container.querySelector('.function').innerHTML = info.Function;
     container.querySelector('.time').innerHTML = info.StartTime;
 
@@ -40,7 +40,7 @@ class JobRoute extends Route {
       } else {
         result = window.escape(result);
       }
-      job._addHost(job.getElement().querySelector(".hosts"), hostname, result);
+      job._addHost(job.getPageElement().querySelector(".hosts"), hostname, result);
     });
     this.resolvePromise();
   }
