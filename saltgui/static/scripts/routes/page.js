@@ -1,5 +1,25 @@
 class PageRoute extends Route {
 
+  constructor(path, name, page_selector, menuitem_selector) {
+    super(path, name, page_selector, menuitem_selector);
+
+    if(PageRoute.hasMenu == undefined) {
+      var header = document.getElementById("header");
+      var menu = new DropDownMenu(header);
+      menu.addMenuItem("minions", function(evt) {
+        window.location.replace("/");
+      });
+      menu.addMenuItem("keys", function(evt) {
+        window.location.replace("/keys");
+      });
+      menu.addMenuItem("logout", function(evt) {
+        let api = new API();
+        api._logout(api);
+      });
+      PageRoute.hasMenu = true;
+    }
+  }
+
   _updateMinions(data) {
     var minions = data.return[0];
 
@@ -131,8 +151,8 @@ class PageRoute extends Route {
     var element = document.createElement('li');
     element.id = job.id;
 
-    element.appendChild(Route._createDiv("function", job.Function));
     element.appendChild(Route._createDiv("target", job.Target));
+    element.appendChild(Route._createDiv("function", job.Function));
     element.appendChild(Route._createDiv("time", job.StartTime));
     container.appendChild(element);
     element.addEventListener('click', this._createJobListener(job.id));

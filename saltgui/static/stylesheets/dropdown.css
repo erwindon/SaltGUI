@@ -3,6 +3,16 @@
     padding: 5px 20px 5px 20px;
 }
 
+header .menu-dropdown {
+    font-size: 45px;
+    transform: scale(1.3, 1) translate(-4px, -10px);
+    padding: 5px 10px 5px 10px;
+}
+
+header .menu-dropdown-content {
+    transform: translate(-12px, -14px);
+}
+
 /* Dropdown Content (Hidden by Default) */
 .run-command-button .menu-dropdown-content {
     display: none;
@@ -10,14 +20,14 @@
     position: absolute;
     background-color: #e0e0e0;
     border: 10px solid #e0e0e0;
-    z-index: 1;
+    z-index: 5;
 }
-
 
 /* Links inside the menu-dropdown */
 .run-command-button .menu-dropdown-content div {
     display: block;
     float: left;
+    clear: both;
     margin: 3px;
     padding: 5px 20px 5px 20px;
 }
@@ -25,6 +35,7 @@
 /* Change color of menu-dropdown links on hover */
 .run-command-button .menu-dropdown-content div:hover {
     background-color: #efefef;
+    cursor: pointer;
 }
 
 /* Show the menu-dropdown menu on hover */

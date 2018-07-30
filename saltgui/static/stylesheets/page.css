@@ -12,6 +12,10 @@
   width: 100%;
 }
 
+.minions {
+  min-width: 620px;
+}
+
 .minions, .jobs {
   padding: 0px;
 }
@@ -34,10 +38,8 @@
 
 .minions li .run-command-button {
   color: #263238;
-  float: right;
   cursor: pointer;
   margin-right: 0;
-  margin-left: 20px;
 }
 
 .minions li .run-command-button:hover {
@@ -158,7 +160,7 @@ pre .hostname:first-of-type {
 
 .jobs li .function {
   font-weight: 500;
-  font-size: 18px;
+  font-size: 14px;
   color: #3a3a3a;
   display: inline-block;
 }
@@ -167,10 +169,6 @@ pre .hostname:first-of-type {
   font-weight: 500;
   font-size: 18px;
   color: #505050;
-  display: inline-block;
-  transform: translateY(4px);
-  margin-left: 7px;
-  float: right;
 }
 
 .jobs li .time {
@@ -187,16 +185,11 @@ pre .hostname:first-of-type {
   flex-basis: 50%;
 }
 
-@media(max-width: 1200px) {
-
-  .minions li .run-command-button {
-    display: inline-block;
-    float: none;
-  }
-
-}
-
 @media(max-width: 800px) {
+  
+  .minions {
+    min-width:0;
+  }
 
   .dashboard {
     display: block;
@@ -207,5 +200,3 @@ pre .hostname:first-of-type {
     margin-right: 0;
     margin-bottom: 10px;
   }
-
-}
