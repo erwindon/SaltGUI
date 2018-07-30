@@ -30,7 +30,7 @@ external_auth:
 - At the bottom of this file, also setup the rest_cherrypi server:
 ```
 rest_cherrypy:
-  port: 8000
+  port: 3333
   host: 0.0.0.0
   disable_ssl: true
   app: /srv/saltgui/index.html
