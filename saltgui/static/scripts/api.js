@@ -3,6 +3,10 @@ class API {
   constructor() {
     this.APIURL = "";
 
+    // consts
+    this.patInteger = new RegExp("^[-]?[1-9][0-9]*$");
+    this.patFloat = new RegExp("^[-]?(([0-9]+[.][0-9]*)|([0-9]*[.][0-9]+))([eE][-+]?[0-9]+)?$");
+
     this._callMethod = this._callMethod.bind(this);
     this._fetch = this._fetch.bind(this);
     this._getRunParams = this._getRunParams.bind(this);
@@ -92,7 +96,7 @@ class API {
     var command = document.querySelector(".run-command #command").value;
     var output = document.querySelector(".run-command pre").innerHTML;
     if(isShowing && command.startsWith("salt.wheel.key.") && output != "Waiting for command...") {
-      location.reload(); 
+      location.reload();
     }
     evt.stopPropagation();
   }
@@ -165,31 +169,10 @@ class API {
       errLabel.style.display = "none";
   }
 
-  _getRunParams(target, toRun) {
- 
-    this._showError("");
-
-    if(target === "") {
-      this._showError("'Target' field cannot be empty");
-      return null;
-    }
-
-    if(toRun === "") {
-      this._showError("'Command' field cannot be empty");
-      return null;
-    }
-
+  _parseCommandLine(toRun, args, params) {
     // just in case the user typed some extra whitespace
+    // at the start of the line
     toRun = toRun.trim();
-
-    var patInteger = new RegExp("^[-]?[1-9][0-9]*$");
-    var patFloat = new RegExp("^[-]?(([0-9]+[.][0-9]*)|([0-9]*[.][0-9]+))([eE][-+]?[0-9]+)?$");
-
-    // collection for unnamed parameters
-    var args = [ ];
-
-    // collection for named parameters
-    var params = {};
 
     while(toRun.length > 0)
     {
@@ -200,7 +183,7 @@ class API {
         firstSpaceChar = toRun.length;
       var firstEqualSign = toRun.indexOf("=");
       if(firstEqualSign >= 0 && firstEqualSign < firstSpaceChar) {
-        // we have a named parameter
+        // we have the name of a named parameter
         name = toRun.substr(0, firstEqualSign);
         toRun = toRun.substr(firstEqualSign + 1);
         if(toRun === "" || toRun[0] === " ") {
@@ -226,7 +209,7 @@ class API {
         endChar = '\'';
         objType = "single-quoted-string";
       }
-        
+
       var value;
       if(endChar && objType) {
         // The string starts with a character for a known JSON type
@@ -244,7 +227,7 @@ class API {
           // but that may not be enough, e.g. "{a:{}"
           var s = toRun.substring(0, n + 1);
           try {
-            var o = JSON.parse(s);
+            value = JSON.parse(s);
           }
           catch(err) {
             // the string that we tried to parse is not valid json
@@ -261,27 +244,28 @@ class API {
           }
 
           // valid JSON and not followed by strange characters
-          value = JSON.parse(s);
           toRun = toRun.substring(n);
           break;
         }
       } else {
         // everything else is a string (without quotes)
         // when we are done, we'll see whether it actually is a number
+        // or any of the known constants
         var str = "";
         while(toRun.length > 0 && toRun[0] != ' ') {
           str += toRun[0];
           toRun = toRun.substring(1);
         }
 
-        // try to find whether the string is actually boolean, null/none, integer or float
+        // try to find whether the string is actually a known constant
+        // or integer or float
         if(str === "null") {
           value = null;
         } else if(str === "true" || str === "false") {
           value = str === "true";
-        } else if(patInteger.test(str)) {
+        } else if(this.patInteger.test(str)) {
           value = parseInt(str);
-        } else if(patFloat.test(str)) {
+        } else if(this.patFloat.test(str)) {
           value = parseFloat(str);
           if(!isFinite(f)) {
             this._showError("Numeric argument has overflowed or is infinity");
@@ -291,17 +275,41 @@ class API {
           value = str;
         }
       }
-      
+
       if(name !== null) {
         // named parameter
-    	params[name] = value;
+        params[name] = value;
       } else {
         // anonymous parameter
         args.push(value);
       }
 
+      // ignore the whitespace before the next part
       toRun = toRun.trim();
     }
+  }
+
+  _getRunParams(target, toRun) {
+
+    this._showError("");
+
+    if(target === "") {
+      this._showError("'Target' field cannot be empty");
+      return null;
+    }
+
+    if(toRun === "") {
+      this._showError("'Command' field cannot be empty");
+      return null;
+    }
+
+    // collection for unnamed parameters
+    var args = [ ];
+
+    // collection for named parameters
+    var params = { };
+
+    this._parseCommandLine(toRun, args, params);
 
     if(args.length === 0) {
       this._showError("First (unnamed) parameter is the function name, it is mandatory");
@@ -315,15 +323,14 @@ class API {
       return null;
     }
 
-    if(functionToRun.startsWith("salt.wheel.key.")) {
+    if(functionToRun.startsWith("salt.wheel.")) {
+      // wheel.key functions are treated slightly different
+      // we re-use the 'target' field to fill the parameter 'match'
+      // as used by the salt.wheel.key functions
       params.client = "wheel";
       // use only the part after "salt.wheel." (11 chars)
       params.fun = functionToRun.substring(11);
       params.match = target;
-      if(args.length !== 0) {
-        this._showError("Parameters for salt.wheel.key functions are not allowed");
-        return null;
-      }
     } else {
       params.client = "local";
       params.fun = functionToRun;
