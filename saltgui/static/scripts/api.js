@@ -4,8 +4,12 @@ class API {
     this.APIURL = "";
 
     // consts
-    this.patInteger = new RegExp("^[-]?[1-9][0-9]*$");
-    this.patFloat = new RegExp("^[-]?(([0-9]+[.][0-9]*)|([0-9]*[.][0-9]+))([eE][-+]?[0-9]+)?$");
+    // note that "none" is not case-insensitive
+    this.patNull = /^(None|null|Null|NULL)$/;
+    this.patBooleanFalse = /^(false|False|FALSE)$/;
+    this.patBooleanTrue = /^(true|True|TRUE)$/;
+    this.patInteger = /^((0)|([-+]?[1-9][0-9]*))$/;
+    this.patFloat = /^([-+]?(([0-9]+)|([0-9]+[.][0-9]*)|([0-9]*[.][0-9]+))([eE][-+]?[0-9]+)?)$/;
 
     this._callMethod = this._callMethod.bind(this);
     this._fetch = this._fetch.bind(this);
@@ -259,10 +263,12 @@ class API {
 
         // try to find whether the string is actually a known constant
         // or integer or float
-        if(str === "null") {
+        if(this.patNull.test(str)) {
           value = null;
-        } else if(str === "true" || str === "false") {
-          value = str === "true";
+        } else if(this.patBooleanFalse.test(str)) {
+          value = false;
+        } else if(this.patBooleanTrue.test(str)) {
+          value = true;
         } else if(this.patInteger.test(str)) {
           value = parseInt(str);
         } else if(this.patFloat.test(str)) {
