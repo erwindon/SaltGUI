@@ -65,21 +65,21 @@ class KeysRoute extends PageRoute {
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
-  _addMenuItemAccept(menu, hostname) {
+  _addMenuItemAccept(menu, hostname, extra) {
     menu.addMenuItem("Accept&nbsp;key...", function(evt) {
-      this._runAcceptKey(evt, hostname);
+      this._runAcceptKey(evt, hostname, extra);
     }.bind(this));
   }
 
-  _addMenuItemDelete(menu, hostname) {
+  _addMenuItemDelete(menu, hostname, extra) {
     menu.addMenuItem("Delete&nbsp;key...", function(evt) {
-      this._runDeleteKey(evt, hostname);
+      this._runDeleteKey(evt, hostname, extra);
     }.bind(this));
   }
 
-  _addMenuItemReject(menu, hostname) {
+  _addMenuItemReject(menu, hostname, extra) {
     menu.addMenuItem("Reject&nbsp;key...", function(evt) {
-      this._runRejectKey(evt, hostname);
+      this._runRejectKey(evt, hostname, extra);
     }.bind(this));
   }
 
@@ -92,8 +92,8 @@ class KeysRoute extends PageRoute {
     element.appendChild(Route._createDiv("os", ""));
 
     var menu = new DropDownMenu(element);
-    this._addMenuItemReject(menu, hostname);
-    this._addMenuItemDelete(menu, hostname);
+    this._addMenuItemReject(menu, hostname, " include_accepted=true");
+    this._addMenuItemDelete(menu, hostname, "");
   }
 
   _updateMinion(container, minion) {
@@ -102,8 +102,8 @@ class KeysRoute extends PageRoute {
     var element = document.getElementById(minion.hostname);
 
     var menu = new DropDownMenu(element);
-    this._addMenuItemReject(menu, minion.hostname);
-    this._addMenuItemDelete(menu, minion.hostname);
+    this._addMenuItemReject(menu, minion.hostname, " include_accepted=true");
+    this._addMenuItemDelete(menu, minion.hostname, "");
   }
 
   _addRejectedMinion(container, hostname) {
@@ -119,8 +119,8 @@ class KeysRoute extends PageRoute {
     element.appendChild(Route._createDiv("os", ""));
 
     var menu = new DropDownMenu(element);
-    this._addMenuItemDelete(menu, hostname);
-    this._addMenuItemAccept(menu, hostname);
+    this._addMenuItemDelete(menu, hostname, "");
+    this._addMenuItemAccept(menu, hostname, " include_rejected=true");
 
     container.appendChild(element);
   }
@@ -138,9 +138,9 @@ class KeysRoute extends PageRoute {
     element.appendChild(Route._createDiv("os", ""));
 
     var menu = new DropDownMenu(element);
-    this._addMenuItemAccept(menu, hostname);
-    this._addMenuItemReject(menu, hostname);
-    this._addMenuItemDelete(menu, hostname);
+    this._addMenuItemAccept(menu, hostname, " include_denied=true");
+    this._addMenuItemReject(menu, hostname, " include_denied=true");
+    this._addMenuItemDelete(menu, hostname, "");
 
     container.appendChild(element);
   }
@@ -158,9 +158,9 @@ class KeysRoute extends PageRoute {
     element.appendChild(Route._createDiv("os", ""));
 
     var menu = new DropDownMenu(element);
-    this._addMenuItemAccept(menu, hostname);
-    this._addMenuItemReject(menu, hostname);
-    this._addMenuItemDelete(menu, hostname);
+    this._addMenuItemAccept(menu, hostname, "");
+    this._addMenuItemReject(menu, hostname, "");
+    this._addMenuItemDelete(menu, hostname, "");
 
     container.appendChild(element);
   }
