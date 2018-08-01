@@ -192,7 +192,7 @@ class API {
         toRun = toRun.substr(firstEqualSign + 1);
         if(toRun === "" || toRun[0] === " ") {
           this._showError("Must have value for named parameter '" + name + "'");
-          return null;
+          return false;
         }
       }
 
@@ -223,7 +223,7 @@ class API {
           var n = toRun.indexOf(endChar, p);
           if(n < 0) {
             this._showError("No valid " + objType + " found");
-            return null;
+            return false;
           }
 
           // parse what we have found so far
@@ -244,7 +244,7 @@ class API {
           n = n + 1;
           if(n < toRun.length && toRun[n] !== ' ') {
             console.log("valid " + objType + ", but followed by text:" + toRun.substring(n) + "...");
-            return null;
+            return false;
           }
 
           // valid JSON and not followed by strange characters
@@ -255,7 +255,7 @@ class API {
         // everything else is a string (without quotes)
         // when we are done, we'll see whether it actually is a number
         // or any of the known constants
-        var str = "";
+        let str = "";
         while(toRun.length > 0 && toRun[0] != ' ') {
           str += toRun[0];
           toRun = toRun.substring(1);
@@ -273,9 +273,9 @@ class API {
           value = parseInt(str);
         } else if(this.patFloat.test(str)) {
           value = parseFloat(str);
-          if(!isFinite(f)) {
+          if(!isFinite(value)) {
             this._showError("Numeric argument has overflowed or is infinity");
-            return null;
+            return false;
           }
         } else {
           value = str;
@@ -293,6 +293,9 @@ class API {
       // ignore the whitespace before the next part
       toRun = toRun.trim();
     }
+
+    // succesful
+    return true;
   }
 
   _getRunParams(target, toRun) {
@@ -315,7 +318,10 @@ class API {
     // collection for named parameters
     var params = { };
 
-    this._parseCommandLine(toRun, args, params);
+    if(!this._parseCommandLine(toRun, args, params)) {
+      // error already given in function
+      return null;
+    }
 
     if(args.length === 0) {
       this._showError("First (unnamed) parameter is the function name, it is mandatory");
