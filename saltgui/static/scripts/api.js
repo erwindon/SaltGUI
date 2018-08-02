@@ -9,22 +9,22 @@ class API {
     this._onRun = this._onRun.bind(this);
     this._onRunReturn = this._onRunReturn.bind(this);
     this._setRunTypeAsync = this._setRunTypeAsync.bind(this);
-    this._setRunTypeBatch = this._setRunTypeBatch.bind(this);
     this._setRunTypeBatchSize1 = this._setRunTypeBatchSize1.bind(this);
-    this._setRunTypeBatchSize10 = this._setRunTypeBatchSize10.bind(this);
-    this._setRunTypeBatchSize10p = this._setRunTypeBatchSize10p.bind(this);
     this._setRunTypeBatchSize2 = this._setRunTypeBatchSize2.bind(this);
-    this._setRunTypeBatchSize25p = this._setRunTypeBatchSize25p.bind(this);
     this._setRunTypeBatchSize3 = this._setRunTypeBatchSize3.bind(this);
     this._setRunTypeBatchSize5 = this._setRunTypeBatchSize5.bind(this);
+    this._setRunTypeBatchSize10 = this._setRunTypeBatchSize10.bind(this);
+    this._setRunTypeBatchSize10p = this._setRunTypeBatchSize10p.bind(this);
+    this._setRunTypeBatchSize25p = this._setRunTypeBatchSize25p.bind(this);
+    this._setRunTypeBatch = this._setRunTypeBatch.bind(this);
+    this._setRunTypeBatchWaitNone = this._setRunTypeBatchWaitNone.bind(this);
     this._setRunTypeBatchWait1 = this._setRunTypeBatchWait1.bind(this);
-    this._setRunTypeBatchWait10 = this._setRunTypeBatchWait10.bind(this);
     this._setRunTypeBatchWait2 = this._setRunTypeBatchWait2.bind(this);
     this._setRunTypeBatchWait3 = this._setRunTypeBatchWait3.bind(this);
-    this._setRunTypeBatchWait30 = this._setRunTypeBatchWait30.bind(this);
     this._setRunTypeBatchWait5 = this._setRunTypeBatchWait5.bind(this);
+    this._setRunTypeBatchWait10 = this._setRunTypeBatchWait10.bind(this);
+    this._setRunTypeBatchWait30 = this._setRunTypeBatchWait30.bind(this);
     this._setRunTypeBatchWait60 = this._setRunTypeBatchWait60.bind(this);
-    this._setRunTypeBatchWaitNone = this._setRunTypeBatchWaitNone.bind(this);
     this._setRunTypeNormal = this._setRunTypeNormal.bind(this);
 
     this._registerEventListeners();
@@ -51,29 +51,33 @@ class API {
     } );
 
     var runblock = document.getElementById("runblock");
-    var m = new DropDownMenu(runblock);
-    m.addMenuItem("Normal", this._setRunTypeNormal);
-    m.addMenuItem("Async", this._setRunTypeAsync);
-    m.addMenuItem("Batch", this._setRunTypeBatch);
+    this.menuRunType = new DropDownMenu(runblock);
+    this.menuRunType.addMenuItem("Normal", this._setRunTypeNormal);
+    this.menuRunType.addMenuItem("Async", this._setRunTypeAsync);
+    this.menuRunType.addMenuItem("Batch", this._setRunTypeBatch);
 
-    var mw = new DropDownMenu(runblock);
-    mw.addMenuItem("BatchWaitNone", this._setRunTypeBatchWaitNone);
-    mw.addMenuItem("BatchWait1s", this._setRunTypeBatchWait1);
-    mw.addMenuItem("BatchWait2s", this._setRunTypeBatchWait2);
-    mw.addMenuItem("BatchWait3s", this._setRunTypeBatchWait3);
-    mw.addMenuItem("BatchWait5s", this._setRunTypeBatchWait5);
-    mw.addMenuItem("BatchWait10s", this._setRunTypeBatchWait10);
-    mw.addMenuItem("BatchWait30s", this._setRunTypeBatchWait30);
-    mw.addMenuItem("BatchWait60s", this._setRunTypeBatchWait60);
+    this.menuBatchSize = new DropDownMenu(runblock);
+    this.menuBatchSize.setTitle("Batch&nbsp;Size");
+    this.menuBatchSize.addMenuItem("10%", this._setRunTypeBatchSize10p);
+    this.menuBatchSize.addMenuItem("25%", this._setRunTypeBatchSize25p);
+    this.menuBatchSize.addMenuItem("1", this._setRunTypeBatchSize1);
+    this.menuBatchSize.addMenuItem("2", this._setRunTypeBatchSize2);
+    this.menuBatchSize.addMenuItem("3", this._setRunTypeBatchSize3);
+    this.menuBatchSize.addMenuItem("5", this._setRunTypeBatchSize5);
+    this.menuBatchSize.addMenuItem("10", this._setRunTypeBatchSize10);
+    this.menuBatchSize.hideMenu();
 
-    var ms = new DropDownMenu(runblock);
-    ms.addMenuItem("BatchSize1", this._setRunTypeBatchSize1);
-    ms.addMenuItem("BatchSize2", this._setRunTypeBatchSize2);
-    ms.addMenuItem("BatchSize3", this._setRunTypeBatchSize3);
-    ms.addMenuItem("BatchSize5", this._setRunTypeBatchSize5);
-    ms.addMenuItem("BatchSize10", this._setRunTypeBatchSize10);
-    ms.addMenuItem("BatchSize10%", this._setRunTypeBatchSize10p);
-    ms.addMenuItem("BatchSize25%", this._setRunTypeBatchSize25p);
+    this.menuBatchWait = new DropDownMenu(runblock);
+    this.menuBatchWait.setTitle("Batch&nbsp;Wait");
+    this.menuBatchWait.addMenuItem("None", this._setRunTypeBatchWaitNone);
+    this.menuBatchWait.addMenuItem("1 second", this._setRunTypeBatchWait1);
+    this.menuBatchWait.addMenuItem("2 seconds", this._setRunTypeBatchWait2);
+    this.menuBatchWait.addMenuItem("3 seconds", this._setRunTypeBatchWait3);
+    this.menuBatchWait.addMenuItem("5 seconds", this._setRunTypeBatchWait5);
+    this.menuBatchWait.addMenuItem("10 seconds", this._setRunTypeBatchWait10);
+    this.menuBatchWait.addMenuItem("30 seconds", this._setRunTypeBatchWait30);
+    this.menuBatchWait.addMenuItem("60 seconds", this._setRunTypeBatchWait60);
+    this.menuBatchWait.hideMenu();
 
     var jobRunType = Route._createDiv("jobRunType", "normal");
     jobRunType.style.display = "none";
@@ -94,35 +98,49 @@ class API {
       .addEventListener('click', this._onRun);
   }
 
-  _updaterunTypeText() {
+  _updateRunTypeText() {
     var jobRunType = document.querySelector(".jobRunType").innerText;
     var batchWait = document.querySelector(".batchWait").innerText;
     var batchSize = document.querySelector(".batchSize").innerText;
 
+    // now that the menu is used show the menu title
+    // this is much clearer when the Size/Wait menus are also shown
+    this.menuRunType.setTitle("Type");
+
     var txt;
     switch(jobRunType) {
     case "normal":
-      txt = "run command normally (default)";
+      this.menuBatchSize.hideMenu();
+      this.menuBatchWait.hideMenu();
+      // note that this text is initially not shown until
+      // the user explicitly selects "normal" again
+      txt = "Run command normally";
       break;
     case "async":
-      txt = "run command in the background";
+      this.menuBatchSize.hideMenu();
+      this.menuBatchWait.hideMenu();
+      txt = "Run command in the background";
       break;
     case "batch":
-      txt = "run command in batches";
-      if(!batchSize)
-        txt += " of 10% (default)"
+      this.menuBatchSize.showMenu();
+      this.menuBatchWait.showMenu();
+      txt = "Run command in batches";
+      if(batchSize === "")
+        txt += " of 10%"
       else if(batchSize.endsWith("%"))
         txt += " of " + batchSize;
       else if(batchSize === "1")
         txt += " of " + batchSize + " job";
       else
         txt += " of " + batchSize + " jobs";
-      if(!batchWait)
-        txt += ", not waiting between batches (default)"
+      if(batchWait === "")
+        // do not initially show this part until
+        // the user explicitly makes a choice
+        txt += "";
       else if(batchWait == "0")
-        txt += ", not waiting between batches"
+        txt += ", not waiting between batches";
       else if(batchWait == "1")
-        txt += ", waiting " + batchWait + " second between batches"
+        txt += ", waiting " + batchWait + " second between batches";
       else
         txt += ", waiting " + batchWait + " seconds between batches"
       break;
@@ -135,67 +153,67 @@ class API {
   _setRunTypeBatchWaitNone() {
     var batchWait = document.querySelector(".batchWait");
     batchWait.innerText = "0";
-    this._updaterunTypeText();
+    this._updateRunTypeText();
   }
 
   _setRunTypeBatchWait1() {
     var batchWait = document.querySelector(".batchWait");
     batchWait.innerText = "1";
-    this._updaterunTypeText();
+    this._updateRunTypeText();
   }
 
   _setRunTypeBatchWait2() {
     var batchWait = document.querySelector(".batchWait");
     batchWait.innerText = "2";
-    this._updaterunTypeText();
+    this._updateRunTypeText();
   }
 
   _setRunTypeBatchWait3() {
     var batchWait = document.querySelector(".batchWait");
     batchWait.innerText = "3";
-    this._updaterunTypeText();
+    this._updateRunTypeText();
   }
 
   _setRunTypeBatchWait5() {
     var batchWait = document.querySelector(".batchWait");
     batchWait.innerText = "5";
-    this._updaterunTypeText();
+    this._updateRunTypeText();
   }
 
   _setRunTypeBatchWait10() {
     var batchWait = document.querySelector(".batchWait");
     batchWait.innerText = "10";
-    this._updaterunTypeText();
+    this._updateRunTypeText();
   }
 
   _setRunTypeBatchWait30() {
     var batchWait = document.querySelector(".batchWait");
     batchWait.innerText = "30";
-    this._updaterunTypeText();
+    this._updateRunTypeText();
   }
 
   _setRunTypeBatchWait60() {
     var batchWait = document.querySelector(".batchWait");
     batchWait.innerText = "60";
-    this._updaterunTypeText();
+    this._updateRunTypeText();
   }
 
   _setRunTypeNormal() {
     var jobRunType = document.querySelector(".jobRunType");
     jobRunType.innerText = "normal";
-    this._updaterunTypeText();
+    this._updateRunTypeText();
   }
 
   _setRunTypeAsync() {
     var jobRunType = document.querySelector(".jobRunType");
     jobRunType.innerText = "async";
-    this._updaterunTypeText();
+    this._updateRunTypeText();
   }
 
   _setRunTypeBatch() {
     var jobRunType = document.querySelector(".jobRunType");
     jobRunType.innerText = "batch";
-    this._updaterunTypeText();
+    this._updateRunTypeText();
   }
 
   _setRunTypeBatchSize1() {
@@ -203,7 +221,7 @@ class API {
     jobRunType.innerText = "batch";
     var batchSize = document.querySelector(".batchSize");
     batchSize.innerText = "1";
-    this._updaterunTypeText();
+    this._updateRunTypeText();
   }
 
   _setRunTypeBatchSize2() {
@@ -211,6 +229,7 @@ class API {
     jobRunType.innerText = "batch";
     var batchSize = document.querySelector(".batchSize");
     batchSize.innerText = "2";
+    this._updateRunTypeText();
   }
 
   _setRunTypeBatchSize3() {
@@ -218,7 +237,7 @@ class API {
     jobRunType.innerText = "batch";
     var batchSize = document.querySelector(".batchSize");
     batchSize.innerText = "3";
-    this._updaterunTypeText();
+    this._updateRunTypeText();
   }
 
   _setRunTypeBatchSize5() {
@@ -226,7 +245,7 @@ class API {
     jobRunType.innerText = "batch";
     var batchSize = document.querySelector(".batchSize");
     batchSize.innerText = "5";
-    this._updaterunTypeText();
+    this._updateRunTypeText();
   }
 
   _setRunTypeBatchSize10() {
@@ -234,7 +253,7 @@ class API {
     jobRunType.innerText = "batch";
     var batchSize = document.querySelector(".batchSize");
     batchSize.innerText = "10";
-    this._updaterunTypeText();
+    this._updateRunTypeText();
   }
 
   _setRunTypeBatchSize10p() {
@@ -242,7 +261,7 @@ class API {
     jobRunType.innerText = "batch";
     var batchSize = document.querySelector(".batchSize");
     batchSize.innerText = "10%";
-    this._updaterunTypeText();
+    this._updateRunTypeText();
   }
 
   _setRunTypeBatchSize25p() {
@@ -250,7 +269,7 @@ class API {
     jobRunType.innerText = "batch";
     var batchSize = document.querySelector(".batchSize");
     batchSize.innerText = "25%";
-    this._updaterunTypeText();
+    this._updateRunTypeText();
   }
 
   _onRun() {
