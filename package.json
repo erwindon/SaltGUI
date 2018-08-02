@@ -15,6 +15,8 @@
     "esversion": 6
   },
   "scripts": {
-    "test": "jshint saltgui/"
+    "lint": "jshint saltgui/ tests/",
+    "wait-for-docker": "node tests/helpers/wait-for-docker.js",
+    "test": "mocha --trace-warnings --reporter spec tests/unit/"
   }
 }
