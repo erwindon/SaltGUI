@@ -1,10 +1,15 @@
 {
-  "name": "saltgui-linter",
-  "description": "Simple check for JSHint (Code Linting)",
+  "name": "saltgui-test",
+  "description": "Code linting and testing package for SaltGUI",
   "author": "Martijn Jacobs",
   "version": "0.0.1",
+  "license": "MIT",
   "devDependencies": {
-    "jshint": "^2.9.5"
+    "chai": "^4.1.2",
+    "jshint": "^2.9.5",
+    "mocha": "^5.2.0",
+    "nightmare": "^3.0.1",
+    "wait-on": "^2.1.0"
   },
   "jshintConfig": {
     "esversion": 6
