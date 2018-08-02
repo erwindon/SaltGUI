@@ -146,4 +146,4 @@ window.parseCommandLine = function(toRun, args, params) {
 
   // succesfull (no error message return)
   return null;
-}
+};
