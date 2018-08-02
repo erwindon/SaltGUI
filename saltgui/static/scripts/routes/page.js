@@ -213,14 +213,14 @@ class PageRoute extends Route {
   }
 
   _runAcceptKey(evt, hostname, extra) {
-    this._runCommand(evt, hostname, "salt.wheel.key.accept" + extra);
+    this._runCommand(evt, hostname, "wheel.key.accept" + extra);
   }
 
   _runRejectKey(evt, hostname, extra) {
-    this._runCommand(evt, hostname, "salt.wheel.key.reject" + extra);
+    this._runCommand(evt, hostname, "wheel.key.reject" + extra);
   }
 
   _runDeleteKey(evt, hostname, extra) {
-    this._runCommand(evt, hostname, "salt.wheel.key.delete" + extra);
+    this._runCommand(evt, hostname, "wheel.key.delete" + extra);
   }
 }

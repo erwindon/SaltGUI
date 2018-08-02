@@ -72,7 +72,7 @@ class API {
 
       var output = response[hostname];
 
-      // when you do a salt.apply for example you get a json response.
+      // when you do a state.apply for example you get a json response.
       // let's format it nicely here
       if (typeof output === 'object') {
         output = JSON.stringify(output, null, 2);
@@ -99,7 +99,7 @@ class API {
     // the user may have altered the text after running the command, just ignore that
     var command = document.querySelector(".run-command #command").value;
     var output = document.querySelector(".run-command pre").innerHTML;
-    if(isShowing && command.startsWith("salt.wheel.key.") && output != "Waiting for command...") {
+    if(isShowing && command.startsWith("wheel.key.") && output != "Waiting for command...") {
       location.reload();
     }
     evt.stopPropagation();
@@ -335,13 +335,13 @@ class API {
       return null;
     }
 
-    if(functionToRun.startsWith("salt.wheel.")) {
+    if(functionToRun.startsWith("wheel.")) {
       // wheel.key functions are treated slightly different
       // we re-use the 'target' field to fill the parameter 'match'
       // as used by the salt.wheel.key functions
       params.client = "wheel";
-      // use only the part after "salt.wheel." (11 chars)
-      params.fun = functionToRun.substring(11);
+      // use only the part after "wheel." (6 chars)
+      params.fun = functionToRun.substring(6);
       params.match = target;
     } else {
       params.client = "local";
