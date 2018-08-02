@@ -2,9 +2,11 @@
 
 A new open source web interface for managing a SaltStack server. Built using vanilla ES6 and implemented as a wrapper around the rest_cherrypy server.
 
+
 ## Screenshots
 ![overview](/docs/overview.png)
 ![job](/docs/job.png)
+
 
 ## Features
 - Login via PAM or any other supported authentication by Salt
@@ -12,6 +14,7 @@ A new open source web interface for managing a SaltStack server. Built using van
 - Run state.highstate for a particular minion
 - View the seven most recent jobs run on Salt
 - Manually run any Salt function and see the output
+
 
 ## Quick start using PAM as authentication method
 - Install `salt-api` - this is available in the Salt PPA package which should already been installed if you're using Salt
@@ -59,8 +62,16 @@ docker-compose up
 ```
 Then browse to [http://localhost:3333/](http://localhost:3333/), you can login with `salt:salt`.
 
+
+## Testing
+We also provide some [nightmare.js](https://github.com/segmentio/nightmare) and unittests. They use the docker setup to run some functional tests. You will also need [yarn](https://yarnpkg.com) and [node.js](https://nodejs.org/en/) to run them. When you have docker, yarn and node.js installed, you can run the tests from the root of the repository like this:
+```
+./runtests.sh
+```
+
 ## Contributing
-- Just open a PR! Try to use no dependencies where possible, as vanilla JS is the aim. Any libraries will need to be heavily considered first.
+Open a PR! Try to use no dependencies where possible, as vanilla JS is the aim. Any libraries will need to be heavily considered first. Please see the section above as PR's won't be reviewed if they don't pass the tests.
+
 
 ## Credits
 This excellent frontend is originally written by [Oliver Dunk](https://github.com/oliverdunk).
@@ -89,8 +100,8 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 ## 1.0.1 (2018-05-16)
 - Fixed position of popup when main window has scrolled (erwindon)
 - Sort minions by hostname (erwindon)
-- Fixed OS description in minion overview (No lsb_distrib_description) [#5](https://github.com/maerteijn/SaltGUI/issues/5) (erwindon)
-- Now sort the jobs correctly on StartDate in the overview window [#6](https://github.com/maerteijn/SaltGUI/issues/6)
+- Fixed OS description in minion overview (No lsb_distrib_description)(erwindon)
+- Now sort the jobs correctly on ``StartDate`` in the overview window
 
 ## 1.0.0 (2018-03-07)
-Original release with some styling fixes and with enabled the highstate functionality.
+- Original release with some styling fixes and with enabled highstate functionality.
