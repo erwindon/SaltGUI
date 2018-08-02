@@ -3,14 +3,6 @@ class API {
   constructor() {
     this.APIURL = "";
 
-    // consts
-    // note that "none" is not case-insensitive
-    this.patNull = /^(None|null|Null|NULL)$/;
-    this.patBooleanFalse = /^(false|False|FALSE)$/;
-    this.patBooleanTrue = /^(true|True|TRUE)$/;
-    this.patInteger = /^((0)|([-+]?[1-9][0-9]*))$/;
-    this.patFloat = /^([-+]?(([0-9]+)|([0-9]+[.][0-9]*)|([0-9]*[.][0-9]+))([eE][-+]?[0-9]+)?)$/;
-
     this._callMethod = this._callMethod.bind(this);
     this._fetch = this._fetch.bind(this);
     this._getRunParams = this._getRunParams.bind(this);
@@ -173,131 +165,6 @@ class API {
       errLabel.style.display = "none";
   }
 
-  _parseCommandLine(toRun, args, params) {
-    // just in case the user typed some extra whitespace
-    // at the start of the line
-    toRun = toRun.trim();
-
-    while(toRun.length > 0)
-    {
-      var name = null;
-
-      var firstSpaceChar = toRun.indexOf(" ");
-      if(firstSpaceChar < 0)
-        firstSpaceChar = toRun.length;
-      var firstEqualSign = toRun.indexOf("=");
-      if(firstEqualSign >= 0 && firstEqualSign < firstSpaceChar) {
-        // we have the name of a named parameter
-        name = toRun.substr(0, firstEqualSign);
-        toRun = toRun.substr(firstEqualSign + 1);
-        if(toRun === "" || toRun[0] === " ") {
-          this._showError("Must have value for named parameter '" + name + "'");
-          return false;
-        }
-      }
-
-      // Determine whether the JSON string starts with a known
-      // character for a JSON type
-      var endChar = undefined;
-      var objType = undefined;
-      if(toRun[0] === '{') {
-        endChar = '}';
-        objType = "dictionary";
-      } else if(toRun[0] === '[') {
-        endChar = ']';
-        objType = "array";
-      } else if(toRun[0] === '"') {
-        endChar = '"';
-        objType = "double-quoted-string";
-      } else if(toRun[0] === '\'') {
-        endChar = '\'';
-        objType = "single-quoted-string";
-      }
-
-      var value;
-      if(endChar && objType) {
-        // The string starts with a character for a known JSON type
-        var p = 1;
-        while(true) {
-          // Try until the next closing character
-          var n = toRun.indexOf(endChar, p);
-          if(n < 0) {
-            this._showError("No valid " + objType + " found");
-            return false;
-          }
-
-          // parse what we have found so far
-          // the string ends with a closing character
-          // but that may not be enough, e.g. "{a:{}"
-          var s = toRun.substring(0, n + 1);
-          try {
-            value = JSON.parse(s);
-          }
-          catch(err) {
-            // the string that we tried to parse is not valid json
-            // continue to add more text from the input
-            p = n + 1;
-            continue;
-          }
-
-          // the first part of the string is valid JSON
-          n = n + 1;
-          if(n < toRun.length && toRun[n] !== ' ') {
-            console.log("valid " + objType + ", but followed by text:" + toRun.substring(n) + "...");
-            return false;
-          }
-
-          // valid JSON and not followed by strange characters
-          toRun = toRun.substring(n);
-          break;
-        }
-      } else {
-        // everything else is a string (without quotes)
-        // when we are done, we'll see whether it actually is a number
-        // or any of the known constants
-        let str = "";
-        while(toRun.length > 0 && toRun[0] != ' ') {
-          str += toRun[0];
-          toRun = toRun.substring(1);
-        }
-
-        // try to find whether the string is actually a known constant
-        // or integer or float
-        if(this.patNull.test(str)) {
-          value = null;
-        } else if(this.patBooleanFalse.test(str)) {
-          value = false;
-        } else if(this.patBooleanTrue.test(str)) {
-          value = true;
-        } else if(this.patInteger.test(str)) {
-          value = parseInt(str);
-        } else if(this.patFloat.test(str)) {
-          value = parseFloat(str);
-          if(!isFinite(value)) {
-            this._showError("Numeric argument has overflowed or is infinity");
-            return false;
-          }
-        } else {
-          value = str;
-        }
-      }
-
-      if(name !== null) {
-        // named parameter
-        params[name] = value;
-      } else {
-        // anonymous parameter
-        args.push(value);
-      }
-
-      // ignore the whitespace before the next part
-      toRun = toRun.trim();
-    }
-
-    // succesful
-    return true;
-  }
-
   _getRunParams(target, toRun) {
 
     this._showError("");
@@ -318,8 +185,10 @@ class API {
     // collection for named parameters
     var params = { };
 
-    if(!this._parseCommandLine(toRun, args, params)) {
-      // error already given in function
+    let ret = window.parseCommandLine(toRun, args, params);
+    if(ret !== null) {
+      // that is an error message being returned
+      this._showError(ret);
       return null;
     }
 
