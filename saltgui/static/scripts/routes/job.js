@@ -32,7 +32,7 @@ class JobRoute extends Route {
     var hostnames = Object.keys(info.Result);
     hostnames.forEach(function(hostname) {
       
-      // when you do a salt.apply for example you get a json response.
+      // when you do a state.apply for example you get a json response.
       // let's format it nicely here
       var result = info.Result[hostname].return;
       if (typeof result === "object") {

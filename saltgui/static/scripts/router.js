@@ -10,6 +10,7 @@ class Router {
     this.registerRoute(new JobRoute(this));
 
     this._registerEventListeners();
+
     this.goTo(this.api.isAuthenticated() ?
       window.location.pathname + window.location.search : "/login");
   }

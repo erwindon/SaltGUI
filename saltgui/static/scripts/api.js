@@ -5,8 +5,10 @@ class API {
 
     this._callMethod = this._callMethod.bind(this);
     this._fetch = this._fetch.bind(this);
+    this._getRunParams = this._getRunParams.bind(this);
     this._onRun = this._onRun.bind(this);
     this._onRunReturn = this._onRunReturn.bind(this);
+
     this._registerEventListeners();
   }
 
@@ -40,13 +42,14 @@ class API {
 
     var target = document.querySelector(".run-command #target").value;
     var command = document.querySelector(".run-command #command").value;
-    if(target === "" || command === "") return;
+
+    var func = this._getRunParams(target, command);
+    if(func == null) return;
 
     button.disabled = true;
     output.innerHTML = "Loading...";
 
-    this.runFunction(target, command)
-    .then(this._onRunReturn, this._onRunReturn);
+    func.then(this._onRunReturn, this._onRunReturn);
   }
 
   _onRunReturn(data) {
@@ -61,7 +64,7 @@ class API {
 
       var output = response[hostname];
 
-      // when you do a salt.apply for example you get a json response.
+      // when you do a state.apply for example you get a json response.
       // let's format it nicely here
       if (typeof output === 'object') {
         output = JSON.stringify(output, null, 2);
@@ -88,8 +91,8 @@ class API {
     // the user may have altered the text after running the command, just ignore that
     var command = document.querySelector(".run-command #command").value;
     var output = document.querySelector(".run-command pre").innerHTML;
-    if(isShowing && command.startsWith("salt.wheel.key.") && output != "Waiting for command...") {
-      location.reload(); 
+    if(isShowing && command.startsWith("wheel.key.") && output != "Waiting for command...") {
+      location.reload();
     }
     evt.stopPropagation();
   }
@@ -153,40 +156,67 @@ class API {
     return this._callMethod("GET", "/jobs/" + id, {});
   }
 
-  runFunction(target, toRun) {
-    var args = toRun.split(" ");
-    var functionToRun = args[0];
-    args.shift();
+  _showError(errorMessage) {
+    var errLabel = document.querySelector("#cmd_error");
+    errLabel.innerText = errorMessage;
+    if(errorMessage)
+      errLabel.style.display = "block";
+    else
+      errLabel.style.display = "none";
+  }
 
-    var params = {};
+  _getRunParams(target, toRun) {
 
-    if(functionToRun.startsWith("salt.wheel.key.")) {
+    this._showError("");
+
+    if(target === "") {
+      this._showError("'Target' field cannot be empty");
+      return null;
+    }
+
+    if(toRun === "") {
+      this._showError("'Command' field cannot be empty");
+      return null;
+    }
+
+    // collection for unnamed parameters
+    var args = [ ];
+
+    // collection for named parameters
+    var params = { };
+
+    let ret = window.parseCommandLine(toRun, args, params);
+    if(ret !== null) {
+      // that is an error message being returned
+      this._showError(ret);
+      return null;
+    }
+
+    if(args.length === 0) {
+      this._showError("First (unnamed) parameter is the function name, it is mandatory");
+      return null;
+    }
+
+    var functionToRun = args.shift();
+
+    if(typeof functionToRun != typeof "dummy") {
+      this._showError("First (unnamed) parameter is the function name, it must be a string, not a " + typeof functionToRun);
+      return null;
+    }
+
+    if(functionToRun.startsWith("wheel.")) {
+      // wheel.key functions are treated slightly different
+      // we re-use the 'target' field to fill the parameter 'match'
+      // as used by the salt.wheel.key functions
       params.client = "wheel";
-      // use only the part after "salt.wheel." (11 chars)
-      params.fun = functionToRun.substring(11);
+      // use only the part after "wheel." (6 chars)
+      params.fun = functionToRun.substring(6);
       params.match = target;
     } else {
       params.client = "local";
       params.fun = functionToRun;
       params.tgt = target;
-      if(args.length !== 0) params.arg = args.join(" ");
-    }
-
-    switch(functionToRun) {
-    case "salt.wheel.key.accept":
-      // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.accept
-      params.include_denied = true;
-      params.include_rejected = true;
-      break;
-    case "salt.wheel.key.reject":
-      // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.reject
-      params.include_accepted = true;
-      params.include_denied = true;
-      break;
-    case "salt.wheel.key.delete":
-      // See https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#salt.wheel.key.delete
-      // no special parameters needed here
-      break;
+      if(args.length !== 0) params.arg = args;
     }
 
     return this._callMethod("POST", "/", params);

@@ -210,6 +210,12 @@ input[disabled] {
   margin-bottom: 20px;
 }
 
+#cmd_error {
+  display: none;
+  font-weight: bold;
+  color: red;
+}
+
 .run-command pre {
   background-color: #272727;
   color: white;

@@ -111,11 +111,13 @@
         <input id='target' type='text' placeholder="Target"/>
         <input id='command' type='text' placeholder="Command"/>
         <input type='submit' value="Run command"/>
+        <div id="cmd_error"></div>
         <pre class='output'>Waiting for command...</pre>
       </div>
     </div>
 
     <script src='static/scripts/utils.js'></script>
+    <script src='static/scripts/parsecmdline.js'></script>
     <script src='static/scripts/api.js'></script>
     <script src='static/scripts/routes/route.js'></script>
     <script src='static/scripts/routes/login.js'></script>
