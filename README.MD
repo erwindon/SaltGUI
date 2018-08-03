@@ -64,10 +64,15 @@ Then browse to [http://localhost:3333/](http://localhost:3333/), you can login w
 
 
 ## Testing
-We also provide some [nightmare.js](https://github.com/segmentio/nightmare) and unittests. They use the docker setup to run some functional tests. You will also need [yarn](https://yarnpkg.com) and [node.js](https://nodejs.org/en/) to run them. When you have docker, yarn and node.js installed, you can run the tests from the root of the repository like this:
+We provide some functional tests and unit tests. They use the docker setup to run the functional tests. You will also need [yarn](https://yarnpkg.com) and [node.js](https://nodejs.org/en/) to run them. When you have docker, yarn and node.js installed, you can run the tests from the root of the repository like this:
 ```
 ./runtests.sh
 ```
+
+We use the following testing libraries:
+- [nightmare.js](https://github.com/segmentio/nightmare), for functional/browser tests
+- [mocha](https://https://mochajs.org/), a well documented testing framework for javascript 
+- [chai](http://www.chaijs.com/), the preferred assertion library for testing
 
 ## Contributing
 Open a PR! Try to use no dependencies where possible, as vanilla JS is the aim. Any libraries will need to be heavily considered first. Please see the section above as PR's won't be reviewed if they don't pass the tests.
