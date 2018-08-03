@@ -1,13 +1,15 @@
-const assert = require('chai').assert;
+ const assert = require('chai').assert;
 
-// so we can import the utils for testing
-global.window = new Object({});
+// create a global window so we can unittest the window.<x> functions
+if (!global.window)
+   global.window = new Object({});
+
 require('../../saltgui/static/scripts/utils');
 
 
 describe('Unittests for utils.js', function() {
   
-  it('test elapsedToString', done => {
+  it('test elapsedToString with valid values', done => {
     var now = new Date();
     var result = window.elapsedToString(now);
 
@@ -36,6 +38,21 @@ describe('Unittests for utils.js', function() {
     now.setHours(now.getHours() - 2400);
     result = window.elapsedToString(now);
     assert.equal(result, "A long time ago, in a galaxy far, far away");
+
+    done();
+  });
+
+  it('test elapsedToString with invalid values', done => {
+    var now = new Date();
+
+    // a time in the future?
+    now.setSeconds(now.getSeconds() + 110);
+    result = window.elapsedToString(now);
+    assert.equal(result, "Magic happened in the future");
+
+    // and something which is not a date at all
+    result = window.elapsedToString("I'm not a date");
+    assert.equal(result, "It did happen, when I don't know");
 
     done();
   });

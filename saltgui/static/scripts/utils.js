@@ -1,28 +1,35 @@
 window.elapsedToString = function(date) {
-  var secondsPassed = (new Date().getTime() / 1000) - (date.getTime() / 1000);
-  if(secondsPassed < 20) return "A few moments ago";
-  if(secondsPassed < 120) return "A few minutes ago";
+  try {
+    var secondsPassed = (new Date().getTime() / 1000) - (date.getTime() / 1000);
 
-  if(secondsPassed < 60 * 60) {
-    var minutes = Math.round(secondsPassed / 60);
-    return minutes + " minutes ago";
+    if(secondsPassed < 0) return "Magic happened in the future";
+    if(secondsPassed < 20) return "A few moments ago";
+    if(secondsPassed < 120) return "A few minutes ago";
+
+    if(secondsPassed < 60 * 60) {
+      var minutes = Math.round(secondsPassed / 60);
+      return minutes + " minutes ago";
+    }
+
+    if(secondsPassed < 60 * 60 * 24) {
+      var hours = Math.round(secondsPassed / 60 / 60);
+      return hours + " hours ago";
+    }
+
+    if(secondsPassed < 60 * 60 * 24 * 2) {
+      return "Yesterday";
+    }
+
+    if(secondsPassed < 60 * 60 * 24 * 30) {
+      var days = Math.round(secondsPassed / 60 / 60 / 24);
+      return days + " days ago";
+    }
+
+    return "A long time ago, in a galaxy far, far away";
   }
-
-  if(secondsPassed < 60 * 60 * 24) {
-    var hours = Math.round(secondsPassed / 60 / 60);
-    return hours + " hours ago";
+  catch(err) {
+    return "It did happen, when I don't know";
   }
-
-  if(secondsPassed < 60 * 60 * 24 * 2) {
-    return "Yesterday";
-  }
-
-  if(secondsPassed < 60 * 60 * 24 * 30) {
-    var days = Math.round(secondsPassed / 60 / 60 / 24);
-    return days + " days ago";
-  }
-
-  return "A long time ago, in a galaxy far, far away";
 };
 
 window.createElement = function(type, className, content) {
