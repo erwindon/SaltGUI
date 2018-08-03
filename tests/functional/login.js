@@ -4,14 +4,17 @@ const assert = require('chai').assert;
 const url = 'http://localhost:3333/';
 
 
+
 describe('Login tests', function() {
 
-  this.timeout('10s');
+  this.timeout('30s');
 
   let browser = null;
 
   beforeEach( () => {
     browser = new Nightmare({ 
+      // to make the typed input much faster
+      typeInterval: 20,
       // uncomment this to show the browser and the debug window
       // openDevTools: {
       //   mode: "detach"
@@ -50,9 +53,26 @@ describe('Login tests', function() {
           assert.equal(message, 'Authentication failed');
           done() ;
         })
-        .catch(error => {
-          console.log(error);
-        });
+        .catch(done);
+    });
+
+    it('valid credentials will redirect us to the homepage and hide the loginform', done => {
+      browser
+        .type('#username', 'salt')
+        .type('#password', 'salt')
+        .click('#login-submit')
+        .wait( ()=> {
+          // we wait here for the loginpage to be hidden
+          var loginpage = document.querySelector('#page_login');
+          return loginpage.style.display == 'none';
+        })
+        .end()
+        .evaluate( ()=> { return document.location.href; })
+        .then(function (href) {
+          assert.equal(href, url);
+          done();
+        })
+        .catch(done);
     });
 
   });
