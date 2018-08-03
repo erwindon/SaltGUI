@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# always cleanup the docker images when something goes wrong
+function cleanupdocker {
+    docker-compose -f docker/docker-compose.yml rm -f -s
+}
+trap cleanupdocker EXIT
+
 set -e
 # add testing packages
 yarn
@@ -15,8 +21,5 @@ yarn wait-for-docker
 
 # run the unittests/nightmare.js functional tests
 yarn test
-
-# cleanup the docker images for 100% reproducable testresults
-docker-compose -f docker/docker-compose.yml rm -f -s
 
 set +e
