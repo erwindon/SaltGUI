@@ -25,7 +25,7 @@ describe('Login tests', function() {
       .goto(url);
   });
 
-  describe('Login', () => {
+  describe('Functional tests for login', () => {
   
     it('we should be redirected to the login page', done => {
       browser
