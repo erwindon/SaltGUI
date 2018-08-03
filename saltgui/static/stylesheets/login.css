@@ -30,17 +30,14 @@
   font-size: 18px;
 }
 
-#login-form select {
-  width: 100%;
-  font-size: 14px;
-}
-
 #login-form input[type='success'] {
   width: 100%;
 }
 
 #login-form select {
   color: black;
+  width: 100%;
+  font-size: 14px;
 }
 #login-form select option#eauth_default {
   color: gray;

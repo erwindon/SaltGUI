@@ -12,6 +12,16 @@
   width: 100%;
 }
 
+pre .hostname {
+  color: #4caf50;
+  display: inline-block;
+  margin-top: 12px;
+}
+
+pre .hostname:first-of-type {
+  margin-top: 0;
+}
+
 .minions {
   min-width: 620px;
 }
@@ -24,6 +34,13 @@
   list-style: none;
   border-bottom: 1px solid #4caf50;
   padding: 10px 0px;
+  position: relative;
+}
+
+.jobs li {
+  list-style: none;
+  border-bottom: 1px solid #4caf50;
+  padding: 10px 18px;
 }
 
 .minions li:last-of-type {
@@ -130,28 +147,8 @@
   color: #0000FF;
 }
 
-.minions li {
-  position: relative;
-}
-
-pre .hostname {
-  color: #4caf50;
-  display: inline-block;
-  margin-top: 12px;
-}
-
-pre .hostname:first-of-type {
-  margin-top: 0;
-}
-
 #popup_runcommand {
   display: none;
-}
-
-.jobs li {
-  list-style: none;
-  border-bottom: 1px solid #4caf50;
-  padding: 10px 18px;
 }
 
 .jobs li:last-of-type {
