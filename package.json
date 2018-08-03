@@ -10,13 +10,13 @@
     "mocha": "^5.2.0",
     "nightmare": "^3.0.1",
     "stylelint": "^9.4.0",
-    "stylelint-config-recommended": "^2.1.0"
+    "stylelint-config-standard": "^18.2.0"
   },
   "jshintConfig": {
     "esversion": 6
   },
   "stylelint": {
-    "extends": "stylelint-config-recommended"
+    "extends": "stylelint-config-standard"
   },
   "scripts": {
     "jslint": "jshint saltgui/ tests/",
