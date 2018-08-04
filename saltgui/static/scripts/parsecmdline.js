@@ -60,11 +60,9 @@ window.parseCommandLine = function(toRun, args, params) {
       endChar = ']';
       objType = "array";
     } else if(toRun[0] === '"') {
+      // note that json does not support single-quoted strings
       endChar = '"';
       objType = "double-quoted-string";
-    } else if(toRun[0] === '\'') {
-      endChar = '\'';
-      objType = "single-quoted-string";
     }
 
     var value;
