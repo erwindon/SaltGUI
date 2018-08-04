@@ -74,6 +74,12 @@ We use the following testing libraries:
 - [mocha](https://https://mochajs.org/), a well documented testing framework for javascript 
 - [chai](http://www.chaijs.com/), the preferred assertion library for testing
 
+You'll need at least:
+- `docker-compose` 1.12 or above
+- `nodejs` 8.11.x or above
+- `yarn` 1.7.0 or above
+
+
 ## Contributing
 Open a PR! Try to use no dependencies where possible, as vanilla JS is the aim. Any libraries will need to be heavily considered first. Please see the section above as PR's won't be reviewed if they don't pass the tests.
 
