@@ -91,9 +91,6 @@ class API {
     batchWait.style.display = "none";
     runblock.appendChild(batchWait);
 
-    var runTypeText = Route._createDiv("runTypeText", "");
-    runblock.appendChild(runTypeText);
-
     document.querySelector(".run-command input[type='submit']")
       .addEventListener('click', this._onRun);
   }
@@ -105,49 +102,45 @@ class API {
 
     // now that the menu is used show the menu title
     // this is much clearer when the Size/Wait menus are also shown
-    this.menuRunType.setTitle("Type");
 
-    var txt;
     switch(jobRunType) {
     case "normal":
+      this.menuRunType.setTitle("Normal");
       this.menuBatchSize.hideMenu();
       this.menuBatchWait.hideMenu();
-      // note that this text is initially not shown until
-      // the user explicitly selects "normal" again
-      txt = "Run command normally";
       break;
     case "async":
+      this.menuRunType.setTitle("Async");
       this.menuBatchSize.hideMenu();
       this.menuBatchWait.hideMenu();
-      txt = "Run command in the background";
       break;
     case "batch":
+      this.menuRunType.setTitle("Batch");
       this.menuBatchSize.showMenu();
       this.menuBatchWait.showMenu();
-      txt = "Run command in batches";
-      if(batchSize === "")
-        txt += " of 10%"
-      else if(batchSize.endsWith("%"))
-        txt += " of " + batchSize;
-      else if(batchSize === "1")
-        txt += " of " + batchSize + " job";
-      else
-        txt += " of " + batchSize + " jobs";
-      if(batchWait === "")
-        // do not initially show this part until
-        // the user explicitly makes a choice
-        txt += "";
-      else if(batchWait == "0")
-        txt += ", not waiting between batches";
-      else if(batchWait == "1")
-        txt += ", waiting " + batchWait + " second between batches";
-      else
-        txt += ", waiting " + batchWait + " seconds between batches"
+
+      if(batchSize === "") {
+        this.menuBatchSize.setTitle("Size 10%");
+      } else if(batchSize.endsWith("%")) {
+        this.menuBatchSize.setTitle("Size " + batchSize);
+      } else if(batchSize === "1") {
+        this.menuBatchSize.setTitle("Size " + batchSize + " job");
+      } else {
+        this.menuBatchSize.setTitle("Size " + batchSize + " jobs");
+      }
+
+      if(batchWait === "") {
+        this.menuBatchWait.setTitle("No wait");
+      } else if(batchWait == "0") {
+        this.menuBatchWait.setTitle("No wait");
+      } else if(batchWait == "1") {
+        this.menuBatchWait.setTitle("Wait " + batchWait + " second");
+      } else {
+        this.menuBatchWait.setTitle("Wait " + batchWait + " seconds");
+      }
+
       break;
     }
-
-    var runTypeText = document.querySelector(".runTypeText");
-    runTypeText.innerText = txt;
   }
 
   _setRunTypeBatchWaitNone() {
