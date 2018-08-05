@@ -6,7 +6,7 @@ const url = 'http://localhost:3333/';
 
 describe('Login tests', function() {
 
-  this.timeout('30s');
+  this.timeout('60s');
 
   let browser = null;
 
