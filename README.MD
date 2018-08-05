@@ -76,8 +76,8 @@ We use the following testing libraries:
 
 You'll need at least:
 - `docker-compose` 1.12 or above
-- `nodejs` 8.11.x or above
-- `yarn` 1.7.0 or above
+- `nodejs` 8.11 or above
+- `yarn` 1.7 or above
 
 
 ## Contributing
