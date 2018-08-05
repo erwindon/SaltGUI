@@ -21,11 +21,15 @@ describe('Unittests for utils.js', function() {
 
     now.setMinutes(now.getMinutes() - 1);
     result = window.elapsedToString(now);
-    assert.equal(result, "3 minutes ago");
+    assert.equal(result, "3 minute(s) ago");
 
-    now.setHours(now.getHours() - 2);
+    now.setHours(now.getHours() - 1);
     result = window.elapsedToString(now);
-    assert.equal(result, "2 hours ago");
+    assert.equal(result, "1 hour(s) ago");
+
+    now.setHours(now.getHours() - 1);
+    result = window.elapsedToString(now);
+    assert.equal(result, "2 hour(s) ago");
 
     now.setHours(now.getHours() - 24);
     result = window.elapsedToString(now);
