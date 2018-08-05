@@ -8,12 +8,12 @@ window.elapsedToString = function(date) {
 
     if(secondsPassed < 60 * 60) {
       var minutes = Math.round(secondsPassed / 60);
-      return minutes + " minutes ago";
+      return minutes + " minute(s) ago";
     }
 
     if(secondsPassed < 60 * 60 * 24) {
       var hours = Math.round(secondsPassed / 60 / 60);
-      return hours + " hours ago";
+      return hours + " hour(s) ago";
     }
 
     if(secondsPassed < 60 * 60 * 24 * 2) {
@@ -28,6 +28,7 @@ window.elapsedToString = function(date) {
     return "A long time ago, in a galaxy far, far away";
   }
   catch(err) {
+    console.error(err);
     return "It did happen, when I don't know";
   }
 };
