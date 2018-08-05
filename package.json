@@ -16,6 +16,6 @@
   "scripts": {
     "lint": "jshint saltgui/ tests/",
     "wait-for-docker": "node tests/helpers/wait-for-docker.js",
-    "test": "mocha --bail --trace-warnings --reporter spec tests/unit/ tests/functional/"
+    "test": "mocha --trace-warnings --reporter spec tests/unit/ tests/functional/"
   }
 }
