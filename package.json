@@ -8,8 +8,7 @@
     "chai": "^4.1.2",
     "jshint": "^2.9.5",
     "mocha": "^5.2.0",
-    "nightmare": "^3.0.1",
-    "wait-on": "^2.1.0"
+    "nightmare": "^3.0.1"
   },
   "jshintConfig": {
     "esversion": 6

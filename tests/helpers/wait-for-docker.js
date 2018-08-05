@@ -1,19 +1,18 @@
-const waitOn = require('wait-on');
+const request = require('request');
+
+const url = 'http://localhost:3333';
 
 console.log("waiting for docker setup to be ready");
 
-var resources = {
-  resources: [
-    'http://localhost:3333/',
-  ],
-  timeout: 30000,
-  followAllRedirects: true,
-  followRedirect: true,
-};
-
-waitOn(resources, error => {
-  if (error)
-      console.error(error);
-  else
+function waitfordocker() {
+  request
+    .get(url)
+    .on('response', function(response) {
       console.log("docker setup is ready");
-});
+    })
+   .on('error', function(err) {
+      setTimeout(waitfordocker, 1000);
+    });
+}
+
+waitfordocker();
