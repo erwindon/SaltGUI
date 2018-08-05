@@ -4,7 +4,6 @@ const assert = require('chai').assert;
 const url = 'http://localhost:3333/';
 
 
-
 describe('Login tests', function() {
 
   this.timeout('30s');
@@ -30,9 +29,9 @@ describe('Login tests', function() {
     it('we should be redirected to the login page', done => {
       browser
         .end()
-        .evaluate( () => { return document; } )
-        .then(function (document) { 
-          assert.equal(document.location.href, 'http://localhost:3333/login');
+        .evaluate( () => { return document.location.href; } )
+        .then(function (href) { 
+          assert.equal(href, url + 'login');
           done();
         })
         .catch(done);
@@ -51,7 +50,7 @@ describe('Login tests', function() {
         }, selector)
         .then(function (message) {
           assert.equal(message, 'Authentication failed');
-          done() ;
+          done();
         })
         .catch(done);
     });
@@ -61,7 +60,7 @@ describe('Login tests', function() {
         .type('#username', 'salt')
         .type('#password', 'salt')
         .click('#login-submit')
-        .wait( ()=> {
+        .wait( () => {
           // we wait here for the loginpage to be hidden
           var loginpage = document.querySelector('#page_login');
           return loginpage.style.display == 'none';

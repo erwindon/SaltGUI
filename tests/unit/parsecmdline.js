@@ -12,8 +12,6 @@ describe('Unittests for parsecmdline.js', function() {
   it('test parseCommandLine', done => {
     let args = [], params = {};
 
-
-
     // GENERAL ERROR HANDLING
 
     // null means: it was all ok
@@ -28,8 +26,6 @@ describe('Unittests for parsecmdline.js', function() {
     args = []; params = {};
     result = window.parseCommandLine("{\"test\"", args, params);
     assert.equal(result, "No valid dictionary found");
-
-
 
     // GENERAL WHITESPACE HANDLING
 
@@ -47,8 +43,6 @@ describe('Unittests for parsecmdline.js', function() {
     assert.equal(Object.keys(params).length, 1);
     assert.equal(params.name, true);
 
-
-
     // NAMED PARAMETERS
 
     // name-value-pair without value is not ok
@@ -61,8 +55,6 @@ describe('Unittests for parsecmdline.js', function() {
     args = []; params = {};
     result = window.parseCommandLine("test= arg2 arg3", args, params);
     assert.equal(result, "Must have value for named parameter 'test'");
-
-
 
     // DICTIONARY
 
@@ -90,8 +82,6 @@ describe('Unittests for parsecmdline.js', function() {
     result = window.parseCommandLine("{\"a}\":1}}", args, params);
     assert.equal(result, "Valid dictionary, but followed by text:}...");
 
-
-
     // ARRAYS
 
     // a simple array
@@ -107,8 +97,6 @@ describe('Unittests for parsecmdline.js', function() {
     result = window.parseCommandLine("[1,2", args, params);
     assert.equal(result, "No valid array found");
 
-
-
     // DOUBLE-QUOTED-STRINGS
 
     // a simple string
@@ -123,8 +111,6 @@ describe('Unittests for parsecmdline.js', function() {
     args = []; params = {};
     result = window.parseCommandLine("\"string", args, params);
     assert.equal(result, "No valid double-quoted-string found");
-
-
 
     // SINGLE-QUOTED-STRINGS (never supported!)
 
@@ -147,8 +133,6 @@ describe('Unittests for parsecmdline.js', function() {
     assert.equal(args[0], "\'string");
     assert.equal(Object.keys(params).length, 0);
 
-
-
     // INTEGER
 
     args = []; params = {};
@@ -157,8 +141,6 @@ describe('Unittests for parsecmdline.js', function() {
     assert.equal(args.length, 1);
     assert.equal(args[0], 0);
     assert.equal(Object.keys(params).length, 0);
-
-
 
     // FLOAT
 
@@ -236,9 +218,6 @@ describe('Unittests for parsecmdline.js', function() {
     result = window.parseCommandLine("1e999", args, params);
     assert.equal(result, "Numeric argument has overflowed or is infinity");
 
-
-
-
     // NULL
 
     args = []; params = {};
@@ -269,8 +248,6 @@ describe('Unittests for parsecmdline.js', function() {
     assert.equal(args[0], "NUll");
     assert.equal(Object.keys(params).length, 0);
 
-
-
     // NONE
 
     args = []; params = {};
@@ -290,7 +267,6 @@ describe('Unittests for parsecmdline.js', function() {
     args = []; params = {};
     result = window.parseCommandLine("NONE", args, params);
 
-
     // GENERAL WHITESPACE HANDLING
 
     assert.isNull(result);
@@ -304,8 +280,6 @@ describe('Unittests for parsecmdline.js', function() {
     assert.equal(args.length, 1);
     assert.equal(args[0], "NOne");
     assert.equal(Object.keys(params).length, 0);
-
-
 
     // BOOLEAN
 
