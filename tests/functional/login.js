@@ -6,14 +6,17 @@ const url = 'http://localhost:3333/';
 
 describe('Login tests', function() {
 
-  this.timeout('60s');
-
   let browser = null;
+
+  // the global electron timeout
+  this.timeout(60 * 1000);
 
   beforeEach( () => {
     browser = new Nightmare({ 
       // to make the typed input much faster
       typeInterval: 20,
+      // the wait function has a timeout as well
+      waitTimeout: 60 * 1000
       // uncomment this to show the browser and the debug window
       // openDevTools: {
       //   mode: "detach"
