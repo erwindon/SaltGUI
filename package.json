@@ -6,14 +6,30 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "^4.1.2",
-    "jshint": "^2.9.5",
+    "eslint": "^5.3.0",
     "mocha": "^5.2.0",
     "nightmare": "^3.0.1",
     "stylelint": "^9.4.0",
     "stylelint-config-standard": "^18.2.0"
   },
-  "jshintConfig": {
-    "esversion": 6
+  "eslintConfig": {
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": 6
+    },
+    "rules": {
+      "//": "see https://eslint.org/docs/rules/ for details",
+      "semi": 2,
+      "no-undef": 0,
+      "no-unused-vars": 0,
+      "no-console": 0,
+      "indent": ["error", 2],
+      "no-irregular-whitespace": 2,
+      "no-whitespace-before-property": 2,
+      "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1 }],
+      "no-useless-escape": 0,
+      "no-constant-condition": ["error", { "checkLoops": false }]
+    }
   },
   "stylelint": {
     "extends": "stylelint-config-standard"
