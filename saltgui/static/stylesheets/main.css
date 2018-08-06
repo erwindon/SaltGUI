@@ -161,7 +161,7 @@ h1 {
 
 input,
 select {
-  display: inline-block;
+  display: block;
   padding: 7px 10px;
   margin-bottom: 15px;
   border-radius: 2px;
