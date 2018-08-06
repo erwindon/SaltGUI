@@ -32,34 +32,34 @@ class KeysRoute extends PageRoute {
     var list = this.getPageElement().querySelector('#minions');
     var hostnames = keys.minions.sort();
     for(var i = 0; i < hostnames.length; i++) {
-        this._addMinion(list, hostnames[i]);
+      this._addMinion(list, hostnames[i]);
     }
     if(hostnames.length == 0)
-        this._addNone(list);
+      this._addNone(list);
 
     list = this.getPageElement().querySelector('#keys_denied');
     hostnames = keys.minions_denied.sort();
     for(i = 0; i < hostnames.length; i++) {
-        this._addDeniedMinion(list, hostnames[i]);
+      this._addDeniedMinion(list, hostnames[i]);
     }
     if(hostnames.length == 0)
-        this._addNone(list);
+      this._addNone(list);
 
     list = this.getPageElement().querySelector('#keys_unaccepted');
     hostnames = keys.minions_pre.sort();
     for(i = 0; i < hostnames.length; i++) {
-        this._addPreMinion(list, hostnames[i]);
+      this._addPreMinion(list, hostnames[i]);
     }
     if(hostnames.length == 0)
-        this._addNone(list);
+      this._addNone(list);
 
     list = this.getPageElement().querySelector('#keys_rejected');
     hostnames = keys.minions_rejected.sort();
     for(i = 0; i < hostnames.length; i++) {
-        this._addRejectedMinion(list, hostnames[i]);
+      this._addRejectedMinion(list, hostnames[i]);
     }
     if(hostnames.length == 0)
-        this._addNone(list);
+      this._addNone(list);
 
     this.keysLoaded = true;
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
