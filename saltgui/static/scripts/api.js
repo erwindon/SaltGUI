@@ -8,6 +8,24 @@ class API {
     this._getRunParams = this._getRunParams.bind(this);
     this._onRun = this._onRun.bind(this);
     this._onRunReturn = this._onRunReturn.bind(this);
+    this._setRunTypeAsync = this._setRunTypeAsync.bind(this);
+    this._setRunTypeBatchSize1 = this._setRunTypeBatchSize1.bind(this);
+    this._setRunTypeBatchSize2 = this._setRunTypeBatchSize2.bind(this);
+    this._setRunTypeBatchSize3 = this._setRunTypeBatchSize3.bind(this);
+    this._setRunTypeBatchSize5 = this._setRunTypeBatchSize5.bind(this);
+    this._setRunTypeBatchSize10 = this._setRunTypeBatchSize10.bind(this);
+    this._setRunTypeBatchSize10p = this._setRunTypeBatchSize10p.bind(this);
+    this._setRunTypeBatchSize25p = this._setRunTypeBatchSize25p.bind(this);
+    this._setRunTypeBatch = this._setRunTypeBatch.bind(this);
+    this._setRunTypeBatchWaitNone = this._setRunTypeBatchWaitNone.bind(this);
+    this._setRunTypeBatchWait1 = this._setRunTypeBatchWait1.bind(this);
+    this._setRunTypeBatchWait2 = this._setRunTypeBatchWait2.bind(this);
+    this._setRunTypeBatchWait3 = this._setRunTypeBatchWait3.bind(this);
+    this._setRunTypeBatchWait5 = this._setRunTypeBatchWait5.bind(this);
+    this._setRunTypeBatchWait10 = this._setRunTypeBatchWait10.bind(this);
+    this._setRunTypeBatchWait30 = this._setRunTypeBatchWait30.bind(this);
+    this._setRunTypeBatchWait60 = this._setRunTypeBatchWait60.bind(this);
+    this._setRunTypeNormal = this._setRunTypeNormal.bind(this);
 
     this._registerEventListeners();
   }
@@ -31,8 +49,220 @@ class API {
       .addEventListener('click', _ => {
         window.location.replace("/keys");
     } );
+
+    var runblock = document.getElementById("runblock");
+    this.menuRunType = new DropDownMenu(runblock);
+    this.menuRunType.addMenuItem("Normal", this._setRunTypeNormal);
+    this.menuRunType.addMenuItem("Async", this._setRunTypeAsync);
+    this.menuRunType.addMenuItem("Batch", this._setRunTypeBatch);
+
+    this.menuBatchSize = new DropDownMenu(runblock);
+    this.menuBatchSize.setTitle("Batch&nbsp;Size");
+    this.menuBatchSize.addMenuItem("10%", this._setRunTypeBatchSize10p);
+    this.menuBatchSize.addMenuItem("25%", this._setRunTypeBatchSize25p);
+    this.menuBatchSize.addMenuItem("1", this._setRunTypeBatchSize1);
+    this.menuBatchSize.addMenuItem("2", this._setRunTypeBatchSize2);
+    this.menuBatchSize.addMenuItem("3", this._setRunTypeBatchSize3);
+    this.menuBatchSize.addMenuItem("5", this._setRunTypeBatchSize5);
+    this.menuBatchSize.addMenuItem("10", this._setRunTypeBatchSize10);
+    this.menuBatchSize.hideMenu();
+
+    this.menuBatchWait = new DropDownMenu(runblock);
+    this.menuBatchWait.setTitle("Batch&nbsp;Wait");
+    this.menuBatchWait.addMenuItem("None", this._setRunTypeBatchWaitNone);
+    this.menuBatchWait.addMenuItem("1 second", this._setRunTypeBatchWait1);
+    this.menuBatchWait.addMenuItem("2 seconds", this._setRunTypeBatchWait2);
+    this.menuBatchWait.addMenuItem("3 seconds", this._setRunTypeBatchWait3);
+    this.menuBatchWait.addMenuItem("5 seconds", this._setRunTypeBatchWait5);
+    this.menuBatchWait.addMenuItem("10 seconds", this._setRunTypeBatchWait10);
+    this.menuBatchWait.addMenuItem("30 seconds", this._setRunTypeBatchWait30);
+    this.menuBatchWait.addMenuItem("60 seconds", this._setRunTypeBatchWait60);
+    this.menuBatchWait.hideMenu();
+
+    var jobRunType = Route._createDiv("jobRunType", "normal");
+    jobRunType.style.display = "none";
+    runblock.appendChild(jobRunType);
+
+    var batchSize = Route._createDiv("batchSize", "");
+    batchSize.style.display = "none";
+    runblock.appendChild(batchSize);
+
+    var batchWait = Route._createDiv("batchWait", "");
+    batchWait.style.display = "none";
+    runblock.appendChild(batchWait);
+
     document.querySelector(".run-command input[type='submit']")
       .addEventListener('click', this._onRun);
+  }
+
+  _updateRunTypeText() {
+    var jobRunType = document.querySelector(".jobRunType").innerText;
+    var batchWait = document.querySelector(".batchWait").innerText;
+    var batchSize = document.querySelector(".batchSize").innerText;
+
+    // now that the menu is used show the menu title
+    // this is much clearer when the Size/Wait menus are also shown
+
+    switch(jobRunType) {
+    case "normal":
+      this.menuRunType.setTitle("Normal");
+      this.menuBatchSize.hideMenu();
+      this.menuBatchWait.hideMenu();
+      break;
+    case "async":
+      this.menuRunType.setTitle("Async");
+      this.menuBatchSize.hideMenu();
+      this.menuBatchWait.hideMenu();
+      break;
+    case "batch":
+      this.menuRunType.setTitle("Batch");
+      this.menuBatchSize.showMenu();
+      this.menuBatchWait.showMenu();
+
+      if(batchSize === "") {
+        this.menuBatchSize.setTitle("Size 10%");
+      } else if(batchSize.endsWith("%")) {
+        this.menuBatchSize.setTitle("Size " + batchSize);
+      } else if(batchSize === "1") {
+        this.menuBatchSize.setTitle("Size " + batchSize + " job");
+      } else {
+        this.menuBatchSize.setTitle("Size " + batchSize + " jobs");
+      }
+
+      if(batchWait === "") {
+        this.menuBatchWait.setTitle("No wait");
+      } else if(batchWait == "0") {
+        this.menuBatchWait.setTitle("No wait");
+      } else if(batchWait == "1") {
+        this.menuBatchWait.setTitle("Wait " + batchWait + " second");
+      } else {
+        this.menuBatchWait.setTitle("Wait " + batchWait + " seconds");
+      }
+
+      break;
+    }
+  }
+
+  _setRunTypeBatchWaitNone() {
+    var batchWait = document.querySelector(".batchWait");
+    batchWait.innerText = "0";
+    this._updateRunTypeText();
+  }
+
+  _setRunTypeBatchWait1() {
+    var batchWait = document.querySelector(".batchWait");
+    batchWait.innerText = "1";
+    this._updateRunTypeText();
+  }
+
+  _setRunTypeBatchWait2() {
+    var batchWait = document.querySelector(".batchWait");
+    batchWait.innerText = "2";
+    this._updateRunTypeText();
+  }
+
+  _setRunTypeBatchWait3() {
+    var batchWait = document.querySelector(".batchWait");
+    batchWait.innerText = "3";
+    this._updateRunTypeText();
+  }
+
+  _setRunTypeBatchWait5() {
+    var batchWait = document.querySelector(".batchWait");
+    batchWait.innerText = "5";
+    this._updateRunTypeText();
+  }
+
+  _setRunTypeBatchWait10() {
+    var batchWait = document.querySelector(".batchWait");
+    batchWait.innerText = "10";
+    this._updateRunTypeText();
+  }
+
+  _setRunTypeBatchWait30() {
+    var batchWait = document.querySelector(".batchWait");
+    batchWait.innerText = "30";
+    this._updateRunTypeText();
+  }
+
+  _setRunTypeBatchWait60() {
+    var batchWait = document.querySelector(".batchWait");
+    batchWait.innerText = "60";
+    this._updateRunTypeText();
+  }
+
+  _setRunTypeNormal() {
+    var jobRunType = document.querySelector(".jobRunType");
+    jobRunType.innerText = "normal";
+    this._updateRunTypeText();
+  }
+
+  _setRunTypeAsync() {
+    var jobRunType = document.querySelector(".jobRunType");
+    jobRunType.innerText = "async";
+    this._updateRunTypeText();
+  }
+
+  _setRunTypeBatch() {
+    var jobRunType = document.querySelector(".jobRunType");
+    jobRunType.innerText = "batch";
+    this._updateRunTypeText();
+  }
+
+  _setRunTypeBatchSize1() {
+    var jobRunType = document.querySelector(".jobRunType");
+    jobRunType.innerText = "batch";
+    var batchSize = document.querySelector(".batchSize");
+    batchSize.innerText = "1";
+    this._updateRunTypeText();
+  }
+
+  _setRunTypeBatchSize2() {
+    var jobRunType = document.querySelector(".jobRunType");
+    jobRunType.innerText = "batch";
+    var batchSize = document.querySelector(".batchSize");
+    batchSize.innerText = "2";
+    this._updateRunTypeText();
+  }
+
+  _setRunTypeBatchSize3() {
+    var jobRunType = document.querySelector(".jobRunType");
+    jobRunType.innerText = "batch";
+    var batchSize = document.querySelector(".batchSize");
+    batchSize.innerText = "3";
+    this._updateRunTypeText();
+  }
+
+  _setRunTypeBatchSize5() {
+    var jobRunType = document.querySelector(".jobRunType");
+    jobRunType.innerText = "batch";
+    var batchSize = document.querySelector(".batchSize");
+    batchSize.innerText = "5";
+    this._updateRunTypeText();
+  }
+
+  _setRunTypeBatchSize10() {
+    var jobRunType = document.querySelector(".jobRunType");
+    jobRunType.innerText = "batch";
+    var batchSize = document.querySelector(".batchSize");
+    batchSize.innerText = "10";
+    this._updateRunTypeText();
+  }
+
+  _setRunTypeBatchSize10p() {
+    var jobRunType = document.querySelector(".jobRunType");
+    jobRunType.innerText = "batch";
+    var batchSize = document.querySelector(".batchSize");
+    batchSize.innerText = "10%";
+    this._updateRunTypeText();
+  }
+
+  _setRunTypeBatchSize25p() {
+    var jobRunType = document.querySelector(".jobRunType");
+    jobRunType.innerText = "batch";
+    var batchSize = document.querySelector(".batchSize");
+    batchSize.innerText = "25%";
+    this._updateRunTypeText();
   }
 
   _onRun() {
@@ -53,12 +283,16 @@ class API {
   }
 
   _onRunReturn(data) {
-    var response = data.return[0];
-    var hostnames = Object.keys(response);
-
     var outputContainer = document.querySelector(".run-command pre");
     outputContainer.innerHTML = "";
 
+    // collate all output, so that it can be presented in alphabetic order
+    var response = { };
+    for(var r of data.return)
+      for(var h in r)
+        response[h] = r[h];
+
+    var hostnames = Object.keys(response).sort();
     for(var i = 0; i < hostnames.length; i++) {
       var hostname = hostnames[i];
 
@@ -217,6 +451,21 @@ class API {
       params.fun = functionToRun;
       params.tgt = target;
       if(args.length !== 0) params.arg = args;
+    }
+
+    var jobRunType = document.querySelector(".jobRunType");
+    if(params.client === "local" && jobRunType.innerText === "async") {
+      params.client = "local_async";
+      // return looks like:
+      // { "jid": "20180718173942195461", "minions": [ ... ] }
+    }
+    if(params.client === "local" && jobRunType.innerText === "batch") {
+      params.client = "local_batch";
+      // TODO
+      params.batch = "10%";
+      // TODO
+      params.batch_wait = 3;
+      // it returns the actual output in a group of batches
     }
 
     return this._callMethod("POST", "/", params);
