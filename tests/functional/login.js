@@ -66,10 +66,10 @@ describe('Login tests', function() {
         .wait( () => {
           // we wait here for the loginpage to be hidden
           var loginpage = document.querySelector('#page_login');
-          return loginpage.style.display == 'none';
+          return loginpage.style.display === 'none';
         })
         .end()
-        .evaluate( ()=> { return document.location.href; })
+        .evaluate( () => { return document.location.href; })
         .then(function (href) {
           assert.equal(href, url);
           done();
@@ -82,20 +82,20 @@ describe('Login tests', function() {
         .type('#username', 'salt')
         .type('#password', 'salt')
         .click('#login-submit')
-        .wait( ()=> {
+        .wait( () => {
           // we wait here for the loginpage to be hidden
           var loginpage = document.querySelector('#page_login');
           return loginpage.style.display == 'none';
         })
         .click('#button_logout')
-        .wait( ()=> {
+        .wait( () => {
           // we wait here for the loginpage to be shown
           var loginpage = document.querySelector('#page_login');
           console.log(loginpage.style.display);
           return loginpage.style.display === '';
         })
         .end()
-        .evaluate( ()=> { return document.location.href; })
+        .evaluate( () => { return document.location.href; })
         .then(function (href) {
           // and we a redirected to the login page
           assert.equal(href,'http://localhost:3333/login');
