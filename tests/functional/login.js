@@ -77,6 +77,33 @@ describe('Login tests', function() {
         .catch(done);
     });
 
+    it('check that we can logout', done => {
+      browser
+        .type('#username', 'salt')
+        .type('#password', 'salt')
+        .click('#login-submit')
+        .wait( ()=> {
+          // we wait here for the loginpage to be hidden
+          var loginpage = document.querySelector('#page_login');
+          return loginpage.style.display == 'none';
+        })
+        .click('#button_logout')
+        .wait( ()=> {
+          // we wait here for the loginpage to be shown
+          var loginpage = document.querySelector('#page_login');
+          console.log(loginpage.style.display);
+          return loginpage.style.display === '';
+        })
+        .end()
+        .evaluate( ()=> { return document.location.href; })
+        .then(function (href) {
+          // and we a redirected to the login page
+          assert.equal(href,'http://localhost:3333/login');
+          done();
+        })
+        .catch(done);
+    });
+
   });
 
 });
