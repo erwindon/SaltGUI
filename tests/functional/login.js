@@ -22,7 +22,7 @@ describe('Login tests', function() {
     if (process.env.NIGHTMARE_DEBUG === '1') {
       // show the browser and the debug window
       options.openDevTools = {
-         mode: "detach"
+        mode: "detach"
       };
       options.show = true;
     }
