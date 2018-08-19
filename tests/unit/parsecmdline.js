@@ -97,6 +97,24 @@ describe('Unittests for parsecmdline.js', function() {
     result = window.parseCommandLine("[1,2", args, params);
     assert.equal(result, "No valid array found");
 
+    // STRINGS WITHOUT QUOTES
+
+    // a simple string
+    args = []; params = {};
+    result = window.parseCommandLine("string", args, params);
+    assert.isNull(result);
+    assert.equal(args.length, 1);
+    assert.equal(args[0], "string");
+    assert.equal(Object.keys(params).length, 0);
+
+    // a number that looks like a jobid
+    args = []; params = {};
+    result = window.parseCommandLine("20180820003411338317", args, params);
+    assert.isNull(result);
+    assert.equal(args.length, 1);
+    assert.equal(args[0], "20180820003411338317");
+    assert.equal(Object.keys(params).length, 0);
+
     // DOUBLE-QUOTED-STRINGS
 
     // a simple string
@@ -140,6 +158,30 @@ describe('Unittests for parsecmdline.js', function() {
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], 0);
+    assert.equal(Object.keys(params).length, 0);
+
+    // an integer that almost looks like a jobid, but one digit less
+    args = []; params = {};
+    result = window.parseCommandLine("2018082000341133831", args, params);
+    assert.isNull(result);
+    assert.equal(args.length, 1);
+    assert.equal(args[0], 2018082000341133831);
+    assert.equal(Object.keys(params).length, 0);
+
+    // an integer that almost looks like a jobid, but one digit more
+    args = []; params = {};
+    result = window.parseCommandLine("201808200034113383170", args, params);
+    assert.isNull(result);
+    assert.equal(args.length, 1);
+    assert.equal(args[0], 201808200034113383170);
+    assert.equal(Object.keys(params).length, 0);
+
+    // an integer that almost looks like a jobid, just not a true date-time
+    args = []; params = {};
+    result = window.parseCommandLine("20182820003411338317", args, params);
+    assert.isNull(result);
+    assert.equal(args.length, 1);
+    assert.equal(args[0], 20182820003411338317);
     assert.equal(Object.keys(params).length, 0);
 
     // FLOAT
