@@ -69,6 +69,11 @@ We provide some functional tests and unit tests. They use the docker setup to ru
 ./runtests.sh
 ```
 
+To show the browser window + a debugger while running the functional tests you can run:
+```
+NIGHTMARE_DEBUG=1 ./runtests.sh
+```
+
 We use the following testing libraries:
 - [nightmare.js](https://github.com/segmentio/nightmare), for functional/browser tests
 - [mocha](https://https://mochajs.org/), a well documented testing framework for javascript 
