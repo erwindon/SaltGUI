@@ -105,13 +105,11 @@ class API {
     var params = {
     };
 
-    return new Promise(function(resolve, reject) {
-      api._callMethod("POST", "/logout", params)
-      .then(function(data) {
-        window.sessionStorage.removeItem("token");
-        window.location.replace("/");
-        resolve();
-      }, reject);
+    return api._callMethod("POST", "/logout", params).then(response => {
+      window.sessionStorage.removeItem("token");
+      window.location.replace("/");
+    }).catch(error => {
+      console.error("_logout", error);
     });
   }
 

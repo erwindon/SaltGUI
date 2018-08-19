@@ -1,16 +1,16 @@
-FROM ubuntu
+FROM ubuntu:18.04
 MAINTAINER Martijn Jacobs <martijn@devopsconsulting.nl>
 
-ENV REFRESHED_ON "7 Mar 2018"
+ENV REFRESHED_ON "24 Jul 2018"
 ENV DEBIAN_FRONTEND noninteractive
 
-# add saltstack key and install gnupg2
-RUN apt-get update && apt-get install curl --yes && apt-get install gnupg2 --yes
-RUN curl --fail --silent --show-error --location https://repo.saltstack.com/apt/ubuntu/16.04/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
-RUN echo 'deb http://repo.saltstack.com/apt/ubuntu/16.04/amd64/latest xenial main' > /etc/apt/sources.list.d/saltstack.list
+# add saltstack key and install dependencies
+RUN apt-get update && apt-get install curl net-tools gnupg2 --yes
+RUN curl --fail --silent --show-error --location https://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
+RUN echo 'deb http://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest bionic main' > /etc/apt/sources.list.d/saltstack.list
 
 # install salt-master and salt-api, dependencies
-RUN apt-get update && apt-get install salt-master --yes && apt-get install salt-api --yes 
+RUN apt-get update && apt-get install salt-master salt-api --yes
 
 # add a user for the frontend salt:salt
 RUN useradd -m -s/bin/bash -p  $(openssl passwd -1 salt) salt
@@ -25,3 +25,6 @@ ADD ./conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # some volume configuration for the saltmaster
 VOLUME ["/pki","/var/cache/salt","/var/log/salt"]
 EXPOSE 3333 4505 4506
+
+# show which versions are installed
+RUN dpkg -l | grep salt\-

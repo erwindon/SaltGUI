@@ -1,9 +1,7 @@
 version: '3'
 services:
   saltmaster-local:
-    build:
-        context: . 
-        dockerfile: ./dockerfiles/dockerfile-saltmaster
+    image: maerteijn/saltgui-saltmaster
     ports: 
       - 4505:4505
       - 4506:4506
@@ -14,18 +12,14 @@ services:
     entrypoint: /usr/bin/supervisord
 
   saltminion-ubuntu:
-    build:
-        context: . 
-        dockerfile: ./dockerfiles/dockerfile-saltminion-ubuntu
+    image: maerteijn/saltgui-saltminion-ubuntu
     depends_on:
        - saltmaster-local
     restart: on-failure
     command: /usr/bin/salt-minion
 
   saltminion-debian:
-    build:
-        context: . 
-        dockerfile: ./dockerfiles/dockerfile-saltminion-debian
+    image: maerteijn/saltgui-saltminion-debian
     depends_on:
        - saltmaster-local
     restart: on-failure

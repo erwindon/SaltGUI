@@ -45,9 +45,9 @@ class Router {
     var router = this;
     route.getPageElement().style.display = "";
 
-    document.querySelectorAll(".menu_item_active").forEach(
-	function (e){ e.classList.remove("menu_item_active"); }
-	);
+    Array.from(document.querySelectorAll(".menu_item_active")).forEach(
+          function (e){ e.classList.remove("menu_item_active"); }
+    );
 
     var elem = route.getMenuItemElement();
     if(elem) elem.classList.add("menu_item_active");
