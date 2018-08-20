@@ -49,7 +49,7 @@ class LoginRoute extends Route{
 
     this.toggleForm(false);
     this.router.api.login(username, password)
-    .then(this.onLoginSuccess, this.onLoginFailure);
+      .then(this.onLoginSuccess, this.onLoginFailure);
   }
 
   onLoginSuccess() {

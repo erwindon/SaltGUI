@@ -31,7 +31,7 @@ class MinionsRoute extends PageRoute {
 
     var hostnames = keys.minions.sort();
     for(var i = 0; i < hostnames.length; i++) {
-        this._addMinion(list, hostnames[i]);
+      this._addMinion(list, hostnames[i]);
     }
 
     this.keysLoaded = true;

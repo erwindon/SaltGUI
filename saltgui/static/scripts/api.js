@@ -22,15 +22,15 @@ class API {
     document.querySelector("#button_logout")
       .addEventListener('click', _ => {
         this._logout(this);
-    } );
+      } );
     document.querySelector("#button_minions")
       .addEventListener('click', _ => {
         window.location.replace("/");
-    } );
+      } );
     document.querySelector("#button_keys")
       .addEventListener('click', _ => {
         window.location.replace("/keys");
-    } );
+      } );
     document.querySelector(".run-command input[type='submit']")
       .addEventListener('click', this._onRun);
   }
@@ -131,10 +131,10 @@ class API {
 
     return new Promise(function(resolve, reject) {
       api._callMethod("POST", "/login", params)
-      .then(function(data) {
-        window.sessionStorage.setItem("token", data.return[0].token);
-        resolve();
-      }, reject);
+        .then(function(data) {
+          window.sessionStorage.setItem("token", data.return[0].token);
+          resolve();
+        }, reject);
     });
   }
 
@@ -266,7 +266,7 @@ class API {
     }
 
     response.json()
-    .then(resolve, reject);
+      .then(resolve, reject);
   }
 
 }

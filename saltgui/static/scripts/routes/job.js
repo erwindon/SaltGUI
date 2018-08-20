@@ -12,7 +12,7 @@ class JobRoute extends Route {
     return new Promise(function(resolve, reject) {
       job.resolvePromise = resolve;
       job.router.api.getJob(window.getQueryParam("id"))
-      .then(job._onJobData);
+        .then(job._onJobData);
     });
   }
 

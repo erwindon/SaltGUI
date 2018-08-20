@@ -11,7 +11,10 @@ set -e
 yarn
 
 # first see if we write es6 compatible js
-yarn lint
+yarn jslint
+
+# and if our css is sane
+yarn stylelint
 
 # start a salt master, two salt minions and saltgui to run tests on
 docker-compose -f docker/docker-compose.yml up -d

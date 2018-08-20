@@ -1,4 +1,5 @@
-#page_minions, #page_keys {
+#page_minions,
+#page_keys {
   width: 100%;
 }
 
@@ -12,18 +13,36 @@
   width: 100%;
 }
 
+pre .hostname {
+  color: #4caf50;
+  display: inline-block;
+  margin-top: 12px;
+}
+
+pre .hostname:first-of-type {
+  margin-top: 0;
+}
+
 .minions {
   min-width: 620px;
 }
 
-.minions, .jobs {
-  padding: 0px;
+.minions,
+.jobs {
+  padding: 0;
 }
 
 .minions li {
   list-style: none;
   border-bottom: 1px solid #4caf50;
-  padding: 10px 0px;
+  padding: 10px 0;
+  position: relative;
+}
+
+.jobs li {
+  list-style: none;
+  border-bottom: 1px solid #4caf50;
+  padding: 10px 18px;
 }
 
 .minions li:last-of-type {
@@ -43,7 +62,7 @@
 }
 
 .minions li .run-command-button:hover {
-  color: #2E7D32;
+  color: #2e7d32;
 }
 
 .minions li .hostname {
@@ -57,7 +76,7 @@
 }
 
 .minions li .address {
-  color: #3F51B5;
+  color: #3f51b5;
   cursor: pointer;
   position: relative;
 
@@ -68,17 +87,17 @@
   -webkit-user-select: none;
 }
 
-.minions li .address:before,
-.minions li .address:after {
+.minions li .address::before,
+.minions li .address::after {
   opacity: 0;
   pointer-events: none;
 }
 
-.minions li .address:before {
+.minions li .address::before {
   position: absolute;
   bottom: 100%;
   left: 50%;
-  margin: 0px 0px 5px -50px;
+  margin: 0 0 5px -50px;
   padding: 5px 7px;
   border-radius: 3px;
   background-color: hsla(0, 0%, 20%, 0.9);
@@ -88,12 +107,12 @@
   font-size: 14px;
 }
 
-.minions li .address:focus:before {
+.minions li .address:focus::before {
   content: "Copied!";
   left: 68%;
 }
 
-.minions li .address:after {
+.minions li .address::after {
   position: absolute;
   bottom: 100%;
   left: 50%;
@@ -105,8 +124,8 @@
   content: " ";
 }
 
-.minions li .address:hover:before,
-.minions li .address:hover:after {
+.minions li .address:hover::before,
+.minions li .address:hover::after {
   opacity: 1;
 }
 
@@ -115,43 +134,23 @@
 }
 
 .minions li .accepted {
-  color: #00A000;
+  color: #00a000;
 }
 
 .minions li .denied {
-  color: #FF00FF;
+  color: #f0f;
 }
 
 .minions li .unaccepted {
-  color: #FF0000;
+  color: #f00;
 }
 
 .minions li .rejected {
-  color: #0000FF;
-}
-
-.minions li {
-  position: relative;
-}
-
-pre .hostname {
-  color: #4caf50;
-  display: inline-block;
-  margin-top: 12px;
-}
-
-pre .hostname:first-of-type {
-  margin-top: 0;
+  color: #00f;
 }
 
 #popup_runcommand {
   display: none;
-}
-
-.jobs li {
-  list-style: none;
-  border-bottom: 1px solid #4caf50;
-  padding: 10px 18px;
 }
 
 .jobs li:last-of-type {
@@ -185,10 +184,9 @@ pre .hostname:first-of-type {
   flex-basis: 50%;
 }
 
-@media(max-width: 800px) {
-  
+@media (max-width: 800px) {
   .minions {
-    min-width:0;
+    min-width: 0;
   }
 
   .dashboard {

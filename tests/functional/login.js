@@ -4,7 +4,7 @@ const assert = require('chai').assert;
 const url = 'http://localhost:3333/';
 
 
-describe('Login tests', function() {
+describe('Funtional tests', function() {
 
   let browser = null;
 
@@ -22,7 +22,7 @@ describe('Login tests', function() {
     if (process.env.NIGHTMARE_DEBUG === '1') {
       // show the browser and the debug window
       options.openDevTools = {
-         mode: "detach"
+        mode: "detach"
       };
       options.show = true;
     }
@@ -32,7 +32,7 @@ describe('Login tests', function() {
       .goto(url);
   });
 
-  describe('Functional tests for login', () => {
+  describe('Login and logout', () => {
   
     it('we should be redirected to the login page', done => {
       browser

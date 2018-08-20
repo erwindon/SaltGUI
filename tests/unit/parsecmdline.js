@@ -2,7 +2,7 @@ const assert = require('chai').assert;
 
 // create a global window so we can unittest the window.<x> functions
 if (!global.window)
-   global.window = new Object({});
+  global.window = new Object({});
 
 require('../../saltgui/static/scripts/parsecmdline');
 

@@ -11,14 +11,14 @@
 #login-form {
   align-self: center;
   background-color: white;
-  padding: 0px 50px;
+  padding: 0 50px;
   box-shadow: 1px 1px 24px rgba(0, 0, 0, 0.7);
   border-radius: 2px;
 }
 
 #login-form h1 {
   text-align: center;
-  margin: 38px 0px;
+  margin: 38px 0;
   margin-bottom: 23px;
   font-weight: lighter;
   font-size: 60px;
@@ -30,24 +30,24 @@
   font-size: 18px;
 }
 
-#login-form select {
-  width: 100%;
-  font-size: 14px;
-}
-
 #login-form input[type='success'] {
   width: 100%;
 }
 
 #login-form select {
   color: black;
+  width: 100%;
+  font-size: 14px;
 }
+
 #login-form select option#eauth_default {
   color: gray;
 }
+
 #login-form select option {
   color: black;
 }
+
 #login-form select optgroup {
   color: black;
 }
@@ -77,15 +77,15 @@
 }
 
 @keyframes shownotice {
-  0% { height: 0px; }
+  0% { height: 0; }
   20% { height: 38px; }
   80% { height: 38px; }
-  100% { height: 0px; }
+  100% { height: 0; }
 }
 
 .notice {
   color: white;
-  padding: 9px 0px;
+  padding: 9px 0;
   border-radius: 2px;
   text-align: center;
   font-size: 15px;
