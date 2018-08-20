@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# This script is a BASH script, therefore the interpreter must be BASH
+[ "$BASH" != "" ] || { echo "$0: must use bash"; exit 1; }
+
+# Docker must be started as root, therefore this script must run as root
+[ "$UID" = "0" ] || { echo "$0: must be root"; exit 1; }
+
 # always cleanup the docker images when something goes wrong
 function cleanupdocker {
     docker-compose -f docker/docker-compose.yml rm -f -s
