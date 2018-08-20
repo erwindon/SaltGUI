@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# This script is a BASH script, therefore the interpreter must be BASH
+[ "$BASH" != "" ] || { echo "$0: must use bash"; exit 1; }
+
 # always cleanup the docker images when something goes wrong
 function cleanupdocker {
     docker-compose -f docker/docker-compose.yml rm -f -s
