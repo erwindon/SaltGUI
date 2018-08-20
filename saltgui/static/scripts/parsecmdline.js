@@ -22,6 +22,8 @@ const patNull = /^(None|null|Null|NULL)$/;
 const patBooleanFalse = /^(false|False|FALSE)$/;
 const patBooleanTrue = /^(true|True|TRUE)$/;
 
+const patJid = /^[2-9][0-9][0-9][0-9][01][0-9][0-3][0-9][0-2][0-9][0-5][0-9][0-5][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$/;
+
 const patInteger = /^((0)|([-+]?[1-9][0-9]*))$/;
 
 const patFloat = /^([-+]?(([0-9]+)|([0-9]+[.][0-9]*)|([0-9]*[.][0-9]+))([eE][-+]?[0-9]+)?)$/;
@@ -118,6 +120,9 @@ window.parseCommandLine = function(toRun, args, params) {
         value = false;
       } else if(patBooleanTrue.test(str)) {
         value = true;
+      } else if(patJid.test(str)) {
+        // jids look like numbers but must be strings
+        value = str;
       } else if(patInteger.test(str)) {
         value = parseInt(str);
       } else if(patFloat.test(str)) {
