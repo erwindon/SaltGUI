@@ -234,23 +234,40 @@ class API {
       return;
     }
 
+    let foundDocu = false;
     for(let hostname of Object.keys(response)) {
       if(typeof response[hostname] !== "object") {
         // make sure it is an object (instead of e.g. "false" for an offline minion)
-        response[hostname] = { };
+        delete response[hostname];
+        continue;
       }
 
-      let hostReponse = response[hostname];
+      let hostResponse = response[hostname];
       for(let key of Object.keys(hostResponse)) {
+
+        // an exact match is great
         if(key === filterKey) continue;
+
+        // a true prefix is also ok
         if(!filterKey || key.startsWith(filterKey + ".")) continue;
+
         delete hostResponse[key];
       }
 
-      if(Object.keys(hostResponse).length == 0) {
-        // no documentation found (or left)
-        hostResponse[visualKey] = "no documentation found";
+      // no documentation present (or left) on this minion?
+      // then discard the result of this minion
+      if(Object.keys(hostResponse).length === 0) {
+        delete response[hostname];
+        continue;
       }
+
+      foundDocu = true;
+    }
+
+    // prepare a dummy response when no documentation could be found
+    // otherwise leave all documentation responses
+    if(!foundDocu) {
+      response[visualKey] = "no documentation found";
     }
   }
 
@@ -483,12 +500,17 @@ class API {
 
     var functionToRun = args.shift();
 
-    if(typeof functionToRun != typeof "dummy") {
+    if(typeof functionToRun != "string") {
       this._showError("First (unnamed) parameter is the function name, it must be a string, not a " + typeof functionToRun);
       return null;
     }
 
-    if(functionToRun.startsWith("wheel.")) {
+    if(functionToRun.startsWith("runners.")) {
+      params.client = "runner";
+      // use only the part after "runners." (8 chars)
+      params.fun = functionToRun.substring(8);
+      if(args.length !== 0) params.arg = args;
+    } else if(functionToRun.startsWith("wheel.")) {
       // wheel.key functions are treated slightly different
       // we re-use the 'target' field to fill the parameter 'match'
       // as used by the salt.wheel.key functions

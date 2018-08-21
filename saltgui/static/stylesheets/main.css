@@ -193,7 +193,7 @@ input[type='submit'] {
 
 input,
 select {
-  display: block;
+  display: inline-block;
   padding: 7px 10px;
   margin-bottom: 15px;
   border-radius: 2px;
