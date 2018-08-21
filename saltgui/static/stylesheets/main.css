@@ -175,7 +175,7 @@ input[type='submit'] {
 }
 
 .run-command input[type='submit'] {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .run-command pre {
@@ -217,12 +217,6 @@ input[disabled] {
 input[type='submit']:active:not([disabled]) {
   transform: scale(0.98);
   box-shadow: 0 3px 1px rgba(33, 33, 33, 0.2);
-}
-
-.run-command input[type='button'] {
-  min-width: initial;
-  width: 30px;
-  margin-left: 10px;
 }
 
 *:focus {

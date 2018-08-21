@@ -3,6 +3,9 @@ class DropDownMenu {
   // Creates an empty dropdown menu
   // The visual clue for the menu is added to the given element
   constructor(element) {
+
+    this.verifyAll = this.verifyAll.bind(this);
+
     this.menuDropdown = Route._createDiv("run-command-button", "");
     var menuButton;
     if(element.id === "header") {
@@ -13,20 +16,25 @@ class DropDownMenu {
       // 9658 = BLACK RIGHT-POINTING POINTER
       menuButton = Route._createDiv("menu-dropdown", "&#9658;");
       // hide the menu until it receives menu-items
-      this.menuDropdown.style.display = "none";
+      this.verifyAll();
     }
     this.menuDropdown.appendChild(menuButton);
     this.menuDropdownContent = Route._createDiv("menu-dropdown-content", "");
     this.menuDropdown.appendChild(this.menuDropdownContent);
-    let here = this;
-    this.menuDropdown.addEventListener('mouseenter', function(evt) {
-      for(let chld of here.menuDropdownContent.children) {
-        var verifyCallback = chld.verifyCallback;
-        if(!verifyCallback) continue;
-        verifyCallback(chld);
-      }
-    }.bind(this));
+    this.menuDropdown.addEventListener('mouseenter', this.verifyAll);
     element.appendChild(this.menuDropdown);
+  }
+
+  verifyAll() {
+    if(!this.menuDropdownContent) return;
+    var visibleCount = 0;
+    for(let chld of this.menuDropdownContent.children) {
+      let verifyCallback = chld.verifyCallback;
+      if(verifyCallback) verifyCallback(chld);
+      if(chld.style.display != "none") visibleCount++;
+    }
+    // hide the menu when it has no visible menu-items
+    this.menuDropdown.style.display = (visibleCount > 0) ? "inline-block" : "none";
   }
 
   // Add a menu item at the end of this dropdown menu
@@ -37,7 +45,7 @@ class DropDownMenu {
   // or visibility (use menuitem.style.display = "none"/"inline-block")
   addMenuItem(title, callback) {
     var button = Route._createDiv("run-command-button", "...");
-    if(typeof title === typeof "xyz")
+    if(typeof title === "string")
       button.innerHTML = title;
     else
       button.verifyCallback = title;
@@ -47,7 +55,7 @@ class DropDownMenu {
       // this shows the menu button as soon as it has a menu-item
       // don't mess with the toplevel menu, as that has separate
       // css code which will otherwise be overruled
-      this.menuDropdown.style.display = "inline-block";
+      this.verifyAll();
     }
   }
 

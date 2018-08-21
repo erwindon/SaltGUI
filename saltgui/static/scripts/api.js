@@ -6,38 +6,17 @@ class API {
     this._callMethod = this._callMethod.bind(this);
     this._fetch = this._fetch.bind(this);
     this._getRunParams = this._getRunParams.bind(this);
-    this._manualRunMenuHtmlDoc0Run = this._manualRunMenuHtmlDoc0Run.bind(this);
-    this._manualRunMenuHtmlDoc1Prepare = this._manualRunMenuHtmlDoc1Prepare.bind(this);
-    this._manualRunMenuHtmlDoc1Run = this._manualRunMenuHtmlDoc1Run.bind(this);
-    this._manualRunMenuHtmlDoc2Prepare = this._manualRunMenuHtmlDoc2Prepare.bind(this);
-    this._manualRunMenuHtmlDoc2Run = this._manualRunMenuHtmlDoc2Run.bind(this);
-    this._manualRunMenuHtmlDoc3Prepare = this._manualRunMenuHtmlDoc3Prepare.bind(this);
-    this._manualRunMenuHtmlDoc3Run = this._manualRunMenuHtmlDoc3Run.bind(this);
     this._manualRunMenuSysDocPrepare = this._manualRunMenuSysDocPrepare.bind(this);
     this._manualRunMenuSysDocRun = this._manualRunMenuSysDocRun.bind(this);
     this._onRun = this._onRun.bind(this);
     this._onRunReturn = this._onRunReturn.bind(this);
     this._toggleManualRun = this._toggleManualRun.bind(this);
 
-    this.documentationUrl = "https://docs.saltstack.com/en/latest/ref/";
-    this.externalLink = "&nbsp;<img src='static/images/externallink.png' style='width:12px'>";
-
     var cmdbox = document.querySelector(".run-command #cmdbox");
-    var menu = new DropDownMenu(cmdbox);
-    menu.addMenuItem(
+    this.menu = new DropDownMenu(cmdbox);
+    this.menu.addMenuItem(
       this._manualRunMenuSysDocPrepare,
       this._manualRunMenuSysDocRun);
-    menu.addMenuItem("Module&nbsp;reference" + this.externalLink,
-      this._manualRunMenuHtmlDoc0Run);
-    menu.addMenuItem(
-      this._manualRunMenuHtmlDoc1Prepare,
-      this._manualRunMenuHtmlDoc1Run);
-    menu.addMenuItem(
-      this._manualRunMenuHtmlDoc2Prepare,
-      this._manualRunMenuHtmlDoc2Run);
-    menu.addMenuItem(
-      this._manualRunMenuHtmlDoc3Prepare,
-      this._manualRunMenuHtmlDoc3Run);
 
     this._registerEventListeners();
   }
@@ -63,42 +42,20 @@ class API {
       } );
     document.querySelector(".run-command input[type='submit']")
       .addEventListener('click', this._onRun);
-  }
 
-  _getKeywordFragments() {
-    var command = document.querySelector(".run-command #command").value;
-    // remove the command arguments
-    command = command.trim().replace(/ .*/, "");
-    // remove trailing ".", typically found between categoryname and function name
-    // but user wants to lookup the commands from the category
-    command = command.trim().replace(/[.]*$/, "");
-    var cmd = command.split(".");
-
-    // re-organize the command with its formal category
-    switch(cmd[0]){
-    case "":
-      cmd = ["modules"];
-      break;
-    case "runners":
-      // we recognize this category
-      break;
-    case "wheel":
-      // we recognize this category
-      break;
-    case "modules":
-      // we recognize this category
-      break;
-    default:
-      // all unknown categories are actually modules
-      cmd.unshift("modules");
-    }
-
-    if(cmd.length >= 2 && cmd[0] === "modules" && cmd[1] === "sys") {
-      // e.g. sys.doc actually is available as sysmod.doc on website
-      cmd[1] = "sysmod";
-    }
-
-    return cmd;
+    // keydown is too early, keypress also does not work
+    document.querySelector("#command")
+      .addEventListener('keyup', this.menu.verifyAll);
+    // cut/paste do not work everywhere
+    document.querySelector("#command")
+      .addEventListener('cut', this.menu.verifyAll);
+    document.querySelector("#command")
+      .addEventListener('paste', this.menu.verifyAll);
+    // blur/focus should not be needed but are a valueable fallback
+    document.querySelector("#command")
+      .addEventListener('blur', this.menu.verifyAll);
+    document.querySelector("#command")
+      .addEventListener('focus', this.menu.verifyAll);
   }
 
   _onRun() {
@@ -116,8 +73,7 @@ class API {
     button.disabled = true;
     output.innerHTML = "Loading...";
 
-    this._getRunParams(target, command)
-      .then(this._onRunReturn, this._onRunReturn);
+    func.then(this._onRunReturn, this._onRunReturn);
   }
 
   _onRunReturn(data) {
@@ -209,22 +165,31 @@ class API {
     var command = document.querySelector(".run-command #command").value;
     // remove the command arguments
     command = command.trim().replace(/ .*/, "");
-    if(!command) {
-      menuitem.innerText = "Run 'sys.doc' (slow) on " + target;
+    command = command.trim().replace(/[.]*$/, "");
+    if(!command.match(/^[a-z.]*$/i)) {
+      // when it is not a command, don't treat it as a command
+      menuitem.style.display = "none";
+    } else if(!command) {
+      // this spot was reserved for `sys.doc` without parameters
+      // but that is far too slow for normal use
+      menuitem.style.display = "none";
     } else if(command === "runners" || command.startsWith("runners.")) {
       // actually 'command' is not passed, but we select that part of the actual result
-      // too complicated to explain that here
+      // because `runners.doc.runner` always returns all documentation for `runners'
       command = command.substring(8);
       if(command) command = " " + command;
       menuitem.innerText = "Run 'runners.doc.runner" + command + "'";
+      menuitem.style.display = "block";
     } else if(command === "wheel" || command.startsWith("wheel.")) {
       // actually 'command' is not passed, but we select that part of the actual result
-      // too complicated to explain that here
+      // because `runners.doc.wheel` always returns all documentation for `wheel'
       command = command.substring(6);
       if(command) command = " " + command;
       menuitem.innerText = "Run 'runners.doc.wheel" + command + "'";
+      menuitem.style.display = "block";
     } else {
       menuitem.innerText = "Run 'sys.doc " + command + "' on " + target;
+      menuitem.style.display = "block";
     }
   }
 
@@ -283,8 +248,11 @@ class API {
 
     // do not use the command-parser
     var command = document.querySelector(".run-command #command").value;
+    // remove arguments
     command = command.trim().replace(/ .*/, "");
-    // command can be empty here
+    // remove trailing dots
+    command = command.trim().replace(/[.]*$/, "");
+    // command can be empty here (but the gui prevents that)
 
     button.disabled = true;
     output.innerHTML = "Loading...";
@@ -316,69 +284,6 @@ class API {
             this._onRunReturn(arg); },
           this._onRunReturn);
     }
-  }
-
-  _manualRunMenuHtmlDoc0Run(menuitem) {
-    var url = this.documentationUrl;
-    window.open(url);
-  }
-
-  _manualRunMenuHtmlDoc1Prepare(menuitem) {
-    var cmd = this._getKeywordFragments();
-    if(cmd.length >= 1 && cmd[0] === "modules") {
-      // match the web page title
-      menuitem.innerHTML = "'execution' modules" + this.externalLink;
-      menuitem.style.display = "inline-block";
-    } else if(cmd.length >= 1) {
-      menuitem.innerHTML = "'" + cmd[0] + "' modules" + this.externalLink;
-      menuitem.style.display = "inline-block";
-    } else {
-      menuitem.innerText = "'XXX' modules (disabled)";
-      menuitem.style.display = "none";
-    }
-  }
-
-  _manualRunMenuHtmlDoc1Run(menuitem) {
-    var cmd = this._getKeywordFragments();
-    var url = this.documentationUrl + cmd[0] + "/all/index.html";
-    window.open(url);
-  }
-
-  _manualRunMenuHtmlDoc2Prepare(menuitem) {
-    var cmd = this._getKeywordFragments();
-    if(cmd.length >= 2) {
-      menuitem.innerHTML = "'" + cmd[0] + "." + cmd[1] + "' functions'" + this.externalLink;
-      menuitem.style.display = "inline-block";
-    } else {
-      menuitem.innerText = "'xxx.xxx' functions' (disabled)";
-      menuitem.style.display = "none";
-    }
-  }
-
-  _manualRunMenuHtmlDoc2Run(menuitem) {
-    var cmd = this._getKeywordFragments();
-    // e.g. "modules.test"
-    var url = this.documentationUrl + cmd[0] + "/all/salt." + cmd[0] + "." + cmd[1] + ".html";
-    window.open(url);
-  }
-
-  _manualRunMenuHtmlDoc3Prepare(menuitem) {
-    var cmd = this._getKeywordFragments();
-    if(cmd.length >= 3) {
-      menuitem.innerHTML = "'" + cmd[0] + "." + cmd[1] + "." + cmd[2] + "' function'" + this.externalLink;
-      menuitem.style.display = "inline-block";
-    } else {
-      menuitem.innerText = "'xxx.xxx.xxx' function' (disabled)";
-      menuitem.style.display = "none";
-    }
-  }
-
-  _manualRunMenuHtmlDoc3Run(menuitem) {
-    var cmd = this._getKeywordFragments();
-    // 3 and more (use only first 3)
-    // e.g. "modules.test.ping"
-    var url = this.documentationUrl + cmd[0] + "/all/salt." + cmd[0] + "." + cmd[1] + ".html#salt." + cmd[0] + "." + cmd[1] + "." + cmd[2];
-    window.open(url);
   }
 
   _toggleManualRun(evt) {
