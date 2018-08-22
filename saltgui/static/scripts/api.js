@@ -6,8 +6,8 @@ class API {
     this._callMethod = this._callMethod.bind(this);
     this._fetch = this._fetch.bind(this);
     this._getRunParams = this._getRunParams.bind(this);
-    this._manualRunMenuSysDocPrepare = window._manualRunMenuSysDocPrepare.bind(this);
-    this._manualRunMenuSysDocRun = window._manualRunMenuSysDocRun.bind(this);
+    this._manualRunMenuSysDocPrepare = Documentation._manualRunMenuSysDocPrepare.bind(this);
+    this._manualRunMenuSysDocRun = Documentation._manualRunMenuSysDocRun.bind(this);
     this._onRun = this._onRun.bind(this);
     this._onRunReturn = this._onRunReturn.bind(this);
     this._toggleManualRun = this._toggleManualRun.bind(this);
@@ -75,7 +75,7 @@ class API {
     func.then(
       arg => { this._onRunReturn(command, arg); },
       arg => { this._onRunReturn(command, arg); }
-      );
+    );
   }
 
   _onRunReturn(command, data) {
@@ -83,7 +83,7 @@ class API {
 
     let outputContainer = document.querySelector(".run-command pre");
 
-    window._addOutput(outputContainer, response, command);
+    Output.addOutput(outputContainer, response, command);
 
     let button = document.querySelector(".run-command input[type='submit']");
     button.disabled = false;

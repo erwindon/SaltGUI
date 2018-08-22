@@ -139,6 +139,7 @@ class PageRoute extends Route {
       if(job.Function === "wheel.key.list_all") continue;
       if(job.Function === "runner.jobs.list_job") continue;
       if(job.Function === "runner.jobs.list_jobs") continue;
+      if(job.Function === "sys.doc") continue;
 
       this._addJob(jobContainer, job);
       shown = shown + 1;
