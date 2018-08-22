@@ -5,8 +5,10 @@
 //    all other nodes are then ignored
 // B) state output
 //    TODO
-// C) other output
+// C) error output
 //    the response is formatted as text
+// D) other output
+//    the response is formatted as json text
 //
 // Additionally the following preparations may be needed:
 // 1) Output from WHEEL functions
