@@ -19,7 +19,7 @@ pre a.disabled:hover {
   text-decoration: none;
 }
 
-pre a {
+pre.output a {
   color: yellow;
   cursor: pointer;
 }

@@ -32,8 +32,8 @@ docker-compose --file docker/docker-compose.yml up -d
 npm run wait-for-docker
 
 # run the nightmare.js functional tests
-#export DEBUG=nightmare:*,electron:*
-#export NIGHTMARE_DEBUG=1
+export DEBUG=nightmare:*,electron:*
+export NIGHTMARE_DEBUG=1
 npm run test:functional
 
 set +e

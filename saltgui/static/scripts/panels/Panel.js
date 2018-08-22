@@ -586,7 +586,7 @@ export class Panel {
   }
 
   runFullCommand (pClickEvent, pTargetType, pTargetString, pCommandString) {
-    CommandBox.showManualRun(pClickEvent);
+    CommandBox.showManualRun(pClickEvent, this.api);
     const target = document.getElementById("target");
     const command = document.getElementById("command");
     const targetbox = document.getElementById("target-box");

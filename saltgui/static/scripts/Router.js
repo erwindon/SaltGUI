@@ -24,7 +24,7 @@ export class Router {
 
   constructor () {
     this.api = new API();
-    this.commandbox = new CommandBox(this.api);
+    this.commandbox = new CommandBox(this, this.api);
     this.currentPage = undefined;
     this.pages = [];
 
@@ -44,6 +44,15 @@ export class Router {
     this._registerPage(new TemplatesPage(this));
     this._registerPage(this.eventsPage = new EventsPage(this));
     this._registerPage(new OptionsPage(this));
+
+    // show template menu item if templates defined
+    const templatesText = Utils.getStorageItem("session", "templates", "");
+    if (templatesText) {
+      const item1 = document.getElementById("button-templates1");
+      item1.classList.remove("menu-item-hidden");
+      const item2 = document.getElementById("button-templates2");
+      item2.classList.remove("menu-item-hidden");
+    }
 
     this._registerRouterEventListeners();
 

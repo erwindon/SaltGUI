@@ -1,0 +1,15 @@
+Branch zzz-externaldoc
+("zzz" to move it to the bottom of the list)
+PoC for accessing Salt documentation from the SaltStack website.
+See https://docs.saltstack.com/en/latest/ref/
+
+PRO:
+* the online documentation is nicer to read
+
+CON:
+* documentation can already be requested
+* the external documentation may not be matching the current version that is in use
+  otoh: in systems with different minion versions, that may already be the case
+
+VERDICT:
+Keep until there is an actual request for it

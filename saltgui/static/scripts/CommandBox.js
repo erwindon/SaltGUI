@@ -10,13 +10,14 @@ import {Utils} from "./Utils.js";
 
 export class CommandBox {
 
-  constructor (pApi) {
+  constructor (pRouter, pApi) {
+    this.router = pRouter;
     this.api = pApi;
 
     const cmdbox = document.getElementById("cmd-box");
     this.cmdmenu = new DropDownMenu(cmdbox);
 
-    this.documentation = new Documentation(this);
+    this.documentation = new Documentation(this.router, this);
     this._registerCommandBoxEventListeners();
 
     RunType.createMenu();
@@ -83,11 +84,11 @@ export class CommandBox {
 
   _registerCommandBoxEventListeners () {
     document.getElementById("popup-run-command").
-      addEventListener("click", CommandBox._hideManualRun);
+      addEventListener("click", (pClickEvent) => CommandBox._hideManualRun(pClickEvent));
     document.getElementById("button-manual-run").
-      addEventListener("click", CommandBox.showManualRun);
+      addEventListener("click", (pClickEvent) => CommandBox.showManualRun(pClickEvent, this.api));
     document.getElementById("cmd-close-button").
-      addEventListener("click", CommandBox._hideManualRun);
+      addEventListener("click", (pClickEvent) => CommandBox._hideManualRun(pClickEvent));
 
     document.querySelector(".run-command input[type='submit']").
       addEventListener("click", () => {
@@ -199,7 +200,7 @@ export class CommandBox {
     button.disabled = false;
   }
 
-  static showManualRun (pClickEvent) {
+  static showManualRun (pClickEvent, pApi) {
     const manualRun = document.getElementById("popup-run-command");
     manualRun.style.display = "block";
 
@@ -251,6 +252,14 @@ export class CommandBox {
     CommandBox._populateTemplateMenu();
 
     pClickEvent.stopPropagation();
+
+    const localTestProviders = pApi.getLocalTestProviders();
+
+    localTestProviders.then((pData) => {
+      Documentation._handleLocalTestProviders(pData);
+    }, () => {
+      // VOID
+    });
   }
 
   // pEvent is:
