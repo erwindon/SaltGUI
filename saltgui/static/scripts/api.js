@@ -6,8 +6,8 @@ class API {
     this._callMethod = this._callMethod.bind(this);
     this._fetch = this._fetch.bind(this);
     this._getRunParams = this._getRunParams.bind(this);
-    this._manualRunMenuSysDocPrepare = this._manualRunMenuSysDocPrepare.bind(this);
-    this._manualRunMenuSysDocRun = this._manualRunMenuSysDocRun.bind(this);
+    this._manualRunMenuSysDocPrepare = window._manualRunMenuSysDocPrepare.bind(this);
+    this._manualRunMenuSysDocRun = window._manualRunMenuSysDocRun.bind(this);
     this._onRun = this._onRun.bind(this);
     this._onRunReturn = this._onRunReturn.bind(this);
     this._toggleManualRun = this._toggleManualRun.bind(this);
@@ -64,7 +64,6 @@ class API {
     var output = document.querySelector(".run-command pre");
 
     var target = document.querySelector(".run-command #target").value;
-    if(target === "") return;
     var command = document.querySelector(".run-command #command").value;
 
     var func = this._getRunParams(target, command);
@@ -73,217 +72,21 @@ class API {
     button.disabled = true;
     output.innerHTML = "Loading...";
 
-    func.then(this._onRunReturn, this._onRunReturn);
+    func.then(
+      arg => { this._onRunReturn(command, arg); },
+      arg => { this._onRunReturn(command, arg); }
+      );
   }
 
-  _onRunReturn(data) {
-    var response = data.return[0];
-    var hostnames = Object.keys(response).sort();
+  _onRunReturn(command, data) {
+    let response = data.return[0];
 
-    var outputContainer = document.querySelector(".run-command pre");
-    outputContainer.innerHTML = "";
+    let outputContainer = document.querySelector(".run-command pre");
 
-    for(let i = 0; i < hostnames.length; i++) {
-      let hostname = hostnames[i];
-      var output = response[hostname];
-      if(typeof output !== 'object') {
-        continue;
-      }
-      if(!output) {
-        // some commands do not have help-text
-        // e.g. wheel.key.get_key
-        continue;
-      }
-      let isSysDocOutput = true;
-      for(let key of Object.keys(output)) {
+    window._addOutput(outputContainer, response, command);
 
-        // e.g. for "test.rand_str"
-        if(output[key] === null)
-          continue;
-
-        if(typeof output[key] !== 'string') {
-          isSysDocOutput = false;
-          break;
-        }
-      }
-      if(!isSysDocOutput)
-        break;
-
-      // some commands do not exist anywhere
-      // prevent an empty display by still using
-      // the standard output form when that happens
-      var cnt = 0;
-
-      for(let key of Object.keys(output).sort()) {
-        let out = output[key];
-        if(out === null) continue;
-        // the output is already pre-ed
-        out = out.replace(/\n[ \t]*<[\/]?pre>[ \t]*\n/g, "\n");
-        // turn text into html
-        out = out.replace(/&/g, "&amp;");
-        out = out.replace(/</g, "&lt;");
-        out = out.replace(/>/g, "&gt;");
-        out = out.trimEnd();
-        outputContainer.innerHTML +=
-          `<span class='hostname'>${key}</span>:<br>` +
-          '<pre style="height: initial; overflow-y: initial;">' + out + '</pre>';
-        cnt += 1;
-      }
-
-      if(cnt) {
-        // sabotage any further output
-        hostnames = [];
-        break;
-      }
-    }
-
-    for(let i = 0; i < hostnames.length; i++) {
-      let hostname = hostnames[i];
-      let output = response[hostname];
-
-      if (typeof output === 'object') {
-        // when you do a state.apply for example you get a json response.
-        // let's format it nicely here
-        output = JSON.stringify(output, null, 2);
-      }
-      else if (typeof output === 'string') {
-        // Or when it is documentation, strip trailing whitespace
-        output = output.replace(/[ \r\n]+$/g, "");
-      }
-
-      outputContainer.innerHTML +=
-        `<span class='hostname'>${hostname}</span>: ${output}<br>`;
-    }
-
-    var button = document.querySelector(".run-command input[type='submit']");
+    let button = document.querySelector(".run-command input[type='submit']");
     button.disabled = false;
-  }
-
-  _manualRunMenuSysDocPrepare(menuitem) {
-    var target = document.querySelector(".run-command #target").value;
-    target = target ? "target" : "all minions";
-    var command = document.querySelector(".run-command #command").value;
-    // remove the command arguments
-    command = command.trim().replace(/ .*/, "");
-    command = command.trim().replace(/[.]*$/, "");
-    if(!command.match(/^[a-z.]*$/i)) {
-      // when it is not a command, don't treat it as a command
-      menuitem.style.display = "none";
-    } else if(!command) {
-      // this spot was reserved for `sys.doc` without parameters
-      // but that is far too slow for normal use
-      menuitem.style.display = "none";
-    } else if(command === "runners" || command.startsWith("runners.")) {
-      // actually 'command' is not passed, but we select that part of the actual result
-      // because `runners.doc.runner` always returns all documentation for `runners'
-      command = command.substring(8);
-      if(command) command = " " + command;
-      menuitem.innerText = "Run 'runners.doc.runner" + command + "'";
-      menuitem.style.display = "block";
-    } else if(command === "wheel" || command.startsWith("wheel.")) {
-      // actually 'command' is not passed, but we select that part of the actual result
-      // because `runners.doc.wheel` always returns all documentation for `wheel'
-      command = command.substring(6);
-      if(command) command = " " + command;
-      menuitem.innerText = "Run 'runners.doc.wheel" + command + "'";
-      menuitem.style.display = "block";
-    } else {
-      menuitem.innerText = "Run 'sys.doc " + command + "' on " + target;
-      menuitem.style.display = "block";
-    }
-  }
-
-  _fixDocuReturn(response, visualKey, filterKey) {
-    if(!response || typeof response !== "object") {
-      // strange --> don't try to fix anything
-      return;
-    }
-
-    let foundDocu = false;
-    for(let hostname of Object.keys(response)) {
-      if(typeof response[hostname] !== "object") {
-        // make sure it is an object (instead of e.g. "false" for an offline minion)
-        delete response[hostname];
-        continue;
-      }
-
-      let hostResponse = response[hostname];
-      for(let key of Object.keys(hostResponse)) {
-
-        // an exact match is great
-        if(key === filterKey) continue;
-
-        // a true prefix is also ok
-        if(!filterKey || key.startsWith(filterKey + ".")) continue;
-
-        delete hostResponse[key];
-      }
-
-      // no documentation present (or left) on this minion?
-      // then discard the result of this minion
-      if(Object.keys(hostResponse).length === 0) {
-        delete response[hostname];
-        continue;
-      }
-
-      foundDocu = true;
-    }
-
-    // prepare a dummy response when no documentation could be found
-    // otherwise leave all documentation responses
-    if(!foundDocu) {
-      response[visualKey] = "no documentation found";
-    }
-  }
-
-  _manualRunMenuSysDocRun() {
-    var button = document.querySelector(".run-command input[type='submit']");
-    if(button.disabled) return;
-    var output = document.querySelector(".run-command pre");
-
-    var target = document.querySelector(".run-command #target").value;
-    // the help text is taken from the first minion that answers
-    // when no target is selectes, just ask all minions
-    if(target === "") target = "*";
-
-    // do not use the command-parser
-    var command = document.querySelector(".run-command #command").value;
-    // remove arguments
-    command = command.trim().replace(/ .*/, "");
-    // remove trailing dots
-    command = command.trim().replace(/[.]*$/, "");
-    // command can be empty here (but the gui prevents that)
-
-    button.disabled = true;
-    output.innerHTML = "Loading...";
-
-    if(command === "runners" || command.startsWith("runners.")) {
-      command = command.substring(8);
-      this._getRunParams(target, "runners.doc.runner")
-        .then(
-          arg => {
-            arg.return[0] = {"master": arg.return[0]};
-            this._fixDocuReturn(arg.return[0], "runners." + command, command);
-            this._onRunReturn(arg); },
-          this._onRunReturn);
-    } else if(command === "wheel" || command.startsWith("wheel.")) {
-      command = command.substring(6);
-      this._getRunParams(target, "runners.doc.wheel")
-        .then(
-          arg => {
-            arg.return[0] = {"master": arg.return[0]};
-            this._fixDocuReturn(arg.return[0], "wheel." + command, command);
-            this._onRunReturn(arg); },
-          this._onRunReturn);
-    } else {
-      // regular command
-      this._getRunParams(target, "sys.doc " + command)
-        .then(
-          arg => {
-            this._fixDocuReturn(arg.return[0], command, command);
-            this._onRunReturn(arg); },
-          this._onRunReturn);
-    }
   }
 
   _toggleManualRun(evt) {
@@ -375,11 +178,6 @@ class API {
 
     this._showError("");
 
-    if(target === "") {
-      this._showError("'Target' field cannot be empty");
-      return null;
-    }
-
     if(toRun === "") {
       this._showError("'Command' field cannot be empty");
       return null;
@@ -407,6 +205,15 @@ class API {
 
     if(typeof functionToRun != "string") {
       this._showError("First (unnamed) parameter is the function name, it must be a string, not a " + typeof functionToRun);
+      return null;
+    }
+
+    // RUNNERS commands do not have a target (MASTER is the target)
+    // WHEEL commands also do not have a target
+    // but we use the TARGET value to form the usually required MATCH parameter
+    // therefore for WHEEL commands it is still required
+    if(target === "" && functionToRun !== "runners" && !functionToRun.startsWith("runners.")) {
+      this._showError("'Target' field cannot be empty");
       return null;
     }
 

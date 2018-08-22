@@ -1,6 +1,6 @@
 // Function to parse a commandline
 // The line is broken into individual tokens
-// Each token that is recognized a JS type will get its proper type
+// Each token that is recognized as a JS type will get that type
 // Otherwise the token is considered to be a string
 // name-value pairs in the form "name=value" are added to the 'params' dictionary
 // other parameters are added to the 'args' array
