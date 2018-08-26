@@ -12,8 +12,10 @@ class Documentation {
     // remove the command arguments
     command = command.trim().replace(/ .*/, "");
     command = command.trim().replace(/[.]*$/, "");
-    if(!command.match(/^[a-z.]*$/i)) {
-      // when it is not a command, don't treat it as a command
+    if(!command.match(/^[a-z_][a-z0-9_.]*$/i)) {
+      // When it is not a command, don't treat it as a command.
+      // This RE still allows some illegal command formats, but
+      // that is something that sys.doc/runners.doc can handle.
       menuitem.style.display = "none";
     } else if(!command) {
       // this spot was reserved for `sys.doc` without parameters
