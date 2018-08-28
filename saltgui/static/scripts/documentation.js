@@ -5,6 +5,13 @@ class Documentation {
   // formatting of the documentation is done as a regular output type
   // that is therefore in output.js
 
+  static addCommandMenuItems(api) {
+    Documentation.API = api;
+    api.menu.addMenuItem(
+      Documentation._manualRunMenuSysDocPrepare,
+      Documentation._manualRunMenuSysDocRun);
+  }
+
   static _manualRunMenuSysDocPrepare(menuitem) {
     var target = document.querySelector(".run-command #target").value;
     target = target ? "target" : "all minions";
@@ -78,9 +85,9 @@ class Documentation {
       dummyCommand = "sys.doc " + command;
     }
 
-    this._getRunParams(target, docCommand).then(
-      arg => { this._onRunReturn(dummyCommand, arg); },
-      arg => { this._onRunReturn(dummyCommand, arg); }
+    Documentation.API._getRunParams(target, docCommand).then(
+      arg => { Documentation.API._onRunReturn(dummyCommand, arg); },
+      arg => { Documentation.API._onRunReturn(dummyCommand, arg); }
     );
   }
 
