@@ -46,6 +46,8 @@ class Output {
   // empty values are allowed due to errors in the documentation
   static isDocumentationOutput(response) {
 
+    let result = false;
+
     for(let hostname of Object.keys(response)) {
 
       var output = response[hostname];
@@ -65,14 +67,17 @@ class Output {
         // e.g. for "test.rand_str"
         if(output[key] === null)
           continue;
+
         // but otherwise it must be a (documentation)string
         if(typeof output[key] !== 'string') {
           return false;
         }
+
+        result = true;
       }
     }
 
-    return true;
+    return result;
   }
 
   // documentation is requested from all targetted minions
@@ -246,3 +251,5 @@ class Output {
   }
 
 }
+
+module.exports = Output;

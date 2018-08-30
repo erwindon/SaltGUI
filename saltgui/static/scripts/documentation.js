@@ -92,3 +92,5 @@ class Documentation {
   }
 
 }
+
+module.exports = Documentation;
