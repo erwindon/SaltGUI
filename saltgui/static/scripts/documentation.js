@@ -93,4 +93,5 @@ class Documentation {
 
 }
 
-module.exports = Documentation;
+// for unit tests
+if(typeof module !== "undefined") module.exports = Documentation;

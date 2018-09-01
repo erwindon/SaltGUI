@@ -246,10 +246,11 @@ class Output {
       return;
     }
 
-    // nothing special? the it is normal output
+    // nothing special? then it is normal output
     Output.addNormalOutput(outputContainer, response);
   }
 
 }
 
-module.exports = Output;
+// for unit tests
+if(typeof module !== "undefined") module.exports = Output;
