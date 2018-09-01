@@ -13,9 +13,9 @@ class Documentation {
   }
 
   static _manualRunMenuSysDocPrepare(menuitem) {
-    var target = document.querySelector(".run-command #target").value;
+    let target = document.querySelector(".run-command #target").value;
     target = target ? "target" : "all minions";
-    var command = document.querySelector(".run-command #command").value;
+    let command = document.querySelector(".run-command #command").value;
     // remove the command arguments
     command = command.trim().replace(/ .*/, "");
     command = command.trim().replace(/[.]*$/, "");
@@ -49,17 +49,17 @@ class Documentation {
   }
 
   static _manualRunMenuSysDocRun() {
-    var button = document.querySelector(".run-command input[type='submit']");
+    let button = document.querySelector(".run-command input[type='submit']");
     if(button.disabled) return;
-    var output = document.querySelector(".run-command pre");
+    let output = document.querySelector(".run-command pre");
 
-    var target = document.querySelector(".run-command #target").value;
+    let target = document.querySelector(".run-command #target").value;
     // the help text is taken from the first minion that answers
     // when no target is selectes, just ask all minions
     if(target === "") target = "*";
 
     // do not use the command-parser
-    var command = document.querySelector(".run-command #command").value;
+    let command = document.querySelector(".run-command #command").value;
     // remove arguments
     command = command.trim().replace(/ .*/, "");
     // remove trailing dots

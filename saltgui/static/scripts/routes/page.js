@@ -207,6 +207,8 @@ class PageRoute extends Route {
     var command = document.querySelector("#command");
     target.value = targetString;
     command.value = commandString;
+    // the menu may become (in)visible due to content of command field
+    this.router.api.menu.verifyAll();
   }
 
   _runHighState(evt, hostname) {

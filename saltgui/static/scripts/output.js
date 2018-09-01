@@ -41,16 +41,37 @@ class Output {
   }
 
 
+  // test whether the returned data matches the requested data
+  static isDocuKeyMatch(key, filterKey) {
+
+    // no filter is always OK
+    if(!filterKey) return true;
+
+    // an exact match is great
+    if(key === filterKey) return true;
+
+    // a true prefix is also ok
+    if(key.startsWith(filterKey + ".")) return true;
+
+    // no match
+    return false;
+  }
+
+
   // we only treat output as documentation output when it sticks to strict rules
   // all minions must return strings
+  // and when its key matches the requested documentation
   // empty values are allowed due to errors in the documentation
-  static isDocumentationOutput(response) {
+  static isDocumentationOutput(response, command) {
 
     let result = false;
 
+    // reduce the search key to match the data in the response
+    command = Output.reduceFilterKey(command);
+
     for(let hostname of Object.keys(response)) {
 
-      var output = response[hostname];
+      let output = response[hostname];
 
       if(!output) {
         // some commands do not have help-text
@@ -65,20 +86,45 @@ class Output {
 
       for(let key of Object.keys(output)) {
         // e.g. for "test.rand_str"
-        if(output[key] === null)
+        if(output[key] === null) {
           continue;
+        }
 
         // but otherwise it must be a (documentation)string
         if(typeof output[key] !== 'string') {
           return false;
         }
 
-        result = true;
+        // is this what we were looking for?
+        if(Output.isDocuKeyMatch(key, command)) {
+          result = true;
+        }
       }
     }
 
     return result;
   }
+
+
+  // reduce the search key to match the data in the response
+  static reduceFilterKey(filterKey) {
+    if(filterKey === "wheel") {
+      return "";
+    }
+    if (filterKey.startsWith("wheel.")) {
+      return filterKey.substring(6);
+    }
+
+    if(filterKey === "runners") {
+      return "";
+    }
+    if (filterKey.startsWith("runners.")) {
+      return filterKey.substring(8);
+    }
+
+    return filterKey;
+  }
+
 
   // documentation is requested from all targetted minions
   // these all return roughly the same output
@@ -100,15 +146,7 @@ class Output {
     }
 
     // reduce the search key to match the data in the response
-    if(filterKey === "wheel") {
-      filterKey = "";
-    } else if (filterKey.startsWith("wheel.")) {
-      filterKey = filterKey.substring(6);
-    } else if(filterKey === "runners") {
-      filterKey = "";
-    } else if (filterKey.startsWith("runners.")) {
-      filterKey = filterKey.substring(8);
-    }
+    filterKey = Output.reduceFilterKey(filterKey);
 
     let selectedMinion = null;
     for(let hostname of Object.keys(response)) {
@@ -132,14 +170,11 @@ class Output {
       let hostResponse = response[hostname];
       for(let key of Object.keys(hostResponse)) {
 
-        // an exact match is great
-        if(key === filterKey) continue;
-
-        // a true prefix is also ok
-        if(!filterKey || key.startsWith(filterKey + ".")) continue;
-
-        // no match, ignore the whole entry
-        delete hostResponse[key];
+        // is this what we were looking for?
+        if(!Output.isDocuKeyMatch(key, filterKey)) {
+          // no match, ignore the whole entry
+          delete hostResponse[key];
+        }
       }
 
       // no documentation present (or left) on this minion?
@@ -176,14 +211,30 @@ class Output {
       for(let key of Object.keys(hostResponse).sort()) {
         let out = hostResponse[key];
         if(out === null) continue;
-        // the output is already pre-ed
-        out = out.replace(/\n[ \t]*<[\/]?pre>[ \t]*\n/g, "\n");
+        // internal links: remove the ".. rubric::" prefix
+        // e.g. in "sys.doc state.apply"
+        out = out.replace(/[.][.] rubric:: */g, "");
+        // internal links: remove prefixes like ":mod:" and ":py:func:"
+        // e.g. in "sys.doc state.apply"
+        out = out.replace(/(:[a-z_]*)*:`/g, "`");
+        // internal links: remove link indicators in highlighted text
+        // e.g. in "sys.doc state.apply"
+        out = out.replace(/[ \n]*<[^`]*>`/gm, "`");
         // turn text into html
+        // e.g. in "sys.doc cmd.run"
         out = out.replace(/&/g, "&amp;");
+        // turn text into html
+        // e.g. in "sys.doc state.template"
         out = out.replace(/</g, "&lt;");
+        // turn text into html
+        // e.g. in "sys.doc state.template"
         out = out.replace(/>/g, "&gt;");
         // replace ``......``
+        // e.g. in "sys.doc state.apply"
         out = out.replace(/``([^`]*)``/g, "<span style='background-color: #575757'>$1</span>");
+        // replace `......`
+        // e.g. in "sys.doc state.apply"
+        out = out.replace(/`([^`]*)`/g, "<span style='color: yellow'>$1</span>");
         out = out.trimEnd();
         outputContainer.innerHTML +=
           `<span class='hostname'>${key}</span>:<br>` +
@@ -238,10 +289,10 @@ class Output {
     response = Output.addVirtualMinion(response, command);
 
     // it might be documentation
-    let isDocumentationOutput = Output.isDocumentationOutput(response);
+    let commandArg = command.trim().replace(/^[a-z.]* */i, "");
+    let isDocumentationOutput = Output.isDocumentationOutput(response, commandArg);
     if(isDocumentationOutput) {
-      command = command.trim().replace(/^[a-z.]* */i, "");
-      Output.reduceDocumentationOutput(response, command, command);
+      Output.reduceDocumentationOutput(response, commandArg, commandArg);
       Output.addDocumentationOutput(outputContainer, response);
       return;
     }
