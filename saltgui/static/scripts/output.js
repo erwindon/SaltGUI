@@ -41,6 +41,26 @@ class Output {
   }
 
 
+  // reduce the search key to match the data in the response
+  static reduceFilterKey(filterKey) {
+    if(filterKey === "wheel") {
+      return "";
+    }
+    if (filterKey.startsWith("wheel.")) {
+      return filterKey.substring(6);
+    }
+
+    if(filterKey === "runners") {
+      return "";
+    }
+    if (filterKey.startsWith("runners.")) {
+      return filterKey.substring(8);
+    }
+
+    return filterKey;
+  }
+
+
   // test whether the returned data matches the requested data
   static isDocuKeyMatch(key, filterKey) {
 
@@ -106,26 +126,6 @@ class Output {
   }
 
 
-  // reduce the search key to match the data in the response
-  static reduceFilterKey(filterKey) {
-    if(filterKey === "wheel") {
-      return "";
-    }
-    if (filterKey.startsWith("wheel.")) {
-      return filterKey.substring(6);
-    }
-
-    if(filterKey === "runners") {
-      return "";
-    }
-    if (filterKey.startsWith("runners.")) {
-      return filterKey.substring(8);
-    }
-
-    return filterKey;
-  }
-
-
   // documentation is requested from all targetted minions
   // these all return roughly the same output
   // it is a big waste of screen lines to show the output for each minion
@@ -146,6 +146,7 @@ class Output {
     }
 
     // reduce the search key to match the data in the response
+    // i.e. remove the prefixes for "wheel" and "runners"
     filterKey = Output.reduceFilterKey(filterKey);
 
     let selectedMinion = null;
@@ -159,7 +160,7 @@ class Output {
 
       // make sure it is an object (instead of e.g. "false" for an offline minion)
       // when it is not, the whole entry is ignored
-      if(typeof response[hostname] !== "object") {
+      if(!response[hostname] || typeof response[hostname] !== "object") {
         delete response[hostname];
         continue;
       }
@@ -204,38 +205,51 @@ class Output {
 
   // add the output of a documentation command to the display
   static addDocumentationOutput(outputContainer, response) {
+
     // we expect no hostnames present
     // as it should have been reduced already
     for(let hostname of Object.keys(response)) {
+
       let hostResponse = response[hostname];
+
       for(let key of Object.keys(hostResponse).sort()) {
+
         let out = hostResponse[key];
         if(out === null) continue;
+        out = out.trimEnd();
+
         // internal links: remove the ".. rubric::" prefix
         // e.g. in "sys.doc state.apply"
         out = out.replace(/[.][.] rubric:: */g, "");
+
         // internal links: remove prefixes like ":mod:" and ":py:func:"
         // e.g. in "sys.doc state.apply"
         out = out.replace(/(:[a-z_]*)*:`/g, "`");
+
         // internal links: remove link indicators in highlighted text
         // e.g. in "sys.doc state.apply"
         out = out.replace(/[ \n]*<[^`]*>`/gm, "`");
+
         // turn text into html
         // e.g. in "sys.doc cmd.run"
         out = out.replace(/&/g, "&amp;");
+
         // turn text into html
         // e.g. in "sys.doc state.template"
         out = out.replace(/</g, "&lt;");
+
         // turn text into html
         // e.g. in "sys.doc state.template"
         out = out.replace(/>/g, "&gt;");
+
         // replace ``......``
         // e.g. in "sys.doc state.apply"
         out = out.replace(/``([^`]*)``/g, "<span style='background-color: #575757'>$1</span>");
+
         // replace `......`
         // e.g. in "sys.doc state.apply"
         out = out.replace(/`([^`]*)`/g, "<span style='color: yellow'>$1</span>");
-        out = out.trimEnd();
+
         outputContainer.innerHTML +=
           `<span class='hostname'>${key}</span>:<br>` +
           '<pre style="height: initial; overflow-y: initial;">' + out + '</pre>';
