@@ -10,7 +10,7 @@ require('../../saltgui/static/scripts/parsecmdline');
 describe('Unittests for parsecmdline.js', function() {
 
   it('test parseCommandLine', done => {
-    let args = [], params = {};
+    let args = [], params = {}, result;
 
     // GENERAL ERROR HANDLING
 

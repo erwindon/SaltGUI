@@ -10,9 +10,10 @@ require('../../saltgui/static/scripts/utils');
 describe('Unittests for utils.js', function() {
   
   it('test elapsedToString with valid values', done => {
-    var now = new Date();
-    var result = window.elapsedToString(now);
+    let now = new Date();
+    let result;
 
+    result = window.elapsedToString(now);
     assert.equal(result, "A few moments ago");
 
     now.setSeconds(now.getSeconds() - 110);
@@ -47,7 +48,8 @@ describe('Unittests for utils.js', function() {
   });
 
   it('test elapsedToString with invalid values', done => {
-    var now = new Date();
+    let now = new Date();
+    let result;
 
     // a time in the future?
     now.setSeconds(now.getSeconds() + 110);
