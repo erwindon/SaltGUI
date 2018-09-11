@@ -8,11 +8,21 @@ class DropDownMenu {
 
     this.menuDropdown = Route._createDiv("run-command-button", "");
     var menuButton;
-    if(element.id === "header") {
+
+    switch (element.id) {
+    case "header":
       // 8801 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
       menuButton = Route._createDiv("menu-dropdown", "&#8801;");
       this.menuDropdown.classList.add("hamburger");
-    } else {
+      break;
+    case "cmdbox":
+      // 128214 = A BOOK
+      menuButton = Route._createDiv("menu-dropdown", "&#128214;");
+      // hide the menu until it receives menu-items
+      this.verifyAll();
+      break;
+
+    default:
       // 9658 = BLACK RIGHT-POINTING POINTER
       menuButton = Route._createDiv("menu-dropdown", "&#9658;");
       // hide the menu until it receives menu-items
