@@ -40,6 +40,20 @@ class API {
     document.querySelector(".run-command input[type='submit']")
       .addEventListener('click', this._onRun);
 
+    // keydown is too early, keypress also does not work
+    document.querySelector("#command")
+      .addEventListener('keyup', this.menu.verifyAll);
+    // cut/paste do not work everywhere
+    document.querySelector("#command")
+      .addEventListener('cut', this.menu.verifyAll);
+    document.querySelector("#command")
+      .addEventListener('paste', this.menu.verifyAll);
+    // blur/focus should not be needed but are a valueable fallback
+    document.querySelector("#command")
+      .addEventListener('blur', this.menu.verifyAll);
+    document.querySelector("#command")
+      .addEventListener('focus', this.menu.verifyAll);
+
     RunType._registerEventListeners();
   }
 

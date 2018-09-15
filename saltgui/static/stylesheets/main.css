@@ -219,11 +219,6 @@ input[type='submit']:active:not([disabled]) {
   box-shadow: 0 3px 1px rgba(33, 33, 33, 0.2);
 }
 
-#login-form input,
-#login-form select {
-  display: block;
-}
-
 *:focus {
   outline: none;
 }
