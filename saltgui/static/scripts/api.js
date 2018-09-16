@@ -115,7 +115,7 @@ class API {
     document.body.style["overflow-y"] = "scroll";
 
     // reset to default, so that its value is initially hidden
-    RunType._setRunTypeDefault();
+    RunType.setRunTypeDefault();
 
     // test whether the command may have caused an update to the list
     // the user may have altered the text after running the command, just ignore that
@@ -257,22 +257,17 @@ class API {
       if(args.length !== 0) params.arg = args;
     }
 
-    var jobRunType = document.querySelector(".jobRunType");
-    if(params.client === "local" && jobRunType.innerText === "async") {
+    let runType = RunType.getRunType();
+    if(params.client === "local" && runType === "async") {
       params.client = "local_async";
       // return looks like:
       // { "jid": "20180718173942195461", "minions": [ ... ] }
     }
-    else if(params.client === "local" && jobRunType.innerText === "batch") {
+    else if(params.client === "local" && runType === "batch") {
       params.client = "local_batch";
-
-      var batchSize = document.querySelector(".batchSize");
-      params.batch = batchSize.innerText;
-
-      var batchWait = document.querySelector(".batchWait");
-      params.batch_wait = parseInt(batchWait.innerText);
-
-      // it returns the actual output in a group of batches
+      params.batch = RunType.getBatchSize();
+      params.batch_wait = RunType.getBatchWait();
+      // it returns the actual output in a list of batches
     }
 
     return this._callMethod("POST", "/", params);

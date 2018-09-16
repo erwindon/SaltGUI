@@ -4,6 +4,8 @@ class DropDownMenu {
   // The visual clue for the menu is added to the given element
   constructor(element) {
 
+    this.callback= this.callback.bind(this);
+    this.setValue= this.setValue.bind(this);
     this.verifyAll = this.verifyAll.bind(this);
 
     this.menuDropdown = Route._createDiv("run-command-button", "");
@@ -54,13 +56,13 @@ class DropDownMenu {
   // function is called each time the menu opens
   // This allows dynamic menuitem titles (use menuitem.innerText/innerHTML)
   // or visibility (use menuitem.style.display = "none"/"inline-block")
-  addMenuItem(title, callback) {
+  addMenuItem(title, callback, value) {
     const button = Route._createDiv("run-command-button", "...");
     if(typeof title === "string")
       button.innerHTML = title;
     else
       button.verifyCallback = title;
-    button.addEventListener('click', evt => callback(evt));
+    button.addEventListener('click', evt => this.callback(evt, callback, value));
     this.menuDropdownContent.appendChild(button);
     if(this.menuDropdown.parentElement.id !== "header") {
       // this shows the menu button as soon as it has a menu-item
@@ -68,6 +70,19 @@ class DropDownMenu {
       // css code which will otherwise be overruled
       this.verifyAll();
     }
+  }
+
+  callback(evt, callback, value) {
+    this.setValue(value);
+    callback(evt);
+  }
+
+  getValue() {
+    return this._value;
+  }
+
+  setValue(value) {
+    this._value = value;
   }
 
   setTitle(title) {

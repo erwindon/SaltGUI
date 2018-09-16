@@ -1,58 +1,62 @@
 class RunType {
 
   static _registerEventListeners() {
+    let batchMenuRelJobs = [10, 25]; // in %
+    let batchMenuAbsJobs = [1, 2, 3, 5, 10];
+    let batchMenuWaitTimes = [0, 1, 2, 3, 5, 10, 30, 60];
+
     let runblock = document.getElementById("runblock");
     RunType.menuRunType = new DropDownMenu(runblock);
     RunType.menuRunType.setTitle("");
-    RunType.menuRunType.addMenuItem("Normal", this._setRunTypeNormal);
-    RunType.menuRunType.addMenuItem("Async", this._setRunTypeAsync);
-    RunType.menuRunType.addMenuItem("Batch", this._setRunTypeBatch);
+    RunType.menuRunType.addMenuItem("Normal", this._updateRunTypeText, "normal");
+    RunType.menuRunType.addMenuItem("Async", this._updateRunTypeText, "async");
+    RunType.menuRunType.addMenuItem("Batch", this._updateRunTypeText, "batch");
 
     RunType.menuBatchSize = new DropDownMenu(runblock);
     RunType.menuBatchSize.setTitle("Batch&nbsp;Size");
-    RunType.menuBatchSize.addMenuItem("10%", this._setRunTypeBatchSize10p);
-    RunType.menuBatchSize.addMenuItem("25%", this._setRunTypeBatchSize25p);
-    RunType.menuBatchSize.addMenuItem("1", this._setRunTypeBatchSize1);
-    RunType.menuBatchSize.addMenuItem("2", this._setRunTypeBatchSize2);
-    RunType.menuBatchSize.addMenuItem("3", this._setRunTypeBatchSize3);
-    RunType.menuBatchSize.addMenuItem("5", this._setRunTypeBatchSize5);
-    RunType.menuBatchSize.addMenuItem("10", this._setRunTypeBatchSize10);
+    for(let rel of batchMenuRelJobs) {
+      RunType.menuBatchSize.addMenuItem(rel.toString() + "%",
+        this._updateRunTypeText,
+        rel.toString() + "%");
+    }
+    for(let abs of batchMenuAbsJobs) {
+      RunType.menuBatchSize.addMenuItem(abs.toString(),
+        this._updateRunTypeText,
+        abs.toString());
+    }
     RunType.menuBatchSize.hideMenu();
 
+    // batch_wait was introduced in salt 2016.3
+    // we take no special actions for older systems
     RunType.menuBatchWait = new DropDownMenu(runblock);
     RunType.menuBatchWait.setTitle("Batch&nbsp;Wait");
-    RunType.menuBatchWait.addMenuItem("None", this._setRunTypeBatchWaitNone);
-    RunType.menuBatchWait.addMenuItem("1 second", this._setRunTypeBatchWait1);
-    RunType.menuBatchWait.addMenuItem("2 seconds", this._setRunTypeBatchWait2);
-    RunType.menuBatchWait.addMenuItem("3 seconds", this._setRunTypeBatchWait3);
-    RunType.menuBatchWait.addMenuItem("5 seconds", this._setRunTypeBatchWait5);
-    RunType.menuBatchWait.addMenuItem("10 seconds", this._setRunTypeBatchWait10);
-    RunType.menuBatchWait.addMenuItem("30 seconds", this._setRunTypeBatchWait30);
-    RunType.menuBatchWait.addMenuItem("60 seconds", this._setRunTypeBatchWait60);
+    for(let wait of batchMenuWaitTimes) {
+      if(wait === 0) {
+        RunType.menuBatchWait.addMenuItem("None",
+          this._updateRunTypeText,
+          wait);
+      } else if(wait === 1) {
+        RunType.menuBatchWait.addMenuItem(wait.toString() + " second",
+          this._updateRunTypeText,
+          wait);
+      } else {
+        RunType.menuBatchWait.addMenuItem(wait.toString() + " seconds",
+          this._updateRunTypeText,
+          wait);
+      }
+    }
     RunType.menuBatchWait.hideMenu();
-
-    let jobRunType = Route._createDiv("jobRunType", "normal");
-    jobRunType.style.display = "none";
-    runblock.appendChild(jobRunType);
-
-    let batchSize = Route._createDiv("batchSize", "");
-    batchSize.style.display = "none";
-    runblock.appendChild(batchSize);
-
-    let batchWait = Route._createDiv("batchWait", "");
-    batchWait.style.display = "none";
-    runblock.appendChild(batchWait);
   }
 
   static _updateRunTypeText() {
-    let jobRunType = document.querySelector(".jobRunType").innerText;
-    let batchWait = document.querySelector(".batchWait").innerText;
-    let batchSize = document.querySelector(".batchSize").innerText;
+    let runType = RunType.getRunType();
+    let batchSize = RunType.getBatchSize();
+    let batchWait = RunType.getBatchWait();
 
     // now that the menu is used show the menu title
     // this is much clearer when the Size/Wait menus are also shown
 
-    switch(jobRunType) {
+    switch(runType) {
     case "normal":
       RunType.menuRunType.setTitle("Normal");
       RunType.menuBatchSize.hideMenu();
@@ -68,9 +72,7 @@ class RunType {
       RunType.menuBatchSize.showMenu();
       RunType.menuBatchWait.showMenu();
 
-      if(batchSize === "") {
-        RunType.menuBatchSize.setTitle("Size 10%");
-      } else if(batchSize.endsWith("%")) {
+      if(batchSize.endsWith("%")) {
         RunType.menuBatchSize.setTitle("Size " + batchSize);
       } else if(batchSize === "1") {
         RunType.menuBatchSize.setTitle("Size " + batchSize + " job");
@@ -78,9 +80,7 @@ class RunType {
         RunType.menuBatchSize.setTitle("Size " + batchSize + " jobs");
       }
 
-      if(batchWait === "") {
-        RunType.menuBatchWait.setTitle("No wait");
-      } else if(batchWait == "0") {
+      if(batchWait == "0") {
         RunType.menuBatchWait.setTitle("No wait");
       } else if(batchWait == "1") {
         RunType.menuBatchWait.setTitle("Wait " + batchWait + " second");
@@ -92,133 +92,32 @@ class RunType {
     }
   }
 
-  static _setRunTypeBatchWaitNone() {
-    let batchWait = document.querySelector(".batchWait");
-    batchWait.innerText = "0";
+  static setRunTypeDefault() {
+    RunType.menuRunType.setValue("normal");
+    // do not reset the batchSize or batchWait
     RunType._updateRunTypeText();
-  }
-
-  static _setRunTypeBatchWait1() {
-    let batchWait = document.querySelector(".batchWait");
-    batchWait.innerText = "1";
-    RunType._updateRunTypeText();
-  }
-
-  static _setRunTypeBatchWait2() {
-    let batchWait = document.querySelector(".batchWait");
-    batchWait.innerText = "2";
-    RunType._updateRunTypeText();
-  }
-
-  static _setRunTypeBatchWait3() {
-    let batchWait = document.querySelector(".batchWait");
-    batchWait.innerText = "3";
-    RunType._updateRunTypeText();
-  }
-
-  static _setRunTypeBatchWait5() {
-    let batchWait = document.querySelector(".batchWait");
-    batchWait.innerText = "5";
-    RunType._updateRunTypeText();
-  }
-
-  static _setRunTypeBatchWait10() {
-    let batchWait = document.querySelector(".batchWait");
-    batchWait.innerText = "10";
-    RunType._updateRunTypeText();
-  }
-
-  static _setRunTypeBatchWait30() {
-    let batchWait = document.querySelector(".batchWait");
-    batchWait.innerText = "30";
-    RunType._updateRunTypeText();
-  }
-
-  static _setRunTypeBatchWait60() {
-    let batchWait = document.querySelector(".batchWait");
-    batchWait.innerText = "60";
-    RunType._updateRunTypeText();
-  }
-
-  static _setRunTypeDefault() {
-    RunType._setRunTypeNormal();
     // reset the title to the absolute minimum
     // so that the menu does not stand out in trivial situations
     RunType.menuRunType.setTitle("");
   }
 
-  static _setRunTypeNormal() {
-    let jobRunType = document.querySelector(".jobRunType");
-    jobRunType.innerText = "normal";
-    RunType._updateRunTypeText();
+  static getRunType() {
+    let runType = RunType.menuRunType.getValue();
+    if(runType === undefined || runType === "") return "normal";
+    return runType;
   }
 
-  static _setRunTypeAsync() {
-    let jobRunType = document.querySelector(".jobRunType");
-    jobRunType.innerText = "async";
-    RunType._updateRunTypeText();
+  static getBatchSize() {
+    let batchSize = RunType.menuBatchSize.getValue();
+    if(batchSize === undefined || batchSize === "") return "10%";
+    // returns a string, also for the regular batch sizes
+    return batchSize;
   }
 
-  static _setRunTypeBatch() {
-    let jobRunType = document.querySelector(".jobRunType");
-    jobRunType.innerText = "batch";
-    RunType._updateRunTypeText();
-  }
-
-  static _setRunTypeBatchSize1() {
-    let jobRunType = document.querySelector(".jobRunType");
-    jobRunType.innerText = "batch";
-    let batchSize = document.querySelector(".batchSize");
-    batchSize.innerText = "1";
-    RunType._updateRunTypeText();
-  }
-
-  static _setRunTypeBatchSize2() {
-    let jobRunType = document.querySelector(".jobRunType");
-    jobRunType.innerText = "batch";
-    let batchSize = document.querySelector(".batchSize");
-    batchSize.innerText = "2";
-    RunType._updateRunTypeText();
-  }
-
-  static _setRunTypeBatchSize3() {
-    let jobRunType = document.querySelector(".jobRunType");
-    jobRunType.innerText = "batch";
-    let batchSize = document.querySelector(".batchSize");
-    batchSize.innerText = "3";
-    RunType._updateRunTypeText();
-  }
-
-  static _setRunTypeBatchSize5() {
-    let jobRunType = document.querySelector(".jobRunType");
-    jobRunType.innerText = "batch";
-    let batchSize = document.querySelector(".batchSize");
-    batchSize.innerText = "5";
-    RunType._updateRunTypeText();
-  }
-
-  static _setRunTypeBatchSize10() {
-    let jobRunType = document.querySelector(".jobRunType");
-    jobRunType.innerText = "batch";
-    let batchSize = document.querySelector(".batchSize");
-    batchSize.innerText = "10";
-    RunType._updateRunTypeText();
-  }
-
-  static _setRunTypeBatchSize10p() {
-    let jobRunType = document.querySelector(".jobRunType");
-    jobRunType.innerText = "batch";
-    let batchSize = document.querySelector(".batchSize");
-    batchSize.innerText = "10%";
-    RunType._updateRunTypeText();
-  }
-
-  static _setRunTypeBatchSize25p() {
-    let jobRunType = document.querySelector(".jobRunType");
-    jobRunType.innerText = "batch";
-    let batchSize = document.querySelector(".batchSize");
-    batchSize.innerText = "25%";
-    RunType._updateRunTypeText();
+  static getBatchWait() {
+    let batchWait = RunType.menuBatchWait.getValue();
+    if(batchWait === undefined || batchWait === "") return 0;
+    return parseInt(batchWait);
   }
 
 }
