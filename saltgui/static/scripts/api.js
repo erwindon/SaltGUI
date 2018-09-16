@@ -78,7 +78,15 @@ class API {
   }
 
   _onRunReturn(command, data) {
-    const response = data.return[0];
+
+    // The data.return array may contain the answer from several batches
+    // combine these first
+    let response = { };
+    for(let batch of data.return) {
+      for(let host in batch) {
+        response[host] = batch[host];
+      }
+    }
 
     const outputContainer = document.querySelector(".run-command pre");
 
