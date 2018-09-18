@@ -46,7 +46,7 @@ describe('Funtional tests', function() {
     });
 
     it('we cannot login with false credentials', done => {
-      var selector = '.notice-wrapper';
+      let selector = '.notice-wrapper';
       browser
         .type('#username', 'sald')
         .type('#password', 'sald')
@@ -70,7 +70,7 @@ describe('Funtional tests', function() {
         .click('#login-submit')
         .wait( () => {
           // we wait here for the loginpage to be hidden
-          var loginpage = document.querySelector('#page_login');
+          let loginpage = document.querySelector('#page_login');
           return loginpage.style.display === 'none';
         })
         .end()
@@ -89,13 +89,13 @@ describe('Funtional tests', function() {
         .click('#login-submit')
         .wait( () => {
           // we wait here for the loginpage to be hidden
-          var loginpage = document.querySelector('#page_login');
+          let loginpage = document.querySelector('#page_login');
           return loginpage.style.display == 'none';
         })
         .click('#button_logout')
         .wait( () => {
           // we wait here for the loginpage to be shown
-          var loginpage = document.querySelector('#page_login');
+          let loginpage = document.querySelector('#page_login');
           console.log(loginpage.style.display);
           return loginpage.style.display === '';
         })
