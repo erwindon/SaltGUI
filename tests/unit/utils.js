@@ -10,7 +10,7 @@ require('../../saltgui/static/scripts/utils');
 describe('Unittests for utils.js', function() {
   
   it('test elapsedToString with valid values', done => {
-    let now = new Date();
+    const now = new Date();
     let result;
 
     result = window.elapsedToString(now);
@@ -48,7 +48,7 @@ describe('Unittests for utils.js', function() {
   });
 
   it('test elapsedToString with invalid values', done => {
-    let now = new Date();
+    const now = new Date();
     let result;
 
     // a time in the future?

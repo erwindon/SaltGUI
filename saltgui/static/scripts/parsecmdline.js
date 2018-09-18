@@ -41,7 +41,7 @@ window.parseCommandLine = function(toRun, args, params) {
     let firstSpaceChar = toRun.indexOf(" ");
     if(firstSpaceChar < 0)
       firstSpaceChar = toRun.length;
-    let firstEqualSign = toRun.indexOf("=");
+    const firstEqualSign = toRun.indexOf("=");
     if(firstEqualSign >= 0 && firstEqualSign < firstSpaceChar) {
       // we have the name of a named parameter
       name = toRun.substr(0, firstEqualSign);
@@ -81,7 +81,7 @@ window.parseCommandLine = function(toRun, args, params) {
         // parse what we have found so far
         // the string ends with a closing character
         // but that may not be enough, e.g. "{a:{}"
-        let s = toRun.substring(0, n + 1);
+        const s = toRun.substring(0, n + 1);
         try {
           value = JSON.parse(s);
         }

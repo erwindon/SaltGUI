@@ -38,8 +38,8 @@ class DropDownMenu {
   verifyAll() {
     if(!this.menuDropdownContent) return;
     let visibleCount = 0;
-    for(let chld of this.menuDropdownContent.children) {
-      let verifyCallback = chld.verifyCallback;
+    for(const chld of this.menuDropdownContent.children) {
+      const verifyCallback = chld.verifyCallback;
       if(verifyCallback) verifyCallback(chld);
       if(chld.style.display != "none") visibleCount++;
     }
@@ -54,7 +54,7 @@ class DropDownMenu {
   // This allows dynamic menuitem titles (use menuitem.innerText/innerHTML)
   // or visibility (use menuitem.style.display = "none"/"inline-block")
   addMenuItem(title, callback) {
-    let button = Route._createDiv("run-command-button", "...");
+    const button = Route._createDiv("run-command-button", "...");
     if(typeof title === "string")
       button.innerHTML = title;
     else

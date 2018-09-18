@@ -89,9 +89,9 @@ class Output {
     // reduce the search key to match the data in the response
     command = Output.reduceFilterKey(command);
 
-    for(let hostname of Object.keys(response)) {
+    for(const hostname of Object.keys(response)) {
 
-      let output = response[hostname];
+      const output = response[hostname];
 
       if(!output) {
         // some commands do not have help-text
@@ -104,7 +104,7 @@ class Output {
         return false;
       }
 
-      for(let key of Object.keys(output)) {
+      for(const key of Object.keys(output)) {
         // e.g. for "test.rand_str"
         if(output[key] === null) {
           continue;
@@ -150,7 +150,7 @@ class Output {
     filterKey = Output.reduceFilterKey(filterKey);
 
     let selectedMinion = null;
-    for(let hostname of Object.keys(response)) {
+    for(const hostname of Object.keys(response)) {
 
       // When we already found the documentation ignore all others
       if(selectedMinion) {
@@ -168,8 +168,8 @@ class Output {
       // make sure that the entry matches with the requested command or prefix
       // that's always the case for SYS.DOC output, but not for RUNNERS.DOC.RUNNER
       // and/or RUNNERS.DOC.WHEEL.
-      let hostResponse = response[hostname];
-      for(let key of Object.keys(hostResponse)) {
+      const hostResponse = response[hostname];
+      for(const key of Object.keys(hostResponse)) {
 
         // is this what we were looking for?
         if(!Output.isDocuKeyMatch(key, filterKey)) {
@@ -192,7 +192,7 @@ class Output {
 
     if(selectedMinion) {
       // basically rename the key
-      let savedDocumentation = response[selectedMinion];
+      const savedDocumentation = response[selectedMinion];
       delete response[selectedMinion];
       response[visualKey] = savedDocumentation;
     } else {
@@ -208,11 +208,11 @@ class Output {
 
     // we expect no hostnames present
     // as it should have been reduced already
-    for(let hostname of Object.keys(response)) {
+    for(const hostname of Object.keys(response)) {
 
-      let hostResponse = response[hostname];
+      const hostResponse = response[hostname];
 
-      for(let key of Object.keys(hostResponse).sort()) {
+      for(const key of Object.keys(hostResponse).sort()) {
 
         let out = hostResponse[key];
         if(out === null) continue;
@@ -262,7 +262,7 @@ class Output {
   // just format the returned objects
   static addNormalOutput(outputContainer, response) {
 
-    for(let hostname of Object.keys(response).sort()) {
+    for(const hostname of Object.keys(response).sort()) {
       let hostResponse = response[hostname];
 
       if (typeof hostResponse === 'object') {
@@ -303,8 +303,8 @@ class Output {
     response = Output.addVirtualMinion(response, command);
 
     // it might be documentation
-    let commandArg = command.trim().replace(/^[a-z.]* */i, "");
-    let isDocumentationOutput = Output.isDocumentationOutput(response, commandArg);
+    const commandArg = command.trim().replace(/^[a-z.]* */i, "");
+    const isDocumentationOutput = Output.isDocumentationOutput(response, commandArg);
     if(isDocumentationOutput) {
       Output.reduceDocumentationOutput(response, commandArg, commandArg);
       Output.addDocumentationOutput(outputContainer, response);

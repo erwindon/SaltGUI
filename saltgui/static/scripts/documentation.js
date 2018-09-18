@@ -49,9 +49,9 @@ class Documentation {
   }
 
   static _manualRunMenuSysDocRun() {
-    let button = document.querySelector(".run-command input[type='submit']");
+    const button = document.querySelector(".run-command input[type='submit']");
     if(button.disabled) return;
-    let output = document.querySelector(".run-command pre");
+    const output = document.querySelector(".run-command pre");
 
     let target = document.querySelector(".run-command #target").value;
     // the help text is taken from the first minion that answers

@@ -16,7 +16,7 @@ class KeysRoute extends PageRoute {
   }
 
   onShow() {
-    let keys = this;
+    const keys = this;
     return new Promise(function(resolve, reject) {
       keys.resolvePromise = resolve;
       if(keys.keysLoaded && keys.jobsLoaded) resolve();
@@ -27,7 +27,7 @@ class KeysRoute extends PageRoute {
   }
 
   _updateKeys(data) {
-    let keys = data.return;
+    const keys = data.return;
 
     let list = this.getPageElement().querySelector('#minions');
     let hostnames = keys.minions.sort();
@@ -86,12 +86,12 @@ class KeysRoute extends PageRoute {
   _updateOfflineMinion(container, hostname) {
     super._updateOfflineMinion(container, hostname);
 
-    let element = document.getElementById(hostname);
+    const element = document.getElementById(hostname);
 
     // force same columns on all rows
     element.appendChild(Route._createDiv("os", ""));
 
-    let menu = new DropDownMenu(element);
+    const menu = new DropDownMenu(element);
     this._addMenuItemReject(menu, hostname, " include_accepted=true");
     this._addMenuItemDelete(menu, hostname, "");
   }
@@ -99,26 +99,26 @@ class KeysRoute extends PageRoute {
   _updateMinion(container, minion) {
     super._updateMinion(container, minion);
 
-    let element = document.getElementById(minion.hostname);
+    const element = document.getElementById(minion.hostname);
 
-    let menu = new DropDownMenu(element);
+    const menu = new DropDownMenu(element);
     this._addMenuItemReject(menu, minion.hostname, " include_accepted=true");
     this._addMenuItemDelete(menu, minion.hostname, "");
   }
 
   _addRejectedMinion(container, hostname) {
-    let element = this._getElement(container, hostname);
+    const element = this._getElement(container, hostname);
 
     element.appendChild(Route._createDiv("hostname", hostname));
 
-    let rejected = Route._createDiv("status", "rejected");
+    const rejected = Route._createDiv("status", "rejected");
     rejected.classList.add("rejected");
     element.appendChild(rejected);
 
     // force same columns on all rows
     element.appendChild(Route._createDiv("os", ""));
 
-    let menu = new DropDownMenu(element);
+    const menu = new DropDownMenu(element);
     this._addMenuItemDelete(menu, hostname, "");
     this._addMenuItemAccept(menu, hostname, " include_rejected=true");
 
@@ -126,18 +126,18 @@ class KeysRoute extends PageRoute {
   }
 
   _addDeniedMinion(container, hostname) {
-    let element = this._getElement(container, hostname);
+    const element = this._getElement(container, hostname);
 
     element.appendChild(Route._createDiv("hostname", hostname));
 
-    let denied = Route._createDiv("status", "denied");
+    const denied = Route._createDiv("status", "denied");
     denied.classList.add("denied");
     element.appendChild(denied);
 
     // force same columns on all rows
     element.appendChild(Route._createDiv("os", ""));
 
-    let menu = new DropDownMenu(element);
+    const menu = new DropDownMenu(element);
     this._addMenuItemAccept(menu, hostname, " include_denied=true");
     this._addMenuItemReject(menu, hostname, " include_denied=true");
     this._addMenuItemDelete(menu, hostname, "");
@@ -146,18 +146,18 @@ class KeysRoute extends PageRoute {
   }
 
   _addPreMinion(container, hostname) {
-    let element = this._getElement(container, hostname);
+    const element = this._getElement(container, hostname);
 
     element.appendChild(Route._createDiv("hostname", hostname));
 
-    let pre = Route._createDiv("status", "unaccepted");
+    const pre = Route._createDiv("status", "unaccepted");
     pre.classList.add("unaccepted");
     element.appendChild(pre);
 
     // force same columns on all rows
     element.appendChild(Route._createDiv("os", ""));
 
-    let menu = new DropDownMenu(element);
+    const menu = new DropDownMenu(element);
     this._addMenuItemAccept(menu, hostname, "");
     this._addMenuItemReject(menu, hostname, "");
     this._addMenuItemDelete(menu, hostname, "");

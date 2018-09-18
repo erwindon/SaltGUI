@@ -8,7 +8,7 @@ class JobRoute extends Route {
   }
 
   onShow() {
-    let job = this;
+    const job = this;
     return new Promise(function(resolve, reject) {
       job.resolvePromise = resolve;
       job.router.api.getJob(window.getQueryParam("id"))
@@ -17,19 +17,19 @@ class JobRoute extends Route {
   }
 
   _onJobData(data) {
-    let job = this;
-    let info = data.info[0];
+    const job = this;
+    const info = data.info[0];
     job.getPageElement().querySelector(".hosts").innerHTML = "";
 
     document.querySelector('#button_close_job').addEventListener('click', _ => {
       this.router.goTo("/");
     });
 
-    let container = this.getPageElement().querySelector(".job-info");
+    const container = this.getPageElement().querySelector(".job-info");
     container.querySelector('.function').innerHTML = info.Function;
     container.querySelector('.time').innerHTML = info.StartTime;
 
-    let hostnames = Object.keys(info.Result);
+    const hostnames = Object.keys(info.Result);
     hostnames.forEach(function(hostname) {
       
       // when you do a state.apply for example you get a json response.
@@ -46,11 +46,11 @@ class JobRoute extends Route {
   }
 
   _addHost(container, hostname, result) {
-    let host = createElement("div", "host", `<h1>${hostname}</h1>`);
+    const host = createElement("div", "host", `<h1>${hostname}</h1>`);
     host.addEventListener('click', this._onHostClick);
 
     if(typeof result === "string") {
-      let task = createElement("div", "task", "");
+      const task = createElement("div", "task", "");
       task.appendChild(createElement("div", "name", result));
       host.appendChild(task);
       container.appendChild(host);
@@ -60,8 +60,8 @@ class JobRoute extends Route {
     let hasFailedOnce = false;
 
     Object.keys(result).forEach(function(taskKey) {
-      let data = result[taskKey];
-      let task = createElement("div", "task", "");
+      const data = result[taskKey];
+      const task = createElement("div", "task", "");
       task.classList.add(data.result !== false ? "success" : "failure");
       if(data.result === false) hasFailedOnce = true;
 

@@ -16,7 +16,7 @@ class Router {
   }
 
   _registerEventListeners() {
-    let router = this;
+    const router = this;
     document.querySelector('.logo').addEventListener('click', _ => {
       if(window.location.pathname === "/login") return;
       router.goTo("/");
@@ -32,7 +32,7 @@ class Router {
     if(this.switchingRoute) return;
     if(window.location.pathname === path && this.currentRoute) return;
     for(let i = 0; i < this.routes.length; i++) {
-      let route = this.routes[i];
+      const route = this.routes[i];
       if(!route.getPath().test(path.split("?")[0])) continue;
 
       window.history.pushState({}, undefined, path);
@@ -42,18 +42,18 @@ class Router {
   }
 
   showRoute(route) {
-    let router = this;
+    const router = this;
     route.getPageElement().style.display = "";
 
     Array.from(document.querySelectorAll(".menu_item_active")).forEach(
       function (e){ e.classList.remove("menu_item_active"); }
     );
 
-    let elem = route.getMenuItemElement();
+    const elem = route.getMenuItemElement();
     if(elem) elem.classList.add("menu_item_active");
     router.switchingRoute = true;
 
-    let afterLoad = function() {
+    const afterLoad = function() {
       if(router.currentRoute !== undefined) {
         router.hideRoute(router.currentRoute);
       }

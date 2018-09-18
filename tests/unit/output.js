@@ -1,6 +1,6 @@
 const assert = require('chai').assert;
 
-let Output = require('../../saltgui/static/scripts/output');
+const Output = require('../../saltgui/static/scripts/output');
 
 describe('Unittests for output.js', function() {
 
