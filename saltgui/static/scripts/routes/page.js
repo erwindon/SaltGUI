@@ -202,7 +202,7 @@ class PageRoute extends Route {
   }
 
   _runCommand(evt, targetString, commandString) {
-    this.router.api._toggleManualRun(evt);
+    this.router.api._showManualRun(evt);
     var target = document.querySelector("#target");
     var command = document.querySelector("#command");
     target.value = targetString;

@@ -8,7 +8,8 @@ class API {
     this._getRunParams = this._getRunParams.bind(this);
     this._onRun = this._onRun.bind(this);
     this._onRunReturn = this._onRunReturn.bind(this);
-    this._toggleManualRun = this._toggleManualRun.bind(this);
+    this._showManualRun = this._showManualRun.bind(this);
+    this._hideManualRun = this._hideManualRun.bind(this);
 
     var cmdbox = document.querySelector(".run-command #cmdbox");
     this.menu = new DropDownMenu(cmdbox);
@@ -19,11 +20,11 @@ class API {
 
   _registerEventListeners() {
     document.querySelector("#popup_runcommand")
-      .addEventListener('click', this._toggleManualRun);
+      .addEventListener('click', this._hideManualRun);
     document.querySelector("#button_manualrun")
-      .addEventListener('click', this._toggleManualRun);
+      .addEventListener('click', this._showManualRun);
     document.querySelector("#button_close_cmd")
-      .addEventListener('click', this._toggleManualRun);
+      .addEventListener('click', this._hideManualRun);
     document.querySelector("#button_logout")
       .addEventListener('click', _ => {
         this._logout(this);
@@ -85,22 +86,32 @@ class API {
     button.disabled = false;
   }
 
-  _toggleManualRun(evt) {
-    var manualRun = document.querySelector("#popup_runcommand");
-    var isShowing = manualRun.style.display !== "none" && manualRun.style.display !== "";
+  _showManualRun(evt) {
+    let manualRun = document.querySelector("#popup_runcommand");
+    manualRun.style.display = "block";
 
+    document.body.style["overflow-y"] = "hidden";
+
+    evt.stopPropagation();
+  }
+
+  _hideManualRun(evt) {
     //Don't close if they click inside the window
-    if(isShowing && evt.target.className !== "popup" && evt.target.className !== "nearlyvisiblebutton") return;
-    manualRun.style.display = isShowing ? "none" : "block";
-    document.body.style["overflow-y"] = isShowing ? "scroll" : "hidden";
+    if(evt.target.className !== "popup" && evt.target.className !== "nearlyvisiblebutton") return;
+
+    let manualRun = document.querySelector("#popup_runcommand");
+    manualRun.style.display = "none";
+
+    document.body.style["overflow-y"] = "scroll";
 
     // test whether the command may have caused an update to the list
     // the user may have altered the text after running the command, just ignore that
-    var command = document.querySelector(".run-command #command").value;
-    var output = document.querySelector(".run-command pre").innerHTML;
-    if(isShowing && command.startsWith("wheel.key.") && output != "Waiting for command...") {
+    let command = document.querySelector(".run-command #command").value;
+    let output = document.querySelector(".run-command pre").innerHTML;
+    if(command.startsWith("wheel.key.") && output != "Waiting for command...") {
       location.reload();
     }
+
     evt.stopPropagation();
   }
 
