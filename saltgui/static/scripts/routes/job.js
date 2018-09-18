@@ -8,7 +8,7 @@ class JobRoute extends Route {
   }
 
   onShow() {
-    var job = this;
+    let job = this;
     return new Promise(function(resolve, reject) {
       job.resolvePromise = resolve;
       job.router.api.getJob(window.getQueryParam("id"))
@@ -17,24 +17,24 @@ class JobRoute extends Route {
   }
 
   _onJobData(data) {
-    var job = this;
-    var info = data.info[0];
+    let job = this;
+    let info = data.info[0];
     job.getPageElement().querySelector(".hosts").innerHTML = "";
 
     document.querySelector('#button_close_job').addEventListener('click', _ => {
       this.router.goTo("/");
     });
 
-    var container = this.getPageElement().querySelector(".job-info");
+    let container = this.getPageElement().querySelector(".job-info");
     container.querySelector('.function').innerHTML = info.Function;
     container.querySelector('.time').innerHTML = info.StartTime;
 
-    var hostnames = Object.keys(info.Result);
+    let hostnames = Object.keys(info.Result);
     hostnames.forEach(function(hostname) {
       
       // when you do a state.apply for example you get a json response.
       // let's format it nicely here
-      var result = info.Result[hostname].return;
+      let result = info.Result[hostname].return;
       if (typeof result === "object") {
         result = JSON.stringify(result, null, 2);
       } else {
@@ -46,22 +46,22 @@ class JobRoute extends Route {
   }
 
   _addHost(container, hostname, result) {
-    var host = createElement("div", "host", `<h1>${hostname}</h1>`);
+    let host = createElement("div", "host", `<h1>${hostname}</h1>`);
     host.addEventListener('click', this._onHostClick);
 
     if(typeof result === "string") {
-      var task = createElement("div", "task", "");
+      let task = createElement("div", "task", "");
       task.appendChild(createElement("div", "name", result));
       host.appendChild(task);
       container.appendChild(host);
       return;
     }
 
-    var hasFailedOnce = false;
+    let hasFailedOnce = false;
 
     Object.keys(result).forEach(function(taskKey) {
-      var data = result[taskKey];
-      var task = createElement("div", "task", "");
+      let data = result[taskKey];
+      let task = createElement("div", "task", "");
       task.classList.add(data.result !== false ? "success" : "failure");
       if(data.result === false) hasFailedOnce = true;
 

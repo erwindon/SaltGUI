@@ -14,7 +14,7 @@ class MinionsRoute extends PageRoute {
   }
 
   onShow() {
-    var minions = this;
+    let minions = this;
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
       if(minions.keysLoaded && minions.jobsLoaded) resolve();
@@ -25,12 +25,12 @@ class MinionsRoute extends PageRoute {
   }
 
   _updateKeys(data) {
-    var keys = data.return;
+    let keys = data.return;
 
-    var list = this.getPageElement().querySelector('#minions');
+    let list = this.getPageElement().querySelector('#minions');
 
-    var hostnames = keys.minions.sort();
-    for(var i = 0; i < hostnames.length; i++) {
+    let hostnames = keys.minions.sort();
+    for(let i = 0; i < hostnames.length; i++) {
       this._addMinion(list, hostnames[i]);
     }
 
@@ -47,8 +47,8 @@ class MinionsRoute extends PageRoute {
   _updateMinion(container, minion) {
     super._updateMinion(container, minion);
 
-    var element = document.getElementById(minion.hostname);
-    var menu = new DropDownMenu(element);
+    let element = document.getElementById(minion.hostname);
+    let menu = new DropDownMenu(element);
     this._addMenuItemSyncState(menu, minion.hostname);
   }
 

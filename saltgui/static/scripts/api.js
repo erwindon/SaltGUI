@@ -11,7 +11,7 @@ class API {
     this._showManualRun = this._showManualRun.bind(this);
     this._hideManualRun = this._hideManualRun.bind(this);
 
-    var cmdbox = document.querySelector(".run-command #cmdbox");
+    let cmdbox = document.querySelector(".run-command #cmdbox");
     this.menu = new DropDownMenu(cmdbox);
     Documentation.addCommandMenuItems(this);
 
@@ -56,14 +56,14 @@ class API {
   }
 
   _onRun() {
-    var button = document.querySelector(".run-command input[type='submit']");
+    let button = document.querySelector(".run-command input[type='submit']");
     if(button.disabled) return;
-    var output = document.querySelector(".run-command pre");
+    let output = document.querySelector(".run-command pre");
 
-    var target = document.querySelector(".run-command #target").value;
-    var command = document.querySelector(".run-command #command").value;
+    let target = document.querySelector(".run-command #target").value;
+    let command = document.querySelector(".run-command #command").value;
 
-    var func = this._getRunParams(target, command);
+    let func = this._getRunParams(target, command);
     if(func == null) return;
 
     button.disabled = true;
@@ -120,7 +120,7 @@ class API {
   }
 
   _logout(api) {
-    var params = {
+    let params = {
     };
 
     return api._callMethod("POST", "/logout", params).then(response => {
@@ -132,16 +132,16 @@ class API {
   }
 
   login(username, password) {
-    var api = this;
+    let api = this;
 
-    var params = {
+    let params = {
       username: username,
       password: password,
       eauth: "pam"
     };
 
     // overrule the eauth method when one is selected
-    var type = document.querySelector("#login-form #eauth");
+    let type = document.querySelector("#login-form #eauth");
     if(type.value !== "default") {
       params.eauth = type.value;
     }
@@ -173,7 +173,7 @@ class API {
   }
 
   _showError(errorMessage) {
-    var errLabel = document.querySelector("#cmd_error");
+    let errLabel = document.querySelector("#cmd_error");
     errLabel.innerText = errorMessage;
     if(errorMessage)
       errLabel.style.display = "block";
@@ -191,10 +191,10 @@ class API {
     }
 
     // collection for unnamed parameters
-    var args = [ ];
+    let args = [ ];
 
     // collection for named parameters
-    var params = { };
+    let params = { };
 
     let ret = window.parseCommandLine(toRun, args, params);
     if(ret !== null) {
@@ -208,7 +208,7 @@ class API {
       return null;
     }
 
-    var functionToRun = args.shift();
+    let functionToRun = args.shift();
 
     if(typeof functionToRun != "string") {
       this._showError("First (unnamed) parameter is the function name, it must be a string, not a " + typeof functionToRun);
@@ -248,10 +248,10 @@ class API {
   }
 
   _callMethod(method, route, params) {
-    var location = this.APIURL + route;
-    var token = window.sessionStorage.getItem("token");
+    let location = this.APIURL + route;
+    let token = window.sessionStorage.getItem("token");
 
-    var headers = {
+    let headers = {
       "Accept": "application/json",
       "X-Auth-Token": token !== null ? token : "",
       "Cache-Control": "no-cache"
@@ -261,10 +261,10 @@ class API {
   }
 
   _fetch(method, url, headers, params) {
-    var onFetchResponse = this._onFetchResponse;
+    let onFetchResponse = this._onFetchResponse;
     return new Promise(function(resolve, reject) {
 
-      var options = {
+      let options = {
         method: method,
         url: url,
         headers: headers
