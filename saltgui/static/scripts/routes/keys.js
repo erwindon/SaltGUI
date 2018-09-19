@@ -34,7 +34,7 @@ class KeysRoute extends PageRoute {
     for(let i = 0; i < hostnames.length; i++) {
       this._addMinion(list, hostnames[i]);
     }
-    if(hostnames.length == 0)
+    if(hostnames.length === 0)
       this._addNone(list);
 
     list = this.getPageElement().querySelector('#keys_denied');
@@ -42,7 +42,7 @@ class KeysRoute extends PageRoute {
     for(let i = 0; i < hostnames.length; i++) {
       this._addDeniedMinion(list, hostnames[i]);
     }
-    if(hostnames.length == 0)
+    if(hostnames.length === 0)
       this._addNone(list);
 
     list = this.getPageElement().querySelector('#keys_unaccepted');
@@ -50,7 +50,7 @@ class KeysRoute extends PageRoute {
     for(let i = 0; i < hostnames.length; i++) {
       this._addPreMinion(list, hostnames[i]);
     }
-    if(hostnames.length == 0)
+    if(hostnames.length === 0)
       this._addNone(list);
 
     list = this.getPageElement().querySelector('#keys_rejected');
@@ -58,7 +58,7 @@ class KeysRoute extends PageRoute {
     for(let i = 0; i < hostnames.length; i++) {
       this._addRejectedMinion(list, hostnames[i]);
     }
-    if(hostnames.length == 0)
+    if(hostnames.length === 0)
       this._addNone(list);
 
     this.keysLoaded = true;

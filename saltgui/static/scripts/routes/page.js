@@ -3,7 +3,7 @@ class PageRoute extends Route {
   constructor(path, name, page_selector, menuitem_selector) {
     super(path, name, page_selector, menuitem_selector);
 
-    if(PageRoute.hasMenu == undefined) {
+    if(PageRoute.hasMenu === undefined) {
       const header = document.getElementById("header");
       const menu = new DropDownMenu(header);
       menu.addMenuItem("minions", function(evt) {
@@ -43,7 +43,7 @@ class PageRoute extends Route {
   _getElement(container, id) {
     let element = document.getElementById(id);
 
-    if(element == null) {
+    if(element === null) {
       // minion not found on screen...
       // construct a basic element that can be updated
       element = document.createElement('li');
@@ -94,7 +94,7 @@ class PageRoute extends Route {
   _addMinion(container, hostname) {
 
     let element = document.getElementById(hostname);
-    if(element != null) {
+    if(element !== null) {
       // minion already on screen...
       return;
     }

@@ -107,7 +107,7 @@ window.parseCommandLine = function(toRun, args, params) {
       // when we are done, we'll see whether it actually is a number
       // or any of the known constants
       let str = "";
-      while(toRun.length > 0 && toRun[0] != ' ') {
+      while(toRun.length > 0 && toRun[0] !== ' ') {
         str += toRun[0];
         toRun = toRun.substring(1);
       }

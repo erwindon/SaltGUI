@@ -64,7 +64,7 @@ class API {
     const command = document.querySelector(".run-command #command").value;
 
     const func = this._getRunParams(target, command);
-    if(func == null) return;
+    if(func === null) return;
 
     button.disabled = true;
     output.innerHTML = "Loading...";
@@ -108,7 +108,7 @@ class API {
     // the user may have altered the text after running the command, just ignore that
     const command = document.querySelector(".run-command #command").value;
     const output = document.querySelector(".run-command pre").innerHTML;
-    if(command.startsWith("wheel.key.") && output != "Waiting for command...") {
+    if(command.startsWith("wheel.key.") && output !== "Waiting for command...") {
       location.reload();
     }
 
@@ -210,7 +210,7 @@ class API {
 
     const functionToRun = args.shift();
 
-    if(typeof functionToRun != "string") {
+    if(typeof functionToRun !== "string") {
       this._showError("First (unnamed) parameter is the function name, it must be a string, not a " + typeof functionToRun);
       return null;
     }
@@ -280,7 +280,7 @@ class API {
   }
 
   _onFetchResponse(response, resolve, reject) {
-    if(response.status == 401 && document.location.pathname != "/login") {
+    if(response.status === 401 && document.location.pathname !== "/login") {
       // sesion has expired
       // redirect to login screen
       window.sessionStorage.removeItem("token");
