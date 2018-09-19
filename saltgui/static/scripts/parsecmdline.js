@@ -36,12 +36,12 @@ window.parseCommandLine = function(toRun, args, params) {
 
   while(toRun.length > 0)
   {
-    var name = null;
+    let name = null;
 
-    var firstSpaceChar = toRun.indexOf(" ");
+    let firstSpaceChar = toRun.indexOf(" ");
     if(firstSpaceChar < 0)
       firstSpaceChar = toRun.length;
-    var firstEqualSign = toRun.indexOf("=");
+    const firstEqualSign = toRun.indexOf("=");
     if(firstEqualSign >= 0 && firstEqualSign < firstSpaceChar) {
       // we have the name of a named parameter
       name = toRun.substr(0, firstEqualSign);
@@ -53,8 +53,8 @@ window.parseCommandLine = function(toRun, args, params) {
 
     // Determine whether the JSON string starts with a known
     // character for a JSON type
-    var endChar = undefined;
-    var objType = undefined;
+    let endChar = undefined;
+    let objType = undefined;
     if(toRun[0] === '{') {
       endChar = '}';
       objType = "dictionary";
@@ -67,13 +67,13 @@ window.parseCommandLine = function(toRun, args, params) {
       objType = "double-quoted-string";
     }
 
-    var value;
+    let value;
     if(endChar && objType) {
       // The string starts with a character for a known JSON type
-      var p = 1;
+      let p = 1;
       while(true) {
         // Try until the next closing character
-        var n = toRun.indexOf(endChar, p);
+        let n = toRun.indexOf(endChar, p);
         if(n < 0) {
           return "No valid " + objType + " found";
         }
@@ -81,7 +81,7 @@ window.parseCommandLine = function(toRun, args, params) {
         // parse what we have found so far
         // the string ends with a closing character
         // but that may not be enough, e.g. "{a:{}"
-        var s = toRun.substring(0, n + 1);
+        const s = toRun.substring(0, n + 1);
         try {
           value = JSON.parse(s);
         }

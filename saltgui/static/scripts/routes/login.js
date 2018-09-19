@@ -13,7 +13,7 @@ class LoginRoute extends Route{
   }
 
   updateTypeColor() {
-    var typeItem = document.querySelector("#login-form #eauth");
+    const typeItem = document.querySelector("#login-form #eauth");
     // make it look like a hint
     if(typeItem.value === "default")
       typeItem.style.color = "gray";
@@ -23,7 +23,7 @@ class LoginRoute extends Route{
 
   onShow() {
 
-    var typeItem = document.querySelector("#login-form #eauth");
+    const typeItem = document.querySelector("#login-form #eauth");
 
     // restore login type
     let typeValue = localStorage.getItem('logintype');
@@ -36,7 +36,7 @@ class LoginRoute extends Route{
   }
   
   registerEventListeners() {
-    var submit = document.querySelector("#login-form");
+    const submit = document.querySelector("#login-form");
     submit.addEventListener('submit', this.onLogin);
   }
 
@@ -44,8 +44,8 @@ class LoginRoute extends Route{
     evt.preventDefault();
     if(this.loginPending) return; //Don't continue if waiting on a request
 
-    var username = document.querySelector("#username").value;
-    var password = document.querySelector("#password").value;
+    const username = document.querySelector("#username").value;
+    const password = document.querySelector("#password").value;
 
     this.toggleForm(false);
     this.router.api.login(username, password)
@@ -55,9 +55,9 @@ class LoginRoute extends Route{
   onLoginSuccess() {
     this.toggleForm(true);
 
-    var notice = document.querySelector('.notice-wrapper');
+    const notice = document.querySelector('.notice-wrapper');
 
-    var success = Route._createDiv("notice", "Please wait...");
+    const success = Route._createDiv("notice", "Please wait...");
     success.style.backgroundColor = "#4CAF50";
     notice.replaceChild(success, notice.firstChild);
 
@@ -75,9 +75,9 @@ class LoginRoute extends Route{
   onLoginFailure() {
     this.toggleForm(true);
 
-    var notice = document.querySelector('.notice-wrapper');
+    const notice = document.querySelector('.notice-wrapper');
 
-    var authFailed = Route._createDiv("notice", "Authentication failed");
+    const authFailed = Route._createDiv("notice", "Authentication failed");
     authFailed.style.backgroundColor = "#F44336";
 
     notice.replaceChild(authFailed, notice.firstChild);

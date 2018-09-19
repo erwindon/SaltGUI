@@ -11,7 +11,7 @@ class API {
     this._showManualRun = this._showManualRun.bind(this);
     this._hideManualRun = this._hideManualRun.bind(this);
 
-    var cmdbox = document.querySelector(".run-command #cmdbox");
+    const cmdbox = document.querySelector(".run-command #cmdbox");
     this.menu = new DropDownMenu(cmdbox);
     Documentation.addCommandMenuItems(this);
 
@@ -56,14 +56,14 @@ class API {
   }
 
   _onRun() {
-    var button = document.querySelector(".run-command input[type='submit']");
+    const button = document.querySelector(".run-command input[type='submit']");
     if(button.disabled) return;
-    var output = document.querySelector(".run-command pre");
+    const output = document.querySelector(".run-command pre");
 
-    var target = document.querySelector(".run-command #target").value;
-    var command = document.querySelector(".run-command #command").value;
+    const target = document.querySelector(".run-command #target").value;
+    const command = document.querySelector(".run-command #command").value;
 
-    var func = this._getRunParams(target, command);
+    const func = this._getRunParams(target, command);
     if(func == null) return;
 
     button.disabled = true;
@@ -76,18 +76,18 @@ class API {
   }
 
   _onRunReturn(command, data) {
-    let response = data.return[0];
+    const response = data.return[0];
 
-    let outputContainer = document.querySelector(".run-command pre");
+    const outputContainer = document.querySelector(".run-command pre");
 
     Output.addOutput(outputContainer, response, command);
 
-    let button = document.querySelector(".run-command input[type='submit']");
+    const button = document.querySelector(".run-command input[type='submit']");
     button.disabled = false;
   }
 
   _showManualRun(evt) {
-    let manualRun = document.querySelector("#popup_runcommand");
+    const manualRun = document.querySelector("#popup_runcommand");
     manualRun.style.display = "block";
 
     document.body.style["overflow-y"] = "hidden";
@@ -99,15 +99,15 @@ class API {
     //Don't close if they click inside the window
     if(evt.target.className !== "popup" && evt.target.className !== "nearlyvisiblebutton") return;
 
-    let manualRun = document.querySelector("#popup_runcommand");
+    const manualRun = document.querySelector("#popup_runcommand");
     manualRun.style.display = "none";
 
     document.body.style["overflow-y"] = "scroll";
 
     // test whether the command may have caused an update to the list
     // the user may have altered the text after running the command, just ignore that
-    let command = document.querySelector(".run-command #command").value;
-    let output = document.querySelector(".run-command pre").innerHTML;
+    const command = document.querySelector(".run-command #command").value;
+    const output = document.querySelector(".run-command pre").innerHTML;
     if(command.startsWith("wheel.key.") && output != "Waiting for command...") {
       location.reload();
     }
@@ -120,7 +120,7 @@ class API {
   }
 
   _logout(api) {
-    var params = {
+    const params = {
     };
 
     return api._callMethod("POST", "/logout", params).then(response => {
@@ -132,16 +132,16 @@ class API {
   }
 
   login(username, password) {
-    var api = this;
+    const api = this;
 
-    var params = {
+    const params = {
       username: username,
       password: password,
       eauth: "pam"
     };
 
     // overrule the eauth method when one is selected
-    var type = document.querySelector("#login-form #eauth");
+    const type = document.querySelector("#login-form #eauth");
     if(type.value !== "default") {
       params.eauth = type.value;
     }
@@ -173,7 +173,7 @@ class API {
   }
 
   _showError(errorMessage) {
-    var errLabel = document.querySelector("#cmd_error");
+    const errLabel = document.querySelector("#cmd_error");
     errLabel.innerText = errorMessage;
     if(errorMessage)
       errLabel.style.display = "block";
@@ -191,12 +191,12 @@ class API {
     }
 
     // collection for unnamed parameters
-    var args = [ ];
+    const args = [ ];
 
     // collection for named parameters
-    var params = { };
+    const params = { };
 
-    let ret = window.parseCommandLine(toRun, args, params);
+    const ret = window.parseCommandLine(toRun, args, params);
     if(ret !== null) {
       // that is an error message being returned
       this._showError(ret);
@@ -208,7 +208,7 @@ class API {
       return null;
     }
 
-    var functionToRun = args.shift();
+    const functionToRun = args.shift();
 
     if(typeof functionToRun != "string") {
       this._showError("First (unnamed) parameter is the function name, it must be a string, not a " + typeof functionToRun);
@@ -248,10 +248,10 @@ class API {
   }
 
   _callMethod(method, route, params) {
-    var location = this.APIURL + route;
-    var token = window.sessionStorage.getItem("token");
+    const location = this.APIURL + route;
+    const token = window.sessionStorage.getItem("token");
 
-    var headers = {
+    const headers = {
       "Accept": "application/json",
       "X-Auth-Token": token !== null ? token : "",
       "Cache-Control": "no-cache"
@@ -261,10 +261,10 @@ class API {
   }
 
   _fetch(method, url, headers, params) {
-    var onFetchResponse = this._onFetchResponse;
+    const onFetchResponse = this._onFetchResponse;
     return new Promise(function(resolve, reject) {
 
-      var options = {
+      const options = {
         method: method,
         url: url,
         headers: headers

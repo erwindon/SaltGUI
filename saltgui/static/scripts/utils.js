@@ -1,18 +1,18 @@
 window.elapsedToString = function(date) {
   try {
-    var secondsPassed = (new Date().getTime() / 1000) - (date.getTime() / 1000);
+    const secondsPassed = (new Date().getTime() / 1000) - (date.getTime() / 1000);
 
     if(secondsPassed < 0) return "Magic happened in the future";
     if(secondsPassed < 20) return "A few moments ago";
     if(secondsPassed < 120) return "A few minutes ago";
 
     if(secondsPassed < 60 * 60) {
-      var minutes = Math.round(secondsPassed / 60);
+      const minutes = Math.round(secondsPassed / 60);
       return minutes + " minute(s) ago";
     }
 
     if(secondsPassed < 60 * 60 * 24) {
-      var hours = Math.round(secondsPassed / 60 / 60);
+      const hours = Math.round(secondsPassed / 60 / 60);
       return hours + " hour(s) ago";
     }
 
@@ -21,7 +21,7 @@ window.elapsedToString = function(date) {
     }
 
     if(secondsPassed < 60 * 60 * 24 * 30) {
-      var days = Math.round(secondsPassed / 60 / 60 / 24);
+      const days = Math.round(secondsPassed / 60 / 60 / 24);
       return days + " days ago";
     }
 
@@ -34,17 +34,17 @@ window.elapsedToString = function(date) {
 };
 
 window.createElement = function(type, className, content) {
-  var element = document.createElement(type);
+  const element = document.createElement(type);
   element.classList.add(className);
   if(content !== "") element.innerHTML = content;
   return element;
 };
 
 window.getQueryParam = function(name) {
-  var vars = [], hash;
-  var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-  for(var i = 0; i < hashes.length; i++) {
-    hash = hashes[i].split('=');
+  const vars = [];
+  const hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+  for(let i = 0; i < hashes.length; i++) {
+    const hash = hashes[i].split('=');
     vars.push(hash[0]);
     if(hash[0] === name) return hash[1];
   }
@@ -52,7 +52,7 @@ window.getQueryParam = function(name) {
 };
 
 window.escape = function(input) {
-  var div = document.createElement('div');
+  const div = document.createElement('div');
   div.appendChild(document.createTextNode(input));
   return div.innerHTML;
 };
