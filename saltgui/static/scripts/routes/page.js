@@ -34,8 +34,7 @@ class PageRoute extends Route {
         this._updateOfflineMinion(list, hostnames[i]);
       } else {
         const minion = minions[hostnames[i]];
-        minion.hostname = hostnames[i];
-        this._updateMinion(list, minion);
+        this._updateMinion(list, minion, hostnames[i]);
       }
     }
   }
@@ -75,12 +74,12 @@ class PageRoute extends Route {
     element.appendChild(offline);
   }
 
-  _updateMinion(container, minion) {
+  _updateMinion(container, minion, hostname) {
     const ip = minion.fqdn_ip4;
 
-    const element = this._getElement(container, minion.hostname);
+    const element = this._getElement(container, hostname);
 
-    element.appendChild(Route._createDiv("hostname", minion.hostname));
+    element.appendChild(Route._createDiv("hostname", hostname));
 
     const address = Route._createDiv("status", ip);
     address.classList.add("address");

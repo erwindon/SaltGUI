@@ -44,12 +44,12 @@ class MinionsRoute extends PageRoute {
     }.bind(this));
   }
 
-  _updateMinion(container, minion) {
-    super._updateMinion(container, minion);
+  _updateMinion(container, minion, hostname) {
+    super._updateMinion(container, minion, hostname);
 
-    const element = document.getElementById(minion.hostname);
+    const element = document.getElementById(hostname);
     const menu = new DropDownMenu(element);
-    this._addMenuItemSyncState(menu, minion.hostname);
+    this._addMenuItemSyncState(menu, hostname);
   }
 
 }
