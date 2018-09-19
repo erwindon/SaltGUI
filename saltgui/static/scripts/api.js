@@ -81,9 +81,9 @@ class API {
 
     // The data.return array may contain the answer from several batches
     // combine these first
-    let response = { };
-    for(let batch of data.return) {
-      for(let host in batch) {
+    const response = { };
+    for(const batch of data.return) {
+      for(const host in batch) {
         response[host] = batch[host];
       }
     }
@@ -257,7 +257,7 @@ class API {
       if(args.length !== 0) params.arg = args;
     }
 
-    let runType = RunType.getRunType();
+    const runType = RunType.getRunType();
     if(params.client === "local" && runType === "async") {
       params.client = "local_async";
       // return looks like:

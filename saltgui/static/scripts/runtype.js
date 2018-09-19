@@ -1,11 +1,11 @@
 class RunType {
 
   static _registerEventListeners() {
-    let batchMenuRelJobs = [10, 25]; // in %
-    let batchMenuAbsJobs = [1, 2, 3, 5, 10];
-    let batchMenuWaitTimes = [0, 1, 2, 3, 5, 10, 30, 60];
+    const batchMenuRelJobs = [10, 25]; // in %
+    const batchMenuAbsJobs = [1, 2, 3, 5, 10];
+    const batchMenuWaitTimes = [0, 1, 2, 3, 5, 10, 30, 60];
 
-    let runblock = document.getElementById("runblock");
+    const runblock = document.getElementById("runblock");
     RunType.menuRunType = new DropDownMenu(runblock);
     RunType.menuRunType.setTitle("");
     RunType.menuRunType.addMenuItem("Normal", this._updateRunTypeText, "normal");
@@ -14,12 +14,12 @@ class RunType {
 
     RunType.menuBatchSize = new DropDownMenu(runblock);
     RunType.menuBatchSize.setTitle("Batch&nbsp;Size");
-    for(let rel of batchMenuRelJobs) {
+    for(const rel of batchMenuRelJobs) {
       RunType.menuBatchSize.addMenuItem(rel.toString() + "%",
         this._updateRunTypeText,
         rel.toString() + "%");
     }
-    for(let abs of batchMenuAbsJobs) {
+    for(const abs of batchMenuAbsJobs) {
       RunType.menuBatchSize.addMenuItem(abs.toString(),
         this._updateRunTypeText,
         abs.toString());
@@ -30,7 +30,7 @@ class RunType {
     // we take no special actions for older systems
     RunType.menuBatchWait = new DropDownMenu(runblock);
     RunType.menuBatchWait.setTitle("Batch&nbsp;Wait");
-    for(let wait of batchMenuWaitTimes) {
+    for(const wait of batchMenuWaitTimes) {
       if(wait === 0) {
         RunType.menuBatchWait.addMenuItem("None",
           this._updateRunTypeText,
@@ -49,9 +49,9 @@ class RunType {
   }
 
   static _updateRunTypeText() {
-    let runType = RunType.getRunType();
-    let batchSize = RunType.getBatchSize();
-    let batchWait = RunType.getBatchWait();
+    const runType = RunType.getRunType();
+    const batchSize = RunType.getBatchSize();
+    const batchWait = RunType.getBatchWait();
 
     // now that the menu is used show the menu title
     // this is much clearer when the Size/Wait menus are also shown
@@ -102,20 +102,20 @@ class RunType {
   }
 
   static getRunType() {
-    let runType = RunType.menuRunType.getValue();
+    const runType = RunType.menuRunType.getValue();
     if(runType === undefined || runType === "") return "normal";
     return runType;
   }
 
   static getBatchSize() {
-    let batchSize = RunType.menuBatchSize.getValue();
+    const batchSize = RunType.menuBatchSize.getValue();
     if(batchSize === undefined || batchSize === "") return "10%";
     // returns a string, also for the regular batch sizes
     return batchSize;
   }
 
   static getBatchWait() {
-    let batchWait = RunType.menuBatchWait.getValue();
+    const batchWait = RunType.menuBatchWait.getValue();
     if(batchWait === undefined || batchWait === "") return 0;
     return parseInt(batchWait);
   }
