@@ -31,8 +31,7 @@ class Router {
   goTo(path) {
     if(this.switchingRoute) return;
     if(window.location.pathname === path && this.currentRoute) return;
-    for(let i = 0; i < this.routes.length; i++) {
-      const route = this.routes[i];
+    for(const route of this.routes) {
       if(!route.getPath().test(path.split("?")[0])) continue;
 
       window.history.pushState({}, undefined, path);

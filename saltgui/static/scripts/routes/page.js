@@ -26,15 +26,14 @@ class PageRoute extends Route {
     const list = this.getPageElement().querySelector('#minions');
     const hostnames = Object.keys(minions).sort();
 
-    for(let i = 0; i < hostnames.length; i++) {
-      const minion_info = minions[hostnames[i]];
+    for(const hostname of hostnames) {
+      const minion_info = minions[hostname];
 
       // minions can be offline, then the info will be false
       if (minion_info === false) {
-        this._updateOfflineMinion(list, hostnames[i]);
+        this._updateOfflineMinion(list, hostname);
       } else {
-        const minion = minions[hostnames[i]];
-        this._updateMinion(list, minion, hostnames[i]);
+        this._updateMinion(list, minion_info, hostname);
       }
     }
   }
@@ -169,8 +168,7 @@ class PageRoute extends Route {
     const keys = Object.keys(jobs);
     const newArray = [];
 
-    for(let i = 0; i < keys.length; i++) {
-      const key = keys[i];
+    for(const key of keys) {
       const job = jobs[key];
       job.id = key;
       newArray.push(job);

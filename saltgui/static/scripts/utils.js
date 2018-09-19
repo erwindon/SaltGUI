@@ -43,10 +43,10 @@ window.createElement = function(type, className, content) {
 window.getQueryParam = function(name) {
   const vars = [];
   const hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-  for(let i = 0; i < hashes.length; i++) {
-    const hash = hashes[i].split('=');
-    vars.push(hash[0]);
-    if(hash[0] === name) return hash[1];
+  for(const hash of hashes) {
+    const hashparts = hash.split('=');
+    vars.push(hashparts[0]);
+    if(hashparts[0] === name) return hashparts[1];
   }
   return undefined;
 };
