@@ -96,14 +96,14 @@ class KeysRoute extends PageRoute {
     this._addMenuItemDelete(menu, hostname, "");
   }
 
-  _updateMinion(container, minion) {
-    super._updateMinion(container, minion);
+  _updateMinion(container, minion, hostname) {
+    super._updateMinion(container, minion, hostname);
 
-    const element = document.getElementById(minion.hostname);
+    const element = document.getElementById(hostname);
 
     const menu = new DropDownMenu(element);
-    this._addMenuItemReject(menu, minion.hostname, " include_accepted=true");
-    this._addMenuItemDelete(menu, minion.hostname, "");
+    this._addMenuItemReject(menu, hostname, " include_accepted=true");
+    this._addMenuItemDelete(menu, hostname, "");
   }
 
   _addRejectedMinion(container, hostname) {
