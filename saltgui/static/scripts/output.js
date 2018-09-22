@@ -242,6 +242,27 @@ class Output {
         // e.g. in "sys.doc state.template"
         out = out.replace(/>/g, "&gt;");
 
+        // external links
+        // e.g. in "sys.doc pkg.install"
+        while(out.includes(".. _")) {
+          // take only a line containing ".. _"
+          const reference = out.
+            replace(/^(.|\n|\r)*[.][.] _/m, "").
+            replace(/(\n|\r)(.|\n|\r)*$/m, "");
+          const words = reference.split(": ");
+          if(words.length !== 2) { console.log("words", words); break; }
+          const link = words[0];
+          const target = words[1];
+          // add link to all references
+          while(out.includes(link + "_")) {
+            out = out.replace(
+              link + "_",
+              "<a href='" + target + "' target='_blank'>" + link + "</a>");
+          }
+          // remove the item from the link table
+          out = out.replace(".. _" + reference, "");
+        }
+
         // replace ``......``
         // e.g. in "sys.doc state.apply"
         out = out.replace(/``([^`]*)``/g, "<span style='background-color: #575757'>$1</span>");
@@ -249,6 +270,12 @@ class Output {
         // replace `......`
         // e.g. in "sys.doc state.apply"
         out = out.replace(/`([^`]*)`/g, "<span style='color: yellow'>$1</span>");
+
+        // remove whitespace at end of lines
+        out = out.replace(/  *\n/gm, "");
+
+        // remove duplicate empty lines (usually due to previous rule)
+        out = out.replace(/\n\n\n*/gm, "\n\n");
 
         outputContainer.innerHTML +=
           `<span class='hostname'>${key}</span>:<br>` +
