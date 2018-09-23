@@ -28,7 +28,7 @@ class JobRoute extends Route {
     const container = this.getPageElement().querySelector(".job-info");
 
     let functionText = info.Function + " on ";
-    if(info["Target-type"] != "glob" && info["Target-type"] != "list") {
+    if(info["Target-type"] !== "glob" && info["Target-type"] !== "list") {
       // note that due to bug in 2018.3, all finished jobs
       // will be shown as if of type 'list'
       // therefore we suppress that one
