@@ -305,6 +305,12 @@ class Output {
       } else if (typeof hostResponse === 'string') {
         // Or when it is text, strip trailing whitespace
         hostResponse = hostResponse.replace(/[ \r\n]+$/g, "");
+        // replace all returned JIDs to links
+        // typically found in the output of an async job
+        // patJid is defined in scripts/parsecmdline.js
+        if(hostResponse.match(patJid)) {
+          hostResponse = "<a href='/job?id=" + hostResponse + "'>" + hostResponse + "</a>";
+        }
       }
 
       outputContainer.innerHTML +=

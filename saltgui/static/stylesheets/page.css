@@ -23,6 +23,14 @@ pre .hostname:first-of-type {
   margin-top: 0;
 }
 
+pre a {
+  color: yellow;
+}
+
+pre a:link {
+  text-decoration: none;
+}
+
 .minions {
   min-width: 620px;
 }
