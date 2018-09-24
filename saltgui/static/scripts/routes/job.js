@@ -26,7 +26,19 @@ class JobRoute extends Route {
     });
 
     const container = this.getPageElement().querySelector(".job-info");
-    container.querySelector('.function').innerHTML = info.Function;
+
+    let functionText = info.Function + " on ";
+    if(info["Target-type"] !== "glob" && info["Target-type"] !== "list") {
+      // note that due to bug in 2018.3, all finished jobs
+      // will be shown as if of type 'list'
+      // therefore we suppress that one
+      functionText += info["Target-type"];
+    }
+    if(info.Target) {
+      functionText += info.Target;
+    }
+    container.querySelector('.function').innerHTML = functionText;
+
     container.querySelector('.time').innerHTML = info.StartTime;
 
     const hostnames = Object.keys(info.Result);
