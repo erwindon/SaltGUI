@@ -178,13 +178,7 @@ class PageRoute extends Route {
     const element = document.createElement('li');
     element.id = "job" + job.id;
 
-    let targetText = job.Target;
-    if(job["Target-type"] !== "glob" && job["Target-type"] !== "list") {
-      // note that due to bug in 2018.3, all finished jobs
-      // will be shown as if of type 'list'
-      // therefore we suppress that one
-      targetText = job["Target-type"] + " " + targetText;
-    }
+    const targetText = window.makeTargetText(job["Target-type"], job.Target);
     element.appendChild(Route._createDiv("target", targetText));
 
     const functionText = job.Function;
