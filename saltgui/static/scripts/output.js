@@ -578,6 +578,30 @@ class Output {
   }
 
 
+// TODO
+// This is where the JOBIS was formatted
+//  static addNormalOutput(hostname, outputContainer, hostResponse) {
+
+//    if (typeof hostResponse === 'object') {
+//      // salt output is a json object
+//      // let's format it nicely here
+//      hostResponse = Output.formatJSON(hostResponse);
+//    } else if (typeof hostResponse === 'string') {
+//      // Or when it is text, strip trailing whitespace and no quotes
+//      hostResponse = hostResponse.replace(/[ \r\n]+$/g, "");
+//      // replace all returned JIDs to links
+//      // typically found in the output of an async job
+//      // patJid is defined in scripts/parsecmdline.js
+//      if(hostResponse.match(patJid)) {
+//        hostResponse = "<a href='/job?id=" + hostResponse + "'>" + hostResponse + "</a>";
+//      }
+//    }
+
+//    outputContainer.innerHTML +=
+//      Output.getHostnameHtml(hostname, "") + " " + hostResponse + "<br>";
+//  }
+
+
   // the orchestrator for the output
   // determines what format should be used and uses that
   static addResponseOutput(outputContainer, response, command) {
