@@ -53,6 +53,8 @@ class API {
       .addEventListener('blur', this.menu.verifyAll);
     document.querySelector("#command")
       .addEventListener('focus', this.menu.verifyAll);
+
+    RunType._registerEventListeners();
   }
 
   _onRun() {
@@ -76,7 +78,15 @@ class API {
   }
 
   _onRunReturn(command, data) {
-    const response = data.return[0];
+
+    // The data.return array may contain the answer from several batches
+    // combine these first
+    const response = { };
+    for(const batch of data.return) {
+      for(const host in batch) {
+        response[host] = batch[host];
+      }
+    }
 
     const outputContainer = document.querySelector(".run-command pre");
 
@@ -103,6 +113,9 @@ class API {
     manualRun.style.display = "none";
 
     document.body.style["overflow-y"] = "scroll";
+
+    // reset to default, so that its value is initially hidden
+    RunType.setRunTypeDefault();
 
     // test whether the command may have caused an update to the list
     // the user may have altered the text after running the command, just ignore that
@@ -242,6 +255,19 @@ class API {
       params.fun = functionToRun;
       params.tgt = target;
       if(args.length !== 0) params.arg = args;
+    }
+
+    const runType = RunType.getRunType();
+    if(params.client === "local" && runType === "async") {
+      params.client = "local_async";
+      // return looks like:
+      // { "jid": "20180718173942195461", "minions": [ ... ] }
+    }
+    else if(params.client === "local" && runType === "batch") {
+      params.client = "local_batch";
+      params.batch = RunType.getBatchSize();
+      params.batch_wait = RunType.getBatchWait();
+      // it returns the actual output in a list of batches
     }
 
     return this._callMethod("POST", "/", params);
