@@ -18,6 +18,11 @@ class PageRoute extends Route {
       });
       PageRoute.hasMenu = true;
     }
+
+    this._runCommand = this._runCommand.bind(this);
+    this._updateJobs = this._updateJobs.bind(this);
+    this._updateMinion = this._updateMinion.bind(this);
+    this._updateMinions = this._updateMinions.bind(this);
   }
 
   _updateMinions(data) {
@@ -85,8 +90,6 @@ class PageRoute extends Route {
     address.setAttribute("tabindex", -1);
     address.addEventListener('click', this._copyAddress);
     element.appendChild(address);
-
-    element.appendChild(Route._createDiv("os", minion.os + " " + minion.osrelease));
   }
 
   _addMinion(container, hostname) {
@@ -235,21 +238,5 @@ class PageRoute extends Route {
     command.value = commandString;
     // the menu may become (in)visible due to content of command field
     this.router.commandbox.menu.verifyAll();
-  }
-
-  _runHighState(evt, hostname) {
-    this._runCommand(evt, hostname, "state.apply");
-  }
-
-  _runAcceptKey(evt, hostname, extra) {
-    this._runCommand(evt, hostname, "wheel.key.accept" + extra);
-  }
-
-  _runRejectKey(evt, hostname, extra) {
-    this._runCommand(evt, hostname, "wheel.key.reject" + extra);
-  }
-
-  _runDeleteKey(evt, hostname, extra) {
-    this._runCommand(evt, hostname, "wheel.key.delete" + extra);
   }
 }

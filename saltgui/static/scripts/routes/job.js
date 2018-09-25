@@ -38,7 +38,7 @@ class JobRoute extends Route {
       // let's format it nicely here
       let result = info.Result[hostname].return;
       if (typeof result === "object") {
-        result = JSON.stringify(result, null, 2);
+        result = Stringify.format(result);
       } else {
         result = window.escape(result);
       }

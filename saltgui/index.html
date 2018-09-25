@@ -6,6 +6,7 @@
     <link rel='stylesheet' type='text/css' href='static/stylesheets/login.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/page.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/job.css' />
+    <link rel='stylesheet' type='text/css' href='static/stylesheets/grains.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/dropdown.css' />
     <link rel='shortcut icon' href='static/images/icon.png' />
   </head>
@@ -16,6 +17,7 @@
       <div class='menubar'>
         <div class='menu_item' id='button_minions'>minions</div>
         <div class='menu_item' id='button_keys'>keys</div>
+        <div class='menu_item' id='button_grains'>grains</div>
         <div class='menu_item' id='button_logout'>logout</div>
       </div>
       <div class='fab' id='button_manualrun'>&gt;_</div>
@@ -91,6 +93,23 @@
         </div>
       </div>
 
+      <div class='route' id='page_grains'>
+        <div class='dashboard'>
+          <div class='panel minion-list'>
+            <h1>Grains</h1>
+            <ul id="minions" class='minions'></ul>
+          </div>
+          <div class='panel job-list'>
+            <h1>Recent Jobs</h1>
+            <ul class='jobs'></ul>
+          </div>
+          <div class='panel grains-list'>
+            <h1 id="grains_title">Grains</h1>
+            <ul id="grains_list" class='grains'></ul>
+          </div>
+        </div>
+      </div>
+
       <div class='route' id='page_job'>
         <div class='panel job-info'>
           <div class='nearlyvisiblebutton' id='button_close_job'>&#x2715;</div>
@@ -114,6 +133,7 @@
     </div>
 
     <script src='static/scripts/utils.js'></script>
+    <script src='static/scripts/stringify.js'></script>
     <script src='static/scripts/parsecmdline.js'></script>
     <script src='static/scripts/output.js'></script>
     <script src='static/scripts/documentation.js'></script>
@@ -125,6 +145,7 @@
     <script src='static/scripts/routes/job.js'></script>
     <script src='static/scripts/routes/minions.js'></script>
     <script src='static/scripts/routes/keys.js'></script>
+    <script src='static/scripts/routes/grains.js'></script>
     <script src='static/scripts/dropdown.js'></script>
     <script src='static/scripts/router.js'></script>
   </body>

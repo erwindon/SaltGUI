@@ -113,7 +113,7 @@ describe('Unittests for output.js', function() {
     done();
   });
 
-  it('test documemation external link conversion', done => {
+  it('test documentation external link conversion', done => {
     // external links will be converted to html
     const container = {"innerHTML": ""};
     const output = {"host1": {"pkg.install": "`systemd-run(1)`_\n .. _`systemd-run(1)`: https://www.freedesktop.org/software/systemd/man/systemd-run.html"}};

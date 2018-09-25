@@ -48,8 +48,14 @@ class MinionsRoute extends PageRoute {
     super._updateMinion(container, minion, hostname);
 
     const element = document.getElementById(hostname);
+   
+    element.appendChild(Route._createDiv("os", minion.os + " " + minion.osrelease));
+
     const menu = new DropDownMenu(element);
     this._addMenuItemSyncState(menu, hostname);
   }
 
+  _runHighState(evt, hostname) {
+    this._runCommand(evt, hostname, "state.apply");
+  }
 }

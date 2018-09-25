@@ -110,6 +110,12 @@ class Output {
         return false;
       }
 
+      // arrays are also objects,
+      // but not what we are looking for
+      if(Array.isArray(output)) {
+        return false;
+      }
+
       for(const key of Object.keys(output)) {
         // e.g. for "test.rand_str"
         if(output[key] === null) {
@@ -222,7 +228,7 @@ class Output {
 
         let out = hostResponse[key];
         if(out === null) continue;
-        out = out.trimEnd();
+        out = out.trimRight();
 
         // internal links: remove the ".. rubric::" prefix
         // e.g. in "sys.doc state.apply"
@@ -301,7 +307,7 @@ class Output {
       if (typeof hostResponse === 'object') {
         // when you do a state.apply for example you get a json response.
         // let's format it nicely here
-        hostResponse = JSON.stringify(hostResponse, null, 2);
+        hostResponse = Stringify.format(hostResponse);
       } else if (typeof hostResponse === 'string') {
         // Or when it is text, strip trailing whitespace
         hostResponse = hostResponse.replace(/[ \r\n]+$/g, "");

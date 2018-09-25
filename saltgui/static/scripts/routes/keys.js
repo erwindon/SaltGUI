@@ -100,6 +100,8 @@ class KeysRoute extends PageRoute {
     super._updateMinion(container, minion, hostname);
 
     const element = document.getElementById(hostname);
+    
+    element.appendChild(Route._createDiv("os", minion.os + " " + minion.osrelease));
 
     const menu = new DropDownMenu(element);
     this._addMenuItemReject(menu, hostname, " include_accepted=true");
@@ -165,5 +167,16 @@ class KeysRoute extends PageRoute {
     container.appendChild(element);
   }
 
-}
+  _runAcceptKey(evt, hostname, extra) {
+    this._runCommand(evt, hostname, "wheel.key.accept" + extra);
+  }
 
+  _runRejectKey(evt, hostname, extra) {
+    this._runCommand(evt, hostname, "wheel.key.reject" + extra);
+  }
+
+  _runDeleteKey(evt, hostname, extra) {
+    this._runCommand(evt, hostname, "wheel.key.delete" + extra);
+  }
+
+}
