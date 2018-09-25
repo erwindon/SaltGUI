@@ -63,4 +63,58 @@ describe('Unittests for utils.js', function() {
     done();
   });
 
+  it('test makeTargetText', done => {
+
+    let result;
+
+    // list of target-types from:
+    // https://docs.saltstack.com/en/latest/ref/clients/index.html#salt.client.LocalClient.cmd
+
+    // glob - Bash glob completion - Default
+    result = window.makeTargetText("glob", "*");
+    assert.equal(result, "*");
+
+    // pcre - Perl style regular expression
+    result = window.makeTargetText("pcre", ".*");
+    assert.equal(result, "pcre .*");
+
+    // list - Python list of hosts
+    result = window.makeTargetText("list", "a,b,c");
+    assert.equal(result, "a,b,c");
+
+    // grain - Match based on a grain comparison
+    result = window.makeTargetText("grain", "os:*");
+    assert.equal(result, "grain os:*");
+
+    // grain_pcre - Grain comparison with a regex
+    result = window.makeTargetText("grain_pcre", "os:.*");
+    assert.equal(result, "grain_pcre os:.*");
+
+    // pillar - Pillar data comparison
+    result = window.makeTargetText("pillar", "p1:*");
+    assert.equal(result, "pillar p1:*");
+
+    // pillar_pcre - Pillar data comparison with a regex
+    result = window.makeTargetText("pillar_pcre", "p1:.*");
+    assert.equal(result, "pillar_pcre p1:.*");
+
+    // nodegroup - Match on nodegroup
+    result = window.makeTargetText("nodegroup", "ng3");
+    assert.equal(result, "nodegroup ng3");
+
+    // range - Use a Range server for matching
+    result = window.makeTargetText("range", "a-z");
+    assert.equal(result, "range a-z");
+
+    // compound - Pass a compound match string
+    result = window.makeTargetText("compound", "webserv* and G@os:Debian or E@web-dc1-srv.*");
+    assert.equal(result, "compound webserv* and G@os:Debian or E@web-dc1-srv.*");
+
+    // ipcidr - Match based on Subnet (CIDR notation) or IPv4 address.
+    result = window.makeTargetText("ipcidr", "10.0.0.0/24");
+    assert.equal(result, "ipcidr 10.0.0.0/24");
+
+    done();
+  });
+
 });
