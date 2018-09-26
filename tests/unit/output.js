@@ -28,6 +28,11 @@ describe('Unittests for output.js', function() {
     result = Output.isDocumentationOutput(outputData, "keyword");
     assert.isFalse(result);
 
+    // documentation is not text in a dict
+    outputData = { "host1": ["something"] };
+    result = Output.isDocumentationOutput(outputData, "keyword");
+    assert.isFalse(result);
+
     // documentation is not text
     outputData = { "host1": 123 };
     result = Output.isDocumentationOutput(outputData, "keyword");
