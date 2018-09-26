@@ -155,13 +155,7 @@ class PageRoute extends Route {
       const job = jobs[k];
 
       // start with same text as for _addJob
-      let targetText = job.Target;
-      if(job["Target-type"] !== "glob" && job["Target-type"] !== "list") {
-        // note that due to bug in 2018.3, all finished jobs
-        // will be shown as if of type 'list'
-        // therefore we suppress that one
-        targetText = job["Target-type"] + " " + targetText;
-      }
+      let targetText = window.makeTargetText(job["Target-type"], job.Target);
 
       // then add the operational statistics
       if(job.Running.length > 0)
