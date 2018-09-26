@@ -27,16 +27,8 @@ class JobRoute extends Route {
 
     const container = this.getPageElement().querySelector(".job-info");
 
-    let functionText = info.Function + " on ";
-    if(info["Target-type"] !== "glob" && info["Target-type"] !== "list") {
-      // note that due to bug in 2018.3, all finished jobs
-      // will be shown as if of type 'list'
-      // therefore we suppress that one
-      functionText += info["Target-type"];
-    }
-    if(info.Target) {
-      functionText += info.Target;
-    }
+    const functionText = info.Function + " on " +
+      window.makeTargetText(info["Target-type"], info.Target);
     container.querySelector('.function').innerHTML = functionText;
 
     container.querySelector('.time').innerHTML = info.StartTime;
