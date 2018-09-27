@@ -8,32 +8,37 @@ describe('Unittests for output.js', function() {
 
     let outputData, result;
 
-    // normal case
+    // ok, normal documentation case
     outputData = { "host1": {"keyword": "explanation"} };
     result = Output.isDocumentationOutput(outputData, "keyword");
     assert.isTrue(result);
 
-    // does not match requested documentation
+    // wrong, does not match requested documentation
     outputData = { "host1": {"keyword": "explanation"} };
     result = Output.isDocumentationOutput(outputData, "another");
     assert.isFalse(result);
 
-    // no resulting documentation
+    // wrong, no resulting documentation
     outputData = { "host1": {"keyword": null} };
     result = Output.isDocumentationOutput(outputData, "keyword");
     assert.isFalse(result);
 
-    // documentation is not text
+    // wrong, value is not text
     outputData = { "host1": {"keyword": 123} };
     result = Output.isDocumentationOutput(outputData, "keyword");
     assert.isFalse(result);
 
-    // documentation is not text
+    // wrong, returned structure is not a dict
+    outputData = { "host1": ["something"] };
+    result = Output.isDocumentationOutput(outputData, "keyword");
+    assert.isFalse(result);
+
+    // wrong, returned structure is not a dict
     outputData = { "host1": 123 };
     result = Output.isDocumentationOutput(outputData, "keyword");
     assert.isFalse(result);
 
-    // documentation is not text in a dictionary
+    // wrong, returned structure is not a dict
     outputData = { "host1": "hello" };
     result = Output.isDocumentationOutput(outputData, "keyword");
     assert.isFalse(result);
