@@ -7,7 +7,8 @@ services:
       - 4506:4506
       - 3333:3333
     volumes:
-    - ./salt:/srv/salt
+    - ./srv/salt:/srv/salt
+    - ./conf/master:/etc/salt/master
     - ../saltgui:/saltgui
     entrypoint: /usr/bin/supervisord
 
