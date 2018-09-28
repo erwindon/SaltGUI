@@ -76,7 +76,7 @@ NIGHTMARE_DEBUG=1 ./runtests.sh
 
 We use the following testing libraries:
 - [nightmare.js](https://github.com/segmentio/nightmare), for functional/browser tests
-- [mocha](https://https://mochajs.org/), a well documented testing framework for javascript 
+- [mocha](https://https://mochajs.org/), a well documented testing framework for javascript
 - [chai](http://www.chaijs.com/), the preferred assertion library for testing
 
 You'll need at least:
@@ -93,6 +93,13 @@ Open a PR! Try to use no dependencies where possible, as vanilla JS is the aim. 
 This excellent frontend is originally written by [Oliver Dunk](https://github.com/oliverdunk).
 
 ## Changelog
+
+## 1.3.0 (2018-09-28)
+- Improved command parser (erwindon)
+- Loads of ES6 code improvements and testing including linting (erwindon/maerteijn)
+- Documentation view option in the command box (erwindon)
+- Show job progress in job list (erwindon)
+- Improved job detail (erwindon)
 
 ## 1.2.0 (2018-07-30)
 - Addition of menu bar; separation of minion vs keys (erwindon)
