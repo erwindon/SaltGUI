@@ -4,12 +4,21 @@ file_roots:
   base:
     - /srv/salt/
 
+pillar_roots:
+  base:
+    - /srv/pillar
+
 external_auth:
   pam:
     salt:
-      - .*
-      - '@runner'
-      - '@wheel'
+      - grains.items
+      - sys.doc
+      - state.apply
+
+      - '@runner':
+        - 'jobs.*'
+      - '@wheel':
+        - 'key.*'
       - '@jobs'
 
 rest_cherrypy:
