@@ -2,12 +2,12 @@ version: '3'
 services:
   saltmaster-local:
     image: maerteijn/saltgui-saltmaster
-    ports: 
+    ports:
       - 4505:4505
       - 4506:4506
       - 3333:3333
     volumes:
-    - ./srv/salt:/srv/salt
+    - ./srv/:/srv/
     - ./conf/master:/etc/salt/master
     - ../saltgui:/saltgui
     entrypoint: /usr/bin/supervisord
