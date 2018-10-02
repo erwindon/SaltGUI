@@ -1,10 +1,17 @@
+class HTTPError extends Error {
+  constructor(status, message) {
+    super();
+    this.status = status;
+    this.message = message;
+  }
+}
+
 class API {
 
   constructor() {
     this.APIURL = "";
 
     this._callMethod = this._callMethod.bind(this);
-    this._fetch = this._fetch.bind(this);
     this._getRunParams = this._getRunParams.bind(this);
     this._onRun = this._onRun.bind(this);
     this._onRunReturn = this._onRunReturn.bind(this);
@@ -25,10 +32,6 @@ class API {
       .addEventListener('click', this._showManualRun);
     document.querySelector("#button_close_cmd")
       .addEventListener('click', this._hideManualRun);
-    document.querySelector("#button_logout")
-      .addEventListener('click', _ => {
-        this._logout(this);
-      } );
     document.querySelector("#button_minions")
       .addEventListener('click', _ => {
         window.location.replace("/");
@@ -116,24 +119,24 @@ class API {
   }
 
   isAuthenticated() {
-    return window.sessionStorage.getItem("token") !== null;
+    // As there is not an API call to check if you are authenticated we call
+    // the stats call to see if we can access that
+    return this._callMethod("GET", "/stats", {})
+      .then(response => {
+        return window.sessionStorage.getItem("token") !== null;
+      });
   }
 
-  _logout(api) {
-    const params = {
-    };
-
-    return api._callMethod("POST", "/logout", params).then(response => {
-      window.sessionStorage.removeItem("token");
-      window.location.replace("/");
-    }).catch(error => {
-      console.error("_logout", error);
-    });
+  logout() {
+    // only delete the session here as the router should take care of
+    // redirecting to the login screen
+    return this._callMethod("POST", "/logout", {})
+      .then(response => {
+        window.sessionStorage.removeItem("token");
+      });
   }
 
   login(username, password) {
-    const api = this;
-
     const params = {
       username: username,
       password: password,
@@ -147,12 +150,8 @@ class API {
     }
     localStorage.setItem('logintype', type.value);
 
-    return new Promise(function(resolve, reject) {
-      api._callMethod("POST", "/login", params)
-        .then(function(data) {
-          window.sessionStorage.setItem("token", data.return[0].token);
-          resolve();
-        }, reject);
+    return this._callMethod("POST", "/login", params).then(data => {
+      window.sessionStorage.setItem("token", data.return[0].token);
     });
   }
 
@@ -248,56 +247,32 @@ class API {
       if(args.length !== 0) params.arg = args;
     }
 
-    return this._callMethod("POST", "/", params);
+    return this._callMethod("POST", "/", params).catch({});
   }
 
   _callMethod(method, route, params) {
     const location = this.APIURL + route;
     const token = window.sessionStorage.getItem("token");
-
     const headers = {
       "Accept": "application/json",
       "X-Auth-Token": token !== null ? token : "",
       "Cache-Control": "no-cache"
     };
+    const options = {
+      method: method,
+      url: location,
+      headers: headers
+    };
 
-    return this._fetch(method, location, headers, params);
+    if(method === "POST") options.body = JSON.stringify(params);
+
+    return fetch(location, options)
+      .then(response => {
+        if (response.ok) return response.json();
+        // fetch does not reject on > 300 http status codes, so let's
+        // do it ourselves
+        return Promise.reject(
+          new HTTPError(response.status, response.statusText));
+      });
   }
-
-  _fetch(method, url, headers, params) {
-    const onFetchResponse = this._onFetchResponse;
-    return new Promise(function(resolve, reject) {
-
-      const options = {
-        method: method,
-        url: url,
-        headers: headers
-      };
-
-      if(method === "POST") options.body = JSON.stringify(params);
-
-      fetch(url, options).then(
-        (response) => onFetchResponse(response, resolve, reject),
-        reject
-      );
-    });
-  }
-
-  _onFetchResponse(response, resolve, reject) {
-    if(response.status === 401 && document.location.pathname !== "/login") {
-      // sesion has expired
-      // redirect to login screen
-      window.sessionStorage.removeItem("token");
-      document.location.replace("/");
-      return;
-    }
-    if(response.status !== 200) {
-      reject();
-      return;
-    }
-
-    response.json()
-      .then(resolve, reject);
-  }
-
 }
