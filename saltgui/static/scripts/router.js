@@ -11,16 +11,27 @@ class Router {
 
     this._registerEventListeners();
 
-    this.goTo(this.api.isAuthenticated() ?
-      window.location.pathname + window.location.search : "/login");
+    this.api.isAuthenticated()
+      .then(valid_session => this.goTo(
+        valid_session ? window.location.pathname + window.location.search : "/login"))
+      .catch(error => this.goTo("/login"));
   }
 
   _registerEventListeners() {
     const router = this;
-    document.querySelector('.logo').addEventListener('click', _ => {
-      if(window.location.pathname === "/login") return;
-      router.goTo("/");
-    });
+
+    document.querySelector('.logo')
+      .addEventListener('click', _ => {
+        if(window.location.pathname === "/login") return;
+        router.goTo("/");
+      });
+
+    document.querySelector("#button_logout")
+      .addEventListener('click', _ => {
+        this.api.logout().then(() => {
+          window.location.replace("/");
+        });
+      });
   }
 
   registerRoute(route) {
@@ -52,7 +63,7 @@ class Router {
     if(elem) elem.classList.add("menu_item_active");
     router.switchingRoute = true;
 
-    const afterLoad = function() {
+    const afterLoad = function(route) {
       if(router.currentRoute !== undefined) {
         router.hideRoute(router.currentRoute);
       }
@@ -66,8 +77,8 @@ class Router {
     let response;
     if(route.onShow) response = route.onShow();
 
-    if(response && response.then) response.then(afterLoad);
-    else afterLoad();
+    if(response && response.then) response.then(afterLoad(route));
+    else afterLoad(route);
   }
 
   hideRoute(route) {
@@ -82,3 +93,4 @@ class Router {
 }
 
 window.addEventListener('load', new Router());
+
