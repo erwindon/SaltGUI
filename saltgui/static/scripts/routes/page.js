@@ -228,13 +228,13 @@ class PageRoute extends Route {
   }
 
   _runCommand(evt, targetString, commandString) {
-    this.router.api._showManualRun(evt);
+    this.router.commandbox._showManualRun(evt);
     const target = document.querySelector("#target");
     const command = document.querySelector("#command");
     target.value = targetString;
     command.value = commandString;
     // the menu may become (in)visible due to content of command field
-    this.router.api.menu.verifyAll();
+    this.router.commandbox.menu.verifyAll();
   }
 
   _runHighState(evt, hostname) {
