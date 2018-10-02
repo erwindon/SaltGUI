@@ -73,18 +73,14 @@ class API {
     output.innerHTML = "Loading...";
 
     func.then(
-      arg => { this._onRunReturn(command, arg); },
-      arg => { this._onRunReturn(command, arg); }
+      arg => { this._onRunReturn(arg.return[0], command); },
+      arg => { this._onRunReturn(arg.return[0], command); }
     );
   }
 
-  _onRunReturn(command, data) {
-    const response = data.return[0];
-
+  _onRunReturn(response, command) {
     const outputContainer = document.querySelector(".run-command pre");
-
     Output.addOutput(outputContainer, response, command);
-
     const button = document.querySelector(".run-command input[type='submit']");
     button.disabled = false;
   }
@@ -94,6 +90,7 @@ class API {
     manualRun.style.display = "block";
 
     document.body.style["overflow-y"] = "hidden";
+    document.querySelector(".run-command pre").innerHTML = "Waiting for command...";
 
     evt.stopPropagation();
   }
@@ -175,18 +172,11 @@ class API {
     return this._getRunParams(null, "runners.jobs.active");
   }
 
-  _showError(errorMessage) {
-    const errLabel = document.querySelector("#cmd_error");
-    errLabel.innerText = errorMessage;
-    if(errorMessage)
-      errLabel.style.display = "block";
-    else
-      errLabel.style.display = "none";
+  _showError(message) {
+    this._onRunReturn(message);
   }
 
   _getRunParams(target, toRun) {
-
-    this._showError("");
 
     if(toRun === "") {
       this._showError("'Command' field cannot be empty");
@@ -247,7 +237,11 @@ class API {
       if(args.length !== 0) params.arg = args;
     }
 
-    return this._callMethod("POST", "/", params).catch({});
+    return this._callMethod("POST", "/", params)
+      .catch(error => {
+        this._showError(error.message);
+        return error;
+      });
   }
 
   _callMethod(method, route, params) {
@@ -271,6 +265,7 @@ class API {
         if (response.ok) return response.json();
         // fetch does not reject on > 300 http status codes, so let's
         // do it ourselves
+
         return Promise.reject(
           new HTTPError(response.status, response.statusText));
       });

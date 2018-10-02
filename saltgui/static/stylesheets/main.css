@@ -222,9 +222,3 @@ input[type='submit']:active:not([disabled]) {
 *:focus {
   outline: none;
 }
-
-#cmd_error {
-  display: none;
-  font-weight: bold;
-  color: red;
-}

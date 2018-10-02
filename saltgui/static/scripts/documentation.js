@@ -86,8 +86,7 @@ class Documentation {
     }
 
     Documentation.API._getRunParams(target, docCommand).then(
-      arg => { Documentation.API._onRunReturn(dummyCommand, arg); },
-      arg => { Documentation.API._onRunReturn(dummyCommand, arg); }
+      response => Documentation.API._onRunReturn(response.return[0], dummyCommand)
     );
   }
 
