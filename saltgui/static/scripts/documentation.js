@@ -5,14 +5,16 @@ class Documentation {
   // formatting of the documentation is done as a regular output type
   // that is therefore in output.js
 
-  static addCommandMenuItems(api) {
-    Documentation.API = api;
-    api.menu.addMenuItem(
-      Documentation._manualRunMenuSysDocPrepare,
-      Documentation._manualRunMenuSysDocRun);
+  constructor (commandbox) {
+    this.commandbox = commandbox;
+    this._manualRunMenuSysDocRun = this._manualRunMenuSysDocRun.bind(this);
+
+    commandbox.menu.addMenuItem(
+      this._manualRunMenuSysDocPrepare,
+      this._manualRunMenuSysDocRun);
   }
 
-  static _manualRunMenuSysDocPrepare(menuitem) {
+  _manualRunMenuSysDocPrepare(menuitem) {
     let target = document.querySelector(".run-command #target").value;
     target = target ? "target" : "all minions";
     let command = document.querySelector(".run-command #command").value;
@@ -48,7 +50,7 @@ class Documentation {
     }
   }
 
-  static _manualRunMenuSysDocRun() {
+  _manualRunMenuSysDocRun() {
     const button = document.querySelector(".run-command input[type='submit']");
     if(button.disabled) return;
     const output = document.querySelector(".run-command pre");
@@ -85,8 +87,8 @@ class Documentation {
       dummyCommand = "sys.doc " + command;
     }
 
-    Documentation.API._getRunParams(target, docCommand).then(
-      response => Documentation.API._onRunReturn(response.return[0], dummyCommand)
+    this.commandbox._getRunParams(target, docCommand).then(
+      response => this.commandbox._onRunReturn(response.return[0], dummyCommand)
     );
   }
 

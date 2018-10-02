@@ -2,6 +2,7 @@ class Router {
 
   constructor() {
     this.api = new API();
+    this.commandbox = new CommandBox(this.api);
     this.currentRoute = undefined;
     this.routes = [];
     this.registerRoute(new LoginRoute(this));
@@ -31,6 +32,16 @@ class Router {
         this.api.logout().then(() => {
           window.location.replace("/");
         });
+      });
+
+    document.querySelector("#button_minions")
+      .addEventListener('click', _ => {
+        window.location.replace("/");
+      });
+
+    document.querySelector("#button_keys")
+      .addEventListener('click', _ => {
+        window.location.replace("/keys");
       });
   }
 
