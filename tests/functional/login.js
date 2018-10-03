@@ -12,7 +12,7 @@ describe('Funtional tests', function() {
   this.timeout(60 * 1000);
 
   beforeEach( () => {
-    const options = { 
+    const options = {
       // to make the typed input much faster
       typeInterval: 20,
       // the wait function has a timeout as well
@@ -33,12 +33,15 @@ describe('Funtional tests', function() {
   });
 
   describe('Login and logout', () => {
-  
+
     it('we should be redirected to the login page', done => {
       browser
         .end()
+        .wait( () => {
+          return document.location.href.includes('login');
+        })
         .evaluate( () => { return document.location.href; } )
-        .then(function (href) { 
+        .then(function (href) {
           assert.equal(href, url + 'login');
           done();
         })
@@ -98,6 +101,9 @@ describe('Funtional tests', function() {
           const loginpage = document.querySelector('#page_login');
           console.log(loginpage.style.display);
           return loginpage.style.display === '';
+        })
+        .wait( () => {
+          return document.location.href.includes('login');
         })
         .end()
         .evaluate( () => { return document.location.href; })
