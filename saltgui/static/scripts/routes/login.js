@@ -1,7 +1,7 @@
-class LoginRoute extends Route{
+class LoginRoute extends Route {
 
   constructor(router) {
-    super("^[\/]login$", "Login", "#page_login", "");
+    super("^[\/]login$", "Login", "#page_login", "", router);
     this.router = router;
 
     this.loginPending = false;
@@ -12,29 +12,12 @@ class LoginRoute extends Route{
     this.registerEventListeners();
   }
 
-  updateTypeColor() {
-    const typeItem = document.querySelector("#login-form #eauth");
-    // make it look like a hint
-    if(typeItem.value === "default")
-      typeItem.style.color = "gray";
-    else
-      typeItem.style.color = "black";
-  }
-
   onShow() {
-
-    const typeItem = document.querySelector("#login-form #eauth");
-
-    // restore login type
-    let typeValue = localStorage.getItem('logintype');
-    if(!typeValue) typeValue = "default";
-    typeItem.value = typeValue;
-
-    this.updateTypeColor();
-
-    typeItem.addEventListener('change', this.updateTypeColor);
+    const eauthSelector = document.querySelector("#login-form #eauth");
+    const eauthValue = localStorage.getItem('eauth');
+    eauthSelector.value = eauthValue ? eauthValue : 'pam'
   }
-  
+
   registerEventListeners() {
     const submit = document.querySelector("#login-form");
     submit.addEventListener('submit', this.onLogin);
@@ -46,9 +29,10 @@ class LoginRoute extends Route{
 
     const username = document.querySelector("#username").value;
     const password = document.querySelector("#password").value;
+    const eauth = document.querySelector("#eauth").value;
 
     this.toggleForm(false);
-    this.router.api.login(username, password)
+    this.router.api.login(username, password, eauth)
       .then(this.onLoginSuccess, this.onLoginFailure);
   }
 

@@ -6,39 +6,38 @@ class HTTPError extends Error {
   }
 }
 
-class API {
 
+class API {
   constructor(apiurl="") {
     this.APIURL = apiurl;
-    this.apiRequest = this.apiRequest.bind(this);
   }
 
   isAuthenticated() {
-    // As there is not an API call to check if you are authenticated we call
-    // the stats call to see if we can access that
-    return this.apiRequest("GET", "/stats", {})
+    return this.apiRequest("GET", "/login", {})
       .then(response => {
         return window.sessionStorage.getItem("token") !== null;
-      });
+      })
   }
 
-  login(username, password) {
+  login(username, password, eauth='pam') {
     const params = {
       username: username,
       password: password,
-      eauth: "pam"
+      eauth: eauth
     };
 
-    // overrule the eauth method when one is selected
-    const type = document.querySelector("#login-form #eauth");
-    if(type.value !== "default") {
-      params.eauth = type.value;
-    }
-    localStorage.setItem('logintype', type.value);
+    // store it as the default login method
+    localStorage.setItem('eauth', eauth);
 
-    return this.apiRequest("POST", "/login", params).then(data => {
-      window.sessionStorage.setItem("token", data.return[0].token);
-    });
+    return this.apiRequest("POST", "/login", params)
+      .then(data => {
+        const response = data.return[0];
+        if (Object.keys(response.perms).length === 0) {
+          // we are allowed to login but there are no permissions available
+          throw new HTTPError(403, "Unauthorized");
+        }
+        window.sessionStorage.setItem("token", response.token);
+      });
   }
 
   logout() {
@@ -51,7 +50,7 @@ class API {
   }
 
   getMinions() {
-    return this.apiRequest("GET", "/minions", {});
+    return this.apiRequest("GET", "/minions", {})
   }
 
   getKeys() {
@@ -67,7 +66,11 @@ class API {
   }
 
   getRunningJobs() {
-    return this._getRunParams(null, "runners.jobs.active");
+    const params = {
+      client: "runner",
+      fun: "jobs.active"
+    };
+    return this.apiRequest("POST", "/", params).catch(console.error);
   }
 
   apiRequest(method, route, params) {
@@ -92,6 +95,6 @@ class API {
         // fetch does not reject on > 300 http status codes, so let's
         // do it ourselves
         throw new HTTPError(response.status, response.statusText);
-      });
+      }).catch(console.error);
   }
 }
