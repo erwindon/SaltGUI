@@ -1,8 +1,7 @@
 class KeysRoute extends PageRoute {
 
   constructor(router) {
-    super("^[\/]keys$", "Keys", "#page_keys", "#button_keys");
-    this.router = router;
+    super("^[\/]keys$", "Keys", "#page_keys", "#button_keys", router);
     this.keysLoaded = false;
     this.jobsLoaded = false;
 

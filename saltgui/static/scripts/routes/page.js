@@ -1,7 +1,7 @@
 class PageRoute extends Route {
 
-  constructor(path, name, page_selector, menuitem_selector) {
-    super(path, name, page_selector, menuitem_selector);
+  constructor(path, name, page_selector, menuitem_selector, router) {
+    super(path, name, page_selector, menuitem_selector, router);
 
     if(PageRoute.hasMenu === undefined) {
       const header = document.getElementById("header");
