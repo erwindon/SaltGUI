@@ -17,7 +17,7 @@ class Router {
         valid_session ? window.location.pathname + window.location.search : "/login"))
       .catch(error => {
         console.error(error);
-        this.goTo("/login")
+        this.goTo("/login");
       });
   }
 

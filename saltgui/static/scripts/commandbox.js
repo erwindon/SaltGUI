@@ -53,7 +53,7 @@ class CommandBox {
     output.innerHTML = "Loading...";
 
     func.then(response => {
-      this._onRunReturn(response.return[0], command)
+      this._onRunReturn(response.return[0], command);
     });
   }
 

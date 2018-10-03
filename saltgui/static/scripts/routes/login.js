@@ -15,7 +15,7 @@ class LoginRoute extends Route {
   onShow() {
     const eauthSelector = document.querySelector("#login-form #eauth");
     const eauthValue = localStorage.getItem('eauth');
-    eauthSelector.value = eauthValue ? eauthValue : 'pam'
+    eauthSelector.value = eauthValue ? eauthValue : 'pam';
   }
 
   registerEventListeners() {

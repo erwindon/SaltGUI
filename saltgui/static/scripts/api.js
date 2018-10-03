@@ -16,7 +16,7 @@ class API {
     return this.apiRequest("GET", "/login", {})
       .then(response => {
         return window.sessionStorage.getItem("token") !== null;
-      })
+      });
   }
 
   login(username, password, eauth='pam') {
@@ -50,7 +50,7 @@ class API {
   }
 
   getMinions() {
-    return this.apiRequest("GET", "/minions", {})
+    return this.apiRequest("GET", "/minions", {});
   }
 
   getKeys() {
