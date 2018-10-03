@@ -97,12 +97,13 @@ h1 {
   cursor: pointer;
 }
 
-.hamburger {
+#hamburger_container {
   display: none;
+  float: right;
 }
 
 @media (max-width: 800px) {
-  .hamburger {
+  #hamburger_container {
     display: inline-block;
     float: right;
   }
