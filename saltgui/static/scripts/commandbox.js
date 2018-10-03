@@ -52,10 +52,9 @@ class CommandBox {
     button.disabled = true;
     output.innerHTML = "Loading...";
 
-    func.then(
-      arg => { this._onRunReturn(arg.return[0], command); },
-      arg => { this._onRunReturn(arg.return[0], command); }
-    );
+    func.then(response => {
+      this._onRunReturn(response.return[0], command)
+    });
   }
 
   _onRunReturn(response, command) {
