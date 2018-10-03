@@ -15,7 +15,10 @@ class Router {
     this.api.isAuthenticated()
       .then(valid_session => this.goTo(
         valid_session ? window.location.pathname + window.location.search : "/login"))
-      .catch(error => this.goTo("/login"));
+      .catch(error => {
+        console.error(error);
+        this.goTo("/login")
+      });
   }
 
   _registerEventListeners() {
