@@ -1,9 +1,7 @@
 class JobRoute extends Route {
 
   constructor(router) {
-    super("^[\/]job$", "Job", "#page_job", "");
-    this.router = router;
-
+    super("^[\/]job$", "Job", "#page_job", "", router);
     this._onJobData = this._onJobData.bind(this);
   }
 
@@ -35,7 +33,7 @@ class JobRoute extends Route {
 
     const hostnames = Object.keys(info.Result);
     hostnames.forEach(function(hostname) {
-      
+
       // when you do a state.apply for example you get a json response.
       // let's format it nicely here
       let result = info.Result[hostname].return;

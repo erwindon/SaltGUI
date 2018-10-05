@@ -1,11 +1,11 @@
 class PageRoute extends Route {
 
-  constructor(path, name, page_selector, menuitem_selector) {
-    super(path, name, page_selector, menuitem_selector);
+  constructor(path, name, page_selector, menuitem_selector, router) {
+    super(path, name, page_selector, menuitem_selector, router);
 
     if(PageRoute.hasMenu === undefined) {
-      const header = document.getElementById("header");
-      const menu = new DropDownMenu(header);
+      const hamburger_container = document.querySelector("#hamburger_container");
+      const menu = new DropDownMenu(hamburger_container);
       menu.addMenuItem("minions", function(evt) {
         window.location.replace("/");
       });
@@ -14,7 +14,7 @@ class PageRoute extends Route {
       });
       menu.addMenuItem("logout", function(evt) {
         const api = new API();
-        api._logout(api);
+        api.logout().then(window.location.replace("/"));
       });
       PageRoute.hasMenu = true;
     }
@@ -228,13 +228,13 @@ class PageRoute extends Route {
   }
 
   _runCommand(evt, targetString, commandString) {
-    this.router.api._showManualRun(evt);
+    this.router.commandbox._showManualRun(evt);
     const target = document.querySelector("#target");
     const command = document.querySelector("#command");
     target.value = targetString;
     command.value = commandString;
     // the menu may become (in)visible due to content of command field
-    this.router.api.menu.verifyAll();
+    this.router.commandbox.menu.verifyAll();
   }
 
   _runHighState(evt, hostname) {

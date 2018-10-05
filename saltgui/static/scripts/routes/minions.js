@@ -1,8 +1,7 @@
 class MinionsRoute extends PageRoute {
 
   constructor(router) {
-    super("^[\/]$", "Minions", "#page_minions", "#button_minions");
-    this.router = router;
+    super("^[\/]$", "Minions", "#page_minions", "#button_minions", router);
     this.keysLoaded = false;
     this.jobsLoaded = false;
 

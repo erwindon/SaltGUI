@@ -10,7 +10,7 @@ class DropDownMenu {
     let menuButton;
 
     switch (element.id) {
-    case "header":
+    case "hamburger_container":
       // 8801 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
       menuButton = Route._createDiv("menu-dropdown", "&#8801;");
       this.menuDropdown.classList.add("hamburger");
@@ -61,12 +61,7 @@ class DropDownMenu {
       button.verifyCallback = title;
     button.addEventListener('click', evt => callback(evt));
     this.menuDropdownContent.appendChild(button);
-    if(this.menuDropdown.parentElement.id !== "header") {
-      // this shows the menu button as soon as it has a menu-item
-      // don't mess with the toplevel menu, as that has separate
-      // css code which will otherwise be overruled
-      this.verifyAll();
-    }
+    this.verifyAll();
   }
 
 }

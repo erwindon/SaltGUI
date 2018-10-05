@@ -1,9 +1,10 @@
 class Route {
 
-  constructor(path, name, page_selector, menuitem_selector) {
+  constructor(path, name, page_selector, menuitem_selector, router) {
     this.path = new RegExp(path);
     this.name = name;
     this.page_element = document.querySelector(page_selector);
+    this.router = router;
     if(menuitem_selector)
       this.menuitem_element = document.querySelector(menuitem_selector);
   }

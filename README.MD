@@ -2,10 +2,9 @@
 
 A new open source web interface for managing a SaltStack server. Built using vanilla ES6 and implemented as a wrapper around the rest_cherrypy server.
 
-
 ## Screenshots
-![overview](/docs/overview.png)
-![job](/docs/job.png)
+![overview](/docs/screenshots/overview.png)
+![job](/docs/screenshots/job.png)
 
 
 ## Features
@@ -19,17 +18,19 @@ A new open source web interface for managing a SaltStack server. Built using van
 ## Quick start using PAM as authentication method
 - Install `salt-api` - this is available in the Salt PPA package which should already been installed if you're using Salt
 - Open the master config /etc/salt/master
-- Find `external_auth` and add a user as follows:
+- Find `external_auth` and configure as following (see the note below!):
 ```
 external_auth:
   pam:
-    desiredSaltGuiUsername:
+    saltuser:
       - .*
       - '@runner'
-      - '@wheel'
+        - 'jobs.*'
+      - '@wheel':
+        - 'key.*'
       - '@jobs'
 ```
-- Make sure to create this user, and set a password via the command line
+- `saltuser` is a unix (PAM) user, make sure it exists or create a new one.
 - At the bottom of this file, also setup the rest_cherrypi server:
 ```
 rest_cherrypy:
@@ -43,6 +44,11 @@ rest_cherrypy:
 - Replace `/srv/saltgui` in the above config with the directory containing the saltgui html/js source files.
 - Restart everything with ``pkill salt-master && pkill salt-api && salt-master -d && salt-api -d``
 - You should be good to go. If you have any problems, open a GitHub issue. As always, SSL is recommended wherever possible but setup is beyond the scope of this guide.
+
+**Note: With this configuration, the `saltuser` user has access to all salt modules available, maybe this is not what you want**
+
+Please read the [Permissions](docs/PERMISSIONS.md) page for more information.
+
 
 ## Authentication
 SaltGUI supports the following authentication methods supported by salt:
