@@ -36,7 +36,7 @@ class Output {
       // put each element on its own line
       let str = "[";
       let separator = "";
-      for(let elem of value) {
+      for(const elem of value) {
         str += separator + "\n" + indentStr + indentCnt +
           Output._formatJSON0(elem, indentStr + indentCnt, indentCnt);
         separator = ",";
@@ -53,7 +53,7 @@ class Output {
   
     // regular object
     // put each name+value on its own line
-    let keys = Object.keys(value);
+    const keys = Object.keys(value);
     let str = "{";
     let separator = "";
     for (const [key, val] of Object.entries(value).sort()) {
@@ -70,15 +70,6 @@ class Output {
     str += "}";
     return str;
   }
-
-//console.log("int", sf(123, 4));
-//console.log("str", sf("aap", 4));
-//console.log("arr", sf([], 4));
-//onsole.log("arr", sf([1], 4));
-//console.log("arr", sf([1,2], 4));
-//console.log("arr", sf([1,2,3,4,5], 4));
-//console.log("arr", sf({}, 4));
-//console.log("arr", sf({"a":11,"c":22,"b":33}, 4));
 
   // format a JSON object
   static formatJSON(a) {
