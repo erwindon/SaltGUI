@@ -10,25 +10,25 @@ describe('Unittests for output.js', function() {
 
     outputData = 123;
     result = Output.formatJSON(outputData);
-    assert.deepEqual(result, "123");
+    assert.equal(result, "123");
 
     outputData = "txt";
     result = Output.formatJSON(outputData);
-    assert.deepEqual(result, "\"txt\"");
+    assert.equal(result, "\"txt\"");
 
     outputData = [];
     result = Output.formatJSON(outputData);
-    assert.deepEqual(result, "[ ]");
+    assert.equal(result, "[ ]");
 
     outputData = [1];
     result = Output.formatJSON(outputData);
-    assert.deepEqual(result, "[\n" +
+    assert.equal(result, "[\n" +
       "  1\n" +
       "]");
 
     outputData = [1,2,3,4,5];
     result = Output.formatJSON(outputData);
-    assert.deepEqual(result,
+    assert.equal(result,
       "[\n" +
       "  1,\n" +
       "  2,\n" +
@@ -39,13 +39,13 @@ describe('Unittests for output.js', function() {
 
     outputData = {};
     result = Output.formatJSON(outputData);
-    assert.deepEqual(result, "{ }");
+    assert.equal(result, "{ }");
 
     // unordered input
     outputData = {"a":11,"c":22,"b":33};
     result = Output.formatJSON(outputData);
     // ordered output
-    assert.deepEqual(result,
+    assert.equal(result,
       "{\n" +
       "  \"a\": 11,\n" +
       "  \"b\": 33,\n" +
@@ -56,7 +56,7 @@ describe('Unittests for output.js', function() {
     outputData = {"ip6_interfaces":{"lo":["::1"],"eth0":["fe80::20d:3aff:fe38:576b"]}};
     result = Output.formatJSON(outputData);
     // ordered output
-    assert.deepEqual(result, 
+    assert.equal(result, 
       "{\n" +
       "  \"ip6_interfaces\": {\n" +
       "    \"eth0\": [\n" +
