@@ -106,6 +106,10 @@ class Output {
     return response;
   }
 
+  // compose the host/minion-name label that is shown with each response
+  static getHostnameHtml(hostname, extraClasses) {
+    return "<span class='hostname" + extraClasses + "'>" + hostname + "</span>:";
+  }
 
   // reduce the search key to match the data in the response
   static reduceFilterKey(filterKey) {
@@ -113,6 +117,7 @@ class Output {
       return "";
     }
     if (filterKey.startsWith("wheel.")) {
+      // strip the prefix "wheel."
       return filterKey.substring(6);
     }
 
@@ -120,6 +125,7 @@ class Output {
       return "";
     }
     if (filterKey.startsWith("runners.")) {
+      // strip the prefix "runners."
       return filterKey.substring(8);
     }
 
@@ -356,50 +362,131 @@ class Output {
     }
   }
 
+  static isHighStateOutput(command) {
+    if(command === 'state.apply') return true;
+    if(command === 'state.highstate') return true;
+    return false;
+  }
+
+  static addHighStateOutput(hostname, outputContainer, hostResponse) {
+
+    let anyFailures = false;
+    for(const [key, task] of Object.entries(hostResponse)) {
+      if(!task.result) anyFailures = true;
+    }
+
+    let html;
+    if(anyFailures) {
+      html = Output.getHostnameHtml(hostname, " failure");
+    } else {
+      html = Output.getHostnameHtml(hostname, "");
+    }
+
+    // The tasks are in an (unordered) object with uninteresting keys
+    // convert it to an array that is in execution order
+    // first put all the values in an array
+    const tasks = [];
+    Object.keys(hostResponse).forEach(
+      function(taskKey) { tasks.push(hostResponse[taskKey]); }
+    );
+    // then sort the array
+    tasks.sort(function(a, b) { return a.__run_num__ - b.__run_num__; } );
+
+    const indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
+
+    for(let task of tasks) {
+
+      if(task.result) {
+        // 2714 == HEAVY CHECK MARK
+        html += "</br><span style='color:green'>&#x2714;</span> ";
+      } else {
+        // 2718 = HEAVY BALLOT X
+        html += "</br><span style='color:red'>&#x2718;</span> ";
+      }
+
+      if(task.name) {
+        html += task.name;
+      } else {
+        // make sure that the checkbox/ballot-x is on a reasonable line
+        html += "(anonymous task)";
+      }
+
+      if(task.comment) {
+        html += "</br>" + indent + task.comment;
+      }
+
+      if(task.changes && task.changes.length) {
+        html += "</br>" + indent + JSON.stringify(task.changes);
+      }
+
+      if(task.hasOwnProperty('duration')) {
+        const millis = Math.round(task.duration);
+        if(millis < 1000) {
+          html += "</br>" + indent + `Took ${millis} milliseconds`;
+        } else {
+          html += "</br>" + indent + `Took ${millis/1000} seconds`;
+        }
+      }
+
+      // show any unknown attribute of a task
+      for(const [key, item] of Object.entries(task)) {
+        if(key === "__id__") continue; // ignored, generated
+        if(key === "__sls__") continue; // ignored
+        if(key === "__run_num__") continue; // handled, not shown
+        if(key === "changes") continue; // handled
+        if(key === "comment") continue; // handled
+        if(key === "duration") continue; // handled
+        if(key === "host") continue; // ignored, same as host
+        if(key === "name") continue; // handled
+        if(key === "result") continue; // handled
+        if(key === "start_time") continue; // ignored
+        html += "</br>" + indent + key + " = " + JSON.stringify(item);
+      }
+    }
+
+    html += "</br>";
+
+    outputContainer.innerHTML += html;
+  }
 
   // this is the default output form
   // just format the returned objects
-  static addNormalOutput(outputContainer, response) {
+  static addNormalOutput(hostname, outputContainer, hostResponse) {
 
-    for(const hostname of Object.keys(response).sort()) {
-      let hostResponse = response[hostname];
-
-      if (typeof hostResponse === 'object') {
-        // when you do a state.apply for example you get a json response.
-        // let's format it nicely here
-        hostResponse = Output.formatJSON(hostResponse);
-      } else if (typeof hostResponse === 'string') {
-        // Or when it is text, strip trailing whitespace
-        hostResponse = hostResponse.replace(/[ \r\n]+$/g, "");
-      }
-
-      outputContainer.innerHTML +=
-        `<span class='hostname'>${hostname}</span>: ${hostResponse}<br>`;
+    if (typeof hostResponse === 'object') {
+      // salt output is a json object
+      // let's format it nicely here
+      hostResponse = JSON.stringify(hostResponse, null, 2);
+    } else if (typeof hostResponse === 'string') {
+      // Or when it is text, strip trailing whitespace
+      hostResponse = hostResponse.replace(/[ \r\n]+$/g, "");
     }
-  }
 
-
-  // show an error
-  // we do not assume any organisation of the data
-  static addErrorOutput(outputContainer, response) {
-    outputContainer.innerText = response;
+    outputContainer.innerHTML +=
+      Output.getHostnameHtml(hostname, "") + " " + hostResponse + "<br>";
   }
 
 
   // the orchestrator for the output
   // determines what format should be used and uses that
-  static addOutput(outputContainer, response, command) {
+  static addResponseOutput(outputContainer, response, command) {
 
     // remove old content
     outputContainer.innerHTML = "";
 
+    // reformat runner/wheel output into regular output
+    response = Output.addVirtualMinion(response, command);
+
     if(typeof response === "string") {
-      Output.addErrorOutput(outputContainer, response);
+      // do not format a string as an object
+      outputContainer.innerText = response;
       return;
     }
 
-    // reformat runner/wheel output into regular output
-    response = Output.addVirtualMinion(response, command);
+    if(typeof response !== "object" || Array.isArray(response)) {
+      outputContainer.innerText = JSON.stringify(response);
+      return;
+    }
 
     // it might be documentation
     const commandArg = command.trim().replace(/^[a-z.]* */i, "");
@@ -410,8 +497,42 @@ class Output {
       return;
     }
 
-    // nothing special? then it is normal output
-    Output.addNormalOutput(outputContainer, response);
+    // for all other types we consider the output per minion
+    // this is more generic and it simplifies the handlers
+    for(const hostname of Object.keys(response).sort()) {
+
+      const hostResponse = response[hostname];
+
+      if(typeof hostResponse === "string") {
+        // do not format a string as an object
+        outputContainer.innerHTML +=
+          Output.getHostnameHtml(hostname, "") +
+          " " +
+          hostResponse +
+          "</br>";
+        continue;
+      }
+
+      if(typeof hostResponse !== "object" || Array.isArray(hostResponse)) {
+        outputContainer.innerHTML +=
+          Output.getHostnameHtml(hostname, "") +
+          " " +
+          JSON.stringify(hostResponse) +
+          "</br>";
+        continue;
+      }
+
+      // it might be highstate output
+      const commandCmd = command.trim().replace(/ .*/, "");
+      const isHighStateOutput = Output.isHighStateOutput(commandCmd);
+      if(isHighStateOutput) {
+        Output.addHighStateOutput(hostname, outputContainer, hostResponse);
+        continue;
+      }
+
+      // nothing special? then it is normal output
+      Output.addNormalOutput(hostname, outputContainer, hostResponse);
+    }
   }
 
 }

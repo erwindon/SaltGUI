@@ -59,7 +59,7 @@ class CommandBox {
 
   _onRunReturn(response, command) {
     const outputContainer = document.querySelector(".run-command pre");
-    Output.addOutput(outputContainer, response, command);
+    Output.addResponseOutput(outputContainer, response, command);
     const button = document.querySelector(".run-command input[type='submit']");
     button.disabled = false;
   }
