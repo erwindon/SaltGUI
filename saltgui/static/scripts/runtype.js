@@ -24,7 +24,7 @@ class RunType {
   }
 
   static setRunTypeDefault() {
-    RunType.menuRunType.setValue("normal");
+    RunType.menuRunType._value = "normal";
     RunType._updateRunTypeText();
     // reset the title to the absolute minimum
     // so that the menu does not stand out in trivial situations
@@ -32,7 +32,7 @@ class RunType {
   }
 
   static getRunType() {
-    const runType = RunType.menuRunType.getValue();
+    const runType = RunType.menuRunType._value;
     if(runType === undefined || runType === "") return "normal";
     return runType;
   }

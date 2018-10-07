@@ -5,7 +5,6 @@ class DropDownMenu {
   constructor(element) {
 
     this.callback= this.callback.bind(this);
-    this.setValue= this.setValue.bind(this);
     this.verifyAll = this.verifyAll.bind(this);
 
     this.menuDropdown = Route._createDiv("run-command-button", "");
@@ -68,16 +67,8 @@ class DropDownMenu {
   }
 
   callback(evt, callback, value) {
-    this.setValue(value);
-    callback(evt);
-  }
-
-  getValue() {
-    return this._value;
-  }
-
-  setValue(value) {
     this._value = value;
+    callback(evt);
   }
 
   setTitle(title) {
