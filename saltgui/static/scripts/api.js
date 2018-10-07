@@ -13,7 +13,9 @@ class API {
   }
 
   isAuthenticated() {
-    return this.apiRequest("GET", "/login", {})
+    // use the /stats api call to see if we are allowed to access SaltGUI
+    // (if the session cookie is still valid)
+    return this.apiRequest("GET", "/stats", {})
       .then(response => {
         return window.sessionStorage.getItem("token") !== null;
       });
