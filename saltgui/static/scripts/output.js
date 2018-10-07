@@ -23,7 +23,11 @@ class Output {
 
   // format a JSON object
   // based on an initial indentation and an indentation increment
-  static _formatJSON0(value, indentStr, indentCnt) {
+  // default initial indentation is ""
+  static formatJSON(value, indentStr="") {
+
+    // indent each level with 2 spaces
+    const indentStep = "  ";
 
     if(typeof value !== "object") {
       // a simple type
@@ -37,8 +41,8 @@ class Output {
       let str = "[";
       let separator = "";
       for(const elem of value) {
-        str += separator + "\n" + indentStr + indentCnt +
-          Output._formatJSON0(elem, indentStr + indentCnt, indentCnt);
+        str += separator + "\n" + indentStr + indentStep +
+          Output.formatJSON(elem, indentStr + indentStep);
         separator = ",";
       }
       if(value.length === 0) {
@@ -57,8 +61,8 @@ class Output {
     let str = "{";
     let separator = "";
     for (const [key, val] of Object.entries(value).sort()) {
-      str += separator + "\n" + indentStr + indentCnt + "\"" + key + "\": " +
-        Output._formatJSON0(val, indentStr + indentCnt, indentCnt);
+      str += separator + "\n" + indentStr + indentStep + "\"" + key + "\": " +
+        Output.formatJSON(val, indentStr + indentStep);
       separator = ",";
     }
     if(Object.keys(value).length === 0) {
@@ -69,13 +73,6 @@ class Output {
     }
     str += "}";
     return str;
-  }
-
-  // format a JSON object
-  static formatJSON(a) {
-    // initial indentation is ""
-    // indent each level with 2 spaces
-    return Output._formatJSON0(a, "", "  ");
   }
 
   // Re-organize the output to let it appear as if the output comes
