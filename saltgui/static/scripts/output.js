@@ -167,12 +167,6 @@ class Output {
         return false;
       }
 
-      // arrays are also objects,
-      // but not what we are looking for
-      if(Array.isArray(output)) {
-        return false;
-      }
-
       for(const key of Object.keys(output)) {
         // e.g. for "test.rand_str"
         if(output[key] === null) {
