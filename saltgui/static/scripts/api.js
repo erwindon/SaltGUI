@@ -97,6 +97,6 @@ class API {
         // fetch does not reject on > 300 http status codes, so let's
         // do it ourselves
         throw new HTTPError(response.status, response.statusText);
-      }).catch(console.error);
+      });
   }
 }
