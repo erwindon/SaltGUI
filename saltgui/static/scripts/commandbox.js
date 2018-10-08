@@ -87,12 +87,12 @@ class CommandBox {
     // the user may have altered the text after running the command, just ignore that
     const command = document.querySelector(".run-command #command").value.split(" ")[0];
     const output = document.querySelector(".run-command pre").innerHTML;
-    const _screenModifyingCommands = [
+    const screenModifyingCommands = [
       "wheel.key.accept",
       "wheel.key.delete",
       "wheel.key.reject",
     ];
-    if(_screenModifyingCommands.includes(command) && output !== "Waiting for command...") {
+    if(screenModifyingCommands.includes(command) && output !== "Waiting for command...") {
       location.reload(); 
     }
 
