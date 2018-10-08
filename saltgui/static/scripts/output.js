@@ -24,10 +24,10 @@ class Output {
   // format a JSON object
   // based on an initial indentation and an indentation increment
   // default initial indentation is ""
-  static formatJSON(value, indentStr="") {
+  static formatJSON(value, indentLevel=0) {
 
     // indent each level with 2 spaces
-    const indentStep = "  ";
+    const indentStep = 2;
 
     if(typeof value !== "object") {
       // a simple type
@@ -41,15 +41,15 @@ class Output {
       let str = "[";
       let separator = "";
       for(const elem of value) {
-        str += separator + "\n" + indentStr + indentStep +
-          Output.formatJSON(elem, indentStr + indentStep);
+        str += separator + "\n" + " ".repeat(indentLevel + indentStep) +
+          Output.formatJSON(elem, indentLevel + indentStep);
         separator = ",";
       }
       if(value.length === 0) {
         // show the brackets for an empty array a bit wider apart
         str += " ";
       } else {
-        str += "\n" + indentStr;
+        str += "\n" + " ".repeat(indentLevel);
       }
       str += "]";
       return str;
@@ -61,15 +61,15 @@ class Output {
     let str = "{";
     let separator = "";
     for (const [key, val] of Object.entries(value).sort()) {
-      str += separator + "\n" + indentStr + indentStep + "\"" + key + "\": " +
-        Output.formatJSON(val, indentStr + indentStep);
+      str += separator + "\n" + " ".repeat(indentLevel + indentStep) + "\"" + key + "\": " +
+        Output.formatJSON(val, indentLevel + indentStep);
       separator = ",";
     }
     if(Object.keys(value).length === 0) {
       // show the brackets for an empty object a bit wider apart
       str += " ";
     } else {
-      str += "\n" + indentStr;
+      str += "\n" + " ".repeat(indentLevel);
     }
     str += "}";
     return str;
