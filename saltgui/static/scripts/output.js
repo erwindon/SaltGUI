@@ -21,6 +21,60 @@
 
 class Output {
 
+  // format a JSON object
+  // based on an initial indentation and an indentation increment
+  // default initial indentation is ""
+  static formatJSON(value, indentStr="") {
+
+    // indent each level with 2 spaces
+    const indentStep = "  ";
+
+    if(typeof value !== "object") {
+      // a simple type
+      // leave that to the builtin function
+      return JSON.stringify(value);
+    }
+  
+    if(Array.isArray(value)) {
+      // an array
+      // put each element on its own line
+      let str = "[";
+      let separator = "";
+      for(const elem of value) {
+        str += separator + "\n" + indentStr + indentStep +
+          Output.formatJSON(elem, indentStr + indentStep);
+        separator = ",";
+      }
+      if(value.length === 0) {
+        // show the brackets for an empty array a bit wider apart
+        str += " ";
+      } else {
+        str += "\n" + indentStr;
+      }
+      str += "]";
+      return str;
+    }
+  
+    // regular object
+    // put each name+value on its own line
+    const keys = Object.keys(value);
+    let str = "{";
+    let separator = "";
+    for (const [key, val] of Object.entries(value).sort()) {
+      str += separator + "\n" + indentStr + indentStep + "\"" + key + "\": " +
+        Output.formatJSON(val, indentStr + indentStep);
+      separator = ",";
+    }
+    if(Object.keys(value).length === 0) {
+      // show the brackets for an empty object a bit wider apart
+      str += " ";
+    } else {
+      str += "\n" + indentStr;
+    }
+    str += "}";
+    return str;
+  }
+
   // Re-organize the output to let it appear as if the output comes
   // from a single node called "RUNNER" or "MASTER".
   // This way all responses are organized by minion
@@ -222,7 +276,7 @@ class Output {
 
         let out = hostResponse[key];
         if(out === null) continue;
-        out = out.trimEnd();
+        out = out.trimRight();
 
         // internal links: remove the ".. rubric::" prefix
         // e.g. in "sys.doc state.apply"
@@ -301,7 +355,7 @@ class Output {
       if (typeof hostResponse === 'object') {
         // when you do a state.apply for example you get a json response.
         // let's format it nicely here
-        hostResponse = JSON.stringify(hostResponse, null, 2);
+        hostResponse = Output.formatJSON(hostResponse);
       } else if (typeof hostResponse === 'string') {
         // Or when it is text, strip trailing whitespace
         hostResponse = hostResponse.replace(/[ \r\n]+$/g, "");
