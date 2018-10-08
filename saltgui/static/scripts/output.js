@@ -415,8 +415,15 @@ class Output {
         html += "</br>" + indent + task.comment;
       }
 
-      if(task.changes && task.changes.length) {
-        html += "</br>" + indent + JSON.stringify(task.changes);
+      if(task.changes) {
+        for(const key of Object.keys(task.changes).sort()) {
+          const change = task.changes[key];
+          // 9658 = BLACK RIGHT-POINTING POINTER
+          // don't use arrows here, these are higher than a regular
+          // text-line and disturb the text-flow
+          html += "</br>" + indent + key + ": " +
+            JSON.stringify(change.old) + " &#9658; " + JSON.stringify(change.new);
+        }
       }
 
       if(task.hasOwnProperty('duration')) {
