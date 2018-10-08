@@ -85,10 +85,15 @@ class CommandBox {
 
     // test whether the command may have caused an update to the list
     // the user may have altered the text after running the command, just ignore that
-    const command = document.querySelector(".run-command #command").value;
+    const command = document.querySelector(".run-command #command").value.split(" ")[0];
     const output = document.querySelector(".run-command pre").innerHTML;
-    if(command.startsWith("wheel.key.") && output !== "Waiting for command...") {
-      location.reload();
+    const _screenModifyingCommands = [
+      "wheel.key.accept",
+      "wheel.key.delete",
+      "wheel.key.reject",
+    ];
+    if(_screenModifyingCommands.includes(command) && output !== "Waiting for command...") {
+      location.reload(); 
     }
 
     evt.stopPropagation();
