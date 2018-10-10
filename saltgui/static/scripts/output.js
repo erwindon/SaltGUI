@@ -407,14 +407,19 @@ class Output {
 
     const indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
 
+    let succeeded = 0;
+    let failed = 0;
+    let total_millis = 0;
     for(let task of tasks) {
 
       if(task.result) {
         // 2714 == HEAVY CHECK MARK
         html += "</br><span style='color:green'>&#x2714;</span> ";
+        succeeded += 1;
       } else {
         // 2718 = HEAVY BALLOT X
         html += "</br><span style='color:red'>&#x2718;</span> ";
+        failed += 1;
       }
 
       if(task.name) {
@@ -445,6 +450,7 @@ class Output {
 
       if(task.hasOwnProperty('duration')) {
         const millis = Math.round(task.duration);
+        total_millis += millis;
         if(millis >= 10) {
           // anything below 10ms is not worth reporting
           // report only the "slow" jobs
@@ -467,6 +473,20 @@ class Output {
         if(key === "start_time") continue; // ignored
         html += "</br>" + indent + key + " = " + JSON.stringify(item);
       }
+    }
+
+    if(succeeded || failed) {
+      let line = "";
+
+      if(succeeded) line += ", " + succeeded + " succeeded";
+
+      if(failed) line += ", " + failed + " failed";
+
+      if(failed && succeeded) line += ", " + (succeeded + failed) + " total";
+
+      line += ", " + Output.getDurationClause(total_millis);
+
+      html += "</br>" + line.substring(2);
     }
 
     html += "</br>";
