@@ -400,7 +400,10 @@ class Output {
     // first put all the values in an array
     const tasks = [];
     Object.keys(hostResponse).forEach(
-      function(taskKey) { tasks.push(hostResponse[taskKey]); }
+      function(taskKey) {
+        hostResponse[taskKey].___key___ = taskKey;
+        tasks.push(hostResponse[taskKey]);
+      }
     );
     // then sort the array
     tasks.sort(function(a, b) { return a.__run_num__ - b.__run_num__; } );
@@ -410,10 +413,10 @@ class Output {
     let succeeded = 0;
     let failed = 0;
     let total_millis = 0;
-    for(let task of tasks) {
+    for(const task of tasks) {
 
       if(task.result) {
-        // 2714 == HEAVY CHECK MARK
+        // 2714 = HEAVY CHECK MARK
         html += "</br><span style='color:green'>&#x2714;</span> ";
         succeeded += 1;
       } else {
@@ -426,6 +429,7 @@ class Output {
         html += task.name;
       } else {
         // make sure that the checkbox/ballot-x is on a reasonable line
+        // also for the next "from" clause (if any)
         html += "(anonymous task)";
       }
 
@@ -455,6 +459,10 @@ class Output {
         }
       }
 
+      if(task.hasOwnProperty('start_time')) {
+        html += "</br>" + indent + "Started at " + task.start_time;
+      }
+
       if(task.hasOwnProperty('duration')) {
         const millis = Math.round(task.duration);
         total_millis += millis;
@@ -478,7 +486,7 @@ class Output {
         if(key === "host") continue; // ignored, same as host
         if(key === "name") continue; // handled
         if(key === "result") continue; // handled
-        if(key === "start_time") continue; // ignored
+        if(key === "start_time") continue; // handled
         html += "</br>" + indent + key + " = " + JSON.stringify(item);
       }
     }
