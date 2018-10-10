@@ -429,6 +429,10 @@ class Output {
         html += "(anonymous task)";
       }
 
+      if(task.__id__ && task.__id__ !== task.name) {
+        html += " id=" + task.__id__;
+      }
+
       if(task.__sls__) {
         html += " (from " + task.__sls__.replace(".", "/") + ".sls)";
       }
@@ -461,7 +465,7 @@ class Output {
 
       // show any unknown attribute of a task
       for(const [key, item] of Object.entries(task)) {
-        if(key === "__id__") continue; // ignored, generated
+        if(key === "__id__") continue; // handled
         if(key === "__sls__") continue; // handled
         if(key === "__run_num__") continue; // handled, not shown
         if(key === "changes") continue; // handled
