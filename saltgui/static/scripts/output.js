@@ -368,6 +368,19 @@ class Output {
     return false;
   }
 
+  static getDurationClause(millis) {
+    if(millis === 1) {
+      return `${millis} millisecond`;
+    }
+    if(millis < 1000) {
+      return `${millis} milliseconds`;
+    }
+    if(millis === 1000) {
+      return `${millis/1000} second`;
+    }
+    return `${millis/1000} seconds`;
+  }
+
   static addHighStateOutput(hostname, outputContainer, hostResponse) {
 
     let anyFailures = false;
@@ -432,10 +445,11 @@ class Output {
 
       if(task.hasOwnProperty('duration')) {
         const millis = Math.round(task.duration);
-        if(millis < 1000) {
-          html += "</br>" + indent + `Took ${millis} milliseconds`;
-        } else {
-          html += "</br>" + indent + `Took ${millis/1000} seconds`;
+        if(millis >= 10) {
+          // anything below 10ms is not worth reporting
+          // report only the "slow" jobs
+          // it still counts for the grand total thought
+          html += "</br>" + indent + "Duration " + Output.getDurationClause(millis);
         }
       }
 
