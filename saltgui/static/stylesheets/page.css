@@ -13,14 +13,23 @@
   width: 100%;
 }
 
-pre .hostname {
-  color: #4caf50;
-  display: inline-block;
-  margin-top: 12px;
+pre.output div {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
-pre .hostname:first-of-type {
+pre.output div:first-of-type {
   margin-top: 0;
+}
+
+pre .hostname {
+  color: #4caf50;
+}
+
+.collapsed {
+  color: red;
+  max-height: calc(1em + 8px);
+  overflow-y: hidden;
 }
 
 .minions {
