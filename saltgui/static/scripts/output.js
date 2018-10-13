@@ -29,18 +29,24 @@ class Output {
     // indent each level with 2 spaces
     const indentStep = 2;
 
+    if(value === undefined) {
+      // JSON.stringify does not return a string for this
+      // but again a value undefined
+      return "undefined";
+    }
+
     if(typeof value !== "object") {
       // a simple type
       // leave that to the builtin function
       return JSON.stringify(value);
     }
-  
+
     if(value === null) {
       // null is an object, but not really
       // leave that to the builtin function
       return JSON.stringify(value);
     }
-  
+
     if(Array.isArray(value)) {
       // an array
       // put each element on its own line
@@ -60,7 +66,7 @@ class Output {
       str += "]";
       return str;
     }
-  
+
     // regular object
     // put each name+value on its own line
     const keys = Object.keys(value);
