@@ -504,6 +504,12 @@ class Output {
       html += "</br>" + line.substring(2);
     }
 
+    if(nrMultiLineBlocks <= 1) {
+      // No collapsable elements, hide the master
+      // Also hide with 1 collapsable element
+      allDiv.style.display = "none";
+    }
+
     html += "</br>";
 
     outputContainer.innerHTML += html;
@@ -520,6 +526,27 @@ class Output {
     } else if (typeof hostResponse === 'string') {
       // Or when it is text, strip trailing whitespace
       hostResponse = hostResponse.replace(/[ \r\n]+$/g, "");
+    }
+
+    const oneLineView = !hostResponse.includes("\n");
+    if(!oneLineView) nrMultiLineBlocks += 1;
+    const div = document.createElement("div");
+    const span = document.createElement("span");
+    span.classList.add("hostname");
+    span.innerText = hostname;
+    div.append(span);
+    div.appendChild(document.createTextNode(": "));
+    // multiple line, collapsible
+    // 25B7 = WHITE RIGHT-POINTING TRIANGLE
+    // 25BD = WHITE DOWN-POINTING TRIANGLE
+    let triangle = null;
+    if(!oneLineView) {
+      triangle = document.createElement("span");
+      triangle.innerText = "\u25bd";
+      triangle.style = "cursor: pointer";
+      triangle.classList.add("triangle");
+      div.appendChild(triangle);
+      div.appendChild(document.createElement("br"));
     }
 
     outputContainer.innerHTML +=
@@ -556,6 +583,46 @@ class Output {
       Output.addDocumentationOutput(outputContainer, response);
       return;
     }
+
+    const allDiv = document.createElement("div");
+
+    const txt = document.createElement("span");
+    const cnt = Object.keys(response).length;
+    txt.innerText = cnt + " responses ";
+    allDiv.appendChild(txt);
+
+    let triangle = document.createElement("span");
+    triangle.innerText = "\u25bd";
+    triangle.style = "cursor: pointer";
+    allDiv.appendChild(triangle);
+
+    outputContainer.appendChild(allDiv);
+
+    triangle.addEventListener('click', _ => {
+      // 25B7 = WHITE RIGHT-POINTING TRIANGLE
+      // 25BD = WHITE DOWN-POINTING TRIANGLE
+      if(triangle.innerText !== "\u25bd") {
+        triangle.innerText = "\u25bd";
+      } else {
+        triangle.innerText = "\u25b7";
+      }
+
+      for(const div of outputContainer.childNodes) {
+        // only click on items that are collapsible
+        const childs = div.getElementsByClassName("triangle");
+        if(childs.length !== 1) continue;
+        // do not collapse the "all" item again
+        const tr = childs[0];
+        if(tr === triangle) continue;
+        // only click on items that are not already the same as "all"
+        if(tr.innerText === triangle.innerText) continue;
+        // (un)collapse the minion
+        const evt = new MouseEvent("click", {});
+        tr.dispatchEvent(evt);
+      }
+    });
+
+    let nrMultiLineBlocks = 0;
 
     // for all other types we consider the output per minion
     // this is more generic and it simplifies the handlers
