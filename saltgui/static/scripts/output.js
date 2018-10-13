@@ -35,6 +35,12 @@ class Output {
       return JSON.stringify(value);
     }
   
+    if(value === null) {
+      // null is an object, but not really
+      // leave that to the builtin function
+      return JSON.stringify(value);
+    }
+  
     if(Array.isArray(value)) {
       // an array
       // put each element on its own line
