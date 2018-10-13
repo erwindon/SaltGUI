@@ -165,7 +165,7 @@ class Output {
         continue;
       }
 
-      if(typeof output !== 'object') {
+      if(typeof output !== "object") {
         // strange --> no documentation object
         return false;
       }
@@ -183,7 +183,7 @@ class Output {
         }
 
         // but otherwise it must be a (documentation)string
-        if(typeof output[key] !== 'string') {
+        if(typeof output[key] !== "string") {
           return false;
         }
 
@@ -350,8 +350,7 @@ class Output {
         out = out.replace(/\n\n\n*/gm, "\n\n");
 
         outputContainer.innerHTML +=
-          `<span class='hostname'>${key}</span>:<br>` +
-          '<pre style="height: initial; overflow-y: initial;">' + out + '</pre>';
+          "<div><span class='hostname'>" + key + "</span>:</br><pre style='height: initial; overflow-y: initial;'>" + out + "</pre></div>";
       }
     }
   }
@@ -364,11 +363,11 @@ class Output {
     for(const hostname of Object.keys(response).sort()) {
       let hostResponse = response[hostname];
 
-      if (typeof hostResponse === 'object') {
+      if (typeof hostResponse === "object") {
         // when you do a state.apply for example you get a json response.
         // let's format it nicely here
         hostResponse = Output.formatJSON(hostResponse);
-      } else if (typeof hostResponse === 'string') {
+      } else if (typeof hostResponse === "string") {
         // Or when it is text, strip trailing whitespace
         hostResponse = hostResponse.replace(/[ \r\n]+$/g, "");
       }
