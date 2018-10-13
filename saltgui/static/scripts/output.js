@@ -171,7 +171,7 @@ class Output {
         continue;
       }
 
-      if(typeof output !== 'object') {
+      if(typeof output !== "object") {
         // strange --> no documentation object
         return false;
       }
@@ -189,7 +189,7 @@ class Output {
         }
 
         // but otherwise it must be a (documentation)string
-        if(typeof output[key] !== 'string') {
+        if(typeof output[key] !== "string") {
           return false;
         }
 
@@ -356,8 +356,7 @@ class Output {
         out = out.replace(/\n\n\n*/gm, "\n\n");
 
         outputContainer.innerHTML +=
-          `<span class='hostname'>${key}</span>:<br>` +
-          '<pre style="height: initial; overflow-y: initial;">' + out + '</pre>';
+          "<div><span class='hostname'>" + key + "</span>:</br><pre style='height: initial; overflow-y: initial;'>" + out + "</pre></div>";
       }
     }
   }
