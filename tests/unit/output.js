@@ -8,6 +8,14 @@ describe('Unittests for output.js', function() {
 
     let outputData, result;
 
+    outputData = null;
+    result = Output.formatJSON(outputData);
+    assert.equal(result, "null");
+
+    outputData = undefined;
+    result = Output.formatJSON(outputData);
+    assert.equal(result, "undefined");
+
     outputData = 123;
     result = Output.formatJSON(outputData);
     assert.equal(result, "123");
