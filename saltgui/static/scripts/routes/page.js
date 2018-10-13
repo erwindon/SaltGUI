@@ -164,7 +164,8 @@ class PageRoute extends Route {
         targetText = targetText + ", " + job.Returned.length + " returned";
 
       const targetField = document.querySelector(".jobs #job" + k + " .target");
-      targetField.innerText = targetText;
+      // the field may not (yet) be on the screen
+      if(targetField) targetField.innerText = targetText;
     }
   }
 
