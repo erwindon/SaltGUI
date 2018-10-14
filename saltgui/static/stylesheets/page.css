@@ -54,14 +54,14 @@ pre .hostname {
   padding: 10px 18px;
 }
 
-.minions li:last-of-type {
-  border-bottom: 0;
-}
-
 .minions li div {
   display: inline-block;
   margin-left: 0;
   margin-right: 20px;
+}
+
+.minions li:last-of-type {
+  border-bottom: 0;
 }
 
 .minions li .run-command-button {
