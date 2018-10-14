@@ -4,7 +4,7 @@
 //    one of the responsing nodes is selected
 //    all other nodes are then ignored
 // B) state output
-//    TODO
+//    the response is formatted as a list of tasks
 // C) error output
 //    the response is formatted as text
 // D) other output
@@ -107,8 +107,12 @@ class Output {
   }
 
   // compose the host/minion-name label that is shown with each response
-  static getHostnameHtml(hostname, extraClasses) {
-    return "<span class='hostname" + extraClasses + "'>" + hostname + "</span>:";
+  static getHostnameHtml(hostname, extraClass="") {
+    const span = document.createElement('span');
+    span.classList.add("hostname");
+    if(extraClass) span.classList.add(extraClass);
+    span.innerText = hostname;
+    return span;
   }
 
   // reduce the search key to match the data in the response
@@ -380,19 +384,19 @@ class Output {
     return `${millis/1000} seconds`;
   }
 
-  static addHighStateOutput(hostname, outputContainer, hostResponse) {
-
+  static getHighStateLabel(hostname, hostResponse) {
     let anyFailures = false;
     for(const [key, task] of Object.entries(hostResponse)) {
       if(!task.result) anyFailures = true;
     }
 
-    let html;
     if(anyFailures) {
-      html = Output.getHostnameHtml(hostname, " failure");
-    } else {
-      html = Output.getHostnameHtml(hostname, "");
+      return Output.getHostnameHtml(hostname, "host_failure");
     }
+    return Output.getHostnameHtml(hostname, "host_success");
+  }
+
+  static getHighStateOutput(hostResponse) {
 
     // The tasks are in an (unordered) object with uninteresting keys
     // convert it to an array that is in execution order
@@ -407,59 +411,83 @@ class Output {
     // then sort the array
     tasks.sort(function(a, b) { return a.__run_num__ - b.__run_num__; } );
 
-    const indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
+    const indent = "    ";
+
+    const div = document.createElement("div");
 
     let succeeded = 0;
     let failed = 0;
     let total_millis = 0;
     for(const task of tasks) {
 
+      const taskDiv = document.createElement("div");
+
+      const span = document.createElement("span");
       if(task.result) {
         // 2714 = HEAVY CHECK MARK
-        html += "</br><span style='color:green'>&#x2714;</span> ";
+        span.style.color = "green";
+        span.innerText = "\u2714";
         succeeded += 1;
       } else {
         // 2718 = HEAVY BALLOT X
-        html += "</br><span style='color:red'>&#x2718;</span> ";
+        span.style.color = "red";
+        span.innerText = "\u2718";
         failed += 1;
       }
+      taskDiv.append(span);
+
+      taskDiv.append(document.createTextNode(" "));
 
       if(task.name) {
-        html += task.name;
+        taskDiv.append(document.createTextNode(task.name));
       } else {
         // make sure that the checkbox/ballot-x is on a reasonable line
         // also for the next "from" clause (if any)
-        html += "(anonymous task)";
+        taskDiv.append(document.createTextNode("(anonymous task)"));
       }
 
       if(task.__id__ && task.__id__ !== task.name) {
-        html += " id=" + task.__id__;
+        taskDiv.append(document.createTextNode(" id=" + task.__id__));
       }
 
       if(task.__sls__) {
-        html += " (from " + task.__sls__.replace(".", "/") + ".sls)";
+        taskDiv.append(document.createTextNode(
+          " (from " + task.__sls__.replace(".", "/") + ".sls)"));
       }
 
       const components = task.___key___.split("_|-");
-      html += "</br>" + indent + "Function is " + components[0] + "." + components[3];
+      taskDiv.append(document.createElement("br"));
+      taskDiv.append(document.createTextNode(
+        indent + "Function is " + components[0] + "." + components[3]));
 
       if(task.comment) {
-        html += "</br>" + indent + task.comment;
+        taskDiv.append(document.createElement("br"));
+        let txt = task.comment;
+        // trim extra whitespace
+        txt = txt.replace(/[ \r\n]+$/g, "");
+        // indent extra lines
+        txt = txt.replace(/[\n]+/g, "\n" + indent);
+        taskDiv.append(document.createTextNode(indent + txt));
       }
 
       if(task.changes) {
         for(const key of Object.keys(task.changes).sort()) {
           const change = task.changes[key];
-          // 9658 = BLACK RIGHT-POINTING POINTER
+          // 25BA = BLACK RIGHT-POINTING POINTER
           // don't use arrows here, these are higher than a regular
           // text-line and disturb the text-flow
-          html += "</br>" + indent + key + ": " +
-            JSON.stringify(change.old) + " &#9658; " + JSON.stringify(change.new);
+          taskDiv.append(document.createElement("br"));
+          taskDiv.append(document.createTextNode(
+            indent + key + ": " +
+            JSON.stringify(change.old) + " \u25BA " +
+            JSON.stringify(change.new)));
         }
       }
 
       if(task.hasOwnProperty('start_time')) {
-        html += "</br>" + indent + "Started at " + task.start_time;
+        taskDiv.append(document.createElement("br"));
+        taskDiv.append(document.createTextNode(
+          indent + "Started at " + task.start_time));
       }
 
       if(task.hasOwnProperty('duration')) {
@@ -469,7 +497,9 @@ class Output {
           // anything below 10ms is not worth reporting
           // report only the "slow" jobs
           // it still counts for the grand total thought
-          html += "</br>" + indent + "Duration " + Output.getDurationClause(millis);
+          taskDiv.append(document.createElement("br"));
+          taskDiv.append(document.createTextNode(
+            indent + "Duration " + Output.getDurationClause(millis)));
         }
       }
 
@@ -486,8 +516,12 @@ class Output {
         if(key === "name") continue; // handled
         if(key === "result") continue; // handled
         if(key === "start_time") continue; // handled
-        html += "</br>" + indent + key + " = " + JSON.stringify(item);
+        taskDiv.append(document.createElement("br"));
+        taskDiv.append(document.createTextNode(
+          indent + key + " = " + JSON.stringify(item)));
       }
+
+      div.append(taskDiv);
     }
 
     if(succeeded || failed) {
@@ -501,56 +535,30 @@ class Output {
 
       line += ", " + Output.getDurationClause(total_millis);
 
-      html += "</br>" + line.substring(2);
+      div.append(document.createTextNode(line.substring(2)));
     }
 
-    if(nrMultiLineBlocks <= 1) {
-      // No collapsable elements, hide the master
-      // Also hide with 1 collapsable element
-      allDiv.style.display = "none";
-    }
-
-    html += "</br>";
-
-    outputContainer.innerHTML += html;
+    return div;
   }
+
+
+  // the output is only text
+  // note: do not return a text-node
+  static getTextOutput(hostResponse) {
+    hostResponse = hostResponse.replace(/[ \r\n]+$/g, "");
+    const span = document.createElement("span");
+    span.innerText = hostResponse;
+    return span;
+  }
+
 
   // this is the default output form
   // just format the returned objects
-  static addNormalOutput(hostname, outputContainer, hostResponse) {
-
-    if (typeof hostResponse === 'object') {
-      // salt output is a json object
-      // let's format it nicely here
-      hostResponse = Output.formatJSON(hostResponse);
-    } else if (typeof hostResponse === 'string') {
-      // Or when it is text, strip trailing whitespace
-      hostResponse = hostResponse.replace(/[ \r\n]+$/g, "");
-    }
-
-    const oneLineView = !hostResponse.includes("\n");
-    if(!oneLineView) nrMultiLineBlocks += 1;
-    const div = document.createElement("div");
+  // note: do not return a text-node
+  static getNormalOutput(hostResponse) {
     const span = document.createElement("span");
-    span.classList.add("hostname");
-    span.innerText = hostname;
-    div.append(span);
-    div.appendChild(document.createTextNode(": "));
-    // multiple line, collapsible
-    // 25B7 = WHITE RIGHT-POINTING TRIANGLE
-    // 25BD = WHITE DOWN-POINTING TRIANGLE
-    let triangle = null;
-    if(!oneLineView) {
-      triangle = document.createElement("span");
-      triangle.innerText = "\u25bd";
-      triangle.style = "cursor: pointer";
-      triangle.classList.add("triangle");
-      div.appendChild(triangle);
-      div.appendChild(document.createElement("br"));
-    }
-
-    outputContainer.innerHTML +=
-      Output.getHostnameHtml(hostname, "") + " " + hostResponse + "<br>";
+    span.innerText = Output.formatJSON(hostResponse);
+    return span;
   }
 
 
@@ -588,23 +596,27 @@ class Output {
 
     const txt = document.createElement("span");
     const cnt = Object.keys(response).length;
-    txt.innerText = cnt + " responses ";
+    if(cnt === 1) {
+      txt.innerText = cnt + " response ";
+    } else {
+      txt.innerText = cnt + " responses ";
+    }
     allDiv.appendChild(txt);
 
-    const triangle = document.createElement("span");
-    triangle.innerText = "\u25bd";
-    triangle.style = "cursor: pointer";
-    allDiv.appendChild(triangle);
+    const masterTriangle = document.createElement("span");
+    masterTriangle.innerText = "\u25bd";
+    masterTriangle.style = "cursor: pointer";
+    allDiv.appendChild(masterTriangle);
 
     outputContainer.appendChild(allDiv);
 
-    triangle.addEventListener('click', _ => {
+    masterTriangle.addEventListener('click', _ => {
       // 25B7 = WHITE RIGHT-POINTING TRIANGLE
       // 25BD = WHITE DOWN-POINTING TRIANGLE
-      if(triangle.innerText !== "\u25bd") {
-        triangle.innerText = "\u25bd";
+      if(masterTriangle.innerText !== "\u25bd") {
+        masterTriangle.innerText = "\u25bd";
       } else {
-        triangle.innerText = "\u25b7";
+        masterTriangle.innerText = "\u25b7";
       }
 
       for(const div of outputContainer.childNodes) {
@@ -613,9 +625,9 @@ class Output {
         if(childs.length !== 1) continue;
         // do not collapse the "all" item again
         const tr = childs[0];
-        if(tr === triangle) continue;
+        if(tr === masterTriangle) continue;
         // only click on items that are not already the same as "all"
-        if(tr.innerText === triangle.innerText) continue;
+        if(tr.innerText === masterTriangle.innerText) continue;
         // (un)collapse the minion
         const evt = new MouseEvent("click", {});
         tr.dispatchEvent(evt);
@@ -630,36 +642,103 @@ class Output {
 
       const hostResponse = response[hostname];
 
-      if(typeof hostResponse === "string") {
-        // do not format a string as an object
-        outputContainer.innerHTML +=
-          Output.getHostnameHtml(hostname, "") +
-          " " +
-          hostResponse +
-          "</br>";
-        continue;
+      let hostLabel = null;
+      let hostOutput = null;
+      let hostMultiLine = null;
+      let fndRepresentation = false;
+
+      if(!fndRepresentation && typeof hostResponse === "string") {
+        hostLabel = Output.getHostnameHtml(hostname);
+        hostOutput = Output.getTextOutput(hostResponse);
+        hostMultiLine = hostResponse.includes("\n");
+        fndRepresentation = true;
       }
 
-      if(typeof hostResponse !== "object" || Array.isArray(hostResponse)) {
-        outputContainer.innerHTML +=
-          Output.getHostnameHtml(hostname, "") +
-          " " +
-          Output.formatJSON(hostResponse) +
-          "</br>";
-        continue;
+      if(!fndRepresentation && typeof hostResponse !== "object") {
+        hostLabel = Output.getHostnameHtml(hostname);
+        hostOutput = Output.getNormalOutput(hostResponse);
+        hostMultiLine = false;
+        fndRepresentation = true;
+      }
+
+      // null is an object, but treat it separatelly
+      if(!fndRepresentation && hostResponse === null) {
+        hostLabel = Output.getHostnameHtml(hostname);
+        hostOutput = Output.getNormalOutput(hostResponse);
+        hostMultiLine = false;
+        fndRepresentation = true;
+      }
+
+      // an array is an object, but treat it separatelly
+      if(!fndRepresentation && Array.isArray(hostResponse)) {
+        hostLabel = Output.getHostnameHtml(hostname);
+        hostOutput = Output.getNormalOutput(hostResponse);
+        hostMultiLine = hostResponse.length > 0;
+        fndRepresentation = true;
       }
 
       // it might be highstate output
       const commandCmd = command.trim().replace(/ .*/, "");
       const isHighStateOutput = Output.isHighStateOutput(commandCmd);
-      if(isHighStateOutput) {
-        Output.addHighStateOutput(hostname, outputContainer, hostResponse);
-        continue;
+      if(!fndRepresentation && isHighStateOutput) {
+        hostLabel = Output.getHighStateLabel(hostname, hostResponse);
+        hostOutput = Output.getHighStateOutput(hostResponse);
+        hostMultiLine = true;
+        fndRepresentation = true;
       }
 
       // nothing special? then it is normal output
-      Output.addNormalOutput(hostname, outputContainer, hostResponse);
+      if(!fndRepresentation) {
+        hostLabel = Output.getHostnameHtml(hostname);
+        hostOutput = Output.getNormalOutput(hostResponse);
+        hostMultiLine = Object.keys(hostResponse).length > 0;
+      }
+
+      if(hostMultiLine) nrMultiLineBlocks += 1;
+
+      // compose the actual output
+      const div = document.createElement("div");
+
+      div.append(hostLabel);
+
+      div.appendChild(document.createTextNode(": "));
+
+      // multiple line, collapsible
+      // 25B7 = WHITE RIGHT-POINTING TRIANGLE
+      // 25BD = WHITE DOWN-POINTING TRIANGLE
+      let triangle = null;
+      if(hostMultiLine) {
+        triangle = document.createElement("span");
+        triangle.innerText = "\u25bd";
+        triangle.style = "cursor: pointer";
+        triangle.classList.add("triangle");
+        div.appendChild(triangle);
+        div.appendChild(document.createElement("br"));
+
+        triangle.addEventListener('click', _ => {
+          // 25B7 = WHITE RIGHT-POINTING TRIANGLE
+          // 25BD = WHITE DOWN-POINTING TRIANGLE
+          if(triangle.innerText !== "\u25bd") {
+            triangle.innerText = "\u25bd";
+            hostOutput.style.display = "";
+          } else {
+            triangle.innerText = "\u25b7";
+            hostOutput.style.display = "none";
+          }
+        });
+      }
+
+      div.append(hostOutput);
+
+      outputContainer.append(div);
     }
+
+    if(nrMultiLineBlocks <= 1) {
+      // No collapsable elements, hide the master
+      // Also hide with 1 collapsable element
+      masterTriangle.style.display = "none";
+    }
+
   }
 
 }

@@ -100,7 +100,7 @@ class CommandBox {
   }
 
   _showError(message) {
-    this._onRunReturn(message);
+    this._onRunReturn(message, "");
   }
 
   _getRunParams(target, toRun) {

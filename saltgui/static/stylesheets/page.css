@@ -60,7 +60,7 @@ pre.output div:first-of-type {
   margin-top: 0;
 }
 
-pre .hostname.failure {
+pre .hostname.host_failure {
   color: red;
 }
 

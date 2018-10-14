@@ -64,7 +64,7 @@ class JobRoute extends Route {
     Object.keys(result).forEach(function(taskKey) {
       const data = result[taskKey];
       const task = createElement("div", "task", "");
-      task.classList.add(data.result !== false ? "success" : "failure");
+      task.classList.add(data.result !== false ? "host_success" : "host_failure");
       if(data.result === false) hasFailedOnce = true;
 
       task.appendChild(createElement("div", "name", data.name));
