@@ -17,72 +17,28 @@ class JobRoute extends Route {
   _onJobData(data) {
     const job = this;
     const info = data.info[0];
-    job.getPageElement().querySelector(".hosts").innerHTML = "";
+    job.getPageElement().querySelector(".output").innerHTML = "";
 
     document.querySelector('#button_close_job').addEventListener('click', _ => {
       this.router.goTo("/");
     });
 
-    const container = this.getPageElement().querySelector(".job-info");
+    const jobinfo = this.getPageElement().querySelector(".job-info");
 
     const functionText = info.Function + " on " +
       window.makeTargetText(info["Target-type"], info.Target);
-    container.querySelector('.function').innerHTML = functionText;
+    jobinfo.querySelector('.function').innerText = functionText;
 
-    container.querySelector('.time').innerHTML = info.StartTime;
+    jobinfo.querySelector('.time').innerText = info.StartTime;
 
-    const hostnames = Object.keys(info.Result);
+    const hostnames = Object.keys(info.Result).sort();
+    const output = job.getPageElement().querySelector(".output");
     hostnames.forEach(function(hostname) {
-
-      // when you do a state.apply for example you get a json response.
-      // let's format it nicely here
-      let result = info.Result[hostname].return;
-      if (typeof result === "object") {
-        result = Output.formatJSON(result);
-      } else {
-        result = window.escape(result);
-      }
-      job._addHost(job.getPageElement().querySelector(".hosts"), hostname, result);
+      // use same formatter as direct commands
+      const result = info.Result[hostname].return;
+      Output.addOutput(output, result, info.Function);
     });
     this.resolvePromise();
-  }
-
-  _addHost(container, hostname, result) {
-    const host = createElement("div", "host", `<h1>${hostname}</h1>`);
-    host.addEventListener('click', this._onHostClick);
-
-    if(typeof result === "string") {
-      const task = createElement("div", "task", "");
-      task.appendChild(createElement("div", "name", result));
-      host.appendChild(task);
-      container.appendChild(host);
-      return;
-    }
-
-    let hasFailedOnce = false;
-
-    Object.keys(result).forEach(function(taskKey) {
-      const data = result[taskKey];
-      const task = createElement("div", "task", "");
-      task.classList.add(data.result !== false ? "host_success" : "host_failure");
-      if(data.result === false) hasFailedOnce = true;
-
-      task.appendChild(createElement("div", "name", data.name));
-      task.appendChild(createElement("div", "comment", data.comment));
-      task.appendChild(createElement("div", "duration",
-        `Took ${Math.round(data.duration)} seconds.`));
-      host.appendChild(task);
-    });
-
-    host.style.color = hasFailedOnce ? "red" : "green";
-    container.appendChild(host);
-  }
-
-  _onHostClick(evt) {
-    this.childNodes.forEach(function(child) {
-      if(child.nodeName === "H1") return;
-      child.style.display = child.style.display !== "none" ? "none" : "block";
-    });
   }
 
 }
