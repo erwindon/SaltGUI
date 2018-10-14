@@ -13,19 +13,6 @@
   width: 100%;
 }
 
-pre.output div {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-pre.output div:first-of-type {
-  margin-top: 0;
-}
-
-pre .hostname {
-  color: #4caf50;
-}
-
 .collapsed {
   color: red;
   max-height: calc(1em + 8px);
@@ -156,6 +143,19 @@ pre .hostname {
 
 .minions li .rejected {
   color: #00f;
+}
+
+pre.output div {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+pre.output div:first-of-type {
+  margin-top: 0;
+}
+
+pre .hostname {
+  color: #4caf50;
 }
 
 #popup_runcommand {
