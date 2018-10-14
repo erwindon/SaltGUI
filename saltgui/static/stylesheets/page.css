@@ -13,6 +13,10 @@
   width: 100%;
 }
 
+pre .hostname.failure {
+  color: red;
+}
+
 pre .hostname {
   color: #4caf50;
   display: inline-block;
