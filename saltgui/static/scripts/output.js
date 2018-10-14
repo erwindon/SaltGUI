@@ -517,7 +517,7 @@ class Output {
     if (typeof hostResponse === 'object') {
       // salt output is a json object
       // let's format it nicely here
-      hostResponse = JSON.stringify(hostResponse, null, 2);
+      hostResponse = Output.formatJSON(hostResponse);
     } else if (typeof hostResponse === 'string') {
       // Or when it is text, strip trailing whitespace
       hostResponse = hostResponse.replace(/[ \r\n]+$/g, "");
@@ -545,7 +545,7 @@ class Output {
     }
 
     if(typeof response !== "object" || Array.isArray(response)) {
-      outputContainer.innerText = JSON.stringify(response);
+      outputContainer.innerText = Output.formatJSON(response);
       return;
     }
 
@@ -578,7 +578,7 @@ class Output {
         outputContainer.innerHTML +=
           Output.getHostnameHtml(hostname, "") +
           " " +
-          JSON.stringify(hostResponse) +
+          Output.formatJSON(hostResponse) +
           "</br>";
         continue;
       }
