@@ -51,6 +51,23 @@
   border-bottom: 0;
 }
 
+pre.output div {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+pre.output div:first-of-type {
+  margin-top: 0;
+}
+
+pre .hostname.failure {
+  color: red;
+}
+
+pre .hostname {
+  color: #4caf50;
+}
+
 .minions li .run-command-button {
   color: #263238;
   cursor: pointer;
@@ -143,23 +160,6 @@
 
 .minions li .rejected {
   color: #00f;
-}
-
-pre.output div {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-pre.output div:first-of-type {
-  margin-top: 0;
-}
-
-pre .hostname.failure {
-  color: red;
-}
-
-pre .hostname {
-  color: #4caf50;
 }
 
 #popup_runcommand {
