@@ -165,7 +165,7 @@ class Output {
         continue;
       }
 
-      if(typeof output !== 'object') {
+      if(typeof output !== "object") {
         // strange --> no documentation object
         return false;
       }
@@ -183,7 +183,7 @@ class Output {
         }
 
         // but otherwise it must be a (documentation)string
-        if(typeof output[key] !== 'string') {
+        if(typeof output[key] !== "string") {
           return false;
         }
 
@@ -350,8 +350,7 @@ class Output {
         out = out.replace(/\n\n\n*/gm, "\n\n");
 
         outputContainer.innerHTML +=
-          `<span class='hostname'>${key}</span>:<br>` +
-          '<pre style="height: initial; overflow-y: initial;">' + out + '</pre>';
+          "<div><span class='hostname'>" + key + "</span>:</br><pre style='height: initial; overflow-y: initial;'>" + out + "</pre></div>";
       }
     }
   }
@@ -361,20 +360,101 @@ class Output {
   // just format the returned objects
   static addNormalOutput(outputContainer, response) {
 
+    const allDiv = document.createElement("div");
+
+    const txt = document.createElement("span");
+    const cnt = Object.keys(response).length;
+    txt.innerText = cnt + " responses ";
+    allDiv.appendChild(txt);
+
+    const triangle = document.createElement("span");
+    triangle.innerText = "\u25bd";
+    triangle.style = "cursor: pointer";
+    allDiv.appendChild(triangle);
+
+    outputContainer.appendChild(allDiv);
+
+    triangle.addEventListener('click', _ => {
+      // 25B7 = WHITE RIGHT-POINTING TRIANGLE
+      // 25BD = WHITE DOWN-POINTING TRIANGLE
+      if(triangle.innerText !== "\u25bd") {
+        triangle.innerText = "\u25bd";
+      } else {
+        triangle.innerText = "\u25b7";
+      }
+
+      for(const div of outputContainer.childNodes) {
+        // only click on items that are collapsible
+        const childs = div.getElementsByClassName("triangle");
+        if(childs.length !== 1) continue;
+        // do not collapse the "all" item again
+        const tr = childs[0];
+        if(tr === triangle) continue;
+        // only click on items that are not already the same as "all"
+        if(tr.innerText === triangle.innerText) continue;
+        // (un)collapse the minion
+        const evt = new MouseEvent("click", {});
+        tr.dispatchEvent(evt);
+      }
+    });
+
+    let nrMultiLineBlocks = 0;
     for(const hostname of Object.keys(response).sort()) {
       let hostResponse = response[hostname];
 
-      if (typeof hostResponse === 'object') {
+      if (typeof hostResponse === "object") {
         // when you do a state.apply for example you get a json response.
         // let's format it nicely here
         hostResponse = Output.formatJSON(hostResponse);
-      } else if (typeof hostResponse === 'string') {
+      } else if (typeof hostResponse === "string") {
         // Or when it is text, strip trailing whitespace
         hostResponse = hostResponse.replace(/[ \r\n]+$/g, "");
+      } else {
+        hostResponse = Output.formatJSON(hostResponse);
       }
 
-      outputContainer.innerHTML +=
-        `<span class='hostname'>${hostname}</span>: ${hostResponse}<br>`;
+      const oneLineView = !hostResponse.includes("\n");
+      if(!oneLineView) nrMultiLineBlocks += 1;
+      const div = document.createElement("div");
+      const span = document.createElement("span");
+      span.classList.add("hostname");
+      span.innerText = hostname;
+      div.append(span);
+      div.appendChild(document.createTextNode(": "));
+      // multiple line, collapsible
+      // 25B7 = WHITE RIGHT-POINTING TRIANGLE
+      // 25BD = WHITE DOWN-POINTING TRIANGLE
+      let triangle = null;
+      if(!oneLineView) {
+        triangle = document.createElement("span");
+        triangle.innerText = "\u25bd";
+        triangle.style = "cursor: pointer";
+        triangle.classList.add("triangle");
+        div.appendChild(triangle);
+        div.appendChild(document.createElement("br"));
+      }
+      const txt = document.createElement("span");
+      txt.innerText = hostResponse;
+      div.appendChild(txt);
+      if(triangle) {
+        triangle.addEventListener('click', _ => {
+          if(txt.style.display === "none") {
+            txt.style.display = "";
+            triangle.innerText = "\u25bd";
+          } else {
+            txt.style.display = "none";
+            triangle.innerText = "\u25b7";
+          }
+        });
+      }
+
+      outputContainer.append(div);
+    }
+
+    if(nrMultiLineBlocks <= 1) {
+      // No collapsable elements, hide the master
+      // Also hide with 1 collapsable element
+      allDiv.style.display = "none";
     }
   }
 
