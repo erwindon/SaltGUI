@@ -179,11 +179,6 @@ input[type='submit'] {
   margin-bottom: 20px;
 }
 
-.run-command pre.output {
-  height: 250px;
-  overflow-y: scroll;
-}
-
 pre.output {
   background-color: #272727;
   color: white;
@@ -193,6 +188,11 @@ pre.output {
   white-space: pre-wrap;
   max-width: calc(100% - 10px);
   width: calc(100% - 10px);
+}
+
+.run-command pre.output {
+  height: 250px;
+  overflow-y: scroll;
 }
 
 input,
