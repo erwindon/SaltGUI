@@ -179,17 +179,20 @@ input[type='submit'] {
   margin-bottom: 20px;
 }
 
-.run-command pre {
+.run-command pre.output {
+  height: 250px;
+  overflow-y: scroll;
+}
+
+pre.output {
   background-color: #272727;
   color: white;
   margin: 0;
   padding: 10px;
   border-radius: 2px;
-  overflow-y: scroll;
   white-space: pre-wrap;
   max-width: calc(100% - 10px);
   width: calc(100% - 10px);
-  height: 250px;
 }
 
 input,
