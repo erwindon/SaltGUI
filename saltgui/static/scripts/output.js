@@ -367,7 +367,7 @@ class Output {
     txt.innerText = cnt + " responses ";
     allDiv.appendChild(txt);
 
-    let triangle = document.createElement("span");
+    const triangle = document.createElement("span");
     triangle.innerText = "\u25bd";
     triangle.style = "cursor: pointer";
     allDiv.appendChild(triangle);
