@@ -35,7 +35,7 @@ class JobRoute extends Route {
     const output = job.getPageElement().querySelector(".output");
     hostnames.forEach(function(hostname) {
       // use same formatter as direct commands
-      let result = info.Result[hostname].return;
+      const result = info.Result[hostname].return;
       Output.addOutput(output, result, info.Function);
     });
     this.resolvePromise();
