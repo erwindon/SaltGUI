@@ -13,18 +13,10 @@
   width: 100%;
 }
 
-pre .hostname.failure {
+.collapsed {
   color: red;
-}
-
-pre .hostname {
-  color: #4caf50;
-  display: inline-block;
-  margin-top: 12px;
-}
-
-pre .hostname:first-of-type {
-  margin-top: 0;
+  max-height: calc(1em + 8px);
+  overflow-y: hidden;
 }
 
 .minions {
@@ -49,14 +41,31 @@ pre .hostname:first-of-type {
   padding: 10px 18px;
 }
 
-.minions li:last-of-type {
-  border-bottom: 0;
-}
-
 .minions li div {
   display: inline-block;
   margin-left: 0;
   margin-right: 20px;
+}
+
+.minions li:last-of-type {
+  border-bottom: 0;
+}
+
+pre.output div {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+pre.output div:first-of-type {
+  margin-top: 0;
+}
+
+pre .hostname.host_failure {
+  color: red;
+}
+
+pre .hostname {
+  color: #4caf50;
 }
 
 .minions li .run-command-button {

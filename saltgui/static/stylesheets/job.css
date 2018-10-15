@@ -24,7 +24,7 @@
   white-space: pre-wrap;
 }
 
-#page_job .task.failure {
+#page_job .task.host_failure {
   background-color: rgba(218, 41, 28, 0.31);
   color: black;
 }
