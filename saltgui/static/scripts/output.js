@@ -551,7 +551,20 @@ class Output {
   // the output is only text
   // note: do not return a text-node
   static getTextOutput(hostResponse) {
+    // strip trailing whitespace
     hostResponse = hostResponse.replace(/[ \r\n]+$/g, "");
+
+    // replace all returned JIDs to links
+    // typically found in the output of an async job
+    // patJid is defined in scripts/parsecmdline.js
+    if(hostResponse.match(patJid)) {
+      const a = document.createElement("a");
+      a.href = "/job?id=" + hostResponse;
+      a.innerText = hostResponse;
+      return a;
+    }
+
+    // all regular text
     const span = document.createElement("span");
     span.innerText = hostResponse;
     return span;
@@ -578,28 +591,14 @@ class Output {
   }
 
 
-// TODO
-// This is where the JOBIS was formatted
-//  static addNormalOutput(hostname, outputContainer, hostResponse) {
-
-//    if (typeof hostResponse === 'object') {
-//      // salt output is a json object
-//      // let's format it nicely here
-//      hostResponse = Output.formatJSON(hostResponse);
-//    } else if (typeof hostResponse === 'string') {
-//      // Or when it is text, strip trailing whitespace and no quotes
-//      hostResponse = hostResponse.replace(/[ \r\n]+$/g, "");
-//      // replace all returned JIDs to links
-//      // typically found in the output of an async job
-//      // patJid is defined in scripts/parsecmdline.js
-//      if(hostResponse.match(patJid)) {
-//        hostResponse = "<a href='/job?id=" + hostResponse + "'>" + hostResponse + "</a>";
-//      }
-//    }
-
-//    outputContainer.innerHTML +=
-//      Output.getHostnameHtml(hostname, "") + " " + hostResponse + "<br>";
-//  }
+  static isAsyncOutput(response) {
+    let keys = Object.keys(response);
+    if(keys.length !== 2) return false;
+    keys = keys.sort();
+    if(keys[0] !== "jid") return false;
+    if(keys[1] !== "minions") return false;
+    return true;
+  }
 
 
   // the orchestrator for the output
@@ -634,8 +633,11 @@ class Output {
 
     const allDiv = document.createElement("div");
 
-    if(!command.startsWith("runners.") && !command.startsWith("wheel.")) {
+    if(!command.startsWith("runners.") &&
+       !command.startsWith("wheel.") &&
+       !Output.isAsyncOutput(response)) {
       // runners/wheel responses are not per minion
+      // Do not produce a #response line for async-start confirmation
       const txt = document.createElement("span");
       const cnt = Object.keys(response).length;
       if(cnt === 1) {
