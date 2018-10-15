@@ -694,6 +694,12 @@ class Output {
         hostMultiLine = Object.keys(hostResponse).length > 0;
       }
 
+      // one response does not need to be collapsible
+      const cnt = Object.keys(response).length;
+      if(cnt === 1) {
+        hostMultiLine = false;
+      }
+
       if(hostMultiLine) nrMultiLineBlocks += 1;
 
       // compose the actual output
@@ -734,8 +740,8 @@ class Output {
     }
 
     if(nrMultiLineBlocks <= 1) {
-      // No collapsable elements, hide the master
-      // Also hide with 1 collapsable element
+      // No collapsible elements, hide the master
+      // Also hide with 1 collapsible element
       masterTriangle.style.display = "none";
     }
 
