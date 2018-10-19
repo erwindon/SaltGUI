@@ -14,13 +14,13 @@ class LoginRoute extends Route {
 
   onShow() {
     const eauthSelector = document.querySelector("#login-form #eauth");
-    const eauthValue = localStorage.getItem('eauth');
-    eauthSelector.value = eauthValue ? eauthValue : 'pam';
+    const eauthValue = localStorage.getItem("eauth");
+    eauthSelector.value = eauthValue ? eauthValue : "pam";
   }
 
   registerEventListeners() {
     const submit = document.querySelector("#login-form");
-    submit.addEventListener('submit', this.onLogin);
+    submit.addEventListener("submit", this.onLogin);
   }
 
   onLogin(evt) {
@@ -39,7 +39,7 @@ class LoginRoute extends Route {
   onLoginSuccess() {
     this.toggleForm(true);
 
-    const notice = document.querySelector('.notice-wrapper');
+    const notice = document.querySelector(".notice-wrapper");
 
     const success = Route._createDiv("notice", "Please wait...");
     success.style.backgroundColor = "#4CAF50";
@@ -49,9 +49,9 @@ class LoginRoute extends Route {
     document.querySelector("#password").disabled = true;
     document.querySelector("#eauth").disabled = true;
 
-    notice.className = 'notice-wrapper';
+    notice.className = "notice-wrapper";
     notice.focus(); //Used to trigger a reflow (to restart animation)
-    notice.className = 'notice-wrapper show';
+    notice.className = "notice-wrapper show";
 
     this.router.goTo("/");
   }
@@ -59,15 +59,15 @@ class LoginRoute extends Route {
   onLoginFailure() {
     this.toggleForm(true);
 
-    const notice = document.querySelector('.notice-wrapper');
+    const notice = document.querySelector(".notice-wrapper");
 
     const authFailed = Route._createDiv("notice", "Authentication failed");
     authFailed.style.backgroundColor = "#F44336";
 
     notice.replaceChild(authFailed, notice.firstChild);
-    notice.className = 'notice-wrapper';
+    notice.className = "notice-wrapper";
     notice.focus(); //Used to trigger a reflow (to restart animation)
-    notice.className = 'notice-wrapper show';
+    notice.className = "notice-wrapper show";
   }
 
   toggleForm(allowSubmit) {

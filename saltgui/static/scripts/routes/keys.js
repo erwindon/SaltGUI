@@ -29,7 +29,7 @@ class KeysRoute extends PageRoute {
   _updateKeys(data) {
     const keys = data.return;
 
-    let list = this.getPageElement().querySelector('#minions');
+    let list = this.getPageElement().querySelector("#minions");
     let hostnames = keys.minions.sort();
     for(const hostname of hostnames) {
       this._addMinion(list, hostname);
@@ -37,7 +37,7 @@ class KeysRoute extends PageRoute {
     if(hostnames.length === 0)
       this._addNone(list);
 
-    list = this.getPageElement().querySelector('#keys_denied');
+    list = this.getPageElement().querySelector("#keys_denied");
     hostnames = keys.minions_denied.sort();
     for(const hostname of hostnames) {
       this._addDeniedMinion(list, hostname);
@@ -45,7 +45,7 @@ class KeysRoute extends PageRoute {
     if(hostnames.length === 0)
       this._addNone(list);
 
-    list = this.getPageElement().querySelector('#keys_unaccepted');
+    list = this.getPageElement().querySelector("#keys_unaccepted");
     hostnames = keys.minions_pre.sort();
     for(const hostname of hostnames) {
       this._addPreMinion(list, hostname);
@@ -53,7 +53,7 @@ class KeysRoute extends PageRoute {
     if(hostnames.length === 0)
       this._addNone(list);
 
-    list = this.getPageElement().querySelector('#keys_rejected');
+    list = this.getPageElement().querySelector("#keys_rejected");
     hostnames = keys.minions_rejected.sort();
     for(const hostname of hostnames) {
       this._addRejectedMinion(list, hostname);

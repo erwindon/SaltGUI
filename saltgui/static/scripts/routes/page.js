@@ -23,7 +23,7 @@ class PageRoute extends Route {
   _updateMinions(data) {
     const minions = data.return[0];
 
-    const list = this.getPageElement().querySelector('#minions');
+    const list = this.getPageElement().querySelector("#minions");
     const hostnames = Object.keys(minions).sort();
 
     for(const hostname of hostnames) {
@@ -44,7 +44,7 @@ class PageRoute extends Route {
     if(element === null) {
       // minion not found on screen...
       // construct a basic element that can be updated
-      element = document.createElement('li');
+      element = document.createElement("li");
       element.id = id;
       container.appendChild(element);
       return element;
@@ -83,7 +83,7 @@ class PageRoute extends Route {
     const address = Route._createDiv("status", ip);
     address.classList.add("address");
     address.setAttribute("tabindex", -1);
-    address.addEventListener('click', this._copyAddress);
+    address.addEventListener("click", this._copyAddress);
     element.appendChild(address);
 
     element.appendChild(Route._createDiv("os", minion.os + " " + minion.osrelease));
@@ -97,7 +97,7 @@ class PageRoute extends Route {
       return;
     }
 
-    element = document.createElement('li');
+    element = document.createElement("li");
     element.id = hostname;
 
     element.appendChild(Route._createDiv("hostname", hostname));
@@ -113,7 +113,7 @@ class PageRoute extends Route {
 
   _addNone(container) {
 
-    const element = document.createElement('li');
+    const element = document.createElement("li");
 
     element.appendChild(Route._createDiv("hostname", "none"));
 
@@ -170,7 +170,7 @@ class PageRoute extends Route {
   }
 
   _addJob(container, job) {
-    const element = document.createElement('li');
+    const element = document.createElement("li");
     element.id = "job" + job.id;
 
     const targetText = window.makeTargetText(job["Target-type"], job.Target);
@@ -184,7 +184,7 @@ class PageRoute extends Route {
 
     container.appendChild(element);
 
-    element.addEventListener('click', this._createJobListener(job.id));
+    element.addEventListener("click", this._createJobListener(job.id));
   }
 
   _createJobListener(id) {

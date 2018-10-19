@@ -19,7 +19,7 @@ class JobRoute extends Route {
     const info = data.info[0];
     job.getPageElement().querySelector(".output").innerHTML = "";
 
-    document.querySelector('#button_close_job').addEventListener('click', _ => {
+    document.querySelector("#button_close_job").addEventListener("click", _ => {
       this.router.goTo("/");
     });
 
@@ -27,9 +27,9 @@ class JobRoute extends Route {
 
     const functionText = info.Function + " on " +
       window.makeTargetText(info["Target-type"], info.Target);
-    jobinfo.querySelector('.function').innerText = functionText;
+    jobinfo.querySelector(".function").innerText = functionText;
 
-    jobinfo.querySelector('.time').innerText = info.StartTime;
+    jobinfo.querySelector(".time").innerText = info.StartTime;
 
     const output = job.getPageElement().querySelector(".output");
     // use same formatter as direct commands

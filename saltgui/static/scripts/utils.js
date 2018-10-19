@@ -42,9 +42,9 @@ window.createElement = function(type, className, content) {
 
 window.getQueryParam = function(name) {
   const vars = [];
-  const hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+  const hashes = window.location.href.slice(window.location.href.indexOf("?") + 1).split("&");
   for(const hash of hashes) {
-    const hashparts = hash.split('=');
+    const hashparts = hash.split("=");
     vars.push(hashparts[0]);
     if(hashparts[0] === name) return hashparts[1];
   }
@@ -52,19 +52,19 @@ window.getQueryParam = function(name) {
 };
 
 window.escape = function(input) {
-  const div = document.createElement('div');
+  const div = document.createElement("div");
   div.appendChild(document.createTextNode(input));
   return div.innerHTML;
 };
 
 window.makeTargetText = function(targetType, targetPattern) {
-  // note that 'glob' is the most common case
+  // note that "glob" is the most common case
   // when used from the command-line, that target-type
   // is not even specified.
   // therefore we suppress that one
 
   // note that due to bug in 2018.3, all finished jobs
-  // will be shown as if of type 'list'
+  // will be shown as if of type "list"
   // therefore we suppress that one
 
   let returnText = "";

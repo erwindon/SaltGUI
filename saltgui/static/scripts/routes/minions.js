@@ -27,7 +27,7 @@ class MinionsRoute extends PageRoute {
   _updateKeys(data) {
     const keys = data.return;
 
-    const list = this.getPageElement().querySelector('#minions');
+    const list = this.getPageElement().querySelector("#minions");
 
     const hostnames = keys.minions.sort();
     for(const hostname of hostnames) {

@@ -31,15 +31,15 @@ class Documentation {
       // but that is far too slow for normal use
       menuitem.style.display = "none";
     } else if(command === "runners" || command.startsWith("runners.")) {
-      // actually 'command' is not passed, but we select that part of the actual result
-      // because `runners.doc.runner` always returns all documentation for `runners'
+      // actually "command" is not passed, but we select that part of the actual result
+      // because `runners.doc.runner` always returns all documentation for "runners"
       command = command.substring(8);
       if(command) command = " " + command;
       menuitem.innerText = "Run 'runners.doc.runner" + command + "'";
       menuitem.style.display = "block";
     } else if(command === "wheel" || command.startsWith("wheel.")) {
-      // actually 'command' is not passed, but we select that part of the actual result
-      // because `runners.doc.wheel` always returns all documentation for `wheel'
+      // actually "command" is not passed, but we select that part of the actual result
+      // because `runners.doc.wheel` always returns all documentation for "wheel"
       command = command.substring(6);
       if(command) command = " " + command;
       menuitem.innerText = "Run 'runners.doc.wheel" + command + "'";

@@ -16,26 +16,26 @@ class CommandBox {
 
   _registerEventListeners() {
     document.querySelector("#popup_runcommand")
-      .addEventListener('click', this._hideManualRun);
+      .addEventListener("click", this._hideManualRun);
     document.querySelector("#button_manualrun")
-      .addEventListener('click', this._showManualRun);
+      .addEventListener("click", this._showManualRun);
     document.querySelector("#button_close_cmd")
-      .addEventListener('click', this._hideManualRun);
+      .addEventListener("click", this._hideManualRun);
     document.querySelector(".run-command input[type='submit']")
-      .addEventListener('click', this._onRun);
+      .addEventListener("click", this._onRun);
     // keydown is too early, keypress also does not work
     document.querySelector("#command")
-      .addEventListener('keyup', this.menu.verifyAll);
+      .addEventListener("keyup", this.menu.verifyAll);
     // cut/paste do not work everywhere
     document.querySelector("#command")
-      .addEventListener('cut', this.menu.verifyAll);
+      .addEventListener("cut", this.menu.verifyAll);
     document.querySelector("#command")
-      .addEventListener('paste', this.menu.verifyAll);
+      .addEventListener("paste", this.menu.verifyAll);
     // blur/focus should not be needed but are a valueable fallback
     document.querySelector("#command")
-      .addEventListener('blur', this.menu.verifyAll);
+      .addEventListener("blur", this.menu.verifyAll);
     document.querySelector("#command")
-      .addEventListener('focus', this.menu.verifyAll);
+      .addEventListener("focus", this.menu.verifyAll);
   }
 
   _onRun() {
@@ -151,7 +151,7 @@ class CommandBox {
       if(args.length !== 0) params.arg = args;
     } else if(functionToRun.startsWith("wheel.")) {
       // wheel.key functions are treated slightly different
-      // we re-use the 'target' field to fill the parameter 'match'
+      // we re-use the "target" field to fill the parameter "match"
       // as used by the salt.wheel.key functions
       params.client = "wheel";
       // use only the part after "wheel." (6 chars)

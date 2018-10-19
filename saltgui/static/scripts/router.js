@@ -24,26 +24,26 @@ class Router {
   _registerEventListeners() {
     const router = this;
 
-    document.querySelector('.logo')
-      .addEventListener('click', _ => {
+    document.querySelector(".logo")
+      .addEventListener("click", _ => {
         if(window.location.pathname === "/login") return;
         router.goTo("/");
       });
 
     document.querySelector("#button_logout")
-      .addEventListener('click', _ => {
+      .addEventListener("click", _ => {
         this.api.logout().then(() => {
           window.location.replace("/");
         });
       });
 
     document.querySelector("#button_minions")
-      .addEventListener('click', _ => {
+      .addEventListener("click", _ => {
         window.location.replace("/");
       });
 
     document.querySelector("#button_keys")
-      .addEventListener('click', _ => {
+      .addEventListener("click", _ => {
         window.location.replace("/keys");
       });
   }
@@ -84,7 +84,7 @@ class Router {
 
       router.currentRoute = route;
       document.title = "SaltGUI - " + router.currentRoute.getName();
-      router.currentRoute.getPageElement().className = 'route current';
+      router.currentRoute.getPageElement().className = "route current";
       router.switchingRoute = false;
     };
 
@@ -96,7 +96,7 @@ class Router {
   }
 
   hideRoute(route) {
-    route.getPageElement().className = 'route';
+    route.getPageElement().className = "route";
     setTimeout(function() {
       //Hide element after fade, so it does not expand the body
       route.getPageElement().style.display = "none";
@@ -106,5 +106,5 @@ class Router {
 
 }
 
-window.addEventListener('load', () => new Router());
+window.addEventListener("load", () => new Router());
 

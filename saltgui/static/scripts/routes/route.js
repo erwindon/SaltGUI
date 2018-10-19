@@ -26,7 +26,7 @@ class Route {
   }
 
   static _createDiv(className, content) {
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     div.className = className;
     div.innerHTML = content;
     return div;

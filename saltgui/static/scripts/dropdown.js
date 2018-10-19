@@ -31,7 +31,7 @@ class DropDownMenu {
     this.menuDropdown.appendChild(menuButton);
     this.menuDropdownContent = Route._createDiv("menu-dropdown-content", "");
     this.menuDropdown.appendChild(this.menuDropdownContent);
-    this.menuDropdown.addEventListener('mouseenter', this.verifyAll);
+    this.menuDropdown.addEventListener("mouseenter", this.verifyAll);
     element.appendChild(this.menuDropdown);
   }
 
@@ -59,7 +59,7 @@ class DropDownMenu {
       button.innerHTML = title;
     else
       button.verifyCallback = title;
-    button.addEventListener('click', evt => callback(evt));
+    button.addEventListener("click", evt => callback(evt));
     this.menuDropdownContent.appendChild(button);
     this.verifyAll();
   }

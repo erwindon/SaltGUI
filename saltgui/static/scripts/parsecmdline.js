@@ -2,8 +2,8 @@
 // The line is broken into individual tokens
 // Each token that is recognized as a JS type will get that type
 // Otherwise the token is considered to be a string
-// name-value pairs in the form "name=value" are added to the 'params' dictionary
-// other parameters are added to the 'args' array
+// name-value pairs in the form "name=value" are added to the "params" dictionary
+// other parameters are added to the "args" array
 // e.g.:
 //   test "1 2 3" 4 x=7 {"a":1, "b":2}
 // is a command line of 5 tokens
@@ -55,15 +55,15 @@ window.parseCommandLine = function(toRun, args, params) {
     // character for a JSON type
     let endChar = undefined;
     let objType = undefined;
-    if(toRun[0] === '{') {
-      endChar = '}';
+    if(toRun[0] === "{") {
+      endChar = "}";
       objType = "dictionary";
-    } else if(toRun[0] === '[') {
-      endChar = ']';
+    } else if(toRun[0] === "[") {
+      endChar = "]";
       objType = "array";
-    } else if(toRun[0] === '"') {
+    } else if(toRun[0] === "\"") {
       // note that json does not support single-quoted strings
-      endChar = '"';
+      endChar = "\"";
       objType = "double-quoted-string";
     }
 
@@ -94,7 +94,7 @@ window.parseCommandLine = function(toRun, args, params) {
 
         // the first part of the string is valid JSON
         n = n + 1;
-        if(n < toRun.length && toRun[n] !== ' ') {
+        if(n < toRun.length && toRun[n] !== " ") {
           return "Valid " + objType + ", but followed by text:" + toRun.substring(n) + "...";
         }
 
@@ -107,7 +107,7 @@ window.parseCommandLine = function(toRun, args, params) {
       // when we are done, we'll see whether it actually is a number
       // or any of the known constants
       let str = "";
-      while(toRun.length > 0 && toRun[0] !== ' ') {
+      while(toRun.length > 0 && toRun[0] !== " ") {
         str += toRun[0];
         toRun = toRun.substring(1);
       }

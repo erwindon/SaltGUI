@@ -108,7 +108,7 @@ class Output {
 
   // compose the host/minion-name label that is shown with each response
   static getHostnameHtml(hostname, extraClass="") {
-    const span = document.createElement('span');
+    const span = document.createElement("span");
     span.classList.add("hostname");
     if(extraClass) span.classList.add(extraClass);
     span.innerText = hostname;
@@ -366,8 +366,8 @@ class Output {
   }
 
   static isHighStateOutput(command) {
-    if(command === 'state.apply') return true;
-    if(command === 'state.highstate') return true;
+    if(command === "state.apply") return true;
+    if(command === "state.highstate") return true;
     return false;
   }
 
@@ -489,13 +489,13 @@ class Output {
         }
       }
 
-      if(task.hasOwnProperty('start_time')) {
+      if(task.hasOwnProperty("start_time")) {
         taskDiv.append(document.createElement("br"));
         taskDiv.append(document.createTextNode(
           indent + "Started at " + task.start_time));
       }
 
-      if(task.hasOwnProperty('duration')) {
+      if(task.hasOwnProperty("duration")) {
         const millis = Math.round(task.duration);
         total_millis += millis;
         if(millis >= 10) {
@@ -629,7 +629,7 @@ class Output {
 
     outputContainer.appendChild(allDiv);
 
-    masterTriangle.addEventListener('click', _ => {
+    masterTriangle.addEventListener("click", _ => {
       // 25B7 = WHITE RIGHT-POINTING TRIANGLE
       // 25BD = WHITE DOWN-POINTING TRIANGLE
       if(masterTriangle.innerText !== "\u25bd") {
@@ -747,7 +747,7 @@ class Output {
         div.appendChild(triangle);
         div.appendChild(document.createElement("br"));
 
-        triangle.addEventListener('click', _ => {
+        triangle.addEventListener("click", _ => {
           // 25B7 = WHITE RIGHT-POINTING TRIANGLE
           // 25BD = WHITE DOWN-POINTING TRIANGLE
           if(triangle.innerText !== "\u25bd") {

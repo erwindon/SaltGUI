@@ -21,7 +21,7 @@ class API {
       });
   }
 
-  login(username, password, eauth='pam') {
+  login(username, password, eauth="pam") {
     const params = {
       username: username,
       password: password,
@@ -29,7 +29,7 @@ class API {
     };
 
     // store it as the default login method
-    localStorage.setItem('eauth', eauth);
+    localStorage.setItem("eauth", eauth);
 
     return this.apiRequest("POST", "/login", params)
       .then(data => {
