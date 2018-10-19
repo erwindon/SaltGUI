@@ -470,17 +470,22 @@ class Output {
         taskDiv.append(document.createTextNode(indent + txt));
       }
 
-      if(task.changes) {
-        for(const key of Object.keys(task.changes).sort()) {
-          const change = task.changes[key];
-          // 25BA = BLACK RIGHT-POINTING POINTER
-          // don't use arrows here, these are higher than a regular
-          // text-line and disturb the text-flow
+      if(task.hasOwnProperty("changes")) {
+        if(typeof task.changes !== "object" || Array.isArray(task.changes)) {
           taskDiv.append(document.createElement("br"));
-          taskDiv.append(document.createTextNode(
-            indent + key + ": " +
-            JSON.stringify(change.old) + " \u25BA " +
-            JSON.stringify(change.new)));
+          taskDiv.append(document.createTextNode(indent + JSON.stringify(task.changes)));
+        } else {
+          for(const key of Object.keys(task.changes).sort()) {
+            taskDiv.append(document.createElement("br"));
+            const change = task.changes[key];
+            // 25BA = BLACK RIGHT-POINTING POINTER
+            // don't use arrows here, these are higher than a regular
+            // text-line and disturb the text-flow
+            taskDiv.append(document.createTextNode(
+              indent + key + ": " +
+              JSON.stringify(change.old) + " \u25BA " +
+              JSON.stringify(change.new)));
+          }
         }
       }
 
