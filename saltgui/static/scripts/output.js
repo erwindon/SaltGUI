@@ -667,20 +667,24 @@ class Output {
         hostResponse = hostResponse.return.return;
       }
 
-      let hostLabel = null;
       let hostOutput = null;
       let hostMultiLine = null;
       let fndRepresentation = false;
 
+      // the standard label is the hostname,
+      // future: colored based on the successflag
+      // future: colored based on the retcode
+      let hostLabel = Output.getHostnameHtml(
+        hostname,
+        "host_success");
+
       if(!fndRepresentation && typeof hostResponse === "string") {
-        hostLabel = Output.getHostnameHtml(hostname);
         hostOutput = Output.getTextOutput(hostResponse);
         hostMultiLine = hostResponse.includes("\n");
         fndRepresentation = true;
       }
 
       if(!fndRepresentation && typeof hostResponse !== "object") {
-        hostLabel = Output.getHostnameHtml(hostname);
         hostOutput = Output.getNormalOutput(hostResponse);
         hostMultiLine = false;
         fndRepresentation = true;
@@ -688,7 +692,6 @@ class Output {
 
       // null is an object, but treat it separatelly
       if(!fndRepresentation && hostResponse === null) {
-        hostLabel = Output.getHostnameHtml(hostname);
         hostOutput = Output.getNormalOutput(hostResponse);
         hostMultiLine = false;
         fndRepresentation = true;
@@ -696,7 +699,6 @@ class Output {
 
       // an array is an object, but treat it separatelly
       if(!fndRepresentation && Array.isArray(hostResponse)) {
-        hostLabel = Output.getHostnameHtml(hostname);
         hostOutput = Output.getNormalOutput(hostResponse);
         hostMultiLine = hostResponse.length > 0;
         fndRepresentation = true;
@@ -714,7 +716,6 @@ class Output {
 
       // nothing special? then it is normal output
       if(!fndRepresentation) {
-        hostLabel = Output.getHostnameHtml(hostname);
         hostOutput = Output.getNormalOutput(hostResponse);
         hostMultiLine = Object.keys(hostResponse).length > 0;
       }
