@@ -31,13 +31,10 @@ class JobRoute extends Route {
 
     jobinfo.querySelector('.time').innerText = info.StartTime;
 
-    const hostnames = Object.keys(info.Result).sort();
     const output = job.getPageElement().querySelector(".output");
-    hostnames.forEach(function(hostname) {
-      // use same formatter as direct commands
-      const result = info.Result[hostname].return;
-      Output.addOutput(output, result, info.Function);
-    });
+    // use same formatter as direct commands
+    Output.addResponseOutput(output, info.Result, info.Function);
+
     this.resolvePromise();
   }
 

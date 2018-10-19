@@ -562,6 +562,16 @@ class Output {
   }
 
 
+  static hasProperties(obj, props) {
+    for(const prop of props) {
+      if(!obj.hasOwnProperty(prop)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+
   // the orchestrator for the output
   // determines what format should be used and uses that
   static addResponseOutput(outputContainer, response, command) {
@@ -640,7 +650,13 @@ class Output {
     // this is more generic and it simplifies the handlers
     for(const hostname of Object.keys(response).sort()) {
 
-      const hostResponse = response[hostname];
+      let hostResponse = response[hostname];
+      if(Output.hasProperties(hostResponse, ["retcode", "return", "success"])) {
+        hostResponse = hostResponse.return;
+      }
+      else if(command.startsWith("runner.") && hostResponse.hasOwnProperty("return")) {
+        hostResponse = hostResponse.return.return;
+      }
 
       let hostLabel = null;
       let hostOutput = null;
