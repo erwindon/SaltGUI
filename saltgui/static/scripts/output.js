@@ -610,14 +610,17 @@ class Output {
 
     const allDiv = document.createElement("div");
 
-    const txt = document.createElement("span");
-    const cnt = Object.keys(response).length;
-    if(cnt === 1) {
-      txt.innerText = cnt + " response ";
-    } else {
-      txt.innerText = cnt + " responses ";
+    if(!command.startsWith("runners.") && !command.startsWith("wheel.")) {
+      // runners/wheel responses are not per minion
+      const txt = document.createElement("span");
+      const cnt = Object.keys(response).length;
+      if(cnt === 1) {
+        txt.innerText = cnt + " response ";
+      } else {
+        txt.innerText = cnt + " responses ";
+      }
+      allDiv.appendChild(txt);
     }
-    allDiv.appendChild(txt);
 
     const masterTriangle = document.createElement("span");
     masterTriangle.innerText = "\u25bd";
