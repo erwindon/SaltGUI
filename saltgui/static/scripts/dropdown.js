@@ -4,7 +4,7 @@ class DropDownMenu {
   // The visual clue for the menu is added to the given element
   constructor(element) {
 
-    this.callback= this.callback.bind(this);
+    this.callback = this.callback.bind(this);
     this.verifyAll = this.verifyAll.bind(this);
 
     this.menuDropdown = Route._createDiv("run-command-button", "");
@@ -61,7 +61,7 @@ class DropDownMenu {
       button.innerHTML = title;
     else
       button.verifyCallback = title;
-    button.addEventListener('click', evt => this.callback(evt, callback, value));
+    button.addEventListener("click", evt => this.callback(evt, callback, value));
     this.menuDropdownContent.appendChild(button);
     this.verifyAll();
   }

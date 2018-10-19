@@ -98,7 +98,7 @@ class CommandBox {
       "wheel.key.reject",
     ];
     if(screenModifyingCommands.includes(command) && output !== "Waiting for command...") {
-      location.reload(); 
+      location.reload();
     }
 
     evt.stopPropagation();
