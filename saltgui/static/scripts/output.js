@@ -514,6 +514,7 @@ class Output {
         if(key === "duration") continue; // handled
         if(key === "host") continue; // ignored, same as host
         if(key === "name") continue; // handled
+        if(key === "pchanges") continue; // ignored, also ignored by cli
         if(key === "result") continue; // handled
         if(key === "start_time") continue; // handled
         taskDiv.append(document.createElement("br"));
