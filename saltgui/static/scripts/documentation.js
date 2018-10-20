@@ -69,7 +69,7 @@ class Documentation {
     // command can be empty here (but the gui prevents that)
 
     button.disabled = true;
-    output.innerHTML = "Loading...";
+    output.innerText = "Loading...";
 
     let docCommand;
     let dummyCommand;

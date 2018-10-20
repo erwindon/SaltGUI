@@ -606,7 +606,7 @@ class Output {
   static addResponseOutput(outputContainer, response, command) {
 
     // remove old content
-    outputContainer.innerHTML = "";
+    outputContainer.innerText = "";
 
     // reformat runner/wheel output into regular output
     response = Output.addVirtualMinion(response, command);

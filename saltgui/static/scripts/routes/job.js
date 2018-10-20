@@ -17,7 +17,7 @@ class JobRoute extends Route {
   _onJobData(data) {
     const job = this;
     const info = data.info[0];
-    job.getPageElement().querySelector(".output").innerHTML = "";
+    job.getPageElement().querySelector(".output").innerText = "";
 
     document.querySelector("#button_close_job").addEventListener("click", _ => {
       this.router.goTo("/");

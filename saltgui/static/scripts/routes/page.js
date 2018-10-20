@@ -122,7 +122,7 @@ class PageRoute extends Route {
 
   _updateJobs(data) {
     const jobContainer = this.getPageElement().querySelector(".jobs");
-    jobContainer.innerHTML = "";
+    jobContainer.innerText = "";
     const jobs = this._jobsToArray(data.return[0]);
     this._sortJobs(jobs);
 

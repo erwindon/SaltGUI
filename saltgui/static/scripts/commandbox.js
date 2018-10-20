@@ -52,7 +52,7 @@ class CommandBox {
     if(func === null) return;
 
     button.disabled = true;
-    output.innerHTML = "Loading...";
+    output.innerText = "Loading...";
 
     func.then(response => {
       this._onRunReturn(response.return[0], command);
@@ -71,7 +71,7 @@ class CommandBox {
     manualRun.style.display = "block";
 
     document.body.style["overflow-y"] = "hidden";
-    document.querySelector(".run-command pre").innerHTML = "Waiting for command...";
+    document.querySelector(".run-command pre").innerText = "Waiting for command...";
 
     evt.stopPropagation();
   }
@@ -91,7 +91,7 @@ class CommandBox {
     // test whether the command may have caused an update to the list
     // the user may have altered the text after running the command, just ignore that
     const command = document.querySelector(".run-command #command").value.split(" ")[0];
-    const output = document.querySelector(".run-command pre").innerHTML;
+    const output = document.querySelector(".run-command pre").innerText;
     const screenModifyingCommands = [
       "wheel.key.accept",
       "wheel.key.delete",
