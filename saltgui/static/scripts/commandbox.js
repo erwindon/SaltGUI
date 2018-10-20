@@ -9,11 +9,13 @@ class CommandBox {
     this._hideManualRun = this._hideManualRun.bind(this);
 
     const cmdbox = document.querySelector(".run-command #cmdbox");
-    this.menu = new DropDownMenu(cmdbox);
+    this.cmdmenu = new DropDownMenu(cmdbox);
+
     this.documentation = new Documentation(this);
     this._registerEventListeners();
 
-    RunType._registerEventListeners();
+    RunType.createMenu();
+    TargetType.createMenu();
   }
 
   _registerEventListeners() {
@@ -23,21 +25,27 @@ class CommandBox {
       .addEventListener("click", this._showManualRun);
     document.querySelector("#button_close_cmd")
       .addEventListener("click", this._hideManualRun);
+
     document.querySelector(".run-command input[type='submit']")
       .addEventListener("click", this._onRun);
+
+    this._addKeyEventListener("#target", _ => {
+      const target = document.querySelector(".run-command #target").value;
+      TargetType.autoSelectTargetType(target);
+    });
+
+    this._addKeyEventListener("#command", this.cmdmenu.verifyAll);
+  }
+
+  _addKeyEventListener(selector, func) {
     // keydown is too early, keypress also does not work
-    document.querySelector("#command")
-      .addEventListener("keyup", this.menu.verifyAll);
+    document.querySelector(selector).addEventListener("keyup", func);
     // cut/paste do not work everywhere
-    document.querySelector("#command")
-      .addEventListener("cut", this.menu.verifyAll);
-    document.querySelector("#command")
-      .addEventListener("paste", this.menu.verifyAll);
+    document.querySelector(selector).addEventListener("cut", func);
+    document.querySelector(selector).addEventListener("paste", func);
     // blur/focus should not be needed but are a valueable fallback
-    document.querySelector("#command")
-      .addEventListener("blur", this.menu.verifyAll);
-    document.querySelector("#command")
-      .addEventListener("focus", this.menu.verifyAll);
+    document.querySelector(selector).addEventListener("blur", func);
+    document.querySelector(selector).addEventListener("focus", func);
   }
 
   _onRun() {
@@ -48,7 +56,9 @@ class CommandBox {
     const target = document.querySelector(".run-command #target").value;
     const command = document.querySelector(".run-command #command").value;
 
-    const func = this._getRunParams(target, command);
+    const tgtType = TargetType.menuTargetType._value;
+
+    const func = this._getRunParams(tgtType, target, command);
     if(func === null) return;
 
     button.disabled = true;
@@ -73,6 +83,11 @@ class CommandBox {
     document.body.style["overflow-y"] = "hidden";
     document.querySelector(".run-command pre").innerText = "Waiting for command...";
 
+    const target = document.querySelector(".run-command #target").value;
+    TargetType.autoSelectTargetType(target);
+
+    RunType.setRunTypeDefault();
+
     evt.stopPropagation();
   }
 
@@ -87,6 +102,7 @@ class CommandBox {
 
     // reset to default, so that its value is initially hidden
     RunType.setRunTypeDefault();
+    TargetType.setTargetTypeDefault();
 
     // test whether the command may have caused an update to the list
     // the user may have altered the text after running the command, just ignore that
@@ -108,7 +124,7 @@ class CommandBox {
     this._onRunReturn(message, "");
   }
 
-  _getRunParams(target, toRun) {
+  _getRunParams(tgtType, target, toRun) {
 
     if(toRun === "") {
       this._showError("'Command' field cannot be empty");
@@ -166,6 +182,7 @@ class CommandBox {
       params.client = "local";
       params.fun = functionToRun;
       params.tgt = target;
+      if(tgtType) params.tgt_type = tgtType;
       if(args.length !== 0) params.arg = args;
     }
 

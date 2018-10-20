@@ -9,7 +9,7 @@ class Documentation {
     this.commandbox = commandbox;
     this._manualRunMenuSysDocRun = this._manualRunMenuSysDocRun.bind(this);
 
-    commandbox.menu.addMenuItem(
+    commandbox.cmdmenu.addMenuItem(
       this._manualRunMenuSysDocPrepare,
       this._manualRunMenuSysDocRun);
   }
@@ -87,7 +87,9 @@ class Documentation {
       dummyCommand = "sys.doc " + command;
     }
 
-    this.commandbox._getRunParams(target, docCommand).then(
+    const tgtType = TargetType.menuTargetType._value;
+
+    this.commandbox._getRunParams(tgtType, target, docCommand).then(
       response => this.commandbox._onRunReturn(response.return[0], dummyCommand)
     );
   }
