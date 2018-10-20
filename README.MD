@@ -100,6 +100,12 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.4.0 (2018-10-20)
+- Improved (high)state output (erwindon)
+- Added collapsable output (erwindon)
+- Format jobs same as direct command output (erwindon)
+- Jobs can now be started asynchronously (erwindon)
+
 ## 1.3.0 (2018-09-28)
 - Improved command parser (erwindon)
 - Loads of ES6 code improvements and testing including linting (erwindon/maerteijn)
