@@ -4,9 +4,9 @@ class TargetType {
     const targetbox = document.getElementById("targetbox");
     TargetType.menuTargetType = new DropDownMenu(targetbox);
     // do not show the menu title at first
-    TargetType.menuTargetType.addMenuItem("Normal", this._updateTargetTypeText, "glob");
-    TargetType.menuTargetType.addMenuItem("List", this._updateTargetTypeText, "list");
-    TargetType.menuTargetType.addMenuItem("Compound", this._updateTargetTypeText, "compound");
+    TargetType.menuTargetType.addMenuItem("Normal", this.manualUpdateTargetTypeText, "glob");
+    TargetType.menuTargetType.addMenuItem("List", this.manualUpdateTargetTypeText, "list");
+    TargetType.menuTargetType.addMenuItem("Compound", this.manualUpdateTargetTypeText, "compound");
     TargetType.setTargetTypeDefault();
   }
 
@@ -35,6 +35,11 @@ class TargetType {
 
     // do not show it when default and not explicitly selected
     TargetType.setTargetTypeDefault();
+  }
+
+  static manualUpdateTargetTypeText() {
+    TargetType.menuTargetType._system = false;
+    TargetType._updateTargetTypeText();
   }
 
   static _updateTargetTypeText() {
