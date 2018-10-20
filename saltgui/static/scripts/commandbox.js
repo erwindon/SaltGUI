@@ -12,6 +12,8 @@ class CommandBox {
     this.menu = new DropDownMenu(cmdbox);
     this.documentation = new Documentation(this);
     this._registerEventListeners();
+
+    RunType._registerEventListeners();
   }
 
   _registerEventListeners() {
@@ -83,6 +85,9 @@ class CommandBox {
 
     document.body.style["overflow-y"] = "scroll";
 
+    // reset to default, so that its value is initially hidden
+    RunType.setRunTypeDefault();
+
     // test whether the command may have caused an update to the list
     // the user may have altered the text after running the command, just ignore that
     const command = document.querySelector(".run-command #command").value.split(" ")[0];
@@ -93,7 +98,7 @@ class CommandBox {
       "wheel.key.reject",
     ];
     if(screenModifyingCommands.includes(command) && output !== "Waiting for command...") {
-      location.reload(); 
+      location.reload();
     }
 
     evt.stopPropagation();
@@ -162,6 +167,13 @@ class CommandBox {
       params.fun = functionToRun;
       params.tgt = target;
       if(args.length !== 0) params.arg = args;
+    }
+
+    const runType = RunType.getRunType();
+    if(params.client === "local" && runType === "async") {
+      params.client = "local_async";
+      // return looks like:
+      // { "jid": "20180718173942195461", "minions": [ ... ] }
     }
 
     return this.api.apiRequest("POST", "/", params)

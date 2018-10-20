@@ -551,7 +551,20 @@ class Output {
   // the output is only text
   // note: do not return a text-node
   static getTextOutput(hostResponse) {
+    // strip trailing whitespace
     hostResponse = hostResponse.replace(/[ \r\n]+$/g, "");
+
+    // replace all returned JIDs to links
+    // typically found in the output of an async job
+    // patJid is defined in scripts/parsecmdline.js
+    if(hostResponse.match(patJid)) {
+      const a = document.createElement("a");
+      a.href = "/job?id=" + hostResponse;
+      a.innerText = hostResponse;
+      return a;
+    }
+
+    // all regular text
     const span = document.createElement("span");
     span.innerText = hostResponse;
     return span;
@@ -574,6 +587,16 @@ class Output {
         return false;
       }
     }
+    return true;
+  }
+
+
+  static isAsyncOutput(response) {
+    let keys = Object.keys(response);
+    if(keys.length !== 2) return false;
+    keys = keys.sort();
+    if(keys[0] !== "jid") return false;
+    if(keys[1] !== "minions") return false;
     return true;
   }
 
@@ -610,8 +633,11 @@ class Output {
 
     const allDiv = document.createElement("div");
 
-    if(!command.startsWith("runners.") && !command.startsWith("wheel.")) {
+    if(!command.startsWith("runners.") &&
+       !command.startsWith("wheel.") &&
+       !Output.isAsyncOutput(response)) {
       // runners/wheel responses are not per minion
+      // Do not produce a #response line for async-start confirmation
       const txt = document.createElement("span");
       const cnt = Object.keys(response).length;
       if(cnt === 1) {

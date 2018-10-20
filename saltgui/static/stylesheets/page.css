@@ -19,6 +19,14 @@
   overflow-y: hidden;
 }
 
+pre a {
+  color: yellow;
+}
+
+pre a:link {
+  text-decoration: none;
+}
+
 .minions {
   min-width: 620px;
 }
