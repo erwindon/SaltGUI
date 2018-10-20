@@ -19,15 +19,17 @@ class TargetType {
       return;
     }
 
-    if(target.includes("@")) {
-      // @ is a strong indicator for compound target
+    if(target.includes("@") || target.includes(" ") ||
+       target.includes("(") || target.includes(")")) {
+      // "@" is a strong indicator for compound target
+      // but "space", "(" and ")" are also typical for compound target
       TargetType.menuTargetType._value = "compound";
       TargetType._updateTargetTypeText();
       return;
     }
 
     if(target.includes(",")) {
-      // @ is a strong indicator for list target (when it is also not compound)
+      // "," is a strong indicator for list target (when it is also not compound)
       TargetType.menuTargetType._value = "list";
       TargetType._updateTargetTypeText();
       return;
