@@ -1,6 +1,6 @@
 class RunType {
 
-  static _registerEventListeners() {
+  static createMenu() {
     const runblock = document.getElementById("runblock");
     RunType.menuRunType = new DropDownMenu(runblock);
     // do not show the menu title at first
