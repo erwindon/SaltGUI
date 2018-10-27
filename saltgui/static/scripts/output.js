@@ -365,10 +365,15 @@ class Output {
     }
   }
 
-  static isHighStateOutput(command) {
-    if(command === "state.apply") return true;
-    if(command === "state.highstate") return true;
-    return false;
+  static isHighStateOutput(command, response) {
+    if(typeof response !== "object") return false;
+    if(Array.isArray(response)) return false;
+    if(command !== "state.apply" && command !== "state.highstate") return false;
+    for(const key of Object.keys(response)) {
+      const components = key.split("_|-");
+      if(components.length != 4) return false;
+    }
+    return true;
   }
 
   static getDurationClause(millis) {
@@ -734,7 +739,7 @@ class Output {
 
       // it might be highstate output
       const commandCmd = command.trim().replace(/ .*/, "");
-      const isHighStateOutput = Output.isHighStateOutput(commandCmd);
+      const isHighStateOutput = Output.isHighStateOutput(commandCmd, hostResponse);
       if(!fndRepresentation && isHighStateOutput) {
         hostLabel = Output.getHighStateLabel(hostname, hostResponse);
         hostOutput = Output.getHighStateOutput(hostResponse);
