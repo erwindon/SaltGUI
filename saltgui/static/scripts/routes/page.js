@@ -235,7 +235,7 @@ class PageRoute extends Route {
     target.value = targetString;
     command.value = commandString;
     // the menu may become (in)visible due to content of command field
-    this.router.commandbox.menu.verifyAll();
+    this.router.commandbox.cmdmenu.verifyAll();
   }
 
   _runHighState(evt, hostname) {
