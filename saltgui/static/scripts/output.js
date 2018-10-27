@@ -486,10 +486,38 @@ class Output {
             // 25BA = BLACK RIGHT-POINTING POINTER
             // don't use arrows here, these are higher than a regular
             // text-line and disturb the text-flow
-            taskDiv.append(document.createTextNode(
-              indent + key + ": " +
-              JSON.stringify(change.old) + " \u25BA " +
-              JSON.stringify(change.new)));
+            if(typeof change === "string" && change.includes("\n")) {
+              // show multi-line text as a separate block
+              taskDiv.append(document.createTextNode(indent + key + ":"));
+              let lines = change.trim().split("\n");
+              for(const line of lines) {
+                taskDiv.append(document.createElement("br"));
+                taskDiv.append(document.createTextNode("      " + line));
+              }
+            } else if(typeof change !== "object" || Array.isArray(task.change)) {
+              // show all other non-objects in a simple way
+              taskDiv.append(document.createTextNode(
+                indent + key + ": " +
+                JSON.stringify(change)));
+            } else {
+              // treat old->new first
+              if(change.old && change.new) {
+                // place changes on one line
+                taskDiv.append(document.createTextNode(
+                  indent + key + ": " +
+                  JSON.stringify(change.old) + " \u25BA " +
+                  JSON.stringify(change.new)));
+                delete change.old;
+                delete change.new;
+              }
+              // then show whatever remains
+              for(const taskkey of Object.keys(change).sort()) {
+                taskDiv.append(document.createElement("br"));
+                taskDiv.append(document.createTextNode(
+                  indent + key + ": " + taskkey + ": " +
+                  JSON.stringify(change[taskkey])));
+              }
+            }
           }
         }
       }
