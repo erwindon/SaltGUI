@@ -566,6 +566,8 @@ class Output {
 
     // all regular text
     const span = document.createElement("span");
+    if(hostResponse.includes("\n"))
+      hostResponse = "\n    " + hostResponse;
     span.innerText = hostResponse;
     return span;
   }
