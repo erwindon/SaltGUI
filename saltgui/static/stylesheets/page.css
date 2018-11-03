@@ -72,6 +72,10 @@ pre .hostname.host_failure {
   color: red;
 }
 
+pre .hostname.host_skips {
+  color: yellow;
+}
+
 pre .hostname {
   color: #4caf50;
 }

@@ -391,12 +391,17 @@ class Output {
 
   static getHighStateLabel(hostname, hostResponse) {
     let anyFailures = false;
+    let anySkips = false;
     for(const [key, task] of Object.entries(hostResponse)) {
-      if(!task.result) anyFailures = true;
+      if(task.result == null) anySkips = true;
+      else if(!task.result) anyFailures = true;
     }
 
     if(anyFailures) {
       return Output.getHostnameHtml(hostname, "host_failure");
+    }
+    if(anySkips) {
+      return Output.getHostnameHtml(hostname, "host_skips");
     }
     return Output.getHostnameHtml(hostname, "host_success");
   }
@@ -422,6 +427,7 @@ class Output {
 
     let succeeded = 0;
     let failed = 0;
+    let skipped = 0;
     let total_millis = 0;
     let changes = 0;
     for(const task of tasks) {
@@ -429,7 +435,12 @@ class Output {
       const taskDiv = document.createElement("div");
 
       const span = document.createElement("span");
-      if(task.result) {
+      if(task.result == null) {
+        // 2714 = HEAVY CHECK MARK
+        span.style.color = "yellow";
+        span.innerText = "\u2714";
+        skipped += 1;
+      } else if(task.result) {
         // 2714 = HEAVY CHECK MARK
         span.style.color = "green";
         span.innerText = "\u2714";
@@ -567,25 +578,32 @@ class Output {
       div.append(taskDiv);
     }
 
-    if(succeeded || failed || changes) {
-      let line = "";
+    // add a summary line
+    let line = "";
 
-      if(succeeded) line += ", " + succeeded + " succeeded";
+    if(succeeded) line += ", " + succeeded + " succeeded";
+    if(skipped) line += ", " + skipped + " skipped";
+    if(failed) line += ", " + failed + " failed";
+    const total = succeeded + skipped + failed;
+    if(total != succeeded && total != skipped && total != failed) {
+      line += ", " + (succeeded + skipped + failed) + " total";
+    }
 
-      if(failed) line += ", " + failed + " failed";
+    // note that the number of changes may be higher or lower
+    // than the number of tasks. tasks may contribute multiple
+    // changes, or tasks may have no changes.
+    if(changes == 1) line += ", " + changes + " change";
+    else if(changes) line += ", " + changes + " changes";
 
-      if(failed && succeeded) line += ", " + (succeeded + failed) + " total";
-
-      // note that the number of changes may be higher or lower
-      // than the number of tasks. tasks may contribute multiple
-      // changes, or tasks may have no changes.
-      if(changes == 1) line += ", " + changes + " change";
-      else if(changes) line += ", " + changes + " changes";
-
+    // multiple durations and significant?
+    if(total > 1 && total_millis >= 10) {
       line += ", " + Output.getDurationClause(total_millis);
+    }
 
+    if(line) {
       div.append(document.createTextNode(line.substring(2)));
     }
+
 
     return div;
   }
