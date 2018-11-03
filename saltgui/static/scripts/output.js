@@ -423,6 +423,7 @@ class Output {
     let succeeded = 0;
     let failed = 0;
     let total_millis = 0;
+    let changes = 0;
     for(const task of tasks) {
 
       const taskDiv = document.createElement("div");
@@ -481,6 +482,7 @@ class Output {
           taskDiv.append(document.createTextNode(indent + JSON.stringify(task.changes)));
         } else {
           for(const key of Object.keys(task.changes).sort()) {
+            changes = changes + 1;
             taskDiv.append(document.createElement("br"));
             const change = task.changes[key];
             // 25BA = BLACK RIGHT-POINTING POINTER
@@ -563,7 +565,7 @@ class Output {
       div.append(taskDiv);
     }
 
-    if(succeeded || failed) {
+    if(succeeded || failed || changes) {
       let line = "";
 
       if(succeeded) line += ", " + succeeded + " succeeded";
@@ -571,6 +573,12 @@ class Output {
       if(failed) line += ", " + failed + " failed";
 
       if(failed && succeeded) line += ", " + (succeeded + failed) + " total";
+
+      // note that the number of changes may be higher or lower
+      // than the number of tasks. tasks may contribute multiple
+      // changes, or tasks may have no changes.
+      if(changes == 1) line += ", " + changes + " change";
+      else if(changes) line += ", " + changes + " changes";
 
       line += ", " + Output.getDurationClause(total_millis);
 
