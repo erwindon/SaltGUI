@@ -483,12 +483,12 @@ class Output {
         } else {
           for(const key of Object.keys(task.changes).sort()) {
             changes = changes + 1;
-            taskDiv.append(document.createElement("br"));
             const change = task.changes[key];
             // 25BA = BLACK RIGHT-POINTING POINTER
             // don't use arrows here, these are higher than a regular
             // text-line and disturb the text-flow
             if(typeof change === "string" && change.includes("\n")) {
+              taskDiv.append(document.createElement("br"));
               // show multi-line text as a separate block
               taskDiv.append(document.createTextNode(indent + key + ":"));
               let lines = change.trim().split("\n");
@@ -498,12 +498,14 @@ class Output {
               }
             } else if(typeof change !== "object" || Array.isArray(task.change)) {
               // show all other non-objects in a simple way
+              taskDiv.append(document.createElement("br"));
               taskDiv.append(document.createTextNode(
                 indent + key + ": " +
                 JSON.stringify(change)));
             } else {
               // treat old->new first
               if(change.hasOwnProperty("old") && change.hasOwnProperty("new")) {
+                taskDiv.append(document.createElement("br"));
                 // place changes on one line
                 taskDiv.append(document.createTextNode(
                   indent + key + ": " +
