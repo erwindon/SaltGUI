@@ -503,7 +503,7 @@ class Output {
                 JSON.stringify(change)));
             } else {
               // treat old->new first
-              if(change.old && change.new) {
+              if(change.hasOwnProperty("old") && change.hasOwnProperty("new")) {
                 // place changes on one line
                 taskDiv.append(document.createTextNode(
                   indent + key + ": " +
