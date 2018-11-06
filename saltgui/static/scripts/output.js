@@ -748,6 +748,9 @@ class Output {
     // this is more generic and it simplifies the handlers
     for(const hostname of Object.keys(response).sort()) {
 
+      let isSuccess = true;
+      let retCode = 0;
+
       let hostResponse = response[hostname];
       if(Output.hasProperties(hostResponse, ["retcode", "return", "success"])) {
         hostResponse = hostResponse.return;
@@ -763,9 +766,15 @@ class Output {
       // the standard label is the hostname,
       // future: colored based on the successflag
       // future: colored based on the retcode
-      let hostLabel = Output.getHostnameHtml(
-        hostname,
-        "host_success");
+      let hostClass = "host_success";
+      if(!isSuccess) hostClass = "host_failure";
+      if(!response.hasOwnProperty(hostname)) hostClass = "host_noresponse";
+      let hostLabel = Output.getHostnameHtml(hostname, hostClass);
+
+      if(!fndRepresentation && !response.hasOwnProperty(hostname)) {
+        hostOutput = Output.getTextOutput("(no response)");
+        fndRepresentation = true;
+      }
 
       if(!fndRepresentation && typeof hostResponse === "string") {
         hostOutput = Output.getTextOutput(hostResponse);
