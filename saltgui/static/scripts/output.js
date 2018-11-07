@@ -645,6 +645,9 @@ class Output {
 
 
   static hasProperties(obj, props) {
+    if(typeof obj !== "object") {
+      return false;
+    }
     for(const prop of props) {
       if(!obj.hasOwnProperty(prop)) {
         return false;
