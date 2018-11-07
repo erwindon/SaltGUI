@@ -71,7 +71,8 @@ class CommandBox {
 
   _onRunReturn(response, command) {
     const outputContainer = document.querySelector(".run-command pre");
-    Output.addResponseOutput(outputContainer, response, command);
+    const minions = Object.keys(response);
+    Output.addResponseOutput(outputContainer, minions, response, command);
     const button = document.querySelector(".run-command input[type='submit']");
     button.disabled = false;
   }

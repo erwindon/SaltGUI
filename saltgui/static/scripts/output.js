@@ -666,7 +666,7 @@ class Output {
 
   // the orchestrator for the output
   // determines what format should be used and uses that
-  static addResponseOutput(outputContainer, response, command) {
+  static addResponseOutput(outputContainer, minions, response, command) {
 
     // remove old content
     outputContainer.innerText = "";
@@ -701,14 +701,32 @@ class Output {
        !Output.isAsyncOutput(response)) {
       // runners/wheel responses are not per minion
       // Do not produce a #response line for async-start confirmation
-      const txt = document.createElement("span");
-      const cnt = Object.keys(response).length;
-      if(cnt === 1) {
-        txt.innerText = cnt + " response ";
+      const span = document.createElement("span");
+
+      const cntResponses = Object.keys(response).length;
+      const cntMinions = minions.length;
+
+      let txt;
+
+      if(cntResponses === 1) {
+        txt = cntResponses + " response";
       } else {
-        txt.innerText = cnt + " responses ";
+        txt = cntResponses + " responses";
       }
-      allDiv.appendChild(txt);
+
+      if(cntMinions != cntResponses) {
+        txt = txt + ", " + (cntMinions - cntResponses) + " no response";
+      }
+
+      if(cntResponses > 0 && cntMinions != cntResponses) {
+        txt = txt + ", " + cntMinions + " total";
+      }
+
+      // some room for the triangle
+      txt = txt + " ";
+
+      span.innerText = txt;
+      allDiv.appendChild(span);
     }
 
     const masterTriangle = document.createElement("span");

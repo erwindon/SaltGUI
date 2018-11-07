@@ -33,7 +33,7 @@ class JobRoute extends Route {
 
     const output = job.getPageElement().querySelector(".output");
     // use same formatter as direct commands
-    Output.addResponseOutput(output, info.Result, info.Function);
+    Output.addResponseOutput(output, info.Minions, info.Result, info.Function);
 
     this.resolvePromise();
   }
