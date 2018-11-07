@@ -100,6 +100,11 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.4.1 (2018-11-07)
+- added selectable targettype (erwindon)
+- improved state output (erwindon)
+- various output improvements (erwindon)
+
 ## 1.4.0 (2018-10-20)
 - Improved (high)state output (erwindon)
 - Added collapsable output (erwindon)
