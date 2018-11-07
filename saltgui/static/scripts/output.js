@@ -767,7 +767,7 @@ class Output {
 
     // for all other types we consider the output per minion
     // this is more generic and it simplifies the handlers
-    for(const hostname of Object.keys(response).sort()) {
+    for(const hostname of minions.sort()) {
 
       let isSuccess = true;
       let retCode = 0;
