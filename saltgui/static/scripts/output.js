@@ -502,7 +502,7 @@ class Output {
               taskDiv.append(document.createElement("br"));
               // show multi-line text as a separate block
               taskDiv.append(document.createTextNode(indent + key + ":"));
-              let lines = change.trim().split("\n");
+              const lines = change.trim().split("\n");
               for(const line of lines) {
                 taskDiv.append(document.createElement("br"));
                 taskDiv.append(document.createTextNode("      " + line));
