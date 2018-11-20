@@ -28,7 +28,7 @@ class MinionsRoute extends PageRoute {
 
   _templates(data) {
     // store for later use
-    let templates = data.return[0].data.return.saltgui_templates;
+    const templates = data.return[0].data.return.saltgui_templates;
     localStorage.setItem("templates", JSON.stringify(templates));
   }
 

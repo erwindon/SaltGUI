@@ -17,15 +17,15 @@ class CommandBox {
     RunType.createMenu();
     TargetType.createMenu();
 
-    var title = document.querySelector(".run-command #templatemenuhere");
-    var menu = new DropDownMenu(title);
-    var templatesText = localStorage.getItem("templates");
+    const title = document.querySelector(".run-command #templatemenuhere");
+    const menu = new DropDownMenu(title);
+    let templatesText = localStorage.getItem("templates");
     if(!templatesText || templatesText === "undefined") templatesText = "{}";
-    var templates = JSON.parse(templatesText);
-    var keys = Object.keys(templates).sort();
-    let page = this;
+    const templates = JSON.parse(templatesText);
+    const keys = Object.keys(templates).sort();
+    const page = this;
     for(let key of keys) {
-      let template = templates[key];
+      const template = templates[key];
       let description = template["description"];
       if(!description) description = "(" + key + ")";
       menu.addMenuItem(
@@ -60,12 +60,12 @@ class CommandBox {
 
     if(template.targettype) {
       let tt = template.targettype;
-      var targetbox = document.querySelector("#targetbox");
+      const targetbox = document.querySelector("#targetbox");
       // show the extended selection controls when
       targetbox.style.display = "inherit";
       if(tt !== "glob" && tt !== "list" && tt !== "compound") {
-	// we don't support that, revert to standard (not default)
-	tt = "glob";
+        // we don't support that, revert to standard (not default)
+        tt = "glob";
       }
       TargetType.setTargetType(tt);
     } else {
@@ -74,12 +74,12 @@ class CommandBox {
     }
 
     if(template.target) {
-      var target = document.querySelector(".run-command #target");
+      const target = document.querySelector(".run-command #target");
       target.value = template.target;
     }
 
     if(template.command) {
-      var command = document.querySelector(".run-command #command");
+      const command = document.querySelector(".run-command #command");
       command.value = template.command;
     }
   }
