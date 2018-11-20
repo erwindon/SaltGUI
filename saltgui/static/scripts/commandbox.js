@@ -16,6 +16,25 @@ class CommandBox {
 
     RunType.createMenu();
     TargetType.createMenu();
+
+    var title = document.querySelector(".run-command #templatemenuhere");
+    var menu = new DropDownMenu(title);
+    var templatesText = localStorage.getItem("templates");
+    if(!templatesText || templatesText === "undefined") templatesText = "{}";
+    var templates = JSON.parse(templatesText);
+    var keys = Object.keys(templates).sort();
+    let page = this;
+    for(let key of keys) {
+      let template = templates[key];
+      let description = template["description"];
+      if(!description) description = "(" + key + ")";
+      menu.addMenuItem(
+        description,
+        function() {
+          page._applyTemplate(template);
+        }
+      );
+    }
   }
 
   _registerEventListeners() {
@@ -37,13 +56,41 @@ class CommandBox {
     this._addKeyEventListener("#command", this.cmdmenu.verifyAll);
   }
 
+  _applyTemplate(template) {
+
+    if(template.targettype) {
+      let tt = template.targettype;
+      var targetbox = document.querySelector("#targetbox");
+      // show the extended selection controls when
+      targetbox.style.display = "inherit";
+      if(tt !== "glob" && tt !== "list" && tt !== "compound") {
+	// we don't support that, revert to standard (not default)
+	tt = "glob";
+      }
+      TargetType.setTargetType(tt);
+    } else {
+      // not in the template, revert to default
+      TargetType.setTargetTypeDefault();
+    }
+
+    if(template.target) {
+      var target = document.querySelector(".run-command #target");
+      target.value = template.target;
+    }
+
+    if(template.command) {
+      var command = document.querySelector(".run-command #command");
+      command.value = template.command;
+    }
+  }
+
   _addKeyEventListener(selector, func) {
     // keydown is too early, keypress also does not work
     document.querySelector(selector).addEventListener("keyup", func);
     // cut/paste do not work everywhere
     document.querySelector(selector).addEventListener("cut", func);
     document.querySelector(selector).addEventListener("paste", func);
-    // blur/focus should not be needed but are a valueable fallback
+    // blur/focus should not be needed but are a valuable fallback
     document.querySelector(selector).addEventListener("blur", func);
     document.querySelector(selector).addEventListener("focus", func);
   }

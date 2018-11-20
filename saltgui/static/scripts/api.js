@@ -75,6 +75,14 @@ class API {
     return this.apiRequest("POST", "/", params).catch(console.error);
   }
 
+  getTemplates() {
+    const params = {
+      client: "wheel",
+      fun: "config.values"
+    };
+    return this.apiRequest("POST", "/", params).catch(console.error);
+  }
+
   apiRequest(method, route, params) {
     const location = this.APIURL + route;
     const token = window.sessionStorage.getItem("token");

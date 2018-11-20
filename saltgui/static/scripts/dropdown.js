@@ -38,12 +38,13 @@ class DropDownMenu {
   }
 
   verifyAll() {
-    if(!this.menuDropdownContent) return;
     let visibleCount = 0;
-    for(const chld of this.menuDropdownContent.children) {
-      const verifyCallback = chld.verifyCallback;
-      if(verifyCallback) verifyCallback(chld);
-      if(chld.style.display !== "none") visibleCount++;
+    if(this.menuDropdownContent) {
+      for(const chld of this.menuDropdownContent.children) {
+        const verifyCallback = chld.verifyCallback;
+        if(verifyCallback) verifyCallback(chld);
+        if(chld.style.display !== "none") visibleCount++;
+      }
     }
     // hide the menu when it has no visible menu-items
     this.menuDropdown.style.display = (visibleCount > 0) ? "inline-block" : "none";

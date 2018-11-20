@@ -21,7 +21,15 @@ class MinionsRoute extends PageRoute {
       minions.router.api.getKeys().then(minions._updateKeys);
       minions.router.api.getJobs().then(minions._updateJobs);
       minions.router.api.getRunningJobs().then(minions._runningJobs);
+      //we need these functions to poulate the dropdown boxes
+      minions.router.api.getTemplates().then(minions._templates);
     });
+  }
+
+  _templates(data) {
+    // store for later use
+    let templates = data.return[0].data.return.saltgui_templates;
+    localStorage.setItem("templates", JSON.stringify(templates));
   }
 
   _updateKeys(data) {
