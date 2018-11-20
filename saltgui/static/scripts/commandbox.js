@@ -24,7 +24,7 @@ class CommandBox {
     const templates = JSON.parse(templatesText);
     const keys = Object.keys(templates).sort();
     const page = this;
-    for(let key of keys) {
+    for(const key of keys) {
       const template = templates[key];
       let description = template["description"];
       if(!description) description = "(" + key + ")";
