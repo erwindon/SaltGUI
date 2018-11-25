@@ -60,6 +60,27 @@ SaltGUI supports the following authentication methods supported by salt:
 
 See the [EAUTH documentation](https://docs.saltstack.com/en/latest/topics/eauth/index.html) and the [Salt auth source code](https://github.com/saltstack/salt/tree/2018.3/salt/auth) for more information.
 
+## Templates
+SaltGUI supports command templates for easier command entry into the command-box.
+The menu item for that becomes visible there when you define one or more templates
+in salt master configuration file `/etc/salt/master`.
+The field `targettype` supports the values `glob`, `list` and `compound`.
+Entries will be sorted in the GUI based on their key.
+You can leave out any detail field.
+e.g.:
+```
+saltgui_templates:
+    template1:
+        description: First template
+        target: "*"
+        command: test.fib num=10
+    template2:
+        description: Second template
+        targettype: glob
+        target: dev*
+        command: test.version
+```
+
 ## Development environment with Docker
 To make life a bit easier for testing SaltGUI or setting up a local development environment you can use the provided docker-compose setup in this repository to run a saltmaster with two minions, including SaltGUI:
 ```

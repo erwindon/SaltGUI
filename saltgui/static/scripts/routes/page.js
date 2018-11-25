@@ -139,6 +139,7 @@ class PageRoute extends Route {
       if(job.Function === "saltutil.find_job") continue;
       if(job.Function === "saltutil.running") continue;
       if(job.Function === "sys.doc") continue;
+      if(job.Function === "wheel.config.values") continue;
       if(job.Function === "wheel.key.list_all") continue;
 
       this._addJob(jobContainer, job);

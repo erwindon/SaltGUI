@@ -69,6 +69,12 @@ class TargetType {
     TargetType.menuTargetType._system = true;
   }
 
+  static setTargetType(tt) {
+    TargetType.menuTargetType._value = tt;
+    TargetType.menuTargetType._system = true;
+    TargetType._updateTargetTypeText();
+  }
+
   static getTargetType() {
     const targetType = TargetType.menuTargetType._value;
     if(targetType === undefined || targetType === "") return "glob";
