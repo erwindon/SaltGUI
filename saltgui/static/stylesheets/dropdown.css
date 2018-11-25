@@ -19,6 +19,9 @@ header .menu-dropdown-content {
   display: none;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.5);
   position: absolute;
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: visible;
   background-color: #e0e0e0;
   border: 10px solid #e0e0e0;
   z-index: 5;
