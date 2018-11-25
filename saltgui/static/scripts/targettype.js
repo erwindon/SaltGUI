@@ -6,6 +6,7 @@ class TargetType {
     // do not show the menu title at first
     TargetType.menuTargetType.addMenuItem("Normal", this.manualUpdateTargetTypeText, "glob");
     TargetType.menuTargetType.addMenuItem("List", this.manualUpdateTargetTypeText, "list");
+    TargetType.menuTargetType.addMenuItem("Nodegroup", this.manualUpdateTargetTypeText, "nodegroup");
     TargetType.menuTargetType.addMenuItem("Compound", this.manualUpdateTargetTypeText, "compound");
     TargetType.setTargetTypeDefault();
   }
@@ -57,6 +58,9 @@ class TargetType {
       break;
     case "list":
       TargetType.menuTargetType.setTitle("List");
+      break;
+    case "nodegroup":
+      TargetType.menuTargetType.setTitle("Nodegroup");
       break;
     }
   }
