@@ -65,6 +65,7 @@ SaltGUI supports command templates for easier command entry into the command-box
 The menu item for that becomes visible there when you define one or more templates
 in salt master configuration file `/etc/salt/master`.
 The field `targettype` supports the values `glob`, `list` and `compound`.
+Entries will be sorted in the GUI based on their key.
 You can leave out any detail field.
 e.g.:
 ```
