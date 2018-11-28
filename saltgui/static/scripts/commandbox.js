@@ -63,7 +63,7 @@ class CommandBox {
       const targetbox = document.querySelector("#targetbox");
       // show the extended selection controls when
       targetbox.style.display = "inherit";
-      if(tt !== "glob" && tt !== "list" && tt !== "compound") {
+      if(tt !== "glob" && tt !== "list" && tt !== "compound" && tt !== "nodegroup") {
         // we don't support that, revert to standard (not default)
         tt = "glob";
       }
