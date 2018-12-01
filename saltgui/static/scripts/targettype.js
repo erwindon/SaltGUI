@@ -6,9 +6,21 @@ class TargetType {
     // do not show the menu title at first
     TargetType.menuTargetType.addMenuItem("Normal", this.manualUpdateTargetTypeText, "glob");
     TargetType.menuTargetType.addMenuItem("List", this.manualUpdateTargetTypeText, "list");
-    TargetType.menuTargetType.addMenuItem("Nodegroup", this.manualUpdateTargetTypeText, "nodegroup");
+    TargetType.menuTargetType.addMenuItem(TargetType._targetTypeNodeGroupPrepare, this.manualUpdateTargetTypeText, "nodegroup");
     TargetType.menuTargetType.addMenuItem("Compound", this.manualUpdateTargetTypeText, "compound");
     TargetType.setTargetTypeDefault();
+  }
+
+  // It takes a while before we known the list of nodegroups
+  // so this conclusion must be re-evaluated each time
+  static _targetTypeNodeGroupPrepare(menuitem) {
+    const nodegroups = window.localStorage.getItem("nodegroups");
+    if(nodegroups && nodegroups != "{}") {
+      menuitem.innerText = "Nodegroup";
+      menuitem.style.display = "block";
+    } else {
+      menuitem.style.display = "none";
+    }
   }
 
   static autoSelectTargetType(target) {
