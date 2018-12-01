@@ -213,6 +213,16 @@ class CommandBox {
       return null;
     }
 
+    // SALT API returns a 500-InternalServerError when it hits an unknown group
+    // Let's improve on that
+    if(tgtType === "nodegroup") {
+      const nodegroups = JSON.parse(window.localStorage.getItem("nodegroups"));
+      if(!(target in nodegroups)) {
+        this._showError("Unknown nodegroup");
+        return null;
+      }
+    }
+
     if(functionToRun.startsWith("runners.")) {
       params.client = "runner";
       // use only the part after "runners." (8 chars)
