@@ -218,7 +218,7 @@ class CommandBox {
     if(tgtType === "nodegroup") {
       const nodegroups = JSON.parse(window.localStorage.getItem("nodegroups"));
       if(!(target in nodegroups)) {
-        this._showError("Unknown nodegroup");
+        this._showError("Unknown nodegroup '" + target + "'");
         return null;
       }
     }
