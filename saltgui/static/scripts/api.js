@@ -75,7 +75,7 @@ class API {
     return this.apiRequest("POST", "/", params).catch(console.error);
   }
 
-  getTemplates() {
+  getConfigValues() {
     const params = {
       client: "wheel",
       fun: "config.values"

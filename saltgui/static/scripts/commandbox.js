@@ -63,7 +63,7 @@ class CommandBox {
       const targetbox = document.querySelector("#targetbox");
       // show the extended selection controls when
       targetbox.style.display = "inherit";
-      if(tt !== "glob" && tt !== "list" && tt !== "compound") {
+      if(tt !== "glob" && tt !== "list" && tt !== "compound" && tt !== "nodegroup") {
         // we don't support that, revert to standard (not default)
         tt = "glob";
       }
@@ -211,6 +211,16 @@ class CommandBox {
     if(target === "" && functionToRun !== "runners" && !functionToRun.startsWith("runners.")) {
       this._showError("'Target' field cannot be empty");
       return null;
+    }
+
+    // SALT API returns a 500-InternalServerError when it hits an unknown group
+    // Let's improve on that
+    if(tgtType === "nodegroup") {
+      const nodegroups = JSON.parse(window.localStorage.getItem("nodegroups"));
+      if(!(target in nodegroups)) {
+        this._showError("Unknown nodegroup '" + target + "'");
+        return null;
+      }
     }
 
     if(functionToRun.startsWith("runners.")) {
