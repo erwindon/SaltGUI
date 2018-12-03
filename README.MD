@@ -121,6 +121,10 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.5.0 (2018-12-03)
+- added command templates (erwindon)
+- added targettype nodegroups (lostsnow)
+
 ## 1.4.1 (2018-11-07)
 - added selectable targettype (erwindon)
 - improved state output (erwindon)
