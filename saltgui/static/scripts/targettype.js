@@ -48,6 +48,14 @@ class TargetType {
       return;
     }
 
+    if(target.startsWith("#")) {
+      // "#" at the start of a line is a strong indicator for nodegroup target
+      // this is not a SALTSTACK standard, but our own invention
+      TargetType.menuTargetType._value = "nodegroup";
+      TargetType._updateTargetTypeText();
+      return;
+    }
+
     // do not show it when default and not explicitly selected
     TargetType.setTargetTypeDefault();
   }

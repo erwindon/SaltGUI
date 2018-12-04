@@ -174,6 +174,11 @@ class CommandBox {
 
   _getRunParams(tgtType, target, toRun) {
 
+    // The leading # was used to indicate a nodegroup
+    if(tgtType === "nodegroup" && target.startsWith("#")) {
+      target = target.substring(1);
+    }
+
     if(toRun === "") {
       this._showError("'Command' field cannot be empty");
       return null;
