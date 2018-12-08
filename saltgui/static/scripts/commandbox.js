@@ -190,9 +190,9 @@ class CommandBox {
     const args = [ ];
 
     // collection for named parameters
-    const params = { };
+    const kwargs = { };
 
-    const ret = window.parseCommandLine(toRun, args, params);
+    const ret = window.parseCommandLine(toRun, args, kwargs);
     if(ret !== null) {
       // that is an error message being returned
       this._showError(ret);
@@ -230,15 +230,18 @@ class CommandBox {
       }
     }
 
+    let params = { };
     if(functionToRun.startsWith("runners.")) {
+      params = kwargs;
       params.client = "runner";
       // use only the part after "runners." (8 chars)
       params.fun = functionToRun.substring(8);
-      if(args.length !== 0) params.arg = args;
+      if(args.length > 0) params.arg = args;
     } else if(functionToRun.startsWith("wheel.")) {
       // wheel.key functions are treated slightly different
       // we re-use the "target" field to fill the parameter "match"
       // as used by the salt.wheel.key functions
+      params = kwargs;
       params.client = "wheel";
       // use only the part after "wheel." (6 chars)
       params.fun = functionToRun.substring(6);
@@ -249,6 +252,7 @@ class CommandBox {
       params.tgt = target;
       if(tgtType) params.tgt_type = tgtType;
       if(args.length !== 0) params.arg = args;
+      if(Object.keys(kwargs).length > 0) params.kwarg = kwargs;
     }
 
     const runType = RunType.getRunType();
