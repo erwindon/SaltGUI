@@ -121,6 +121,10 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.5.1 (2018-12-08)
+- fixed named parameter issues reported by marceliq (erwindon)
+- fixed result display for wheel/runner functions (erwindon)
+
 ## 1.5.0 (2018-12-03)
 - added command templates (erwindon)
 - added targettype nodegroups (lostsnow)
