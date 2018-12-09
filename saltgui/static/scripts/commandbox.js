@@ -138,6 +138,24 @@ class CommandBox {
 
     RunType.setRunTypeDefault();
 
+    // (re-)populate the dropdown box
+    const targetlist = document.getElementById("targetlist");
+    while (targetlist.firstChild) {
+      targetlist.removeChild(targetlist.firstChild);
+    }
+    const nodegroups = JSON.parse(window.localStorage.getItem("nodegroups"));
+    for(let nodegroup of Object.keys(nodegroups).sort()) {
+      let option = document.createElement("option");
+      option.value = "#" + nodegroup;
+      targetlist.appendChild(option);
+    }
+    const minions = JSON.parse(window.localStorage.getItem("minions"));
+    for(let minion of minions.sort()) {
+      let option = document.createElement("option");
+      option.value = minion;
+      targetlist.appendChild(option);
+    }
+
     evt.stopPropagation();
   }
 

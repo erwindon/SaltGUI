@@ -26,6 +26,9 @@ class PageRoute extends Route {
     const list = this.getPageElement().querySelector("#minions");
     const hostnames = Object.keys(minions).sort();
 
+    // save for the autocompletion
+    window.localStorage.setItem("minions", JSON.stringify(hostnames));
+
     for(const hostname of hostnames) {
       const minion_info = minions[hostname];
 
