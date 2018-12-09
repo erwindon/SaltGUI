@@ -144,14 +144,14 @@ class CommandBox {
       targetlist.removeChild(targetlist.firstChild);
     }
     const nodegroups = JSON.parse(window.localStorage.getItem("nodegroups"));
-    for(let nodegroup of Object.keys(nodegroups).sort()) {
-      let option = document.createElement("option");
+    for(const nodegroup of Object.keys(nodegroups).sort()) {
+      const option = document.createElement("option");
       option.value = "#" + nodegroup;
       targetlist.appendChild(option);
     }
     const minions = JSON.parse(window.localStorage.getItem("minions"));
-    for(let minion of minions.sort()) {
-      let option = document.createElement("option");
+    for(const minion of minions.sort()) {
+      const option = document.createElement("option");
       option.value = minion;
       targetlist.appendChild(option);
     }
