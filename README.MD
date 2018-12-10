@@ -121,6 +121,9 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.5.2 (2018-12-10)
+- Added list of values for targetfield: minions+nodegroups, suggested by lostsnow (erwindon)
+
 ## 1.5.1 (2018-12-08)
 - fixed named parameter issues reported by marceliq (erwindon)
 - fixed result display for wheel/runner functions (erwindon)
