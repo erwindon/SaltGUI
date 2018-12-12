@@ -30,11 +30,13 @@ header .menu-dropdown-content {
 
 /* Links inside the menu-dropdown */
 .run-command-button .menu-dropdown-content div {
-  display: block;
+  display: inline-block;
   float: left;
   clear: both;
   margin: 3px;
   padding: 5px 20px 5px 20px;
+  /* correct width for margin-left/right,padding-left/right */
+  width: calc(100% - 20px - 20px - 3px - 3px);
 }
 
 /* Change color of menu-dropdown links on hover */
