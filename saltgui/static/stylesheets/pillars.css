@@ -1,0 +1,51 @@
+#page_pillars {
+  width: 100%;
+}
+
+.pillars {
+  padding: 0;
+}
+
+.pillars li {
+  list-style: none;
+  border-bottom: 1px solid #4caf50;
+  padding: 10px 0;
+}
+
+.pillars li:last-of-type {
+  border-bottom: 0;
+}
+
+.pillars li div {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.pillars li div:last-of-type {
+  margin-right: 0;
+}
+
+.pillars li .pillar_name {
+  font-weight: 500;
+  font-size: 17px;
+  min-width: 120px;
+  vertical-align: top;
+}
+
+.pillars li .pillar_value {
+  font-weight: 500;
+  font-size: 17px;
+  font-family: inherit;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  display: inline-block;
+}
+
+.pillar_hidden {
+  cursor: pointer;
+}
+
+.pillar_shown {
+  cursor: pointer;
+  white-space: pre;
+}

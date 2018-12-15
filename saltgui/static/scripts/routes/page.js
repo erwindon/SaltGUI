@@ -3,6 +3,8 @@ class PageRoute extends Route {
   constructor(path, name, page_selector, menuitem_selector, router) {
     super(path, name, page_selector, menuitem_selector, router);
 
+    this._updateMinions = this._updateMinions.bind(this);
+
     if(PageRoute.hasMenu === undefined) {
       const hamburger_container = document.querySelector("#hamburger_container");
       const menu = new DropDownMenu(hamburger_container);
@@ -80,19 +82,29 @@ class PageRoute extends Route {
   }
 
   _updateMinion(container, minion, hostname) {
-    const ip = minion.fqdn_ip4;
 
     const element = this._getElement(container, hostname);
 
     element.appendChild(Route._createDiv("hostname", hostname));
 
-    const address = Route._createDiv("status", ip);
-    address.classList.add("address");
-    address.setAttribute("tabindex", -1);
-    address.addEventListener("click", this._copyAddress);
-    element.appendChild(address);
+    const ip = minion.fqdn_ip4;
+    if(ip) {
+      const address = Route._createDiv("status", ip);
+      address.classList.add("address");
+      address.setAttribute("tabindex", -1);
+      address.addEventListener("click", this._copyAddress);
+      element.appendChild(address);
+    } else {
+      const accepted = Route._createDiv("status", "accepted");
+      accepted.classList.add("accepted");
+      element.appendChild(accepted);
+    }
 
-    element.appendChild(Route._createDiv("os", minion.os + " " + minion.osrelease));
+    if(minion.os && minion.osrelease) {
+      element.appendChild(Route._createDiv("os", minion.os + " " + minion.osrelease));
+    } else if(minion.os) {
+      element.appendChild(Route._createDiv("os", minion.os));
+    }
   }
 
   _addMinion(container, hostname) {
@@ -139,11 +151,13 @@ class PageRoute extends Route {
       const job = jobs[i];
       i = i + 1;
       if(job.Function === "grains.items") continue;
+      if(job.Function === "pillar.items") continue;
       if(job.Function === "runner.jobs.active") continue;
       if(job.Function === "runner.jobs.list_job") continue;
       if(job.Function === "runner.jobs.list_jobs") continue;
       if(job.Function === "saltutil.find_job") continue;
       if(job.Function === "saltutil.running") continue;
+      if(job.Function === "schedule.list") continue;
       if(job.Function === "sys.doc") continue;
       if(job.Function === "wheel.config.values") continue;
       if(job.Function === "wheel.key.list_all") continue;

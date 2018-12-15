@@ -11,6 +11,8 @@ class Router {
     this.registerRoute(new KeysRoute(this));
     this.registerRoute(new GrainsRoute(this));
     this.registerRoute(new GrainsMinionRoute(this));
+    this.registerRoute(new PillarsRoute(this));
+    this.registerRoute(new PillarsMinionRoute(this));
     this.registerRoute(new JobRoute(this));
 
     this._registerEventListeners();
@@ -53,6 +55,11 @@ class Router {
     document.querySelector("#button_grains")
       .addEventListener('click', _ => {
         window.location.replace("/grains");
+      });
+
+    document.querySelector("#button_pillars")
+      .addEventListener('click', _ => {
+        window.location.replace("/pillars");
       });
   }
 
