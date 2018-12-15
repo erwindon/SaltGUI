@@ -37,6 +37,9 @@ class GrainsMinionRoute extends PageRoute {
       container.removeChild(container.firstChild);
     }
 
+
+    if(!grains) return;
+
     const keys = Object.keys(grains).sort();
     for(const k of keys) {
       const grain = document.createElement('li');
