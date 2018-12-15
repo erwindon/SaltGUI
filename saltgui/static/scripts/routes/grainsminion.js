@@ -13,7 +13,7 @@ class GrainsMinionRoute extends PageRoute {
   onShow() {
     const minions = this;
 
-    const minion = window.getQueryParam("minion");
+    const minion = decodeURIComponent(window.getQueryParam("minion"));
 
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
@@ -24,7 +24,7 @@ class GrainsMinionRoute extends PageRoute {
   }
 
   _showGrains(data) {
-    const minion = window.getQueryParam("minion");
+    const minion = decodeURIComponent(window.getQueryParam("minion"));
 
     const grains = data.return[0][minion];
 
