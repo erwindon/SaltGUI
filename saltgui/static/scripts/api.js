@@ -77,6 +77,23 @@ class API {
     return this.apiRequest("POST", "/", params).catch(console.error);
   }
 
+
+  getScheduleList(minion) {
+    const params = {
+      client: "local",
+      fun: "schedule.list",
+      kwarg: { return_yaml: false }
+    };
+    if(minion) {
+      params.tgt_type = "list";
+      params.tgt = minion;
+    } else {
+      params.tgt_type = "glob";
+      params.tgt = "*";
+    }
+    return this.apiRequest("POST", "/", params).catch(console.error);
+  }
+
   getJobsActive() {
     const params = {
       client: "runner",

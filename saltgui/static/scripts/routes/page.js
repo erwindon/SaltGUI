@@ -15,6 +15,9 @@ class PageRoute extends Route {
       menu.addMenuItem("grains", function(evt) {
         window.location.replace("/grains");
       });
+      menu.addMenuItem("schedules", function(evt) {
+        window.location.replace("/schedules");
+      });
       menu.addMenuItem("logout", function(evt) {
         const api = new API();
         api.logout().then(window.location.replace("/"));
@@ -144,6 +147,7 @@ class PageRoute extends Route {
       if(job.Function === "runner.jobs.list_jobs") continue;
       if(job.Function === "saltutil.find_job") continue;
       if(job.Function === "saltutil.running") continue;
+      if(job.Function === "schedule.list") continue;
       if(job.Function === "sys.doc") continue;
       if(job.Function === "wheel.config.values") continue;
       if(job.Function === "wheel.key.list_all") continue;
