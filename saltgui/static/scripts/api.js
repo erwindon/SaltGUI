@@ -67,6 +67,16 @@ class API {
     return this.apiRequest("GET", "/jobs/" + id, {});
   }
 
+  getGrainsItems(minion) {
+    const params = {
+      client: "local",
+      fun: "grains.items",
+      tgt_type: "list",
+      tgt: minion
+    };
+    return this.apiRequest("POST", "/", params).catch(console.error);
+  }
+
   getJobsActive() {
     const params = {
       client: "runner",

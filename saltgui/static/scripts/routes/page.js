@@ -12,6 +12,9 @@ class PageRoute extends Route {
       menu.addMenuItem("keys", function(evt) {
         window.location.replace("/keys");
       });
+      menu.addMenuItem("grains", function(evt) {
+        window.location.replace("/grains");
+      });
       menu.addMenuItem("logout", function(evt) {
         const api = new API();
         api.logout().then(window.location.replace("/"));
@@ -194,7 +197,7 @@ class PageRoute extends Route {
   _createJobListener(id) {
     const router = this.router;
     return function() {
-      router.goTo("/job?id=" + id);
+      router.goTo("/job?id=" + encodeURIComponent(id));
     };
   }
 

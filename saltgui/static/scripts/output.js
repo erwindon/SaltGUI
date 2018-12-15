@@ -464,7 +464,7 @@ class Output {
       }
 
       if(task.__id__ && task.__id__ !== task.name) {
-        taskDiv.append(document.createTextNode(" id=" + task.__id__));
+        taskDiv.append(document.createTextNode(" id=" + encodeURIComponent(task.__id__)));
       }
 
       if(task.__sls__) {
@@ -620,7 +620,7 @@ class Output {
     // patJid is defined in scripts/parsecmdline.js
     if(hostResponse.match(patJid)) {
       const a = document.createElement("a");
-      a.href = "/job?id=" + hostResponse;
+      a.href = "/job?id=" + encodeURIComponent(hostResponse);
       a.innerText = hostResponse;
       return a;
     }

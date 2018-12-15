@@ -2,7 +2,6 @@ class LoginRoute extends Route {
 
   constructor(router) {
     super("^[\/]login$", "Login", "#page_login", "", router);
-    this.router = router;
 
     this.loginPending = false;
 

@@ -1,0 +1,42 @@
+#page_grains {
+  width: 100%;
+}
+
+.grains {
+  padding: 0;
+}
+
+.grains li {
+  list-style: none;
+  border-bottom: 1px solid #4caf50;
+  padding: 10px 0;
+}
+
+.grains li:last-of-type {
+  border-bottom: 0;
+}
+
+.grains li div {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.grains li div:last-of-type {
+  margin-right: 0;
+}
+
+.grains li .grain_name {
+  font-weight: 500;
+  font-size: 17px;
+  min-width: 120px;
+  vertical-align: top;
+}
+
+.grains li .grain_value {
+  font-weight: 500;
+  font-size: 17px;
+  font-family: inherit;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  display: inline-block;
+}
