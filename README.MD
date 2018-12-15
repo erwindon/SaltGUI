@@ -121,6 +121,12 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.6.0 (2018-12-15)
+- Added page for grain info (erwindon)
+- Added page for schedules info (erwindon)
+- Added page for pillars info (erwindon)
+- Celebrating almost 100 stars on GitHub
+
 ## 1.5.2 (2018-12-10)
 - Added list of values for targetfield: minions+nodegroups, suggested by lostsnow (erwindon)
 
