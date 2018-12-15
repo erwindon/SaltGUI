@@ -67,7 +67,7 @@ class API {
     return this.apiRequest("GET", "/jobs/" + id, {});
   }
 
-  getRunningJobs() {
+  getJobsActive() {
     const params = {
       client: "runner",
       fun: "jobs.active"

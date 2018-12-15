@@ -22,7 +22,7 @@ class KeysRoute extends PageRoute {
       keys.router.api.getMinions().then(keys._updateMinions);
       keys.router.api.getKeys().then(keys._updateKeys);
       keys.router.api.getJobs().then(keys._updateJobs);
-      keys.router.api.getRunningJobs().then(keys._runningJobs);
+      keys.router.api.getJobsActive().then(keys._runningJobs);
     });
   }
 
