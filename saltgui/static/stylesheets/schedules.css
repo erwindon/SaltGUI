@@ -1,0 +1,46 @@
+#page_schedules {
+  width: 100%;
+}
+
+.schedules {
+  padding: 0;
+}
+
+.schedules li {
+  list-style: none;
+  border-bottom: 1px solid #4caf50;
+  padding: 10px 0;
+}
+
+.schedules li:last-of-type {
+  border-bottom: 0;
+}
+
+.schedules li div {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.schedules li div:last-of-type {
+  margin-right: 0;
+}
+
+.schedules li .schedule_name {
+  font-weight: 500;
+  font-size: 17px;
+  min-width: 120px;
+  vertical-align: top;
+}
+
+.schedules li .schedule_value {
+  font-weight: 500;
+  font-size: 17px;
+  font-family: inherit;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  display: inline-block;
+}
+
+.disabled_schedule {
+  color: gray;
+}
