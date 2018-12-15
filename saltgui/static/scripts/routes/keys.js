@@ -5,7 +5,6 @@ class KeysRoute extends PageRoute {
     this.keysLoaded = false;
     this.jobsLoaded = false;
 
-    this._updateMinions = this._updateMinions.bind(this);
     this._updateKeys = this._updateKeys.bind(this);
     this._updateJobs = this._updateJobs.bind(this);
     this._runAcceptKey = this._runAcceptKey.bind(this);

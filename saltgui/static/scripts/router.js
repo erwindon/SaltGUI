@@ -13,6 +13,8 @@ class Router {
     this.registerRoute(new GrainsMinionRoute(this));
     this.registerRoute(new SchedulesRoute(this));
     this.registerRoute(new SchedulesMinionRoute(this));
+    this.registerRoute(new PillarsRoute(this));
+    this.registerRoute(new PillarsMinionRoute(this));
     this.registerRoute(new JobRoute(this));
 
     this._registerEventListeners();
@@ -60,6 +62,10 @@ class Router {
     document.querySelector("#button_schedules")
       .addEventListener('click', _ => {
         window.location.replace("/schedules");
+
+    document.querySelector("#button_pillars")
+      .addEventListener('click', _ => {
+        window.location.replace("/pillars");
       });
   }
 
