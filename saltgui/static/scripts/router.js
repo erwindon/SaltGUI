@@ -62,6 +62,7 @@ class Router {
     document.querySelector("#button_schedules")
       .addEventListener('click', _ => {
         window.location.replace("/schedules");
+      });
 
     document.querySelector("#button_pillars")
       .addEventListener('click', _ => {
