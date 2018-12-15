@@ -8,6 +8,10 @@ class PillarsMinionRoute extends PageRoute {
 
     this._showPillars = this._showPillars.bind(this);
     this._updateJobs = this._updateJobs.bind(this);
+
+    document.querySelector("#button_close_pillarsminion").addEventListener("click", _ => {
+      this.router.goTo("/pillars");
+    });
   }
 
   onShow() {

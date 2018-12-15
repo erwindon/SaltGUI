@@ -8,6 +8,10 @@ class SchedulesMinionRoute extends PageRoute {
 
     this._showSchedules = this._showSchedules.bind(this);
     this._updateJobs = this._updateJobs.bind(this);
+
+    document.querySelector("#button_close_schedulesminion").addEventListener("click", _ => {
+      this.router.goTo("/schedules");
+    });
   }
 
   onShow() {
