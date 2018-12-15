@@ -15,6 +15,9 @@ class PageRoute extends Route {
       menu.addMenuItem("grains", function(evt) {
         window.location.replace("/grains");
       });
+      menu.addMenuItem("schedules", function(evt) {
+        window.location.replace("/schedules");
+      });
       menu.addMenuItem("logout", function(evt) {
         const api = new API();
         api.logout().then(window.location.replace("/"));
