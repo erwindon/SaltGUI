@@ -13,6 +13,9 @@ A new open source web interface for managing a SaltStack server. Built using van
 - Run state.highstate for a particular minion
 - View the seven most recent jobs run on Salt
 - Manually run any Salt function and see the output
+- View the values for grains for a particular minion
+- View the schedules for a particular minion
+- View the values for pillars for a particular minion
 
 
 ## Quick start using PAM as authentication method
@@ -118,6 +121,7 @@ Open a PR! Try to use no dependencies where possible, as vanilla JS is the aim. 
 
 ## Credits
 This excellent frontend is originally written by [Oliver Dunk](https://github.com/oliverdunk).
+
 
 ## Changelog
 
