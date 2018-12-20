@@ -18,7 +18,7 @@ class API {
     return this.apiRequest("GET", "/stats", {})
       .then(response => {
         return window.sessionStorage.getItem("token") !== null;
-      });
+      }, response => { return false; } );
   }
 
   login(username, password, eauth="pam") {
