@@ -125,6 +125,12 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.7.0 (2018-12-22)
+- Allow some editing on grains info (erwindon)
+- Allow some editing on schedules info (erwindon)
+- Minimize handling of pillar values (erwindon)
+- Fixes some text/html representation problems (erwindon)
+
 ## 1.6.0 (2018-12-15)
 - Added page for grain info (erwindon)
 - Added page for schedules info (erwindon)
