@@ -168,7 +168,10 @@ class PageRoute extends Route {
       if(job.Function === "schedule.list") continue;
       if(job.Function === "sys.doc") continue;
       if(job.Function === "wheel.config.values") continue;
+      if(job.Function === "wheel.key.accept") continue;
+      if(job.Function === "wheel.key.delete") continue;
       if(job.Function === "wheel.key.list_all") continue;
+      if(job.Function === "wheel.key.reject") continue;
 
       this._addJob(jobContainer, job);
       shown = shown + 1;
