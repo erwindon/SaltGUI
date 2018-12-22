@@ -11,22 +11,22 @@ class DropDownMenu {
 
     switch (element.id) {
     case "hamburger_container":
-      // 8801 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
-      this.menuButton = Route._createDiv("menu-dropdown", "&#8801;");
+      // 2261 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
+      this.menuButton = Route._createDiv("menu-dropdown", "\u2261");
       this.menuDropdown.classList.add("hamburger");
       break;
 
     case "cmdbox":
-      // 128214 = A BOOK
-      this.menuButton = Route._createDiv("menu-dropdown", "&#128214;");
+      // 1F4D6 (D83D+DCD6) = A BOOK
+      this.menuButton = Route._createDiv("menu-dropdown", "\uD83D\uDCD6");
       // hide the menu until it receives menu-items
       this.verifyAll();
       break;
 
     default:
-      // 9658 = BLACK RIGHT-POINTING POINTER
+      // 25BA = BLACK RIGHT-POINTING POINTER
       // assume it will be a command menu
-      this.menuButton = Route._createDiv("menu-dropdown", "&#9658;");
+      this.menuButton = Route._createDiv("menu-dropdown", "\u25BA");
       // hide the menu until it receives menu-items
       this.verifyAll();
     }
@@ -76,8 +76,8 @@ class DropDownMenu {
     // Setting the title implies that we are interested
     // in the menu values, rather than their actions.
     // Use a slightly different clue for that.
-    // 9660 = BLACK DOWN-POINTING TRIANGLE
-    this.menuButton.innerHTML = title + "&nbsp;&#9660;";
+    // 25BC = BLACK DOWN-POINTING TRIANGLE
+    this.menuButton.innerHTML = title + "&nbsp;\u25BC";
   }
 
   showMenu() {
