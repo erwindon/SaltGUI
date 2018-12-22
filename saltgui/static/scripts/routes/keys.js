@@ -6,11 +6,9 @@ class KeysRoute extends PageRoute {
     this.jobsLoaded = false;
 
     this._updateKeys = this._updateKeys.bind(this);
-    this._updateJobs = this._updateJobs.bind(this);
     this._runAcceptKey = this._runAcceptKey.bind(this);
     this._runRejectKey = this._runRejectKey.bind(this);
     this._runDeleteKey = this._runDeleteKey.bind(this);
-    this._runCommand = this._runCommand.bind(this);
   }
 
   onShow() {

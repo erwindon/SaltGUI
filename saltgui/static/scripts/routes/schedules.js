@@ -5,10 +5,8 @@ class SchedulesRoute extends PageRoute {
     this.keysLoaded = false;
     this.jobsLoaded = false;
 
-    this._updateJobs = this._updateJobs.bind(this);
     this._updateKeys = this._updateKeys.bind(this);
     this._updateMinion = this._updateMinion.bind(this);
-    this._updateMinions = this._updateMinions.bind(this);
   }
 
   onShow() {
