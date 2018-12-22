@@ -158,7 +158,11 @@ class PageRoute extends Route {
     while(shown < 7 && jobs[i] !== undefined) {
       const job = jobs[i];
       i = i + 1;
+      if(job.Function === "grains.append") continue;
+      if(job.Function === "grains.delkey") continue;
+      if(job.Function === "grains.delval") continue;
       if(job.Function === "grains.items") continue;
+      if(job.Function === "grains.setval") continue;
       if(job.Function === "pillar.items") continue;
       if(job.Function === "runner.jobs.active") continue;
       if(job.Function === "runner.jobs.list_job") continue;
