@@ -160,6 +160,7 @@ class PageRoute extends Route {
       i = i + 1;
       if(job.Function === "grains.items") continue;
       if(job.Function === "pillar.items") continue;
+      if(job.Function === "pillar.obfuscate") continue;
       if(job.Function === "runner.jobs.active") continue;
       if(job.Function === "runner.jobs.list_job") continue;
       if(job.Function === "runner.jobs.list_jobs") continue;

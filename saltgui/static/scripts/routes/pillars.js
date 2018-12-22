@@ -16,7 +16,7 @@ class PillarsRoute extends PageRoute {
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
       if(minions.keysLoaded && minions.jobsLoaded) resolve();
-      minions.router.api.getPillarItems(null).then(minions._updateMinions);
+      minions.router.api.getPillarObfuscate(null).then(minions._updateMinions);
       minions.router.api.getKeys().then(minions._updateKeys);
       minions.router.api.getJobs().then(minions._updateJobs);
     });
