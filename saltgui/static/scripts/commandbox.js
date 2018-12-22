@@ -181,6 +181,12 @@ class CommandBox {
     const command = document.querySelector(".run-command #command").value.split(" ")[0];
     const output = document.querySelector(".run-command pre").innerText;
     const screenModifyingCommands = [
+      "schedule.delete",
+      "schedule.disable",
+      "schedule.disable_job",
+      "schedule.enable",
+      "schedule.enable_job",
+      "schedule.modify",
       "wheel.key.accept",
       "wheel.key.delete",
       "wheel.key.reject",
