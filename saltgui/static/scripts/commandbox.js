@@ -144,16 +144,20 @@ class CommandBox {
       targetlist.removeChild(targetlist.firstChild);
     }
     const nodegroups = JSON.parse(window.localStorage.getItem("nodegroups"));
-    for(const nodegroup of Object.keys(nodegroups).sort()) {
-      const option = document.createElement("option");
-      option.value = "#" + nodegroup;
-      targetlist.appendChild(option);
+    if(nodegroups) {
+      for(const nodegroup of Object.keys(nodegroups).sort()) {
+        const option = document.createElement("option");
+        option.value = "#" + nodegroup;
+        targetlist.appendChild(option);
+      }
     }
     const minions = JSON.parse(window.localStorage.getItem("minions"));
-    for(const minion of minions.sort()) {
-      const option = document.createElement("option");
-      option.value = minion;
-      targetlist.appendChild(option);
+    if(minions) {
+      for(const minion of minions.sort()) {
+        const option = document.createElement("option");
+        option.value = minion;
+        targetlist.appendChild(option);
+      }
     }
 
     evt.stopPropagation();
@@ -242,7 +246,7 @@ class CommandBox {
     // Let's improve on that
     if(tgtType === "nodegroup") {
       const nodegroups = JSON.parse(window.localStorage.getItem("nodegroups"));
-      if(!(target in nodegroups)) {
+      if(!nodegroups || !(target in nodegroups)) {
         this._showError("Unknown nodegroup '" + target + "'");
         return null;
       }
