@@ -181,6 +181,10 @@ class CommandBox {
     const command = document.querySelector(".run-command #command").value.split(" ")[0];
     const output = document.querySelector(".run-command pre").innerText;
     const screenModifyingCommands = [
+      "grains.append",
+      "grains.delkey",
+      "grains.delval",
+      "grains.setval",
       "wheel.key.accept",
       "wheel.key.delete",
       "wheel.key.reject",
