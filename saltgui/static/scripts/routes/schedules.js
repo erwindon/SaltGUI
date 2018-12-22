@@ -84,10 +84,8 @@ class SchedulesRoute extends PageRoute {
     element.appendChild(Route._createDiv("scheduleinfo", scheduleinfo));
 
     const menu = new DropDownMenu(element);
-    if(cnt > 0) {
-      menu.addMenuItem("Show&nbsp;schedules", function(evt) {
-        window.location.assign("schedulesminion?minion=" + encodeURIComponent(hostname));
-      }.bind(this));
-    }
+    menu.addMenuItem("Show&nbsp;schedules", function(evt) {
+      window.location.assign("schedulesminion?minion=" + encodeURIComponent(hostname));
+    }.bind(this));
   }
 }
