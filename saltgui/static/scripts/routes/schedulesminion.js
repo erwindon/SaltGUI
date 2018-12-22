@@ -37,7 +37,18 @@ class SchedulesMinionRoute extends PageRoute {
     if(!schedules.enabled) txt += " (disabled)";
     title.innerText = txt;
 
+    const page = document.getElementById("schedulesminion_page");
+
+    const menu = new DropDownMenu(page);
+    menu.addMenuItem("Enable&nbsp;scheduler...", function(evt) {
+      this._runCommand(evt, minion, "schedule.enable");
+    }.bind(this));
+    menu.addMenuItem("Disable&nbsp;scheduler...", function(evt) {
+      this._runCommand(evt, minion, "schedule.disable");
+    }.bind(this));
+
     const container = document.getElementById("schedulesminion_list");
+    page.append(container);
 
     while(container.firstChild) {
       container.removeChild(container.firstChild);
@@ -68,10 +79,33 @@ class SchedulesMinionRoute extends PageRoute {
 
       const schedule_value = Output.formatJSON(schedule);
       const value = Route._createDiv("schedule_value", schedule_value);
-      if(schedule.hasOwnProperty("enabled") && !schedule.enabled) {
-        value.classList.add("disabled_schedule");
-      }
+      const isJobDisabled = schedule.hasOwnProperty("enabled") && !schedule.enabled;
+      if(isJobDisabled) value.classList.add("disabled_schedule");
       li.appendChild(value);
+
+      const menu = new DropDownMenu(li);
+      menu.addMenuItem("Modify&nbsp;job...", function(evt) {
+        let cmd = "schedule.modify " + k;
+        for(const key in schedule) {
+          cmd = cmd + " " + key + "=" + JSON.stringify(schedule[key]);
+        }
+        this._runCommand(evt, minion, cmd);
+      }.bind(this));
+      menu.addMenuItem("Enable&nbsp;job...", function(evt) {
+        this._runCommand(evt, minion, "schedule.enable_job " + k);
+      }.bind(this));
+      menu.addMenuItem("Disable&nbsp;job...", function(evt) {
+        this._runCommand(evt, minion, "schedule.disable_job " + k);
+      }.bind(this));
+      menu.addMenuItem("Delete&nbsp;job...", function(evt) {
+        this._runCommand(evt, minion, "schedule.delete " + k);
+      }.bind(this));
+      menu.addMenuItem("Run&nbsp;job...", function(evt) {
+        let cmd = "schedule.run_job";
+        if(isJobDisabled) cmd += " force=true";
+        cmd += " " + k;
+        this._runCommand(evt, minion, cmd);
+      }.bind(this));
 
       container.appendChild(li);
     }

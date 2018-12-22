@@ -165,7 +165,14 @@ class PageRoute extends Route {
       if(job.Function === "runner.jobs.list_jobs") continue;
       if(job.Function === "saltutil.find_job") continue;
       if(job.Function === "saltutil.running") continue;
+      if(job.Function === "schedule.delete") continue;
+      if(job.Function === "schedule.disable") continue;
+      if(job.Function === "schedule.disable_job") continue;
+      if(job.Function === "schedule.enable") continue;
+      if(job.Function === "schedule.enable_job") continue;
       if(job.Function === "schedule.list") continue;
+      if(job.Function === "schedule.modify") continue;
+      if(job.Function === "schedule.run_job") continue;
       if(job.Function === "sys.doc") continue;
       if(job.Function === "wheel.config.values") continue;
       if(job.Function === "wheel.key.accept") continue;
