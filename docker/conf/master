@@ -11,10 +11,7 @@ pillar_roots:
 external_auth:
   pam:
     salt:
-      - grains.items
-      - sys.doc
-      - state.apply
-
+      - .*
       - '@runner':
         - 'jobs.*'
       - '@wheel':
