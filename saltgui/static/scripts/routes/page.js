@@ -282,7 +282,7 @@ class PageRoute extends Route {
     this.router.commandbox.cmdmenu.verifyAll();
   }
 
-  _runHighState(evt, hostname) {
+  _runStateApply(evt, hostname) {
     this._runCommand(evt, hostname, "state.apply");
   }
 

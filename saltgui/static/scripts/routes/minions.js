@@ -6,7 +6,7 @@ class MinionsRoute extends PageRoute {
     this.jobsLoaded = false;
 
     this._updateKeys = this._updateKeys.bind(this);
-    this._runHighState = this._runHighState.bind(this);
+    this._runStateApply = this._runStateApply.bind(this);
   }
 
   onShow() {
@@ -46,9 +46,9 @@ class MinionsRoute extends PageRoute {
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
-  _addMenuItemSyncState(menu, hostname) {
-    menu.addMenuItem("Sync&nbsp;state...", function(evt) {
-      this._runHighState(evt, hostname);
+  _addMenuItemStateApply(menu, hostname) {
+    menu.addMenuItem("Apply&nbsp;state...", function(evt) {
+      this._runStateApply(evt, hostname);
     }.bind(this));
   }
 
@@ -57,7 +57,7 @@ class MinionsRoute extends PageRoute {
 
     const element = document.getElementById(hostname);
     const menu = new DropDownMenu(element);
-    this._addMenuItemSyncState(menu, hostname);
+    this._addMenuItemStateApply(menu, hostname);
   }
 
 }
