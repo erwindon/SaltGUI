@@ -50,7 +50,7 @@ class PillarsMinionRoute extends PageRoute {
     if(!Array.isArray(public_pillars)) public_pillars = [ ];
     for(let i = 0; i < public_pillars.length; i++) {
       try {
-        public_pillars[i] = new RegExp(public_pillars);
+        public_pillars[i] = new RegExp(public_pillars[i]);
       }
       catch(err) {
         // most likely a syntax error in the RE
