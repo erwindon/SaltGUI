@@ -12,10 +12,8 @@ external_auth:
   pam:
     salt:
       - .*
-      - '@runner':
-        - 'jobs.*'
-      - '@wheel':
-        - 'key.*'
+      - '@runner'
+      - '@wheel'
       - '@jobs'
 
 rest_cherrypy:

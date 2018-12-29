@@ -28,11 +28,10 @@ external_auth:
     saltuser:
       - .*
       - '@runner'
-        - 'jobs.*'
-      - '@wheel':
-        - 'key.*'
+      - '@wheel'
       - '@jobs'
 ```
+- See `docs/PERMISSIONS.md` for more restricted security configurations.
 - `saltuser` is a unix (PAM) user, make sure it exists or create a new one.
 - At the bottom of this file, also setup the rest_cherrypi server:
 ```
