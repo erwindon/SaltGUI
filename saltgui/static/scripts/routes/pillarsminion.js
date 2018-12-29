@@ -43,6 +43,21 @@ class PillarsMinionRoute extends PageRoute {
 
     if(!pillars) return;
 
+    // collect the public pillars and compile their regexps
+    let publicPillarsText = localStorage.getItem("public_pillars");
+    if(!publicPillarsText || publicPillarsText === "undefined") publicPillarsText = "[]";
+    let public_pillars = JSON.parse(publicPillarsText);
+    if(!Array.isArray(public_pillars)) public_pillars = [ ];
+    for(let i = 0; i < public_pillars.length; i++) {
+      try {
+        public_pillars[i] = new RegExp(public_pillars[i]);
+      }
+      catch(err) {
+        // most likely a syntax error in the RE
+        public_pillars[i] = null;
+      }
+    }
+
     const keys = Object.keys(pillars).sort();
     for(const k of keys) {
       const pillar = document.createElement('li');
@@ -50,28 +65,38 @@ class PillarsMinionRoute extends PageRoute {
       const name = Route._createDiv("pillar_name", k);
       pillar.appendChild(name);
 
-      // 8 bullet characters
+      // 8 bullet characters when hidden
       const value_hidden = "\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF";
       const pillar_hidden = Route._createDiv("pillar_hidden", value_hidden);
-      // add the masked representation, shown
+      // initially use the hidden view
       pillar.appendChild(pillar_hidden);
 
       const value_shown = Output.formatJSON(pillars[k]);
       const pillar_shown = Route._createDiv("pillar_shown", value_shown);
+      // initially hide the normal view
       pillar_shown.style.display = "none";
       pillar.appendChild(pillar_shown);
-      // add the non-masked representation, not shown yet
-      
+
+      // show public pillars immediatelly
+      for(let i = 0; i < public_pillars.length; i++) {
+        if(public_pillars[i] && public_pillars[i].test(k)) {
+          // same code as when clicking the hidden value
+          pillar_hidden.style.display = "none";
+          pillar_shown.style.display = "";
+          break;
+        }
+      }
+
       pillar_hidden.addEventListener("click", function(evt) {
         pillar_hidden.style.display = "none";
         pillar_shown.style.display = "";
       });
-     
+
       pillar_shown.addEventListener("click", function(evt) {
         pillar_shown.style.display = "none";
         pillar_hidden.style.display = "";
       });
-     
+
       container.appendChild(pillar);
     }
 
