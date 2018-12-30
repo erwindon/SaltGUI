@@ -48,7 +48,7 @@ class PillarsRoute extends PageRoute {
   }
 
   _updateMinion(container, minion, hostname) {
-    super._updateMinion(container, minion, hostname);
+    super._updateMinion(container, null, hostname);
 
     const element = document.getElementById(hostname);
 

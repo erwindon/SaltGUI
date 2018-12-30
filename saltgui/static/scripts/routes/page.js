@@ -94,7 +94,7 @@ class PageRoute extends Route {
       let ipv4 = minion.fqdn_ip4;
       // even this grain can have multiple values, just pick the first one
       if(Array.isArray(ipv4)) ipv4 = ipv4[0];
-      const address = Route._createDiv("status", ipv4);
+      const address = Route._createTd("status", ipv4);
       address.classList.add("address");
       address.setAttribute("tabindex", -1);
       address.addEventListener("click", this._copyAddress);
@@ -105,11 +105,14 @@ class PageRoute extends Route {
       element.appendChild(accepted);
     }
 
-    if(minion.os && minion.osrelease) {
-      element.appendChild(Route._createTd("os", minion.os + " " + minion.osrelease));
-    } else if(minion.os) {
-      element.appendChild(Route._createTd("os", minion.os));
-    }
+    let saltversion = "---";
+    if(minion && minion.saltversion) saltversion = minion.saltversion;
+    if(minion) element.appendChild(Route._createTd("saltversion", saltversion));
+
+    let os = "---";
+    if(minion && minion.os && minion.osrelease) os = minion.os + " " + minion.osrelease;
+    else if(minion && minion.os) os = minion.os;
+    if(minion) element.appendChild(Route._createTd("os", os));
   }
 
   _addMinion(container, hostname, nrOfColumns) {

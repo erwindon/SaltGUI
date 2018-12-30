@@ -30,7 +30,7 @@ class KeysRoute extends PageRoute {
 
     // Unaccepted goes first because that is where the user must decide
     const hdr3 = Route._createTd("subtitle", "Unaccepted Keys");
-    hdr3.setAttribute("colspan", 5);
+    hdr3.setAttribute("colspan", 6);
     const tr3 = document.createElement("tr");
     tr3.appendChild(hdr3);
     list.appendChild(tr3);
@@ -39,10 +39,10 @@ class KeysRoute extends PageRoute {
       this._addPreMinion(list, hostname);
     }
     if(hostnames.length === 0)
-      this._addNone(list, 5);
+      this._addNone(list, 6);
 
     const hdr1 = Route._createTd("subtitle", "Accepted Keys");
-    hdr1.setAttribute("colspan", 5);
+    hdr1.setAttribute("colspan", 6);
     const tr1 = document.createElement("tr");
     tr1.appendChild(hdr1);
     list.appendChild(tr1);
@@ -51,10 +51,10 @@ class KeysRoute extends PageRoute {
       this._addMinion(list, hostname, 4);
     }
     if(hostnames.length === 0)
-      this._addNone(list, 5);
+      this._addNone(list, 6);
 
     const hdr2 = Route._createTd("subtitle", "Denied Keys");
-    hdr2.setAttribute("colspan", 5);
+    hdr2.setAttribute("colspan", 6);
     const tr2 = document.createElement("tr");
     tr2.appendChild(hdr2);
     list.appendChild(tr2);
@@ -63,10 +63,10 @@ class KeysRoute extends PageRoute {
       this._addDeniedMinion(list, hostname);
     }
     if(hostnames.length === 0)
-      this._addNone(list, 5);
+      this._addNone(list, 6);
 
     const hdr4 = Route._createTd("subtitle", "Rejected Keys");
-    hdr4.setAttribute("colspan", 5);
+    hdr4.setAttribute("colspan", 6);
     const tr4 = document.createElement("tr");
     tr4.appendChild(hdr4);
     list.appendChild(tr4);
@@ -75,7 +75,7 @@ class KeysRoute extends PageRoute {
       this._addRejectedMinion(list, hostname);
     }
     if(hostnames.length === 0)
-      this._addNone(list, 5);
+      this._addNone(list, 6);
 
     this.keysLoaded = true;
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
@@ -105,6 +105,7 @@ class KeysRoute extends PageRoute {
     const element = document.getElementById(hostname);
 
     // force same columns on all rows
+    element.appendChild(Route._createTd("saltversion", ""));
     element.appendChild(Route._createTd("os", ""));
 
     const menu = new DropDownMenu(element);
@@ -138,6 +139,7 @@ class KeysRoute extends PageRoute {
     element.appendChild(rejected);
 
     // force same columns on all rows
+    element.appendChild(Route._createTd("saltversion", ""));
     element.appendChild(Route._createTd("os", ""));
 
     const menu = new DropDownMenu(element);
@@ -160,6 +162,7 @@ class KeysRoute extends PageRoute {
     element.appendChild(denied);
 
     // force same columns on all rows
+    element.appendChild(Route._createTd("saltversion", ""));
     element.appendChild(Route._createTd("os", ""));
 
     const menu = new DropDownMenu(element);
@@ -183,6 +186,7 @@ class KeysRoute extends PageRoute {
     element.appendChild(pre);
 
     // force same columns on all rows
+    element.appendChild(Route._createTd("saltversion", ""));
     element.appendChild(Route._createTd("os", ""));
 
     const menu = new DropDownMenu(element);
