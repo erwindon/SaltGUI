@@ -49,6 +49,36 @@ pre .hostname {
   color: #4caf50;
 }
 
+table {
+  min-width: 100%;
+}
+
+table tr td {
+  border-bottom: 1px solid #4caf50;
+  padding-right: 20px;
+  vertical-align: top;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  white-space: nowrap;
+}
+
+table tr td:last-child {
+  width: 100%;
+}
+
+table tr td.subtitle {
+  padding-top: 30px;
+  font-size: 20px;
+}
+
+table tr:last-of-type td {
+  border-bottom: none;
+}
+
+table tr td:last-of-type {
+  padding-right: 0;
+}
+
 .run-command-button {
   color: #263238;
   cursor: pointer;
@@ -165,39 +195,4 @@ pre .hostname {
     width: auto;
     margin-bottom: 10px;
   }
-}
-
-table {
-  min-width: 100%;
-}
-
-table tr td:last-child {
-  width: 100%;
-}
-
-table th td {
-  border-bottom: 10px solid #4caf50;
-  padding-right: 20px;
-}
-
-table tr td.subtitle {
-  padding-top: 30px;
-  font-size: 20px;
-}
-
-table tr td {
-  border-bottom: 1px solid #4caf50;
-  padding-right: 20px;
-  vertical-align: top;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  white-space: nowrap;
-}
-
-table tr:last-of-type td {
-  border-bottom: none;
-}
-
-table tr td:last-of-type {
-  padding-right: 0;
 }

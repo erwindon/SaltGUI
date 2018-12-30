@@ -38,6 +38,7 @@ h1 {
 
 .panel h1 {
   font-size: 20px;
+
   /* separate title from table */
   margin-bottom: 10px;
 }
