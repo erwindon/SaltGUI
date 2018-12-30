@@ -774,7 +774,7 @@ class Output {
       if(Output.hasProperties(hostResponse, ["retcode", "return", "success"])) {
         hostResponse = hostResponse.return;
       }
-      else if(command.startsWith("runner.") && hostResponse.hasOwnProperty("return")) {
+      else if(command.startsWith("runner.") && hostResponse && hostResponse.hasOwnProperty("return")) {
         hostResponse = hostResponse.return.return;
       }
 
