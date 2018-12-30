@@ -26,8 +26,16 @@ class KeysRoute extends PageRoute {
   _updateKeys(data) {
     const keys = data.return;
 
-    let list = this.getPageElement().querySelector("#minions");
-    let hostnames = keys.minions.sort();
+    let list = this.getPageElement().querySelector("#keys_unaccepted");
+    let hostnames = keys.minions_pre.sort();
+    for(const hostname of hostnames) {
+      this._addPreMinion(list, hostname);
+    }
+    if(hostnames.length === 0)
+      this._addNone(list);
+
+    list = this.getPageElement().querySelector("#minions");
+    hostnames = keys.minions.sort();
     for(const hostname of hostnames) {
       this._addMinion(list, hostname);
     }
@@ -38,14 +46,6 @@ class KeysRoute extends PageRoute {
     hostnames = keys.minions_denied.sort();
     for(const hostname of hostnames) {
       this._addDeniedMinion(list, hostname);
-    }
-    if(hostnames.length === 0)
-      this._addNone(list);
-
-    list = this.getPageElement().querySelector("#keys_unaccepted");
-    hostnames = keys.minions_pre.sort();
-    for(const hostname of hostnames) {
-      this._addPreMinion(list, hostname);
     }
     if(hostnames.length === 0)
       this._addNone(list);
