@@ -29,9 +29,9 @@ class KeysRoute extends PageRoute {
     const list = this.getPageElement().querySelector("#minions");
 
     // Unaccepted goes first because that is where the user must decide
-    let hdr3 = Route._createTd("subtitle", "Unaccepted Keys");
+    const hdr3 = Route._createTd("subtitle", "Unaccepted Keys");
     hdr3.setAttribute("colspan", 5);
-    let tr3 = document.createElement("tr");
+    const tr3 = document.createElement("tr");
     tr3.appendChild(hdr3);
     list.appendChild(tr3);
     let hostnames = keys.minions_pre.sort();
@@ -41,9 +41,9 @@ class KeysRoute extends PageRoute {
     if(hostnames.length === 0)
       this._addNone(list, 5);
 
-    let hdr1 = Route._createTd("subtitle", "Accepted Keys");
+    const hdr1 = Route._createTd("subtitle", "Accepted Keys");
     hdr1.setAttribute("colspan", 5);
-    let tr1 = document.createElement("tr");
+    const tr1 = document.createElement("tr");
     tr1.appendChild(hdr1);
     list.appendChild(tr1);
     hostnames = keys.minions.sort();
@@ -53,9 +53,9 @@ class KeysRoute extends PageRoute {
     if(hostnames.length === 0)
       this._addNone(list, 5);
 
-    let hdr2 = Route._createTd("subtitle", "Denied Keys");
+    const hdr2 = Route._createTd("subtitle", "Denied Keys");
     hdr2.setAttribute("colspan", 5);
-    let tr2 = document.createElement("tr");
+    const tr2 = document.createElement("tr");
     tr2.appendChild(hdr2);
     list.appendChild(tr2);
     hostnames = keys.minions_denied.sort();
@@ -65,9 +65,9 @@ class KeysRoute extends PageRoute {
     if(hostnames.length === 0)
       this._addNone(list, 5);
 
-    let hdr4 = Route._createTd("subtitle", "Rejected Keys");
+    const hdr4 = Route._createTd("subtitle", "Rejected Keys");
     hdr4.setAttribute("colspan", 5);
-    let tr4 = document.createElement("tr");
+    const tr4 = document.createElement("tr");
     tr4.appendChild(hdr4);
     list.appendChild(tr4);
     hostnames = keys.minions_rejected.sort();

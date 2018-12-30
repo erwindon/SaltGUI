@@ -54,8 +54,8 @@ class DropDownMenu {
       }
     }
     // hide the menu when it has no visible menu-items
-    let display_visible = (this.menuDropdown.tagName == "TD") ? "table-cell" : "inline-block";
-    let display_invisible = "none";
+    const display_visible = (this.menuDropdown.tagName == "TD") ? "table-cell" : "inline-block";
+    const display_invisible = "none";
     this.menuDropdown.style.display = (visibleCount > 0) ? display_visible : display_invisible;
   }
 
