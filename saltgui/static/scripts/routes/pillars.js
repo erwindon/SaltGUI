@@ -29,11 +29,22 @@ class PillarsRoute extends PageRoute {
 
     const hostnames = keys.minions.sort();
     for(const hostname of hostnames) {
-      this._addMinion(list, hostname);
+      this._addMinion(list, hostname, 4);
     }
 
     this.keysLoaded = true;
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
+  }
+
+  _updateOfflineMinion(container, hostname) {
+    super._updateOfflineMinion(container, hostname);
+
+    const element = document.getElementById(hostname);
+
+    // force same columns on all rows
+    element.appendChild(Route._createTd("pillarinfo", ""));
+    element.appendChild(Route._createTd("run-command-button", ""));
+    element.appendChild(Route._createTd("", ""));
   }
 
   _updateMinion(container, minion, hostname) {
@@ -50,12 +61,14 @@ class PillarsRoute extends PageRoute {
     } else {
       pillarInfoText = cnt + " pillars";
     }
-    const pillarInfoDiv = Route._createDiv("pillarinfo", pillarInfoText);
-    element.appendChild(pillarInfoDiv);
+    const pillarInfoTd = Route._createTd("pillarinfo", pillarInfoText);
+    element.appendChild(pillarInfoTd);
 
     const menu = new DropDownMenu(element);
     menu.addMenuItem("Show&nbsp;pillars", function(evt) {
       window.location.assign("pillarsminion?minion=" + encodeURIComponent(hostname));
     }.bind(this));
+
+    element.appendChild(Route._createTd("", ""));
   }
 }

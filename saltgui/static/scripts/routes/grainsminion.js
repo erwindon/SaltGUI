@@ -56,14 +56,12 @@ class GrainsMinionRoute extends PageRoute {
 
     const keys = Object.keys(grains).sort();
     for(const k of keys) {
-      const grain = document.createElement('li');
+      const grain = document.createElement('tr');
 
-      const name = Route._createDiv("grain_name", k);
+      const name = Route._createTd("grain_name", k);
       grain.appendChild(name);
 
       const grain_value = Output.formatJSON(grains[k]);
-      const value = Route._createDiv("grain_value", grain_value);
-      grain.appendChild(value);
 
       const menu = new DropDownMenu(grain);
       menu.addMenuItem("Edit&nbsp;grain...", function(evt) {
@@ -80,6 +78,10 @@ class GrainsMinionRoute extends PageRoute {
       menu.addMenuItem("Delete&nbsp;value...", function(evt) {
         this._runCommand(evt, minion, "grains.delval \"" + k + "\"");
       }.bind(this));
+
+      // menu comes before this data on purpose
+      const value = Route._createTd("grain_value", grain_value);
+      grain.appendChild(value);
 
       container.appendChild(grain);
     }

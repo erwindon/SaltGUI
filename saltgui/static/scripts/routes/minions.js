@@ -44,7 +44,7 @@ class MinionsRoute extends PageRoute {
 
     const hostnames = keys.minions.sort();
     for(const hostname of hostnames) {
-      this._addMinion(list, hostname);
+      this._addMinion(list, hostname, 4);
     }
 
     this.keysLoaded = true;
@@ -57,12 +57,26 @@ class MinionsRoute extends PageRoute {
     }.bind(this));
   }
 
+  _updateOfflineMinion(container, hostname) {
+    super._updateOfflineMinion(container, hostname);
+    
+    const element = document.getElementById(hostname);
+    
+    // force same columns on all rows
+    element.appendChild(Route._createTd("os", ""));
+    element.appendChild(Route._createTd("run-command-button", ""));
+    element.appendChild(Route._createTd("", ""));
+  }
+
   _updateMinion(container, minion, hostname) {
     super._updateMinion(container, minion, hostname);
 
     const element = document.getElementById(hostname);
     const menu = new DropDownMenu(element);
     this._addMenuItemStateApply(menu, hostname);
+
+    // last one is empty to catch the table-stretch
+    element.appendChild(Route._createTd("", ""));
   }
 
 }

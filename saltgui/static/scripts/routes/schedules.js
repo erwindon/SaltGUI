@@ -47,11 +47,22 @@ class SchedulesRoute extends PageRoute {
 
     const hostnames = keys.minions.sort();
     for(const hostname of hostnames) {
-      this._addMinion(list, hostname);
+      this._addMinion(list, hostname, 4);
     }
 
     this.keysLoaded = true;
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
+  }
+
+  _updateOfflineMinion(container, hostname) {
+    super._updateOfflineMinion(container, hostname);
+
+    const element = document.getElementById(hostname);
+
+    // force same columns on all rows
+    element.appendChild(Route._createTd("scheduleinfo", ""));
+    element.appendChild(Route._createTd("run-command-button", ""));
+    element.appendChild(Route._createTd("", ""));
   }
 
   _updateMinion(container, minion, hostname) {
@@ -67,7 +78,7 @@ class SchedulesRoute extends PageRoute {
     if(element == null) {
       // offline minion not found on screen...
       // construct a basic element that can be updated here
-      element = document.createElement('li');
+      element = document.createElement('tr');
       element.id = hostname;
       container.appendChild(element);
     }
@@ -75,17 +86,19 @@ class SchedulesRoute extends PageRoute {
       element.removeChild(element.firstChild);
     }
 
-    element.appendChild(Route._createDiv("hostname", hostname));
+    element.appendChild(Route._createTd("hostname", hostname));
 
-    const statusDiv = Route._createDiv("status", "accepted");
+    const statusDiv = Route._createTd("status", "accepted");
     statusDiv.classList.add("accepted");
     element.appendChild(statusDiv);
 
-    element.appendChild(Route._createDiv("scheduleinfo", scheduleinfo));
+    element.appendChild(Route._createTd("scheduleinfo", scheduleinfo));
 
     const menu = new DropDownMenu(element);
     menu.addMenuItem("Show&nbsp;schedules", function(evt) {
       window.location.assign("schedulesminion?minion=" + encodeURIComponent(hostname));
     }.bind(this));
+
+    element.appendChild(Route._createTd("", ""));
   }
 }

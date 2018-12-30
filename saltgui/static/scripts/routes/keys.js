@@ -26,37 +26,56 @@ class KeysRoute extends PageRoute {
   _updateKeys(data) {
     const keys = data.return;
 
-    let list = this.getPageElement().querySelector("#keys_unaccepted");
+    const list = this.getPageElement().querySelector("#minions");
+
+    // Unaccepted goes first because that is where the user must decide
+    let hdr3 = Route._createTd("subtitle", "Unaccepted Keys");
+    hdr3.setAttribute("colspan", 5);
+    let tr3 = document.createElement("tr");
+    tr3.appendChild(hdr3);
+    list.appendChild(tr3);
     let hostnames = keys.minions_pre.sort();
     for(const hostname of hostnames) {
       this._addPreMinion(list, hostname);
     }
     if(hostnames.length === 0)
-      this._addNone(list);
+      this._addNone(list, 5);
 
-    list = this.getPageElement().querySelector("#minions");
+    let hdr1 = Route._createTd("subtitle", "Accepted Keys");
+    hdr1.setAttribute("colspan", 5);
+    let tr1 = document.createElement("tr");
+    tr1.appendChild(hdr1);
+    list.appendChild(tr1);
     hostnames = keys.minions.sort();
     for(const hostname of hostnames) {
-      this._addMinion(list, hostname);
+      this._addMinion(list, hostname, 4);
     }
     if(hostnames.length === 0)
-      this._addNone(list);
+      this._addNone(list, 5);
 
-    list = this.getPageElement().querySelector("#keys_denied");
+    let hdr2 = Route._createTd("subtitle", "Denied Keys");
+    hdr2.setAttribute("colspan", 5);
+    let tr2 = document.createElement("tr");
+    tr2.appendChild(hdr2);
+    list.appendChild(tr2);
     hostnames = keys.minions_denied.sort();
     for(const hostname of hostnames) {
       this._addDeniedMinion(list, hostname);
     }
     if(hostnames.length === 0)
-      this._addNone(list);
+      this._addNone(list, 5);
 
-    list = this.getPageElement().querySelector("#keys_rejected");
+    let hdr4 = Route._createTd("subtitle", "Rejected Keys");
+    hdr4.setAttribute("colspan", 5);
+    let tr4 = document.createElement("tr");
+    tr4.appendChild(hdr4);
+    list.appendChild(tr4);
     hostnames = keys.minions_rejected.sort();
     for(const hostname of hostnames) {
       this._addRejectedMinion(list, hostname);
     }
     if(hostnames.length === 0)
-      this._addNone(list);
+      this._addNone(list, 5);
 
     this.keysLoaded = true;
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
@@ -86,11 +105,14 @@ class KeysRoute extends PageRoute {
     const element = document.getElementById(hostname);
 
     // force same columns on all rows
-    element.appendChild(Route._createDiv("os", ""));
+    element.appendChild(Route._createTd("os", ""));
 
     const menu = new DropDownMenu(element);
     this._addMenuItemReject(menu, hostname, " include_accepted=true");
     this._addMenuItemDelete(menu, hostname, "");
+
+    // last one is empty to catch the table-stretch
+    element.appendChild(Route._createTd("", ""));
   }
 
   _updateMinion(container, minion, hostname) {
@@ -101,23 +123,29 @@ class KeysRoute extends PageRoute {
     const menu = new DropDownMenu(element);
     this._addMenuItemReject(menu, hostname, " include_accepted=true");
     this._addMenuItemDelete(menu, hostname, "");
+
+    // last one is empty to catch the table-stretch
+    element.appendChild(Route._createTd("", ""));
   }
 
   _addRejectedMinion(container, hostname) {
     const element = this._getElement(container, hostname);
 
-    element.appendChild(Route._createDiv("hostname", hostname));
+    element.appendChild(Route._createTd("hostname", hostname));
 
-    const rejected = Route._createDiv("status", "rejected");
+    const rejected = Route._createTd("status", "rejected");
     rejected.classList.add("rejected");
     element.appendChild(rejected);
 
     // force same columns on all rows
-    element.appendChild(Route._createDiv("os", ""));
+    element.appendChild(Route._createTd("os", ""));
 
     const menu = new DropDownMenu(element);
     this._addMenuItemDelete(menu, hostname, "");
     this._addMenuItemAccept(menu, hostname, " include_rejected=true");
+
+    // last one is empty to catch the table-stretch
+    element.appendChild(Route._createTd("", ""));
 
     container.appendChild(element);
   }
@@ -125,19 +153,22 @@ class KeysRoute extends PageRoute {
   _addDeniedMinion(container, hostname) {
     const element = this._getElement(container, hostname);
 
-    element.appendChild(Route._createDiv("hostname", hostname));
+    element.appendChild(Route._createTd("hostname", hostname));
 
-    const denied = Route._createDiv("status", "denied");
+    const denied = Route._createTd("status", "denied");
     denied.classList.add("denied");
     element.appendChild(denied);
 
     // force same columns on all rows
-    element.appendChild(Route._createDiv("os", ""));
+    element.appendChild(Route._createTd("os", ""));
 
     const menu = new DropDownMenu(element);
     this._addMenuItemAccept(menu, hostname, " include_denied=true");
     this._addMenuItemReject(menu, hostname, " include_denied=true");
     this._addMenuItemDelete(menu, hostname, "");
+
+    // last one is empty to catch the table-stretch
+    element.appendChild(Route._createTd("", ""));
 
     container.appendChild(element);
   }
@@ -145,22 +176,24 @@ class KeysRoute extends PageRoute {
   _addPreMinion(container, hostname) {
     const element = this._getElement(container, hostname);
 
-    element.appendChild(Route._createDiv("hostname", hostname));
+    element.appendChild(Route._createTd("hostname", hostname));
 
-    const pre = Route._createDiv("status", "unaccepted");
+    const pre = Route._createTd("status", "unaccepted");
     pre.classList.add("unaccepted");
     element.appendChild(pre);
 
     // force same columns on all rows
-    element.appendChild(Route._createDiv("os", ""));
+    element.appendChild(Route._createTd("os", ""));
 
     const menu = new DropDownMenu(element);
     this._addMenuItemAccept(menu, hostname, "");
     this._addMenuItemReject(menu, hostname, "");
     this._addMenuItemDelete(menu, hostname, "");
 
+    // last one is empty to catch the table-stretch
+    element.appendChild(Route._createTd("", ""));
+
     container.appendChild(element);
   }
 
 }
-

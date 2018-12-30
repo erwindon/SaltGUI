@@ -60,21 +60,24 @@ class PillarsMinionRoute extends PageRoute {
 
     const keys = Object.keys(pillars).sort();
     for(const k of keys) {
-      const pillar = document.createElement('li');
+      const pillar = document.createElement('tr');
 
-      const name = Route._createDiv("pillar_name", k);
+      const name = Route._createTd("pillar_name", k);
       pillar.appendChild(name);
 
-      // 8 bullet characters when hidden
+      // menu comes before this data if there was any
+
+      // 8 bullet characters
       const value_hidden = "\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF";
-      const pillar_hidden = Route._createDiv("pillar_hidden", value_hidden);
+      const pillar_hidden = Route._createTd("pillar_hidden", value_hidden);
       // initially use the hidden view
       pillar.appendChild(pillar_hidden);
 
       const value_shown = Output.formatJSON(pillars[k]);
-      const pillar_shown = Route._createDiv("pillar_shown", value_shown);
+      const pillar_shown = Route._createTd("pillar_shown", value_shown);
       // initially hide the normal view
       pillar_shown.style.display = "none";
+      // add the non-masked representation, not shown yet
       pillar.appendChild(pillar_shown);
 
       // show public pillars immediatelly
@@ -97,11 +100,13 @@ class PillarsMinionRoute extends PageRoute {
         pillar_hidden.style.display = "";
       });
 
+      pillar.appendChild(Route._createTd("", ""));
+
       container.appendChild(pillar);
     }
 
     if(!keys.length) {
-      const noPillarsMsg = Route._createDiv("msg", "No pillars found");
+      const noPillarsMsg = Route._createTd("msg", "No pillars found");
       container.appendChild(noPillarsMsg);
     }
   }

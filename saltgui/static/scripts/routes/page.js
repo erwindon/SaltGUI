@@ -60,15 +60,10 @@ class PageRoute extends Route {
     if(element === null) {
       // minion not found on screen...
       // construct a basic element that can be updated
-      element = document.createElement("li");
+      element = document.createElement("tr");
       element.id = id;
       container.appendChild(element);
       return element;
-    }
-
-    if(element.parentElement !== container) {
-      // item is not the expected list, move it
-      container.appendChild(element);
     }
 
     // remove existing content
@@ -82,9 +77,9 @@ class PageRoute extends Route {
   _updateOfflineMinion(container, hostname) {
     const element = this._getElement(container, hostname);
 
-    element.appendChild(Route._createDiv("hostname", hostname));
+    element.appendChild(Route._createTd("hostname", hostname));
 
-    const offline = Route._createDiv("status", "offline");
+    const offline = Route._createTd("status", "offline");
     offline.classList.add("offline");
     element.appendChild(offline);
   }
@@ -93,7 +88,7 @@ class PageRoute extends Route {
 
     const element = this._getElement(container, hostname);
 
-    element.appendChild(Route._createDiv("hostname", hostname));
+    element.appendChild(Route._createTd("hostname", hostname));
 
     if(minion && minion.fqdn_ip4) {
       let ipv4 = minion.fqdn_ip4;
@@ -105,19 +100,19 @@ class PageRoute extends Route {
       address.addEventListener("click", this._copyAddress);
       element.appendChild(address);
     } else {
-      const accepted = Route._createDiv("status", "accepted");
+      const accepted = Route._createTd("status", "accepted");
       accepted.classList.add("accepted");
       element.appendChild(accepted);
     }
 
     if(minion.os && minion.osrelease) {
-      element.appendChild(Route._createDiv("os", minion.os + " " + minion.osrelease));
+      element.appendChild(Route._createTd("os", minion.os + " " + minion.osrelease));
     } else if(minion.os) {
-      element.appendChild(Route._createDiv("os", minion.os));
+      element.appendChild(Route._createTd("os", minion.os));
     }
   }
 
-  _addMinion(container, hostname) {
+  _addMinion(container, hostname, nrOfColumns) {
 
     let element = document.getElementById(hostname);
     if(element !== null) {
@@ -125,27 +120,31 @@ class PageRoute extends Route {
       return;
     }
 
-    element = document.createElement("li");
+    element = document.createElement("tr");
     element.id = hostname;
 
-    element.appendChild(Route._createDiv("hostname", hostname));
+    element.appendChild(Route._createTd("hostname", hostname));
 
-    const minion = Route._createDiv("status", "accepted");
+    const minion = Route._createTd("status", "accepted");
     minion.classList.add("accepted");
     element.appendChild(minion);
 
-    element.appendChild(Route._createDiv("os", "loading..."));
+    element.appendChild(Route._createTd("os", "loading..."));
+
+    // fill out the number of columns, one more than requested
+    for(let i = 3; i <= nrOfColumns; i++) {
+      element.appendChild(Route._createTd("", ""));
+    }
 
     container.appendChild(element);
   }
 
-  _addNone(container) {
-
-    const element = document.createElement("li");
-
-    element.appendChild(Route._createDiv("hostname", "none"));
-
-    container.appendChild(element);
+  _addNone(container, colspan) {
+    const tr = document.createElement("tr");
+    const td = Route._createTd("hostname", "none");
+    td.setAttribute("colspan", colspan);
+    tr.appendChild(td);
+    container.appendChild(tr);
   }
 
   _updateJobs(data) {
@@ -216,21 +215,25 @@ class PageRoute extends Route {
   }
 
   _addJob(container, job) {
-    const element = document.createElement("li");
-    element.id = "job" + job.id;
+    const tr = document.createElement("tr");
+
+    const td = document.createElement("td");
+    tr.appendChild(td);
+
+    td.id = "job" + job.id;
 
     const targetText = window.makeTargetText(job["Target-type"], job.Target);
-    element.appendChild(Route._createDiv("target", targetText));
+    td.appendChild(Route._createDiv("target", targetText));
 
     const functionText = job.Function;
-    element.appendChild(Route._createDiv("function", functionText));
+    td.appendChild(Route._createDiv("function", functionText));
 
     const startTimeText = job.StartTime;
-    element.appendChild(Route._createDiv("time", startTimeText));
+    td.appendChild(Route._createDiv("time", startTimeText));
 
-    container.appendChild(element);
+    container.appendChild(tr);
 
-    element.addEventListener("click", this._createJobListener(job.id));
+    tr.addEventListener("click", this._createJobListener(job.id));
   }
 
   _createJobListener(id) {

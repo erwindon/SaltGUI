@@ -72,18 +72,14 @@ class SchedulesMinionRoute extends PageRoute {
       if("maxrunning" in schedule && schedule.maxrunning == 1)
         delete schedule.maxrunning;
 
-      const li = document.createElement('li');
+      const tr = document.createElement('tr');
 
-      const name = Route._createDiv("schedule_name", k);
-      li.appendChild(name);
+      const name = Route._createTd("schedule_name", k);
+      tr.appendChild(name);
 
-      const schedule_value = Output.formatJSON(schedule);
-      const value = Route._createDiv("schedule_value", schedule_value);
       const isJobDisabled = schedule.hasOwnProperty("enabled") && !schedule.enabled;
-      if(isJobDisabled) value.classList.add("disabled_schedule");
-      li.appendChild(value);
 
-      const menu = new DropDownMenu(li);
+      const menu = new DropDownMenu(tr);
       menu.addMenuItem("Modify&nbsp;job...", function(evt) {
         let cmd = "schedule.modify " + k;
         for(const key in schedule) {
@@ -107,7 +103,13 @@ class SchedulesMinionRoute extends PageRoute {
         this._runCommand(evt, minion, cmd);
       }.bind(this));
 
-      container.appendChild(li);
+      // menu comes before this data on purpose
+      const schedule_value = Output.formatJSON(schedule);
+      const value = Route._createTd("schedule_value", schedule_value);
+      if(isJobDisabled) value.classList.add("disabled_schedule");
+      tr.appendChild(value);
+
+      container.appendChild(tr);
     }
 
     if(!keys.length) {
