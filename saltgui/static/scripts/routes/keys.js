@@ -30,7 +30,7 @@ class KeysRoute extends PageRoute {
 
     // Unaccepted goes first because that is where the user must decide
     const hdr3 = Route._createTd("subtitle", "Unaccepted Keys");
-    hdr3.setAttribute("colspan", 6);
+    hdr3.setAttribute("colspan", 5);
     const tr3 = document.createElement("tr");
     tr3.appendChild(hdr3);
     list.appendChild(tr3);
@@ -39,22 +39,22 @@ class KeysRoute extends PageRoute {
       this._addPreMinion(list, hostname);
     }
     if(hostnames.length === 0)
-      this._addNone(list, 6);
+      this._addNone(list);
 
     const hdr1 = Route._createTd("subtitle", "Accepted Keys");
-    hdr1.setAttribute("colspan", 6);
+    hdr1.setAttribute("colspan", 5);
     const tr1 = document.createElement("tr");
     tr1.appendChild(hdr1);
     list.appendChild(tr1);
     hostnames = keys.minions.sort();
     for(const hostname of hostnames) {
-      this._addMinion(list, hostname, 4);
+      this._addMinion(list, hostname);
     }
     if(hostnames.length === 0)
-      this._addNone(list, 6);
+      this._addNone(list);
 
     const hdr2 = Route._createTd("subtitle", "Denied Keys");
-    hdr2.setAttribute("colspan", 6);
+    hdr2.setAttribute("colspan", 5);
     const tr2 = document.createElement("tr");
     tr2.appendChild(hdr2);
     list.appendChild(tr2);
@@ -63,10 +63,10 @@ class KeysRoute extends PageRoute {
       this._addDeniedMinion(list, hostname);
     }
     if(hostnames.length === 0)
-      this._addNone(list, 6);
+      this._addNone(list);
 
     const hdr4 = Route._createTd("subtitle", "Rejected Keys");
-    hdr4.setAttribute("colspan", 6);
+    hdr4.setAttribute("colspan", 5);
     const tr4 = document.createElement("tr");
     tr4.appendChild(hdr4);
     list.appendChild(tr4);
@@ -75,7 +75,7 @@ class KeysRoute extends PageRoute {
       this._addRejectedMinion(list, hostname);
     }
     if(hostnames.length === 0)
-      this._addNone(list, 6);
+      this._addNone(list);
 
     this.keysLoaded = true;
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
@@ -111,9 +111,6 @@ class KeysRoute extends PageRoute {
     const menu = new DropDownMenu(element);
     this._addMenuItemReject(menu, hostname, " include_accepted=true");
     this._addMenuItemDelete(menu, hostname, "");
-
-    // last one is empty to catch the table-stretch
-    element.appendChild(Route._createTd("", ""));
   }
 
   _updateMinion(container, minion, hostname) {
@@ -124,9 +121,6 @@ class KeysRoute extends PageRoute {
     const menu = new DropDownMenu(element);
     this._addMenuItemReject(menu, hostname, " include_accepted=true");
     this._addMenuItemDelete(menu, hostname, "");
-
-    // last one is empty to catch the table-stretch
-    element.appendChild(Route._createTd("", ""));
   }
 
   _addRejectedMinion(container, hostname) {
@@ -145,9 +139,6 @@ class KeysRoute extends PageRoute {
     const menu = new DropDownMenu(element);
     this._addMenuItemDelete(menu, hostname, "");
     this._addMenuItemAccept(menu, hostname, " include_rejected=true");
-
-    // last one is empty to catch the table-stretch
-    element.appendChild(Route._createTd("", ""));
 
     container.appendChild(element);
   }
@@ -170,9 +161,6 @@ class KeysRoute extends PageRoute {
     this._addMenuItemReject(menu, hostname, " include_denied=true");
     this._addMenuItemDelete(menu, hostname, "");
 
-    // last one is empty to catch the table-stretch
-    element.appendChild(Route._createTd("", ""));
-
     container.appendChild(element);
   }
 
@@ -193,9 +181,6 @@ class KeysRoute extends PageRoute {
     this._addMenuItemAccept(menu, hostname, "");
     this._addMenuItemReject(menu, hostname, "");
     this._addMenuItemDelete(menu, hostname, "");
-
-    // last one is empty to catch the table-stretch
-    element.appendChild(Route._createTd("", ""));
 
     container.appendChild(element);
   }

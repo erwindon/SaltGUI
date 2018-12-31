@@ -115,7 +115,7 @@ class PageRoute extends Route {
     if(minion) element.appendChild(Route._createTd("os", os));
   }
 
-  _addMinion(container, hostname, nrOfColumns) {
+  _addMinion(container, hostname) {
 
     let element = document.getElementById(hostname);
     if(element !== null) {
@@ -134,18 +134,18 @@ class PageRoute extends Route {
 
     element.appendChild(Route._createTd("os", "loading..."));
 
-    // fill out the number of columns, one more than requested
-    for(let i = 3; i <= nrOfColumns; i++) {
+    // fill out the number of columns to that of the header
+    while(element.cells.length < container.rows[0].cells.length) {
       element.appendChild(Route._createTd("", ""));
     }
 
     container.appendChild(element);
   }
 
-  _addNone(container, colspan) {
+  _addNone(container) {
     const tr = document.createElement("tr");
     const td = Route._createTd("hostname", "none");
-    td.setAttribute("colspan", colspan);
+    td.setAttribute("colspan", container.rows[0].cells.length);
     tr.appendChild(td);
     container.appendChild(tr);
   }

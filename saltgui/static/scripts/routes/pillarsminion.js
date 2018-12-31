@@ -36,8 +36,8 @@ class PillarsMinionRoute extends PageRoute {
 
     const container = document.getElementById("pillarsminion_list");
 
-    while(container.firstChild) {
-      container.removeChild(container.firstChild);
+    while(container.rows.length > 1) {
+      container.deleteRow(1);
     }
 
 
@@ -99,8 +99,6 @@ class PillarsMinionRoute extends PageRoute {
         pillar_shown.style.display = "none";
         pillar_hidden.style.display = "";
       });
-
-      pillar.appendChild(Route._createTd("", ""));
 
       container.appendChild(pillar);
     }

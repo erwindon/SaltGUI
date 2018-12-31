@@ -50,8 +50,8 @@ class SchedulesMinionRoute extends PageRoute {
     const container = document.getElementById("schedulesminion_list");
     page.append(container);
 
-    while(container.firstChild) {
-      container.removeChild(container.firstChild);
+    while(container.rows.length > 1) {
+      container.deleteRow(1);
     }
 
 

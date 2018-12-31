@@ -29,7 +29,7 @@ class GrainsRoute extends PageRoute {
 
     const hostnames = keys.minions.sort();
     for(const hostname of hostnames) {
-      this._addMinion(list, hostname, 5);
+      this._addMinion(list, hostname);
     }
 
     this.keysLoaded = true;
@@ -42,10 +42,10 @@ class GrainsRoute extends PageRoute {
     const element = document.getElementById(hostname);
 
     // force same columns on all rows
+    element.appendChild(Route._createTd("saltversion", ""));
     element.appendChild(Route._createTd("os", ""));
     element.appendChild(Route._createTd("graininfo", ""));
     element.appendChild(Route._createTd("run-command-button", ""));
-    element.appendChild(Route._createTd("", ""));
   }
 
   _updateMinion(container, minion, hostname) {
@@ -62,8 +62,5 @@ class GrainsRoute extends PageRoute {
     menu.addMenuItem("Show&nbsp;grains", function(evt) {
       window.location.assign("grainsminion?minion=" + encodeURIComponent(hostname));
     }.bind(this));
-
-    // last one is empty to catch the table-stretch
-    element.appendChild(Route._createTd("", ""));
   }
 }

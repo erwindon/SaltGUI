@@ -7,7 +7,7 @@ class DropDownMenu {
     this.callback = this.callback.bind(this);
     this.verifyAll = this.verifyAll.bind(this);
 
-    // correct for lazy caller
+    // allow reduced code on the caller side
     if(element.tagName == "TR") {
       const nelement = Route._createTd("", "");
       element.appendChild(nelement);

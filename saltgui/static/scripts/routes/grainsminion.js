@@ -47,10 +47,9 @@ class GrainsMinionRoute extends PageRoute {
     // fix that by re-adding the minion list
     gmp.appendChild(container);
 
-    while(container.firstChild) {
-      container.removeChild(container.firstChild);
+    while(container.rows.length > 1) {
+      container.deleteRow(1);
     }
-
 
     if(!grains) return;
 

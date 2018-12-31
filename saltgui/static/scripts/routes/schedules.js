@@ -47,7 +47,7 @@ class SchedulesRoute extends PageRoute {
 
     const hostnames = keys.minions.sort();
     for(const hostname of hostnames) {
-      this._addMinion(list, hostname, 4);
+      this._addMinion(list, hostname);
     }
 
     this.keysLoaded = true;
@@ -62,7 +62,6 @@ class SchedulesRoute extends PageRoute {
     // force same columns on all rows
     element.appendChild(Route._createTd("scheduleinfo", ""));
     element.appendChild(Route._createTd("run-command-button", ""));
-    element.appendChild(Route._createTd("", ""));
   }
 
   _updateMinion(container, minion, hostname) {
@@ -98,7 +97,5 @@ class SchedulesRoute extends PageRoute {
     menu.addMenuItem("Show&nbsp;schedules", function(evt) {
       window.location.assign("schedulesminion?minion=" + encodeURIComponent(hostname));
     }.bind(this));
-
-    element.appendChild(Route._createTd("", ""));
   }
 }

@@ -51,6 +51,16 @@ pre .hostname {
 
 table {
   min-width: 100%;
+  border-spacing: 5px;
+}
+
+table tr th {
+  border-bottom: 3px double #4caf50;
+  padding-right: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  text-align: left;
+  min-width: 20px;
 }
 
 table tr td {
