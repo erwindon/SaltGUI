@@ -2,6 +2,7 @@ version: '3'
 services:
   saltmaster-local:
     image: maerteijn/saltgui-saltmaster
+    hostname: saltmaster-local
     ports:
       - 4505:4505
       - 4506:4506
@@ -14,6 +15,7 @@ services:
 
   saltminion-ubuntu:
     image: maerteijn/saltgui-saltminion-ubuntu
+    hostname: saltminion-ubuntu
     depends_on:
        - saltmaster-local
     restart: on-failure
@@ -21,6 +23,7 @@ services:
 
   saltminion-debian:
     image: maerteijn/saltgui-saltminion-debian
+    hostname: saltminion-debian
     depends_on:
        - saltmaster-local
     restart: on-failure
