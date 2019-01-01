@@ -19,7 +19,7 @@ services:
     depends_on:
        - saltmaster-local
     restart: on-failure
-    command: /usr/bin/salt-minion
+    entrypoint: /usr/bin/salt-minion
 
   saltminion-debian:
     image: maerteijn/saltgui-saltminion-debian
@@ -27,4 +27,12 @@ services:
     depends_on:
        - saltmaster-local
     restart: on-failure
-    command: /usr/bin/salt-minion
+    entrypoint: /usr/bin/salt-minion
+
+  saltminion-centos:
+    image: maerteijn/saltgui-saltminion-centos
+    hostname: saltminion-centos
+    depends_on:
+       - saltmaster-local
+    restart: on-failure
+    entrypoint: /usr/bin/salt-minion

@@ -1,7 +1,7 @@
 FROM debian:9
 MAINTAINER Martijn Jacobs <martijn@devopsconsulting.nl>
 
-ENV REFRESHED_ON "24 Jul 2018"
+ENV REFRESHED_ON "1 Jan 2019"
 ENV DEBIAN_FRONTEND noninteractive
 
 # add saltstack key and install dependencies
@@ -13,7 +13,7 @@ RUN echo 'deb http://repo.saltstack.com/apt/debian/9/amd64/latest stretch main' 
 RUN apt-get update && apt-get install salt-minion --yes
 
 # copy the minion configuration
-ADD ./conf/minion /etc/salt/minion
+COPY ./conf/minion /etc/salt/minion
 
 # show which versions are installed
 RUN dpkg -l | grep salt\-

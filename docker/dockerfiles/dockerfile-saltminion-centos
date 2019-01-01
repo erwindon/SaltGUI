@@ -1,0 +1,20 @@
+FROM centos:7.6.1810
+MAINTAINER Dawid Malinowski <dawidmalina@gmail.com>
+
+ENV REFRESHED_ON "1 Jan 2019"
+
+# add saltstack key and install dependencies
+RUN yum install epel-release curl gnupg2 net-tools --assumeyes
+
+RUN rpm --import https://repo.saltstack.com/py3/redhat/7/x86_64/latest/SALTSTACK-GPG-KEY.pub
+
+RUN echo -e "[salt-py3-latest]\nname=SaltStack Latest Release Channel Python 3 for RHEL/Centos \$releasever\nbaseurl=https://repo.saltstack.com/py3/redhat/7/\$basearch/latest\nenabled=1\ngpgcheck=1\ngpgkey=https://repo.saltstack.com/py3/redhat/7/\$basearch/latest/SALTSTACK-GPG-KEY.pub\n" > /etc/yum.repos.d/salt-py3-latest.repo
+
+# install salt-minion
+RUN yum update --assumeyes && yum install salt-minion --assumeyes
+
+# copy the minion configuration
+COPY ./conf/minion /etc/salt/minion
+
+# show which versions are installed
+RUN rpm -qa | grep salt\-
