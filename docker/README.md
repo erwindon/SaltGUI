@@ -18,20 +18,20 @@ Commands used to build these docker images (you must be inside `dockerfiles` fol
 
 ## salt master based on ubuntu
 ```
-docker build -f dockerfile-saltmaster --tag maerteijn/saltgui-saltmaster .
+docker build -f dockerfile-saltmaster --tag erwindon/saltgui-saltmaster .
 ```
 
 ## salt minion based on centos
 ```
-docker build -f dockerfile-saltminion-centos --tag maerteijn/saltgui-saltminion-centos .
+docker build -f dockerfile-saltminion-centos --tag erwindon/saltgui-saltminion-centos .
 ```
 
 ## salt minion based on debian
 ```
-docker build -f dockerfile-saltminion-debian --tag maerteijn/saltgui-saltminion-debian .
+docker build -f dockerfile-saltminion-debian --tag erwindon/saltgui-saltminion-debian .
 ```
 
 ## salt minion based on ubuntu
 ```
-docker build -f dockerfile-saltminion-ubuntu --tag maerteijn/saltgui-saltminion-ubuntu .
+docker build -f dockerfile-saltminion-ubuntu --tag erwindon/saltgui-saltminion-ubuntu .
 ```

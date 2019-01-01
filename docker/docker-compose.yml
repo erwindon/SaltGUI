@@ -1,7 +1,7 @@
 version: '3'
 services:
   saltmaster-local:
-    image: maerteijn/saltgui-saltmaster
+    image: erwindon/saltgui-saltmaster
     hostname: saltmaster-local
     ports:
       - 4505:4505
@@ -14,7 +14,7 @@ services:
     entrypoint: /usr/bin/supervisord
 
   saltminion-ubuntu:
-    image: maerteijn/saltgui-saltminion-ubuntu
+    image: erwindon/saltgui-saltminion-ubuntu
     hostname: saltminion-ubuntu
     depends_on:
        - saltmaster-local
@@ -22,7 +22,7 @@ services:
     entrypoint: /usr/bin/salt-minion
 
   saltminion-debian:
-    image: maerteijn/saltgui-saltminion-debian
+    image: erwindon/saltgui-saltminion-debian
     hostname: saltminion-debian
     depends_on:
        - saltmaster-local
@@ -30,7 +30,7 @@ services:
     entrypoint: /usr/bin/salt-minion
 
   saltminion-centos:
-    image: maerteijn/saltgui-saltminion-centos
+    image: erwindon/saltgui-saltminion-centos
     hostname: saltminion-centos
     depends_on:
        - saltmaster-local
