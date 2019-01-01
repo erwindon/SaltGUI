@@ -95,9 +95,11 @@ class PageRoute extends Route {
 
     element.appendChild(Route._createDiv("hostname", hostname));
 
-    const ip = minion.fqdn_ip4;
-    if(ip) {
-      const address = Route._createDiv("status", ip);
+    if(minion && minion.fqdn_ip4) {
+      let ipv4 = minion.fqdn_ip4;
+      // even this grain can have multiple values, just pick the first one
+      if(Array.isArray(ipv4)) ipv4 = ipv4[0];
+      const address = Route._createDiv("status", ipv4);
       address.classList.add("address");
       address.setAttribute("tabindex", -1);
       address.addEventListener("click", this._copyAddress);
