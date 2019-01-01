@@ -96,7 +96,7 @@ class PageRoute extends Route {
       if(Array.isArray(ipv4)) ipv4 = ipv4[0];
       const address = Route._createTd("status", ipv4);
       // ipnumbers do not sort well, reformat into something sortable
-      let ipv4parts = ipv4.split(".");
+      const ipv4parts = ipv4.split(".");
       let sorttable_customkey = "";
       if(ipv4parts.length == 4) {
         // never mind adding '.'; this is only a sort-key
