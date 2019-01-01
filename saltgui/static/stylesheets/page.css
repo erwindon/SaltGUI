@@ -105,12 +105,6 @@ pre .hostname {
   color: #3f51b5;
   cursor: pointer;
   position: relative;
-
-  /* Screw browser prefixes, am I right?! */
-  user-select: none;
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
 }
 
 .minions li .address::before,
