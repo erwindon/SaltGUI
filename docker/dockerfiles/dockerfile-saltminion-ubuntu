@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 
-LABEL maintainer="Erwin Dondorp"
+LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
 LABEL project=SaltGUI
 LABEL Version=2018.3.3
 LABEL Name=saltminion-ubuntu
