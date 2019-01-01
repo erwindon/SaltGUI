@@ -54,6 +54,16 @@ class SchedulesRoute extends PageRoute {
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
+  _updateOfflineMinion(container, hostname) {
+    super._updateOfflineMinion(container, hostname);
+
+    const element = document.getElementById(hostname);
+
+    // force same columns on all rows
+    element.appendChild(Route._createTd("scheduleinfo", ""));
+    element.appendChild(Route._createTd("run-command-button", ""));
+  }
+
   _updateMinion(container, minion, hostname) {
 
     minion = SchedulesRoute._fixMinion(minion);
@@ -67,7 +77,7 @@ class SchedulesRoute extends PageRoute {
     if(element == null) {
       // offline minion not found on screen...
       // construct a basic element that can be updated here
-      element = document.createElement('li');
+      element = document.createElement('tr');
       element.id = hostname;
       container.appendChild(element);
     }
@@ -75,13 +85,15 @@ class SchedulesRoute extends PageRoute {
       element.removeChild(element.firstChild);
     }
 
-    element.appendChild(Route._createDiv("hostname", hostname));
+    element.appendChild(Route._createTd("hostname", hostname));
 
-    const statusDiv = Route._createDiv("status", "accepted");
+    const statusDiv = Route._createTd("status", "accepted");
     statusDiv.classList.add("accepted");
     element.appendChild(statusDiv);
 
-    element.appendChild(Route._createDiv("scheduleinfo", scheduleinfo));
+    const td = Route._createTd("scheduleinfo", scheduleinfo);
+    td.setAttribute("sorttable_customkey", cnt);
+    element.appendChild(td);
 
     const menu = new DropDownMenu(element);
     menu.addMenuItem("Show&nbsp;schedules", function(evt) {

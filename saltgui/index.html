@@ -69,11 +69,17 @@
         <div class='dashboard'>
           <div class='panel minion-list'>
             <h1>Minions</h1>
-            <ul id="minions" class='minions'></ul>
+            <table id="minions" class='minions sortable'>
+              <thead>
+              <tr><th>Minion</th><th>Status</th><th>Salt&nbsp;version</th><th>OS&nbsp;version</th><th class="sorttable_nosort"></th></tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
-            <ul class='jobs'></ul>
+            <table class='jobs'></table>
           </div>
         </div>
       </div>
@@ -81,18 +87,18 @@
       <div class='route' id='page_keys'>
         <div class='dashboard'>
           <div class='panel minion-list'>
-            <h1>Unaccepted Keys</h1>
-            <ul id="keys_unaccepted" class='minions'></ul>
-            <h1>Accepted Keys</h1>
-            <ul id="minions" class='minions'></ul>
-            <h1>Denied Keys</h1>
-            <ul id="keys_denied" class='minions'></ul>
-            <h1>Rejected Keys</h1>
-            <ul id="keys_rejected" class='minions'></ul>
+            <h1>Keys</h1>
+            <table id="minions" class='minions sortable'>
+              <thead>
+              <tr><th>Minion</th><th>Status</th><th>Salt&nbsp;version</th><th>OS&nbsp;version</th><th class="sorttable_nosort"></th></tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
-            <ul class='jobs'></ul>
+            <table class='jobs'></table>
           </div>
         </div>
       </div>
@@ -101,11 +107,17 @@
         <div class='dashboard'>
           <div class='panel minion-list'>
             <h1>Grains</h1>
-            <ul id="minions" class='minions'></ul>
+            <table id="minions" class='minions sortable'>
+              <thead>
+              <tr><th>Minion</th><th>Status</th><th>Salt&nbsp;version</th><th>OS&nbsp;version</th><th>Grains</th><th class="sorttable_nosort"></th></tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
-            <ul class='jobs'></ul>
+            <table class='jobs'></table>
           </div>
         </div>
       </div>
@@ -115,11 +127,17 @@
           <div id="grainsminion_page" class='panel minion-list'>
             <div class='nearlyvisiblebutton' id='button_close_grainsminion'>&#x2715;</div>
             <h1 id="grainsminion_title">Grains on ...</h1>
-            <ul id="grainsminion_list" class='grains'></ul>
+            <table id="grainsminion_list" class='grains sortable'>
+              <thead>
+              <tr><th>Name</th><th class="sorttable_nosort"></th><th>Value</th></tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
-            <ul class='jobs'></ul>
+            <table class='jobs'></table>
           </div>
         </div>
       </div>
@@ -128,11 +146,17 @@
         <div class='dashboard'>
           <div class='panel minion-list'>
             <h1>Schedules</h1>
-            <ul id="minions" class='minions'></ul>
+            <table id="minions" class='minions sortable'>
+              <thead>
+              <tr><th>Minion</th><th>Status</th><th>Schedules</th><th class="sorttable_nosort"></th></tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
-            <ul class='jobs'></ul>
+            <table class='jobs'></table>
           </div>
         </div>
       </div>
@@ -142,11 +166,17 @@
           <div id="schedulesminion_page" class='panel minion-list'>
             <div class='nearlyvisiblebutton' id='button_close_schedulesminion'>&#x2715;</div>
             <h1 id="schedulesminion_title">Schedules on ...</h1>
-            <ul id="schedulesminion_list" class='schedules'></ul>
+            <table id="schedulesminion_list" class='schedules sortable'>
+              <thead>
+              <tr><th>Name</th><th class="sorttable_nosort"></th><th>Details</th></tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
-            <ul class='jobs'></ul>
+            <table class='jobs'></table>
           </div>
         </div>
       </div>
@@ -155,11 +185,17 @@
         <div class='dashboard'>
           <div class='panel minion-list'>
             <h1>Pillars</h1>
-            <ul id="minions" class='minions'></ul>
+            <table id="minions" class='minions sortable'>
+              <thead>
+              <tr><th>Minion</th><th>Status</th><th>Pillars</th><th class="sorttable_nosort"></th></tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
-            <ul class='jobs'></ul>
+            <table class='jobs'></table>
           </div>
         </div>
       </div>
@@ -169,11 +205,17 @@
           <div class='panel minion-list'>
             <div class='nearlyvisiblebutton' id='button_close_pillarsminion'>&#x2715;</div>
             <h1 id="pillarsminion_title">Pillars on ...</h1>
-            <ul id="pillarsminion_list" class='pillars'></ul>
+            <table id="pillarsminion_list" class='pillars sortable'>
+              <thead>
+              <tr><th>Name</th><th>Value</th></tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
-            <ul class='jobs'></ul>
+            <table class='jobs'></table>
           </div>
         </div>
       </div>
@@ -222,6 +264,8 @@
     <script src='static/scripts/routes/pillarsminion.js'></script>
     <script src='static/scripts/dropdown.js'></script>
     <script src='static/scripts/router.js'></script>
+    <!-- see https://www.kryogenix.org/code/browser/sorttable/ -->
+    <script type="text/javascript" src="static/sorttable/sorttable.js"></script>
   </body>
 
 </html>

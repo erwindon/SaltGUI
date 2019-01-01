@@ -1,13 +1,12 @@
 /* The container <div> - needed to position the menu-dropdown content */
 .menu-dropdown {
-  padding: 5px 20px 5px 20px;
+  padding: 0 20px 0 20px;
   cursor: pointer;
 }
 
 header .menu-dropdown {
   font-size: 45px;
   transform: scale(1.3, 1) translate(-4px, -10px);
-  padding: 5px 10px 5px 10px;
 }
 
 header .menu-dropdown-content {

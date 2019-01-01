@@ -47,23 +47,20 @@ class GrainsMinionRoute extends PageRoute {
     // fix that by re-adding the minion list
     gmp.appendChild(container);
 
-    while(container.firstChild) {
-      container.removeChild(container.firstChild);
+    while(container.tBodies[0].rows.length > 0) {
+      container.tBodies[0].deleteRow(0);
     }
-
 
     if(!grains) return;
 
     const keys = Object.keys(grains).sort();
     for(const k of keys) {
-      const grain = document.createElement('li');
+      const grain = document.createElement('tr');
 
-      const name = Route._createDiv("grain_name", k);
+      const name = Route._createTd("grain_name", k);
       grain.appendChild(name);
 
       const grain_value = Output.formatJSON(grains[k]);
-      const value = Route._createDiv("grain_value", grain_value);
-      grain.appendChild(value);
 
       const menu = new DropDownMenu(grain);
       menu.addMenuItem("Edit&nbsp;grain...", function(evt) {
@@ -81,7 +78,11 @@ class GrainsMinionRoute extends PageRoute {
         this._runCommand(evt, minion, "grains.delval \"" + k + "\"");
       }.bind(this));
 
-      container.appendChild(grain);
+      // menu comes before this data on purpose
+      const value = Route._createTd("grain_value", grain_value);
+      grain.appendChild(value);
+
+      container.tBodies[0].appendChild(grain);
     }
   }
 }

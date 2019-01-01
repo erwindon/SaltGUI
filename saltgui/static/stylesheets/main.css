@@ -29,15 +29,18 @@ h1 {
   padding: 20px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   border-radius: 1px;
-  margin-right: 10px;
 }
 
-.panel:last-of-type {
-  margin-right: 0;
+.panel:first-of-type {
+  /* separate main-panel and jobs-panel */
+  margin-right: 10px;
 }
 
 .panel h1 {
   font-size: 20px;
+
+  /* separate title from table */
+  margin-bottom: 10px;
 }
 
 .fab {

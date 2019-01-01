@@ -26,37 +26,42 @@ class KeysRoute extends PageRoute {
   _updateKeys(data) {
     const keys = data.return;
 
-    let list = this.getPageElement().querySelector("#keys_unaccepted");
-    let hostnames = keys.minions_pre.sort();
-    for(const hostname of hostnames) {
+    const list = this.getPageElement().querySelector("#minions");
+
+    // Unaccepted goes first because that is where the user must decide
+    const hostnames_pre = keys.minions_pre.sort();
+    for(const hostname of hostnames_pre) {
       this._addPreMinion(list, hostname);
     }
-    if(hostnames.length === 0)
-      this._addNone(list);
 
-    list = this.getPageElement().querySelector("#minions");
-    hostnames = keys.minions.sort();
-    for(const hostname of hostnames) {
+    const hostnames_accepted = keys.minions.sort();
+    for(const hostname of hostnames_accepted) {
       this._addMinion(list, hostname);
     }
-    if(hostnames.length === 0)
-      this._addNone(list);
 
-    list = this.getPageElement().querySelector("#keys_denied");
-    hostnames = keys.minions_denied.sort();
-    for(const hostname of hostnames) {
+    const hostnames_denied = keys.minions_denied.sort();
+    for(const hostname of hostnames_denied) {
       this._addDeniedMinion(list, hostname);
     }
-    if(hostnames.length === 0)
-      this._addNone(list);
 
-    list = this.getPageElement().querySelector("#keys_rejected");
-    hostnames = keys.minions_rejected.sort();
-    for(const hostname of hostnames) {
+    const hostnames_rejected = keys.minions_rejected.sort();
+    for(const hostname of hostnames_rejected) {
       this._addRejectedMinion(list, hostname);
     }
-    if(hostnames.length === 0)
-      this._addNone(list);
+
+    let summary = "";
+    if(hostnames_pre.length === 0)
+      summary += ", no unaccepted keys";
+    if(hostnames_accepted.length === 0)
+      summary += ", no accepted keys";
+    if(hostnames_denied.length === 0)
+      summary += ", no denied keys";
+    if(hostnames_rejected.length === 0)
+      summary += ", no rejected keys";
+    if(summary) {
+      const tn = document.createTextNode(summary.replace(/, n/, "N"));
+      this.getPageElement().querySelector(".minion-list").appendChild(tn);
+    }
 
     this.keysLoaded = true;
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
@@ -86,7 +91,8 @@ class KeysRoute extends PageRoute {
     const element = document.getElementById(hostname);
 
     // force same columns on all rows
-    element.appendChild(Route._createDiv("os", ""));
+    element.appendChild(Route._createTd("saltversion", ""));
+    element.appendChild(Route._createTd("os", ""));
 
     const menu = new DropDownMenu(element);
     this._addMenuItemReject(menu, hostname, " include_accepted=true");
@@ -106,61 +112,63 @@ class KeysRoute extends PageRoute {
   _addRejectedMinion(container, hostname) {
     const element = this._getElement(container, hostname);
 
-    element.appendChild(Route._createDiv("hostname", hostname));
+    element.appendChild(Route._createTd("hostname", hostname));
 
-    const rejected = Route._createDiv("status", "rejected");
+    const rejected = Route._createTd("status", "rejected");
     rejected.classList.add("rejected");
     element.appendChild(rejected);
 
     // force same columns on all rows
-    element.appendChild(Route._createDiv("os", ""));
+    element.appendChild(Route._createTd("saltversion", ""));
+    element.appendChild(Route._createTd("os", ""));
 
     const menu = new DropDownMenu(element);
     this._addMenuItemDelete(menu, hostname, "");
     this._addMenuItemAccept(menu, hostname, " include_rejected=true");
 
-    container.appendChild(element);
+    container.tBodies[0].appendChild(element);
   }
 
   _addDeniedMinion(container, hostname) {
     const element = this._getElement(container, hostname);
 
-    element.appendChild(Route._createDiv("hostname", hostname));
+    element.appendChild(Route._createTd("hostname", hostname));
 
-    const denied = Route._createDiv("status", "denied");
+    const denied = Route._createTd("status", "denied");
     denied.classList.add("denied");
     element.appendChild(denied);
 
     // force same columns on all rows
-    element.appendChild(Route._createDiv("os", ""));
+    element.appendChild(Route._createTd("saltversion", ""));
+    element.appendChild(Route._createTd("os", ""));
 
     const menu = new DropDownMenu(element);
     this._addMenuItemAccept(menu, hostname, " include_denied=true");
     this._addMenuItemReject(menu, hostname, " include_denied=true");
     this._addMenuItemDelete(menu, hostname, "");
 
-    container.appendChild(element);
+    container.tBodies[0].appendChild(element);
   }
 
   _addPreMinion(container, hostname) {
     const element = this._getElement(container, hostname);
 
-    element.appendChild(Route._createDiv("hostname", hostname));
+    element.appendChild(Route._createTd("hostname", hostname));
 
-    const pre = Route._createDiv("status", "unaccepted");
+    const pre = Route._createTd("status", "unaccepted");
     pre.classList.add("unaccepted");
     element.appendChild(pre);
 
     // force same columns on all rows
-    element.appendChild(Route._createDiv("os", ""));
+    element.appendChild(Route._createTd("saltversion", ""));
+    element.appendChild(Route._createTd("os", ""));
 
     const menu = new DropDownMenu(element);
     this._addMenuItemAccept(menu, hostname, "");
     this._addMenuItemReject(menu, hostname, "");
     this._addMenuItemDelete(menu, hostname, "");
 
-    container.appendChild(element);
+    container.tBodies[0].appendChild(element);
   }
 
 }
-

@@ -36,8 +36,18 @@ class PillarsRoute extends PageRoute {
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
+  _updateOfflineMinion(container, hostname) {
+    super._updateOfflineMinion(container, hostname);
+
+    const element = document.getElementById(hostname);
+
+    // force same columns on all rows
+    element.appendChild(Route._createTd("pillarinfo", ""));
+    element.appendChild(Route._createTd("run-command-button", ""));
+  }
+
   _updateMinion(container, minion, hostname) {
-    super._updateMinion(container, minion, hostname);
+    super._updateMinion(container, null, hostname);
 
     const element = document.getElementById(hostname);
 
@@ -50,8 +60,9 @@ class PillarsRoute extends PageRoute {
     } else {
       pillarInfoText = cnt + " pillars";
     }
-    const pillarInfoDiv = Route._createDiv("pillarinfo", pillarInfoText);
-    element.appendChild(pillarInfoDiv);
+    const pillarInfoTd = Route._createTd("pillarinfo", pillarInfoText);
+    pillarInfoTd.setAttribute("sorttable_customkey", cnt);
+    element.appendChild(pillarInfoTd);
 
     const menu = new DropDownMenu(element);
     menu.addMenuItem("Show&nbsp;pillars", function(evt) {

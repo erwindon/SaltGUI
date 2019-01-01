@@ -60,15 +60,10 @@ class PageRoute extends Route {
     if(element === null) {
       // minion not found on screen...
       // construct a basic element that can be updated
-      element = document.createElement("li");
+      element = document.createElement("tr");
       element.id = id;
       container.appendChild(element);
       return element;
-    }
-
-    if(element.parentElement !== container) {
-      // item is not the expected list, move it
-      container.appendChild(element);
     }
 
     // remove existing content
@@ -82,9 +77,9 @@ class PageRoute extends Route {
   _updateOfflineMinion(container, hostname) {
     const element = this._getElement(container, hostname);
 
-    element.appendChild(Route._createDiv("hostname", hostname));
+    element.appendChild(Route._createTd("hostname", hostname));
 
-    const offline = Route._createDiv("status", "offline");
+    const offline = Route._createTd("status", "offline");
     offline.classList.add("offline");
     element.appendChild(offline);
   }
@@ -93,28 +88,39 @@ class PageRoute extends Route {
 
     const element = this._getElement(container, hostname);
 
-    element.appendChild(Route._createDiv("hostname", hostname));
+    element.appendChild(Route._createTd("hostname", hostname));
 
     if(minion && minion.fqdn_ip4) {
       let ipv4 = minion.fqdn_ip4;
       // even this grain can have multiple values, just pick the first one
       if(Array.isArray(ipv4)) ipv4 = ipv4[0];
-      const address = Route._createDiv("status", ipv4);
+      const address = Route._createTd("status", ipv4);
+      // ipnumbers do not sort well, reformat into something sortable
+      const ipv4parts = ipv4.split(".");
+      let sorttable_customkey = "";
+      if(ipv4parts.length == 4) {
+        // never mind adding '.'; this is only a sort-key
+        for(let i = 0; i < 4; i++) sorttable_customkey += ipv4parts[i].padStart(3, "0");
+        address.setAttribute("sorttable_customkey", sorttable_customkey);
+      }
       address.classList.add("address");
       address.setAttribute("tabindex", -1);
       address.addEventListener("click", this._copyAddress);
       element.appendChild(address);
     } else {
-      const accepted = Route._createDiv("status", "accepted");
+      const accepted = Route._createTd("status", "accepted");
       accepted.classList.add("accepted");
       element.appendChild(accepted);
     }
 
-    if(minion.os && minion.osrelease) {
-      element.appendChild(Route._createDiv("os", minion.os + " " + minion.osrelease));
-    } else if(minion.os) {
-      element.appendChild(Route._createDiv("os", minion.os));
-    }
+    let saltversion = "---";
+    if(minion && minion.saltversion) saltversion = minion.saltversion;
+    if(minion) element.appendChild(Route._createTd("saltversion", saltversion));
+
+    let os = "---";
+    if(minion && minion.os && minion.osrelease) os = minion.os + " " + minion.osrelease;
+    else if(minion && minion.os) os = minion.os;
+    if(minion) element.appendChild(Route._createTd("os", os));
   }
 
   _addMinion(container, hostname) {
@@ -125,27 +131,31 @@ class PageRoute extends Route {
       return;
     }
 
-    element = document.createElement("li");
+    element = document.createElement("tr");
     element.id = hostname;
 
-    element.appendChild(Route._createDiv("hostname", hostname));
+    element.appendChild(Route._createTd("hostname", hostname));
 
-    const minion = Route._createDiv("status", "accepted");
+    const minion = Route._createTd("status", "accepted");
     minion.classList.add("accepted");
     element.appendChild(minion);
 
-    element.appendChild(Route._createDiv("os", "loading..."));
+    element.appendChild(Route._createTd("os", "loading..."));
 
-    container.appendChild(element);
+    // fill out the number of columns to that of the header
+    while(element.cells.length < container.tHead.rows[0].cells.length) {
+      element.appendChild(Route._createTd("", ""));
+    }
+
+    container.tBodies[0].appendChild(element);
   }
 
   _addNone(container) {
-
-    const element = document.createElement("li");
-
-    element.appendChild(Route._createDiv("hostname", "none"));
-
-    container.appendChild(element);
+    const tr = document.createElement("tr");
+    const td = Route._createTd("hostname", "none");
+    td.setAttribute("colspan", container.rows[0].cells.length);
+    tr.appendChild(td);
+    container.appendChild(tr);
   }
 
   _updateJobs(data) {
@@ -216,21 +226,25 @@ class PageRoute extends Route {
   }
 
   _addJob(container, job) {
-    const element = document.createElement("li");
-    element.id = "job" + job.id;
+    const tr = document.createElement("tr");
+
+    const td = document.createElement("td");
+    tr.appendChild(td);
+
+    td.id = "job" + job.id;
 
     const targetText = window.makeTargetText(job["Target-type"], job.Target);
-    element.appendChild(Route._createDiv("target", targetText));
+    td.appendChild(Route._createDiv("target", targetText));
 
     const functionText = job.Function;
-    element.appendChild(Route._createDiv("function", functionText));
+    td.appendChild(Route._createDiv("function", functionText));
 
     const startTimeText = job.StartTime;
-    element.appendChild(Route._createDiv("time", startTimeText));
+    td.appendChild(Route._createDiv("time", startTimeText));
 
-    container.appendChild(element);
+    container.appendChild(tr);
 
-    element.addEventListener("click", this._createJobListener(job.id));
+    tr.addEventListener("click", this._createJobListener(job.id));
   }
 
   _createJobListener(id) {

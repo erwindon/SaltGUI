@@ -36,6 +36,18 @@ class GrainsRoute extends PageRoute {
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
+  _updateOfflineMinion(container, hostname) {
+    super._updateOfflineMinion(container, hostname);
+
+    const element = document.getElementById(hostname);
+
+    // force same columns on all rows
+    element.appendChild(Route._createTd("saltversion", ""));
+    element.appendChild(Route._createTd("os", ""));
+    element.appendChild(Route._createTd("graininfo", ""));
+    element.appendChild(Route._createTd("run-command-button", ""));
+  }
+
   _updateMinion(container, minion, hostname) {
     super._updateMinion(container, minion, hostname);
 
@@ -43,8 +55,9 @@ class GrainsRoute extends PageRoute {
 
     const cnt = Object.keys(minion).length;
     const grainInfoText = cnt + " grains";
-    const grainInfoDiv = Route._createDiv("graininfo", grainInfoText);
-    element.appendChild(grainInfoDiv);
+    const grainInfoTd = Route._createTd("graininfo", grainInfoText);
+    grainInfoTd.setAttribute("sorttable_customkey", cnt);
+    element.appendChild(grainInfoTd);
 
     const menu = new DropDownMenu(element);
     menu.addMenuItem("Show&nbsp;grains", function(evt) {

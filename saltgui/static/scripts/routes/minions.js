@@ -57,6 +57,17 @@ class MinionsRoute extends PageRoute {
     }.bind(this));
   }
 
+  _updateOfflineMinion(container, hostname) {
+    super._updateOfflineMinion(container, hostname);
+    
+    const element = document.getElementById(hostname);
+    
+    // force same columns on all rows
+    element.appendChild(Route._createTd("saltversion", ""));
+    element.appendChild(Route._createTd("os", ""));
+    element.appendChild(Route._createTd("run-command-button", ""));
+  }
+
   _updateMinion(container, minion, hostname) {
     super._updateMinion(container, minion, hostname);
 

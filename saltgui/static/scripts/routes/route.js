@@ -25,9 +25,16 @@ class Route {
     return this.menuitem_element;
   }
 
+  static _createTd(className, content) {
+    const td = document.createElement("td");
+    if(className) td.className = className;
+    td.innerText = content;
+    return td;
+  }
+
   static _createDiv(className, content) {
     const div = document.createElement("div");
-    div.className = className;
+    if(className) div.className = className;
     div.innerText = content;
     return div;
   }

@@ -8,7 +8,6 @@
 
 #page_job .time {
   font-size: 15px;
-  margin-top: 3px;
   font-weight: normal;
 }
 
@@ -17,7 +16,6 @@
   font-family: monospace;
   padding: 3px 8px;
   border-radius: 2px;
-  margin-top: 10px;
   background-color: #4caf50;
   cursor: default;
   display: block;
@@ -32,7 +30,6 @@
 #page_job .host {
   background-color: #f9f9f9;
   padding: 12px 20px 12px 20px;
-  margin-top: 10px;
   cursor: pointer;
   border: 1px solid #e6e6e6;
   max-height: 300px;
