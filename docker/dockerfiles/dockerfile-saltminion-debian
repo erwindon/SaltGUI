@@ -1,19 +1,33 @@
 FROM debian:9
-MAINTAINER Martijn Jacobs <martijn@devopsconsulting.nl>
 
-ENV REFRESHED_ON "1 Jan 2019"
-ENV DEBIAN_FRONTEND noninteractive
+LABEL maintainer="Erwin Dondorp"
+LABEL project=SaltGUI
+LABEL Version=2018.3.3
+LABEL Name=saltminion-debian
+
+ENV REFRESHED_ON="1 Jan 2019"
+ENV DEBIAN_FRONTEND=noninteractive
 
 # add saltstack key and install dependencies
-RUN apt-get update && apt-get install curl gnupg net-tools --yes
-RUN curl --fail --silent --show-error --location https://repo.saltstack.com/apt/debian/9/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
-RUN echo 'deb http://repo.saltstack.com/apt/debian/9/amd64/latest stretch main' > /etc/apt/sources.list.d/saltstack.list
-
-# install salt-minion
-RUN apt-get update && apt-get install salt-minion --yes
+RUN apt-get update \
+  && apt-get install curl dirmngr gnupg net-tools --yes --no-install-recommends \
+  && apt-key adv --fetch-keys http://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub \
+  && echo 'deb http://repo.saltstack.com/apt/debian/9/amd64/latest stretch main' > /etc/apt/sources.list.d/saltstack.list \
+  # install salt-minion
+  && apt-get update \
+  && apt-get install salt-minion --yes --no-install-recommends \
+  # show which versions are installed
+  && dpkg -l | grep salt- \
+  # cleanup temporary files
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -y autoremove \
+  && apt-get clean
 
 # copy the minion configuration
 COPY ./conf/minion /etc/salt/minion
 
-# show which versions are installed
-RUN dpkg -l | grep salt\-
+# dumy expose instruction
+EXPOSE 22
+
+# define main container command
+CMD /usr/bin/salt-minion

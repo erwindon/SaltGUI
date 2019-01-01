@@ -1,20 +1,31 @@
 FROM centos:7.6.1810
-MAINTAINER Dawid Malinowski <dawidmalina@gmail.com>
 
-ENV REFRESHED_ON "1 Jan 2019"
+LABEL maintainer="Erwin Dondorp"
+LABEL project=SaltGUI
+LABEL Version=2018.3.3
+LABEL Name=saltminion-centos
+
+ENV REFRESHED_ON="1 Jan 2019"
+ENV DEBIAN_FRONTEND=noninteractive
 
 # add saltstack key and install dependencies
-RUN yum install epel-release curl gnupg2 net-tools --assumeyes
-
-RUN rpm --import https://repo.saltstack.com/py3/redhat/7/x86_64/latest/SALTSTACK-GPG-KEY.pub
-
-RUN echo -e "[salt-py3-latest]\nname=SaltStack Latest Release Channel Python 3 for RHEL/Centos \$releasever\nbaseurl=https://repo.saltstack.com/py3/redhat/7/\$basearch/latest\nenabled=1\ngpgcheck=1\ngpgkey=https://repo.saltstack.com/py3/redhat/7/\$basearch/latest/SALTSTACK-GPG-KEY.pub\n" > /etc/yum.repos.d/salt-py3-latest.repo
-
-# install salt-minion
-RUN yum update --assumeyes && yum install salt-minion --assumeyes
+RUN yum install epel-release curl gnupg2 net-tools --assumeyes \
+  && rpm --import https://repo.saltstack.com/py3/redhat/7/x86_64/latest/SALTSTACK-GPG-KEY.pub \
+  && echo -e "[salt-py3-latest]\nname=SaltStack Latest Release Channel Python 3 for RHEL/Centos \$releasever\nbaseurl=https://repo.saltstack.com/py3/redhat/7/\$basearch/latest\nenabled=1\ngpgcheck=1\ngpgkey=https://repo.saltstack.com/py3/redhat/7/\$basearch/latest/SALTSTACK-GPG-KEY.pub\n" > /etc/yum.repos.d/salt-py3-latest.repo \
+  # install salt-minion
+  && yum update --assumeyes \
+  && yum install salt-minion --assumeyes \
+  # show which versions are installed
+  && rpm -qa | grep salt- \
+  # cleanup temporary files
+  && rm -rf /var/lib/yum/* /var/cache/yum \
+  && yum clean all
 
 # copy the minion configuration
 COPY ./conf/minion /etc/salt/minion
 
-# show which versions are installed
-RUN rpm -qa | grep salt\-
+# dumy expose instruction
+EXPOSE 22
+
+# define main container command
+CMD /usr/bin/salt-minion

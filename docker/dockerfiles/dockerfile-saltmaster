@@ -1,27 +1,38 @@
 FROM ubuntu:18.04
-MAINTAINER Martijn Jacobs <martijn@devopsconsulting.nl>
 
-ENV REFRESHED_ON "1 Jan 2019"
-ENV DEBIAN_FRONTEND noninteractive
+LABEL maintainer="Erwin Dondorp"
+LABEL project=SaltGUI
+LABEL Version=2018.3.3
+LABEL Name=saltmaster
+
+ENV REFRESHED_ON="1 Jan 2019"
+ENV DEBIAN_FRONTEND=noninteractive
 
 # add saltstack key and install dependencies
-RUN apt-get update && apt-get install curl net-tools gnupg2 --yes
-RUN curl --fail --silent --show-error --location https://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
-RUN echo 'deb http://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest bionic main' > /etc/apt/sources.list.d/saltstack.list
+RUN apt-get update \
+  && apt-get install curl net-tools gnupg2 --yes --no-install-recommends \
+  && apt-key adv --fetch-keys http://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub \
+  && echo 'deb http://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest bionic main' > /etc/apt/sources.list.d/saltstack.list \
+  # install salt-master and salt-api, dependencies
+  && apt-get update \
+  && apt-get install salt-master salt-api python3-cherrypy3 --yes --no-install-recommends \
+  # add a user for the frontend salt:salt
+  && useradd -m -s/bin/bash -p $(openssl passwd -1 salt) salt \
+  # install supervisor
+  && apt-get install supervisor --yes --no-install-recommends \
+  # show which versions are installed
+  && dpkg -l | grep salt- \
+  # cleanup temporary files
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -y autoremove \
+  && apt-get clean
 
-# install salt-master and salt-api, dependencies
-RUN apt-get update && apt-get install salt-master salt-api --yes
-
-# add a user for the frontend salt:salt
-RUN useradd -m -s/bin/bash -p  $(openssl passwd -1 salt) salt
-
-# install supervisor
-RUN apt-get install -y supervisor
-COPY ./conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf 
+# copy supervisord configuration
+COPY ./conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # some volume configuration for the saltmaster
 VOLUME ["/pki", "/var/cache/salt", "/var/log/salt"]
 EXPOSE 3333 4505 4506
 
-# show which versions are installed
-RUN dpkg -l | grep salt\-
+# define main container command
+CMD /usr/bin/supervisord

@@ -11,7 +11,6 @@ services:
     - ./srv/:/srv/
     - ./conf/master:/etc/salt/master
     - ../saltgui:/saltgui
-    entrypoint: /usr/bin/supervisord
 
   saltminion-ubuntu:
     image: erwindon/saltgui-saltminion-ubuntu
@@ -19,7 +18,6 @@ services:
     depends_on:
        - saltmaster-local
     restart: on-failure
-    entrypoint: /usr/bin/salt-minion
 
   saltminion-debian:
     image: erwindon/saltgui-saltminion-debian
@@ -27,7 +25,6 @@ services:
     depends_on:
        - saltmaster-local
     restart: on-failure
-    entrypoint: /usr/bin/salt-minion
 
   saltminion-centos:
     image: erwindon/saltgui-saltminion-centos
@@ -35,4 +32,3 @@ services:
     depends_on:
        - saltmaster-local
     restart: on-failure
-    entrypoint: /usr/bin/salt-minion
