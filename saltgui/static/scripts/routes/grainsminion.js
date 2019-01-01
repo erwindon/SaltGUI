@@ -47,8 +47,8 @@ class GrainsMinionRoute extends PageRoute {
     // fix that by re-adding the minion list
     gmp.appendChild(container);
 
-    while(container.rows.length > 1) {
-      container.deleteRow(1);
+    while(container.tBodies[0].rows.length > 0) {
+      container.tBodies[0].deleteRow(0);
     }
 
     if(!grains) return;
@@ -82,7 +82,7 @@ class GrainsMinionRoute extends PageRoute {
       const value = Route._createTd("grain_value", grain_value);
       grain.appendChild(value);
 
-      container.appendChild(grain);
+      container.tBodies[0].appendChild(grain);
     }
   }
 }

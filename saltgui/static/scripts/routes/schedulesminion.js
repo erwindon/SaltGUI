@@ -50,8 +50,8 @@ class SchedulesMinionRoute extends PageRoute {
     const container = document.getElementById("schedulesminion_list");
     page.append(container);
 
-    while(container.rows.length > 1) {
-      container.deleteRow(1);
+    while(container.tBodies[0].rows.length > 0) {
+      container.tBodies[0].deleteRow(0);
     }
 
 
@@ -109,12 +109,12 @@ class SchedulesMinionRoute extends PageRoute {
       if(isJobDisabled) value.classList.add("disabled_schedule");
       tr.appendChild(value);
 
-      container.appendChild(tr);
+      container.tBodies[0].appendChild(tr);
     }
 
     if(!keys.length) {
       const noSchedulesMsg = Route._createDiv("msg", "No schedules found");
-      container.appendChild(noSchedulesMsg);
+      container.tBodies[0].appendChild(noSchedulesMsg);
     }
   }
 }

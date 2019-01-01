@@ -61,6 +61,7 @@ class PillarsRoute extends PageRoute {
       pillarInfoText = cnt + " pillars";
     }
     const pillarInfoTd = Route._createTd("pillarinfo", pillarInfoText);
+    pillarInfoTd.setAttribute("sorttable_customkey", cnt);
     element.appendChild(pillarInfoTd);
 
     const menu = new DropDownMenu(element);

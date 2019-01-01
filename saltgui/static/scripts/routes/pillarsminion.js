@@ -36,8 +36,8 @@ class PillarsMinionRoute extends PageRoute {
 
     const container = document.getElementById("pillarsminion_list");
 
-    while(container.rows.length > 1) {
-      container.deleteRow(1);
+    while(container.tBodies[0].rows.length > 0) {
+      container.tBodies[0].deleteRow(0);
     }
 
 
@@ -100,12 +100,12 @@ class PillarsMinionRoute extends PageRoute {
         pillar_hidden.style.display = "";
       });
 
-      container.appendChild(pillar);
+      container.tBodies[0].appendChild(pillar);
     }
 
     if(!keys.length) {
       const noPillarsMsg = Route._createTd("msg", "No pillars found");
-      container.appendChild(noPillarsMsg);
+      container.tBodies[0].appendChild(noPillarsMsg);
     }
   }
 }

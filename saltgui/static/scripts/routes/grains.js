@@ -56,6 +56,7 @@ class GrainsRoute extends PageRoute {
     const cnt = Object.keys(minion).length;
     const grainInfoText = cnt + " grains";
     const grainInfoTd = Route._createTd("graininfo", grainInfoText);
+    grainInfoTd.setAttribute("sorttable_customkey", cnt);
     element.appendChild(grainInfoTd);
 
     const menu = new DropDownMenu(element);

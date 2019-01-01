@@ -91,7 +91,9 @@ class SchedulesRoute extends PageRoute {
     statusDiv.classList.add("accepted");
     element.appendChild(statusDiv);
 
-    element.appendChild(Route._createTd("scheduleinfo", scheduleinfo));
+    const td = Route._createTd("scheduleinfo", scheduleinfo);
+    td.setAttribute("sorttable_customkey", cnt);
+    element.appendChild(td);
 
     const menu = new DropDownMenu(element);
     menu.addMenuItem("Show&nbsp;schedules", function(evt) {

@@ -95,6 +95,14 @@ class PageRoute extends Route {
       // even this grain can have multiple values, just pick the first one
       if(Array.isArray(ipv4)) ipv4 = ipv4[0];
       const address = Route._createTd("status", ipv4);
+      // ipnumbers do not sort well, reformat into something sortable
+      let ipv4parts = ipv4.split(".");
+      let sorttable_customkey = "";
+      if(ipv4parts.length == 4) {
+        // never mind adding '.'; this is only a sort-key
+        for(let i = 0; i < 4; i++) sorttable_customkey += ipv4parts[i].padStart(3, "0");
+        address.setAttribute("sorttable_customkey", sorttable_customkey);
+      }
       address.classList.add("address");
       address.setAttribute("tabindex", -1);
       address.addEventListener("click", this._copyAddress);
@@ -135,11 +143,11 @@ class PageRoute extends Route {
     element.appendChild(Route._createTd("os", "loading..."));
 
     // fill out the number of columns to that of the header
-    while(element.cells.length < container.rows[0].cells.length) {
+    while(element.cells.length < container.tHead.rows[0].cells.length) {
       element.appendChild(Route._createTd("", ""));
     }
 
-    container.appendChild(element);
+    container.tBodies[0].appendChild(element);
   }
 
   _addNone(container) {
