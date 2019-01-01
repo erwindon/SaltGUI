@@ -29,53 +29,39 @@ class KeysRoute extends PageRoute {
     const list = this.getPageElement().querySelector("#minions");
 
     // Unaccepted goes first because that is where the user must decide
-    const hdr3 = Route._createTd("subtitle", "Unaccepted Keys");
-    hdr3.setAttribute("colspan", 5);
-    const tr3 = document.createElement("tr");
-    tr3.appendChild(hdr3);
-    list.appendChild(tr3);
-    let hostnames = keys.minions_pre.sort();
-    for(const hostname of hostnames) {
+    const hostnames_pre = keys.minions_pre.sort();
+    for(const hostname of hostnames_pre) {
       this._addPreMinion(list, hostname);
     }
-    if(hostnames.length === 0)
-      this._addNone(list);
 
-    const hdr1 = Route._createTd("subtitle", "Accepted Keys");
-    hdr1.setAttribute("colspan", 5);
-    const tr1 = document.createElement("tr");
-    tr1.appendChild(hdr1);
-    list.appendChild(tr1);
-    hostnames = keys.minions.sort();
-    for(const hostname of hostnames) {
+    const hostnames_accepted = keys.minions.sort();
+    for(const hostname of hostnames_accepted) {
       this._addMinion(list, hostname);
     }
-    if(hostnames.length === 0)
-      this._addNone(list);
 
-    const hdr2 = Route._createTd("subtitle", "Denied Keys");
-    hdr2.setAttribute("colspan", 5);
-    const tr2 = document.createElement("tr");
-    tr2.appendChild(hdr2);
-    list.appendChild(tr2);
-    hostnames = keys.minions_denied.sort();
-    for(const hostname of hostnames) {
+    const hostnames_denied = keys.minions_denied.sort();
+    for(const hostname of hostnames_denied) {
       this._addDeniedMinion(list, hostname);
     }
-    if(hostnames.length === 0)
-      this._addNone(list);
 
-    const hdr4 = Route._createTd("subtitle", "Rejected Keys");
-    hdr4.setAttribute("colspan", 5);
-    const tr4 = document.createElement("tr");
-    tr4.appendChild(hdr4);
-    list.appendChild(tr4);
-    hostnames = keys.minions_rejected.sort();
-    for(const hostname of hostnames) {
+    const hostnames_rejected = keys.minions_rejected.sort();
+    for(const hostname of hostnames_rejected) {
       this._addRejectedMinion(list, hostname);
     }
-    if(hostnames.length === 0)
-      this._addNone(list);
+
+    let summary = "";
+    if(hostnames_pre.length === 0)
+      summary += ", no unaccepted keys";
+    if(hostnames_accepted.length === 0)
+      summary += ", no accepted keys";
+    if(hostnames_denied.length === 0)
+      summary += ", no denied keys";
+    if(hostnames_rejected.length === 0)
+      summary += ", no rejected keys";
+    if(summary) {
+      const tn = document.createTextNode(summary.replace(/, n/, "N"));
+      this.getPageElement().querySelector(".minion-list").appendChild(tn);
+    }
 
     this.keysLoaded = true;
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
@@ -140,7 +126,7 @@ class KeysRoute extends PageRoute {
     this._addMenuItemDelete(menu, hostname, "");
     this._addMenuItemAccept(menu, hostname, " include_rejected=true");
 
-    container.appendChild(element);
+    container.tBodies[0].appendChild(element);
   }
 
   _addDeniedMinion(container, hostname) {
@@ -161,7 +147,7 @@ class KeysRoute extends PageRoute {
     this._addMenuItemReject(menu, hostname, " include_denied=true");
     this._addMenuItemDelete(menu, hostname, "");
 
-    container.appendChild(element);
+    container.tBodies[0].appendChild(element);
   }
 
   _addPreMinion(container, hostname) {
@@ -182,7 +168,7 @@ class KeysRoute extends PageRoute {
     this._addMenuItemReject(menu, hostname, "");
     this._addMenuItemDelete(menu, hostname, "");
 
-    container.appendChild(element);
+    container.tBodies[0].appendChild(element);
   }
 
 }
