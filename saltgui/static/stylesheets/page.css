@@ -162,6 +162,12 @@ table tr td:last-of-type {
   color: #00f;
 }
 
+.minions td.os .osimage {
+  max-width: 18px;
+  max-height: 18px;
+  padding-right: 5px;
+}
+
 #popup_runcommand {
   display: none;
 }
