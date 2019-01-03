@@ -84,16 +84,64 @@ class PageRoute extends Route {
     element.appendChild(offline);
   }
 
+  _getBestIpNumber(minion) {
+    let ipv4 = minion.fqdn_ip4;
+    if(!ipv4) return null;
+    // either a string or something strange
+    if(!Array.isArray(ipv4)) return ipv4;
+
+    // so, it is an array
+
+    // get the public IP number (if any)
+    for(const s of ipv4) {
+      // local = 127.0.0.0/8
+      if(s.startsWith("127.")) continue;
+      // private A = 10.0.0.0/8
+      if(s.startsWith("10.")) continue;
+      // private B = 172.16.0.0/20
+      if(s.startsWith("172.16.")) continue;
+      if(s.startsWith("172.17.")) continue;
+      if(s.startsWith("172.18.")) continue;
+      if(s.startsWith("172.19.")) continue;
+      if(s.startsWith("172.20.")) continue;
+      if(s.startsWith("172.21.")) continue;
+      if(s.startsWith("172.22.")) continue;
+      if(s.startsWith("172.23.")) continue;
+      if(s.startsWith("172.24.")) continue;
+      if(s.startsWith("172.25.")) continue;
+      if(s.startsWith("172.26.")) continue;
+      if(s.startsWith("172.27.")) continue;
+      if(s.startsWith("172.28.")) continue;
+      if(s.startsWith("172.29.")) continue;
+      if(s.startsWith("172.30.")) continue;
+      if(s.startsWith("172.31.")) continue;
+      // private C = 192.168.0.0/16
+      if(s.startsWith("192.168.")) continue;
+      // not a local/private address, therefore it is public
+      return s;
+    }
+
+    // no public IP number
+    // get the private IP number (if any)
+    for(const s of ipv4) {
+      // local = 127.0.0.0/8
+      if(s.startsWith("127.")) continue;
+      // not a local address, therefore it is private
+      return s;
+    }
+
+    // just pick the first one, should then be a local address
+    return ipv4[0];
+  }
+
   _updateMinion(container, minion, hostname) {
 
     const element = this._getElement(container, hostname);
 
     element.appendChild(Route._createTd("hostname", hostname));
 
-    if(minion && minion.fqdn_ip4) {
-      let ipv4 = minion.fqdn_ip4;
-      // even this grain can have multiple values, just pick the first one
-      if(Array.isArray(ipv4)) ipv4 = ipv4[0];
+    const ipv4 = this._getBestIpNumber(minion);
+    if(ipv4) {
       const address = Route._createTd("status", ipv4);
       // ipnumbers do not sort well, reformat into something sortable
       const ipv4parts = ipv4.split(".");
