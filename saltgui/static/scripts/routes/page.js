@@ -120,7 +120,14 @@ class PageRoute extends Route {
     let os = "---";
     if(minion && minion.os && minion.osrelease) os = minion.os + " " + minion.osrelease;
     else if(minion && minion.os) os = minion.os;
-    if(minion) element.appendChild(Route._createTd("os", os));
+    if(minion) {
+      const td = Route._createTd("os", os);
+      const img = document.createElement("img");
+      img.setAttribute("src", "static/images/os-" + minion.os.toLowerCase() + ".png");
+      img.classList.add("osimage");
+      td.prepend(img);
+      element.appendChild(td);
+    }
   }
 
   _addMinion(container, hostname) {
