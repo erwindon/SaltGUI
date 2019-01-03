@@ -34,7 +34,7 @@ class PillarsMinionRoute extends PageRoute {
     const title = document.getElementById("pillarsminion_title");
     title.innerText = "Pillars on " + minion;
 
-    const pmp = document.getElementById("pillarsminion_title");
+    const pmp = document.getElementById("pillarsminion_page");
     const menu = new DropDownMenu(pmp);
     menu.addMenuItem("Refresh&nbsp;pillar...", function(evt) {
       this._runCommand(evt, minion, "saltutil.refresh_pillar");
@@ -42,10 +42,13 @@ class PillarsMinionRoute extends PageRoute {
 
     const container = document.getElementById("pillarsminion_list");
 
+    // new menu's are always added at the bottom of the div
+    // fix that by re-adding the minion list
+    pmp.appendChild(container);
+
     while(container.tBodies[0].rows.length > 0) {
       container.tBodies[0].deleteRow(0);
     }
-
 
     if(!pillars) return;
 
