@@ -185,6 +185,8 @@ class CommandBox {
       "grains.delkey",
       "grains.delval",
       "grains.setval",
+      "saltutil.refresh_grains",
+      "saltutil.refresh_pillar",
       "schedule.delete",
       "schedule.disable",
       "schedule.disable_job",

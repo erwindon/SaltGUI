@@ -181,6 +181,8 @@ class PageRoute extends Route {
       if(job.Function === "runner.jobs.list_job") continue;
       if(job.Function === "runner.jobs.list_jobs") continue;
       if(job.Function === "saltutil.find_job") continue;
+      if(job.Function === "saltutil.refresh_grains") continue;
+      if(job.Function === "saltutil.refresh_pillar") continue;
       if(job.Function === "saltutil.running") continue;
       if(job.Function === "schedule.delete") continue;
       if(job.Function === "schedule.disable") continue;
