@@ -79,7 +79,7 @@ class GrainsMinionRoute extends PageRoute {
       }.bind(this));
 
       // menu comes before this data on purpose
-      const value = Route._createTd("grain_value", grain_value);
+      const value = Route._createTd("grain_value", json2yaml(grain_value));
       grain.appendChild(value);
 
       container.tBodies[0].appendChild(grain);

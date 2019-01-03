@@ -74,7 +74,7 @@ class PillarsMinionRoute extends PageRoute {
       pillar.appendChild(pillar_hidden);
 
       const value_shown = Output.formatJSON(pillars[k]);
-      const pillar_shown = Route._createTd("pillar_shown", value_shown);
+      const pillar_shown = Route._createTd("pillar_shown", json2yaml(value_shown));
       // initially hide the normal view
       pillar_shown.style.display = "none";
       // add the non-masked representation, not shown yet
