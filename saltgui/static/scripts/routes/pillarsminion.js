@@ -34,6 +34,12 @@ class PillarsMinionRoute extends PageRoute {
     const title = document.getElementById("pillarsminion_title");
     title.innerText = "Pillars on " + minion;
 
+    const pmp = document.getElementById("pillarsminion_title");
+    const menu = new DropDownMenu(pmp);
+    menu.addMenuItem("Refresh&nbsp;pillar...", function(evt) {
+      this._runCommand(evt, minion, "saltutil.refresh_pillar");
+    }.bind(this));
+
     const container = document.getElementById("pillarsminion_list");
 
     while(container.tBodies[0].rows.length > 0) {

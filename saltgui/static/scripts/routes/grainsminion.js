@@ -40,6 +40,9 @@ class GrainsMinionRoute extends PageRoute {
       // use placeholders for name and value
       this._runCommand(evt, minion, "grains.setval \"name\" \"value\"");
     }.bind(this));
+    menu.addMenuItem("Sync&nbsp;grains...", function(evt) {
+      this._runCommand(evt, minion, "saltutil.sync_grains");
+    }.bind(this));
 
     const container = document.getElementById("grainsminion_list");
 
