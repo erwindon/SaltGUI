@@ -85,6 +85,7 @@ class PageRoute extends Route {
   }
 
   _getBestIpNumber(minion) {
+    if(!minion) return null;
     const ipv4 = minion.fqdn_ip4;
     if(!ipv4) return null;
     // either a string or something strange
