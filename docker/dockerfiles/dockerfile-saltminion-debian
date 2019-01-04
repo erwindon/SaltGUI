@@ -1,9 +1,9 @@
 FROM debian:9
 
 LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
-LABEL name=SaltGUI
-LABEL project=https://github.com/erwindon/SaltGUI
-LABEL version=1.7.0
+LABEL name=salt-minion
+LABEL project="SaltGUI testing"
+LABEL version=2018.3.3
 
 ENV SALT_VERSION=2018.3.3
 ENV DEBIAN_FRONTEND=noninteractive
