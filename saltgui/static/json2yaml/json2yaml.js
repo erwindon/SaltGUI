@@ -60,7 +60,7 @@ function convertHash(obj, ret) {
     var recurse;
     var ele;
     var type;
-    for (k = 0; k < obj.length; k += 1) {
+    for (k in obj) {
         recurse = [];
         if (obj.hasOwnProperty(k)) {
             ele = obj[k];
