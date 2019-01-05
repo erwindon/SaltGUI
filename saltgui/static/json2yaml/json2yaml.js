@@ -1,5 +1,5 @@
 /*jslint for:true */
-var spacing = "  ";
+var spacing = "    ";
 
 function getType(obj) {
     "use strict";
@@ -24,7 +24,7 @@ function normalizeString(str) {
     if (str.match(/^[\w]+$/)) {
         return str;
     } else {
-        return "\"" + decodeURI(str).replace(/%u/g, "\\u").replace(/%U/g, "\\U").replace(/%/g, "\\x") + "\"";
+        return decodeURI(str).replace(/%u/g, "\\u").replace(/%U/g, "\\U").replace(/%/g, "\\x");
     }
 }
 
@@ -67,9 +67,9 @@ function convertHash(obj, ret) {
             convert(ele, recurse);
             type = getType(ele);
             if (type === "string" ||
-                    type === "null" ||
-                    type === "number" ||
-                    type === "boolean") {
+            type === "null" ||
+            type === "number" ||
+            type === "boolean") {
                 ret.push(normalizeString(k) + ": " + recurse[0]);
             } else {
                 ret.push(normalizeString(k) + ": ");
@@ -116,8 +116,10 @@ var json2yaml = function (obj) {
     if (getType(obj) === "string") {
         obj = JSON.parse(obj);
     }
-
     var ret = [];
+    if (getType(obj) === "hash") {
+        ret.push("----------");
+    }
     convert(obj, ret);
     return ret.join("\n");
 };
