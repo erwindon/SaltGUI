@@ -74,12 +74,12 @@ h1 {
   cursor: pointer;
 }
 
-.menubar {
+.mainmenubar {
   display: inline-block;
 }
 
 @media (max-width: 800px) {
-  .menubar {
+  .mainmenubar {
     display: none;
   }
 }
@@ -100,13 +100,13 @@ h1 {
   cursor: pointer;
 }
 
-#hamburger_container {
+#mainmenumini {
   display: none;
   float: right;
 }
 
 @media (max-width: 800px) {
-  #hamburger_container {
+  #mainmenumini {
     display: inline-block;
     float: right;
   }

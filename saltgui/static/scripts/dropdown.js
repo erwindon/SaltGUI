@@ -17,10 +17,10 @@ class DropDownMenu {
     this.menuDropdown = Route._createDiv("run-command-button", "");
 
     switch (element.id) {
-    case "hamburger_container":
+    case "mainmenumini":
       // 2261 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
       this.menuButton = Route._createDiv("menu-dropdown", "\u2261");
-      this.menuDropdown.classList.add("hamburger");
+      this.menuDropdown.classList.add("mainmenumini");
       break;
 
     case "cmdbox":
@@ -31,9 +31,9 @@ class DropDownMenu {
       break;
 
     default:
-      // 25BA = BLACK RIGHT-POINTING POINTER
+      // 2261 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
       // assume it will be a command menu
-      this.menuButton = Route._createDiv("menu-dropdown", "\u25BA");
+      this.menuButton = Route._createDiv("menu-dropdown", "\u2261");
       // hide the menu until it receives menu-items
       this.verifyAll();
     }

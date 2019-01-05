@@ -8,8 +8,8 @@ class PageRoute extends Route {
     this._updateMinions = this._updateMinions.bind(this);
 
     if(PageRoute.hasMenu === undefined) {
-      const hamburger_container = document.querySelector("#hamburger_container");
-      const menu = new DropDownMenu(hamburger_container);
+      const mainmenumini = document.querySelector("#mainmenumini");
+      const menu = new DropDownMenu(mainmenumini);
       menu.addMenuItem("minions", function(evt) {
         window.location.replace("/");
       });
