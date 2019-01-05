@@ -1,19 +1,30 @@
 FROM ubuntu:18.04
-MAINTAINER Martijn Jacobs <martijn@devopsconsulting.nl>
 
-ENV REFRESHED_ON "24 Jul 2018"
-ENV DEBIAN_FRONTEND noninteractive
+LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
+LABEL name=salt-minion
+LABEL project="SaltGUI testing"
+LABEL version=2018.3.3
+
+ENV SALT_VERSION=2018.3.3
+ENV DEBIAN_FRONTEND=noninteractive
 
 # add saltstack key and install dependencies
-RUN apt-get update && apt-get install curl gnupg2 net-tools --yes
-RUN curl --fail --silent --show-error --location https://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | apt-key add -
-RUN echo 'deb http://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest bionic main' > /etc/apt/sources.list.d/saltstack.list
-
-# install salt-minion
-RUN apt-get update && apt-get install salt-minion --yes
+RUN apt-get update \
+  && apt-get install curl gnupg2 net-tools --yes --no-install-recommends \
+  && apt-key adv --fetch-keys http://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub \
+  && echo "deb http://repo.saltstack.com/py3/ubuntu/18.04/amd64/latest bionic main" > /etc/apt/sources.list.d/saltstack.list \
+  # install salt-minion
+  && apt-get update \
+  && apt-get install salt-minion=${SALT_VERSION}* --yes --no-install-recommends \
+  # show which versions are installed
+  && dpkg -l | grep salt- \
+  # cleanup temporary files
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -y autoremove \
+  && apt-get clean
 
 # copy the minion configuration
-ADD ./conf/minion /etc/salt/minion
+COPY ./conf/minion /etc/salt/minion
 
-# show which versions are installed
-RUN dpkg -l | grep salt\-
+# define main container command
+CMD /usr/bin/salt-minion
