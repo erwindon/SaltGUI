@@ -28,7 +28,7 @@ window.elapsedToString = function(date) {
     return "A long time ago, in a galaxy far, far away";
   }
   catch(err) {
-    console.error(err);
+    //console.error(err);
     return "It did happen, when I don't know";
   }
 };

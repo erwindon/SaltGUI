@@ -31,7 +31,7 @@ class Output {
 
     if(value === undefined) {
       // JSON.stringify does not return a string for this
-      // but again a value undefined
+      // but again a value undefined, we need a string
       return "undefined";
     }
 
