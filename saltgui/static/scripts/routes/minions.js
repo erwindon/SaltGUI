@@ -35,6 +35,9 @@ class MinionsRoute extends PageRoute {
     let nodegroups = data.return[0].data.return.nodegroups;
     if(!nodegroups) nodegroups = {};
     localStorage.setItem("nodegroups", JSON.stringify(nodegroups));
+
+    const output_format = data.return[0].data.return.saltgui_output_format;
+    localStorage.setItem("output_format", JSON.stringify(output_format));
   }
 
   _updateKeys(data) {

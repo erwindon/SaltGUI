@@ -21,6 +21,13 @@
 
 class Output {
 
+  static isOutputFormatAllowed(requestedOutputFormat) {
+    let supportedOutputFormats = localStorage.getItem("output_format");
+    if(supportedOutputFormats === "undefined") supportedOutputFormats = null;
+    if(supportedOutputFormats === null) supportedOutputFormats = "doc,highstate,json";
+    return supportedOutputFormats.includes(requestedOutputFormat);
+  }
+
   // format a JSON object
   // based on an initial indentation and an indentation increment
   // default initial indentation is ""
@@ -159,6 +166,8 @@ class Output {
   // and when its key matches the requested documentation
   // empty values are allowed due to errors in the documentation
   static isDocumentationOutput(response, command) {
+
+    if(!Output.isOutputFormatAllowed("doc")) return false;
 
     let result = false;
 
@@ -366,6 +375,9 @@ class Output {
   }
 
   static isHighStateOutput(command, response) {
+
+    if(!Output.isOutputFormatAllowed("highstate")) return false;
+
     if(typeof response !== "object") return false;
     if(Array.isArray(response)) return false;
     if(command !== "state.apply" && command !== "state.highstate") return false;
@@ -636,9 +648,22 @@ class Output {
   // just format the returned objects
   // note: do not return a text-node
   static getNormalOutput(hostResponse) {
-    const span = document.createElement("span");
-    span.innerText = Output.formatJSON(hostResponse);
-    return span;
+
+    let content;
+    if(Output.isOutputFormatAllowed("json")) {
+      content = Output.formatJSON(hostResponse);
+    //} else if(Output.isOutputFormatAllowed("yaml")) {
+    //  content = Output.formatYAML(hostResponse);
+    //} else if(Output.isOutputFormatAllowed("nested")) {
+    //  content = Output.formatNESTED(hostResponse);
+    } else {
+      // when nothing is allowed, JSON is always allowed
+      content = Output.formatJSON(hostResponse);
+    }
+
+    const element = document.createElement(content.includes("\n") ? "div" : "span");
+    element.innerText = content;
+    return element;
   }
 
 
