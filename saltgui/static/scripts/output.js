@@ -22,7 +22,9 @@
 class Output {
 
   static isOutputFormatAllowed(requestedOutputFormat) {
-    let supportedOutputFormats = window.localStorage.getItem("output_format");
+    let supportedOutputFormats = null;
+    // window.localStorage is not defined during unit testing
+    if(window.localStorage) supportedOutputFormats = window.localStorage.getItem("output_format");
     if(supportedOutputFormats === "undefined") supportedOutputFormats = null;
     if(supportedOutputFormats === null) supportedOutputFormats = "doc,highstate,json";
     return supportedOutputFormats.includes(requestedOutputFormat);
