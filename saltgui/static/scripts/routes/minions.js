@@ -27,17 +27,17 @@ class MinionsRoute extends PageRoute {
     // store for later use
 
     const templates = data.return[0].data.return.saltgui_templates;
-    localStorage.setItem("templates", JSON.stringify(templates));
+    window.localStorage.setItem("templates", JSON.stringify(templates));
 
     const public_pillars = data.return[0].data.return.saltgui_public_pillars;
-    localStorage.setItem("public_pillars", JSON.stringify(public_pillars));
+    window.localStorage.setItem("public_pillars", JSON.stringify(public_pillars));
 
     let nodegroups = data.return[0].data.return.nodegroups;
     if(!nodegroups) nodegroups = {};
-    localStorage.setItem("nodegroups", JSON.stringify(nodegroups));
+    window.localStorage.setItem("nodegroups", JSON.stringify(nodegroups));
 
     const output_format = data.return[0].data.return.saltgui_output_format;
-    localStorage.setItem("output_format", JSON.stringify(output_format));
+    window.localStorage.setItem("output_format", JSON.stringify(output_format));
   }
 
   _updateKeys(data) {

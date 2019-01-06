@@ -29,7 +29,7 @@ class API {
     };
 
     // store it as the default login method
-    localStorage.setItem("eauth", eauth);
+    window.localStorage.setItem("eauth", eauth);
 
     return this.apiRequest("POST", "/login", params)
       .then(data => {

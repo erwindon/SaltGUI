@@ -22,7 +22,7 @@
 class Output {
 
   static isOutputFormatAllowed(requestedOutputFormat) {
-    let supportedOutputFormats = localStorage.getItem("output_format");
+    let supportedOutputFormats = window.localStorage.getItem("output_format");
     if(supportedOutputFormats === "undefined") supportedOutputFormats = null;
     if(supportedOutputFormats === null) supportedOutputFormats = "doc,highstate,json";
     return supportedOutputFormats.includes(requestedOutputFormat);

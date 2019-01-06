@@ -53,7 +53,7 @@ class PillarsMinionRoute extends PageRoute {
     if(!pillars) return;
 
     // collect the public pillars and compile their regexps
-    let publicPillarsText = localStorage.getItem("public_pillars");
+    let publicPillarsText = window.localStorage.getItem("public_pillars");
     if(!publicPillarsText || publicPillarsText === "undefined") publicPillarsText = "[]";
     let public_pillars = JSON.parse(publicPillarsText);
     if(!Array.isArray(public_pillars)) public_pillars = [ ];

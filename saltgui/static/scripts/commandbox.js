@@ -19,7 +19,7 @@ class CommandBox {
 
     const title = document.querySelector(".run-command #templatemenuhere");
     const menu = new DropDownMenu(title);
-    let templatesText = localStorage.getItem("templates");
+    let templatesText = window.localStorage.getItem("templates");
     if(!templatesText || templatesText === "undefined") templatesText = "{}";
     const templates = JSON.parse(templatesText);
     const keys = Object.keys(templates).sort();
