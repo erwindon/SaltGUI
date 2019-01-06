@@ -371,7 +371,7 @@ class Output {
     if(command !== "state.apply" && command !== "state.highstate") return false;
     for(const key of Object.keys(response)) {
       const components = key.split("_|-");
-      if(components.length != 4) return false;
+      if(components.length !== 4) return false;
     }
     return true;
   }
@@ -393,7 +393,7 @@ class Output {
     let anyFailures = false;
     let anySkips = false;
     for(const [key, task] of Object.entries(hostResponse)) {
-      if(task.result == null) anySkips = true;
+      if(task.result === null) anySkips = true;
       else if(!task.result) anyFailures = true;
     }
 
@@ -435,7 +435,7 @@ class Output {
       const taskDiv = document.createElement("div");
 
       const span = document.createElement("span");
-      if(task.result == null) {
+      if(task.result === null) {
         // 2714 = HEAVY CHECK MARK
         span.style.color = "yellow";
         span.innerText = "\u2714";
@@ -585,14 +585,14 @@ class Output {
     if(skipped) line += ", " + skipped + " skipped";
     if(failed) line += ", " + failed + " failed";
     const total = succeeded + skipped + failed;
-    if(total != succeeded && total != skipped && total != failed) {
+    if(total !== succeeded && total !== skipped && total !== failed) {
       line += ", " + (succeeded + skipped + failed) + " total";
     }
 
     // note that the number of changes may be higher or lower
     // than the number of tasks. tasks may contribute multiple
     // changes, or tasks may have no changes.
-    if(changes == 1) line += ", " + changes + " change";
+    if(changes === 1) line += ", " + changes + " change";
     else if(changes) line += ", " + changes + " changes";
 
     // multiple durations and significant?
@@ -715,11 +715,11 @@ class Output {
         txt = cntResponses + " responses";
       }
 
-      if(cntMinions != cntResponses) {
+      if(cntMinions !== cntResponses) {
         txt = txt + ", " + (cntMinions - cntResponses) + " no response";
       }
 
-      if(cntResponses > 0 && cntMinions != cntResponses) {
+      if(cntResponses > 0 && cntMinions !== cntResponses) {
         txt = txt + ", " + cntMinions + " total";
       }
 

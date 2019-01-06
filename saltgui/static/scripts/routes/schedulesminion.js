@@ -69,7 +69,7 @@ class SchedulesMinionRoute extends PageRoute {
         delete schedule.enabled;
       if("jid_include" in schedule && schedule.jid_include)
         delete schedule.jid_include;
-      if("maxrunning" in schedule && schedule.maxrunning == 1)
+      if("maxrunning" in schedule && schedule.maxrunning === 1)
         delete schedule.maxrunning;
 
       const tr = document.createElement('tr');

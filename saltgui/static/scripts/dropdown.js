@@ -8,7 +8,7 @@ class DropDownMenu {
     this.verifyAll = this.verifyAll.bind(this);
 
     // allow reduced code on the caller side
-    if(element.tagName == "TR") {
+    if(element.tagName === "TR") {
       const nelement = Route._createTd("", "");
       element.appendChild(nelement);
       element = nelement;
@@ -54,7 +54,7 @@ class DropDownMenu {
       }
     }
     // hide the menu when it has no visible menu-items
-    const display_visible = (this.menuDropdown.tagName == "TD") ? "table-cell" : "inline-block";
+    const display_visible = (this.menuDropdown.tagName === "TD") ? "table-cell" : "inline-block";
     const display_invisible = "none";
     this.menuDropdown.style.display = (visibleCount > 0) ? display_visible : display_invisible;
   }

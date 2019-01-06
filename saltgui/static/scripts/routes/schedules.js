@@ -69,12 +69,12 @@ class SchedulesRoute extends PageRoute {
     minion = SchedulesRoute._fixMinion(minion);
 
     const cnt = Object.keys(minion.schedules).length;
-    let scheduleinfo = cnt + " schedule" + (cnt == 1 ? "" : "s");
+    let scheduleinfo = cnt + " schedule" + (cnt === 1 ? "" : "s");
     if(!minion.enabled)
       scheduleinfo += " (disabled)";
 
     let element = document.getElementById(hostname);
-    if(element == null) {
+    if(element === null) {
       // offline minion not found on screen...
       // construct a basic element that can be updated here
       element = document.createElement('tr');

@@ -15,7 +15,7 @@ class TargetType {
   // so this conclusion must be re-evaluated each time
   static _targetTypeNodeGroupPrepare(menuitem) {
     const nodegroups = window.localStorage.getItem("nodegroups");
-    if(nodegroups && nodegroups != "{}") {
+    if(nodegroups && nodegroups !== "{}") {
       menuitem.innerText = "Nodegroup";
       menuitem.style.display = "block";
     } else {

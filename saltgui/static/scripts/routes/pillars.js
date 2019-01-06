@@ -53,9 +53,9 @@ class PillarsRoute extends PageRoute {
 
     const cnt = Object.keys(minion).length;
     let pillarInfoText;
-    if(cnt == 0) {
+    if(cnt === 0) {
       pillarInfoText = "No pillars";
-    } else if(cnt == 1) {
+    } else if(cnt === 1) {
       pillarInfoText = cnt + " pillar";
     } else {
       pillarInfoText = cnt + " pillars";
