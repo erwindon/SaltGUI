@@ -36,8 +36,8 @@ class MinionsRoute extends PageRoute {
     if(!nodegroups) nodegroups = {};
     window.localStorage.setItem("nodegroups", JSON.stringify(nodegroups));
 
-    const output_format = data.return[0].data.return.saltgui_output_format;
-    window.localStorage.setItem("output_format", JSON.stringify(output_format));
+    const output_formats = data.return[0].data.return.saltgui_output_formats;
+    window.localStorage.setItem("output_formats", JSON.stringify(output_formats));
   }
 
   _updateKeys(data) {
@@ -62,9 +62,9 @@ class MinionsRoute extends PageRoute {
 
   _updateOfflineMinion(container, hostname) {
     super._updateOfflineMinion(container, hostname);
-    
+
     const element = document.getElementById(hostname);
-    
+
     // force same columns on all rows
     element.appendChild(Route._createTd("saltversion", ""));
     element.appendChild(Route._createTd("os", ""));

@@ -82,7 +82,7 @@ class PillarsMinionRoute extends PageRoute {
       // initially use the hidden view
       pillar.appendChild(pillar_hidden);
 
-      const value_shown = Output.formatJSON(pillars[k]);
+      const value_shown = Output.formatObject(pillars[k]);
       const pillar_shown = Route._createTd("pillar_shown", value_shown);
       // initially hide the normal view
       pillar_shown.style.display = "none";

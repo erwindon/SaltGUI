@@ -31,18 +31,18 @@ describe('Unittests for output.js', function() {
     outputData = [1];
     result = Output.formatJSON(outputData);
     assert.equal(result, "[\n" +
-      "  1\n" +
+      "    1\n" +
       "]");
 
     outputData = [1,2,3,4,5];
     result = Output.formatJSON(outputData);
     assert.equal(result,
       "[\n" +
-      "  1,\n" +
-      "  2,\n" +
-      "  3,\n" +
-      "  4,\n" +
-      "  5\n" +
+      "    1,\n" +
+      "    2,\n" +
+      "    3,\n" +
+      "    4,\n" +
+      "    5\n" +
       "]");
 
     outputData = {};
@@ -55,9 +55,9 @@ describe('Unittests for output.js', function() {
     // ordered output
     assert.equal(result,
       "{\n" +
-      "  \"a\": 11,\n" +
-      "  \"b\": 33,\n" +
-      "  \"c\": 22\n" +
+      "    \"a\": 11,\n" +
+      "    \"b\": 33,\n" +
+      "    \"c\": 22\n" +
       "}");
 
     // a more complex object, unordered input
@@ -66,15 +66,147 @@ describe('Unittests for output.js', function() {
     // ordered output
     assert.equal(result, 
       "{\n" +
-      "  \"ip6_interfaces\": {\n" +
-      "    \"eth0\": [\n" +
-      "      \"fe80::20d:3aff:fe38:576b\"\n" +
-      "    ],\n" +
-      "    \"lo\": [\n" +
-      "      \"::1\"\n" +
-      "    ]\n" +
-      "  }\n" +
+      "    \"ip6_interfaces\": {\n" +
+      "        \"eth0\": [\n" +
+      "            \"fe80::20d:3aff:fe38:576b\"\n" +
+      "        ],\n" +
+      "        \"lo\": [\n" +
+      "            \"::1\"\n" +
+      "        ]\n" +
+      "    }\n" +
       "}");
+
+    done();
+  });
+
+  it('test formatYAML', done => {
+
+    let outputData, result;
+
+    outputData = null;
+    result = Output.formatYAML(outputData);
+    assert.equal(result, "null");
+
+    outputData = undefined;
+    result = Output.formatYAML(outputData);
+    assert.equal(result, "undefined");
+
+    outputData = 123;
+    result = Output.formatYAML(outputData);
+    assert.equal(result, "123");
+
+    outputData = "txt";
+    result = Output.formatYAML(outputData);
+    assert.equal(result, "txt");
+
+    outputData = [];
+    result = Output.formatYAML(outputData);
+    assert.equal(result, "[ ]");
+
+    outputData = [1];
+    result = Output.formatYAML(outputData);
+    assert.equal(result, "- 1");
+
+    outputData = [1,2,3,4,5];
+    result = Output.formatYAML(outputData);
+    assert.equal(result,
+      "- 1\n" +
+      "- 2\n" +
+      "- 3\n" +
+      "- 4\n" +
+      "- 5");
+
+    outputData = {};
+    result = Output.formatYAML(outputData);
+    assert.equal(result, "{ }");
+
+    // unordered input
+    outputData = {"a":11,"c":22,"b":33};
+    result = Output.formatYAML(outputData);
+    // ordered output
+    assert.equal(result,
+      "a: 11\n" +
+      "b: 33\n" +
+      "c: 22");
+
+    // a more complex object, unordered input
+    outputData = {"ip6_interfaces":{"lo":["::1"],"eth0":["fe80::20d:3aff:fe38:576b"]}};
+    result = Output.formatYAML(outputData);
+    // ordered output
+    assert.equal(result, 
+      "ip6_interfaces:\n" +
+      "    eth0:\n" +
+      "        - fe80::20d:3aff:fe38:576b\n" +
+      "    lo:\n" +
+      "        - ::1");
+
+    done();
+  });
+
+  it('test formatNESTED', done => {
+
+    let outputData, result;
+
+    outputData = null;
+    result = Output.formatNESTED(outputData);
+    assert.equal(result, "None");
+
+    outputData = undefined;
+    result = Output.formatNESTED(outputData);
+    assert.equal(result, "undefined");
+
+    outputData = 123;
+    result = Output.formatNESTED(outputData);
+    assert.equal(result, "123");
+
+    outputData = "txt";
+    result = Output.formatNESTED(outputData);
+    assert.equal(result, "txt");
+
+    outputData = [];
+    result = Output.formatNESTED(outputData);
+    assert.equal(result, "[ ]");
+
+    outputData = [1];
+    result = Output.formatNESTED(outputData);
+    assert.equal(result, "- 1");
+
+    outputData = [1,2,3,4,5];
+    result = Output.formatNESTED(outputData);
+    assert.equal(result,
+      "- 1\n" +
+      "- 2\n" +
+      "- 3\n" +
+      "- 4\n" +
+      "- 5");
+
+    outputData = {};
+    result = Output.formatNESTED(outputData);
+    assert.equal(result, "{ }");
+
+    // unordered input
+    outputData = {"a":11,"c":22,"b":33};
+    result = Output.formatNESTED(outputData);
+    // ordered output
+    assert.equal(result,
+      "a:\n" +
+      "    11\n" +
+      "b:\n" +
+      "    33\n" +
+      "c:\n" +
+      "    22");
+
+    // a more complex object, unordered input
+    outputData = {"ip6_interfaces":{"lo":["::1"],"eth0":["fe80::20d:3aff:fe38:576b"]}};
+    result = Output.formatNESTED(outputData);
+    // ordered output
+    assert.equal(result, 
+      "ip6_interfaces:\n" +
+      "    ----------\n" +
+      "    eth0:\n" +
+      "        - fe80::20d:3aff:fe38:576b\n" +
+      "    lo:\n" +
+      "        - ::1");
 
     done();
   });
