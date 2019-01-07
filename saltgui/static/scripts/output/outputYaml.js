@@ -69,7 +69,6 @@ class OutputYaml {
             out += OutputYaml.formatYAML(item, indentLevel + indentStep, "x");
           }
         } else {
-//return "{{{" + JSON.stringify(indentLevel) + "}}}";
           out += OutputYaml.formatYAML(item, indentLevel, "- ");
         }
         separator = "\n";

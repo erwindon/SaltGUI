@@ -104,7 +104,7 @@ class Output {
   // just format the returned objects
   // note: do not return a text-node
   static getNormalOutput(hostResponse) {
-    let content = Output.formatObject(hostResponse);
+    const content = Output.formatObject(hostResponse);
     const element = document.createElement(content.includes("\n") ? "div" : "span");
     element.innerText = content;
     return element;
