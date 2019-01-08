@@ -192,7 +192,7 @@ class OutputHighstate {
           // it still counts for the grand total thought
           taskDiv.append(document.createElement("br"));
           taskDiv.append(document.createTextNode(
-            indent + "Duration " + Output.getDurationClause(millis)));
+            indent + "Duration " + OutputHighstate.getDurationClause(millis)));
         }
       }
 
@@ -239,7 +239,7 @@ class OutputHighstate {
 
     // multiple durations and significant?
     if(total > 1 && total_millis >= 10) {
-      line += ", " + Output.getDurationClause(total_millis);
+      line += ", " + OutputHighstate.getDurationClause(total_millis);
     }
 
     if(line) {
