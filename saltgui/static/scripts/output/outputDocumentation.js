@@ -21,9 +21,10 @@ class OutputDocumentation {
   // all minions must return strings
   // and when its key matches the requested documentation
   // empty values are allowed due to errors in the documentation
-  static isDocumentationOutput(response, command) {
+  // 'output' is needed like this to prevent an error during testing
+  static isDocumentationOutput(output, response, command) {
 
-    if(!Output.isOutputFormatAllowed("doc")) return false;
+    if(!output.isOutputFormatAllowed("doc")) return false;
 
     let result = false;
 

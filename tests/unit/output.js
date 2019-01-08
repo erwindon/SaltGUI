@@ -221,42 +221,42 @@ describe('Unittests for output.js', function() {
 
     // ok, normal documentation case
     outputData = { "host1": {"keyword": "explanation"} };
-    result = OutputDocumentation.isDocumentationOutput(outputData, "keyword");
+    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
     assert.isTrue(result);
 
     // wrong, does not match requested documentation
     outputData = { "host1": {"keyword": "explanation"} };
-    result = OutputDocumentation.isDocumentationOutput(outputData, "another");
+    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "another");
     assert.isFalse(result);
 
     // wrong, no resulting documentation
     outputData = { "host1": {"keyword": null} };
-    result = OutputDocumentation.isDocumentationOutput(outputData, "keyword");
+    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
     assert.isFalse(result);
 
     // wrong, value is not text
     outputData = { "host1": {"keyword": 123} };
-    result = OutputDocumentation.isDocumentationOutput(outputData, "keyword");
+    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
     assert.isFalse(result);
 
     // wrong, returned structure is not a dict
     outputData = { "host1": ["something"] };
-    result = OutputDocumentation.isDocumentationOutput(outputData, "keyword");
+    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
     assert.isFalse(result);
 
     // wrong, returned structure is not a dict
     outputData = { "host1": 123 };
-    result = OutputDocumentation.isDocumentationOutput(outputData, "keyword");
+    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
     assert.isFalse(result);
 
     // wrong, returned structure is not a dict
     outputData = { "host1": "hello" };
-    result = OutputDocumentation.isDocumentationOutput(outputData, "keyword");
+    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
     assert.isFalse(result);
 
     // first host ignored, second host ok
     outputData = { "host1": null, "host2": {"keyword": "explanation"} };
-    result = OutputDocumentation.isDocumentationOutput(outputData, "keyword");
+    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
     assert.isTrue(result);
 
     done();
