@@ -1,95 +1,53 @@
 class OutputNested {
 
-  // format an object as NESTED
-  // returns NULL when it is not a simple object
-  // i.e. no multi-line objects, no indentation here
-  static formatSimpleNESTED(value) {
+  // heavily inspired by the implementation for NESTED output
+  // as originally implemented in salt/output/nested.py from Salt
 
-    if(value === null) {
-      return "None";
-    }
-
-    if(value === undefined) {
-      return "undefined";
-    }
-
-    if(typeof value === "boolean") {
-      return value ? "True" : "False";
-    }
-
-    if(typeof value === "string") {
-      let needQuotes = false;
-      if(value.match(/^$/)) needQuotes = true;
-      if(!value.match(/^[-a-z0-9_()@./:+ ]+$/i)) needQuotes = true;
-      if(value.match(/^ /)) needQuotes = true;
-      if(value.match(/ $/)) needQuotes = true;
-      if(!needQuotes) return value;
-      return "'" + value + "'";
-    }
-
-    if(typeof value !== "object") {
-      return "" + value;
-    }
-
-    if(Array.isArray(value) && value.length === 0) {
-      // show the brackets for an empty array a bit wider apart
-      return "[ ]";
-    }
-
-    if(!Array.isArray(value) && Object.keys(value).length === 0) {
-      // show the brackets for an empty object a bit wider apart
-      return "{ }";
-    }
-
-    return null;
+  static ustring(indent, msg, prefix='', suffix='') {
+    return " ".repeat(indent) + prefix + msg + suffix;
   }
 
-  // format an object as NESTED
-  // based on an initial indentation and an indentation increment
-  static formatNESTED(value, indentLevel=0, prefix="") {
-
-    // indent each level with 4 spaces
-    const indentStep = 4;
-
-    const str = OutputNested.formatSimpleNESTED(value);
-    if(str !== null) {
-      return prefix + str;
-    }
-
-    if(Array.isArray(value)) {
-      let out = "";
-      let cnt = 0;
-      for(const item of value) {
-        if(cnt > 0) out += "\n" + " ".repeat(indentLevel);
-        if(typeof item === "object") {
-          out += "|_\n" + " ".repeat(indentLevel);
-          if(Array.isArray(item)) {
-            out += "  " + OutputNested.formatNESTED(item, indentLevel + 2, "- ");
-          } else {
-            out += "  " + OutputNested.formatNESTED(item, indentLevel + 2);
-          }
+  static display(ret, indent, prefix, out) {
+    if(ret === null || typeof ret === "boolean" || typeof ret === "number") {
+      out.push(OutputNested.ustring(indent, ret, prefix));
+    } else if(typeof ret === "string") {
+      let first_line = true;
+      ret = ret.replace(/\n$/, "");
+      for(const line of ret.split("\n")) {
+        let line_prefix = prefix;
+        if(!first_line)
+          line_prefix = ".".repeat(prefix.length);
+        out.push(OutputNested.ustring(indent, line, line_prefix));
+        first_line = false;
+      }
+    } else if(typeof ret === "object" && Array.isArray(ret)) {
+      for(const ind of ret) {
+        if(typeof ind === "object" /* including array */ ) {
+          out.push(OutputNested.ustring(indent, '|_'));
+          let prefix;
+          if(typeof ind === "object" && !Array.isArray(ind))
+            prefix = '';
+          else
+            prefix ='- ';
+          OutputNested.display(ind, indent + 2, prefix, out);
         } else {
-          out += OutputNested.formatNESTED(item, indentLevel + 2, "- ");
+          OutputNested.display(ind, indent, '- ', out);
         }
-        cnt = cnt + 1;
       }
-      return out;
-    }
-
-    // regular object
-    let out = "";
-    let cnt = 0;
-    if(indentLevel) out += " ".repeat(indentLevel - indentStep) + "----------\n" + " ".repeat(indentLevel);
-    for(const key of Object.keys(value).sort()) {
-      const item = value[key];
-      if(cnt > 0) out += "\n" + " ".repeat(indentLevel);
-      out += prefix + key + ":";
-      if(item !== null) {
-        out += "\n" + " ".repeat(indentLevel + indentStep) + OutputNested.formatNESTED(item, indentLevel + indentStep, "");
+    } else if(typeof ret === "object") {
+      if(indent) out.push(OutputNested.ustring(indent, '----------'));
+      for(const key of Object.keys(ret).sort()) {
+        const val = ret[key];
+        out.push(OutputNested.ustring(indent, key, prefix, ':'));
+        OutputNested.display(val, indent + 4, '', out);
       }
-      cnt += 1;
     }
     return out;
+  }
+
+  static formatNESTED(value, indentLevel=0) {
+    const lines = OutputNested.display(value, 0, '', []);
+    return lines.join('\n');
   }
 
 }
