@@ -16,41 +16,36 @@ header .menu-dropdown-content {
 /* Dropdown Content (Hidden by Default) */
 .run-command-button .menu-dropdown-content {
   display: none;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.5);
   position: absolute;
   max-height: 210px;
   overflow-y: auto;
   overflow-x: visible;
-  background-color: #e0e0e0;
-  border: 10px solid #e0e0e0;
+  background: #fff;
+  box-shadow: 0 3px 10px -2px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   z-index: 5;
   cursor: pointer;
 }
 
 /* Links inside the menu-dropdown */
 .run-command-button .menu-dropdown-content div {
-  display: inline-block;
+  display: block;
   float: left;
   clear: both;
-  margin: 3px;
-  padding: 5px 20px 5px 20px;
-
-  /* correct width for margin-left/right,padding-left/right */
-  width: calc(100% - 20px - 20px - 3px - 3px);
+  width: 100%;
+  padding: 15px 30px 15px 30px;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 /* Change color of menu-dropdown links on hover */
 .run-command-button .menu-dropdown-content div:hover {
-  background-color: #efefef;
+  background: rgba(0, 0, 0, 0.15);
   cursor: pointer;
 }
 
 /* Show the menu-dropdown menu on hover */
 .run-command-button:hover .menu-dropdown-content {
   display: block;
-}
-
-/* Change the background color of the menu-dropdown button when the menu-dropdown content is shown */
-.run-command-button:hover .menu-dropdown {
-  background-color: #efefef;
 }

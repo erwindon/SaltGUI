@@ -59,8 +59,8 @@ class KeysRoute extends PageRoute {
     if(hostnames_rejected.length === 0)
       summary += ", no rejected keys";
     if(summary) {
-      const tn = document.createTextNode(summary.replace(/, n/, "N"));
-      this.getPageElement().querySelector(".minion-list").appendChild(tn);
+      const div = Route._createDiv("msg", summary.replace(/, n/, "N"));
+      this.getPageElement().querySelector(".minion-list").appendChild(div);
     }
 
     this.keysLoaded = true;

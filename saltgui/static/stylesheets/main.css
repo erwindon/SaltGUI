@@ -1,3 +1,13 @@
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -9,17 +19,20 @@ header {
   border-top: 2px solid #4caf50;
   background-color: white;
   margin-top: 0;
-  padding: 12px 24px 14px 24px;
-  margin-bottom: 5px;
+  padding: 12px 24px 12px 24px;
 }
 
 .logo {
   cursor: pointer;
+  color: #4caf50;
+  font-size: 30px;
+  font-weight: lighter;
 }
 
 h1 {
+  color: #4caf50;
   font-weight: lighter;
-  font-size: 30px;
+  font-size: 20px;
   margin: 0;
   display: inline-block;
 }
@@ -29,6 +42,10 @@ h1 {
   padding: 20px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   border-radius: 1px;
+}
+
+.msg {
+  color: #505050;
 }
 
 .panel:first-of-type {
@@ -46,7 +63,7 @@ h1 {
 .fab {
   background-color: #4caf50;
   padding: 5px 18px 17px 14px;
-  display: inline-block;
+  display: block;
   font-weight: bold;
   font-size: 18px;
   border-radius: 50%;
@@ -54,6 +71,7 @@ h1 {
   transform: scale(0.8) translate(23px, -2px);
   cursor: pointer;
   float: right;
+  margin-top: -4px;
 }
 
 .fab:hover {
@@ -61,7 +79,7 @@ h1 {
 }
 
 .nearlyvisiblebutton {
-  display: inline-block;
+  display: block;
   float: right;
   opacity: 0.3;
   font-size: 25px;
@@ -107,7 +125,7 @@ h1 {
 
 @media (max-width: 800px) {
   #mainmenumini {
-    display: inline-block;
+    display: block;
     float: right;
   }
 }
