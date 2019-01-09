@@ -8,7 +8,11 @@ class OutputNested {
   }
 
   static display(ret, indent, prefix, out) {
-    if(ret === null || typeof ret === "boolean" || typeof ret === "number") {
+    if(ret === null) {
+      out.push(OutputNested.ustring(indent, "None", prefix));
+    } else if(ret === undefined) {
+      out.push(OutputNested.ustring(indent, "undefined", prefix));
+    } else if(typeof ret === "boolean" || typeof ret === "number") {
       out.push(OutputNested.ustring(indent, ret, prefix));
     } else if(typeof ret === "string") {
       let first_line = true;

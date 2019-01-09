@@ -169,7 +169,7 @@ describe('Unittests for output.js', function() {
 
     outputData = [];
     result = OutputNested.formatNESTED(outputData);
-    assert.equal(result, "[ ]");
+    assert.equal(result, "");
 
     outputData = [1];
     result = OutputNested.formatNESTED(outputData);
@@ -186,7 +186,7 @@ describe('Unittests for output.js', function() {
 
     outputData = {};
     result = OutputNested.formatNESTED(outputData);
-    assert.equal(result, "{ }");
+    assert.equal(result, "");
 
     // unordered input
     outputData = {"a":11,"c":22,"b":33};
