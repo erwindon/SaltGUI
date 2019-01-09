@@ -26,7 +26,7 @@ class Output {
     // window.localStorage is not defined during unit testing
     if(window.localStorage) supportedOutputFormats = window.localStorage.getItem("output_formats");
     if(supportedOutputFormats === "undefined") supportedOutputFormats = null;
-    if(supportedOutputFormats === null) supportedOutputFormats = "doc,highstate,json";
+    if(supportedOutputFormats === null) supportedOutputFormats = "doc,saltguihighstate,json";
     return supportedOutputFormats.includes(requestedOutputFormat);
   }
 
@@ -293,7 +293,15 @@ class Output {
       // it might be highstate output
       const commandCmd = command.trim().replace(/ .*/, "");
       const isHighStateOutput = OutputHighstate.isHighStateOutput(commandCmd, hostResponse);
-      if(!fndRepresentation && isHighStateOutput) {
+      // enhanced highstate display
+      if(!fndRepresentation && isHighStateOutput && Output.isOutputFormatAllowed("saltguihighstate")) {
+        hostLabel = OutputSaltGuiHighstate.getHighStateLabel(hostname, hostResponse);
+        hostOutput = OutputSaltGuiHighstate.getHighStateOutput(hostResponse);
+        hostMultiLine = true;
+        fndRepresentation = true;
+      }
+      // regular highstate display
+      if(!fndRepresentation && isHighStateOutput && Output.isOutputFormatAllowed("highstate")) {
         hostLabel = OutputHighstate.getHighStateLabel(hostname, hostResponse);
         hostOutput = OutputHighstate.getHighStateOutput(hostResponse);
         hostMultiLine = true;
