@@ -33,7 +33,7 @@ class DropDownMenu {
     default:
       // 2261 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
       // assume it will be a command menu
-      this.menuButton = Route._createDiv("menu-dropdown", "\u2261");
+      this.menuButton = Route._createHtmlDiv("menu-dropdown", "<span>\u2261</span>");
       // hide the menu until it receives menu-items
       this.verifyAll();
     }

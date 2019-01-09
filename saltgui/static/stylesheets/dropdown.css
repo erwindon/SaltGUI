@@ -54,3 +54,20 @@ header .menu-dropdown-content {
 .run-command-button:hover .menu-dropdown {
   background-color: #efefef;
 }
+
+/* Allow to change humburger with cross mark */
+div.panel .run-command-button div.menu-dropdown span,
+td .run-command-button div.menu-dropdown span {
+  position: relative;
+  content: '≡'
+}
+
+div.panel .run-command-button:hover div.menu-dropdown span,
+td .run-command-button:hover div.menu-dropdown span {
+  display: none;
+}
+
+div.panel .run-command-button:hover div.menu-dropdown:after,
+td .run-command-button:hover div.menu-dropdown:after {
+  content: 'x';
+}

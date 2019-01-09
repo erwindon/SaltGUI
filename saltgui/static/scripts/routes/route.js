@@ -39,4 +39,11 @@ class Route {
     return div;
   }
 
+  static _createHtmlDiv(className, htmlContent) {
+    const div = document.createElement("div");
+    if(className) div.className = className;
+    div.innerHTML = htmlContent;
+    return div;
+  }
+
 }
