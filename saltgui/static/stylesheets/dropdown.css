@@ -42,10 +42,17 @@ header .menu-dropdown-content {
 /* Change color of menu-dropdown links on hover */
 .run-command-button .menu-dropdown-content div:hover {
   background: rgba(0, 0, 0, 0.15);
+  color: #4caf50;
   cursor: pointer;
 }
 
 /* Show the menu-dropdown menu on hover */
 .run-command-button:hover .menu-dropdown-content {
   display: block;
+}
+
+/* Change the background color of the menu-dropdown button when the menu-dropdown content is shown */
+.run-command-button:hover .menu-dropdown {
+  background-color: #efefef;
+  color: #4caf50;
 }

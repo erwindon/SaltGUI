@@ -55,6 +55,7 @@ h1 {
 
 .panel h1 {
   font-size: 20px;
+  font-weight: normal;
 
   /* separate title from table */
   margin-bottom: 10px;
