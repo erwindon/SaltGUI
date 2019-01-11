@@ -136,7 +136,14 @@ class OutputSaltGuiHighstate {
                 taskDiv.append(document.createElement("br"));
                 taskDiv.append(document.createTextNode("      " + line));
               }
-            } else if(typeof change !== "object" || Array.isArray(task.change)) {
+            } else if(Array.isArray(change)) {
+              for(const idx in change) {
+                const task = change[idx];
+                taskDiv.append(document.createElement("br"));
+                taskDiv.append(document.createTextNode(
+                  indent + key + "[" + idx + "]: " + JSON.stringify(task)));
+              }
+            } else if(typeof change !== "object") {
               // show all other non-objects in a simple way
               taskDiv.append(document.createElement("br"));
               taskDiv.append(document.createTextNode(
