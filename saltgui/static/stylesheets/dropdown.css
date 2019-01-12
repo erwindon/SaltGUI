@@ -20,7 +20,7 @@ header .menu-dropdown-content {
   overflow-y: auto;
   overflow-x: visible;
   background: #fff;
-  box-shadow: 0 3px 10px -2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 10px -2px rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(0, 0, 0, 0.1);
   z-index: 5;
   cursor: pointer;
