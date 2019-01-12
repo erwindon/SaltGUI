@@ -23,3 +23,14 @@ rest_cherrypy:
     app: /saltgui/index.html
     static: /saltgui/static
     static_path: /static
+
+saltgui_templates:
+    template1:
+        description: First template
+        target: "*"
+        command: test.fib num=10
+    template2:
+        description: Second template
+        targettype: glob
+        target: *ubuntu*
+        command: test.version
