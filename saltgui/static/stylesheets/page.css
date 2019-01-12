@@ -76,11 +76,6 @@ table tr td:last-child {
   width: 100%;
 }
 
-table tr td.subtitle {
-  padding-top: 30px;
-  font-size: 20px;
-}
-
 table tr:last-of-type td {
   border-bottom: none;
 }
