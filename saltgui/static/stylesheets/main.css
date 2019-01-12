@@ -101,6 +101,10 @@ h1 {
   .mainmenubar {
     display: none;
   }
+
+  .panel:first-of-type {
+    margin-right: 0;
+  }
 }
 
 .menu_item {
