@@ -17,6 +17,7 @@ header .menu-dropdown-content {
 .run-command-button .menu-dropdown-content {
   display: none;
   position: absolute;
+  max-height: 285px;
   overflow-y: auto;
   overflow-x: visible;
   background: #fff;
