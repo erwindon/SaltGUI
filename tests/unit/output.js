@@ -139,10 +139,10 @@ describe('Unittests for output.js', function() {
     // ordered output
     assert.equal(result, 
       "ip6_interfaces:\n" +
-      "    eth0:\n" +
-      "        - fe80::20d:3aff:fe38:576b\n" +
-      "    lo:\n" +
-      "        - ::1");
+      "  eth0:\n" +
+      "  - fe80::20d:3aff:fe38:576b\n" +
+      "  lo:\n" +
+      "  - ::1");
 
     done();
   });
