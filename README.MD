@@ -98,7 +98,7 @@ saltgui_public_pillars:
 ```
 
 ## Development environment with Docker
-To make life a bit easier for testing SaltGUI or setting up a local development environment you can use the provided docker-compose setup in this repository to run a saltmaster with two minions, including SaltGUI:
+To make life a bit easier for testing SaltGUI or setting up a local development environment you can use the provided docker-compose setup in this repository to run a saltmaster with three minions, including SaltGUI:
 ```
 cd docker
 docker-compose up
@@ -137,6 +137,17 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 
 ## Changelog
+
+## 1.8.0 (2018-01-13)
+- Improved testing support (erwindon/dawidmalina)
+- Allow most tables to be sorted (erwindon/dawidmalina)
+- Added support for non-secret pillars (erwindon/dawidmalina)
+- Removed sub-sections from keys page, unaccepted now sorts first (erwindon)
+- Fixed auto-copy (erwindon)
+- Fixed issues when ip-number when multiple available, reported by dawidmalina (erwindon)
+- Improved the general design (dawidmalina)
+- Added OS images with the OS names, suggested by dawidmalina (erwindon)
+- Added sync-grains and sync-pillars commands, suggested by dawidmalina (erwindon)
 
 ## 1.7.0 (2018-12-22)
 - Allow some editing on grains info (erwindon)
