@@ -144,7 +144,7 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 - Added support for non-secret pillars (erwindon/dawidmalina)
 - Removed sub-sections from keys page, unaccepted now sorts first (erwindon)
 - Fixed auto-copy (erwindon)
-- Fixed issues when ip-number when multiple available, reported by dawidmalina (erwindon)
+- Fixed issues with ip-number when multiple available, reported by dawidmalina (erwindon)
 - Improved the general design (dawidmalina)
 - Added OS images with the OS names, suggested by dawidmalina (erwindon)
 - Added sync-grains and sync-pillars commands, suggested by dawidmalina (erwindon)
