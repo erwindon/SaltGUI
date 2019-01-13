@@ -19,10 +19,23 @@ class OutputYaml {
 
     if(typeof value === "string") {
       let needQuotes = false;
+
+      // simple number with extra 0's at the start is still a string
+      if(value.match(/^0[0-9]+$/)) return value;
+
+      if(!isNaN(Number(value))) needQuotes = true;
+
       if(value.match(/^$/)) needQuotes = true;
-      if(!value.match(/^[-a-z0-9_()@./:+ ]+$/i)) needQuotes = true;
+
       if(value.match(/^ /)) needQuotes = true;
       if(value.match(/ $/)) needQuotes = true;
+
+      if(value.match(/^@/)) needQuotes = true;
+      if(value.match(/^`/)) needQuotes = true;
+      if(value.match(/^%/)) needQuotes = true;
+
+      if(!value.match(/^[-a-z0-9_()./:+ ]+$/i)) needQuotes = true;
+
       if(!needQuotes) return value;
       return "'" + value + "'";
     }
@@ -46,32 +59,24 @@ class OutputYaml {
 
   // format an object as YAML
   // based on an initial indentation and an indentation increment
-  static formatYAML(value, indentLevel=0, prefix="") {
+  static formatYAML(value, indentLevel=0) {
 
-    // indent each level with 4 spaces
-    const indentStep = 4;
+    // indent each level with this number of spaces
+    // note that list items are indented with 2 spaces
+    // independently of this setting to match the prefix "- "
+    const indentStep = 2;
 
     const str = OutputYaml.formatSimpleYAML(value);
     if(str !== null) {
-      return prefix + str;
+      return str;
     }
 
     if(Array.isArray(value)) {
       let out = "";
       let separator = "";
       for(const item of value) {
-        out += separator + " ".repeat(indentLevel);
-        if(typeof item === "object") {
-          out += " ".repeat(indentLevel) + "|_\n";
-          if(Array.isArray(item)) {
-            out += OutputYaml.formatYAML(item, indentLevel + indentStep, "y- ");
-          } else {
-            out += OutputYaml.formatYAML(item, indentLevel + indentStep, "x");
-          }
-        } else {
-          out += OutputYaml.formatYAML(item, indentLevel, "- ");
-        }
-        separator = "\n";
+        out += separator + "- " + OutputYaml.formatYAML(item, indentLevel + 2);
+        separator = "\n" + " ".repeat(indentLevel);
       }
       return out;
     }
@@ -81,19 +86,18 @@ class OutputYaml {
     let separator = "";
     for(const key of Object.keys(value).sort()) {
       const item = value[key];
-      out += separator;
-      if(typeof item !== "object") {
-        out += " ".repeat(indentLevel) + prefix +  key + ":";
-        if(item !== null) {
-          out += " " + OutputYaml.formatYAML(item, 0, "");
-        }
+      out += separator + key + ":";
+      const str = OutputYaml.formatSimpleYAML(item);
+      if(str !== null) {
+        out += " " + str;
+      } else if(Array.isArray(item)) {
+        out += "\n" + " ".repeat(indentLevel) + OutputYaml.formatYAML(item, indentLevel);
+      } else if(typeof item === "object") {
+        out += "\n" + " ".repeat(indentLevel + indentStep) + OutputYaml.formatYAML(item, indentLevel + indentStep);
       } else {
-        out += " ".repeat(indentLevel) + prefix +  key + ":\n";
-        if(item !== null && item !== "") {
-          out += OutputYaml.formatYAML(item, indentLevel + indentStep, "");
-        }
+        out += "x" + OutputYaml.formatYAML(item, indentLevel + indentStep);
       }
-      separator = "\n";
+      separator = "\n" + " ".repeat(indentLevel);
     }
     return out;
   }
