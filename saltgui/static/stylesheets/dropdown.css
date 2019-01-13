@@ -17,7 +17,7 @@ header .menu-dropdown-content {
 .run-command-button .menu-dropdown-content {
   display: none;
   position: absolute;
-  max-height: 285px;
+  max-height: 300px;
   overflow-y: auto;
   overflow-x: visible;
   background: #fff;
@@ -55,4 +55,8 @@ header .menu-dropdown-content {
 .run-command-button:hover .menu-dropdown {
   background-color: #efefef;
   color: #4caf50;
+}
+
+#mainmenumini .run-command-button .menu-dropdown-content {
+  max-height: none;
 }
