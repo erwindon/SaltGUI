@@ -52,6 +52,7 @@ pre .hostname {
 table {
   min-width: 100%;
   border-spacing: 5px;
+  border-collapse: collapse;
 }
 
 table tr th {
@@ -70,6 +71,22 @@ table tr td {
   padding-top: 5px;
   padding-bottom: 5px;
   white-space: nowrap;
+}
+
+.jobs th,
+.jobs td,
+.schedules th,
+.schedules td,
+.pillars th,
+.pillars td,
+.grains th,
+.grains td,
+.minions th,
+.minions td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  color: #505050;
 }
 
 table tr td:last-child {
@@ -161,6 +178,7 @@ table tr td:last-of-type {
   max-width: 18px;
   max-height: 18px;
   padding-right: 5px;
+  box-sizing: content-box;
 }
 
 #popup_runcommand {
@@ -183,9 +201,12 @@ table tr td:last-of-type {
   font-size: 11px;
 }
 
-.jobs td:hover {
-  background-color: whitesmoke;
+.jobs tr:hover {
+  background: rgba(0, 0, 0, 0.15);
   cursor: pointer;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .job-list {
