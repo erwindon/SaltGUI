@@ -4,7 +4,6 @@ class SchedulesMinionRoute extends PageRoute {
     super("^[\/]schedulesminion$", "Schedules", "#page_schedulesminion", "#button_schedules", router);
 
     this.keysLoaded = false;
-    this.jobsLoaded = false;
 
     this._showSchedules = this._showSchedules.bind(this);
 
@@ -20,9 +19,8 @@ class SchedulesMinionRoute extends PageRoute {
 
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
-      if(minions.keysLoaded && minions.jobsLoaded) resolve();
+      if(minions.keysLoaded) resolve();
       minions.router.api.getScheduleList(minion).then(minions._showSchedules);
-      minions.router.api.getJobs().then(minions._updateJobs);
     });
   }
 

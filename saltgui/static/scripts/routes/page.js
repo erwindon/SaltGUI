@@ -4,7 +4,6 @@ class PageRoute extends Route {
     super(path, name, page_selector, menuitem_selector, router);
 
     this._runCommand = this._runCommand.bind(this);
-    this._updateJobs = this._updateJobs.bind(this);
     this._updateMinions = this._updateMinions.bind(this);
 
     if(PageRoute.hasMenu === undefined) {
@@ -24,6 +23,9 @@ class PageRoute extends Route {
       });
       menu.addMenuItem("pillars", function(evt) {
         window.location.replace("/pillars");
+      });
+      menu.addMenuItem("jobs", function(evt) {
+        window.location.replace("/jobs");
       });
       menu.addMenuItem("logout", function(evt) {
         const api = new API();
@@ -212,127 +214,6 @@ class PageRoute extends Route {
     td.setAttribute("colspan", container.rows[0].cells.length);
     tr.appendChild(td);
     container.appendChild(tr);
-  }
-
-  _updateJobs(data) {
-    const jobContainer = this.getPageElement().querySelector(".jobs");
-    jobContainer.innerText = "";
-    const jobs = this._jobsToArray(data.return[0]);
-    this._sortJobs(jobs);
-
-    //Add seven most recent jobs
-    let shown = 0;
-    let i = 0;
-    while(shown < 7 && jobs[i] !== undefined) {
-      const job = jobs[i];
-      i = i + 1;
-      if(job.Function === "grains.append") continue;
-      if(job.Function === "grains.delkey") continue;
-      if(job.Function === "grains.delval") continue;
-      if(job.Function === "grains.items") continue;
-      if(job.Function === "grains.setval") continue;
-      if(job.Function === "pillar.items") continue;
-      if(job.Function === "pillar.obfuscate") continue;
-      if(job.Function === "runner.jobs.active") continue;
-      if(job.Function === "runner.jobs.list_job") continue;
-      if(job.Function === "runner.jobs.list_jobs") continue;
-      if(job.Function === "saltutil.find_job") continue;
-      if(job.Function === "saltutil.refresh_grains") continue;
-      if(job.Function === "saltutil.refresh_pillar") continue;
-      if(job.Function === "saltutil.running") continue;
-      if(job.Function === "schedule.delete") continue;
-      if(job.Function === "schedule.disable") continue;
-      if(job.Function === "schedule.disable_job") continue;
-      if(job.Function === "schedule.enable") continue;
-      if(job.Function === "schedule.enable_job") continue;
-      if(job.Function === "schedule.list") continue;
-      if(job.Function === "schedule.modify") continue;
-      if(job.Function === "schedule.run_job") continue;
-      if(job.Function === "sys.doc") continue;
-      if(job.Function === "wheel.config.values") continue;
-      if(job.Function === "wheel.key.accept") continue;
-      if(job.Function === "wheel.key.delete") continue;
-      if(job.Function === "wheel.key.list_all") continue;
-      if(job.Function === "wheel.key.reject") continue;
-
-      this._addJob(jobContainer, job);
-      shown = shown + 1;
-    }
-    this.jobsLoaded = true;
-    if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
-  }
-
-  _runningJobs(data) {
-    const jobs = data.return[0];
-    for(const k in jobs)
-    {
-      const job = jobs[k];
-
-      // start with same text as for _addJob
-      let targetText = window.makeTargetText(job["Target-type"], job.Target);
-
-      // then add the operational statistics
-      if(job.Running.length > 0)
-        targetText = targetText + ", " + job.Running.length + " running";
-      if(job.Returned.length > 0)
-        targetText = targetText + ", " + job.Returned.length + " returned";
-
-      const targetField = document.querySelector(".jobs #job" + k + " .target");
-      // the field may not (yet) be on the screen
-      if(targetField) targetField.innerText = targetText;
-    }
-  }
-
-  _addJob(container, job) {
-    const tr = document.createElement("tr");
-
-    const td = document.createElement("td");
-    tr.appendChild(td);
-
-    td.id = "job" + job.id;
-
-    const targetText = window.makeTargetText(job["Target-type"], job.Target);
-    td.appendChild(Route._createDiv("target", targetText));
-
-    const functionText = job.Function;
-    td.appendChild(Route._createDiv("function", functionText));
-
-    const startTimeText = job.StartTime;
-    td.appendChild(Route._createDiv("time", startTimeText));
-
-    container.appendChild(tr);
-
-    tr.addEventListener("click", this._createJobListener(job.id));
-  }
-
-  _createJobListener(id) {
-    const router = this.router;
-    return function() {
-      router.goTo("/job?id=" + encodeURIComponent(id));
-    };
-  }
-
-  _jobsToArray(jobs) {
-    const keys = Object.keys(jobs);
-    const newArray = [];
-
-    for(const key of keys) {
-      const job = jobs[key];
-      job.id = key;
-      newArray.push(job);
-    }
-
-    return newArray;
-  }
-
-  _sortJobs(jobs) {
-    jobs.sort(function(a, b){
-      // The id is already a integer value based on the date, let's use
-      // it to sort the jobs
-      if (a.id < b.id) return 1;
-      if (a.id > b.id) return -1;
-      return 0;
-    });
   }
 
   _copyAddress(evt) {

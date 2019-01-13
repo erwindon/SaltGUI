@@ -4,7 +4,6 @@ class PillarsMinionRoute extends PageRoute {
     super("^[\/]pillarsminion$", "Pillars", "#page_pillarsminion", "#button_pillars", router);
 
     this.keysLoaded = false;
-    this.jobsLoaded = false;
 
     this._showPillars = this._showPillars.bind(this);
 
@@ -20,9 +19,8 @@ class PillarsMinionRoute extends PageRoute {
 
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
-      if(minions.keysLoaded && minions.jobsLoaded) resolve();
+      if(minions.keysLoaded) resolve();
       minions.router.api.getPillarItems(minion).then(minions._showPillars);
-      minions.router.api.getJobs().then(minions._updateJobs);
     });
   }
 

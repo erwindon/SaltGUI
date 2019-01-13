@@ -3,7 +3,6 @@ class MinionsRoute extends PageRoute {
   constructor(router) {
     super("^[\/]$", "Minions", "#page_minions", "#button_minions", router);
     this.keysLoaded = false;
-    this.jobsLoaded = false;
 
     this._updateKeys = this._updateKeys.bind(this);
     this._runStateApply = this._runStateApply.bind(this);
@@ -13,11 +12,9 @@ class MinionsRoute extends PageRoute {
     const minions = this;
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
-      if(minions.keysLoaded && minions.jobsLoaded) resolve();
+      if(minions.keysLoaded) resolve();
       minions.router.api.getMinions().then(minions._updateMinions);
       minions.router.api.getKeys().then(minions._updateKeys);
-      minions.router.api.getJobs().then(minions._updateJobs);
-      minions.router.api.getJobsActive().then(minions._runningJobs);
       //we need these functions to populate the dropdown boxes
       minions.router.api.getConfigValues().then(minions._configvalues);
     });
@@ -51,7 +48,7 @@ class MinionsRoute extends PageRoute {
     }
 
     this.keysLoaded = true;
-    if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
+    if(this.keysLoaded) this.resolvePromise();
   }
 
   _addMenuItemStateApply(menu, hostname) {
