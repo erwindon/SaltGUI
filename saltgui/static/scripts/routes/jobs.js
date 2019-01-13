@@ -88,8 +88,6 @@ class JobsRoute extends PageRoute {
   _addJob(container, job) {
     const tr = document.createElement("tr");
 
-    console.log(job)
-
     const jidText = job.id;
     tr.appendChild(Route._createTd("JID", jidText));
 
@@ -103,7 +101,7 @@ class JobsRoute extends PageRoute {
     tr.appendChild(Route._createTd("Start Time", startTimeText));
 
     const menu = new DropDownMenu(tr);
-    menu.addMenuItem("Show&nbsp;job&nbsp;details", function(evt) {
+    menu.addMenuItem("Show&nbsp;details...", function(evt) {
       window.location.assign("/job?id=" + encodeURIComponent(job.id));
     }.bind(this));
 
