@@ -43,7 +43,9 @@ class OutputNested {
       for(const key of Object.keys(ret).sort()) {
         const val = ret[key];
         out.push(OutputNested.ustring(indent, key, prefix, ':'));
-        OutputNested.display(val, indent + 4, '', out);
+        if(val !== null && val !== "") {
+          OutputNested.display(val, indent + 4, '', out);
+        }
       }
     }
     return out;
