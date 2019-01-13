@@ -1,5 +1,3 @@
 base:
   '*':
     - vim
-    - python
-    - users
