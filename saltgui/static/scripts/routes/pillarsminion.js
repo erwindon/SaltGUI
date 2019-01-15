@@ -53,7 +53,7 @@ class PillarsMinionRoute extends PageRoute {
     if(!pillars) return;
 
     // collect the public pillars and compile their regexps
-    let publicPillarsText = localStorage.getItem("public_pillars");
+    let publicPillarsText = window.localStorage.getItem("public_pillars");
     if(!publicPillarsText || publicPillarsText === "undefined") publicPillarsText = "[]";
     let public_pillars = JSON.parse(publicPillarsText);
     if(!Array.isArray(public_pillars)) public_pillars = [ ];
@@ -82,7 +82,7 @@ class PillarsMinionRoute extends PageRoute {
       // initially use the hidden view
       pillar.appendChild(pillar_hidden);
 
-      const value_shown = Output.formatJSON(pillars[k]);
+      const value_shown = Output.formatObject(pillars[k]);
       const pillar_shown = Route._createTd("pillar_shown", value_shown);
       // initially hide the normal view
       pillar_shown.style.display = "none";

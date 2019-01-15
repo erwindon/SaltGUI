@@ -104,7 +104,7 @@ class SchedulesMinionRoute extends PageRoute {
       }.bind(this));
 
       // menu comes before this data on purpose
-      const schedule_value = Output.formatJSON(schedule);
+      const schedule_value = Output.formatObject(schedule);
       const value = Route._createTd("schedule_value", schedule_value);
       if(isJobDisabled) value.classList.add("disabled_schedule");
       tr.appendChild(value);

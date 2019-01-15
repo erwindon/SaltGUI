@@ -27,14 +27,17 @@ class MinionsRoute extends PageRoute {
     // store for later use
 
     const templates = data.return[0].data.return.saltgui_templates;
-    localStorage.setItem("templates", JSON.stringify(templates));
+    window.localStorage.setItem("templates", JSON.stringify(templates));
 
     const public_pillars = data.return[0].data.return.saltgui_public_pillars;
-    localStorage.setItem("public_pillars", JSON.stringify(public_pillars));
+    window.localStorage.setItem("public_pillars", JSON.stringify(public_pillars));
 
     let nodegroups = data.return[0].data.return.nodegroups;
     if(!nodegroups) nodegroups = {};
-    localStorage.setItem("nodegroups", JSON.stringify(nodegroups));
+    window.localStorage.setItem("nodegroups", JSON.stringify(nodegroups));
+
+    const output_formats = data.return[0].data.return.saltgui_output_formats;
+    window.localStorage.setItem("output_formats", JSON.stringify(output_formats));
   }
 
   _updateKeys(data) {
@@ -59,9 +62,9 @@ class MinionsRoute extends PageRoute {
 
   _updateOfflineMinion(container, hostname) {
     super._updateOfflineMinion(container, hostname);
-    
+
     const element = document.getElementById(hostname);
-    
+
     // force same columns on all rows
     element.appendChild(Route._createTd("saltversion", ""));
     element.appendChild(Route._createTd("os", ""));

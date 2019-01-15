@@ -62,6 +62,17 @@ SaltGUI supports the following authentication methods supported by salt:
 
 See the [EAUTH documentation](https://docs.saltstack.com/en/latest/topics/eauth/index.html) and the [Salt auth source code](https://github.com/saltstack/salt/tree/2018.3/salt/auth) for more information.
 
+## Output
+SaltGUI shows the data that is returned by the Salt API.
+Some variation can be achieved by modifying salt master configuration file `/etc/salt/master`.
+e.g. (the default)
+```
+saltgui_output_formats: doc,saltguihighstate,json
+```
+`doc` allows reformatting of documentation output into more readable format. Also implies that only the result from one minion is used.
+`saltguihighstate` allows reformatting of highstate data in a sorted and more readable format.
+`json`, `yaml` and `nested` specify how all other output should be formatted. Only the first available of these formats is used.
+
 ## Templates
 SaltGUI supports command templates for easier command entry into the command-box.
 The menu item for that becomes visible there when you define one or more templates

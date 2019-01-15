@@ -63,7 +63,7 @@ class GrainsMinionRoute extends PageRoute {
       const name = Route._createTd("grain_name", k);
       grain.appendChild(name);
 
-      const grain_value = Output.formatJSON(grains[k]);
+      const grain_value = Output.formatObject(grains[k]);
 
       const menu = new DropDownMenu(grain);
       menu.addMenuItem("Edit&nbsp;grain...", function(evt) {
