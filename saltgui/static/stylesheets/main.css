@@ -48,6 +48,11 @@ h1 {
   color: #505050;
 }
 
+.panel:first-of-type {
+  /* separate main-panel and jobs-panel */
+  margin-right: 10px;
+}
+
 .panel h1 {
   font-size: 20px;
   font-weight: normal;
@@ -95,6 +100,10 @@ h1 {
 @media (max-width: 800px) {
   .mainmenubar {
     display: none;
+  }
+
+  .panel:first-of-type {
+    margin-right: 0;
   }
 }
 

@@ -64,41 +64,20 @@ class JobsRoute extends PageRoute {
     if(this.jobsLoaded) this.resolvePromise();
   }
 
-  _runningJobs(data) {
-    const jobs = data.return[0];
-    for(const k in jobs)
-    {
-      const job = jobs[k];
-
-      // start with same text as for _addJob
-      let targetText = window.makeTargetText(job["Target-type"], job.Target);
-
-      // then add the operational statistics
-      if(job.Running.length > 0)
-        targetText = targetText + ", " + job.Running.length + " running";
-      if(job.Returned.length > 0)
-        targetText = targetText + ", " + job.Returned.length + " returned";
-
-      const targetField = document.querySelector(".jobs #job" + k + " .target");
-      // the field may not (yet) be on the screen
-      if(targetField) targetField.innerText = targetText;
-    }
-  }
-
   _addJob(container, job) {
     const tr = document.createElement("tr");
 
     const jidText = job.id;
-    tr.appendChild(Route._createTd("JID", jidText));
+    tr.appendChild(Route._createTd("jid", jidText));
 
     const targetText = window.makeTargetText(job["Target-type"], job.Target);
-    tr.appendChild(Route._createTd("Target", targetText));
+    tr.appendChild(Route._createTd("target", targetText));
 
     const functionText = job.Function;
-    tr.appendChild(Route._createTd("Function", functionText));
+    tr.appendChild(Route._createTd("function", functionText));
 
     const startTimeText = job.StartTime;
-    tr.appendChild(Route._createTd("Start Time", startTimeText));
+    tr.appendChild(Route._createTd("starttime", startTimeText));
 
     const menu = new DropDownMenu(tr);
     menu.addMenuItem("Show&nbsp;details...", function(evt) {
@@ -111,29 +90,6 @@ class JobsRoute extends PageRoute {
     }
 
     container.tBodies[0].appendChild(tr);
-  }
-
-  _jobsToArray(jobs) {
-    const keys = Object.keys(jobs);
-    const newArray = [];
-
-    for(const key of keys) {
-      const job = jobs[key];
-      job.id = key;
-      newArray.push(job);
-    }
-
-    return newArray;
-  }
-
-  _sortJobs(jobs) {
-    jobs.sort(function(a, b){
-      // The id is already a integer value based on the date, let's use
-      // it to sort the jobs
-      if (a.id < b.id) return 1;
-      if (a.id > b.id) return -1;
-      return 0;
-    });
   }
 
 }

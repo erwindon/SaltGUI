@@ -4,6 +4,7 @@ class GrainsMinionRoute extends PageRoute {
     super("^[\/]grainsminion$", "Grains", "#page_grainsminion", "#button_grains", router);
 
     this.keysLoaded = false;
+    this.jobsLoaded = false;
 
     this._showGrains = this._showGrains.bind(this);
 
@@ -19,8 +20,9 @@ class GrainsMinionRoute extends PageRoute {
 
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
-      if(minions.keysLoaded) resolve();
+      if(minions.keysLoaded && minions.jobsLoaded) resolve();
       minions.router.api.getGrainsItems(minion).then(minions._showGrains);
+      minions.router.api.getJobs().then(minions._updateJobs);
     });
   }
 

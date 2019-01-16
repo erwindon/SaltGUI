@@ -4,8 +4,10 @@ class PillarsRoute extends PageRoute {
     super("^[\/]pillars$", "Pillars", "#page_pillars", "#button_pillars", router);
 
     this.keysLoaded = false;
+    this.jobsLoaded = false;
 
     this._updateKeys = this._updateKeys.bind(this);
+    this._updateMinion = this._updateMinion.bind(this);
   }
 
   onShow() {
@@ -13,9 +15,10 @@ class PillarsRoute extends PageRoute {
 
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
-      if(minions.keysLoaded) resolve();
+      if(minions.keysLoaded && minions.jobsLoaded) resolve();
       minions.router.api.getPillarObfuscate(null).then(minions._updateMinions);
       minions.router.api.getKeys().then(minions._updateKeys);
+      minions.router.api.getJobs().then(minions._updateJobs);
     });
   }
 
@@ -30,7 +33,7 @@ class PillarsRoute extends PageRoute {
     }
 
     this.keysLoaded = true;
-    if(this.keysLoaded) this.resolvePromise();
+    if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
   _updateOfflineMinion(container, hostname) {
