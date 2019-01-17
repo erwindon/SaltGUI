@@ -222,6 +222,11 @@ table tr td.target {
   margin-right: 0;
 }
 
+.left-panel td:hover {
+  background-color: whitesmoke;
+  cursor: pointer;
+}
+
 @media (max-width: 800px) {
   .minions {
     min-width: 0;
