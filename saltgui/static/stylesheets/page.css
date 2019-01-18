@@ -23,6 +23,7 @@ pre a {
   color: yellow;
 }
 
+form a:link,
 pre a:link {
   text-decoration: none;
 }
