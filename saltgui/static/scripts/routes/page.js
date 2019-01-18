@@ -258,7 +258,7 @@ class PageRoute extends Route {
       if(job.Function === "wheel.key.reject") continue;
 
       if(detailedJob === true) {
-        this._addDetailedJob(jobContainer, job)
+        this._addDetailedJob(jobContainer, job);
       } else {
         this._addJob(jobContainer, job);
       }

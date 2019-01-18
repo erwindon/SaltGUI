@@ -20,7 +20,8 @@ class JobRoute extends Route {
     job.getPageElement().querySelector(".output").innerText = "";
 
     document.querySelector("#button_close_job").addEventListener("click", _ => {
-      this.router.goTo("/jobs");
+      window.history.back();
+      window.location.reload();
     });
 
     const jobinfo = this.getPageElement().querySelector(".job-info");

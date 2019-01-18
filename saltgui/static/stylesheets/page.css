@@ -103,9 +103,7 @@ table tr td:last-of-type {
 
 table tr td.starttime,
 table tr td.target {
-  white-space: pre-wrap;
-  max-width: 20%;
-  width: 20%;
+  white-space: nowrap;
 }
 
 .run-command-button {
