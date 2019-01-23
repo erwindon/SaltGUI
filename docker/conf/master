@@ -32,5 +32,5 @@ saltgui_templates:
     template2:
         description: Second template
         targettype: glob
-        target: *ubuntu*
+        target: "*ubuntu*"
         command: test.version
