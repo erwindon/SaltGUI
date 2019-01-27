@@ -16,6 +16,7 @@ class Router {
     this.registerRoute(new PillarsRoute(this));
     this.registerRoute(new PillarsMinionRoute(this));
     this.registerRoute(new JobRoute(this));
+    this.registerRoute(new JobsRoute(this));
 
     this._registerEventListeners();
 
@@ -67,6 +68,11 @@ class Router {
     document.querySelector("#button_pillars")
       .addEventListener('click', _ => {
         window.location.replace("/pillars");
+      });
+
+    document.querySelector("#button_jobs")
+      .addEventListener('click', _ => {
+        window.location.replace("/jobs");
       });
   }
 
