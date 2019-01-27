@@ -29,7 +29,7 @@ class JobRoute extends Route {
       window.makeTargetText(info["Target-type"], info.Target);
     jobinfo.querySelector(".function").innerText = functionText;
 
-    jobinfo.querySelector(".time").innerText = info.StartTime;
+    jobinfo.querySelector(".time").innerText = Output.dateTimeStr(info.StartTime);
 
     const output = job.getPageElement().querySelector(".output");
     // use same formatter as direct commands

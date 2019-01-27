@@ -134,6 +134,37 @@ class Output {
   }
 
 
+  // reformat a date-time string
+  // supported formats:
+  // (time) 19:05:01.561754
+  // (datetime) 2019, Jan 26 19:05:22.808348
+  // current action is (only):
+  // - reduce the number of digits for the fractional seconds
+  static dateTimeStr(str) {
+
+    // no available setting, then return the original
+    const datetime_fraction_digits_str = window.localStorage.getItem("datetime_fraction_digits");
+    if(datetime_fraction_digits_str === null) return str;
+
+    // setting is not a number, return the original
+    let datetime_fraction_digits_nr = Number.parseInt(datetime_fraction_digits_str);
+    if(isNaN(datetime_fraction_digits_nr)) return str;
+
+    // stick to the min/max values without complaining
+    if(datetime_fraction_digits_nr < 0) datetime_fraction_digits_nr = 0;
+    if(datetime_fraction_digits_nr > 6) datetime_fraction_digits_nr = 6;
+
+    // find the fractional part (assume only one '.' in the string)
+    let dotPos = str.indexOf(".");
+    if(dotPos < 0) return str;
+
+    // with no digits, also remove the dot
+    if(datetime_fraction_digits_nr === 0) dotPos -= 1;
+
+    return str.substring(0, dotPos + datetime_fraction_digits_nr + 1);
+  }
+
+
   // the orchestrator for the output
   // determines what format should be used and uses that
   static addResponseOutput(outputContainer, minions, response, command) {
