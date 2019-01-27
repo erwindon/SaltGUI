@@ -73,6 +73,15 @@ saltgui_output_formats: doc,saltguihighstate,json
 `saltguihighstate` allows reformatting of highstate data in a sorted and more readable format.
 `json`, `yaml` and `nested` specify how all other output should be formatted. Only the first available of these formats is used.
 
+## Time representation
+The time formats used by Salt are very detailed and by default have 6 decimal digits to specify as accurate as nano-seconds. For most uses that is not needed. The fraction can be truncated to less digits by modifying salt master configuration file `/etc/salt/master`.
+e.g.
+```
+saltgui_datetime_fraction_digits: 3
+```
+The value must be a number from 0 to 6.
+Note that the effect is achieved by string truncation only. This is equivalent to always rounding downwards.
+
 ## Templates
 SaltGUI supports command templates for easier command entry into the command-box.
 The menu item for that becomes visible there when you define one or more templates

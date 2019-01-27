@@ -297,7 +297,7 @@ class PageRoute extends Route {
     const functionText = job.Function;
     td.appendChild(Route._createDiv("function", functionText));
 
-    const startTimeText = job.StartTime;
+    const startTimeText = Output.dateTimeStr(job.StartTime);
     td.appendChild(Route._createDiv("time", startTimeText));
 
     container.appendChild(tr);

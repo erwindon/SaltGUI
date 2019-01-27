@@ -176,7 +176,7 @@ class OutputSaltGuiHighstate {
       if(task.hasOwnProperty("start_time")) {
         taskDiv.append(document.createElement("br"));
         taskDiv.append(document.createTextNode(
-          indent + "Started at " + task.start_time));
+          indent + "Started at " + Output.dateTimeStr(task.start_time)));
       }
 
       if(task.hasOwnProperty("duration")) {

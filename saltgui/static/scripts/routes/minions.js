@@ -38,6 +38,9 @@ class MinionsRoute extends PageRoute {
 
     const output_formats = data.return[0].data.return.saltgui_output_formats;
     window.localStorage.setItem("output_formats", JSON.stringify(output_formats));
+
+    const datetime_fraction_digits = data.return[0].data.return.saltgui_datetime_fraction_digits;
+    window.localStorage.setItem("datetime_fraction_digits", JSON.stringify(datetime_fraction_digits));
   }
 
   _updateKeys(data) {
