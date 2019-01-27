@@ -35,6 +35,79 @@ class OutputSaltGuiHighstate {
     return Output.getHostnameHtml(hostname, "host_success");
   }
 
+  static addChangesInfo(taskDiv, task) {
+    if(!task.hasOwnProperty("changes")) {
+      return 0;
+    }
+
+    if(typeof task.changes !== "object" || Array.isArray(task.changes)) {
+      taskDiv.append(document.createElement("br"));
+      taskDiv.append(document.createTextNode(indent + JSON.stringify(task.changes)));
+      return 0;
+    }
+
+    let changes = 0;
+    for(const key of Object.keys(task.changes).sort()) {
+
+      changes = changes + 1;
+
+      const change = task.changes[key];
+
+      if(typeof change === "string" && change.includes("\n")) {
+        taskDiv.append(document.createElement("br"));
+        // show multi-line text as a separate block
+        taskDiv.append(document.createTextNode(indent + key + ":"));
+        const lines = change.trim().split("\n");
+        for(const line of lines) {
+          taskDiv.append(document.createElement("br"));
+          taskDiv.append(document.createTextNode("      " + line));
+        }
+        continue;
+      }
+
+      if(Array.isArray(change)) {
+        for(const idx in change) {
+          const task = change[idx];
+          taskDiv.append(document.createElement("br"));
+          taskDiv.append(document.createTextNode(
+            indent + key + "[" + idx + "]: " + JSON.stringify(task)));
+        }
+        continue;
+      }
+
+      if(typeof change !== "object") {
+        // show all other non-objects in a simple way
+        taskDiv.append(document.createElement("br"));
+        taskDiv.append(document.createTextNode(
+          indent + key + ": " +
+          JSON.stringify(change)));
+        continue;
+      }
+
+      // treat old->new first
+      if(change.hasOwnProperty("old") && change.hasOwnProperty("new")) {
+        taskDiv.append(document.createElement("br"));
+        // place changes on one line
+        // 25BA = BLACK RIGHT-POINTING POINTER
+        // don't use arrows here, these are higher than a regular
+        // text-line and disturb the text-flow
+        taskDiv.append(document.createTextNode(
+          indent + key + ": " +
+          JSON.stringify(change.old) + " \u25BA " +
+          JSON.stringify(change.new)));
+        delete change.old;
+        delete change.new;
+      }
+      // then show whatever remains
+      for(const taskkey of Object.keys(change).sort()) {
+        taskDiv.append(document.createElement("br"));
+        taskDiv.append(document.createTextNode(
+          indent + key + ": " + taskkey + ": " +
+          JSON.stringify(change[taskkey])));
+      }
+    }
+  }
+
   static getHighStateOutput(hostResponse) {
 
     // The tasks are in an (unordered) object with uninteresting keys
@@ -116,62 +189,7 @@ class OutputSaltGuiHighstate {
         taskDiv.append(document.createTextNode(indent + txt));
       }
 
-      if(task.hasOwnProperty("changes")) {
-        if(typeof task.changes !== "object" || Array.isArray(task.changes)) {
-          taskDiv.append(document.createElement("br"));
-          taskDiv.append(document.createTextNode(indent + JSON.stringify(task.changes)));
-        } else {
-          for(const key of Object.keys(task.changes).sort()) {
-            changes = changes + 1;
-            const change = task.changes[key];
-            // 25BA = BLACK RIGHT-POINTING POINTER
-            // don't use arrows here, these are higher than a regular
-            // text-line and disturb the text-flow
-            if(typeof change === "string" && change.includes("\n")) {
-              taskDiv.append(document.createElement("br"));
-              // show multi-line text as a separate block
-              taskDiv.append(document.createTextNode(indent + key + ":"));
-              const lines = change.trim().split("\n");
-              for(const line of lines) {
-                taskDiv.append(document.createElement("br"));
-                taskDiv.append(document.createTextNode("      " + line));
-              }
-            } else if(Array.isArray(change)) {
-              for(const idx in change) {
-                const task = change[idx];
-                taskDiv.append(document.createElement("br"));
-                taskDiv.append(document.createTextNode(
-                  indent + key + "[" + idx + "]: " + JSON.stringify(task)));
-              }
-            } else if(typeof change !== "object") {
-              // show all other non-objects in a simple way
-              taskDiv.append(document.createElement("br"));
-              taskDiv.append(document.createTextNode(
-                indent + key + ": " +
-                JSON.stringify(change)));
-            } else {
-              // treat old->new first
-              if(change.hasOwnProperty("old") && change.hasOwnProperty("new")) {
-                taskDiv.append(document.createElement("br"));
-                // place changes on one line
-                taskDiv.append(document.createTextNode(
-                  indent + key + ": " +
-                  JSON.stringify(change.old) + " \u25BA " +
-                  JSON.stringify(change.new)));
-                delete change.old;
-                delete change.new;
-              }
-              // then show whatever remains
-              for(const taskkey of Object.keys(change).sort()) {
-                taskDiv.append(document.createElement("br"));
-                taskDiv.append(document.createTextNode(
-                  indent + key + ": " + taskkey + ": " +
-                  JSON.stringify(change[taskkey])));
-              }
-            }
-          }
-        }
-      }
+      changes += OutputSaltGuiHighstate.addChangesInfo(taskDiv, task);
 
       if(task.hasOwnProperty("start_time")) {
         taskDiv.append(document.createElement("br"));
