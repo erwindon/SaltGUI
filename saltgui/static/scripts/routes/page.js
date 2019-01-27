@@ -390,10 +390,6 @@ class PageRoute extends Route {
     this.router.commandbox.cmdmenu.verifyAll();
   }
 
-  _runStateApply(evt, hostname) {
-    this._runCommand(evt, hostname, "state.apply");
-  }
-
   _runAcceptKey(evt, hostname, extra) {
     this._runCommand(evt, hostname, "wheel.key.accept" + extra);
   }

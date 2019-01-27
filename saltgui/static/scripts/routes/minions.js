@@ -82,4 +82,7 @@ class MinionsRoute extends PageRoute {
     this._addMenuItemStateApply(menu, hostname);
   }
 
+  _runStateApply(evt, hostname) {
+    this._runCommand(evt, hostname, "state.apply");
+  }
 }
