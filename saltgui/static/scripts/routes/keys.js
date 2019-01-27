@@ -171,4 +171,15 @@ class KeysRoute extends PageRoute {
     container.tBodies[0].appendChild(element);
   }
 
+  _runAcceptKey(evt, hostname, extra) {
+    this._runCommand(evt, hostname, "wheel.key.accept" + extra);
+  }
+
+  _runRejectKey(evt, hostname, extra) {
+    this._runCommand(evt, hostname, "wheel.key.reject" + extra);
+  }
+
+  _runDeleteKey(evt, hostname, extra) {
+    this._runCommand(evt, hostname, "wheel.key.delete" + extra);
+  }
 }

@@ -389,16 +389,4 @@ class PageRoute extends Route {
     // the menu may become (in)visible due to content of command field
     this.router.commandbox.cmdmenu.verifyAll();
   }
-
-  _runAcceptKey(evt, hostname, extra) {
-    this._runCommand(evt, hostname, "wheel.key.accept" + extra);
-  }
-
-  _runRejectKey(evt, hostname, extra) {
-    this._runCommand(evt, hostname, "wheel.key.reject" + extra);
-  }
-
-  _runDeleteKey(evt, hostname, extra) {
-    this._runCommand(evt, hostname, "wheel.key.delete" + extra);
-  }
 }
