@@ -172,7 +172,7 @@ class PageRoute extends Route {
     if(minion) {
       const td = Route._createTd("os", os);
       const img = document.createElement("img");
-      img.setAttribute("src", "static/images/os-" + minion.os.toLowerCase() + ".png");
+      img.setAttribute("src", "static/images/os-" + minion.os.replace(" ", "-").toLowerCase() + ".png");
       img.classList.add("osimage");
       td.prepend(img);
       element.appendChild(td);
