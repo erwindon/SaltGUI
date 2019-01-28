@@ -327,7 +327,7 @@ class PageRoute extends Route {
     tr.appendChild(Route._createTd("starttime", startTimeText));
 
     const menu = new DropDownMenu(tr);
-    menu.addMenuItem("Show&nbsp;details...", function(evt) {
+    menu.addMenuItem("Show&nbsp;details", function(evt) {
       window.location.assign("/job?id=" + encodeURIComponent(job.id));
     }.bind(this));
 
