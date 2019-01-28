@@ -34,3 +34,6 @@ saltgui_templates:
         targettype: glob
         target: "*ubuntu*"
         command: test.version
+    template3:
+        description: Empty template
+

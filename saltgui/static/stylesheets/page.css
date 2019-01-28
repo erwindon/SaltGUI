@@ -63,6 +63,7 @@ table tr th {
   padding-bottom: 5px;
   text-align: left;
   min-width: 20px;
+  white-space: nowrap;
 }
 
 table tr td {
@@ -73,6 +74,8 @@ table tr td {
   white-space: nowrap;
 }
 
+.templates th,
+.templates td,
 .jobs th,
 .jobs td,
 .schedules th,
@@ -104,6 +107,14 @@ table tr td:last-of-type {
 table tr td.starttime,
 table tr td.target {
   white-space: nowrap;
+}
+
+.none {
+  opacity: 0.4;
+}
+
+.disabled {
+  display: none;
 }
 
 .run-command-button {

@@ -28,6 +28,13 @@ class PageRoute extends Route {
       menu.addMenuItem("jobs", function(evt) {
         window.location.replace("/jobs");
       });
+      // hide template menu item if no templates defined
+      let templatesText = window.localStorage.getItem("templates");
+      if (templatesText && templatesText !== "undefined") {
+        menu.addMenuItem("templates", function(evt) {
+          window.location.replace("/templates");
+        });
+      }
       menu.addMenuItem("logout", function(evt) {
         const api = new API();
         api.logout().then(window.location.replace("/"));
@@ -380,10 +387,26 @@ class PageRoute extends Route {
     document.execCommand("copy");
   }
 
-  _runCommand(evt, targetString, commandString) {
+  _runCommand(evt, targetString, commandString, targettype) {
     this.router.commandbox._showManualRun(evt);
     const target = document.querySelector("#target");
     const command = document.querySelector("#command");
+    const targetbox = document.querySelector("#targetbox");
+
+    if (!targetString) targetString = "";
+    if (!commandString) commandString = "";
+
+    if (targettype) {
+      let tt = targettype;
+      // show the extended selection controls when
+      targetbox.style.display = "inherit";
+      if (tt !== "glob" && tt !== "list" && tt !== "compound" && tt !== "nodegroup") {
+        // we don't support that, revert to standard (not default)
+        tt = "glob";
+      }
+      TargetType.setTargetType(tt);
+    }
+
     target.value = targetString;
     command.value = commandString;
     // the menu may become (in)visible due to content of command field
