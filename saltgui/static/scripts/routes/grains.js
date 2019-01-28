@@ -29,7 +29,12 @@ class GrainsRoute extends PageRoute {
 
     const hostnames = keys.minions.sort();
     for(const hostname of hostnames) {
-      this._addMinion(list, hostname);
+      this._addMinion(list, hostname, 1);
+
+      // preliminary dropdown menu
+      const element = document.getElementById(hostname);
+      const menu = new DropDownMenu(element);
+      this._addMenuItemShowGrains(menu, hostname);
     }
 
     this.keysLoaded = true;
@@ -60,6 +65,10 @@ class GrainsRoute extends PageRoute {
     element.appendChild(grainInfoTd);
 
     const menu = new DropDownMenu(element);
+    this._addMenuItemShowGrains(menu, hostname);
+  }
+
+  _addMenuItemShowGrains(menu, hostname) {
     menu.addMenuItem("Show&nbsp;grains", function(evt) {
       window.location.assign("grainsminion?minion=" + encodeURIComponent(hostname));
     }.bind(this));

@@ -47,7 +47,12 @@ class SchedulesRoute extends PageRoute {
 
     const hostnames = keys.minions.sort();
     for(const hostname of hostnames) {
-      this._addMinion(list, hostname);
+      this._addMinion(list, hostname, 1);
+
+      // preliminary dropdown menu
+      const element = document.getElementById(hostname);
+      const menu = new DropDownMenu(element);
+      this._addMenuItemShowSchedules(menu, hostname);
     }
 
     this.keysLoaded = true;
@@ -96,6 +101,10 @@ class SchedulesRoute extends PageRoute {
     element.appendChild(td);
 
     const menu = new DropDownMenu(element);
+    this._addMenuItemShowSchedules(menu, hostname);
+  }
+
+  _addMenuItemShowSchedules(menu, hostname) {
     menu.addMenuItem("Show&nbsp;schedules", function(evt) {
       window.location.assign("schedulesminion?minion=" + encodeURIComponent(hostname));
     }.bind(this));

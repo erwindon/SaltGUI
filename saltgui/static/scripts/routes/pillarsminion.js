@@ -36,9 +36,7 @@ class PillarsMinionRoute extends PageRoute {
 
     const pmp = document.getElementById("pillarsminion_page");
     const menu = new DropDownMenu(pmp);
-    menu.addMenuItem("Refresh&nbsp;pillar...", function(evt) {
-      this._runCommand(evt, minion, "saltutil.refresh_pillar");
-    }.bind(this));
+    this._addMenuItemRefreshPillar(menu, minion);
 
     const container = document.getElementById("pillarsminion_list");
 
@@ -116,5 +114,11 @@ class PillarsMinionRoute extends PageRoute {
       const noPillarsMsg = Route._createTd("msg", "No pillars found");
       container.tBodies[0].appendChild(noPillarsMsg);
     }
+  }
+
+  _addMenuItemRefreshPillar(menu, hostname) {
+    menu.addMenuItem("Refresh&nbsp;pillar...", function(evt) {
+      this._runCommand(evt, hostname, "saltutil.refresh_pillar");
+    }.bind(this));
   }
 }

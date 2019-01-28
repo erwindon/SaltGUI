@@ -182,7 +182,7 @@ class PageRoute extends Route {
     }
   }
 
-  _addMinion(container, hostname) {
+  _addMinion(container, hostname, freeColumns = 0) {
 
     let element = document.getElementById(hostname);
     if(element !== null) {
@@ -202,7 +202,7 @@ class PageRoute extends Route {
     element.appendChild(Route._createTd("os", "loading..."));
 
     // fill out the number of columns to that of the header
-    while(element.cells.length < container.tHead.rows[0].cells.length) {
+    while(element.cells.length < container.tHead.rows[0].cells.length - freeColumns) {
       element.appendChild(Route._createTd("", ""));
     }
 
