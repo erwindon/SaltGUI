@@ -18,6 +18,10 @@ class SchedulesMinionRoute extends PageRoute {
 
     const minion = decodeURIComponent(window.getQueryParam("minion"));
 
+    // preliminary title
+    const title = document.getElementById("schedulesminion_title");
+    title.innerText = "Schedules on " + minion;
+
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
       if(minions.keysLoaded && minions.jobsLoaded) resolve();

@@ -18,6 +18,9 @@ class PillarsMinionRoute extends PageRoute {
 
     const minion = decodeURIComponent(window.getQueryParam("minion"));
 
+    const title = document.getElementById("pillarsminion_title");
+    title.innerText = "Pillars on " + minion;
+
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
       if(minions.keysLoaded && minions.jobsLoaded) resolve();
@@ -30,9 +33,6 @@ class PillarsMinionRoute extends PageRoute {
     const minion = decodeURIComponent(window.getQueryParam("minion"));
 
     const pillars = data.return[0][minion];
-
-    const title = document.getElementById("pillarsminion_title");
-    title.innerText = "Pillars on " + minion;
 
     const pmp = document.getElementById("pillarsminion_page");
     const menu = new DropDownMenu(pmp);
