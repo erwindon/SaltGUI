@@ -35,7 +35,7 @@ class OutputSaltGuiHighstate {
     return Output.getHostnameHtml(hostname, "host_success");
   }
 
-  static addChangesInfo(taskDiv, task) {
+  static addChangesInfo(taskDiv, task, indent) {
     if(!task.hasOwnProperty("changes")) {
       return 0;
     }
@@ -189,7 +189,7 @@ class OutputSaltGuiHighstate {
         taskDiv.append(document.createTextNode(indent + txt));
       }
 
-      changes += OutputSaltGuiHighstate.addChangesInfo(taskDiv, task);
+      changes += OutputSaltGuiHighstate.addChangesInfo(taskDiv, task, indent);
 
       if(task.hasOwnProperty("start_time")) {
         taskDiv.append(document.createElement("br"));
