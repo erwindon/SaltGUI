@@ -29,7 +29,7 @@ class PageRoute extends Route {
         window.location.replace("/jobs");
       });
       // hide template menu item if no templates defined
-      let templatesText = window.localStorage.getItem("templates");
+      const templatesText = window.localStorage.getItem("templates");
       if (templatesText && templatesText !== "undefined") {
         menu.addMenuItem("templates", function(evt) {
           window.location.replace("/templates");

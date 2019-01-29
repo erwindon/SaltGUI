@@ -20,7 +20,7 @@ class Router {
     this.registerRoute(new TemplatesRoute(this));
 
     // show template menu item if templates defined
-    let templatesText = window.localStorage.getItem("templates");
+    const templatesText = window.localStorage.getItem("templates");
     if (templatesText && templatesText !== "undefined") {
       const item = document.querySelector("#button_templates");
       item.style.display = "inline-block";

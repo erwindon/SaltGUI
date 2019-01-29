@@ -37,7 +37,7 @@ class TemplatesRoute extends PageRoute {
     tr.appendChild(Route._createTd("name", name));
 
     // calculate description
-    let description = template["description"];
+    const description = template["description"];
     if (!description) {
       tr.appendChild(Route._createTd("description none", "(none)"));
     } else {
@@ -45,7 +45,7 @@ class TemplatesRoute extends PageRoute {
     }
 
     // calculate target
-    let target = template["target"];
+    const target = template["target"];
     if (!target) {
       tr.appendChild(Route._createTd("target none", "(none)"));
     } else {
@@ -58,7 +58,7 @@ class TemplatesRoute extends PageRoute {
     tr.appendChild(Route._createTd("targettype", targettype));
 
     // calculate command
-    let command = template["command"];
+    const command = template["command"];
     if (!command) {
       tr.appendChild(Route._createTd("command none", "(none)"));
     } else {
