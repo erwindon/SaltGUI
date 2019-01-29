@@ -6,7 +6,6 @@ class MinionsRoute extends PageRoute {
     this.jobsLoaded = false;
 
     this._updateKeys = this._updateKeys.bind(this);
-    this._runStateApply = this._runStateApply.bind(this);
   }
 
   onShow() {
@@ -50,17 +49,16 @@ class MinionsRoute extends PageRoute {
 
     const hostnames = keys.minions.sort();
     for(const hostname of hostnames) {
-      this._addMinion(list, hostname);
+      this._addMinion(list, hostname, 1);
+
+      // preliminary dropdown menu
+      const element = document.getElementById(hostname);
+      const menu = new DropDownMenu(element);
+      this._addMenuItemStateApply(menu, hostname);
     }
 
     this.keysLoaded = true;
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
-  }
-
-  _addMenuItemStateApply(menu, hostname) {
-    menu.addMenuItem("Apply&nbsp;state...", function(evt) {
-      this._runStateApply(evt, hostname);
-    }.bind(this));
   }
 
   _updateOfflineMinion(container, hostname) {
@@ -82,7 +80,9 @@ class MinionsRoute extends PageRoute {
     this._addMenuItemStateApply(menu, hostname);
   }
 
-  _runStateApply(evt, hostname) {
-    this._runCommand(evt, hostname, "state.apply");
+  _addMenuItemStateApply(menu, hostname) {
+    menu.addMenuItem("Apply&nbsp;state...", function(evt) {
+      this._runCommand(evt, hostname, "state.apply");
+    }.bind(this));
   }
 }

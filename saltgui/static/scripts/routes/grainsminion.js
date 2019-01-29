@@ -18,6 +18,9 @@ class GrainsMinionRoute extends PageRoute {
 
     const minion = decodeURIComponent(window.getQueryParam("minion"));
 
+    const title = document.getElementById("grainsminion_title");
+    title.innerText = "Grains on " + minion;
+
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
       if(minions.keysLoaded && minions.jobsLoaded) resolve();
@@ -30,9 +33,6 @@ class GrainsMinionRoute extends PageRoute {
     const minion = decodeURIComponent(window.getQueryParam("minion"));
 
     const grains = data.return[0][minion];
-
-    const title = document.getElementById("grainsminion_title");
-    title.innerText = "Grains on " + minion;
 
     const gmp = document.getElementById("grainsminion_page");
     const menu = new DropDownMenu(gmp);

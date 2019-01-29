@@ -6,9 +6,6 @@ class KeysRoute extends PageRoute {
     this.jobsLoaded = false;
 
     this._updateKeys = this._updateKeys.bind(this);
-    this._runAcceptKey = this._runAcceptKey.bind(this);
-    this._runRejectKey = this._runRejectKey.bind(this);
-    this._runDeleteKey = this._runDeleteKey.bind(this);
   }
 
   onShow() {
@@ -36,7 +33,13 @@ class KeysRoute extends PageRoute {
 
     const hostnames_accepted = keys.minions.sort();
     for(const hostname of hostnames_accepted) {
-      this._addMinion(list, hostname);
+      this._addMinion(list, hostname, 1);
+
+      // preliminary dropdown menu
+      const element = document.getElementById(hostname);
+      const menu = new DropDownMenu(element);
+      this._addMenuItemReject(menu, hostname, " include_accepted=true");
+      this._addMenuItemDelete(menu, hostname, "");
     }
 
     const hostnames_denied = keys.minions_denied.sort();
@@ -65,24 +68,6 @@ class KeysRoute extends PageRoute {
 
     this.keysLoaded = true;
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
-  }
-
-  _addMenuItemAccept(menu, hostname, extra) {
-    menu.addMenuItem("Accept&nbsp;key...", function(evt) {
-      this._runAcceptKey(evt, hostname, extra);
-    }.bind(this));
-  }
-
-  _addMenuItemDelete(menu, hostname, extra) {
-    menu.addMenuItem("Delete&nbsp;key...", function(evt) {
-      this._runDeleteKey(evt, hostname, extra);
-    }.bind(this));
-  }
-
-  _addMenuItemReject(menu, hostname, extra) {
-    menu.addMenuItem("Reject&nbsp;key...", function(evt) {
-      this._runRejectKey(evt, hostname, extra);
-    }.bind(this));
   }
 
   _updateOfflineMinion(container, hostname) {
@@ -171,15 +156,21 @@ class KeysRoute extends PageRoute {
     container.tBodies[0].appendChild(element);
   }
 
-  _runAcceptKey(evt, hostname, extra) {
-    this._runCommand(evt, hostname, "wheel.key.accept" + extra);
+  _addMenuItemAccept(menu, hostname, extra) {
+    menu.addMenuItem("Accept&nbsp;key...", function(evt) {
+      this._runCommand(evt, hostname, "wheel.key.accept" + extra);
+    }.bind(this));
   }
 
-  _runRejectKey(evt, hostname, extra) {
-    this._runCommand(evt, hostname, "wheel.key.reject" + extra);
+  _addMenuItemReject(menu, hostname, extra) {
+    menu.addMenuItem("Reject&nbsp;key...", function(evt) {
+      this._runCommand(evt, hostname, "wheel.key.reject" + extra);
+    }.bind(this));
   }
 
-  _runDeleteKey(evt, hostname, extra) {
-    this._runCommand(evt, hostname, "wheel.key.delete" + extra);
+  _addMenuItemDelete(menu, hostname, extra) {
+    menu.addMenuItem("Delete&nbsp;key...", function(evt) {
+      this._runCommand(evt, hostname, "wheel.key.delete" + extra);
+    }.bind(this));
   }
 }

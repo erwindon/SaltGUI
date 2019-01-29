@@ -29,7 +29,12 @@ class PillarsRoute extends PageRoute {
 
     const hostnames = keys.minions.sort();
     for(const hostname of hostnames) {
-      this._addMinion(list, hostname);
+      this._addMinion(list, hostname, 1);
+
+      // preliminary dropdown menu
+      const element = document.getElementById(hostname);
+      const menu = new DropDownMenu(element);
+      this._addMenuItemShowPillars(menu, hostname);
     }
 
     this.keysLoaded = true;
@@ -65,6 +70,10 @@ class PillarsRoute extends PageRoute {
     element.appendChild(pillarInfoTd);
 
     const menu = new DropDownMenu(element);
+    this._addMenuItemShowPillars(menu, hostname);
+  }
+
+  _addMenuItemShowPillars(menu, hostname) {
     menu.addMenuItem("Show&nbsp;pillars", function(evt) {
       window.location.assign("pillarsminion?minion=" + encodeURIComponent(hostname));
     }.bind(this));

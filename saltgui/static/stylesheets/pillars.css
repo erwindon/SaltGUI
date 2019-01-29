@@ -6,10 +6,6 @@
   padding: 0;
 }
 
-.pillars li .pillar_value {
-  white-space: pre-wrap;
-}
-
 .pillar_hidden {
   cursor: pointer;
 }
