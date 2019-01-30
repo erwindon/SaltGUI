@@ -387,7 +387,11 @@ class PageRoute extends Route {
     document.execCommand("copy");
   }
 
-  _runCommand(evt, targetString, commandString, targettype) {
+  _runCommand(evt, targetString, commandString) {
+    this._runFullCommand(evt, "", targetString, commandString);
+  }
+
+  _runFullCommand(evt, targettype, targetString, commandString) {
     this.router.commandbox._showManualRun(evt);
     const target = document.querySelector("#target");
     const command = document.querySelector("#command");

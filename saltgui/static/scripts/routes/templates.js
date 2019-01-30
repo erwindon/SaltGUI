@@ -39,7 +39,7 @@ class TemplatesRoute extends PageRoute {
     // calculate description
     const description = template["description"];
     if (!description) {
-      tr.appendChild(Route._createTd("description none", "(none)"));
+      tr.appendChild(Route._createTd("description value_none", "(none)"));
     } else {
       tr.appendChild(Route._createTd("description", description));
     }
@@ -47,39 +47,38 @@ class TemplatesRoute extends PageRoute {
     // calculate target
     const target = template["target"];
     if (!target) {
-      tr.appendChild(Route._createTd("target none", "(none)"));
+      tr.appendChild(Route._createTd("target value_none", "(none)"));
     } else {
       tr.appendChild(Route._createTd("target", target));
     }
 
     // calculate targettype
     let targettype = template["targettype"];
-    if (!targettype) targettype = "";
-    tr.appendChild(Route._createTd("targettype", targettype));
+    if (!targettype) {
+      targettype = "";
+      tr.appendChild(Route._createTd("targettype value_none", "(none)"));
+    } else {
+      tr.appendChild(Route._createTd("targettype", targettype));
+    }
 
     // calculate command
     const command = template["command"];
     if (!command) {
-      tr.appendChild(Route._createTd("command none", "(none)"));
+      tr.appendChild(Route._createTd("command value_none", "(none)"));
     } else {
       tr.appendChild(Route._createTd("command", command));
     }
 
     const menu = new DropDownMenu(tr);
     menu.addMenuItem("Apply&nbsp;template...", function(evt) {
-      this._applyTemplate(evt, template["target"], template["targettype"], template["command"]);
+      this._applyTemplate(evt, targettype, target, command);
     }.bind(this));
-
-    // fill out the number of columns to that of the header
-    while(tr.cells.length < container.tHead.rows[0].cells.length) {
-      tr.appendChild(Route._createTd("", ""));
-    }
 
     container.tBodies[0].appendChild(tr);
   }
 
-  _applyTemplate(evt, target, targettype, command) {
-    this._runCommand(evt, target, command, targettype);
+  _applyTemplate(evt, targettype, target, command) {
+    this._runFullCommand(evt, targettype, target, command);
   }
 
 }

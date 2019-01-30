@@ -109,11 +109,11 @@ table tr td.target {
   white-space: nowrap;
 }
 
-.none {
+.value_none {
   opacity: 0.4;
 }
 
-.disabled {
+.menuitem_hidden {
   display: none;
 }
 
