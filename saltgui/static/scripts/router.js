@@ -17,6 +17,14 @@ class Router {
     this.registerRoute(new PillarsMinionRoute(this));
     this.registerRoute(new JobRoute(this));
     this.registerRoute(new JobsRoute(this));
+    this.registerRoute(new TemplatesRoute(this));
+
+    // show template menu item if templates defined
+    const templatesText = window.localStorage.getItem("templates");
+    if (templatesText && templatesText !== "undefined") {
+      const item = document.querySelector("#button_templates");
+      item.style.display = "inline-block";
+    }
 
     this._registerEventListeners();
 
@@ -73,6 +81,11 @@ class Router {
     document.querySelector("#button_jobs")
       .addEventListener('click', _ => {
         window.location.replace("/jobs");
+      });
+
+    document.querySelector("#button_templates")
+      .addEventListener('click', _ => {
+        window.location.replace("/templates");
       });
   }
 

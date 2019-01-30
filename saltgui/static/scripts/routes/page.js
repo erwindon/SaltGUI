@@ -28,6 +28,13 @@ class PageRoute extends Route {
       menu.addMenuItem("jobs", function(evt) {
         window.location.replace("/jobs");
       });
+      // hide template menu item if no templates defined
+      const templatesText = window.localStorage.getItem("templates");
+      if (templatesText && templatesText !== "undefined") {
+        menu.addMenuItem("templates", function(evt) {
+          window.location.replace("/templates");
+        });
+      }
       menu.addMenuItem("logout", function(evt) {
         const api = new API();
         api.logout().then(window.location.replace("/"));
@@ -296,7 +303,6 @@ class PageRoute extends Route {
     tr.appendChild(td);
 
     td.id = "job" + job.id;
-
     const targetText = window.makeTargetText(job["Target-type"], job.Target);
     td.appendChild(Route._createDiv("target", targetText));
 
@@ -313,7 +319,6 @@ class PageRoute extends Route {
 
   _addDetailedJob(container, job) {
     const tr = document.createElement("tr");
-
     const jidText = job.id;
     tr.appendChild(Route._createTd("jid", jidText));
 
@@ -381,9 +386,29 @@ class PageRoute extends Route {
   }
 
   _runCommand(evt, targetString, commandString) {
+    this._runFullCommand(evt, "", targetString, commandString);
+  }
+
+  _runFullCommand(evt, targettype, targetString, commandString) {
     this.router.commandbox._showManualRun(evt);
     const target = document.querySelector("#target");
     const command = document.querySelector("#command");
+    const targetbox = document.querySelector("#targetbox");
+
+    if (!targetString) targetString = "";
+    if (!commandString) commandString = "";
+
+    if (targettype) {
+      let tt = targettype;
+      // show the extended selection controls when
+      targetbox.style.display = "inherit";
+      if (tt !== "glob" && tt !== "list" && tt !== "compound" && tt !== "nodegroup") {
+        // we don't support that, revert to standard (not default)
+        tt = "glob";
+      }
+      TargetType.setTargetType(tt);
+    }
+
     target.value = targetString;
     command.value = commandString;
     // the menu may become (in)visible due to content of command field
