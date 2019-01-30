@@ -30,7 +30,7 @@ class PageRoute extends Route {
       });
       // hide template menu item if no templates defined
       const templatesText = window.localStorage.getItem("templates");
-      if (templatesText && templatesText !== "undefined") {
+      if(templatesText && templatesText !== "undefined") {
         menu.addMenuItem("templates", function(evt) {
           window.location.replace("/templates");
         });
@@ -56,7 +56,7 @@ class PageRoute extends Route {
       const minion_info = minions[hostname];
 
       // minions can be offline, then the info will be false
-      if (minion_info === false) {
+      if(minion_info === false) {
         this._updateOfflineMinion(list, hostname);
       } else {
         this._updateMinion(list, minion_info, hostname);
@@ -368,8 +368,8 @@ class PageRoute extends Route {
     jobs.sort(function(a, b){
       // The id is already a integer value based on the date, let's use
       // it to sort the jobs
-      if (a.id < b.id) return 1;
-      if (a.id > b.id) return -1;
+      if(a.id < b.id) return 1;
+      if(a.id > b.id) return -1;
       return 0;
     });
   }
@@ -395,14 +395,14 @@ class PageRoute extends Route {
     const command = document.querySelector("#command");
     const targetbox = document.querySelector("#targetbox");
 
-    if (!targetString) targetString = "";
-    if (!commandString) commandString = "";
+    if(!targetString) targetString = "";
+    if(!commandString) commandString = "";
 
-    if (targettype) {
+    if(targettype) {
       let tt = targettype;
       // show the extended selection controls when
       targetbox.style.display = "inherit";
-      if (tt !== "glob" && tt !== "list" && tt !== "compound" && tt !== "nodegroup") {
+      if(tt !== "glob" && tt !== "list" && tt !== "compound" && tt !== "nodegroup") {
         // we don't support that, revert to standard (not default)
         tt = "glob";
       }

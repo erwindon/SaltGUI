@@ -68,7 +68,7 @@ class OutputJson {
     str = "{";
     let separator = "";
     // do not use Object.entries, that is not supported by the test framework
-    for (const key of Object.keys(value).sort()) {
+    for(const key of Object.keys(value).sort()) {
       const item = value[key];
       str += separator + "\n" + " ".repeat(indentLevel + indentStep) + "\"" + key + "\": " +
         OutputJson.formatJSON(item, indentLevel + indentStep);

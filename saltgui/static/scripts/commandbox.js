@@ -140,7 +140,7 @@ class CommandBox {
 
     // (re-)populate the dropdown box
     const targetlist = document.getElementById("targetlist");
-    while (targetlist.firstChild) {
+    while(targetlist.firstChild) {
       targetlist.removeChild(targetlist.firstChild);
     }
     const nodegroups = JSON.parse(window.localStorage.getItem("nodegroups"));

@@ -34,7 +34,7 @@ class API {
     return this.apiRequest("POST", "/login", params)
       .then(data => {
         const response = data.return[0];
-        if (Object.keys(response.perms).length === 0) {
+        if(Object.keys(response.perms).length === 0) {
           // we are allowed to login but there are no permissions available
           throw new HTTPError(403, "Unauthorized");
         }
@@ -157,7 +157,7 @@ class API {
 
     return fetch(location, options)
       .then(response => {
-        if (response.ok) return response.json();
+        if(response.ok) return response.json();
         // fetch does not reject on > 300 http status codes, so let's
         // do it ourselves
         throw new HTTPError(response.status, response.statusText);

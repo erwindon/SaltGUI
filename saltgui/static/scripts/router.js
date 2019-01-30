@@ -21,7 +21,7 @@ class Router {
 
     // show template menu item if templates defined
     const templatesText = window.localStorage.getItem("templates");
-    if (templatesText && templatesText !== "undefined") {
+    if(templatesText && templatesText !== "undefined") {
       const item = document.querySelector("#button_templates");
       item.style.display = "inline-block";
     }

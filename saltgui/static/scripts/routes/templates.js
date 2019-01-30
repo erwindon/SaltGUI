@@ -38,7 +38,7 @@ class TemplatesRoute extends PageRoute {
 
     // calculate description
     const description = template["description"];
-    if (!description) {
+    if(!description) {
       tr.appendChild(Route._createTd("description value_none", "(none)"));
     } else {
       tr.appendChild(Route._createTd("description", description));
@@ -57,7 +57,7 @@ class TemplatesRoute extends PageRoute {
 
     // calculate command
     const command = template["command"];
-    if (!command) {
+    if(!command) {
       tr.appendChild(Route._createTd("command value_none", "(none)"));
     } else {
       tr.appendChild(Route._createTd("command", command));
