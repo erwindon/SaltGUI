@@ -19,6 +19,7 @@ class PillarsRoute extends PageRoute {
       minions.router.api.getPillarObfuscate(null).then(minions._updateMinions);
       minions.router.api.getKeys().then(minions._updateKeys);
       minions.router.api.getJobs().then(minions._updateJobs);
+      minions.router.api.getJobsActive().then(minions._runningJobs);
     });
   }
 
