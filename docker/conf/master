@@ -36,4 +36,8 @@ saltgui_templates:
         command: test.version
     template3:
         description: Empty template
-
+    template4:
+        description: Fourth template
+        targettype: compound
+        target: "G@os:Ubuntu"
+        command: test.version

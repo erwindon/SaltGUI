@@ -303,7 +303,6 @@ class PageRoute extends Route {
     tr.appendChild(td);
 
     td.id = "job" + job.id;
-
     const targetText = window.makeTargetText(job["Target-type"], job.Target);
     td.appendChild(Route._createDiv("target", targetText));
 
@@ -320,7 +319,6 @@ class PageRoute extends Route {
 
   _addDetailedJob(container, job) {
     const tr = document.createElement("tr");
-
     const jidText = job.id;
     tr.appendChild(Route._createTd("jid", jidText));
 

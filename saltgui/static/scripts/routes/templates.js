@@ -44,21 +44,15 @@ class TemplatesRoute extends PageRoute {
       tr.appendChild(Route._createTd("description", description));
     }
 
+    // calculate targettype
+    let targettype = template["targettype"];
+    if (!targettype) targettype = "";
     // calculate target
     const target = template["target"];
     if (!target) {
       tr.appendChild(Route._createTd("target value_none", "(none)"));
     } else {
-      tr.appendChild(Route._createTd("target", target));
-    }
-
-    // calculate targettype
-    let targettype = template["targettype"];
-    if (!targettype) {
-      targettype = "";
-      tr.appendChild(Route._createTd("targettype value_none", "(none)"));
-    } else {
-      tr.appendChild(Route._createTd("targettype", targettype));
+      tr.appendChild(Route._createTd("target", window.makeTargetText(targettype, target)));
     }
 
     // calculate command
