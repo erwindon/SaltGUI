@@ -110,12 +110,25 @@ class Router {
     const router = this;
     route.getPageElement().style.display = "";
 
+    const minionMenuItem = document.getElementById("button_minions");
+    const jobsMenuItem = document.getElementById("button_jobs");
+
     Array.from(document.querySelectorAll(".menu_item_active")).forEach(
       function (e){ e.classList.remove("menu_item_active"); }
     );
 
     const elem = route.getMenuItemElement();
-    if(elem) elem.classList.add("menu_item_active");
+    if(elem) {
+      elem.classList.add("menu_item_active");
+      // activate also parent menu item if child element is selected
+      if (elem.id === "button_pillars" || elem.id === "button_schedules" || elem.id === "button_grains") {
+        minionMenuItem.classList.add("menu_item_active");
+      }
+      if (elem.id === "button_jobs" || elem.id === "button_templates") {
+        jobsMenuItem.classList.add("menu_item_active");
+      }
+    }
+
     router.switchingRoute = true;
 
     const afterLoad = function(route) {
