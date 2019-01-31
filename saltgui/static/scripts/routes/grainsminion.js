@@ -26,6 +26,7 @@ class GrainsMinionRoute extends PageRoute {
       if(minions.keysLoaded && minions.jobsLoaded) resolve();
       minions.router.api.getGrainsItems(minion).then(minions._showGrains);
       minions.router.api.getJobs().then(minions._updateJobs);
+      minions.router.api.getJobsActive().then(minions._runningJobs);
     });
   }
 
