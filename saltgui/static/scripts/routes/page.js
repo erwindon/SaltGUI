@@ -296,6 +296,25 @@ class PageRoute extends Route {
     }
   }
 
+  _runningJobsStatus(data) {
+    const jobs = data.return[0];
+    for(const k in jobs)
+    {
+      const job = jobs[k];
+
+      // then add the operational statistics
+      let targetText;
+      if(job.Running.length > 0)
+        targetText = job.Running.length + " running";
+      if(job.Returned.length > 0)
+        targetText = targetText + ", " + job.Returned.length + " returned";
+
+      const targetField = document.querySelector(".jobs #job" + k + " .status");
+      // the field may not (yet) be on the screen
+      if(targetField) targetField.innerText = targetText;
+    }
+  }
+
   _addJob(container, job) {
     const tr = document.createElement("tr");
 
@@ -319,8 +338,9 @@ class PageRoute extends Route {
 
   _addDetailedJob(container, job) {
     const tr = document.createElement("tr");
+    tr.id = "job" + job.id;
     const jidText = job.id;
-    tr.appendChild(Route._createTd("jid", jidText));
+    tr.appendChild(Route._createTd("job" + job.id, jidText));
 
     const targetText = window.makeTargetText(job["Target-type"], job.Target);
     tr.appendChild(Route._createTd("target", targetText));
@@ -330,6 +350,8 @@ class PageRoute extends Route {
 
     const startTimeText = job.StartTime;
     tr.appendChild(Route._createTd("starttime", startTimeText));
+
+    tr.appendChild(Route._createTd("status", ""));
 
     const menu = new DropDownMenu(tr);
     menu.addMenuItem("Show&nbsp;details", function(evt) {
