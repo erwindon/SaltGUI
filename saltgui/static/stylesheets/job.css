@@ -2,10 +2,6 @@
   margin: 10px;
 }
 
-#page_job .job-info h1 {
-  font-size: 30px;
-}
-
 #page_job .time {
   font-size: 15px;
   font-weight: normal;
@@ -48,4 +44,8 @@
 #page_job .task .comment,
 #page_job .task .duration {
   font-size: 12px;
+}
+
+#page_job .job_menu {
+  display: inline;
 }

@@ -23,9 +23,16 @@ class JobRoute extends Route {
       this.router.goTo("/jobs");
     });
 
-    const jobinfo = this.getPageElement().querySelector(".job-info");
+    const argumentsText = this._decodeArgumentsText(info.Arguments[0]);
+    const commandText = info.Function + " " + argumentsText;
+    const jobinfo = document.getElementById("job_page");
+    const menuSection = jobinfo.querySelector(".job_menu");
+    const menu = new DropDownMenu(menuSection);
+    menu.addMenuItem("Re-run&nbsp;job...", function(evt) {
+      this._runFullCommand(evt, info["Target-type"], info.Target, commandText);
+    }.bind(this));
 
-    const functionText = info.Function + " on " +
+    const functionText = commandText + " on " +
       window.makeTargetText(info["Target-type"], info.Target);
     jobinfo.querySelector(".function").innerText = functionText;
 

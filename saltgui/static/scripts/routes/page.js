@@ -325,7 +325,8 @@ class PageRoute extends Route {
     const targetText = window.makeTargetText(job["Target-type"], job.Target);
     tr.appendChild(Route._createTd("target", targetText));
 
-    const functionText = job.Function;
+    const argumentsText = this._decodeArgumentsText(job.Arguments[0]);
+    const functionText = job.Function + " " + argumentsText;
     tr.appendChild(Route._createTd("function", functionText));
 
     const startTimeText = job.StartTime;
@@ -334,6 +335,9 @@ class PageRoute extends Route {
     const menu = new DropDownMenu(tr);
     menu.addMenuItem("Show&nbsp;details", function(evt) {
       window.location.assign("/job?id=" + encodeURIComponent(job.id));
+    }.bind(this));
+    menu.addMenuItem("Re-run&nbsp;job...", function(evt) {
+      this._runFullCommand(evt, job["Target-type"], job.Target, functionText);
     }.bind(this));
 
     // fill out the number of columns to that of the header
@@ -385,33 +389,4 @@ class PageRoute extends Route {
     document.execCommand("copy");
   }
 
-  _runCommand(evt, targetString, commandString) {
-    this._runFullCommand(evt, "", targetString, commandString);
-  }
-
-  _runFullCommand(evt, targettype, targetString, commandString) {
-    this.router.commandbox._showManualRun(evt);
-    const target = document.querySelector("#target");
-    const command = document.querySelector("#command");
-    const targetbox = document.querySelector("#targetbox");
-
-    if(!targetString) targetString = "";
-    if(!commandString) commandString = "";
-
-    if(targettype) {
-      let tt = targettype;
-      // show the extended selection controls when
-      targetbox.style.display = "inherit";
-      if(tt !== "glob" && tt !== "list" && tt !== "compound" && tt !== "nodegroup") {
-        // we don't support that, revert to standard (not default)
-        tt = "glob";
-      }
-      TargetType.setTargetType(tt);
-    }
-
-    target.value = targetString;
-    command.value = commandString;
-    // the menu may become (in)visible due to content of command field
-    this.router.commandbox.cmdmenu.verifyAll();
-  }
 }
