@@ -275,41 +275,27 @@ class PageRoute extends Route {
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
-  _runningJobs(data) {
+  _runningJobs(data, jobsStatus = false) {
     const jobs = data.return[0];
     for(const k in jobs)
     {
       const job = jobs[k];
 
-      // start with same text as for _addJob
-      let targetText = window.makeTargetText(job["Target-type"], job.Target);
-
+      let targetText = "";
+      let targetField;
+      if (jobsStatus  === true) {
+        targetField = document.querySelector(".jobs #job" + k + " .status");
+      } else {
+        // start with same text as for _addJob
+        targetText = window.makeTargetText(job["Target-type"], job.Target) + ", ";
+        targetField = document.querySelector(".jobs #job" + k + " .target");
+      }
       // then add the operational statistics
       if(job.Running.length > 0)
-        targetText = targetText + ", " + job.Running.length + " running";
+        targetText = targetText + job.Running.length + " running";
       if(job.Returned.length > 0)
         targetText = targetText + ", " + job.Returned.length + " returned";
 
-      const targetField = document.querySelector(".jobs #job" + k + " .target");
-      // the field may not (yet) be on the screen
-      if(targetField) targetField.innerText = targetText;
-    }
-  }
-
-  _runningJobsStatus(data) {
-    const jobs = data.return[0];
-    for(const k in jobs)
-    {
-      const job = jobs[k];
-
-      // then add the operational statistics
-      let targetText;
-      if(job.Running.length > 0)
-        targetText = job.Running.length + " running";
-      if(job.Returned.length > 0)
-        targetText = targetText + ", " + job.Returned.length + " returned";
-
-      const targetField = document.querySelector(".jobs #job" + k + " .status");
       // the field may not (yet) be on the screen
       if(targetField) targetField.innerText = targetText;
     }
@@ -351,13 +337,13 @@ class PageRoute extends Route {
     const startTimeText = job.StartTime;
     tr.appendChild(Route._createTd("starttime", startTimeText));
 
-    tr.appendChild(Route._createTd("status", ""));
-
     const menu = new DropDownMenu(tr);
     menu.addMenuItem("Show&nbsp;details", function(evt) {
       window.location.assign("/job?id=" + encodeURIComponent(job.id));
     }.bind(this));
 
+    tr.appendChild(Route._createTd("status", ""));
+    
     // fill out the number of columns to that of the header
     while(tr.cells.length < container.tHead.rows[0].cells.length) {
       tr.appendChild(Route._createTd("", ""));
