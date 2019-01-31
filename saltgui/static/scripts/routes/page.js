@@ -283,7 +283,7 @@ class PageRoute extends Route {
 
       let targetText = "";
       let targetField;
-      if (jobsStatus  === true) {
+      if(jobsStatus === true) {
         targetField = document.querySelector(".jobs #job" + k + " .status");
       } else {
         // start with same text as for _addJob
