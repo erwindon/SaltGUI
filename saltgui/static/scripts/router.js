@@ -121,10 +121,10 @@ class Router {
     if(elem) {
       elem.classList.add("menu_item_active");
       // activate also parent menu item if child element is selected
-      if (elem.id === "button_pillars" || elem.id === "button_schedules" || elem.id === "button_grains") {
+      if(elem.id === "button_pillars" || elem.id === "button_schedules" || elem.id === "button_grains") {
         minionMenuItem.classList.add("menu_item_active");
       }
-      if (elem.id === "button_jobs" || elem.id === "button_templates") {
+      if(elem.id === "button_jobs" || elem.id === "button_templates") {
         jobsMenuItem.classList.add("menu_item_active");
       }
     }
