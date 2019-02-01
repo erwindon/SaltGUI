@@ -39,4 +39,67 @@ class Route {
     return div;
   }
 
+  _runCommand(evt, targetString, commandString) {
+    this._runFullCommand(evt, "", targetString, commandString);
+  }
+
+  _runFullCommand(evt, targettype, targetString, commandString) {
+    this.router.commandbox._showManualRun(evt);
+    const target = document.querySelector("#target");
+    const command = document.querySelector("#command");
+    const targetbox = document.querySelector("#targetbox");
+
+    // handle https://github.com/saltstack/salt/issues/48734
+    if(targetString === "unknown-target") {
+      targetString = "";
+      targettype = "";
+    }
+
+    if(!targetString) targetString = "";
+    if(!commandString) commandString = "";
+
+    if(targettype) {
+      let tt = targettype;
+      // show the extended selection controls when
+      targetbox.style.display = "inherit";
+      if(tt !== "glob" && tt !== "list" && tt !== "compound" && tt !== "nodegroup") {
+        // we don't support that, revert to standard (not default)
+        tt = "glob";
+      }
+      TargetType.setTargetType(tt);
+    }
+
+    target.value = targetString;
+    command.value = commandString;
+    // the menu may become (in)visible due to content of command field
+    this.router.commandbox.cmdmenu.verifyAll();
+  }
+
+  _decodeArgumentsText(rawArguments) {
+    const rawObject = rawArguments;
+    let argumentsText = "";
+
+    switch (typeof rawObject) {
+    case "undefined":
+      argumentsText = "";
+      break;
+    case "object": {      
+      // object args need special treatment
+      const keys = Object.keys(rawObject).sort();
+      for(const key of keys) {
+        // remove speciall parameters like __kwargs__
+        if(!key.includes("__")) {
+          argumentsText = argumentsText + key + "=" + rawObject[key];
+        }
+      }
+      break;
+    }
+    default:
+      argumentsText = JSON.stringify(rawObject);
+      break;
+    }
+
+    return argumentsText;
+  }
+
 }
