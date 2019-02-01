@@ -49,6 +49,12 @@ class Route {
     const command = document.querySelector("#command");
     const targetbox = document.querySelector("#targetbox");
 
+    // handle https://github.com/saltstack/salt/issues/48734
+    if(targetString === "unknown-target") {
+      targetString = "";
+      targettype = "";
+    }
+
     if(!targetString) targetString = "";
     if(!commandString) commandString = "";
 
@@ -70,7 +76,6 @@ class Route {
   }
 
   _decodeArgumentsText(rawArguments) {
-    console.log(rawArguments);
     const rawObject = rawArguments;
     let argumentsText = "";
 
