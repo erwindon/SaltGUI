@@ -27,6 +27,7 @@ class SchedulesMinionRoute extends PageRoute {
       if(minions.keysLoaded && minions.jobsLoaded) resolve();
       minions.router.api.getScheduleList(minion).then(minions._showSchedules);
       minions.router.api.getJobs().then(minions._updateJobs);
+      minions.router.api.getJobsActive().then(minions._runningJobs);
     });
   }
 

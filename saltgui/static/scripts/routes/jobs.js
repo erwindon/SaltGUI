@@ -5,6 +5,7 @@ class JobsRoute extends PageRoute {
     this.jobsLoaded = false;
 
     this._updateJobs = this._updateJobs.bind(this);
+    this._runningJobs = this._runningJobs.bind(this);
   }
 
   onShow() {
@@ -15,7 +16,9 @@ class JobsRoute extends PageRoute {
       jobs.router.api.getJobs().then(data => {
         jobs._updateJobs(data, 20, true);
       });
-      jobs.router.api.getJobsActive().then(jobs._runningJobs);
+      jobs.router.api.getJobsActive().then(data => {
+        jobs._runningJobs(data, true);
+      });
     });
   }
 
