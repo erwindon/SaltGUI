@@ -28,6 +28,7 @@ header .menu-dropdown-content {
 }
 
 /* Links inside the menu-dropdown */
+.dropdown .dropdown-content div,
 .run-command-button .menu-dropdown-content div {
   display: block;
   float: left;
@@ -40,6 +41,7 @@ header .menu-dropdown-content {
 }
 
 /* Change color of menu-dropdown links on hover */
+.dropdown .dropdown-content div:hover,
 .run-command-button .menu-dropdown-content div:hover {
   background: rgba(0, 0, 0, 0.15);
   color: #4caf50;
@@ -52,11 +54,33 @@ header .menu-dropdown-content {
 }
 
 /* Change the background color of the menu-dropdown button when the menu-dropdown content is shown */
+div.button_schedules:hover .menu_item {
+  background: rgba(0, 0, 0, 0.15);
+  color: #4caf50;
+}
+
 .run-command-button:hover .menu-dropdown {
-  background-color: #efefef;
+  background: rgba(0, 0, 0, 0.15);
   color: #4caf50;
 }
 
 #mainmenumini .run-command-button .menu-dropdown-content {
   max-height: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  z-index: 3;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
 }

@@ -19,14 +19,16 @@ header {
   border-top: 2px solid #4caf50;
   background-color: white;
   margin-top: 0;
-  padding: 12px 24px 12px 24px;
 }
 
 .logo {
   cursor: pointer;
   color: #4caf50;
   font-size: 30px;
-  font-weight: lighter;
+  font-weight: normal;
+  display: block;
+  float: left;
+  padding: 10px 24px 10px 24px;
 }
 
 h1 {
@@ -46,6 +48,7 @@ h1 {
 
 .msg {
   color: #505050;
+  padding-top: 5px;
 }
 
 .panel:first-of-type {
@@ -72,7 +75,8 @@ h1 {
   transform: scale(0.8) translate(23px, -2px);
   cursor: pointer;
   float: right;
-  margin-top: -4px;
+  margin-top: 4px;
+  margin-right: 20px;
 }
 
 .fab:hover {
@@ -109,9 +113,9 @@ h1 {
 
 .menu_item {
   display: inline-block;
-  padding-left: 20px;
   font-size: 18px;
   font-weight: lighter;
+  padding: 15px 30px 15px 30px;
 }
 
 .menu_item_active {
@@ -119,6 +123,7 @@ h1 {
 }
 
 .menu_item:hover {
+  background: rgba(0, 0, 0, 0.15);
   color: #4caf50;
   cursor: pointer;
 }
@@ -126,6 +131,7 @@ h1 {
 #mainmenumini {
   display: none;
   float: right;
+  padding-top: 8px;
 }
 
 @media (max-width: 800px) {
