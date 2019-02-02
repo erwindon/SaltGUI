@@ -104,10 +104,10 @@ class GrainsRoute extends PageRoute {
     for(let i = 0; i < this._previewGrains.length; i++) {
       const td = document.createElement("td");
       const grainName = this._previewGrains[i];
-      if(grainName in minion)
-        td.innerText = JSON.stringify(minion[grainName]);
-      else
-        td.innerText = "";
+      if(grainName in minion) {
+        td.innerText = Output.formatObject(minion[grainName]);
+        td.classList.add("grain_value");
+      }
       element.appendChild(td);
     }
   }
