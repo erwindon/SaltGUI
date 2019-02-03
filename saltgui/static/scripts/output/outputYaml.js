@@ -75,7 +75,7 @@ class OutputYaml {
       let out = "";
       let separator = "";
       for(const item of value) {
-        out += separator + "- " + OutputYaml.formatYAML(item, indentLevel + 2);
+        out += separator + "-&nbsp;" + OutputYaml.formatYAML(item, indentLevel + 2);
         separator = "\n" + " ".repeat(indentLevel);
       }
       return out;
