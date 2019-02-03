@@ -79,7 +79,7 @@ class OutputDocumentation {
     if(filterKey === "wheel") {
       return "";
     }
-    if (filterKey.startsWith("wheel.")) {
+    if(filterKey.startsWith("wheel.")) {
       // strip the prefix "wheel."
       return filterKey.substring(6);
     }
@@ -87,7 +87,7 @@ class OutputDocumentation {
     if(filterKey === "runners") {
       return "";
     }
-    if (filterKey.startsWith("runners.")) {
+    if(filterKey.startsWith("runners.")) {
       // strip the prefix "runners."
       return filterKey.substring(8);
     }

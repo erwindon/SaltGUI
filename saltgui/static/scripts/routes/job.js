@@ -28,9 +28,78 @@ class JobRoute extends Route {
     const jobinfo = document.getElementById("job_page");
     const menuSection = jobinfo.querySelector(".job_menu");
     const menu = new DropDownMenu(menuSection);
+
+    // 1: re-run with original target pattern
     menu.addMenuItem("Re-run&nbsp;job...", function(evt) {
       this._runFullCommand(evt, info["Target-type"], info.Target, commandText);
     }.bind(this));
+
+    // 2: re-run list of minions
+    let minionList = "";
+    if(info.Minions) {
+      for(const m of info.Minions) {
+        minionList += "," + m;
+      }
+    }
+    if(minionList) {
+      const lst = minionList.substring(1);
+      menu.addMenuItem("Re-run&nbsp;job&nbsp;on&nbsp;all&nbsp;minions...", function(evt) {
+        this._runFullCommand(evt, "list", lst, commandText);
+      }.bind(this));
+    }
+
+    // 3: re-run all failed (error+timeout)
+    minionList = "";
+    let has1 = false, has2 = false;
+    if(info.Minions) {
+      for(const m of info.Minions) {
+        if(!(m in info.Result)) has1 = true;
+        if(m in info.Result && !info.Result[m].success) has2 = true;
+        if(!(m in info.Result) || !info.Result[m].success) {
+          minionList += "," + m;
+        }
+      }
+    }
+    // only when we have both types in the list
+    // otherwise the #4 or #5 is sufficient
+    if(has1 && has2 && minionList) {
+      const lst = minionList.substring(1);
+      menu.addMenuItem("Re-run&nbsp;job&nbsp;on&nbsp;unsuccessful&nbsp;minions...", function(evt) {
+        this._runFullCommand(evt, "list", lst, commandText);
+      }.bind(this));
+    }
+
+    // 4: re-run all failed (error)
+    minionList = "";
+    if(info.Minions) {
+      for(const m of info.Minions) {
+        if(m in info.Result && !info.Result[m].success) {
+          minionList += "," + m;
+        }
+      }
+    }
+    if(minionList) {
+      const lst = minionList.substring(1);
+      menu.addMenuItem("Re-run&nbsp;job&nbsp;on&nbsp;failed&nbsp;minions...", function(evt) {
+        this._runFullCommand(evt, "list", lst, commandText);
+      }.bind(this));
+    }
+
+    // 5: re-run all failed (timeout)
+    minionList = "";
+    if(info.Minions) {
+      for(const m of info.Minions) {
+        if(!(m in info.Result)) {
+          minionList += "," + m;
+        }
+      }
+    }
+    if(minionList) {
+      const lst = minionList.substring(1);
+      menu.addMenuItem("Re-run&nbsp;job&nbsp;on&nbsp;non&nbsp;responding&nbsp;minions...", function(evt) {
+        this._runFullCommand(evt, "list", lst, commandText);
+      }.bind(this));
+    }
 
     const functionText = commandText + " on " +
       window.makeTargetText(info["Target-type"], info.Target);
