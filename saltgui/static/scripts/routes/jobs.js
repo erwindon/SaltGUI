@@ -14,7 +14,7 @@ class JobsRoute extends PageRoute {
       jobs.resolvePromise = resolve;
       if(jobs.jobsLoaded) resolve();
       jobs.router.api.getJobs().then(data => {
-        jobs._updateJobs(data, 20, true);
+        jobs._updateJobs(data, 50, true);
       });
       jobs.router.api.getJobsActive().then(data => {
         jobs._runningJobs(data, true);
