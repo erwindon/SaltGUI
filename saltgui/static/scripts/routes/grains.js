@@ -8,6 +8,28 @@ class GrainsRoute extends PageRoute {
 
     this._updateKeys = this._updateKeys.bind(this);
     this._updateMinion = this._updateMinion.bind(this);
+
+    // collect the list of displayed minions
+    let previewGrainsText = window.localStorage.getItem("preview_grains");
+    if(!previewGrainsText || previewGrainsText === "undefined") {
+      previewGrainsText = "[]";
+    }
+    this._previewGrains = JSON.parse(previewGrainsText);
+    if(!Array.isArray(this._previewGrains)) {
+      this._previewGrains = [ ];
+    }
+    // add all the required columns
+    const tr = document.querySelector("#page_grains thead tr");
+    while(tr.childElementCount > 6) {
+      tr.removeChild(tr.lastChild);
+    }
+    for(let i = 0; i < this._previewGrains.length; i++) {
+      const th = document.createElement("th");
+      th.innerText = this._previewGrains[i];
+      tr.appendChild(th);
+    }
+    // the new columns are not yet sortable, make sure they are
+    sorttable.makeSortable(document.querySelector("#page_grains table"));
   }
 
   onShow() {
@@ -30,12 +52,16 @@ class GrainsRoute extends PageRoute {
 
     const hostnames = keys.minions.sort();
     for(const hostname of hostnames) {
-      this._addMinion(list, hostname, 1);
+      this._addMinion(list, hostname, 1 + this._previewGrains.length);
 
       // preliminary dropdown menu
       const element = document.getElementById(hostname);
       const menu = new DropDownMenu(element);
       this._addMenuItemShowGrains(menu, hostname);
+
+      for(let i = 0; i < this._previewGrains.length; i++) {
+        element.appendChild(Route._createTd("", ""));
+      }
     }
 
     this.keysLoaded = true;
@@ -52,6 +78,9 @@ class GrainsRoute extends PageRoute {
     element.appendChild(Route._createTd("os", ""));
     element.appendChild(Route._createTd("graininfo", ""));
     element.appendChild(Route._createTd("run-command-button", ""));
+    for(let i = 0; i < this._previewGrains.length; i++) {
+      element.appendChild(Route._createTd("", ""));
+    }
   }
 
   _updateMinion(container, minion, hostname) {
@@ -67,6 +96,20 @@ class GrainsRoute extends PageRoute {
 
     const menu = new DropDownMenu(element);
     this._addMenuItemShowGrains(menu, hostname);
+
+    // add all the required columns
+    while(element.childElementCount > 6) {
+      element.removeChild(element.lastChild);
+    }
+    for(let i = 0; i < this._previewGrains.length; i++) {
+      const td = document.createElement("td");
+      const grainName = this._previewGrains[i];
+      if(grainName in minion) {
+        td.innerText = Output.formatObject(minion[grainName]);
+        td.classList.add("grain_value");
+      }
+      element.appendChild(td);
+    }
   }
 
   _addMenuItemShowGrains(menu, hostname) {

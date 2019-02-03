@@ -103,6 +103,16 @@ saltgui_templates:
         command: test.version
 ```
 
+## Grains
+Selected grains can be previewed on the Grains page.
+The names of these grains can be configured
+in salt master configuration file `/etc/salt/master`.
+e.g.:
+```
+saltgui_preview_grains:
+    - osrelease_info
+```
+
 ## Pillars
 Pillars potentially contain security senstitive information.
 Therefore their values are initially hidden.

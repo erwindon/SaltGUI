@@ -1,7 +1,8 @@
-#page_grains {
-  width: 100%;
+.grains .grain_value,
+#page_grains .grain_value {
+  white-space: pre-wrap;
 }
 
-.grains .grain_value {
-  white-space: pre-wrap;
+#page_grains {
+  width: 100%;
 }

@@ -31,6 +31,9 @@ class MinionsRoute extends PageRoute {
     const public_pillars = data.return[0].data.return.saltgui_public_pillars;
     window.localStorage.setItem("public_pillars", JSON.stringify(public_pillars));
 
+    const preview_grains = data.return[0].data.return.saltgui_preview_grains;
+    window.localStorage.setItem("preview_grains", JSON.stringify(preview_grains));
+
     let nodegroups = data.return[0].data.return.nodegroups;
     if(!nodegroups) nodegroups = {};
     window.localStorage.setItem("nodegroups", JSON.stringify(nodegroups));
