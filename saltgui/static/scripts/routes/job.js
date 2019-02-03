@@ -80,7 +80,7 @@ class JobRoute extends Route {
     }
     if(minionList) {
       const lst = minionList.substring(1);
-      menu.addMenuItem("Re-run&nbsp;job&nbsp;failed&nbsp;minions...", function(evt) {
+      menu.addMenuItem("Re-run&nbsp;job&nbsp;on&nbsp;failed&nbsp;minions...", function(evt) {
         this._runFullCommand(evt, "list", lst, commandText);
       }.bind(this));
     }
@@ -96,7 +96,7 @@ class JobRoute extends Route {
     }
     if(minionList) {
       const lst = minionList.substring(1);
-      menu.addMenuItem("Re-run&nbsp;job&nbsp;non&nbsp;responding&nbsp;minions...", function(evt) {
+      menu.addMenuItem("Re-run&nbsp;job&nbsp;on&nbsp;non&nbsp;responding&nbsp;minions...", function(evt) {
         this._runFullCommand(evt, "list", lst, commandText);
       }.bind(this));
     }
