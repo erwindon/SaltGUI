@@ -41,7 +41,7 @@ class JobRoute extends Route {
     }
     if(minionList) {
       const lst = minionList.substring(1);
-      menu.addMenuItem("Re-run&nbsp;job (all)...", function(evt) {
+      menu.addMenuItem("Re-run&nbsp;job&nbsp;on&nbsp;all&nbsp;minions...", function(evt) {
         this._runFullCommand(evt, "list", lst, commandText);
       }.bind(this));
     }
@@ -60,7 +60,7 @@ class JobRoute extends Route {
     // otherwise the #4 or #5 is sufficient
     if(has1 && has2 && minionList) {
       const lst = minionList.substring(1);
-      menu.addMenuItem("Re-run&nbsp;job (unsuccessful)...", function(evt) {
+      menu.addMenuItem("Re-run&nbsp;job&nbsp;on&nbsp;unsuccessful&nbsp;minions...", function(evt) {
         this._runFullCommand(evt, "list", lst, commandText);
       }.bind(this));
     }
@@ -74,7 +74,7 @@ class JobRoute extends Route {
     }
     if(minionList) {
       const lst = minionList.substring(1);
-      menu.addMenuItem("Re-run&nbsp;job (errors)...", function(evt) {
+      menu.addMenuItem("Re-run&nbsp;job&nbsp;failed&nbsp;minions...", function(evt) {
         this._runFullCommand(evt, "list", lst, commandText);
       }.bind(this));
     }
@@ -88,7 +88,7 @@ class JobRoute extends Route {
     }
     if(minionList) {
       const lst = minionList.substring(1);
-      menu.addMenuItem("Re-run&nbsp;job (timeout)...", function(evt) {
+      menu.addMenuItem("Re-run&nbsp;job&nbsp;non&nbsp;responding&nbsp;minions...", function(evt) {
         this._runFullCommand(evt, "list", lst, commandText);
       }.bind(this));
     }
