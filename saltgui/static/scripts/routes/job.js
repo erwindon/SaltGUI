@@ -36,8 +36,10 @@ class JobRoute extends Route {
 
     // 2: re-run list of minions
     let minionList = "";
-    for(const m of info.Minions) {
-      minionList += "," + m;
+    if(info.Minions) {
+      for(const m of info.Minions) {
+        minionList += "," + m;
+      }
     }
     if(minionList) {
       const lst = minionList.substring(1);
@@ -49,11 +51,13 @@ class JobRoute extends Route {
     // 3: re-run all failed (error+timeout)
     minionList = "";
     let has1 = false, has2 = false;
-    for(const m of info.Minions) {
-      if(!(m in info.Result)) has1 = true;
-      if(m in info.Result && !info.Result[m].success) has2 = true;
-      if(!(m in info.Result) || !info.Result[m].success) {
-        minionList += "," + m;
+    if(info.Minions) {
+      for(const m of info.Minions) {
+        if(!(m in info.Result)) has1 = true;
+        if(m in info.Result && !info.Result[m].success) has2 = true;
+        if(!(m in info.Result) || !info.Result[m].success) {
+          minionList += "," + m;
+        }
       }
     }
     // only when we have both types in the list
@@ -67,9 +71,11 @@ class JobRoute extends Route {
 
     // 4: re-run all failed (error)
     minionList = "";
-    for(const m of info.Minions) {
-      if(m in info.Result && !info.Result[m].success) {
-        minionList += "," + m;
+    if(info.Minions) {
+      for(const m of info.Minions) {
+        if(m in info.Result && !info.Result[m].success) {
+          minionList += "," + m;
+        }
       }
     }
     if(minionList) {
@@ -81,9 +87,11 @@ class JobRoute extends Route {
 
     // 5: re-run all failed (timeout)
     minionList = "";
-    for(const m of info.Minions) {
-      if(!(m in info.Result)) {
-        minionList += "," + m;
+    if(info.Minions) {
+      for(const m of info.Minions) {
+        if(!(m in info.Result)) {
+          minionList += "," + m;
+        }
       }
     }
     if(minionList) {
