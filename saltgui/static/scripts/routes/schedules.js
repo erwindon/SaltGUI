@@ -2,10 +2,7 @@ class SchedulesRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]schedules$", "Schedules", "#page_schedules", "#button_schedules", router);
-    this.keysLoaded = false;
     this.jobsLoaded = false;
-
-    this._updateKeys = this._updateKeys.bind(this);
     this._updateMinion = this._updateMinion.bind(this);
   }
 
@@ -14,10 +11,8 @@ class SchedulesRoute extends PageRoute {
 
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
-      if(minions.keysLoaded && minions.jobsLoaded) resolve();
-      minions.router.api.getScheduleList(null)
-        .then(minions._updateMinions, minions._updateMinions);
-      minions.router.api.getKeys().then(minions._updateKeys);
+      if(minions.jobsLoaded) resolve();
+      minions.router.api.getScheduleList().then(minions._updateMinions);
       minions.router.api.getJobs().then(minions._updateJobs);
       minions.router.api.getJobsActive().then(minions._runningJobs);
     });
@@ -39,25 +34,6 @@ class SchedulesRoute extends PageRoute {
       ret.schedules[k] = data[k];
     }
     return ret;
-  }
-
-  _updateKeys(data) {
-    const keys = data.return;
-
-    const list = this.getPageElement().querySelector('#minions');
-
-    const hostnames = keys.minions.sort();
-    for(const hostname of hostnames) {
-      this._addMinion(list, hostname, 1);
-
-      // preliminary dropdown menu
-      const element = document.getElementById(hostname);
-      const menu = new DropDownMenu(element);
-      this._addMenuItemShowSchedules(menu, hostname);
-    }
-
-    this.keysLoaded = true;
-    if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
   _updateOfflineMinion(container, hostname) {

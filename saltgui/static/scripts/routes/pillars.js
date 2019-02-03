@@ -2,11 +2,7 @@ class PillarsRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]pillars$", "Pillars", "#page_pillars", "#button_pillars", router);
-
-    this.keysLoaded = false;
     this.jobsLoaded = false;
-
-    this._updateKeys = this._updateKeys.bind(this);
     this._updateMinion = this._updateMinion.bind(this);
   }
 
@@ -15,31 +11,11 @@ class PillarsRoute extends PageRoute {
 
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
-      if(minions.keysLoaded && minions.jobsLoaded) resolve();
-      minions.router.api.getPillarObfuscate(null).then(minions._updateMinions);
-      minions.router.api.getKeys().then(minions._updateKeys);
+      if(minions.jobsLoaded) resolve();
+      minions.router.api.getPillarObfuscate().then(minions._updateMinions);
       minions.router.api.getJobs().then(minions._updateJobs);
       minions.router.api.getJobsActive().then(minions._runningJobs);
     });
-  }
-
-  _updateKeys(data) {
-    const keys = data.return;
-
-    const list = this.getPageElement().querySelector('#minions');
-
-    const hostnames = keys.minions.sort();
-    for(const hostname of hostnames) {
-      this._addMinion(list, hostname, 1);
-
-      // preliminary dropdown menu
-      const element = document.getElementById(hostname);
-      const menu = new DropDownMenu(element);
-      this._addMenuItemShowPillars(menu, hostname);
-    }
-
-    this.keysLoaded = true;
-    if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
   _updateOfflineMinion(container, hostname) {
