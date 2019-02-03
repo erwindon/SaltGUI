@@ -32,10 +32,10 @@ class OutputNested {
           if(typeof ind === "object" && !Array.isArray(ind))
             prefix = '';
           else
-            prefix ='-&nbsp;';
+            prefix ='-\u00A0';
           OutputNested.display(ind, indent + 2, prefix, out);
         } else {
-          OutputNested.display(ind, indent, '-&nbsp;', out);
+          OutputNested.display(ind, indent, '-\u00A0', out);
         }
       }
     } else if(typeof ret === "object") {

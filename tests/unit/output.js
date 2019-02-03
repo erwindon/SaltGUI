@@ -109,16 +109,16 @@ describe('Unittests for output.js', function() {
 
     outputData = [1];
     result = OutputYaml.formatYAML(outputData);
-    assert.equal(result, "-&nbsp;1");
+    assert.equal(result, "-\u00A01");
 
     outputData = [1,2,3,4,5];
     result = OutputYaml.formatYAML(outputData);
     assert.equal(result,
-      "-&nbsp;1\n" +
-      "-&nbsp;2\n" +
-      "-&nbsp;3\n" +
-      "-&nbsp;4\n" +
-      "-&nbsp;5");
+      "-\u00A01\n" +
+      "-\u00A02\n" +
+      "-\u00A03\n" +
+      "-\u00A04\n" +
+      "-\u00A05");
 
     outputData = {};
     result = OutputYaml.formatYAML(outputData);
@@ -140,9 +140,9 @@ describe('Unittests for output.js', function() {
     assert.equal(result, 
       "ip6_interfaces:\n" +
       "  eth0:\n" +
-      "  -&nbsp;fe80::20d:3aff:fe38:576b\n" +
+      "  -\u00A0fe80::20d:3aff:fe38:576b\n" +
       "  lo:\n" +
-      "  -&nbsp;::1");
+      "  -\u00A0::1");
 
     done();
   });
@@ -173,16 +173,16 @@ describe('Unittests for output.js', function() {
 
     outputData = [1];
     result = OutputNested.formatNESTED(outputData);
-    assert.equal(result, "-&nbsp;1");
+    assert.equal(result, "-\u00A01");
 
     outputData = [1,2,3,4,5];
     result = OutputNested.formatNESTED(outputData);
     assert.equal(result,
-      "-&nbsp;1\n" +
-      "-&nbsp;2\n" +
-      "-&nbsp;3\n" +
-      "-&nbsp;4\n" +
-      "-&nbsp;5");
+      "-\u00A01\n" +
+      "-\u00A02\n" +
+      "-\u00A03\n" +
+      "-\u00A04\n" +
+      "-\u00A05");
 
     outputData = {};
     result = OutputNested.formatNESTED(outputData);
@@ -208,9 +208,9 @@ describe('Unittests for output.js', function() {
       "ip6_interfaces:\n" +
       "    ----------\n" +
       "    eth0:\n" +
-      "        -&nbsp;fe80::20d:3aff:fe38:576b\n" +
+      "        -\u00A0fe80::20d:3aff:fe38:576b\n" +
       "    lo:\n" +
-      "        -&nbsp;::1");
+      "        -\u00A0::1");
 
     done();
   });
