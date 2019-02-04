@@ -358,7 +358,7 @@ class PageRoute extends Route {
   _createJobListener(id) {
     const router = this.router;
     return function() {
-      router.goTo("/job?id=" + encodeURIComponent(id));
+      window.location.assign("/job?id=" + encodeURIComponent(id));
     };
   }
 
