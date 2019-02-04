@@ -4,6 +4,7 @@ class PageRoute extends Route {
     super(path, name, page_selector, menuitem_selector, router);
 
     this._runCommand = this._runCommand.bind(this);
+    this._runningJobs = this._runningJobs.bind(this);
     this._updateJobs = this._updateJobs.bind(this);
     this._updateMinions = this._updateMinions.bind(this);
 
