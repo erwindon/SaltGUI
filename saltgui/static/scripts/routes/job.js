@@ -41,6 +41,10 @@ class JobRoute extends Route {
         minionList += "," + m;
       }
     }
+    if(minionList && minionList === "," + info.Minions[0]) {
+      // suppress a trivial case
+      minionList = null;
+    }
     if(minionList) {
       const lst = minionList.substring(1);
       menu.addMenuItem("Re-run&nbsp;job&nbsp;on&nbsp;all&nbsp;minions...", function(evt) {
