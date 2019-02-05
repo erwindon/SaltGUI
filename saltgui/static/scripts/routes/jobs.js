@@ -3,9 +3,6 @@ class JobsRoute extends PageRoute {
   constructor(router) {
     super("^[\/]jobs$", "Jobs", "#page_jobs", "#button_jobs", router);
     this.jobsLoaded = false;
-
-    this._updateJobs = this._updateJobs.bind(this);
-    this._runningJobs = this._runningJobs.bind(this);
   }
 
   onShow() {
