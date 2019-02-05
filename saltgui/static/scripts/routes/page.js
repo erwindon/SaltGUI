@@ -278,6 +278,8 @@ class PageRoute extends Route {
 
   _runningJobs(data, jobsStatus = false) {
     const jobs = data.return[0];
+
+    // update all running jobs
     for(const k in jobs)
     {
       const job = jobs[k];
@@ -298,7 +300,17 @@ class PageRoute extends Route {
         targetText = targetText + ", " + job.Returned.length + " returned";
 
       // the field may not (yet) be on the screen
-      if(targetField) targetField.innerText = targetText;
+      if(!targetField) continue;
+      targetField.classList.remove("no_status");
+      targetField.innerText = targetText;
+    }
+
+    // update all finished jobs
+    for(const tr of document.querySelector("table#jobs tbody").rows) {
+      const statusField = tr.querySelector(".no_status");
+      if(!statusField) continue;
+      statusField.classList.remove("no_status");
+      statusField.innerText = "done";
     }
   }
 
@@ -347,7 +359,9 @@ class PageRoute extends Route {
       this._runFullCommand(evt, job["Target-type"], job.Target, functionText);
     }.bind(this));
 
-    tr.appendChild(Route._createTd("status", ""));
+    const td = Route._createTd("status", "loading...");
+    td.classList.add("no_status");
+    tr.appendChild(td);
     
     // fill out the number of columns to that of the header
     while(tr.cells.length < container.tHead.rows[0].cells.length) {

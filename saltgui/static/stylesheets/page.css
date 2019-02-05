@@ -74,6 +74,10 @@ table tr td {
   white-space: nowrap;
 }
 
+.jobs td.no_status {
+  color: gray;
+}
+
 .templates th,
 .templates td,
 .jobs th,
