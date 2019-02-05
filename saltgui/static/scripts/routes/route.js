@@ -51,6 +51,18 @@ class Route {
 
     // handle https://github.com/saltstack/salt/issues/48734
     if(targetString === "unknown-target") {
+      // target was lost...
+      targetString = "";
+      targettype = "";
+    }
+    if(commandString.startsWith("wheel.") && targetString.endsWith("_master")) {
+      // target was {hostname}_master...
+      // too bad when the real hostname is actually like that :-(
+      targetString = "";
+      targettype = "";
+    }
+    if(commandString.startsWith("runners.")) {
+      // runners do not have a target, so do not bother
       targetString = "";
       targettype = "";
     }
