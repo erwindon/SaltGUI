@@ -264,6 +264,7 @@ class PageRoute extends Route {
       if(job.Function === "wheel.key.delete") continue;
       if(job.Function === "wheel.key.list_all") continue;
       if(job.Function === "wheel.key.reject") continue;
+      if(job.Function === "wheel.key.finger") continue;
 
       if(detailedJob === true) {
         this._addDetailedJob(jobContainer, job);

@@ -6,23 +6,53 @@ class KeysRoute extends PageRoute {
     this.jobsLoaded = false;
 
     this._updateKeys = this._updateKeys.bind(this);
+    this._updateKeysFingerprint = this._updateKeysFingerprint.bind(this);
   }
 
   onShow() {
     const keys = this;
+    const p1 = keys.router.api.getKeys();
+    const p2 = keys.router.api.getKeysFingerprint();
+
+    Promise.all([p1, p2])
+      .then(function(data){
+        // process result of 1st promise
+        keys._updateKeys(data[0]);
+        // process result of 2nd promise
+        keys._updateKeysFingerprint(data[1]);
+      });
     return new Promise(function(resolve, reject) {
       keys.resolvePromise = resolve;
       if(keys.keysLoaded && keys.jobsLoaded) resolve();
-      keys.router.api.getMinions().then(keys._updateMinions);
-      keys.router.api.getKeys().then(keys._updateKeys);
       keys.router.api.getJobs().then(keys._updateJobs);
       keys.router.api.getJobsActive().then(keys._runningJobs);
     });
   }
 
+  _updateKeysFingerprint(data) {
+    const keys = data.return[0].data.return;
+
+    for(const property of Object.keys(keys)) {
+      if(property === "local") continue;
+      const hosts = keys[property];
+      for(const hostname of Object.keys(hosts)) {
+        const item = document.querySelector("#" + hostname + " .os");
+        if(item) {
+          // remove td.os for accepted minions and add td.fingerprint
+          item.parentElement.insertBefore(Route._createTd("fingerprint", ""), item);
+          item.parentElement.removeChild(item);
+        }
+
+        // update td.fingerprint with fingerprint value
+        const fingerprintElement = document.querySelector("#" + hostname + " .fingerprint");
+        const fingerprint = hosts[hostname];
+        if(fingerprintElement) fingerprintElement.innerText = fingerprint;
+      }
+    }
+  }
+
   _updateKeys(data) {
     const keys = data.return;
-
     const list = this.getPageElement().querySelector("#minions");
 
     // Unaccepted goes first because that is where the user must decide
@@ -76,18 +106,7 @@ class KeysRoute extends PageRoute {
     const element = document.getElementById(hostname);
 
     // force same columns on all rows
-    element.appendChild(Route._createTd("saltversion", ""));
-    element.appendChild(Route._createTd("os", ""));
-
-    const menu = new DropDownMenu(element);
-    this._addMenuItemReject(menu, hostname, " include_accepted=true");
-    this._addMenuItemDelete(menu, hostname, "");
-  }
-
-  _updateMinion(container, minion, hostname) {
-    super._updateMinion(container, minion, hostname);
-
-    const element = document.getElementById(hostname);
+    element.appendChild(Route._createTd("fingerprint", ""));
 
     const menu = new DropDownMenu(element);
     this._addMenuItemReject(menu, hostname, " include_accepted=true");
@@ -104,8 +123,7 @@ class KeysRoute extends PageRoute {
     element.appendChild(rejected);
 
     // force same columns on all rows
-    element.appendChild(Route._createTd("saltversion", ""));
-    element.appendChild(Route._createTd("os", ""));
+    element.appendChild(Route._createTd("fingerprint", ""));
 
     const menu = new DropDownMenu(element);
     this._addMenuItemDelete(menu, hostname, "");
@@ -124,8 +142,7 @@ class KeysRoute extends PageRoute {
     element.appendChild(denied);
 
     // force same columns on all rows
-    element.appendChild(Route._createTd("saltversion", ""));
-    element.appendChild(Route._createTd("os", ""));
+    element.appendChild(Route._createTd("fingerprint", ""));
 
     const menu = new DropDownMenu(element);
     this._addMenuItemAccept(menu, hostname, " include_denied=true");
@@ -145,8 +162,7 @@ class KeysRoute extends PageRoute {
     element.appendChild(pre);
 
     // force same columns on all rows
-    element.appendChild(Route._createTd("saltversion", ""));
-    element.appendChild(Route._createTd("os", ""));
+    element.appendChild(Route._createTd("fingerprint", ""));
 
     const menu = new DropDownMenu(element);
     this._addMenuItemAccept(menu, hostname, "");

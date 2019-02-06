@@ -59,6 +59,15 @@ class API {
     return this.apiRequest("GET", "/keys", {});
   }
 
+  getKeysFingerprint() {
+    const params = {
+      client: "wheel",
+      fun: "key.finger",
+      match: "*"
+    };
+    return this.apiRequest("POST", "/", params).catch(console.error);
+  }
+
   getJobs() {
     return this.apiRequest("GET", "/jobs", {});
   }
