@@ -4,6 +4,7 @@ A new open source web interface for managing a SaltStack server. Built using van
 
 ## Screenshots
 ![overview](/docs/screenshots/overview.png)
+
 ![job](/docs/screenshots/job.png)
 
 
@@ -167,6 +168,17 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 
 ## Changelog
+
+## 1.9.0 (2018-02-06)
+- Added more control over output format (erwindon)
+- Added link to GitHub project on login page (dawidmalina)
+- Added separate Jobs page (dawidmalina)
+- Fixed some OS-icons (erwindon)
+- Support more compact time notation (erwindon)
+- Show popup menu's as early as possible (erwindon)
+- Added separate Job Templates page (dawidmalina)
+- Show which jobs are still running (erwindon)
+- Added re-run functionality for jobs (erwindon/dawidmalina)
 
 ## 1.8.0 (2018-01-13)
 - Improved testing support (erwindon/dawidmalina)
