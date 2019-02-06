@@ -36,21 +36,17 @@ class KeysRoute extends PageRoute {
       if(property === "local") continue;
       const hosts = keys[property];
       for(const hostname of Object.keys(hosts)) {
-        const fingerprint = hosts[hostname];
-        // why this is sometimes null?
-        const element = document.querySelector("#" + hostname);
-        if(element) {
+        const item = document.querySelector("#" + hostname + " .os");
+        if(item) {
           // remove td.os for accepted minions and add td.fingerprint
-          for (const item of element.children) {
-            if(item.className === "os") {
-              element.insertBefore(Route._createTd("fingerprint", ""), item);
-              element.removeChild(item);
-            }
-          }
-          // update td.fingerprint with fingerprint value
-          const fingerprintElement = document.querySelector("#" + hostname + " .fingerprint");
-          if(fingerprintElement) fingerprintElement.innerText = fingerprint;
+          item.parentElement.insertBefore(Route._createTd("fingerprint", ""), item);
+          item.parentElement.removeChild(item);
         }
+
+        // update td.fingerprint with fingerprint value
+        const fingerprintElement = document.querySelector("#" + hostname + " .fingerprint");
+        const fingerprint = hosts[hostname];
+        if(fingerprintElement) fingerprintElement.innerText = fingerprint;
       }
     }
   }
