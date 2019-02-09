@@ -228,7 +228,7 @@ class PageRoute extends Route {
   }
 
   _updateJobs(data, numberOfJobs = 7, detailedJob = false) {
-    const jobContainer = this.getPageElement().querySelector(".jobs");
+    const jobContainer = this.getPageElement().querySelector(".jobs tbody");
     const jobs = this._jobsToArray(data.return[0]);
     this._sortJobs(jobs);
 
@@ -367,11 +367,11 @@ class PageRoute extends Route {
     tr.appendChild(td);
     
     // fill out the number of columns to that of the header
-    while(tr.cells.length < container.tHead.rows[0].cells.length) {
+    while(tr.cells.length < container.parentElement.tHead.rows[0].cells.length) {
       tr.appendChild(Route._createTd("", ""));
     }
 
-    container.tBodies[0].appendChild(tr);
+    container.appendChild(tr);
   }
 
   _createJobListener(id) {

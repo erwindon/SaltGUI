@@ -235,7 +235,7 @@ table tr td.target {
   margin-right: 0;
 }
 
-.left-panel td:hover {
+.highlightrows tbody tr:hover {
   background-color: whitesmoke;
   cursor: pointer;
 }
