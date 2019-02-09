@@ -182,10 +182,12 @@ class PageRoute extends Route {
     else if(minion && minion.os) os = minion.os;
     if(minion) {
       const td = Route._createTd("os", os);
-      const img = document.createElement("img");
-      img.setAttribute("src", "static/images/os-" + minion.os.replace(" ", "-").toLowerCase() + ".png");
-      img.classList.add("osimage");
-      td.prepend(img);
+      if(minion.os) {
+        const img = document.createElement("img");
+        img.setAttribute("src", "static/images/os-" + minion.os.replace(" ", "-").toLowerCase() + ".png");
+        img.classList.add("osimage");
+        td.prepend(img);
+      }
       element.appendChild(td);
     }
   }
