@@ -321,7 +321,6 @@ class PageRoute extends Route {
     const tr = document.createElement("tr");
 
     const td = document.createElement("td");
-    tr.appendChild(td);
 
     td.id = "job" + job.id;
     const targetText = window.makeTargetText(job["Target-type"], job.Target);
@@ -332,6 +331,13 @@ class PageRoute extends Route {
 
     const startTimeText = Output.dateTimeStr(job.StartTime);
     td.appendChild(Route._createDiv("time", startTimeText));
+
+    tr.appendChild(td);
+
+    const menu = new DropDownMenu(tr);
+    menu.addMenuItem("Show&nbsp;details", function(evt) {
+      window.location.assign("/job?id=" + encodeURIComponent(job.id));
+    }.bind(this));
 
     container.appendChild(tr);
 
@@ -372,6 +378,8 @@ class PageRoute extends Route {
     }
 
     container.appendChild(tr);
+
+    tr.addEventListener("click", evt => window.location.assign("/job?id=" + encodeURIComponent(job.id)));
   }
 
   _createJobListener(id) {

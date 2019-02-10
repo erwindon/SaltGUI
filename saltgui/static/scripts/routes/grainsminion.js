@@ -87,6 +87,8 @@ class GrainsMinionRoute extends PageRoute {
       grain.appendChild(value);
 
       container.tBodies[0].appendChild(grain);
+
+      grain.addEventListener("click", evt => this._runCommand(evt, minion, "grains.setval \"" + k + "\" " + JSON.stringify(grains[k])));
     }
   }
 }

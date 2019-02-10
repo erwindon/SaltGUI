@@ -85,11 +85,11 @@ class SchedulesMinionRoute extends PageRoute {
       const isJobDisabled = schedule.hasOwnProperty("enabled") && !schedule.enabled;
 
       const menu = new DropDownMenu(tr);
+      let cmd = "schedule.modify " + k;
+      for(const key in schedule) {
+        cmd = cmd + " " + key + "=" + JSON.stringify(schedule[key]);
+      }
       menu.addMenuItem("Modify&nbsp;job...", function(evt) {
-        let cmd = "schedule.modify " + k;
-        for(const key in schedule) {
-          cmd = cmd + " " + key + "=" + JSON.stringify(schedule[key]);
-        }
         this._runCommand(evt, minion, cmd);
       }.bind(this));
       menu.addMenuItem("Enable&nbsp;job...", function(evt) {
@@ -115,6 +115,8 @@ class SchedulesMinionRoute extends PageRoute {
       tr.appendChild(value);
 
       container.tBodies[0].appendChild(tr);
+
+      tr.addEventListener("click", evt => this._runCommand(evt, minion, cmd));
     }
 
     if(!keys.length) {

@@ -58,6 +58,8 @@ class MinionsRoute extends PageRoute {
       const element = document.getElementById(hostname);
       const menu = new DropDownMenu(element);
       this._addMenuItemStateApply(menu, hostname);
+
+      element.addEventListener("click", evt => this._runCommand(evt, hostname, "state.apply"));
     }
 
     this.keysLoaded = true;
@@ -81,6 +83,8 @@ class MinionsRoute extends PageRoute {
     const element = document.getElementById(hostname);
     const menu = new DropDownMenu(element);
     this._addMenuItemStateApply(menu, hostname);
+
+    element.addEventListener("click", evt => this._runCommand(evt, hostname, "state.apply"));
   }
 
   _addMenuItemStateApply(menu, hostname) {

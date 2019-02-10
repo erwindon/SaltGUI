@@ -62,6 +62,8 @@ class GrainsRoute extends PageRoute {
       for(let i = 0; i < this._previewGrains.length; i++) {
         element.appendChild(Route._createTd("", ""));
       }
+
+      element.addEventListener("click", evt => window.location.assign("grainsminion?minion=" + encodeURIComponent(hostname)));
     }
 
     this.keysLoaded = true;
@@ -110,6 +112,8 @@ class GrainsRoute extends PageRoute {
       }
       element.appendChild(td);
     }
+
+    element.addEventListener("click", evt => window.location.assign("grainsminion?minion=" + encodeURIComponent(hostname)));
   }
 
   _addMenuItemShowGrains(menu, hostname) {
