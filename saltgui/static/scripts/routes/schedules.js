@@ -54,6 +54,8 @@ class SchedulesRoute extends PageRoute {
       const element = document.getElementById(hostname);
       const menu = new DropDownMenu(element);
       this._addMenuItemShowSchedules(menu, hostname);
+
+      element.addEventListener("click", evt => window.location.assign("schedulesminion?minion=" + encodeURIComponent(hostname)));
     }
 
     this.keysLoaded = true;
@@ -103,6 +105,8 @@ class SchedulesRoute extends PageRoute {
 
     const menu = new DropDownMenu(element);
     this._addMenuItemShowSchedules(menu, hostname);
+
+    element.addEventListener("click", evt => window.location.assign("schedulesminion?minion=" + encodeURIComponent(hostname)));
   }
 
   _addMenuItemShowSchedules(menu, hostname) {

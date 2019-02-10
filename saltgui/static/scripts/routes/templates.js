@@ -73,6 +73,8 @@ class TemplatesRoute extends PageRoute {
     }.bind(this));
 
     container.tBodies[0].appendChild(tr);
+
+    tr.addEventListener("click", evt => this._applyTemplate(evt, targettype, target, command));
   }
 
   _applyTemplate(evt, targettype, target, command) {

@@ -36,6 +36,8 @@ class PillarsRoute extends PageRoute {
       const element = document.getElementById(hostname);
       const menu = new DropDownMenu(element);
       this._addMenuItemShowPillars(menu, hostname);
+
+      element.addEventListener("click", evt => window.location.assign("pillarsminion?minion=" + encodeURIComponent(hostname)));
     }
 
     this.keysLoaded = true;
@@ -72,6 +74,8 @@ class PillarsRoute extends PageRoute {
 
     const menu = new DropDownMenu(element);
     this._addMenuItemShowPillars(menu, hostname);
+
+    element.addEventListener("click", evt => window.location.assign("pillarsminion?minion=" + encodeURIComponent(hostname)));
   }
 
   _addMenuItemShowPillars(menu, hostname) {

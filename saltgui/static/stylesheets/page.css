@@ -108,11 +108,6 @@ table tr td:last-of-type {
   padding-right: 0;
 }
 
-table tr td.starttime,
-table tr td.target {
-  white-space: nowrap;
-}
-
 .value_none {
   opacity: 0.4;
 }
@@ -213,7 +208,7 @@ table tr td.target {
   font-weight: 500;
   font-size: 18px;
   color: #505050;
-  white-space: pre-wrap;
+  white-space: nowrap;
 }
 
 .jobs td .function {
@@ -235,7 +230,7 @@ table tr td.target {
   margin-right: 0;
 }
 
-.left-panel td:hover {
+.highlightrows tbody tr:hover {
   background-color: whitesmoke;
   cursor: pointer;
 }

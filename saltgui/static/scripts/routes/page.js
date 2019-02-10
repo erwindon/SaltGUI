@@ -228,7 +228,7 @@ class PageRoute extends Route {
   }
 
   _updateJobs(data, numberOfJobs = 7, detailedJob = false) {
-    const jobContainer = this.getPageElement().querySelector(".jobs");
+    const jobContainer = this.getPageElement().querySelector(".jobs tbody");
     const jobs = this._jobsToArray(data.return[0]);
     this._sortJobs(jobs);
 
@@ -321,7 +321,6 @@ class PageRoute extends Route {
     const tr = document.createElement("tr");
 
     const td = document.createElement("td");
-    tr.appendChild(td);
 
     td.id = "job" + job.id;
     const targetText = window.makeTargetText(job["Target-type"], job.Target);
@@ -332,6 +331,13 @@ class PageRoute extends Route {
 
     const startTimeText = Output.dateTimeStr(job.StartTime);
     td.appendChild(Route._createDiv("time", startTimeText));
+
+    tr.appendChild(td);
+
+    const menu = new DropDownMenu(tr);
+    menu.addMenuItem("Show&nbsp;details", function(evt) {
+      window.location.assign("/job?id=" + encodeURIComponent(job.id));
+    }.bind(this));
 
     container.appendChild(tr);
 
@@ -367,11 +373,13 @@ class PageRoute extends Route {
     tr.appendChild(td);
     
     // fill out the number of columns to that of the header
-    while(tr.cells.length < container.tHead.rows[0].cells.length) {
+    while(tr.cells.length < container.parentElement.tHead.rows[0].cells.length) {
       tr.appendChild(Route._createTd("", ""));
     }
 
-    container.tBodies[0].appendChild(tr);
+    container.appendChild(tr);
+
+    tr.addEventListener("click", evt => window.location.assign("/job?id=" + encodeURIComponent(job.id)));
   }
 
   _createJobListener(id) {
