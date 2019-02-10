@@ -66,6 +66,7 @@ div.button_schedules:hover .menu_item {
 
 #mainmenumini .run-command-button .menu-dropdown-content {
   max-height: none;
+  margin-top: 4px;
 }
 
 .dropdown {

@@ -139,6 +139,10 @@ h1 {
     display: block;
     float: right;
   }
+
+  #header {
+    height: 51px;
+  }
 }
 
 .route {
