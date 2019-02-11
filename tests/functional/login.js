@@ -95,7 +95,7 @@ describe('Funtional tests', function() {
           const loginpage = document.querySelector('#page_login');
           return loginpage.style.display === 'none';
         })
-        .click('#button_logout')
+        .click('#button_logout1')
         .wait( () => {
           // we wait here for the loginpage to be shown
           const loginpage = document.querySelector('#page_login');
