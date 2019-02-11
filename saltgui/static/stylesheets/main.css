@@ -124,6 +124,7 @@ h1 {
   .fullmenu { display: inline-block; }
   .minimenu { display: none; }
 }
+
 @media (max-width: 800px) {
   .fullmenu { display: none; }
   .minimenu { display: inline-block; }
