@@ -7,41 +7,6 @@ class PageRoute extends Route {
     this._runningJobs = this._runningJobs.bind(this);
     this._updateJobs = this._updateJobs.bind(this);
     this._updateMinions = this._updateMinions.bind(this);
-
-    if(PageRoute.hasMenu === undefined) {
-      const mainmenumini = document.querySelector("#mainmenumini");
-      const menu = new DropDownMenu(mainmenumini);
-      menu.addMenuItem("minions", function(evt) {
-        window.location.replace("/");
-      });
-      menu.addMenuItem("keys", function(evt) {
-        window.location.replace("/keys");
-      });
-      menu.addMenuItem("grains", function(evt) {
-        window.location.replace("/grains");
-      });
-      menu.addMenuItem("schedules", function(evt) {
-        window.location.replace("/schedules");
-      });
-      menu.addMenuItem("pillars", function(evt) {
-        window.location.replace("/pillars");
-      });
-      menu.addMenuItem("jobs", function(evt) {
-        window.location.replace("/jobs");
-      });
-      // hide template menu item if no templates defined
-      const templatesText = window.localStorage.getItem("templates");
-      if(templatesText && templatesText !== "undefined") {
-        menu.addMenuItem("templates", function(evt) {
-          window.location.replace("/templates");
-        });
-      }
-      menu.addMenuItem("logout", function(evt) {
-        const api = new API();
-        api.logout().then(window.location.replace("/"));
-      });
-      PageRoute.hasMenu = true;
-    }
   }
 
   _updateMinions(data) {

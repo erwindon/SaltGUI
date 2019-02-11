@@ -6,11 +6,6 @@
 
 header .menu-dropdown {
   font-size: 45px;
-  transform: scale(1.3, 1) translate(-4px, -10px);
-}
-
-header .menu-dropdown-content {
-  transform: translate(-12px, -14px);
 }
 
 /* Dropdown Content (Hidden by Default) */
@@ -53,20 +48,9 @@ header .menu-dropdown-content {
   display: block;
 }
 
-/* Change the background color of the menu-dropdown button when the menu-dropdown content is shown */
-div.button_schedules:hover .menu_item {
-  background: rgba(0, 0, 0, 0.15);
-  color: #4caf50;
-}
-
 .run-command-button:hover .menu-dropdown {
   background: rgba(0, 0, 0, 0.15);
   color: #4caf50;
-}
-
-#mainmenumini .run-command-button .menu-dropdown-content {
-  max-height: none;
-  margin-top: 4px;
 }
 
 .dropdown {

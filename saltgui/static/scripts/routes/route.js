@@ -5,8 +5,10 @@ class Route {
     this.name = name;
     this.page_element = document.querySelector(page_selector);
     this.router = router;
-    if(menuitem_selector)
-      this.menuitem_element = document.querySelector(menuitem_selector);
+    if(menuitem_selector) {
+      this.menuitem_element1 = document.querySelector(menuitem_selector + "1");
+      this.menuitem_element2 = document.querySelector(menuitem_selector + "2");
+    }
   }
 
   getName() {
@@ -21,8 +23,12 @@ class Route {
     return this.page_element;
   }
 
-  getMenuItemElement() {
-    return this.menuitem_element;
+  getMenuItemElement1() {
+    return this.menuitem_element1;
+  }
+
+  getMenuItemElement2() {
+    return this.menuitem_element2;
   }
 
   static _createTd(className, content) {

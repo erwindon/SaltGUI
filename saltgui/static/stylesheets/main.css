@@ -97,15 +97,7 @@ h1 {
   cursor: pointer;
 }
 
-.mainmenubar {
-  display: inline-block;
-}
-
 @media (max-width: 800px) {
-  .mainmenubar {
-    display: none;
-  }
-
   .panel:first-of-type {
     margin-right: 0;
   }
@@ -128,21 +120,13 @@ h1 {
   cursor: pointer;
 }
 
-#mainmenumini {
-  display: none;
-  float: right;
-  padding-top: 8px;
+@media (min-width: 800px) {
+  .fullmenu { display: inline-block; }
+  .minimenu { display: none; }
 }
-
 @media (max-width: 800px) {
-  #mainmenumini {
-    display: block;
-    float: right;
-  }
-
-  #header {
-    height: 51px;
-  }
+  .fullmenu { display: none; }
+  .minimenu { display: inline-block; }
 }
 
 .route {
