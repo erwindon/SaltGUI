@@ -169,6 +169,11 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.10.0 (2018-02-12)
+- Improved navigation: made rows clickable (erwindon)
+- Fixed invisible menu in small width screens (dawidmalina/erwindon)
+- Set display of keys to monospace (erwindon)
+
 ## 1.9.0 (2018-02-06)
 - Added more control over output format (erwindon)
 - Added link to GitHub project on login page (dawidmalina)
