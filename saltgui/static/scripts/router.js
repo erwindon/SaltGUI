@@ -22,8 +22,10 @@ class Router {
     // show template menu item if templates defined
     const templatesText = window.localStorage.getItem("templates");
     if(templatesText && templatesText !== "undefined") {
-      const item = document.querySelector("#button_templates");
-      item.style.display = "inline-block";
+      const item1 = document.querySelector("#button_templates1");
+      item1.style.display = "inline-block";
+      const item2 = document.querySelector("#button_templates2");
+      item2.style.display = "inline-block";
     }
 
     this._registerEventListeners();
@@ -46,46 +48,80 @@ class Router {
         router.goTo("/");
       });
 
-    document.querySelector("#button_logout")
+    document.querySelector("#button_minions1")
+      .addEventListener("click", _ => {
+        window.location.replace("/");
+      });
+    document.querySelector("#button_minions2")
+      .addEventListener("click", _ => {
+        window.location.replace("/");
+      });
+
+    document.querySelector("#button_grains1")
+      .addEventListener('click', _ => {
+        window.location.replace("/grains");
+      });
+    document.querySelector("#button_grains2")
+      .addEventListener('click', _ => {
+        window.location.replace("/grains");
+      });
+
+    document.querySelector("#button_schedules1")
+      .addEventListener('click', _ => {
+        window.location.replace("/schedules");
+      });
+    document.querySelector("#button_schedules2")
+      .addEventListener('click', _ => {
+        window.location.replace("/schedules");
+      });
+
+    document.querySelector("#button_pillars1")
+      .addEventListener('click', _ => {
+        window.location.replace("/pillars");
+      });
+    document.querySelector("#button_pillars2")
+      .addEventListener('click', _ => {
+        window.location.replace("/pillars");
+      });
+
+    document.querySelector("#button_keys1")
+      .addEventListener("click", _ => {
+        window.location.replace("/keys");
+      });
+    document.querySelector("#button_keys2")
+      .addEventListener("click", _ => {
+        window.location.replace("/keys");
+      });
+
+    document.querySelector("#button_jobs1")
+      .addEventListener('click', _ => {
+        window.location.replace("/jobs");
+      });
+    document.querySelector("#button_jobs2")
+      .addEventListener('click', _ => {
+        window.location.replace("/jobs");
+      });
+
+    document.querySelector("#button_templates1")
+      .addEventListener('click', _ => {
+        window.location.replace("/templates");
+      });
+    document.querySelector("#button_templates2")
+      .addEventListener('click', _ => {
+        window.location.replace("/templates");
+      });
+
+    document.querySelector("#button_logout1")
       .addEventListener("click", _ => {
         this.api.logout().then(() => {
           window.location.replace("/");
         });
       });
-
-    document.querySelector("#button_minions")
+    document.querySelector("#button_logout2")
       .addEventListener("click", _ => {
-        window.location.replace("/");
-      });
-
-    document.querySelector("#button_keys")
-      .addEventListener("click", _ => {
-        window.location.replace("/keys");
-      });
-
-    document.querySelector("#button_grains")
-      .addEventListener('click', _ => {
-        window.location.replace("/grains");
-      });
-
-    document.querySelector("#button_schedules")
-      .addEventListener('click', _ => {
-        window.location.replace("/schedules");
-      });
-
-    document.querySelector("#button_pillars")
-      .addEventListener('click', _ => {
-        window.location.replace("/pillars");
-      });
-
-    document.querySelector("#button_jobs")
-      .addEventListener('click', _ => {
-        window.location.replace("/jobs");
-      });
-
-    document.querySelector("#button_templates")
-      .addEventListener('click', _ => {
-        window.location.replace("/templates");
+        this.api.logout().then(() => {
+          window.location.replace("/");
+        });
       });
   }
 
@@ -110,23 +146,28 @@ class Router {
     const router = this;
     route.getPageElement().style.display = "";
 
-    const minionMenuItem = document.getElementById("button_minions");
-    const jobsMenuItem = document.getElementById("button_jobs");
+    const minionMenuItem = document.getElementById("button_minions1");
+    const jobsMenuItem = document.getElementById("button_jobs1");
 
     Array.from(document.querySelectorAll(".menu_item_active")).forEach(
       function (e){ e.classList.remove("menu_item_active"); }
     );
 
-    const elem = route.getMenuItemElement();
-    if(elem) {
-      elem.classList.add("menu_item_active");
+    const elem1 = route.getMenuItemElement1();
+    if(elem1) {
+      elem1.classList.add("menu_item_active");
       // activate also parent menu item if child element is selected
-      if(elem.id === "button_pillars" || elem.id === "button_schedules" || elem.id === "button_grains") {
+      if(elem1.id === "button_pillars1" || elem1.id === "button_schedules1" || elem1.id === "button_grains1") {
         minionMenuItem.classList.add("menu_item_active");
       }
-      if(elem.id === "button_jobs" || elem.id === "button_templates") {
+      if(elem1.id === "button_jobs1" || elem1.id === "button_templates1") {
         jobsMenuItem.classList.add("menu_item_active");
       }
+    }
+
+    const elem2 = route.getMenuItemElement2();
+    if(elem2) {
+      elem2.classList.add("menu_item_active");
     }
 
     router.switchingRoute = true;

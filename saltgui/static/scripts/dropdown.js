@@ -17,12 +17,6 @@ class DropDownMenu {
     this.menuDropdown = Route._createDiv("run-command-button", "");
 
     switch (element.id) {
-    case "mainmenumini":
-      // 2261 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
-      this.menuButton = Route._createDiv("menu-dropdown", "\u2261");
-      this.menuDropdown.classList.add("mainmenumini");
-      break;
-
     case "cmdbox":
       // 1F4D6 (D83D+DCD6) = A BOOK
       this.menuButton = Route._createDiv("menu-dropdown", "\uD83D\uDCD6");
