@@ -386,6 +386,8 @@ class PageRoute extends Route {
     selection.removeAllRanges();
     selection.addRange(range);
     document.execCommand("copy");
+
+    evt.stopPropagation();
   }
 
 }
