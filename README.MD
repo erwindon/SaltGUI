@@ -169,6 +169,9 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.10.1 (2018-02-24)
+- Small bugfix for copy of ip-number (erwindon)
+
 ## 1.10.0 (2018-02-12)
 - Improved navigation: made rows clickable (erwindon)
 - Fixed invisible menu in small width screens (dawidmalina/erwindon)
