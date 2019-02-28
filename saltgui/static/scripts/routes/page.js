@@ -315,7 +315,11 @@ class PageRoute extends Route {
     const jidText = job.id;
     tr.appendChild(Route._createTd("job" + job.id, jidText));
 
-    const targetText = window.makeTargetText(job["Target-type"], job.Target);
+    let targetText = window.makeTargetText(job["Target-type"], job.Target);
+    if(targetText.length > 50) {
+      // prevent column becoming too wide
+      targetText = targetText.substring(0, 50) + "...";
+    }
     tr.appendChild(Route._createTd("target", targetText));
 
     const argumentsText = this._decodeArgumentsText(job.Arguments[0]);
