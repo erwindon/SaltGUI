@@ -14,6 +14,12 @@ class JobRoute extends Route {
     });
   }
 
+  _isResultOk(result) {
+    if(!result.success) return false;
+    if(result.retcode !== 0) return false;
+    return true;
+  }
+
   _onJobData(data) {
     const job = this;
     const info = data.info[0];
@@ -58,8 +64,8 @@ class JobRoute extends Route {
     if(info.Minions) {
       for(const m of info.Minions) {
         if(!(m in info.Result)) has1 = true;
-        if(m in info.Result && !info.Result[m].success) has2 = true;
-        if(!(m in info.Result) || !info.Result[m].success) {
+        if(m in info.Result && !this._isResultOk(info.Result[m])) has2 = true;
+        if(!(m in info.Result) || !this._isResultOk(info.Result[m])) {
           minionList += "," + m;
         }
       }
@@ -77,7 +83,7 @@ class JobRoute extends Route {
     minionList = "";
     if(info.Minions) {
       for(const m of info.Minions) {
-        if(m in info.Result && !info.Result[m].success) {
+        if(m in info.Result && !this._isResultOk(info.Result[m])) {
           minionList += "," + m;
         }
       }
