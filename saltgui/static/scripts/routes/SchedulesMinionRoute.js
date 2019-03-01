@@ -1,4 +1,6 @@
 import {PageRoute} from './PageRoute';
+import {SchedulesRoute} from './SchedulesRoute';
+import {DropDownMenu} from '../DropDownMenu';
 
 export class SchedulesMinionRoute extends PageRoute {
 
@@ -81,7 +83,7 @@ export class SchedulesMinionRoute extends PageRoute {
 
       const tr = document.createElement('tr');
 
-      const name = Route._createTd("schedule_name", k);
+      const name = SchedulesMinionRoute._createTd("schedule_name", k);
       tr.appendChild(name);
 
       const isJobDisabled = schedule.hasOwnProperty("enabled") && !schedule.enabled;
@@ -112,7 +114,7 @@ export class SchedulesMinionRoute extends PageRoute {
 
       // menu comes before this data on purpose
       const schedule_value = Output.formatObject(schedule);
-      const value = Route._createTd("schedule_value", schedule_value);
+      const value = SchedulesMinionRoute._createTd("schedule_value", schedule_value);
       if(isJobDisabled) value.classList.add("disabled_schedule");
       tr.appendChild(value);
 
@@ -122,7 +124,7 @@ export class SchedulesMinionRoute extends PageRoute {
     }
 
     if(!keys.length) {
-      const noSchedulesMsg = Route._createDiv("msg", "No schedules found");
+      const noSchedulesMsg = SchedulesMinionRoute._createDiv("msg", "No schedules found");
       container.tBodies[0].appendChild(noSchedulesMsg);
     }
   }

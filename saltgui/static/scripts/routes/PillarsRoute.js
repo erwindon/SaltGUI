@@ -1,4 +1,5 @@
 import {PageRoute} from './PageRoute';
+import {DropDownMenu} from '../DropDownMenu';
 
 export class PillarsRoute extends PageRoute {
 
@@ -52,8 +53,8 @@ export class PillarsRoute extends PageRoute {
     const element = document.getElementById(hostname);
 
     // force same columns on all rows
-    element.appendChild(Route._createTd("pillarinfo", ""));
-    element.appendChild(Route._createTd("run-command-button", ""));
+    element.appendChild(PillarsRoute._createTd("pillarinfo", ""));
+    element.appendChild(PillarsRoute._createTd("run-command-button", ""));
   }
 
   _updateMinion(container, minion, hostname) {
@@ -70,7 +71,7 @@ export class PillarsRoute extends PageRoute {
     } else {
       pillarInfoText = cnt + " pillars";
     }
-    const pillarInfoTd = Route._createTd("pillarinfo", pillarInfoText);
+    const pillarInfoTd = PillarsRoute._createTd("pillarinfo", pillarInfoText);
     pillarInfoTd.setAttribute("sorttable_customkey", cnt);
     element.appendChild(pillarInfoTd);
 

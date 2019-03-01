@@ -1,4 +1,5 @@
 import {PageRoute} from './PageRoute';
+import {DropDownMenu} from '../DropDownMenu';
 
 export class MinionsRoute extends PageRoute {
 

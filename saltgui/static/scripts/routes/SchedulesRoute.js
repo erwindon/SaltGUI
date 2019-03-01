@@ -1,4 +1,5 @@
 import {PageRoute} from './PageRoute';
+import {DropDownMenu} from '../DropDownMenu';
 
 export class SchedulesRoute extends PageRoute {
 
@@ -70,8 +71,8 @@ export class SchedulesRoute extends PageRoute {
     const element = document.getElementById(hostname);
 
     // force same columns on all rows
-    element.appendChild(Route._createTd("scheduleinfo", ""));
-    element.appendChild(Route._createTd("run-command-button", ""));
+    element.appendChild(SchedulesRoute._createTd("scheduleinfo", ""));
+    element.appendChild(SchedulesRoute._createTd("run-command-button", ""));
   }
 
   _updateMinion(container, minion, hostname) {
@@ -95,13 +96,13 @@ export class SchedulesRoute extends PageRoute {
       element.removeChild(element.firstChild);
     }
 
-    element.appendChild(Route._createTd("hostname", hostname));
+    element.appendChild(SchedulesRoute._createTd("hostname", hostname));
 
-    const statusDiv = Route._createTd("status", "accepted");
+    const statusDiv = SchedulesRoute._createTd("status", "accepted");
     statusDiv.classList.add("accepted");
     element.appendChild(statusDiv);
 
-    const td = Route._createTd("scheduleinfo", scheduleinfo);
+    const td = SchedulesRoute._createTd("scheduleinfo", scheduleinfo);
     td.setAttribute("sorttable_customkey", cnt);
     element.appendChild(td);
 

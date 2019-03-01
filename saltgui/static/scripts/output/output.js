@@ -18,8 +18,14 @@
 //    This output is re-organized to let it appear as if the output comes
 //    from a single node called "master".
 
+import {OutputDocumentation} from './OutputDocumentation';
+import {OutputHighstate} from './OutputHighstate';
+import {OutputJson} from './OutputJson';
+import {OutputNested} from './OutputNested';
+import {OutputSaltGuiHighstate} from './OutputSaltGuiHighstate';
+import {OutputYaml} from './OutputYaml';
 
-class Output {
+export class Output {
 
   static isOutputFormatAllowed(requestedOutputFormat) {
     let supportedOutputFormats = null;
@@ -398,6 +404,3 @@ class Output {
 
   }
 }
-
-// for unit tests
-if(typeof module !== "undefined") module.exports = Output;

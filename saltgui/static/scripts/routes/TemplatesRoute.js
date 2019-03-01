@@ -1,4 +1,5 @@
 import {PageRoute} from './PageRoute';
+import {DropDownMenu} from '../DropDownMenu';
 
 export class TemplatesRoute extends PageRoute {
 
@@ -37,14 +38,14 @@ export class TemplatesRoute extends PageRoute {
   _addTemplate(container, name, template) {
     const tr = document.createElement("tr");
 
-    tr.appendChild(Route._createTd("name", name));
+    tr.appendChild(TemplatesRoute._createTd("name", name));
 
     // calculate description
     const description = template["description"];
     if(!description) {
-      tr.appendChild(Route._createTd("description value_none", "(none)"));
+      tr.appendChild(TemplatesRoute._createTd("description value_none", "(none)"));
     } else {
-      tr.appendChild(Route._createTd("description", description));
+      tr.appendChild(TemplatesRoute._createTd("description", description));
     }
 
     // calculate targettype
@@ -52,21 +53,21 @@ export class TemplatesRoute extends PageRoute {
     // calculate target
     const target = template["target"];
     if(!targettype && !target) {
-      tr.appendChild(Route._createTd("target value_none", "(none)"));
+      tr.appendChild(TemplatesRoute._createTd("target value_none", "(none)"));
     } else if(/* targettype && */ !target) {
-      tr.appendChild(Route._createTd("target", targettype));
+      tr.appendChild(TemplatesRoute._createTd("target", targettype));
     } else if(!targettype /* && target */) {
-      tr.appendChild(Route._createTd("target", target));
+      tr.appendChild(TemplatesRoute._createTd("target", target));
     } else {
-      tr.appendChild(Route._createTd("target", targettype + " " + target));
+      tr.appendChild(TemplatesRoute._createTd("target", targettype + " " + target));
     }
 
     // calculate command
     const command = template["command"];
     if(!command) {
-      tr.appendChild(Route._createTd("command value_none", "(none)"));
+      tr.appendChild(TemplatesRoute._createTd("command value_none", "(none)"));
     } else {
-      tr.appendChild(Route._createTd("command", command));
+      tr.appendChild(TemplatesRoute._createTd("command", command));
     }
 
     const menu = new DropDownMenu(tr);

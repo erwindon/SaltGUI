@@ -1,4 +1,6 @@
 import {PageRoute} from './PageRoute';
+import {DropDownMenu} from '../DropDownMenu';
+import {Output} from '../output';
 
 export class PillarsMinionRoute extends PageRoute {
 
@@ -72,19 +74,19 @@ export class PillarsMinionRoute extends PageRoute {
     for(const k of keys) {
       const pillar = document.createElement('tr');
 
-      const name = Route._createTd("pillar_name", k);
+      const name = PillarsMinionRoute._createTd("pillar_name", k);
       pillar.appendChild(name);
 
       // menu comes before this data if there was any
 
       // 8 bullet characters
       const value_hidden = "\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF";
-      const pillar_hidden = Route._createTd("pillar_hidden", value_hidden);
+      const pillar_hidden = PillarsMinionRoute._createTd("pillar_hidden", value_hidden);
       // initially use the hidden view
       pillar.appendChild(pillar_hidden);
 
       const value_shown = Output.formatObject(pillars[k]);
-      const pillar_shown = Route._createTd("pillar_shown", value_shown);
+      const pillar_shown = PillarsMinionRoute._createTd("pillar_shown", value_shown);
       // initially hide the normal view
       pillar_shown.style.display = "none";
       // add the non-masked representation, not shown yet
@@ -114,7 +116,7 @@ export class PillarsMinionRoute extends PageRoute {
     }
 
     if(!keys.length) {
-      const noPillarsMsg = Route._createTd("msg", "No pillars found");
+      const noPillarsMsg = PillarsMinionRoute._createTd("msg", "No pillars found");
       container.tBodies[0].appendChild(noPillarsMsg);
     }
   }
