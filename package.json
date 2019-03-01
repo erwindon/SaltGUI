@@ -10,7 +10,8 @@
     "mocha": "^5.2.0",
     "nightmare": "^3.0.1",
     "stylelint": "^9.4.0",
-    "stylelint-config-standard": "^18.2.0"
+    "stylelint-config-standard": "^18.2.0",
+    "webpack": "^4.29.6"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
@@ -23,12 +24,26 @@
       "no-undef": 0,
       "no-unused-vars": 0,
       "no-console": 0,
-      "indent": ["error", 2],
+      "indent": [
+        "error",
+        2
+      ],
       "no-irregular-whitespace": 2,
       "no-whitespace-before-property": 2,
-      "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1 }],
+      "no-multiple-empty-lines": [
+        "error",
+        {
+          "max": 2,
+          "maxEOF": 1
+        }
+      ],
       "no-useless-escape": 0,
-      "no-constant-condition": ["error", { "checkLoops": false }],
+      "no-constant-condition": [
+        "error",
+        {
+          "checkLoops": false
+        }
+      ],
       "no-var": 2,
       "prefer-const": 2
     }
