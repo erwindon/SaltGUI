@@ -1,4 +1,6 @@
-class KeysRoute extends PageRoute {
+import {PageRoute} from './PageRoute';
+
+export class KeysRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]keys$", "Keys", "#page_keys", "#button_keys", router);

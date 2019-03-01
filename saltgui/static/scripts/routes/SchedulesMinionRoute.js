@@ -1,4 +1,6 @@
-class SchedulesMinionRoute extends PageRoute {
+import {PageRoute} from './PageRoute';
+
+export class SchedulesMinionRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]schedulesminion$", "Schedules", "#page_schedulesminion", "#button_schedules", router);

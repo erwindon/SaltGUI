@@ -1,4 +1,4 @@
-class Route {
+export class Route {
 
   constructor(path, name, page_selector, menuitem_selector, router) {
     this.path = new RegExp(path);

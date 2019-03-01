@@ -1,4 +1,22 @@
-class Router {
+import {
+  LoginRoute,
+  MinionsRoute, 
+  KeysRoute, 
+  GrainsRoute, 
+  GrainsMinionRoute, 
+  SchedulesRoute, 
+  SchedulesMinionRoute, 
+  PillarsRoute,
+  PillarsMinionRoute, 
+  JobRoute, 
+  JobsRoute, 
+  TemplatesRoute
+} from './routes';
+
+import {API} from './API';
+import {CommandBox} from './CommandBox';
+
+export class Router {
 
   constructor() {
     this.api = new API();
@@ -6,6 +24,18 @@ class Router {
     this.currentRoute = undefined;
     this.routes = [];
 
+    // show template menu item if templates defined
+    const templatesText = window.localStorage.getItem("templates");
+    if(templatesText && templatesText !== "undefined") {
+      const item1 = document.querySelector("#button_templates1");
+      item1.style.display = "inline-block";
+      const item2 = document.querySelector("#button_templates2");
+      item2.style.display = "inline-block";
+    }
+  }
+
+
+  bootstrap() {
     this.registerRoute(new LoginRoute(this));
     this.registerRoute(new MinionsRoute(this));
     this.registerRoute(new KeysRoute(this));
@@ -19,18 +49,10 @@ class Router {
     this.registerRoute(new JobsRoute(this));
     this.registerRoute(new TemplatesRoute(this));
 
-    // show template menu item if templates defined
-    const templatesText = window.localStorage.getItem("templates");
-    if(templatesText && templatesText !== "undefined") {
-      const item1 = document.querySelector("#button_templates1");
-      item1.style.display = "inline-block";
-      const item2 = document.querySelector("#button_templates2");
-      item2.style.display = "inline-block";
-    }
-
     this._registerEventListeners();
 
-    this.api.isAuthenticated()
+    this.api
+      .isAuthenticated()
       .then(valid_session => this.goTo(
         valid_session ? window.location.pathname + window.location.search : "/login"))
       .catch(error => {
@@ -200,6 +222,3 @@ class Router {
   }
 
 }
-
-window.addEventListener("load", () => new Router());
-

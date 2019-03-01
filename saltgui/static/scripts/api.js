@@ -1,4 +1,4 @@
-class HTTPError extends Error {
+export class HTTPError extends Error {
   constructor(status, message) {
     super();
     this.status = status;
@@ -7,7 +7,7 @@ class HTTPError extends Error {
 }
 
 
-class API {
+export class API {
   constructor(apiurl="") {
     this.APIURL = apiurl;
   }

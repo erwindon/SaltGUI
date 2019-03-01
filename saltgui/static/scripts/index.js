@@ -1,2 +1,6 @@
-const context = (require).context('./', true, /\.js$/);
-context.keys().map(context);
+import {Router} from './Router';
+
+window.addEventListener("load", () => {
+  const router = new Router();
+  router.bootstrap();
+});

@@ -1,4 +1,6 @@
-class GrainsMinionRoute extends PageRoute {
+import {PageRoute} from './PageRoute';
+
+export class GrainsMinionRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]grainsminion$", "Grains", "#page_grainsminion", "#button_grains", router);

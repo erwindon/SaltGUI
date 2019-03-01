@@ -1,4 +1,6 @@
-class MinionsRoute extends PageRoute {
+import {PageRoute} from './PageRoute';
+
+export class MinionsRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]$", "Minions", "#page_minions", "#button_minions", router);

@@ -1,4 +1,8 @@
-class GrainsRoute extends PageRoute {
+import {PageRoute} from './PageRoute';
+
+require('../../sorttable/sorttable');
+
+export class GrainsRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]grains$", "Grains", "#page_grains", "#button_grains", router);

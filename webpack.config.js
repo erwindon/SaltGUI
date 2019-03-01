@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = {
   entry: './saltgui/static/scripts/index.js',
   mode: 'production',
+  devtool: 'source-map',
   output: {
     filename: 'saltgui.bundle.js',
     path: path.resolve(__dirname, 'saltgui', 'static')
@@ -16,7 +17,8 @@ module.exports = {
             use: {
                 loader: 'babel-loader',
                 options: {
-                    presets: ['@babel/preset-env']
+                    presets: ['@babel/preset-env'],
+                    sourceType: 'unambiguous'
                 }
             }
         },
