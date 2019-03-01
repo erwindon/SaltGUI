@@ -19,4 +19,4 @@ before_script:
   - cd $TRAVIS_BUILD_DIR
 
 script:
-  - ./runtests.sh
+  - PACKAGE_MANAGER=npm ./runtests.sh
