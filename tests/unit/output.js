@@ -1,10 +1,12 @@
 const assert = require('chai').assert;
 
-const Output = require('../../saltgui/static/saltgui.bundle');
-const OutputJson = require('../../saltgui/static/scripts/output/outputJson');
-const OutputYaml = require('../../saltgui/static/scripts/output/outputYaml');
-const OutputNested = require('../../saltgui/static/scripts/output/outputNested');
-const OutputDocumentation = require('../../saltgui/static/scripts/output/outputDocumentation');
+import {
+  Output,
+  OutputJson, 
+  OutputYaml, 
+  OutputNested, 
+  OutputDocumentation
+} from '../../saltgui/static/scripts/output';
 
 describe('Unittests for output.js', function() {
 

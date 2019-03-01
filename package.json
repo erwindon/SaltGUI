@@ -22,7 +22,9 @@
     "stylelint": "^9.4.0",
     "stylelint-config-standard": "^18.2.0",
     "webpack": "^4.29.6",
-    "webpack-cli": "^3.2.3"
+    "webpack-cli": "^3.2.3",
+    "webpack-node-externals": "^1.7.2",
+    "webpack-shell-plugin": "^0.5.0"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
@@ -75,7 +77,7 @@
     "lint": "eslint saltgui/static/scripts tests/",
     "stylelint": "stylelint 'saltgui/static/stylesheets/*.css'",
     "wait-for-docker": "node tests/helpers/wait-for-docker.js",
-    "test:unit": "mocha --trace-warnings --check-leaks --reporter spec tests/unit/",
+    "test:unit": "webpack --config webpack.test.js",
     "test:functional": "mocha --trace-warnings --check-leaks --reporter spec tests/functional/",
     "test": "npm run test:unit && npm run test:functional"
   }
