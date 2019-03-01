@@ -86,6 +86,188 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./saltgui/static/scripts/CommandLineParser.js":
+/*!*****************************************************!*\
+  !*** ./saltgui/static/scripts/CommandLineParser.js ***!
+  \*****************************************************/
+/*! exports provided: CommandLineParser */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CommandLineParser", function() { return CommandLineParser; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+// Function to parse a commandline
+// The line is broken into individual tokens
+// Each token that is recognized as a JS type will get that type
+// Otherwise the token is considered to be a string
+// name-value pairs in the form "name=value" are added to the "params" dictionary
+// other parameters are added to the "args" array
+// e.g.:
+//   test "1 2 3" 4 x=7 {"a":1, "b":2}
+// is a command line of 5 tokens
+//   string: "test"
+//   string: "1 2 3"
+//   number: 4
+//   number: 7
+//   dictionary: {"a":1, "b": 2}
+// the array will be filled with 4 elements
+// the dictionary will be filled with one element named "x"
+// note that "none" is not case-insensitive, but "null" is
+var patNull = /^(None|null|Null|NULL)$/;
+var patBooleanFalse = /^(false|False|FALSE)$/;
+var patBooleanTrue = /^(true|True|TRUE)$/;
+var patJid = /^[2-9][0-9][0-9][0-9][01][0-9][0-3][0-9][0-2][0-9][0-5][0-9][0-5][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$/;
+var patInteger = /^((0)|([-+]?[1-9][0-9]*))$/;
+var patFloat = /^([-+]?(([0-9]+)|([0-9]+[.][0-9]*)|([0-9]*[.][0-9]+))([eE][-+]?[0-9]+)?)$/;
+var CommandLineParser =
+/*#__PURE__*/
+function () {
+  function CommandLineParser() {
+    _classCallCheck(this, CommandLineParser);
+  }
+
+  _createClass(CommandLineParser, [{
+    key: "parse",
+    value: function parse(toRun, args, params) {
+      // just in case the user typed some extra whitespace
+      // at the start of the line
+      toRun = toRun.trim();
+
+      while (toRun.length > 0) {
+        var name = null;
+        var firstSpaceChar = toRun.indexOf(" ");
+        if (firstSpaceChar < 0) firstSpaceChar = toRun.length;
+        var firstEqualSign = toRun.indexOf("=");
+
+        if (firstEqualSign >= 0 && firstEqualSign < firstSpaceChar) {
+          // we have the name of a named parameter
+          name = toRun.substr(0, firstEqualSign);
+          toRun = toRun.substr(firstEqualSign + 1);
+
+          if (toRun === "" || toRun[0] === " ") {
+            return "Must have value for named parameter '" + name + "'";
+          }
+        } // Determine whether the JSON string starts with a known
+        // character for a JSON type
+
+
+        var endChar = undefined;
+        var objType = undefined;
+
+        if (toRun[0] === "{") {
+          endChar = "}";
+          objType = "dictionary";
+        } else if (toRun[0] === "[") {
+          endChar = "]";
+          objType = "array";
+        } else if (toRun[0] === "\"") {
+          // note that json does not support single-quoted strings
+          endChar = "\"";
+          objType = "double-quoted-string";
+        }
+
+        var value = void 0;
+
+        if (endChar && objType) {
+          // The string starts with a character for a known JSON type
+          var p = 1;
+
+          while (true) {
+            // Try until the next closing character
+            var n = toRun.indexOf(endChar, p);
+
+            if (n < 0) {
+              return "No valid " + objType + " found";
+            } // parse what we have found so far
+            // the string ends with a closing character
+            // but that may not be enough, e.g. "{a:{}"
+
+
+            var s = toRun.substring(0, n + 1);
+
+            try {
+              value = JSON.parse(s);
+            } catch (err) {
+              // the string that we tried to parse is not valid json
+              // continue to add more text from the input
+              p = n + 1;
+              continue;
+            } // the first part of the string is valid JSON
+
+
+            n = n + 1;
+
+            if (n < toRun.length && toRun[n] !== " ") {
+              return "Valid " + objType + ", but followed by text:" + toRun.substring(n) + "...";
+            } // valid JSON and not followed by strange characters
+
+
+            toRun = toRun.substring(n);
+            break;
+          }
+        } else {
+          // everything else is a string (without quotes)
+          // when we are done, we'll see whether it actually is a number
+          // or any of the known constants
+          var str = "";
+
+          while (toRun.length > 0 && toRun[0] !== " ") {
+            str += toRun[0];
+            toRun = toRun.substring(1);
+          } // try to find whether the string is actually a known constant
+          // or integer or float
+
+
+          if (patNull.test(str)) {
+            value = null;
+          } else if (patBooleanFalse.test(str)) {
+            value = false;
+          } else if (patBooleanTrue.test(str)) {
+            value = true;
+          } else if (patJid.test(str)) {
+            // jids look like numbers but must be strings
+            value = str;
+          } else if (patInteger.test(str)) {
+            value = parseInt(str);
+          } else if (patFloat.test(str)) {
+            value = parseFloat(str);
+
+            if (!isFinite(value)) {
+              return "Numeric argument has overflowed or is infinity";
+            }
+          } else {
+            value = str;
+          }
+        }
+
+        if (name !== null) {
+          // named parameter
+          params[name] = value;
+        } else {
+          // anonymous parameter
+          args.push(value);
+        } // ignore the whitespace before the next part
+
+
+        toRun = toRun.trim();
+      } // succesfull (no error message return)
+
+
+      return null;
+    }
+  }]);
+
+  return CommandLineParser;
+}();
+
+/***/ }),
+
 /***/ "./saltgui/static/scripts/output/Output.js":
 /*!*************************************************!*\
   !*** ./saltgui/static/scripts/output/Output.js ***!
@@ -2124,167 +2306,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./saltgui/static/scripts/parsecmdline.js":
-/*!************************************************!*\
-  !*** ./saltgui/static/scripts/parsecmdline.js ***!
-  \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// Function to parse a commandline
-// The line is broken into individual tokens
-// Each token that is recognized as a JS type will get that type
-// Otherwise the token is considered to be a string
-// name-value pairs in the form "name=value" are added to the "params" dictionary
-// other parameters are added to the "args" array
-// e.g.:
-//   test "1 2 3" 4 x=7 {"a":1, "b":2}
-// is a command line of 5 tokens
-//   string: "test"
-//   string: "1 2 3"
-//   number: 4
-//   number: 7
-//   dictionary: {"a":1, "b": 2}
-// the array will be filled with 4 elements
-// the dictionary will be filled with one element named "x"
-// note that "none" is not case-insensitive, but "null" is
-var patNull = /^(None|null|Null|NULL)$/;
-var patBooleanFalse = /^(false|False|FALSE)$/;
-var patBooleanTrue = /^(true|True|TRUE)$/;
-var patJid = /^[2-9][0-9][0-9][0-9][01][0-9][0-3][0-9][0-2][0-9][0-5][0-9][0-5][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$/;
-var patInteger = /^((0)|([-+]?[1-9][0-9]*))$/;
-var patFloat = /^([-+]?(([0-9]+)|([0-9]+[.][0-9]*)|([0-9]*[.][0-9]+))([eE][-+]?[0-9]+)?)$/;
-
-window.parseCommandLine = function (toRun, args, params) {
-  // just in case the user typed some extra whitespace
-  // at the start of the line
-  toRun = toRun.trim();
-
-  while (toRun.length > 0) {
-    var name = null;
-    var firstSpaceChar = toRun.indexOf(" ");
-    if (firstSpaceChar < 0) firstSpaceChar = toRun.length;
-    var firstEqualSign = toRun.indexOf("=");
-
-    if (firstEqualSign >= 0 && firstEqualSign < firstSpaceChar) {
-      // we have the name of a named parameter
-      name = toRun.substr(0, firstEqualSign);
-      toRun = toRun.substr(firstEqualSign + 1);
-
-      if (toRun === "" || toRun[0] === " ") {
-        return "Must have value for named parameter '" + name + "'";
-      }
-    } // Determine whether the JSON string starts with a known
-    // character for a JSON type
-
-
-    var endChar = undefined;
-    var objType = undefined;
-
-    if (toRun[0] === "{") {
-      endChar = "}";
-      objType = "dictionary";
-    } else if (toRun[0] === "[") {
-      endChar = "]";
-      objType = "array";
-    } else if (toRun[0] === "\"") {
-      // note that json does not support single-quoted strings
-      endChar = "\"";
-      objType = "double-quoted-string";
-    }
-
-    var value = void 0;
-
-    if (endChar && objType) {
-      // The string starts with a character for a known JSON type
-      var p = 1;
-
-      while (true) {
-        // Try until the next closing character
-        var n = toRun.indexOf(endChar, p);
-
-        if (n < 0) {
-          return "No valid " + objType + " found";
-        } // parse what we have found so far
-        // the string ends with a closing character
-        // but that may not be enough, e.g. "{a:{}"
-
-
-        var s = toRun.substring(0, n + 1);
-
-        try {
-          value = JSON.parse(s);
-        } catch (err) {
-          // the string that we tried to parse is not valid json
-          // continue to add more text from the input
-          p = n + 1;
-          continue;
-        } // the first part of the string is valid JSON
-
-
-        n = n + 1;
-
-        if (n < toRun.length && toRun[n] !== " ") {
-          return "Valid " + objType + ", but followed by text:" + toRun.substring(n) + "...";
-        } // valid JSON and not followed by strange characters
-
-
-        toRun = toRun.substring(n);
-        break;
-      }
-    } else {
-      // everything else is a string (without quotes)
-      // when we are done, we'll see whether it actually is a number
-      // or any of the known constants
-      var str = "";
-
-      while (toRun.length > 0 && toRun[0] !== " ") {
-        str += toRun[0];
-        toRun = toRun.substring(1);
-      } // try to find whether the string is actually a known constant
-      // or integer or float
-
-
-      if (patNull.test(str)) {
-        value = null;
-      } else if (patBooleanFalse.test(str)) {
-        value = false;
-      } else if (patBooleanTrue.test(str)) {
-        value = true;
-      } else if (patJid.test(str)) {
-        // jids look like numbers but must be strings
-        value = str;
-      } else if (patInteger.test(str)) {
-        value = parseInt(str);
-      } else if (patFloat.test(str)) {
-        value = parseFloat(str);
-
-        if (!isFinite(value)) {
-          return "Numeric argument has overflowed or is infinity";
-        }
-      } else {
-        value = str;
-      }
-    }
-
-    if (name !== null) {
-      // named parameter
-      params[name] = value;
-    } else {
-      // anonymous parameter
-      args.push(value);
-    } // ignore the whitespace before the next part
-
-
-    toRun = toRun.trim();
-  } // succesfull (no error message return)
-
-
-  return null;
-};
-
-/***/ }),
-
 /***/ "./saltgui/static/scripts/utils.js":
 /*!*****************************************!*\
   !*** ./saltgui/static/scripts/utils.js ***!
@@ -2772,17 +2793,17 @@ describe('Unittests for output.js', function () {
 /*!************************************!*\
   !*** ./tests/unit/parsecmdline.js ***!
   \************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-var assert = __webpack_require__(/*! chai */ "chai").assert; // create a global window so we can unittest the window.<x> functions
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _saltgui_static_scripts_CommandLineParser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../saltgui/static/scripts/CommandLineParser */ "./saltgui/static/scripts/CommandLineParser.js");
+var assert = __webpack_require__(/*! chai */ "chai").assert;
 
-
-if (!global.window) global.window = new Object({});
-
-__webpack_require__(/*! ../../saltgui/static/scripts/parsecmdline */ "./saltgui/static/scripts/parsecmdline.js");
 
 describe('Unittests for parsecmdline.js', function () {
+  var candidate = new _saltgui_static_scripts_CommandLineParser__WEBPACK_IMPORTED_MODULE_0__["CommandLineParser"]();
   it('test parseCommandLine', function (done) {
     var args = [],
         params = {},
@@ -2791,7 +2812,7 @@ describe('Unittests for parsecmdline.js', function () {
 
     args = [];
     params = {};
-    result = window.parseCommandLine("test", args, params);
+    result = candidate.parse("test", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], "test");
@@ -2799,19 +2820,19 @@ describe('Unittests for parsecmdline.js', function () {
 
     args = [];
     params = {};
-    result = window.parseCommandLine("{\"test\"", args, params);
+    result = candidate.parse("{\"test\"", args, params);
     assert.equal(result, "No valid dictionary found"); // GENERAL WHITESPACE HANDLING
 
     args = [];
     params = {};
-    result = window.parseCommandLine(" name=true", args, params);
+    result = candidate.parse(" name=true", args, params);
     assert.isNull(result);
     assert.equal(args.length, 0);
     assert.equal(Object.keys(params).length, 1);
     assert.equal(params.name, true);
     args = [];
     params = {};
-    result = window.parseCommandLine("name=true ", args, params);
+    result = candidate.parse("name=true ", args, params);
     assert.isNull(result);
     assert.equal(args.length, 0);
     assert.equal(Object.keys(params).length, 1);
@@ -2820,19 +2841,19 @@ describe('Unittests for parsecmdline.js', function () {
 
     args = [];
     params = {};
-    result = window.parseCommandLine("test=", args, params);
+    result = candidate.parse("test=", args, params);
     assert.equal(result, "Must have value for named parameter 'test'"); // name-value-pair without value is not ok
     // make sure it does not confuse it with furher parameters
 
     args = [];
     params = {};
-    result = window.parseCommandLine("test= arg2 arg3", args, params);
+    result = candidate.parse("test= arg2 arg3", args, params);
     assert.equal(result, "Must have value for named parameter 'test'"); // DICTIONARY
     // a regular dictionary
 
     args = [];
     params = {};
-    result = window.parseCommandLine("{\"a\":1}", args, params);
+    result = candidate.parse("{\"a\":1}", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.deepEqual(args[0], {
@@ -2842,24 +2863,24 @@ describe('Unittests for parsecmdline.js', function () {
 
     args = [];
     params = {};
-    result = window.parseCommandLine("{\"a}\":1", args, params);
+    result = candidate.parse("{\"a}\":1", args, params);
     assert.equal(result, "No valid dictionary found"); // a regular dictionary with } in its name
     // test that the parser is not confused
 
     args = [];
     params = {};
-    result = window.parseCommandLine("{\"a}\":1}", args, params);
+    result = candidate.parse("{\"a}\":1}", args, params);
     assert.equal(result, null); // a regular dictionary with } after its value
 
     args = [];
     params = {};
-    result = window.parseCommandLine("{\"a}\":1}}", args, params);
+    result = candidate.parse("{\"a}\":1}}", args, params);
     assert.equal(result, "Valid dictionary, but followed by text:}..."); // ARRAYS
     // a simple array
 
     args = [];
     params = {};
-    result = window.parseCommandLine("[1,2]", args, params);
+    result = candidate.parse("[1,2]", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.deepEqual(args[0], [1, 2]);
@@ -2867,13 +2888,13 @@ describe('Unittests for parsecmdline.js', function () {
 
     args = [];
     params = {};
-    result = window.parseCommandLine("[1,2", args, params);
+    result = candidate.parse("[1,2", args, params);
     assert.equal(result, "No valid array found"); // STRINGS WITHOUT QUOTES
     // a simple string
 
     args = [];
     params = {};
-    result = window.parseCommandLine("string", args, params);
+    result = candidate.parse("string", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], "string");
@@ -2881,7 +2902,7 @@ describe('Unittests for parsecmdline.js', function () {
 
     args = [];
     params = {};
-    result = window.parseCommandLine("20180820003411338317", args, params);
+    result = candidate.parse("20180820003411338317", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], "20180820003411338317");
@@ -2890,7 +2911,7 @@ describe('Unittests for parsecmdline.js', function () {
 
     args = [];
     params = {};
-    result = window.parseCommandLine("\"string\"", args, params);
+    result = candidate.parse("\"string\"", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], "string");
@@ -2898,14 +2919,14 @@ describe('Unittests for parsecmdline.js', function () {
 
     args = [];
     params = {};
-    result = window.parseCommandLine("\"string", args, params);
+    result = candidate.parse("\"string", args, params);
     assert.equal(result, "No valid double-quoted-string found"); // SINGLE-QUOTED-STRINGS (never supported!)
     // a single-quoted string is not supported
     // it evalueates as a string (the whole thing)
 
     args = [];
     params = {};
-    result = window.parseCommandLine("\'string\'", args, params);
+    result = candidate.parse("\'string\'", args, params);
     assert.equal(result, null);
     assert.equal(args.length, 1);
     assert.equal(args[0], "\'string\'");
@@ -2915,7 +2936,7 @@ describe('Unittests for parsecmdline.js', function () {
 
     args = [];
     params = {};
-    result = window.parseCommandLine("\'string", args, params);
+    result = candidate.parse("\'string", args, params);
     assert.equal(result, null);
     assert.equal(args.length, 1);
     assert.equal(args[0], "\'string");
@@ -2923,7 +2944,7 @@ describe('Unittests for parsecmdline.js', function () {
 
     args = [];
     params = {};
-    result = window.parseCommandLine("0", args, params);
+    result = candidate.parse("0", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], 0);
@@ -2931,7 +2952,7 @@ describe('Unittests for parsecmdline.js', function () {
 
     args = [];
     params = {};
-    result = window.parseCommandLine("2018082000341133831", args, params);
+    result = candidate.parse("2018082000341133831", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], 2018082000341133831);
@@ -2939,7 +2960,7 @@ describe('Unittests for parsecmdline.js', function () {
 
     args = [];
     params = {};
-    result = window.parseCommandLine("201808200034113383170", args, params);
+    result = candidate.parse("201808200034113383170", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], 201808200034113383170);
@@ -2947,7 +2968,7 @@ describe('Unittests for parsecmdline.js', function () {
 
     args = [];
     params = {};
-    result = window.parseCommandLine("20182820003411338317", args, params);
+    result = candidate.parse("20182820003411338317", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], 20182820003411338317);
@@ -2955,103 +2976,103 @@ describe('Unittests for parsecmdline.js', function () {
 
     args = [];
     params = {};
-    result = window.parseCommandLine("0.", args, params);
+    result = candidate.parse("0.", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], 0);
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine(".0", args, params);
+    result = candidate.parse(".0", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], 0);
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("0.0", args, params);
+    result = candidate.parse("0.0", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], 0.0);
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("0.0.0", args, params);
+    result = candidate.parse("0.0.0", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], "0.0.0");
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine(".", args, params);
+    result = candidate.parse(".", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], ".");
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("1e99", args, params);
+    result = candidate.parse("1e99", args, params);
     assert.equal(result, null);
     assert.equal(args.length, 1);
     assert.equal(args[0], 1e99);
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("-1e99", args, params);
+    result = candidate.parse("-1e99", args, params);
     assert.equal(result, null);
     assert.equal(args.length, 1);
     assert.equal(args[0], -1e99);
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("+1e99", args, params);
+    result = candidate.parse("+1e99", args, params);
     assert.equal(result, null);
     assert.equal(args.length, 1);
     assert.equal(args[0], 1e99);
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("1e-99", args, params);
+    result = candidate.parse("1e-99", args, params);
     assert.equal(result, null);
     assert.equal(args.length, 1);
     assert.equal(args[0], 1e-99);
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("1e+99", args, params);
+    result = candidate.parse("1e+99", args, params);
     assert.equal(result, null);
     assert.equal(args.length, 1);
     assert.equal(args[0], 1e99);
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("1e999", args, params);
+    result = candidate.parse("1e999", args, params);
     assert.equal(result, "Numeric argument has overflowed or is infinity"); // NULL
 
     args = [];
     params = {};
-    result = window.parseCommandLine("null", args, params);
+    result = candidate.parse("null", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], null);
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("Null", args, params);
+    result = candidate.parse("Null", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], null);
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("NULL", args, params);
+    result = candidate.parse("NULL", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], null);
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("NUll", args, params);
+    result = candidate.parse("NUll", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], "NUll");
@@ -3059,21 +3080,21 @@ describe('Unittests for parsecmdline.js', function () {
 
     args = [];
     params = {};
-    result = window.parseCommandLine("none", args, params);
+    result = candidate.parse("none", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], "none");
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("None", args, params);
+    result = candidate.parse("None", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], null);
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("NONE", args, params); // GENERAL WHITESPACE HANDLING
+    result = candidate.parse("NONE", args, params); // GENERAL WHITESPACE HANDLING
 
     assert.isNull(result);
     assert.equal(args.length, 1);
@@ -3081,7 +3102,7 @@ describe('Unittests for parsecmdline.js', function () {
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("NOne", args, params);
+    result = candidate.parse("NOne", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], "NOne");
@@ -3089,56 +3110,56 @@ describe('Unittests for parsecmdline.js', function () {
 
     args = [];
     params = {};
-    result = window.parseCommandLine("true", args, params);
+    result = candidate.parse("true", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], true);
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("True", args, params);
+    result = candidate.parse("True", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], true);
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("TRUE", args, params);
+    result = candidate.parse("TRUE", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], true);
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("TRue", args, params);
+    result = candidate.parse("TRue", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], "TRue");
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("false", args, params);
+    result = candidate.parse("false", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], false);
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("False", args, params);
+    result = candidate.parse("False", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], false);
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("FALSE", args, params);
+    result = candidate.parse("FALSE", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], false);
     assert.equal(Object.keys(params).length, 0);
     args = [];
     params = {};
-    result = window.parseCommandLine("FAlse", args, params);
+    result = candidate.parse("FAlse", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
     assert.equal(args[0], "FAlse");

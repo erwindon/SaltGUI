@@ -3,11 +3,15 @@ import {Documentation} from './Documentation';
 import {RunType} from './RunType';
 import {TargetType} from './TargetType';
 import {Output} from './output';
+import {CommandLineParser} from './CommandLineParser';
 
 export class CommandBox {
 
   constructor(api) {
     this.api = api;
+
+    this.commandLineParser = new CommandLineParser();
+
     this._getRunParams = this._getRunParams.bind(this);
     this._onRun = this._onRun.bind(this);
     this._onRunReturn = this._onRunReturn.bind(this);
@@ -232,7 +236,8 @@ export class CommandBox {
     // collection for named parameters
     const kwargs = { };
 
-    const ret = window.parseCommandLine(toRun, args, kwargs);
+    
+    const ret = this.commandLineParser.parse(toRun, args, kwargs);
     if(ret !== null) {
       // that is an error message being returned
       this._showError(ret);
