@@ -2,3 +2,7 @@
 .gitignore
 yarn-error.log
 node_modules/
+coverage
+.nyc_output
+saltgui/static/tests.bundle.js
+saltgui/static/tests.bundle.js.map
