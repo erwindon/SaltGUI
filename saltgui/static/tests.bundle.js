@@ -2419,9 +2419,9 @@ window.makeTargetText = function (targetType, targetPattern) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
+	"./CommandLineParser.test.js": "./tests/unit/CommandLineParser.test.js",
+	"./OutputModule.test.js": "./tests/unit/OutputModule.test.js",
 	"./index.js": "./tests/unit/index.js",
-	"./output.js": "./tests/unit/output.js",
-	"./parsecmdline.js": "./tests/unit/parsecmdline.js",
 	"./utils.js": "./tests/unit/utils.js"
 };
 
@@ -2447,352 +2447,10 @@ webpackContext.id = "./tests/unit sync recursive .js$";
 
 /***/ }),
 
-/***/ "./tests/unit/index.js":
-/*!*****************************!*\
-  !*** ./tests/unit/index.js ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var context = __webpack_require__("./tests/unit sync recursive .js$");
-
-context.keys().forEach(context);
-module.exports = context;
-
-/***/ }),
-
-/***/ "./tests/unit/output.js":
-/*!******************************!*\
-  !*** ./tests/unit/output.js ***!
-  \******************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../saltgui/static/scripts/output */ "./saltgui/static/scripts/output/index.js");
-var assert = __webpack_require__(/*! chai */ "chai").assert;
-
-
-describe('Unittests for output.js', function () {
-  it('test formatJSON', function (done) {
-    var outputData, result;
-    outputData = null;
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData);
-    assert.equal(result, "null");
-    outputData = undefined;
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData);
-    assert.equal(result, "undefined");
-    outputData = 123;
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData);
-    assert.equal(result, "123");
-    outputData = "txt";
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData);
-    assert.equal(result, "\"txt\"");
-    outputData = [];
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData);
-    assert.equal(result, "[ ]");
-    outputData = [1];
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData);
-    assert.equal(result, "[\n" + "    1\n" + "]");
-    outputData = [1, 2, 3, 4, 5];
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData);
-    assert.equal(result, "[\n" + "    1,\n" + "    2,\n" + "    3,\n" + "    4,\n" + "    5\n" + "]");
-    outputData = {};
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData);
-    assert.equal(result, "{ }"); // unordered input
-
-    outputData = {
-      "a": 11,
-      "c": 22,
-      "b": 33
-    };
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData); // ordered output
-
-    assert.equal(result, "{\n" + "    \"a\": 11,\n" + "    \"b\": 33,\n" + "    \"c\": 22\n" + "}"); // a more complex object, unordered input
-
-    outputData = {
-      "ip6_interfaces": {
-        "lo": ["::1"],
-        "eth0": ["fe80::20d:3aff:fe38:576b"]
-      }
-    };
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData); // ordered output
-
-    assert.equal(result, "{\n" + "    \"ip6_interfaces\": {\n" + "        \"eth0\": [\n" + "            \"fe80::20d:3aff:fe38:576b\"\n" + "        ],\n" + "        \"lo\": [\n" + "            \"::1\"\n" + "        ]\n" + "    }\n" + "}");
-    done();
-  });
-  it('test formatYAML', function (done) {
-    var outputData, result;
-    outputData = null;
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData);
-    assert.equal(result, "null");
-    outputData = undefined;
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData);
-    assert.equal(result, "undefined");
-    outputData = 123;
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData);
-    assert.equal(result, "123");
-    outputData = "txt";
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData);
-    assert.equal(result, "txt");
-    outputData = [];
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData);
-    assert.equal(result, "[ ]");
-    outputData = [1];
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData);
-    assert.equal(result, "-\xA01");
-    outputData = [1, 2, 3, 4, 5];
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData);
-    assert.equal(result, "-\xA01\n" + "-\xA02\n" + "-\xA03\n" + "-\xA04\n" + "-\xA05");
-    outputData = {};
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData);
-    assert.equal(result, "{ }"); // unordered input
-
-    outputData = {
-      "a": 11,
-      "c": 22,
-      "b": 33
-    };
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData); // ordered output
-
-    assert.equal(result, "a: 11\n" + "b: 33\n" + "c: 22"); // a more complex object, unordered input
-
-    outputData = {
-      "ip6_interfaces": {
-        "lo": ["::1"],
-        "eth0": ["fe80::20d:3aff:fe38:576b"]
-      }
-    };
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData); // ordered output
-
-    assert.equal(result, "ip6_interfaces:\n" + "  eth0:\n" + "  -\xA0fe80::20d:3aff:fe38:576b\n" + "  lo:\n" + "  -\xA0::1");
-    done();
-  });
-  it('test formatNESTED', function (done) {
-    var outputData, result;
-    outputData = null;
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData);
-    assert.equal(result, "None");
-    outputData = undefined;
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData);
-    assert.equal(result, "undefined");
-    outputData = 123;
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData);
-    assert.equal(result, "123");
-    outputData = "txt";
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData);
-    assert.equal(result, "txt");
-    outputData = [];
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData);
-    assert.equal(result, "");
-    outputData = [1];
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData);
-    assert.equal(result, "-\xA01");
-    outputData = [1, 2, 3, 4, 5];
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData);
-    assert.equal(result, "-\xA01\n" + "-\xA02\n" + "-\xA03\n" + "-\xA04\n" + "-\xA05");
-    outputData = {};
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData);
-    assert.equal(result, ""); // unordered input
-
-    outputData = {
-      "a": 11,
-      "c": 22,
-      "b": 33
-    };
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData); // ordered output
-
-    assert.equal(result, "a:\n" + "    11\n" + "b:\n" + "    33\n" + "c:\n" + "    22"); // a more complex object, unordered input
-
-    outputData = {
-      "ip6_interfaces": {
-        "lo": ["::1"],
-        "eth0": ["fe80::20d:3aff:fe38:576b"]
-      }
-    };
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData); // ordered output
-
-    assert.equal(result, "ip6_interfaces:\n" + "    ----------\n" + "    eth0:\n" + "        -\xA0fe80::20d:3aff:fe38:576b\n" + "    lo:\n" + "        -\xA0::1");
-    done();
-  });
-  it('test isDocumentationOutput', function (done) {
-    var outputData, result; // ok, normal documentation case
-
-    outputData = {
-      "host1": {
-        "keyword": "explanation"
-      }
-    };
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
-    assert.isTrue(result); // wrong, does not match requested documentation
-
-    outputData = {
-      "host1": {
-        "keyword": "explanation"
-      }
-    };
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "another");
-    assert.isFalse(result); // wrong, no resulting documentation
-
-    outputData = {
-      "host1": {
-        "keyword": null
-      }
-    };
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
-    assert.isFalse(result); // wrong, value is not text
-
-    outputData = {
-      "host1": {
-        "keyword": 123
-      }
-    };
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
-    assert.isFalse(result); // wrong, returned structure is not a dict
-
-    outputData = {
-      "host1": ["something"]
-    };
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
-    assert.isFalse(result); // wrong, returned structure is not a dict
-
-    outputData = {
-      "host1": 123
-    };
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
-    assert.isFalse(result); // wrong, returned structure is not a dict
-
-    outputData = {
-      "host1": "hello"
-    };
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
-    assert.isFalse(result); // first host ignored, second host ok
-
-    outputData = {
-      "host1": null,
-      "host2": {
-        "keyword": "explanation"
-      }
-    };
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
-    assert.isTrue(result);
-    done();
-  });
-  it('test isDocuKeyMatch', function (done) {
-    var result; // all documentation
-
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocuKeyMatch("anything", null);
-    assert.isTrue(result); // all documentation
-
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocuKeyMatch("anything", "");
-    assert.isTrue(result); // match one word
-
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocuKeyMatch("foo.bar", "foo");
-    assert.isTrue(result); // match two words
-
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocuKeyMatch("foo.bar", "foo.bar");
-    assert.isTrue(result); // wrong match
-
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocuKeyMatch("foo", "bar");
-    assert.isFalse(result); // wrong match (even though text prefix)
-
-    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocuKeyMatch("food", "foo");
-    assert.isFalse(result);
-    done();
-  });
-  it('test reduceDocumentationOutput', function (done) {
-    var out; // normal case, hostname replaced by search key
-
-    out = {
-      "host1": {
-        "topic": "explanation"
-      }
-    };
-    _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].reduceDocumentationOutput(out, "DUMMY", "topic");
-    assert.deepEqual(out, {
-      "DUMMY": {
-        "topic": "explanation"
-      }
-    }); // removed irrelevant documentation parts
-
-    out = {
-      "host1": {
-        "topic": "explanation",
-        "othertopic": "otherexplanation"
-      }
-    };
-    _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].reduceDocumentationOutput(out, "DUMMY", "topic");
-    assert.deepEqual(out, {
-      "DUMMY": {
-        "topic": "explanation"
-      }
-    }); // removed hosts with same answer
-
-    out = {
-      "host1": {
-        "topic": "explanation"
-      },
-      "host2": {
-        "topic": "explanation"
-      }
-    };
-    _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].reduceDocumentationOutput(out, "DUMMY", "topic");
-    assert.deepEqual(out, {
-      "DUMMY": {
-        "topic": "explanation"
-      }
-    }); // ignore hosts with incorrectly formatted answer
-
-    out = {
-      "host1": null,
-      "host2": {
-        "topic": "explanation"
-      }
-    };
-    _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].reduceDocumentationOutput(out, "DUMMY", "topic");
-    assert.deepEqual(out, {
-      "DUMMY": {
-        "topic": "explanation"
-      }
-    }); // ignore hosts with incorrectly formatted answer
-
-    out = {
-      "host1": 123,
-      "host2": {
-        "topic": "explanation"
-      }
-    };
-    _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].reduceDocumentationOutput(out, "DUMMY", "topic");
-    assert.deepEqual(out, {
-      "DUMMY": {
-        "topic": "explanation"
-      }
-    });
-    done();
-  });
-  it('test documentation external link conversion', function (done) {
-    // external links will be converted to html
-    var container = {
-      "innerHTML": ""
-    };
-    var output = {
-      "host1": {
-        "pkg.install": "`systemd-run(1)`_\n .. _`systemd-run(1)`: https://www.freedesktop.org/software/systemd/man/systemd-run.html"
-      }
-    };
-    _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].addDocumentationOutput(container, output);
-    assert.isTrue(container.innerHTML.includes("<a href='https://www.freedesktop.org/software/systemd/man/systemd-run.html' target='_blank'><span style='color: yellow'>systemd-run(1)</span></a>"));
-    done();
-  });
-});
-
-/***/ }),
-
-/***/ "./tests/unit/parsecmdline.js":
-/*!************************************!*\
-  !*** ./tests/unit/parsecmdline.js ***!
-  \************************************/
+/***/ "./tests/unit/CommandLineParser.test.js":
+/*!**********************************************!*\
+  !*** ./tests/unit/CommandLineParser.test.js ***!
+  \**********************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3167,6 +2825,348 @@ describe('Unittests for parsecmdline.js', function () {
     done();
   });
 });
+
+/***/ }),
+
+/***/ "./tests/unit/OutputModule.test.js":
+/*!*****************************************!*\
+  !*** ./tests/unit/OutputModule.test.js ***!
+  \*****************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../saltgui/static/scripts/output */ "./saltgui/static/scripts/output/index.js");
+var assert = __webpack_require__(/*! chai */ "chai").assert;
+
+
+describe('Unittests for output.js', function () {
+  it('test formatJSON', function (done) {
+    var outputData, result;
+    outputData = null;
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData);
+    assert.equal(result, "null");
+    outputData = undefined;
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData);
+    assert.equal(result, "undefined");
+    outputData = 123;
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData);
+    assert.equal(result, "123");
+    outputData = "txt";
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData);
+    assert.equal(result, "\"txt\"");
+    outputData = [];
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData);
+    assert.equal(result, "[ ]");
+    outputData = [1];
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData);
+    assert.equal(result, "[\n" + "    1\n" + "]");
+    outputData = [1, 2, 3, 4, 5];
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData);
+    assert.equal(result, "[\n" + "    1,\n" + "    2,\n" + "    3,\n" + "    4,\n" + "    5\n" + "]");
+    outputData = {};
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData);
+    assert.equal(result, "{ }"); // unordered input
+
+    outputData = {
+      "a": 11,
+      "c": 22,
+      "b": 33
+    };
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData); // ordered output
+
+    assert.equal(result, "{\n" + "    \"a\": 11,\n" + "    \"b\": 33,\n" + "    \"c\": 22\n" + "}"); // a more complex object, unordered input
+
+    outputData = {
+      "ip6_interfaces": {
+        "lo": ["::1"],
+        "eth0": ["fe80::20d:3aff:fe38:576b"]
+      }
+    };
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputJson"].formatJSON(outputData); // ordered output
+
+    assert.equal(result, "{\n" + "    \"ip6_interfaces\": {\n" + "        \"eth0\": [\n" + "            \"fe80::20d:3aff:fe38:576b\"\n" + "        ],\n" + "        \"lo\": [\n" + "            \"::1\"\n" + "        ]\n" + "    }\n" + "}");
+    done();
+  });
+  it('test formatYAML', function (done) {
+    var outputData, result;
+    outputData = null;
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData);
+    assert.equal(result, "null");
+    outputData = undefined;
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData);
+    assert.equal(result, "undefined");
+    outputData = 123;
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData);
+    assert.equal(result, "123");
+    outputData = "txt";
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData);
+    assert.equal(result, "txt");
+    outputData = [];
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData);
+    assert.equal(result, "[ ]");
+    outputData = [1];
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData);
+    assert.equal(result, "-\xA01");
+    outputData = [1, 2, 3, 4, 5];
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData);
+    assert.equal(result, "-\xA01\n" + "-\xA02\n" + "-\xA03\n" + "-\xA04\n" + "-\xA05");
+    outputData = {};
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData);
+    assert.equal(result, "{ }"); // unordered input
+
+    outputData = {
+      "a": 11,
+      "c": 22,
+      "b": 33
+    };
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData); // ordered output
+
+    assert.equal(result, "a: 11\n" + "b: 33\n" + "c: 22"); // a more complex object, unordered input
+
+    outputData = {
+      "ip6_interfaces": {
+        "lo": ["::1"],
+        "eth0": ["fe80::20d:3aff:fe38:576b"]
+      }
+    };
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputYaml"].formatYAML(outputData); // ordered output
+
+    assert.equal(result, "ip6_interfaces:\n" + "  eth0:\n" + "  -\xA0fe80::20d:3aff:fe38:576b\n" + "  lo:\n" + "  -\xA0::1");
+    done();
+  });
+  it('test formatNESTED', function (done) {
+    var outputData, result;
+    outputData = null;
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData);
+    assert.equal(result, "None");
+    outputData = undefined;
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData);
+    assert.equal(result, "undefined");
+    outputData = 123;
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData);
+    assert.equal(result, "123");
+    outputData = "txt";
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData);
+    assert.equal(result, "txt");
+    outputData = [];
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData);
+    assert.equal(result, "");
+    outputData = [1];
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData);
+    assert.equal(result, "-\xA01");
+    outputData = [1, 2, 3, 4, 5];
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData);
+    assert.equal(result, "-\xA01\n" + "-\xA02\n" + "-\xA03\n" + "-\xA04\n" + "-\xA05");
+    outputData = {};
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData);
+    assert.equal(result, ""); // unordered input
+
+    outputData = {
+      "a": 11,
+      "c": 22,
+      "b": 33
+    };
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData); // ordered output
+
+    assert.equal(result, "a:\n" + "    11\n" + "b:\n" + "    33\n" + "c:\n" + "    22"); // a more complex object, unordered input
+
+    outputData = {
+      "ip6_interfaces": {
+        "lo": ["::1"],
+        "eth0": ["fe80::20d:3aff:fe38:576b"]
+      }
+    };
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputNested"].formatNESTED(outputData); // ordered output
+
+    assert.equal(result, "ip6_interfaces:\n" + "    ----------\n" + "    eth0:\n" + "        -\xA0fe80::20d:3aff:fe38:576b\n" + "    lo:\n" + "        -\xA0::1");
+    done();
+  });
+  it('test isDocumentationOutput', function (done) {
+    var outputData, result; // ok, normal documentation case
+
+    outputData = {
+      "host1": {
+        "keyword": "explanation"
+      }
+    };
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
+    assert.isTrue(result); // wrong, does not match requested documentation
+
+    outputData = {
+      "host1": {
+        "keyword": "explanation"
+      }
+    };
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "another");
+    assert.isFalse(result); // wrong, no resulting documentation
+
+    outputData = {
+      "host1": {
+        "keyword": null
+      }
+    };
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
+    assert.isFalse(result); // wrong, value is not text
+
+    outputData = {
+      "host1": {
+        "keyword": 123
+      }
+    };
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
+    assert.isFalse(result); // wrong, returned structure is not a dict
+
+    outputData = {
+      "host1": ["something"]
+    };
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
+    assert.isFalse(result); // wrong, returned structure is not a dict
+
+    outputData = {
+      "host1": 123
+    };
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
+    assert.isFalse(result); // wrong, returned structure is not a dict
+
+    outputData = {
+      "host1": "hello"
+    };
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
+    assert.isFalse(result); // first host ignored, second host ok
+
+    outputData = {
+      "host1": null,
+      "host2": {
+        "keyword": "explanation"
+      }
+    };
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
+    assert.isTrue(result);
+    done();
+  });
+  it('test isDocuKeyMatch', function (done) {
+    var result; // all documentation
+
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocuKeyMatch("anything", null);
+    assert.isTrue(result); // all documentation
+
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocuKeyMatch("anything", "");
+    assert.isTrue(result); // match one word
+
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocuKeyMatch("foo.bar", "foo");
+    assert.isTrue(result); // match two words
+
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocuKeyMatch("foo.bar", "foo.bar");
+    assert.isTrue(result); // wrong match
+
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocuKeyMatch("foo", "bar");
+    assert.isFalse(result); // wrong match (even though text prefix)
+
+    result = _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocuKeyMatch("food", "foo");
+    assert.isFalse(result);
+    done();
+  });
+  it('test reduceDocumentationOutput', function (done) {
+    var out; // normal case, hostname replaced by search key
+
+    out = {
+      "host1": {
+        "topic": "explanation"
+      }
+    };
+    _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].reduceDocumentationOutput(out, "DUMMY", "topic");
+    assert.deepEqual(out, {
+      "DUMMY": {
+        "topic": "explanation"
+      }
+    }); // removed irrelevant documentation parts
+
+    out = {
+      "host1": {
+        "topic": "explanation",
+        "othertopic": "otherexplanation"
+      }
+    };
+    _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].reduceDocumentationOutput(out, "DUMMY", "topic");
+    assert.deepEqual(out, {
+      "DUMMY": {
+        "topic": "explanation"
+      }
+    }); // removed hosts with same answer
+
+    out = {
+      "host1": {
+        "topic": "explanation"
+      },
+      "host2": {
+        "topic": "explanation"
+      }
+    };
+    _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].reduceDocumentationOutput(out, "DUMMY", "topic");
+    assert.deepEqual(out, {
+      "DUMMY": {
+        "topic": "explanation"
+      }
+    }); // ignore hosts with incorrectly formatted answer
+
+    out = {
+      "host1": null,
+      "host2": {
+        "topic": "explanation"
+      }
+    };
+    _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].reduceDocumentationOutput(out, "DUMMY", "topic");
+    assert.deepEqual(out, {
+      "DUMMY": {
+        "topic": "explanation"
+      }
+    }); // ignore hosts with incorrectly formatted answer
+
+    out = {
+      "host1": 123,
+      "host2": {
+        "topic": "explanation"
+      }
+    };
+    _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].reduceDocumentationOutput(out, "DUMMY", "topic");
+    assert.deepEqual(out, {
+      "DUMMY": {
+        "topic": "explanation"
+      }
+    });
+    done();
+  });
+  it('test documentation external link conversion', function (done) {
+    // external links will be converted to html
+    var container = {
+      "innerHTML": ""
+    };
+    var output = {
+      "host1": {
+        "pkg.install": "`systemd-run(1)`_\n .. _`systemd-run(1)`: https://www.freedesktop.org/software/systemd/man/systemd-run.html"
+      }
+    };
+    _saltgui_static_scripts_output__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].addDocumentationOutput(container, output);
+    assert.isTrue(container.innerHTML.includes("<a href='https://www.freedesktop.org/software/systemd/man/systemd-run.html' target='_blank'><span style='color: yellow'>systemd-run(1)</span></a>"));
+    done();
+  });
+});
+
+/***/ }),
+
+/***/ "./tests/unit/index.js":
+/*!*****************************!*\
+  !*** ./tests/unit/index.js ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var context = __webpack_require__("./tests/unit sync recursive .js$");
+
+context.keys().forEach(context);
+module.exports = context;
 
 /***/ }),
 
