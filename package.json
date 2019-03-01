@@ -122,6 +122,6 @@
     "test:coverage": "nyc --reporter=html --reporter=text webpack --config webpack.test.js",
     "test:functional": "mocha --trace-warnings --check-leaks --reporter spec tests/functional/",
     "test": "npm run test:unit && npm run test:functional",
-    "report:coveralls": "nyc report --reporter=text-lcov | coveralls"
+    "report:coveralls": "nyc report --reporter=text-lcov webpack --config webpack.test.js | coveralls"
   }
 }
