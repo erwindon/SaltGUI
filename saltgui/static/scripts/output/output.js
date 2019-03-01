@@ -1,3 +1,10 @@
+import {OutputDocumentation} from './OutputDocumentation';
+import {OutputHighstate} from './OutputHighstate';
+import {OutputJson} from './OutputJson';
+import {OutputNested} from './OutputNested';
+import {OutputSaltGuiHighstate} from './OutputSaltGuiHighstate';
+import {OutputYaml} from './OutputYaml';
+
 // Functions to turn responses from the salt system into visual information
 // The following variations exist:
 // A) documentation output
@@ -17,13 +24,6 @@
 // 2) Output from RUNNERS functions
 //    This output is re-organized to let it appear as if the output comes
 //    from a single node called "master".
-
-import {OutputDocumentation} from './OutputDocumentation';
-import {OutputHighstate} from './OutputHighstate';
-import {OutputJson} from './OutputJson';
-import {OutputNested} from './OutputNested';
-import {OutputSaltGuiHighstate} from './OutputSaltGuiHighstate';
-import {OutputYaml} from './OutputYaml';
 
 export class Output {
 

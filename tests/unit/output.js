@@ -1,6 +1,6 @@
 const assert = require('chai').assert;
 
-const Output = require('../../saltgui/static/scripts/output/output');
+const Output = require('../../saltgui/static/saltgui.bundle');
 const OutputJson = require('../../saltgui/static/scripts/output/outputJson');
 const OutputYaml = require('../../saltgui/static/scripts/output/outputYaml');
 const OutputNested = require('../../saltgui/static/scripts/output/outputNested');
