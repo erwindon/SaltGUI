@@ -1,6 +1,9 @@
 # SaltGUI
 
 A new open source web interface for managing a SaltStack server. Built using vanilla ES6 and implemented as a wrapper around the rest_cherrypy server.
+## QA
+
+!(https://travis-ci.org/smarletta/SaltGUI.svg?branch=master)
 
 ## Screenshots
 ![overview](/docs/screenshots/overview.png)
