@@ -322,8 +322,12 @@ class PageRoute extends Route {
     }
     tr.appendChild(Route._createTd("target", targetText));
 
-    const argumentsText = this._decodeArgumentsText(job.Arguments[0]);
-    const functionText = job.Function + " " + argumentsText;
+    let argumentsText = this._decodeArgumentsText(job.Arguments[0]);
+    let functionText = job.Function + " " + argumentsText;
+    if(functionText.length > 50) {
+      // prevent column becoming too wide
+      functionText = functionText.substring(0, 50) + "...";
+    }
     tr.appendChild(Route._createTd("function", functionText));
 
     const startTimeText = job.StartTime;
