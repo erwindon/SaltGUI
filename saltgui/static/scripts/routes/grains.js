@@ -28,7 +28,14 @@ class GrainsRoute extends PageRoute {
       th.innerText = this._previewGrains[i];
       tr.appendChild(th);
     }
-    // the new columns are not yet sortable, make sure they are
+
+    // The new columns are not yet sortable, make sure they are.
+    // First detroy all the default sorting handlers.
+    // A (deep)copy of an element does not copy its handlers.
+    const oldHead = document.querySelector("#page_grains table thead")
+    const newHead = oldHead.cloneNode(true);
+    oldHead.parentNode.replaceChild(newHead, oldHead);
+    // Now re-start sorting logic.
     sorttable.makeSortable(document.querySelector("#page_grains table"));
   }
 
