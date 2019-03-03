@@ -16,15 +16,15 @@ class PillarsRoute extends PageRoute {
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
       if(minions.keysLoaded && minions.jobsLoaded) resolve();
-      minions.router.api.getPillarObfuscate(null).then(minions._updateMinions);
-      minions.router.api.getKeys().then(minions._updateKeys);
-      minions.router.api.getJobs().then(minions._updateJobs);
-      minions.router.api.getJobsActive().then(minions._runningJobs);
+      minions.router.api.getLocalPillarObfuscate(null).then(minions._updateMinions);
+      minions.router.api.getWheelKeyListAll().then(minions._updateKeys);
+      minions.router.api.getRunnerJobsListJobs().then(minions._updateJobs);
+      minions.router.api.getRunnerJobsActive().then(minions._runningJobs);
     });
   }
 
   _updateKeys(data) {
-    const keys = data.return;
+    const keys = data.return[0].data.return;
 
     const list = this.getPageElement().querySelector('#minions');
 

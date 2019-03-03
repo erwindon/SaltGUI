@@ -11,8 +11,8 @@ class KeysRoute extends PageRoute {
 
   onShow() {
     const keys = this;
-    const p1 = keys.router.api.getKeys();
-    const p2 = keys.router.api.getKeysFingerprint();
+    const p1 = keys.router.api.getWheelKeyListAll();
+    const p2 = keys.router.api.getWheelKeyFinger();
 
     Promise.all([p1, p2])
       .then(function(data){
@@ -24,8 +24,8 @@ class KeysRoute extends PageRoute {
     return new Promise(function(resolve, reject) {
       keys.resolvePromise = resolve;
       if(keys.keysLoaded && keys.jobsLoaded) resolve();
-      keys.router.api.getJobs().then(keys._updateJobs);
-      keys.router.api.getJobsActive().then(keys._runningJobs);
+      keys.router.api.getRunnerJobsListJobs().then(keys._updateJobs);
+      keys.router.api.getRunnerJobsActive().then(keys._runningJobs);
     });
   }
 
@@ -52,7 +52,7 @@ class KeysRoute extends PageRoute {
   }
 
   _updateKeys(data) {
-    const keys = data.return;
+    const keys = data.return[0].data.return;
     const list = this.getPageElement().querySelector("#minions");
 
     // Unaccepted goes first because that is where the user must decide
