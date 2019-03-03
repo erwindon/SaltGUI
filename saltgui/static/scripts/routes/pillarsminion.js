@@ -24,9 +24,9 @@ class PillarsMinionRoute extends PageRoute {
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
       if(minions.keysLoaded && minions.jobsLoaded) resolve();
-      minions.router.api.getPillarItems(minion).then(minions._showPillars);
-      minions.router.api.getJobs().then(minions._updateJobs);
-      minions.router.api.getJobsActive().then(minions._runningJobs);
+      minions.router.api.getLocalPillarItems(minion).then(minions._showPillars);
+      minions.router.api.getRunnerJobsListJobs().then(minions._updateJobs);
+      minions.router.api.getRunnerJobsActive().then(minions._runningJobs);
     });
   }
 

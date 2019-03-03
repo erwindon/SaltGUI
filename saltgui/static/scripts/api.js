@@ -51,42 +51,22 @@ class API {
       });
   }
 
-  getMinions() {
-    return this.apiRequest("GET", "/minions", {});
-  }
-
-  getKeys() {
-    return this.apiRequest("GET", "/keys", {});
-  }
-
-  getKeysFingerprint() {
-    const params = {
-      client: "wheel",
-      fun: "key.finger",
-      match: "*"
-    };
-    return this.apiRequest("POST", "/", params).catch(console.error);
-  }
-
-  getJobs() {
-    return this.apiRequest("GET", "/jobs", {});
-  }
-
-  getJob(id) {
-    return this.apiRequest("GET", "/jobs/" + id, {});
-  }
-
-  getGrainsItems(minion) {
+  getLocalGrainsItems(minion) {
     const params = {
       client: "local",
       fun: "grains.items",
-      tgt_type: "list",
-      tgt: minion
     };
+    if(minion) {
+      params.tgt_type = "list";
+      params.tgt = minion;
+    } else {
+      params.tgt_type = "glob";
+      params.tgt = "*";
+    }
     return this.apiRequest("POST", "/", params).catch(console.error);
   }
 
-  getPillarItems(minion) {
+  getLocalPillarItems(minion) {
     const params = {
       client: "local",
       fun: "pillar.items"
@@ -101,7 +81,7 @@ class API {
     return this.apiRequest("POST", "/", params).catch(console.error);
   }
 
-  getPillarObfuscate(minion) {
+  getLocalPillarObfuscate(minion) {
     const params = {
       client: "local",
       fun: "pillar.obfuscate"
@@ -116,7 +96,7 @@ class API {
     return this.apiRequest("POST", "/", params).catch(console.error);
   }
 
-  getScheduleList(minion) {
+  getLocalScheduleList(minion) {
     const params = {
       client: "local",
       fun: "schedule.list",
@@ -132,7 +112,7 @@ class API {
     return this.apiRequest("POST", "/", params).catch(console.error);
   }
 
-  getJobsActive() {
+  getRunnerJobsActive() {
     const params = {
       client: "runner",
       fun: "jobs.active"
@@ -140,10 +120,44 @@ class API {
     return this.apiRequest("POST", "/", params).catch(console.error);
   }
 
-  getConfigValues() {
+  getRunnerJobsListJob(id) {
+    const params = {
+      client: "runner",
+      fun: "jobs.list_job",
+      jid: id
+    };
+    return this.apiRequest("POST", "/", params).catch(console.error);
+  }
+
+  getRunnerJobsListJobs() {
+    const params = {
+      client: "runner",
+      fun: "jobs.list_jobs"
+    };
+    return this.apiRequest("POST", "/", params).catch(console.error);
+  }
+
+  getWheelConfigValues() {
     const params = {
       client: "wheel",
       fun: "config.values"
+    };
+    return this.apiRequest("POST", "/", params).catch(console.error);
+  }
+
+  getWheelKeyFinger() {
+    const params = {
+      client: "wheel",
+      fun: "key.finger",
+      match: "*"
+    };
+    return this.apiRequest("POST", "/", params).catch(console.error);
+  }
+
+  getWheelKeyListAll() {
+    const params = {
+      client: "wheel",
+      fun: "key.list_all",
     };
     return this.apiRequest("POST", "/", params).catch(console.error);
   }

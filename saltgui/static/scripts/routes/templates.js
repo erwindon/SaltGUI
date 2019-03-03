@@ -13,9 +13,9 @@ class TemplatesRoute extends PageRoute {
     return new Promise(function(resolve, reject) {
       templates.resolvePromise = resolve;
       if(templates.jobsLoaded) resolve();
-      templates.router.api.getJobs().then(templates._updateJobs);
-      templates.router.api.getJobsActive().then(templates._runningJobs);
-      templates.router.api.getConfigValues().then(templates._updateTemplates);
+      templates.router.api.getRunnerJobsListJobs().then(templates._updateJobs);
+      templates.router.api.getRunnerJobsActive().then(templates._runningJobs);
+      templates.router.api.getWheelConfigValues().then(templates._updateTemplates);
     });
   }
 

@@ -15,11 +15,11 @@ class SchedulesRoute extends PageRoute {
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
       if(minions.keysLoaded && minions.jobsLoaded) resolve();
-      minions.router.api.getScheduleList(null)
+      minions.router.api.getLocalScheduleList(null)
         .then(minions._updateMinions, minions._updateMinions);
-      minions.router.api.getKeys().then(minions._updateKeys);
-      minions.router.api.getJobs().then(minions._updateJobs);
-      minions.router.api.getJobsActive().then(minions._runningJobs);
+      minions.router.api.getWheelKeyListAll().then(minions._updateKeys);
+      minions.router.api.getRunnerJobsListJobs().then(minions._updateJobs);
+      minions.router.api.getRunnerJobsActive().then(minions._runningJobs);
     });
   }
 
@@ -42,7 +42,7 @@ class SchedulesRoute extends PageRoute {
   }
 
   _updateKeys(data) {
-    const keys = data.return;
+    const keys = data.return[0].data.return;
 
     const list = this.getPageElement().querySelector('#minions');
 

@@ -10,7 +10,7 @@ class JobRoute extends Route {
     const id = decodeURIComponent(window.getQueryParam("id"));
     return new Promise(function(resolve, reject) {
       job.resolvePromise = resolve;
-      job.router.api.getJob(id).then(job._onJobData);
+      job.router.api.getRunnerJobsListJob(id).then(job._onJobData);
     });
   }
 
@@ -22,7 +22,7 @@ class JobRoute extends Route {
 
   _onJobData(data) {
     const job = this;
-    const info = data.info[0];
+    const info = data.return[0];
     job.getPageElement().querySelector(".output").innerText = "";
 
     document.querySelector("#button_close_job").addEventListener("click", _ => {
