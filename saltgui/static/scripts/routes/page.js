@@ -322,7 +322,7 @@ class PageRoute extends Route {
     }
     tr.appendChild(Route._createTd("target", targetText));
 
-    let argumentsText = this._decodeArgumentsText(job.Arguments[0]);
+    const argumentsText = this._decodeArgumentsText(job.Arguments[0]);
     let functionText = job.Function + " " + argumentsText;
     if(functionText.length > 50) {
       // prevent column becoming too wide
