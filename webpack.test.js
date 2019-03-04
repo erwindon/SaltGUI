@@ -27,7 +27,8 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                         presets: ['@babel/preset-env'],
-                        sourceType: 'unambiguous'
+                        sourceType: 'unambiguous',
+                        "plugins": [ "istanbul" ]
                     }
                 }
             },

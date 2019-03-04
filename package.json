@@ -8,6 +8,7 @@
     "@babel/core": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
     "babel-loader": "^8.0.5",
+    "babel-plugin-istanbul": "^5.1.1",
     "chai": "^4.1.2",
     "css-loader": "^2.1.0",
     "eslint": "^5.3.0",
@@ -17,6 +18,7 @@
     "mocha": "^5.2.0",
     "nightmare": "^3.0.1",
     "node-sass": "^4.11.0",
+    "nyc": "^13.3.0",
     "rimraf": "^2.6.3",
     "sass-loader": "^7.1.0",
     "stylelint": "^9.4.0",
@@ -65,6 +67,43 @@
   "stylelint": {
     "extends": "stylelint-config-standard"
   },
+  "nyc": {
+    "check-coverage": false,
+    "per-file": true,
+    "lines": 85,
+    "statements": 85,
+    "functions": 85,
+    "branches": 85,
+    "cache": true,
+    "all": true,
+    "watermarks": {
+      "lines": [
+        70,
+        90
+      ],
+      "functions": [
+        70,
+        90
+      ],
+      "branches": [
+        70,
+        90
+      ],
+      "statements": [
+        70,
+        90
+      ]
+    },
+    "exclude": [
+      "tests/**/*.js",
+      "saltgui/**/*.bundle.js",
+      "node_modules/**/*.js",
+      "webpack.*.js"
+    ],
+    "include": [
+      "saltgui/static/scripts/**/*.js"
+    ]
+  },
   "scripts": {
     "build": "npm run clean && npm run lint && npm run stylelint && npm run bundle",
     "clean": "rimraf saltgui/static/saltgui.bundle.js && rimraf saltgui/static/saltgui.bundle.js.map && rimraf saltgui/static/tests.bundle.js && rimraf saltgui/static/tests.bundle.js.map",
@@ -74,6 +113,7 @@
     "stylelint": "stylelint 'saltgui/static/stylesheets/*.css'",
     "wait-for-docker": "node tests/helpers/wait-for-docker.js",
     "test:unit": "webpack --config webpack.test.js",
+    "test:coverage": "nyc --reporter=html --reporter=text webpack --config webpack.test.js",
     "test:functional": "mocha --trace-warnings --check-leaks --reporter spec tests/functional/"
   }
 }
