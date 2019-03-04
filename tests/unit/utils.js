@@ -4,7 +4,7 @@ const assert = require('chai').assert;
 if (!global.window)
   global.window = new Object({});
 
-require('../../saltgui/static/scripts/utils');
+require('../../saltgui/static/scripts/Utils');
 
 
 describe('Unittests for utils.js', function() {
