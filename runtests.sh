@@ -16,13 +16,16 @@ npm run jslint
 # and if our css is sane
 npm run stylelint
 
+# run the unittests tests before docker for failing fast
+npm run test:functional
+
 # start a salt master, three salt minions and saltgui to run tests on
 docker-compose -f docker/docker-compose.yml up -d
 
 # wait until all are up
 npm run wait-for-docker
 
-# run the unittests/nightmare.js functional tests
-npm run test
+# run the nightmare.js functional tests
+npm run test:functional
 
 set +e
