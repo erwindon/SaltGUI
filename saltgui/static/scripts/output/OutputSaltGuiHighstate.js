@@ -1,3 +1,5 @@
+import {Output} from './Output';
+
 export class OutputSaltGuiHighstate {
 
   // no separate `isHighStateOutput` here

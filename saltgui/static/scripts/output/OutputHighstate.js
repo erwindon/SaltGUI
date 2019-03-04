@@ -1,3 +1,5 @@
+import {Output} from './Output';
+
 export class OutputHighstate {
 
   static isHighStateOutput(command, response) {

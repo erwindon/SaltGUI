@@ -2,6 +2,7 @@ import {DropDownMenu} from './DropDown';
 import {Documentation} from './Documentation';
 import {RunType} from './RunType';
 import {TargetType} from './TargetType';
+import {Output} from './output/Output';
 
 export class CommandBox {
 

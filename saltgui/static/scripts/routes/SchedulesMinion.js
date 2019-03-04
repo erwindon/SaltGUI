@@ -1,4 +1,5 @@
 import {PageRoute} from './Page';
+import {Route} from './Route';
 import {Output} from '../output/Output';
 
 export class SchedulesMinionRoute extends PageRoute {
