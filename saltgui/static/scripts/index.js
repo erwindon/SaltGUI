@@ -1,3 +1,7 @@
-const context = require.context('./', true, /.js$/);
-context.keys().forEach(context);
-module.exports = context;
+import '../sorttable/sorttable';
+import './ParseCommandLine';
+import './Utils';
+
+import {Router} from './Router';
+
+window.addEventListener("load", () => new Router());

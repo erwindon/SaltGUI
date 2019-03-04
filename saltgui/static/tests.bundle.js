@@ -86,13 +86,288 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./saltgui/static/scripts/output/output.js":
-/*!*************************************************!*\
-  !*** ./saltgui/static/scripts/output/output.js ***!
-  \*************************************************/
+/***/ "./saltgui/static/scripts/ParseCommandLine.js":
+/*!****************************************************!*\
+  !*** ./saltgui/static/scripts/ParseCommandLine.js ***!
+  \****************************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
+// Function to parse a commandline
+// The line is broken into individual tokens
+// Each token that is recognized as a JS type will get that type
+// Otherwise the token is considered to be a string
+// name-value pairs in the form "name=value" are added to the "params" dictionary
+// other parameters are added to the "args" array
+// e.g.:
+//   test "1 2 3" 4 x=7 {"a":1, "b":2}
+// is a command line of 5 tokens
+//   string: "test"
+//   string: "1 2 3"
+//   number: 4
+//   number: 7
+//   dictionary: {"a":1, "b": 2}
+// the array will be filled with 4 elements
+// the dictionary will be filled with one element named "x"
+// note that "none" is not case-insensitive, but "null" is
+var patNull = /^(None|null|Null|NULL)$/;
+var patBooleanFalse = /^(false|False|FALSE)$/;
+var patBooleanTrue = /^(true|True|TRUE)$/;
+var patJid = /^[2-9][0-9][0-9][0-9][01][0-9][0-3][0-9][0-2][0-9][0-5][0-9][0-5][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$/;
+var patInteger = /^((0)|([-+]?[1-9][0-9]*))$/;
+var patFloat = /^([-+]?(([0-9]+)|([0-9]+[.][0-9]*)|([0-9]*[.][0-9]+))([eE][-+]?[0-9]+)?)$/;
+
+window.parseCommandLine = function (toRun, args, params) {
+  // just in case the user typed some extra whitespace
+  // at the start of the line
+  toRun = toRun.trim();
+
+  while (toRun.length > 0) {
+    var name = null;
+    var firstSpaceChar = toRun.indexOf(" ");
+    if (firstSpaceChar < 0) firstSpaceChar = toRun.length;
+    var firstEqualSign = toRun.indexOf("=");
+
+    if (firstEqualSign >= 0 && firstEqualSign < firstSpaceChar) {
+      // we have the name of a named parameter
+      name = toRun.substr(0, firstEqualSign);
+      toRun = toRun.substr(firstEqualSign + 1);
+
+      if (toRun === "" || toRun[0] === " ") {
+        return "Must have value for named parameter '" + name + "'";
+      }
+    } // Determine whether the JSON string starts with a known
+    // character for a JSON type
+
+
+    var endChar = undefined;
+    var objType = undefined;
+
+    if (toRun[0] === "{") {
+      endChar = "}";
+      objType = "dictionary";
+    } else if (toRun[0] === "[") {
+      endChar = "]";
+      objType = "array";
+    } else if (toRun[0] === "\"") {
+      // note that json does not support single-quoted strings
+      endChar = "\"";
+      objType = "double-quoted-string";
+    }
+
+    var value = void 0;
+
+    if (endChar && objType) {
+      // The string starts with a character for a known JSON type
+      var p = 1;
+
+      while (true) {
+        // Try until the next closing character
+        var n = toRun.indexOf(endChar, p);
+
+        if (n < 0) {
+          return "No valid " + objType + " found";
+        } // parse what we have found so far
+        // the string ends with a closing character
+        // but that may not be enough, e.g. "{a:{}"
+
+
+        var s = toRun.substring(0, n + 1);
+
+        try {
+          value = JSON.parse(s);
+        } catch (err) {
+          // the string that we tried to parse is not valid json
+          // continue to add more text from the input
+          p = n + 1;
+          continue;
+        } // the first part of the string is valid JSON
+
+
+        n = n + 1;
+
+        if (n < toRun.length && toRun[n] !== " ") {
+          return "Valid " + objType + ", but followed by text:" + toRun.substring(n) + "...";
+        } // valid JSON and not followed by strange characters
+
+
+        toRun = toRun.substring(n);
+        break;
+      }
+    } else {
+      // everything else is a string (without quotes)
+      // when we are done, we'll see whether it actually is a number
+      // or any of the known constants
+      var str = "";
+
+      while (toRun.length > 0 && toRun[0] !== " ") {
+        str += toRun[0];
+        toRun = toRun.substring(1);
+      } // try to find whether the string is actually a known constant
+      // or integer or float
+
+
+      if (patNull.test(str)) {
+        value = null;
+      } else if (patBooleanFalse.test(str)) {
+        value = false;
+      } else if (patBooleanTrue.test(str)) {
+        value = true;
+      } else if (patJid.test(str)) {
+        // jids look like numbers but must be strings
+        value = str;
+      } else if (patInteger.test(str)) {
+        value = parseInt(str);
+      } else if (patFloat.test(str)) {
+        value = parseFloat(str);
+
+        if (!isFinite(value)) {
+          return "Numeric argument has overflowed or is infinity";
+        }
+      } else {
+        value = str;
+      }
+    }
+
+    if (name !== null) {
+      // named parameter
+      params[name] = value;
+    } else {
+      // anonymous parameter
+      args.push(value);
+    } // ignore the whitespace before the next part
+
+
+    toRun = toRun.trim();
+  } // succesfull (no error message return)
+
+
+  return null;
+};
+
+/***/ }),
+
+/***/ "./saltgui/static/scripts/Utils.js":
+/*!*****************************************!*\
+  !*** ./saltgui/static/scripts/Utils.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+window.elapsedToString = function (date) {
+  try {
+    var secondsPassed = new Date().getTime() / 1000 - date.getTime() / 1000;
+    if (secondsPassed < 0) return "Magic happened in the future";
+    if (secondsPassed < 20) return "A few moments ago";
+    if (secondsPassed < 120) return "A few minutes ago";
+
+    if (secondsPassed < 60 * 60) {
+      var minutes = Math.round(secondsPassed / 60);
+      return minutes + " minute(s) ago";
+    }
+
+    if (secondsPassed < 60 * 60 * 24) {
+      var hours = Math.round(secondsPassed / 60 / 60);
+      return hours + " hour(s) ago";
+    }
+
+    if (secondsPassed < 60 * 60 * 24 * 2) {
+      return "Yesterday";
+    }
+
+    if (secondsPassed < 60 * 60 * 24 * 30) {
+      var days = Math.round(secondsPassed / 60 / 60 / 24);
+      return days + " days ago";
+    }
+
+    return "A long time ago, in a galaxy far, far away";
+  } catch (err) {
+    //console.error(err);
+    return "It did happen, when I don't know";
+  }
+};
+
+window.createElement = function (type, className, content) {
+  var element = document.createElement(type);
+  element.classList.add(className);
+  if (content !== "") element.innerHTML = content;
+  return element;
+};
+
+window.getQueryParam = function (name) {
+  var vars = [];
+  var hashes = window.location.href.slice(window.location.href.indexOf("?") + 1).split("&");
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = hashes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var hash = _step.value;
+      var hashparts = hash.split("=");
+      vars.push(hashparts[0]);
+      if (hashparts[0] === name) return hashparts[1];
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return != null) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  return undefined;
+};
+
+window.escape = function (input) {
+  var div = document.createElement("div");
+  div.appendChild(document.createTextNode(input));
+  return div.innerHTML;
+};
+
+window.makeTargetText = function (targetType, targetPattern) {
+  // note that "glob" is the most common case
+  // when used from the command-line, that target-type
+  // is not even specified.
+  // therefore we suppress that one
+  // note that due to bug in 2018.3, all finished jobs
+  // will be shown as if of type "list"
+  // therefore we suppress that one
+  var returnText = "";
+
+  if (targetType !== "glob" && targetType !== "list") {
+    returnText = targetType + " ";
+  }
+
+  returnText += targetPattern;
+  return returnText;
+};
+
+/***/ }),
+
+/***/ "./saltgui/static/scripts/output/Output.js":
+/*!*************************************************!*\
+  !*** ./saltgui/static/scripts/output/Output.js ***!
+  \*************************************************/
+/*! exports provided: Output */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Output", function() { return Output; });
+/* harmony import */ var _OutputDocumentation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./OutputDocumentation */ "./saltgui/static/scripts/output/OutputDocumentation.js");
+/* harmony import */ var _OutputHighstate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./OutputHighstate */ "./saltgui/static/scripts/output/OutputHighstate.js");
+/* harmony import */ var _OutputJson__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./OutputJson */ "./saltgui/static/scripts/output/OutputJson.js");
+/* harmony import */ var _OutputNested__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./OutputNested */ "./saltgui/static/scripts/output/OutputNested.js");
+/* harmony import */ var _OutputSaltGuiHighstate__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./OutputSaltGuiHighstate */ "./saltgui/static/scripts/output/OutputSaltGuiHighstate.js");
+/* harmony import */ var _OutputYaml__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./OutputYaml */ "./saltgui/static/scripts/output/OutputYaml.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -101,7 +376,12 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-// Functions to turn responses from the salt system into visual information
+
+
+
+
+
+ // Functions to turn responses from the salt system into visual information
 // The following variations exist:
 // A) documentation output
 //    one of the responsing nodes is selected
@@ -120,11 +400,10 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 // 2) Output from RUNNERS functions
 //    This output is re-organized to let it appear as if the output comes
 //    from a single node called "master".
+
 var Output =
 /*#__PURE__*/
 function () {
-  "use strict";
-
   function Output() {
     _classCallCheck(this, Output);
   }
@@ -200,19 +479,19 @@ function () {
     key: "formatObject",
     value: function formatObject(obj) {
       if (Output.isOutputFormatAllowed("json")) {
-        return OutputJson.formatJSON(obj);
+        return _OutputJson__WEBPACK_IMPORTED_MODULE_2__["OutputJson"].formatJSON(obj);
       }
 
       if (Output.isOutputFormatAllowed("yaml")) {
-        return OutputYaml.formatYAML(obj);
+        return _OutputYaml__WEBPACK_IMPORTED_MODULE_5__["OutputYaml"].formatYAML(obj);
       }
 
       if (Output.isOutputFormatAllowed("nested")) {
-        return OutputNested.formatNESTED(obj);
+        return _OutputNested__WEBPACK_IMPORTED_MODULE_3__["OutputNested"].formatNESTED(obj);
       } // when nothing is allowed, JSON is always allowed
 
 
-      return OutputJson.formatJSON(obj);
+      return _OutputJson__WEBPACK_IMPORTED_MODULE_2__["OutputJson"].formatJSON(obj);
     } // this is the default output form
     // just format the returned objects
     // note: do not return a text-node
@@ -319,11 +598,11 @@ function () {
 
 
       var commandArg = command.trim().replace(/^[a-z.]* */i, "");
-      var isDocumentationOutput = OutputDocumentation.isDocumentationOutput(Output, response, commandArg);
+      var isDocumentationOutput = _OutputDocumentation__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].isDocumentationOutput(Output, response, commandArg);
 
       if (isDocumentationOutput) {
-        OutputDocumentation.reduceDocumentationOutput(response, commandArg, commandArg);
-        OutputDocumentation.addDocumentationOutput(outputContainer, response);
+        _OutputDocumentation__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].reduceDocumentationOutput(response, commandArg, commandArg);
+        _OutputDocumentation__WEBPACK_IMPORTED_MODULE_0__["OutputDocumentation"].addDocumentationOutput(outputContainer, response);
         return;
       }
 
@@ -469,19 +748,19 @@ function () {
 
 
           var commandCmd = command.trim().replace(/ .*/, "");
-          var isHighStateOutput = OutputHighstate.isHighStateOutput(commandCmd, hostResponse); // enhanced highstate display
+          var isHighStateOutput = _OutputHighstate__WEBPACK_IMPORTED_MODULE_1__["OutputHighstate"].isHighStateOutput(commandCmd, hostResponse); // enhanced highstate display
 
           if (!fndRepresentation && isHighStateOutput && Output.isOutputFormatAllowed("saltguihighstate")) {
-            hostLabel = OutputSaltGuiHighstate.getHighStateLabel(hostname, hostResponse);
-            hostOutput = OutputSaltGuiHighstate.getHighStateOutput(hostResponse);
+            hostLabel = _OutputSaltGuiHighstate__WEBPACK_IMPORTED_MODULE_4__["OutputSaltGuiHighstate"].getHighStateLabel(hostname, hostResponse);
+            hostOutput = _OutputSaltGuiHighstate__WEBPACK_IMPORTED_MODULE_4__["OutputSaltGuiHighstate"].getHighStateOutput(hostResponse);
             hostMultiLine = true;
             fndRepresentation = true;
           } // regular highstate display
 
 
           if (!fndRepresentation && isHighStateOutput && Output.isOutputFormatAllowed("highstate")) {
-            hostLabel = OutputHighstate.getHighStateLabel(hostname, hostResponse);
-            hostOutput = OutputHighstate.getHighStateOutput(hostResponse);
+            hostLabel = _OutputHighstate__WEBPACK_IMPORTED_MODULE_1__["OutputHighstate"].getHighStateLabel(hostname, hostResponse);
+            hostOutput = _OutputHighstate__WEBPACK_IMPORTED_MODULE_1__["OutputHighstate"].getHighStateOutput(hostResponse);
             hostMultiLine = true;
             fndRepresentation = true;
           } // nothing special? then it is normal output
@@ -560,20 +839,20 @@ function () {
   }]);
 
   return Output;
-}(); // for unit tests
-
-
-if (true) module.exports = Output;
+}();
 
 /***/ }),
 
-/***/ "./saltgui/static/scripts/output/outputDocumentation.js":
+/***/ "./saltgui/static/scripts/output/OutputDocumentation.js":
 /*!**************************************************************!*\
-  !*** ./saltgui/static/scripts/output/outputDocumentation.js ***!
+  !*** ./saltgui/static/scripts/output/OutputDocumentation.js ***!
   \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: OutputDocumentation */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OutputDocumentation", function() { return OutputDocumentation; });
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -585,8 +864,6 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var OutputDocumentation =
 /*#__PURE__*/
 function () {
-  "use strict";
-
   function OutputDocumentation() {
     _classCallCheck(this, OutputDocumentation);
   }
@@ -866,20 +1143,376 @@ function () {
   }]);
 
   return OutputDocumentation;
-}(); // for unit tests
-
-
-if (true) module.exports = OutputDocumentation;
+}();
 
 /***/ }),
 
-/***/ "./saltgui/static/scripts/output/outputJson.js":
-/*!*****************************************************!*\
-  !*** ./saltgui/static/scripts/output/outputJson.js ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./saltgui/static/scripts/output/OutputHighstate.js":
+/*!**********************************************************!*\
+  !*** ./saltgui/static/scripts/output/OutputHighstate.js ***!
+  \**********************************************************/
+/*! exports provided: OutputHighstate */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OutputHighstate", function() { return OutputHighstate; });
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var OutputHighstate =
+/*#__PURE__*/
+function () {
+  function OutputHighstate() {
+    _classCallCheck(this, OutputHighstate);
+  }
+
+  _createClass(OutputHighstate, null, [{
+    key: "isHighStateOutput",
+    value: function isHighStateOutput(command, response) {
+      if (!Output.isOutputFormatAllowed("highstate")) return false;
+      if (_typeof(response) !== "object") return false;
+      if (Array.isArray(response)) return false;
+      if (command !== "state.apply" && command !== "state.highstate") return false;
+
+      var _arr = Object.keys(response);
+
+      for (var _i = 0; _i < _arr.length; _i++) {
+        var key = _arr[_i];
+        var components = key.split("_|-");
+        if (components.length !== 4) return false;
+      }
+
+      return true;
+    }
+  }, {
+    key: "getDurationClause",
+    value: function getDurationClause(millis) {
+      if (millis === 1) {
+        return "".concat(millis, " millisecond");
+      }
+
+      if (millis < 1000) {
+        return "".concat(millis, " milliseconds");
+      }
+
+      if (millis === 1000) {
+        return "".concat(millis / 1000, " second");
+      }
+
+      return "".concat(millis / 1000, " seconds");
+    }
+  }, {
+    key: "getHighStateLabel",
+    value: function getHighStateLabel(hostname, hostResponse) {
+      var anyFailures = false;
+      var anySkips = false; // do not use Object.entries, that is not supported by the test framework
+
+      var _arr2 = Object.keys(hostResponse);
+
+      for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
+        var key = _arr2[_i2];
+        var task = hostResponse[key];
+        if (task.result === null) anySkips = true;else if (!task.result) anyFailures = true;
+      }
+
+      if (anyFailures) {
+        return Output.getHostnameHtml(hostname, "host_failure");
+      }
+
+      if (anySkips) {
+        return Output.getHostnameHtml(hostname, "host_skips");
+      }
+
+      return Output.getHostnameHtml(hostname, "host_success");
+    }
+  }, {
+    key: "getHighStateOutput",
+    value: function getHighStateOutput(hostResponse) {
+      // The tasks are in an (unordered) object with uninteresting keys
+      // convert it to an array that is in execution order
+      // first put all the values in an array
+      var tasks = [];
+      Object.keys(hostResponse).forEach(function (taskKey) {
+        hostResponse[taskKey].___key___ = taskKey;
+        tasks.push(hostResponse[taskKey]);
+      }); // then sort the array
+
+      tasks.sort(function (a, b) {
+        return a.__run_num__ - b.__run_num__;
+      });
+      var indent = "    ";
+      var div = document.createElement("div");
+      var succeeded = 0;
+      var failed = 0;
+      var skipped = 0;
+      var total_millis = 0;
+      var changes = 0;
+
+      for (var _i3 = 0; _i3 < tasks.length; _i3++) {
+        var task = tasks[_i3];
+        var taskDiv = document.createElement("div");
+        var span = document.createElement("span");
+
+        if (task.result === null) {
+          // 2714 = HEAVY CHECK MARK
+          span.style.color = "yellow";
+          span.innerText = "\u2714";
+          skipped += 1;
+        } else if (task.result) {
+          // 2714 = HEAVY CHECK MARK
+          span.style.color = "green";
+          span.innerText = "\u2714";
+          succeeded += 1;
+        } else {
+          // 2718 = HEAVY BALLOT X
+          span.style.color = "red";
+          span.innerText = "\u2718";
+          failed += 1;
+        }
+
+        taskDiv.append(span);
+        taskDiv.append(document.createTextNode(" "));
+
+        if (task.name) {
+          taskDiv.append(document.createTextNode(task.name));
+        } else {
+          // make sure that the checkbox/ballot-x is on a reasonable line
+          // also for the next "from" clause (if any)
+          taskDiv.append(document.createTextNode("(anonymous task)"));
+        }
+
+        if (task.__id__ && task.__id__ !== task.name) {
+          taskDiv.append(document.createTextNode(" id=" + encodeURIComponent(task.__id__)));
+        }
+
+        if (task.__sls__) {
+          taskDiv.append(document.createTextNode(" (from " + task.__sls__.replace(".", "/") + ".sls)"));
+        }
+
+        var components = task.___key___.split("_|-");
+
+        taskDiv.append(document.createElement("br"));
+        taskDiv.append(document.createTextNode(indent + "Function is " + components[0] + "." + components[3]));
+
+        if (task.comment) {
+          taskDiv.append(document.createElement("br"));
+          var txt = task.comment; // trim extra whitespace
+
+          txt = txt.replace(/[ \r\n]+$/g, ""); // indent extra lines
+
+          txt = txt.replace(/[\n]+/g, "\n" + indent);
+          taskDiv.append(document.createTextNode(indent + txt));
+        }
+
+        if (task.hasOwnProperty("changes")) {
+          if (_typeof(task.changes) !== "object" || Array.isArray(task.changes)) {
+            taskDiv.append(document.createElement("br"));
+            taskDiv.append(document.createTextNode(indent + JSON.stringify(task.changes)));
+          } else {
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+              for (var _iterator = Object.keys(task.changes).sort()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var key = _step.value;
+                changes = changes + 1;
+                var change = task.changes[key]; // 25BA = BLACK RIGHT-POINTING POINTER
+                // don't use arrows here, these are higher than a regular
+                // text-line and disturb the text-flow
+
+                if (typeof change === "string" && change.includes("\n")) {
+                  taskDiv.append(document.createElement("br")); // show multi-line text as a separate block
+
+                  taskDiv.append(document.createTextNode(indent + key + ":"));
+                  var lines = change.trim().split("\n");
+                  var _iteratorNormalCompletion2 = true;
+                  var _didIteratorError2 = false;
+                  var _iteratorError2 = undefined;
+
+                  try {
+                    for (var _iterator2 = lines[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                      var _line = _step2.value;
+                      taskDiv.append(document.createElement("br"));
+                      taskDiv.append(document.createTextNode("      " + _line));
+                    }
+                  } catch (err) {
+                    _didIteratorError2 = true;
+                    _iteratorError2 = err;
+                  } finally {
+                    try {
+                      if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+                        _iterator2.return();
+                      }
+                    } finally {
+                      if (_didIteratorError2) {
+                        throw _iteratorError2;
+                      }
+                    }
+                  }
+                } else if (_typeof(change) !== "object" || Array.isArray(task.change)) {
+                  // show all other non-objects in a simple way
+                  taskDiv.append(document.createElement("br"));
+                  taskDiv.append(document.createTextNode(indent + key + ": " + JSON.stringify(change)));
+                } else {
+                  // treat old->new first
+                  if (change.hasOwnProperty("old") && change.hasOwnProperty("new")) {
+                    taskDiv.append(document.createElement("br")); // place changes on one line
+
+                    taskDiv.append(document.createTextNode(indent + key + ": " + JSON.stringify(change.old) + " \u25BA " + JSON.stringify(change.new)));
+                    delete change.old;
+                    delete change.new;
+                  } // then show whatever remains
+
+
+                  var _iteratorNormalCompletion3 = true;
+                  var _didIteratorError3 = false;
+                  var _iteratorError3 = undefined;
+
+                  try {
+                    for (var _iterator3 = Object.keys(change).sort()[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                      var taskkey = _step3.value;
+                      taskDiv.append(document.createElement("br"));
+                      taskDiv.append(document.createTextNode(indent + key + ": " + taskkey + ": " + JSON.stringify(change[taskkey])));
+                    }
+                  } catch (err) {
+                    _didIteratorError3 = true;
+                    _iteratorError3 = err;
+                  } finally {
+                    try {
+                      if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+                        _iterator3.return();
+                      }
+                    } finally {
+                      if (_didIteratorError3) {
+                        throw _iteratorError3;
+                      }
+                    }
+                  }
+                }
+              }
+            } catch (err) {
+              _didIteratorError = true;
+              _iteratorError = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion && _iterator.return != null) {
+                  _iterator.return();
+                }
+              } finally {
+                if (_didIteratorError) {
+                  throw _iteratorError;
+                }
+              }
+            }
+          }
+        }
+
+        if (task.hasOwnProperty("start_time")) {
+          taskDiv.append(document.createElement("br"));
+          taskDiv.append(document.createTextNode(indent + "Started at " + task.start_time));
+        }
+
+        if (task.hasOwnProperty("duration")) {
+          var millis = Math.round(task.duration);
+          total_millis += millis;
+
+          if (millis >= 10) {
+            // anything below 10ms is not worth reporting
+            // report only the "slow" jobs
+            // it still counts for the grand total thought
+            taskDiv.append(document.createElement("br"));
+            taskDiv.append(document.createTextNode(indent + "Duration " + OutputHighstate.getDurationClause(millis)));
+          }
+        } // show any unknown attribute of a task
+        // do not use Object.entries, that is not supported by the test framework
+
+
+        var _arr3 = Object.keys(task);
+
+        for (var _i4 = 0; _i4 < _arr3.length; _i4++) {
+          var _key = _arr3[_i4];
+          var item = task[_key];
+          if (_key === "___key___") continue; // ignored, generated by us
+
+          if (_key === "__id__") continue; // handled
+
+          if (_key === "__sls__") continue; // handled
+
+          if (_key === "__run_num__") continue; // handled, not shown
+
+          if (_key === "changes") continue; // handled
+
+          if (_key === "comment") continue; // handled
+
+          if (_key === "duration") continue; // handled
+
+          if (_key === "host") continue; // ignored, same as host
+
+          if (_key === "name") continue; // handled
+
+          if (_key === "pchanges") continue; // ignored, also ignored by cli
+
+          if (_key === "result") continue; // handled
+
+          if (_key === "start_time") continue; // handled
+
+          taskDiv.append(document.createElement("br"));
+          taskDiv.append(document.createTextNode(indent + _key + " = " + JSON.stringify(item)));
+        }
+
+        div.append(taskDiv);
+      } // add a summary line
+
+
+      var line = "";
+      if (succeeded) line += ", " + succeeded + " succeeded";
+      if (skipped) line += ", " + skipped + " skipped";
+      if (failed) line += ", " + failed + " failed";
+      var total = succeeded + skipped + failed;
+
+      if (total !== succeeded && total !== skipped && total !== failed) {
+        line += ", " + (succeeded + skipped + failed) + " total";
+      } // note that the number of changes may be higher or lower
+      // than the number of tasks. tasks may contribute multiple
+      // changes, or tasks may have no changes.
+
+
+      if (changes === 1) line += ", " + changes + " change";else if (changes) line += ", " + changes + " changes"; // multiple durations and significant?
+
+      if (total > 1 && total_millis >= 10) {
+        line += ", " + OutputHighstate.getDurationClause(total_millis);
+      }
+
+      if (line) {
+        div.append(document.createTextNode(line.substring(2)));
+      }
+
+      return div;
+    }
+  }]);
+
+  return OutputHighstate;
+}();
+
+/***/ }),
+
+/***/ "./saltgui/static/scripts/output/OutputJson.js":
+/*!*****************************************************!*\
+  !*** ./saltgui/static/scripts/output/OutputJson.js ***!
+  \*****************************************************/
+/*! exports provided: OutputJson */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OutputJson", function() { return OutputJson; });
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -891,8 +1524,6 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var OutputJson =
 /*#__PURE__*/
 function () {
-  "use strict";
-
   function OutputJson() {
     _classCallCheck(this, OutputJson);
   }
@@ -1019,20 +1650,20 @@ function () {
   }]);
 
   return OutputJson;
-}(); // for unit tests
-
-
-if (true) module.exports = OutputJson;
+}();
 
 /***/ }),
 
-/***/ "./saltgui/static/scripts/output/outputNested.js":
+/***/ "./saltgui/static/scripts/output/OutputNested.js":
 /*!*******************************************************!*\
-  !*** ./saltgui/static/scripts/output/outputNested.js ***!
+  !*** ./saltgui/static/scripts/output/OutputNested.js ***!
   \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: OutputNested */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OutputNested", function() { return OutputNested; });
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1044,8 +1675,6 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var OutputNested =
 /*#__PURE__*/
 function () {
-  "use strict";
-
   function OutputNested() {
     _classCallCheck(this, OutputNested);
   }
@@ -1177,20 +1806,385 @@ function () {
   }]);
 
   return OutputNested;
-}(); // for unit tests
-
-
-if (true) module.exports = OutputNested;
+}();
 
 /***/ }),
 
-/***/ "./saltgui/static/scripts/output/outputYaml.js":
-/*!*****************************************************!*\
-  !*** ./saltgui/static/scripts/output/outputYaml.js ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./saltgui/static/scripts/output/OutputSaltGuiHighstate.js":
+/*!*****************************************************************!*\
+  !*** ./saltgui/static/scripts/output/OutputSaltGuiHighstate.js ***!
+  \*****************************************************************/
+/*! exports provided: OutputSaltGuiHighstate */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OutputSaltGuiHighstate", function() { return OutputSaltGuiHighstate; });
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var OutputSaltGuiHighstate =
+/*#__PURE__*/
+function () {
+  function OutputSaltGuiHighstate() {
+    _classCallCheck(this, OutputSaltGuiHighstate);
+  }
+
+  _createClass(OutputSaltGuiHighstate, null, [{
+    key: "getDurationClause",
+    // no separate `isHighStateOutput` here
+    // the implementation from OutputHighstate is (re)used
+    value: function getDurationClause(millis) {
+      if (millis === 1) {
+        return "".concat(millis, " millisecond");
+      }
+
+      if (millis < 1000) {
+        return "".concat(millis, " milliseconds");
+      }
+
+      if (millis === 1000) {
+        return "".concat(millis / 1000, " second");
+      }
+
+      return "".concat(millis / 1000, " seconds");
+    }
+  }, {
+    key: "getHighStateLabel",
+    value: function getHighStateLabel(hostname, hostResponse) {
+      var anyFailures = false;
+      var anySkips = false; // do not use Object.entries, that is not supported by the test framework
+
+      var _arr = Object.keys(hostResponse);
+
+      for (var _i = 0; _i < _arr.length; _i++) {
+        var key = _arr[_i];
+        var task = hostResponse[key];
+        if (task.result === null) anySkips = true;else if (!task.result) anyFailures = true;
+      }
+
+      if (anyFailures) {
+        return Output.getHostnameHtml(hostname, "host_failure");
+      }
+
+      if (anySkips) {
+        return Output.getHostnameHtml(hostname, "host_skips");
+      }
+
+      return Output.getHostnameHtml(hostname, "host_success");
+    }
+  }, {
+    key: "addChangesInfo",
+    value: function addChangesInfo(taskDiv, task, indent) {
+      if (!task.hasOwnProperty("changes")) {
+        return 0;
+      }
+
+      if (_typeof(task.changes) !== "object" || Array.isArray(task.changes)) {
+        taskDiv.append(document.createElement("br"));
+        taskDiv.append(document.createTextNode(indent + JSON.stringify(task.changes)));
+        return 0;
+      }
+
+      var changes = 0;
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = Object.keys(task.changes).sort()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var key = _step.value;
+          changes = changes + 1;
+          var change = task.changes[key];
+
+          if (typeof change === "string" && change.includes("\n")) {
+            taskDiv.append(document.createElement("br")); // show multi-line text as a separate block
+
+            taskDiv.append(document.createTextNode(indent + key + ":"));
+            var lines = change.trim().split("\n");
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
+
+            try {
+              for (var _iterator2 = lines[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                var line = _step2.value;
+                taskDiv.append(document.createElement("br"));
+                taskDiv.append(document.createTextNode("      " + line));
+              }
+            } catch (err) {
+              _didIteratorError2 = true;
+              _iteratorError2 = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+                  _iterator2.return();
+                }
+              } finally {
+                if (_didIteratorError2) {
+                  throw _iteratorError2;
+                }
+              }
+            }
+
+            continue;
+          }
+
+          if (Array.isArray(change)) {
+            for (var idx in change) {
+              var _task = change[idx];
+              taskDiv.append(document.createElement("br"));
+              taskDiv.append(document.createTextNode(indent + key + "[" + idx + "]: " + JSON.stringify(_task)));
+            }
+
+            continue;
+          }
+
+          if (_typeof(change) !== "object") {
+            // show all other non-objects in a simple way
+            taskDiv.append(document.createElement("br"));
+            taskDiv.append(document.createTextNode(indent + key + ": " + JSON.stringify(change)));
+            continue;
+          } // treat old->new first
+
+
+          if (change.hasOwnProperty("old") && change.hasOwnProperty("new")) {
+            taskDiv.append(document.createElement("br")); // place changes on one line
+            // 25BA = BLACK RIGHT-POINTING POINTER
+            // don't use arrows here, these are higher than a regular
+            // text-line and disturb the text-flow
+
+            taskDiv.append(document.createTextNode(indent + key + ": " + JSON.stringify(change.old) + " \u25BA " + JSON.stringify(change.new)));
+            delete change.old;
+            delete change.new;
+          } // then show whatever remains
+
+
+          var _iteratorNormalCompletion3 = true;
+          var _didIteratorError3 = false;
+          var _iteratorError3 = undefined;
+
+          try {
+            for (var _iterator3 = Object.keys(change).sort()[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+              var taskkey = _step3.value;
+              taskDiv.append(document.createElement("br"));
+              taskDiv.append(document.createTextNode(indent + key + ": " + taskkey + ": " + JSON.stringify(change[taskkey])));
+            }
+          } catch (err) {
+            _didIteratorError3 = true;
+            _iteratorError3 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+                _iterator3.return();
+              }
+            } finally {
+              if (_didIteratorError3) {
+                throw _iteratorError3;
+              }
+            }
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return != null) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+    }
+  }, {
+    key: "getHighStateOutput",
+    value: function getHighStateOutput(hostResponse) {
+      // The tasks are in an (unordered) object with uninteresting keys
+      // convert it to an array that is in execution order
+      // first put all the values in an array
+      var tasks = [];
+      Object.keys(hostResponse).forEach(function (taskKey) {
+        hostResponse[taskKey].___key___ = taskKey;
+        tasks.push(hostResponse[taskKey]);
+      }); // then sort the array
+
+      tasks.sort(function (a, b) {
+        return a.__run_num__ - b.__run_num__;
+      });
+      var indent = "    ";
+      var div = document.createElement("div");
+      var succeeded = 0;
+      var failed = 0;
+      var skipped = 0;
+      var total_millis = 0;
+      var changes = 0;
+
+      for (var _i2 = 0; _i2 < tasks.length; _i2++) {
+        var task = tasks[_i2];
+        var taskDiv = document.createElement("div");
+        var span = document.createElement("span");
+
+        if (task.result === null) {
+          // 2714 = HEAVY CHECK MARK
+          span.style.color = "yellow";
+          span.innerText = "\u2714";
+          skipped += 1;
+        } else if (task.result) {
+          // 2714 = HEAVY CHECK MARK
+          span.style.color = "green";
+          span.innerText = "\u2714";
+          succeeded += 1;
+        } else {
+          // 2718 = HEAVY BALLOT X
+          span.style.color = "red";
+          span.innerText = "\u2718";
+          failed += 1;
+        }
+
+        taskDiv.append(span);
+        taskDiv.append(document.createTextNode(" "));
+
+        if (task.name) {
+          taskDiv.append(document.createTextNode(task.name));
+        } else {
+          // make sure that the checkbox/ballot-x is on a reasonable line
+          // also for the next "from" clause (if any)
+          taskDiv.append(document.createTextNode("(anonymous task)"));
+        }
+
+        if (task.__id__ && task.__id__ !== task.name) {
+          taskDiv.append(document.createTextNode(" id=" + encodeURIComponent(task.__id__)));
+        }
+
+        if (task.__sls__) {
+          taskDiv.append(document.createTextNode(" (from " + task.__sls__.replace(".", "/") + ".sls)"));
+        }
+
+        var components = task.___key___.split("_|-");
+
+        taskDiv.append(document.createElement("br"));
+        taskDiv.append(document.createTextNode(indent + "Function is " + components[0] + "." + components[3]));
+
+        if (task.comment) {
+          taskDiv.append(document.createElement("br"));
+          var txt = task.comment; // trim extra whitespace
+
+          txt = txt.replace(/[ \r\n]+$/g, ""); // indent extra lines
+
+          txt = txt.replace(/[\n]+/g, "\n" + indent);
+          taskDiv.append(document.createTextNode(indent + txt));
+        }
+
+        changes += OutputSaltGuiHighstate.addChangesInfo(taskDiv, task, indent);
+
+        if (task.hasOwnProperty("start_time")) {
+          taskDiv.append(document.createElement("br"));
+          taskDiv.append(document.createTextNode(indent + "Started at " + Output.dateTimeStr(task.start_time)));
+        }
+
+        if (task.hasOwnProperty("duration")) {
+          var millis = Math.round(task.duration);
+          total_millis += millis;
+
+          if (millis >= 10) {
+            // anything below 10ms is not worth reporting
+            // report only the "slow" jobs
+            // it still counts for the grand total thought
+            taskDiv.append(document.createElement("br"));
+            taskDiv.append(document.createTextNode(indent + "Duration " + OutputSaltGuiHighstate.getDurationClause(millis)));
+          }
+        } // show any unknown attribute of a task
+        // do not use Object.entries, that is not supported by the test framework
+
+
+        var _arr2 = Object.keys(task);
+
+        for (var _i3 = 0; _i3 < _arr2.length; _i3++) {
+          var key = _arr2[_i3];
+          var item = task[key];
+          if (key === "___key___") continue; // ignored, generated by us
+
+          if (key === "__id__") continue; // handled
+
+          if (key === "__sls__") continue; // handled
+
+          if (key === "__run_num__") continue; // handled, not shown
+
+          if (key === "changes") continue; // handled
+
+          if (key === "comment") continue; // handled
+
+          if (key === "duration") continue; // handled
+
+          if (key === "host") continue; // ignored, same as host
+
+          if (key === "name") continue; // handled
+
+          if (key === "pchanges") continue; // ignored, also ignored by cli
+
+          if (key === "result") continue; // handled
+
+          if (key === "start_time") continue; // handled
+
+          taskDiv.append(document.createElement("br"));
+          taskDiv.append(document.createTextNode(indent + key + " = " + JSON.stringify(item)));
+        }
+
+        div.append(taskDiv);
+      } // add a summary line
+
+
+      var line = "";
+      if (succeeded) line += ", " + succeeded + " succeeded";
+      if (skipped) line += ", " + skipped + " skipped";
+      if (failed) line += ", " + failed + " failed";
+      var total = succeeded + skipped + failed;
+
+      if (total !== succeeded && total !== skipped && total !== failed) {
+        line += ", " + (succeeded + skipped + failed) + " total";
+      } // note that the number of changes may be higher or lower
+      // than the number of tasks. tasks may contribute multiple
+      // changes, or tasks may have no changes.
+
+
+      if (changes === 1) line += ", " + changes + " change";else if (changes) line += ", " + changes + " changes"; // multiple durations and significant?
+
+      if (total > 1 && total_millis >= 10) {
+        line += ", " + OutputSaltGuiHighstate.getDurationClause(total_millis);
+      }
+
+      if (line) {
+        div.append(document.createTextNode(line.substring(2)));
+      }
+
+      return div;
+    }
+  }]);
+
+  return OutputSaltGuiHighstate;
+}();
+
+/***/ }),
+
+/***/ "./saltgui/static/scripts/output/OutputYaml.js":
+/*!*****************************************************!*\
+  !*** ./saltgui/static/scripts/output/OutputYaml.js ***!
+  \*****************************************************/
+/*! exports provided: OutputYaml */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OutputYaml", function() { return OutputYaml; });
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1202,8 +2196,6 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var OutputYaml =
 /*#__PURE__*/
 function () {
-  "use strict";
-
   function OutputYaml() {
     _classCallCheck(this, OutputYaml);
   }
@@ -1352,276 +2344,7 @@ function () {
   }]);
 
   return OutputYaml;
-}(); // for unit tests
-
-
-if (true) module.exports = OutputYaml;
-
-/***/ }),
-
-/***/ "./saltgui/static/scripts/parsecmdline.js":
-/*!************************************************!*\
-  !*** ./saltgui/static/scripts/parsecmdline.js ***!
-  \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// Function to parse a commandline
-// The line is broken into individual tokens
-// Each token that is recognized as a JS type will get that type
-// Otherwise the token is considered to be a string
-// name-value pairs in the form "name=value" are added to the "params" dictionary
-// other parameters are added to the "args" array
-// e.g.:
-//   test "1 2 3" 4 x=7 {"a":1, "b":2}
-// is a command line of 5 tokens
-//   string: "test"
-//   string: "1 2 3"
-//   number: 4
-//   number: 7
-//   dictionary: {"a":1, "b": 2}
-// the array will be filled with 4 elements
-// the dictionary will be filled with one element named "x"
-// note that "none" is not case-insensitive, but "null" is
-var patNull = /^(None|null|Null|NULL)$/;
-var patBooleanFalse = /^(false|False|FALSE)$/;
-var patBooleanTrue = /^(true|True|TRUE)$/;
-var patJid = /^[2-9][0-9][0-9][0-9][01][0-9][0-3][0-9][0-2][0-9][0-5][0-9][0-5][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$/;
-var patInteger = /^((0)|([-+]?[1-9][0-9]*))$/;
-var patFloat = /^([-+]?(([0-9]+)|([0-9]+[.][0-9]*)|([0-9]*[.][0-9]+))([eE][-+]?[0-9]+)?)$/;
-
-window.parseCommandLine = function (toRun, args, params) {
-  // just in case the user typed some extra whitespace
-  // at the start of the line
-  toRun = toRun.trim();
-
-  while (toRun.length > 0) {
-    var name = null;
-    var firstSpaceChar = toRun.indexOf(" ");
-    if (firstSpaceChar < 0) firstSpaceChar = toRun.length;
-    var firstEqualSign = toRun.indexOf("=");
-
-    if (firstEqualSign >= 0 && firstEqualSign < firstSpaceChar) {
-      // we have the name of a named parameter
-      name = toRun.substr(0, firstEqualSign);
-      toRun = toRun.substr(firstEqualSign + 1);
-
-      if (toRun === "" || toRun[0] === " ") {
-        return "Must have value for named parameter '" + name + "'";
-      }
-    } // Determine whether the JSON string starts with a known
-    // character for a JSON type
-
-
-    var endChar = undefined;
-    var objType = undefined;
-
-    if (toRun[0] === "{") {
-      endChar = "}";
-      objType = "dictionary";
-    } else if (toRun[0] === "[") {
-      endChar = "]";
-      objType = "array";
-    } else if (toRun[0] === "\"") {
-      // note that json does not support single-quoted strings
-      endChar = "\"";
-      objType = "double-quoted-string";
-    }
-
-    var value = void 0;
-
-    if (endChar && objType) {
-      // The string starts with a character for a known JSON type
-      var p = 1;
-
-      while (true) {
-        // Try until the next closing character
-        var n = toRun.indexOf(endChar, p);
-
-        if (n < 0) {
-          return "No valid " + objType + " found";
-        } // parse what we have found so far
-        // the string ends with a closing character
-        // but that may not be enough, e.g. "{a:{}"
-
-
-        var s = toRun.substring(0, n + 1);
-
-        try {
-          value = JSON.parse(s);
-        } catch (err) {
-          // the string that we tried to parse is not valid json
-          // continue to add more text from the input
-          p = n + 1;
-          continue;
-        } // the first part of the string is valid JSON
-
-
-        n = n + 1;
-
-        if (n < toRun.length && toRun[n] !== " ") {
-          return "Valid " + objType + ", but followed by text:" + toRun.substring(n) + "...";
-        } // valid JSON and not followed by strange characters
-
-
-        toRun = toRun.substring(n);
-        break;
-      }
-    } else {
-      // everything else is a string (without quotes)
-      // when we are done, we'll see whether it actually is a number
-      // or any of the known constants
-      var str = "";
-
-      while (toRun.length > 0 && toRun[0] !== " ") {
-        str += toRun[0];
-        toRun = toRun.substring(1);
-      } // try to find whether the string is actually a known constant
-      // or integer or float
-
-
-      if (patNull.test(str)) {
-        value = null;
-      } else if (patBooleanFalse.test(str)) {
-        value = false;
-      } else if (patBooleanTrue.test(str)) {
-        value = true;
-      } else if (patJid.test(str)) {
-        // jids look like numbers but must be strings
-        value = str;
-      } else if (patInteger.test(str)) {
-        value = parseInt(str);
-      } else if (patFloat.test(str)) {
-        value = parseFloat(str);
-
-        if (!isFinite(value)) {
-          return "Numeric argument has overflowed or is infinity";
-        }
-      } else {
-        value = str;
-      }
-    }
-
-    if (name !== null) {
-      // named parameter
-      params[name] = value;
-    } else {
-      // anonymous parameter
-      args.push(value);
-    } // ignore the whitespace before the next part
-
-
-    toRun = toRun.trim();
-  } // succesfull (no error message return)
-
-
-  return null;
-};
-
-/***/ }),
-
-/***/ "./saltgui/static/scripts/utils.js":
-/*!*****************************************!*\
-  !*** ./saltgui/static/scripts/utils.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-window.elapsedToString = function (date) {
-  try {
-    var secondsPassed = new Date().getTime() / 1000 - date.getTime() / 1000;
-    if (secondsPassed < 0) return "Magic happened in the future";
-    if (secondsPassed < 20) return "A few moments ago";
-    if (secondsPassed < 120) return "A few minutes ago";
-
-    if (secondsPassed < 60 * 60) {
-      var minutes = Math.round(secondsPassed / 60);
-      return minutes + " minute(s) ago";
-    }
-
-    if (secondsPassed < 60 * 60 * 24) {
-      var hours = Math.round(secondsPassed / 60 / 60);
-      return hours + " hour(s) ago";
-    }
-
-    if (secondsPassed < 60 * 60 * 24 * 2) {
-      return "Yesterday";
-    }
-
-    if (secondsPassed < 60 * 60 * 24 * 30) {
-      var days = Math.round(secondsPassed / 60 / 60 / 24);
-      return days + " days ago";
-    }
-
-    return "A long time ago, in a galaxy far, far away";
-  } catch (err) {
-    //console.error(err);
-    return "It did happen, when I don't know";
-  }
-};
-
-window.createElement = function (type, className, content) {
-  var element = document.createElement(type);
-  element.classList.add(className);
-  if (content !== "") element.innerHTML = content;
-  return element;
-};
-
-window.getQueryParam = function (name) {
-  var vars = [];
-  var hashes = window.location.href.slice(window.location.href.indexOf("?") + 1).split("&");
-  var _iteratorNormalCompletion = true;
-  var _didIteratorError = false;
-  var _iteratorError = undefined;
-
-  try {
-    for (var _iterator = hashes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-      var hash = _step.value;
-      var hashparts = hash.split("=");
-      vars.push(hashparts[0]);
-      if (hashparts[0] === name) return hashparts[1];
-    }
-  } catch (err) {
-    _didIteratorError = true;
-    _iteratorError = err;
-  } finally {
-    try {
-      if (!_iteratorNormalCompletion && _iterator.return != null) {
-        _iterator.return();
-      }
-    } finally {
-      if (_didIteratorError) {
-        throw _iteratorError;
-      }
-    }
-  }
-
-  return undefined;
-};
-
-window.escape = function (input) {
-  var div = document.createElement("div");
-  div.appendChild(document.createTextNode(input));
-  return div.innerHTML;
-};
-
-window.makeTargetText = function (targetType, targetPattern) {
-  // note that "glob" is the most common case
-  // when used from the command-line, that target-type
-  // is not even specified.
-  // therefore we suppress that one
-  // note that due to bug in 2018.3, all finished jobs
-  // will be shown as if of type "list"
-  // therefore we suppress that one
-  var returnText = "";
-
-  if (targetType !== "glob" && targetType !== "list") {
-    returnText = targetType + " ";
-  }
-
-  returnText += targetPattern;
-  return returnText;
-};
+}();
 
 /***/ }),
 
@@ -1679,47 +2402,49 @@ module.exports = context;
 /*!******************************!*\
   !*** ./tests/unit/output.js ***!
   \******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _saltgui_static_scripts_output_Output__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../saltgui/static/scripts/output/Output */ "./saltgui/static/scripts/output/Output.js");
+/* harmony import */ var _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../saltgui/static/scripts/output/OutputDocumentation */ "./saltgui/static/scripts/output/OutputDocumentation.js");
+/* harmony import */ var _saltgui_static_scripts_output_OutputJson__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../saltgui/static/scripts/output/OutputJson */ "./saltgui/static/scripts/output/OutputJson.js");
+/* harmony import */ var _saltgui_static_scripts_output_OutputNested__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../saltgui/static/scripts/output/OutputNested */ "./saltgui/static/scripts/output/OutputNested.js");
+/* harmony import */ var _saltgui_static_scripts_output_OutputYaml__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../saltgui/static/scripts/output/OutputYaml */ "./saltgui/static/scripts/output/OutputYaml.js");
 var assert = __webpack_require__(/*! chai */ "chai").assert;
 
-var Output = __webpack_require__(/*! ../../saltgui/static/scripts/output/output */ "./saltgui/static/scripts/output/output.js");
 
-var OutputJson = __webpack_require__(/*! ../../saltgui/static/scripts/output/outputJson */ "./saltgui/static/scripts/output/outputJson.js");
 
-var OutputYaml = __webpack_require__(/*! ../../saltgui/static/scripts/output/outputYaml */ "./saltgui/static/scripts/output/outputYaml.js");
 
-var OutputNested = __webpack_require__(/*! ../../saltgui/static/scripts/output/outputNested */ "./saltgui/static/scripts/output/outputNested.js");
 
-var OutputDocumentation = __webpack_require__(/*! ../../saltgui/static/scripts/output/outputDocumentation */ "./saltgui/static/scripts/output/outputDocumentation.js");
 
 describe('Unittests for output.js', function () {
   it('test formatJSON', function (done) {
     var outputData, result;
     outputData = null;
-    result = OutputJson.formatJSON(outputData);
+    result = _saltgui_static_scripts_output_OutputJson__WEBPACK_IMPORTED_MODULE_2__["OutputJson"].formatJSON(outputData);
     assert.equal(result, "null");
     outputData = undefined;
-    result = OutputJson.formatJSON(outputData);
+    result = _saltgui_static_scripts_output_OutputJson__WEBPACK_IMPORTED_MODULE_2__["OutputJson"].formatJSON(outputData);
     assert.equal(result, "undefined");
     outputData = 123;
-    result = OutputJson.formatJSON(outputData);
+    result = _saltgui_static_scripts_output_OutputJson__WEBPACK_IMPORTED_MODULE_2__["OutputJson"].formatJSON(outputData);
     assert.equal(result, "123");
     outputData = "txt";
-    result = OutputJson.formatJSON(outputData);
+    result = _saltgui_static_scripts_output_OutputJson__WEBPACK_IMPORTED_MODULE_2__["OutputJson"].formatJSON(outputData);
     assert.equal(result, "\"txt\"");
     outputData = [];
-    result = OutputJson.formatJSON(outputData);
+    result = _saltgui_static_scripts_output_OutputJson__WEBPACK_IMPORTED_MODULE_2__["OutputJson"].formatJSON(outputData);
     assert.equal(result, "[ ]");
     outputData = [1];
-    result = OutputJson.formatJSON(outputData);
+    result = _saltgui_static_scripts_output_OutputJson__WEBPACK_IMPORTED_MODULE_2__["OutputJson"].formatJSON(outputData);
     assert.equal(result, "[\n" + "    1\n" + "]");
     outputData = [1, 2, 3, 4, 5];
-    result = OutputJson.formatJSON(outputData);
+    result = _saltgui_static_scripts_output_OutputJson__WEBPACK_IMPORTED_MODULE_2__["OutputJson"].formatJSON(outputData);
     assert.equal(result, "[\n" + "    1,\n" + "    2,\n" + "    3,\n" + "    4,\n" + "    5\n" + "]");
     outputData = {};
-    result = OutputJson.formatJSON(outputData);
+    result = _saltgui_static_scripts_output_OutputJson__WEBPACK_IMPORTED_MODULE_2__["OutputJson"].formatJSON(outputData);
     assert.equal(result, "{ }"); // unordered input
 
     outputData = {
@@ -1727,7 +2452,7 @@ describe('Unittests for output.js', function () {
       "c": 22,
       "b": 33
     };
-    result = OutputJson.formatJSON(outputData); // ordered output
+    result = _saltgui_static_scripts_output_OutputJson__WEBPACK_IMPORTED_MODULE_2__["OutputJson"].formatJSON(outputData); // ordered output
 
     assert.equal(result, "{\n" + "    \"a\": 11,\n" + "    \"b\": 33,\n" + "    \"c\": 22\n" + "}"); // a more complex object, unordered input
 
@@ -1737,7 +2462,7 @@ describe('Unittests for output.js', function () {
         "eth0": ["fe80::20d:3aff:fe38:576b"]
       }
     };
-    result = OutputJson.formatJSON(outputData); // ordered output
+    result = _saltgui_static_scripts_output_OutputJson__WEBPACK_IMPORTED_MODULE_2__["OutputJson"].formatJSON(outputData); // ordered output
 
     assert.equal(result, "{\n" + "    \"ip6_interfaces\": {\n" + "        \"eth0\": [\n" + "            \"fe80::20d:3aff:fe38:576b\"\n" + "        ],\n" + "        \"lo\": [\n" + "            \"::1\"\n" + "        ]\n" + "    }\n" + "}");
     done();
@@ -1745,28 +2470,28 @@ describe('Unittests for output.js', function () {
   it('test formatYAML', function (done) {
     var outputData, result;
     outputData = null;
-    result = OutputYaml.formatYAML(outputData);
+    result = _saltgui_static_scripts_output_OutputYaml__WEBPACK_IMPORTED_MODULE_4__["OutputYaml"].formatYAML(outputData);
     assert.equal(result, "null");
     outputData = undefined;
-    result = OutputYaml.formatYAML(outputData);
+    result = _saltgui_static_scripts_output_OutputYaml__WEBPACK_IMPORTED_MODULE_4__["OutputYaml"].formatYAML(outputData);
     assert.equal(result, "undefined");
     outputData = 123;
-    result = OutputYaml.formatYAML(outputData);
+    result = _saltgui_static_scripts_output_OutputYaml__WEBPACK_IMPORTED_MODULE_4__["OutputYaml"].formatYAML(outputData);
     assert.equal(result, "123");
     outputData = "txt";
-    result = OutputYaml.formatYAML(outputData);
+    result = _saltgui_static_scripts_output_OutputYaml__WEBPACK_IMPORTED_MODULE_4__["OutputYaml"].formatYAML(outputData);
     assert.equal(result, "txt");
     outputData = [];
-    result = OutputYaml.formatYAML(outputData);
+    result = _saltgui_static_scripts_output_OutputYaml__WEBPACK_IMPORTED_MODULE_4__["OutputYaml"].formatYAML(outputData);
     assert.equal(result, "[ ]");
     outputData = [1];
-    result = OutputYaml.formatYAML(outputData);
+    result = _saltgui_static_scripts_output_OutputYaml__WEBPACK_IMPORTED_MODULE_4__["OutputYaml"].formatYAML(outputData);
     assert.equal(result, "-\xA01");
     outputData = [1, 2, 3, 4, 5];
-    result = OutputYaml.formatYAML(outputData);
+    result = _saltgui_static_scripts_output_OutputYaml__WEBPACK_IMPORTED_MODULE_4__["OutputYaml"].formatYAML(outputData);
     assert.equal(result, "-\xA01\n" + "-\xA02\n" + "-\xA03\n" + "-\xA04\n" + "-\xA05");
     outputData = {};
-    result = OutputYaml.formatYAML(outputData);
+    result = _saltgui_static_scripts_output_OutputYaml__WEBPACK_IMPORTED_MODULE_4__["OutputYaml"].formatYAML(outputData);
     assert.equal(result, "{ }"); // unordered input
 
     outputData = {
@@ -1774,7 +2499,7 @@ describe('Unittests for output.js', function () {
       "c": 22,
       "b": 33
     };
-    result = OutputYaml.formatYAML(outputData); // ordered output
+    result = _saltgui_static_scripts_output_OutputYaml__WEBPACK_IMPORTED_MODULE_4__["OutputYaml"].formatYAML(outputData); // ordered output
 
     assert.equal(result, "a: 11\n" + "b: 33\n" + "c: 22"); // a more complex object, unordered input
 
@@ -1784,7 +2509,7 @@ describe('Unittests for output.js', function () {
         "eth0": ["fe80::20d:3aff:fe38:576b"]
       }
     };
-    result = OutputYaml.formatYAML(outputData); // ordered output
+    result = _saltgui_static_scripts_output_OutputYaml__WEBPACK_IMPORTED_MODULE_4__["OutputYaml"].formatYAML(outputData); // ordered output
 
     assert.equal(result, "ip6_interfaces:\n" + "  eth0:\n" + "  -\xA0fe80::20d:3aff:fe38:576b\n" + "  lo:\n" + "  -\xA0::1");
     done();
@@ -1792,28 +2517,28 @@ describe('Unittests for output.js', function () {
   it('test formatNESTED', function (done) {
     var outputData, result;
     outputData = null;
-    result = OutputNested.formatNESTED(outputData);
+    result = _saltgui_static_scripts_output_OutputNested__WEBPACK_IMPORTED_MODULE_3__["OutputNested"].formatNESTED(outputData);
     assert.equal(result, "None");
     outputData = undefined;
-    result = OutputNested.formatNESTED(outputData);
+    result = _saltgui_static_scripts_output_OutputNested__WEBPACK_IMPORTED_MODULE_3__["OutputNested"].formatNESTED(outputData);
     assert.equal(result, "undefined");
     outputData = 123;
-    result = OutputNested.formatNESTED(outputData);
+    result = _saltgui_static_scripts_output_OutputNested__WEBPACK_IMPORTED_MODULE_3__["OutputNested"].formatNESTED(outputData);
     assert.equal(result, "123");
     outputData = "txt";
-    result = OutputNested.formatNESTED(outputData);
+    result = _saltgui_static_scripts_output_OutputNested__WEBPACK_IMPORTED_MODULE_3__["OutputNested"].formatNESTED(outputData);
     assert.equal(result, "txt");
     outputData = [];
-    result = OutputNested.formatNESTED(outputData);
+    result = _saltgui_static_scripts_output_OutputNested__WEBPACK_IMPORTED_MODULE_3__["OutputNested"].formatNESTED(outputData);
     assert.equal(result, "");
     outputData = [1];
-    result = OutputNested.formatNESTED(outputData);
+    result = _saltgui_static_scripts_output_OutputNested__WEBPACK_IMPORTED_MODULE_3__["OutputNested"].formatNESTED(outputData);
     assert.equal(result, "-\xA01");
     outputData = [1, 2, 3, 4, 5];
-    result = OutputNested.formatNESTED(outputData);
+    result = _saltgui_static_scripts_output_OutputNested__WEBPACK_IMPORTED_MODULE_3__["OutputNested"].formatNESTED(outputData);
     assert.equal(result, "-\xA01\n" + "-\xA02\n" + "-\xA03\n" + "-\xA04\n" + "-\xA05");
     outputData = {};
-    result = OutputNested.formatNESTED(outputData);
+    result = _saltgui_static_scripts_output_OutputNested__WEBPACK_IMPORTED_MODULE_3__["OutputNested"].formatNESTED(outputData);
     assert.equal(result, ""); // unordered input
 
     outputData = {
@@ -1821,7 +2546,7 @@ describe('Unittests for output.js', function () {
       "c": 22,
       "b": 33
     };
-    result = OutputNested.formatNESTED(outputData); // ordered output
+    result = _saltgui_static_scripts_output_OutputNested__WEBPACK_IMPORTED_MODULE_3__["OutputNested"].formatNESTED(outputData); // ordered output
 
     assert.equal(result, "a:\n" + "    11\n" + "b:\n" + "    33\n" + "c:\n" + "    22"); // a more complex object, unordered input
 
@@ -1831,7 +2556,7 @@ describe('Unittests for output.js', function () {
         "eth0": ["fe80::20d:3aff:fe38:576b"]
       }
     };
-    result = OutputNested.formatNESTED(outputData); // ordered output
+    result = _saltgui_static_scripts_output_OutputNested__WEBPACK_IMPORTED_MODULE_3__["OutputNested"].formatNESTED(outputData); // ordered output
 
     assert.equal(result, "ip6_interfaces:\n" + "    ----------\n" + "    eth0:\n" + "        -\xA0fe80::20d:3aff:fe38:576b\n" + "    lo:\n" + "        -\xA0::1");
     done();
@@ -1844,7 +2569,7 @@ describe('Unittests for output.js', function () {
         "keyword": "explanation"
       }
     };
-    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
+    result = _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output_Output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
     assert.isTrue(result); // wrong, does not match requested documentation
 
     outputData = {
@@ -1852,7 +2577,7 @@ describe('Unittests for output.js', function () {
         "keyword": "explanation"
       }
     };
-    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "another");
+    result = _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output_Output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "another");
     assert.isFalse(result); // wrong, no resulting documentation
 
     outputData = {
@@ -1860,7 +2585,7 @@ describe('Unittests for output.js', function () {
         "keyword": null
       }
     };
-    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
+    result = _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output_Output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
     assert.isFalse(result); // wrong, value is not text
 
     outputData = {
@@ -1868,25 +2593,25 @@ describe('Unittests for output.js', function () {
         "keyword": 123
       }
     };
-    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
+    result = _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output_Output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
     assert.isFalse(result); // wrong, returned structure is not a dict
 
     outputData = {
       "host1": ["something"]
     };
-    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
+    result = _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output_Output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
     assert.isFalse(result); // wrong, returned structure is not a dict
 
     outputData = {
       "host1": 123
     };
-    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
+    result = _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output_Output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
     assert.isFalse(result); // wrong, returned structure is not a dict
 
     outputData = {
       "host1": "hello"
     };
-    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
+    result = _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output_Output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
     assert.isFalse(result); // first host ignored, second host ok
 
     outputData = {
@@ -1895,29 +2620,29 @@ describe('Unittests for output.js', function () {
         "keyword": "explanation"
       }
     };
-    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
+    result = _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].isDocumentationOutput(_saltgui_static_scripts_output_Output__WEBPACK_IMPORTED_MODULE_0__["Output"], outputData, "keyword");
     assert.isTrue(result);
     done();
   });
   it('test isDocuKeyMatch', function (done) {
     var result; // all documentation
 
-    result = OutputDocumentation.isDocuKeyMatch("anything", null);
+    result = _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].isDocuKeyMatch("anything", null);
     assert.isTrue(result); // all documentation
 
-    result = OutputDocumentation.isDocuKeyMatch("anything", "");
+    result = _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].isDocuKeyMatch("anything", "");
     assert.isTrue(result); // match one word
 
-    result = OutputDocumentation.isDocuKeyMatch("foo.bar", "foo");
+    result = _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].isDocuKeyMatch("foo.bar", "foo");
     assert.isTrue(result); // match two words
 
-    result = OutputDocumentation.isDocuKeyMatch("foo.bar", "foo.bar");
+    result = _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].isDocuKeyMatch("foo.bar", "foo.bar");
     assert.isTrue(result); // wrong match
 
-    result = OutputDocumentation.isDocuKeyMatch("foo", "bar");
+    result = _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].isDocuKeyMatch("foo", "bar");
     assert.isFalse(result); // wrong match (even though text prefix)
 
-    result = OutputDocumentation.isDocuKeyMatch("food", "foo");
+    result = _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].isDocuKeyMatch("food", "foo");
     assert.isFalse(result);
     done();
   });
@@ -1929,7 +2654,7 @@ describe('Unittests for output.js', function () {
         "topic": "explanation"
       }
     };
-    OutputDocumentation.reduceDocumentationOutput(out, "DUMMY", "topic");
+    _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].reduceDocumentationOutput(out, "DUMMY", "topic");
     assert.deepEqual(out, {
       "DUMMY": {
         "topic": "explanation"
@@ -1942,7 +2667,7 @@ describe('Unittests for output.js', function () {
         "othertopic": "otherexplanation"
       }
     };
-    OutputDocumentation.reduceDocumentationOutput(out, "DUMMY", "topic");
+    _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].reduceDocumentationOutput(out, "DUMMY", "topic");
     assert.deepEqual(out, {
       "DUMMY": {
         "topic": "explanation"
@@ -1957,7 +2682,7 @@ describe('Unittests for output.js', function () {
         "topic": "explanation"
       }
     };
-    OutputDocumentation.reduceDocumentationOutput(out, "DUMMY", "topic");
+    _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].reduceDocumentationOutput(out, "DUMMY", "topic");
     assert.deepEqual(out, {
       "DUMMY": {
         "topic": "explanation"
@@ -1970,7 +2695,7 @@ describe('Unittests for output.js', function () {
         "topic": "explanation"
       }
     };
-    OutputDocumentation.reduceDocumentationOutput(out, "DUMMY", "topic");
+    _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].reduceDocumentationOutput(out, "DUMMY", "topic");
     assert.deepEqual(out, {
       "DUMMY": {
         "topic": "explanation"
@@ -1983,7 +2708,7 @@ describe('Unittests for output.js', function () {
         "topic": "explanation"
       }
     };
-    OutputDocumentation.reduceDocumentationOutput(out, "DUMMY", "topic");
+    _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].reduceDocumentationOutput(out, "DUMMY", "topic");
     assert.deepEqual(out, {
       "DUMMY": {
         "topic": "explanation"
@@ -2001,7 +2726,7 @@ describe('Unittests for output.js', function () {
         "pkg.install": "`systemd-run(1)`_\n .. _`systemd-run(1)`: https://www.freedesktop.org/software/systemd/man/systemd-run.html"
       }
     };
-    OutputDocumentation.addDocumentationOutput(container, output);
+    _saltgui_static_scripts_output_OutputDocumentation__WEBPACK_IMPORTED_MODULE_1__["OutputDocumentation"].addDocumentationOutput(container, output);
     assert.isTrue(container.innerHTML.includes("<a href='https://www.freedesktop.org/software/systemd/man/systemd-run.html' target='_blank'><span style='color: yellow'>systemd-run(1)</span></a>"));
     done();
   });
@@ -2021,7 +2746,7 @@ var assert = __webpack_require__(/*! chai */ "chai").assert; // create a global 
 
 if (!global.window) global.window = new Object({});
 
-__webpack_require__(/*! ../../saltgui/static/scripts/parsecmdline */ "./saltgui/static/scripts/parsecmdline.js");
+__webpack_require__(/*! ../../saltgui/static/scripts/ParseCommandLine */ "./saltgui/static/scripts/ParseCommandLine.js");
 
 describe('Unittests for parsecmdline.js', function () {
   it('test parseCommandLine', function (done) {
@@ -2402,7 +3127,7 @@ var assert = __webpack_require__(/*! chai */ "chai").assert; // create a global 
 
 if (!global.window) global.window = new Object({});
 
-__webpack_require__(/*! ../../saltgui/static/scripts/utils */ "./saltgui/static/scripts/utils.js");
+__webpack_require__(/*! ../../saltgui/static/scripts/Utils */ "./saltgui/static/scripts/Utils.js");
 
 describe('Unittests for utils.js', function () {
   it('test elapsedToString with valid values', function (done) {

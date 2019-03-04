@@ -1,4 +1,4 @@
-class OutputYaml {
+export class OutputYaml {
 
   // format an object as YAML
   // returns NULL when it is not a simple object
@@ -103,6 +103,3 @@ class OutputYaml {
   }
 
 }
-
-// for unit tests
-if(typeof module !== "undefined") module.exports = OutputYaml;

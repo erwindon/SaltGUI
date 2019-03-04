@@ -29,7 +29,8 @@
   "eslintConfig": {
     "extends": "eslint:recommended",
     "parserOptions": {
-      "ecmaVersion": 6
+      "ecmaVersion": 6,
+      "sourceType": "module"
     },
     "rules": {
       "//": "see https://eslint.org/docs/rules/ for details",

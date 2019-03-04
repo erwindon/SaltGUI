@@ -1,4 +1,19 @@
-class Router {
+import {LoginRoute} from './routes/Login';
+import {MinionsRoute} from './routes/Minions';
+import {KeysRoute} from './routes/Keys';
+import {GrainsRoute} from './routes/Grains';
+import {GrainsMinionRoute} from './routes/GrainsMinion';
+import {SchedulesRoute} from './routes/Schedules';
+import {SchedulesMinionRoute} from './routes/SchedulesMinion';
+import {PillarsRoute} from './routes/Pillars';
+import {PillarsMinionRoute} from './routes/PillarsMinion';
+import {JobRoute} from './routes/Job';
+import {JobsRoute} from './routes/Jobs';
+import {TemplatesRoute} from './routes/Templates';
+import {CommandBox} from './CommandBox';
+import {API} from './Api';
+
+export class Router {
 
   constructor() {
     this.api = new API();
@@ -200,6 +215,3 @@ class Router {
   }
 
 }
-
-window.addEventListener("load", () => new Router());
-

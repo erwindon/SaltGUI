@@ -1,4 +1,4 @@
-class OutputJson {
+export class OutputJson {
 
   // format an object as JSON
   // returns NULL when it is not a simple object
@@ -79,6 +79,3 @@ class OutputJson {
   }
 
 }
-
-// for unit tests
-if(typeof module !== "undefined") module.exports = OutputJson;

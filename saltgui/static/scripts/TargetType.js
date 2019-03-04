@@ -1,4 +1,6 @@
-class TargetType {
+import {DropDownMenu} from './DropDown';
+
+export class TargetType {
 
   static createMenu() {
     const targetbox = document.getElementById("targetbox");

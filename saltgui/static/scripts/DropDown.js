@@ -1,4 +1,6 @@
-class DropDownMenu {
+import {Route} from './routes/Route';
+
+export class DropDownMenu {
 
   // Creates an empty dropdown menu
   // The visual clue for the menu is added to the given element
