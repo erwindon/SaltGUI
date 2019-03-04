@@ -5,3 +5,5 @@ node_modules/
 .idea
 npm-debug.log
 yarn.lock
+.nyc_output/
+package-lock.json

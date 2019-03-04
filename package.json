@@ -8,10 +8,12 @@
     "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
     "@babel/register": "^7.4.0",
+    "babel-plugin-istanbul": "^5.1.1",
     "chai": "^4.1.2",
     "eslint": "^5.3.0",
     "mocha": "^5.2.0",
     "nightmare": "^3.0.1",
+    "nyc": "^13.3.0",
     "stylelint": "^9.4.0",
     "stylelint-config-standard": "^18.2.0"
   },
@@ -27,12 +29,26 @@
       "no-undef": 0,
       "no-unused-vars": 0,
       "no-console": 0,
-      "indent": ["error", 2],
+      "indent": [
+        "error",
+        2
+      ],
       "no-irregular-whitespace": 2,
       "no-whitespace-before-property": 2,
-      "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1 }],
+      "no-multiple-empty-lines": [
+        "error",
+        {
+          "max": 2,
+          "maxEOF": 1
+        }
+      ],
       "no-useless-escape": 0,
-      "no-constant-condition": ["error", { "checkLoops": false }],
+      "no-constant-condition": [
+        "error",
+        {
+          "checkLoops": false
+        }
+      ],
       "no-var": 2,
       "prefer-const": 2
     }
@@ -40,12 +56,48 @@
   "stylelint": {
     "extends": "stylelint-config-standard"
   },
+  "nyc": {
+    "check-coverage": false,
+    "per-file": true,
+    "lines": 85,
+    "statements": 85,
+    "functions": 85,
+    "branches": 85,
+    "cache": true,
+    "all": true,
+    "watermarks": {
+      "lines": [
+        70,
+        90
+      ],
+      "functions": [
+        70,
+        90
+      ],
+      "branches": [
+        70,
+        90
+      ],
+      "statements": [
+        70,
+        90
+      ]
+    },
+    "exclude": [
+      "tests/**/*.js",
+      "node_modules/**/*.js"
+    ],
+    "include": [
+      "saltgui/static/scripts/**/*.js"
+    ]
+  },
   "scripts": {
     "eslint": "eslint saltgui/static/scripts tests/",
     "eslint:fix": "eslint saltgui/static/scripts tests/ --fix",
     "stylelint": "stylelint 'saltgui/static/stylesheets/*.css'",
     "wait-for-docker": "node tests/helpers/wait-for-docker.js",
     "test:unit": "mocha --require @babel/register --trace-warnings --check-leaks --reporter spec tests/unit/",
-    "test:functional": "mocha --bail --trace-warnings --check-leaks --reporter spec tests/functional/"
+    "test:functional": "mocha --bail --trace-warnings --check-leaks --reporter spec tests/functional/",
+    "test:coverage": "nyc mocha --require @babel/register --trace-warnings --check-leaks --reporter spec tests/unit/"
   }
 }
