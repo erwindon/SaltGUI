@@ -10,17 +10,8 @@ set -e
 # add testing packages
 npm i
 
-# Clead up old bundles
-npm run clean
-
-# first see if we write es6 compatible js
-npm run jslint
-
-# and if our css is sane
-npm run stylelint
-
-# call webpack to create our bundle
-npm run bundle
+# trigger build
+npm run build
 
 # run the unittests tests before docker for failing fast
 npm run test:unit

@@ -66,9 +66,11 @@
     "extends": "stylelint-config-standard"
   },
   "scripts": {
+    "build": "npm run clean && npm run lint && npm run stylelint && npm run bundle",
     "clean": "rimraf saltgui/static/saltgui.bundle.js && rimraf saltgui/static/saltgui.bundle.js.map && rimraf saltgui/static/tests.bundle.js && rimraf saltgui/static/tests.bundle.js.map",
     "bundle": "webpack",
-    "jslint": "eslint saltgui/static/scripts tests/",
+    "lint": "eslint saltgui/static/scripts tests/",
+    "lint:fix": "eslint saltgui/static/scripts tests/ --fix",
     "stylelint": "stylelint 'saltgui/static/stylesheets/*.css'",
     "wait-for-docker": "node tests/helpers/wait-for-docker.js",
     "test:unit": "webpack --config webpack.test.js",
