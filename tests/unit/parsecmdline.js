@@ -4,7 +4,7 @@ const assert = require('chai').assert;
 if (!global.window)
   global.window = new Object({});
 
-require('../../saltgui/static/scripts/parsecmdline');
+require('../../saltgui/static/scripts/ParseCommandLine');
 
 
 describe('Unittests for parsecmdline.js', function() {
