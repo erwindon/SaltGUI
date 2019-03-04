@@ -11,7 +11,7 @@ set -e
 npm i
 
 # first see if we write es6 compatible js
-npm run jslint
+npm run eslint
 
 # and if our css is sane
 npm run stylelint
