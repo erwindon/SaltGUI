@@ -1,10 +1,10 @@
 const assert = require('chai').assert;
 
-const Output = require('../../saltgui/static/scripts/output/output');
-const OutputJson = require('../../saltgui/static/scripts/output/outputJson');
-const OutputYaml = require('../../saltgui/static/scripts/output/outputYaml');
-const OutputNested = require('../../saltgui/static/scripts/output/outputNested');
-const OutputDocumentation = require('../../saltgui/static/scripts/output/outputDocumentation');
+const Output = require('../../saltgui/static/scripts/output/Output');
+const OutputJson = require('../../saltgui/static/scripts/output/OutputJson');
+const OutputYaml = require('../../saltgui/static/scripts/output/OutputYaml');
+const OutputNested = require('../../saltgui/static/scripts/output/OutputNested');
+const OutputDocumentation = require('../../saltgui/static/scripts/output/OutputDocumentation');
 
 describe('Unittests for output.js', function() {
 
