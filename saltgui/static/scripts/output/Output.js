@@ -1,3 +1,10 @@
+import {OutputDocumentation} from './OutputDocumentation';
+import {OutputHighstate} from './OutputHighstate';
+import {OutputJson} from './OutputJson';
+import {OutputNested} from './OutputNested';
+import {OutputSaltGuiHighstate} from './OutputSaltGuiHighstate';
+import {OutputYaml} from './OutputYaml';
+
 // Functions to turn responses from the salt system into visual information
 // The following variations exist:
 // A) documentation output
@@ -19,7 +26,7 @@
 //    from a single node called "master".
 
 
-class Output {
+export class Output {
 
   static isOutputFormatAllowed(requestedOutputFormat) {
     let supportedOutputFormats = null;
@@ -398,6 +405,3 @@ class Output {
 
   }
 }
-
-// for unit tests
-if(typeof module !== "undefined") module.exports = Output;

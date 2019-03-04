@@ -1,4 +1,7 @@
-class JobRoute extends Route {
+import {Route} from './Route';
+import {Output} from '../output/Output';
+
+export class JobRoute extends Route {
 
   constructor(router) {
     super("^[\/]job$", "Job", "#page_job", "", router);

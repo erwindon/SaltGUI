@@ -1,4 +1,4 @@
-class OutputNested {
+export class OutputNested {
 
   // heavily inspired by the implementation for NESTED output
   // as originally implemented in salt/output/nested.py from Salt
@@ -57,6 +57,3 @@ class OutputNested {
   }
 
 }
-
-// for unit tests
-if(typeof module !== "undefined") module.exports = OutputNested;

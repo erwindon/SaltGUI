@@ -1,4 +1,8 @@
-class TemplatesRoute extends PageRoute {
+import {PageRoute} from './Page';
+import {Route} from './Route';
+import {Output} from '../output/Output';
+
+export class TemplatesRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]templates$", "Templates", "#page_templates", "#button_templates", router);

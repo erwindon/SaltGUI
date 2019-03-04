@@ -1,4 +1,9 @@
-class CommandBox {
+import {DropDownMenu} from './DropDown';
+import {Documentation} from './Documentation';
+import {RunType} from './RunType';
+import {TargetType} from './TargetType';
+
+export class CommandBox {
 
   constructor(api) {
     this.api = api;

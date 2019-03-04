@@ -1,4 +1,6 @@
-class RunType {
+import {DropDownMenu} from './DropDown';
+
+export class RunType {
 
   static createMenu() {
     const runblock = document.getElementById("runblock");

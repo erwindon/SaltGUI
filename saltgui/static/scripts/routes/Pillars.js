@@ -1,4 +1,7 @@
-class PillarsRoute extends PageRoute {
+import {PageRoute} from './Page';
+import {Output} from '../output/Output';
+
+export class PillarsRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]pillars$", "Pillars", "#page_pillars", "#button_pillars", router);

@@ -1,6 +1,6 @@
 // documentation utilities
 
-class Documentation {
+export class Documentation {
 
   // formatting of the documentation is done as a regular output type
   // that is therefore in output.js
@@ -95,6 +95,3 @@ class Documentation {
   }
 
 }
-
-// for unit tests
-if(typeof module !== "undefined") module.exports = Documentation;

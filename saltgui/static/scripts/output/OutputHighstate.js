@@ -1,4 +1,4 @@
-class OutputHighstate {
+export class OutputHighstate {
 
   static isHighStateOutput(command, response) {
 
@@ -251,6 +251,3 @@ class OutputHighstate {
   }
 
 }
-
-// for unit tests
-if(typeof module !== "undefined") module.exports = OutputHighstate;
