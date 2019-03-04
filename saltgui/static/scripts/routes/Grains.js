@@ -1,4 +1,9 @@
-class GrainsRoute extends PageRoute {
+import {PageRoute} from './Page';
+import {Route} from './Route';
+import {Output} from '../output/Output';
+import {DropDownMenu} from '../DropDown';
+
+export class GrainsRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]grains$", "Grains", "#page_grains", "#button_grains", router);

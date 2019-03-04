@@ -1,4 +1,7 @@
-class PageRoute extends Route {
+import {Route} from './Route';
+import {Output} from '../output/Output';
+
+export class PageRoute extends Route {
 
   constructor(path, name, page_selector, menuitem_selector, router) {
     super(path, name, page_selector, menuitem_selector, router);

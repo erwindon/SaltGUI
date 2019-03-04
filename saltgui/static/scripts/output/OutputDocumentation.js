@@ -1,4 +1,4 @@
-class OutputDocumentation {
+export class OutputDocumentation {
 
   // test whether the returned data matches the requested data
   static isDocuKeyMatch(key, filterKey) {
@@ -254,6 +254,3 @@ class OutputDocumentation {
   }
 
 }
-
-// for unit tests
-if(typeof module !== "undefined") module.exports = OutputDocumentation;

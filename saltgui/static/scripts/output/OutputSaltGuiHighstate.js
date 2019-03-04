@@ -1,4 +1,6 @@
-class OutputSaltGuiHighstate {
+import {Output} from './Output';
+
+export class OutputSaltGuiHighstate {
 
   // no separate `isHighStateOutput` here
   // the implementation from OutputHighstate is (re)used
@@ -264,6 +266,3 @@ class OutputSaltGuiHighstate {
   }
 
 }
-
-// for unit tests
-if(typeof module !== "undefined") module.exports = OutputSaltGuiHighstate;

@@ -1,4 +1,9 @@
-class MinionsRoute extends PageRoute {
+import {PageRoute} from './Page';
+import {Route} from './Route';
+import {Output} from '../output/Output';
+import {DropDownMenu} from '../DropDown';
+
+export class MinionsRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]$", "Minions", "#page_minions", "#button_minions", router);
@@ -10,6 +15,7 @@ class MinionsRoute extends PageRoute {
 
   onShow() {
     const minions = this;
+
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
       if(minions.keysLoaded && minions.jobsLoaded) resolve();

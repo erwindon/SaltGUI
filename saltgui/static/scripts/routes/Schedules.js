@@ -1,4 +1,8 @@
-class SchedulesRoute extends PageRoute {
+import {PageRoute} from './Page';
+import {Route} from './Route';
+import {Output} from '../output/Output';
+
+export class SchedulesRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]schedules$", "Schedules", "#page_schedules", "#button_schedules", router);

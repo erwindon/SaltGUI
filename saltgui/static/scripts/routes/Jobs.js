@@ -1,4 +1,8 @@
-class JobsRoute extends PageRoute {
+import {PageRoute} from './Page';
+import {Route} from './Route';
+import {Output} from '../output/Output';
+
+export class JobsRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]jobs$", "Jobs", "#page_jobs", "#button_jobs", router);

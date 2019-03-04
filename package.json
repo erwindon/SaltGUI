@@ -5,17 +5,32 @@
   "version": "0.0.1",
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "babel-loader": "^8.0.5",
     "chai": "^4.1.2",
+    "css-loader": "^2.1.0",
     "eslint": "^5.3.0",
+    "file-loader": "^3.0.1",
+    "html-loader": "^0.5.5",
+    "mini-css-extract-plugin": "^0.5.0",
     "mocha": "^5.2.0",
     "nightmare": "^3.0.1",
+    "node-sass": "^4.11.0",
+    "rimraf": "^2.6.3",
+    "sass-loader": "^7.1.0",
     "stylelint": "^9.4.0",
-    "stylelint-config-standard": "^18.2.0"
+    "stylelint-config-standard": "^18.2.0",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3",
+    "webpack-node-externals": "^1.7.2",
+    "webpack-shell-plugin": "^0.5.0"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
     "parserOptions": {
-      "ecmaVersion": 6
+      "ecmaVersion": 6,
+      "sourceType": "module"
     },
     "rules": {
       "//": "see https://eslint.org/docs/rules/ for details",
@@ -51,10 +66,12 @@
     "extends": "stylelint-config-standard"
   },
   "scripts": {
+    "clean": "rimraf saltgui/static/saltgui.bundle.js && rimraf saltgui/static/saltgui.bundle.js.map && rimraf saltgui/static/tests.bundle.js && rimraf saltgui/static/tests.bundle.js.map",
+    "bundle": "webpack",
     "jslint": "eslint saltgui/static/scripts tests/",
     "stylelint": "stylelint 'saltgui/static/stylesheets/*.css'",
     "wait-for-docker": "node tests/helpers/wait-for-docker.js",
-    "test:unit": "mocha --trace-warnings --check-leaks --reporter spec tests/unit/",
+    "test:unit": "webpack --config webpack.test.js",
     "test:functional": "mocha --trace-warnings --check-leaks --reporter spec tests/functional/"
   }
 }

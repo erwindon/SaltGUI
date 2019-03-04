@@ -1,4 +1,6 @@
-class LoginRoute extends Route {
+import {Route} from './Route';
+
+export class LoginRoute extends Route {
 
   constructor(router) {
     super("^[\/]login$", "Login", "#page_login", "", router);
