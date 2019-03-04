@@ -1157,6 +1157,7 @@ function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OutputHighstate", function() { return OutputHighstate; });
+/* harmony import */ var _Output__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Output */ "./saltgui/static/scripts/output/Output.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1164,6 +1165,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 
 var OutputHighstate =
 /*#__PURE__*/
@@ -1175,7 +1177,7 @@ function () {
   _createClass(OutputHighstate, null, [{
     key: "isHighStateOutput",
     value: function isHighStateOutput(command, response) {
-      if (!Output.isOutputFormatAllowed("highstate")) return false;
+      if (!_Output__WEBPACK_IMPORTED_MODULE_0__["Output"].isOutputFormatAllowed("highstate")) return false;
       if (_typeof(response) !== "object") return false;
       if (Array.isArray(response)) return false;
       if (command !== "state.apply" && command !== "state.highstate") return false;
@@ -1222,14 +1224,14 @@ function () {
       }
 
       if (anyFailures) {
-        return Output.getHostnameHtml(hostname, "host_failure");
+        return _Output__WEBPACK_IMPORTED_MODULE_0__["Output"].getHostnameHtml(hostname, "host_failure");
       }
 
       if (anySkips) {
-        return Output.getHostnameHtml(hostname, "host_skips");
+        return _Output__WEBPACK_IMPORTED_MODULE_0__["Output"].getHostnameHtml(hostname, "host_skips");
       }
 
-      return Output.getHostnameHtml(hostname, "host_success");
+      return _Output__WEBPACK_IMPORTED_MODULE_0__["Output"].getHostnameHtml(hostname, "host_success");
     }
   }, {
     key: "getHighStateOutput",
@@ -1820,6 +1822,7 @@ function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OutputSaltGuiHighstate", function() { return OutputSaltGuiHighstate; });
+/* harmony import */ var _Output__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Output */ "./saltgui/static/scripts/output/Output.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1827,6 +1830,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 
 var OutputSaltGuiHighstate =
 /*#__PURE__*/
@@ -1869,14 +1873,14 @@ function () {
       }
 
       if (anyFailures) {
-        return Output.getHostnameHtml(hostname, "host_failure");
+        return _Output__WEBPACK_IMPORTED_MODULE_0__["Output"].getHostnameHtml(hostname, "host_failure");
       }
 
       if (anySkips) {
-        return Output.getHostnameHtml(hostname, "host_skips");
+        return _Output__WEBPACK_IMPORTED_MODULE_0__["Output"].getHostnameHtml(hostname, "host_skips");
       }
 
-      return Output.getHostnameHtml(hostname, "host_success");
+      return _Output__WEBPACK_IMPORTED_MODULE_0__["Output"].getHostnameHtml(hostname, "host_success");
     }
   }, {
     key: "addChangesInfo",
@@ -2088,7 +2092,7 @@ function () {
 
         if (task.hasOwnProperty("start_time")) {
           taskDiv.append(document.createElement("br"));
-          taskDiv.append(document.createTextNode(indent + "Started at " + Output.dateTimeStr(task.start_time)));
+          taskDiv.append(document.createTextNode(indent + "Started at " + _Output__WEBPACK_IMPORTED_MODULE_0__["Output"].dateTimeStr(task.start_time)));
         }
 
         if (task.hasOwnProperty("duration")) {
