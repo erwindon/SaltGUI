@@ -6,7 +6,7 @@ const OutputYaml = require('../../saltgui/static/scripts/output/OutputYaml');
 const OutputNested = require('../../saltgui/static/scripts/output/OutputNested');
 const OutputDocumentation = require('../../saltgui/static/scripts/output/OutputDocumentation');
 
-describe('Unittests for output.js', function() {
+describe('Unittests for Output.js', function() {
 
   it('test formatJSON', done => {
 

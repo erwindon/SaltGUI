@@ -7,8 +7,8 @@ if (!global.window)
 require('../../saltgui/static/scripts/Utils');
 
 
-describe('Unittests for utils.js', function() {
-
+describe('Unittests for Utils.js', function() {
+  
   it('test elapsedToString with valid values', done => {
     const now = new Date();
     let result;
