@@ -135,8 +135,8 @@ class Router {
     if(window.location.pathname === path && this.currentRoute) return;
     for(const route of this.routes) {
       if(!route.getPath().test(path.split("?")[0])) continue;
-
-      window.history.pushState({}, undefined, path);
+      // push history state for login (including redirect to /)
+      if(path === "/login" || path === "/") window.history.pushState({}, undefined, path);
       this.showRoute(route);
       return;
     }
