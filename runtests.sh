@@ -8,21 +8,21 @@ trap cleanupdocker EXIT
 
 set -e
 # add testing packages
-yarn
+npm i
 
 # first see if we write es6 compatible js
-yarn jslint
+npm run jslint
 
 # and if our css is sane
-yarn stylelint
+npm run stylelint
 
 # start a salt master, three salt minions and saltgui to run tests on
 docker-compose -f docker/docker-compose.yml up -d
 
 # wait until all are up
-yarn wait-for-docker
+npm run wait-for-docker
 
 # run the unittests/nightmare.js functional tests
-yarn test
+npm run test
 
 set +e
