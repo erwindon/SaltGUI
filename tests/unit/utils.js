@@ -8,7 +8,7 @@ require('../../saltgui/static/scripts/utils');
 
 
 describe('Unittests for utils.js', function() {
-  
+
   it('test elapsedToString with valid values', done => {
     const now = new Date();
     let result;
@@ -113,6 +113,53 @@ describe('Unittests for utils.js', function() {
     // ipcidr - Match based on Subnet (CIDR notation) or IPv4 address.
     result = window.makeTargetText("ipcidr", "10.0.0.0/24");
     assert.equal(result, "ipcidr 10.0.0.0/24");
+
+    done();
+  });
+
+  it('test getQueryParam2', done => {
+    let result;
+
+    // no parameters
+    result = window.getQueryParam2("http://host/url", "aap");
+    assert.equal(result, undefined);
+
+    // no parameters
+    result = window.getQueryParam2("http://host/url?", "aap");
+    assert.equal(result, undefined);
+
+    // one parameter, match
+    result = window.getQueryParam2("http://host/url?aap=1", "aap");
+    assert.equal(result, "1");
+
+    // one parameter, no match
+    result = window.getQueryParam2("http://host/url?aap=1", "noot");
+    assert.equal(result, undefined);
+
+    // one parameter, illegal format
+    result = window.getQueryParam2("http://host/url?aap", "aap");
+    assert.equal(result, undefined);
+
+    // one parameter, illegal format
+    result = window.getQueryParam2("http://host/url?aap=1=2", "aap");
+    assert.equal(result, undefined);
+
+    // more parameters, match
+    result = window.getQueryParam2("http://host/url?aap=1&noot=2", "aap");
+    assert.equal(result, "1");
+
+    // more parameters, match
+    result = window.getQueryParam2("http://host/url?aap=1&noot=2", "noot");
+    assert.equal(result, "2");
+
+    // more parameters, no match
+    result = window.getQueryParam2("http://host/url?aap=1&noot=2", "mies");
+    assert.equal(result, undefined);
+
+    // mark function as used
+    // it has implicit parameter windows.location which we will not fake
+    result = window.getQueryParam("lkhlkfhlaskdhfljk");
+    assert.equal(result, undefined);
 
     done();
   });
