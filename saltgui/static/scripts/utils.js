@@ -51,12 +51,6 @@ window.getQueryParam = function(name) {
   return undefined;
 };
 
-window.escape = function(input) {
-  const div = document.createElement("div");
-  div.appendChild(document.createTextNode(input));
-  return div.innerHTML;
-};
-
 window.makeTargetText = function(targetType, targetPattern) {
   // note that "glob" is the most common case
   // when used from the command-line, that target-type
