@@ -40,15 +40,21 @@ window.createElement = function(type, className, content) {
   return element;
 };
 
-window.getQueryParam = function(name) {
-  const vars = [];
-  const hashes = window.location.href.slice(window.location.href.indexOf("?") + 1).split("&");
-  for(const hash of hashes) {
-    const hashparts = hash.split("=");
-    vars.push(hashparts[0]);
-    if(hashparts[0] === name) return hashparts[1];
+window.getQueryParam2 = function(url, name) {
+  const questionmarkPos = url.indexOf("?");
+  if(questionmarkPos < 0) return undefined;
+  const parameters = url.slice(questionmarkPos + 1).split("&");
+  for(const parameter of parameters) {
+    const namevalue = parameter.split("=");
+    if(namevalue.length !== 2) continue;
+    if(namevalue[0] === name) return namevalue[1];
   }
   return undefined;
+};
+
+window.getQueryParam = function(name) {
+  if(!window.location) return undefined;
+  return window.getQueryParam2(window.location.href, name);
 };
 
 window.makeTargetText = function(targetType, targetPattern) {
