@@ -4,11 +4,11 @@ const assert = require('chai').assert;
 if (!global.window)
   global.window = new Object({});
 
-require('../../saltgui/static/scripts/utils');
+require('../../saltgui/static/scripts/Utils');
 
 
-describe('Unittests for utils.js', function() {
-
+describe('Unittests for Utils.js', function() {
+  
   it('test elapsedToString with valid values', done => {
     const now = new Date();
     let result;

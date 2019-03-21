@@ -1,12 +1,12 @@
 const assert = require('chai').assert;
 
-const Output = require('../../saltgui/static/scripts/output/output');
-const OutputJson = require('../../saltgui/static/scripts/output/outputJson');
-const OutputYaml = require('../../saltgui/static/scripts/output/outputYaml');
-const OutputNested = require('../../saltgui/static/scripts/output/outputNested');
-const OutputDocumentation = require('../../saltgui/static/scripts/output/outputDocumentation');
+const OutputTest = require('../../saltgui/static/scripts/output/Output');
+const OutputJson = require('../../saltgui/static/scripts/output/OutputJson');
+const OutputYaml = require('../../saltgui/static/scripts/output/OutputYaml');
+const OutputNested = require('../../saltgui/static/scripts/output/OutputNested');
+const OutputDocumentation = require('../../saltgui/static/scripts/output/OutputDocumentation');
 
-describe('Unittests for output.js', function() {
+describe('Unittests for Output.js', function() {
 
   it('test formatJSON', done => {
 
@@ -221,42 +221,42 @@ describe('Unittests for output.js', function() {
 
     // ok, normal documentation case
     outputData = { "host1": {"keyword": "explanation"} };
-    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
+    result = OutputDocumentation.isDocumentationOutput(OutputTest, outputData, "keyword");
     assert.isTrue(result);
 
     // wrong, does not match requested documentation
     outputData = { "host1": {"keyword": "explanation"} };
-    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "another");
+    result = OutputDocumentation.isDocumentationOutput(OutputTest, outputData, "another");
     assert.isFalse(result);
 
     // wrong, no resulting documentation
     outputData = { "host1": {"keyword": null} };
-    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
+    result = OutputDocumentation.isDocumentationOutput(OutputTest, outputData, "keyword");
     assert.isFalse(result);
 
     // wrong, value is not text
     outputData = { "host1": {"keyword": 123} };
-    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
+    result = OutputDocumentation.isDocumentationOutput(OutputTest, outputData, "keyword");
     assert.isFalse(result);
 
     // wrong, returned structure is not a dict
     outputData = { "host1": ["something"] };
-    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
+    result = OutputDocumentation.isDocumentationOutput(OutputTest, outputData, "keyword");
     assert.isFalse(result);
 
     // wrong, returned structure is not a dict
     outputData = { "host1": 123 };
-    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
+    result = OutputDocumentation.isDocumentationOutput(OutputTest, outputData, "keyword");
     assert.isFalse(result);
 
     // wrong, returned structure is not a dict
     outputData = { "host1": "hello" };
-    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
+    result = OutputDocumentation.isDocumentationOutput(OutputTest, outputData, "keyword");
     assert.isFalse(result);
 
     // first host ignored, second host ok
     outputData = { "host1": null, "host2": {"keyword": "explanation"} };
-    result = OutputDocumentation.isDocumentationOutput(Output, outputData, "keyword");
+    result = OutputDocumentation.isDocumentationOutput(OutputTest, outputData, "keyword");
     assert.isTrue(result);
 
     done();
