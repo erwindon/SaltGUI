@@ -195,7 +195,7 @@ export class Output {
 
     // it might be documentation
     const commandArg = command.trim().replace(/^[a-z.]* */i, "");
-    const isDocumentationOutput = OutputDocumentation.isDocumentationOutput(Output, response, commandArg);
+    const isDocumentationOutput = OutputDocumentation.isDocumentationOutput(response, commandArg);
     if(isDocumentationOutput) {
       OutputDocumentation.reduceDocumentationOutput(response, commandArg, commandArg);
       OutputDocumentation.addDocumentationOutput(outputContainer, response);
