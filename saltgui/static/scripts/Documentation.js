@@ -1,5 +1,7 @@
 // documentation utilities
 
+import {TargetType} from './TargetType';
+
 export class Documentation {
 
   // formatting of the documentation is done as a regular output type

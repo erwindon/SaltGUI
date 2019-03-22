@@ -1,3 +1,5 @@
+import {TargetType} from '../TargetType';
+
 export class Route {
 
   constructor(path, name, page_selector, menuitem_selector, router) {
