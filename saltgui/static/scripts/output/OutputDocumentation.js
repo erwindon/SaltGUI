@@ -1,3 +1,5 @@
+import {Output} from './Output.js';
+
 export class OutputDocumentation {
 
   // test whether the returned data matches the requested data

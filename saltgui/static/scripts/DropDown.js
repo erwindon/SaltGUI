@@ -1,4 +1,4 @@
-import {Route} from './routes/Route';
+import {Route} from './routes/Route.js';
 
 export class DropDownMenu {
 

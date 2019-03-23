@@ -1,9 +1,9 @@
-import {OutputDocumentation} from './OutputDocumentation';
-import {OutputHighstate} from './OutputHighstate';
-import {OutputJson} from './OutputJson';
-import {OutputNested} from './OutputNested';
-import {OutputSaltGuiHighstate} from './OutputSaltGuiHighstate';
-import {OutputYaml} from './OutputYaml';
+import {OutputDocumentation} from './OutputDocumentation.js';
+import {OutputHighstate} from './OutputHighstate.js';
+import {OutputJson} from './OutputJson.js';
+import {OutputNested} from './OutputNested.js';
+import {OutputSaltGuiHighstate} from './OutputSaltGuiHighstate.js';
+import {OutputYaml} from './OutputYaml.js';
 
 // Functions to turn responses from the salt system into visual information
 // The following variations exist:

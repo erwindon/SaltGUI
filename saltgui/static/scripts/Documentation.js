@@ -1,6 +1,6 @@
 // documentation utilities
 
-import {TargetType} from './TargetType';
+import {TargetType} from './TargetType.js';
 
 export class Documentation {
 

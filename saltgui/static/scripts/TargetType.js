@@ -1,4 +1,4 @@
-import {DropDownMenu} from './DropDown';
+import {DropDownMenu} from './DropDown.js';
 
 export class TargetType {
 

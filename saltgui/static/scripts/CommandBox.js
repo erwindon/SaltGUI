@@ -1,8 +1,8 @@
-import {DropDownMenu} from './DropDown';
-import {Documentation} from './Documentation';
-import {RunType} from './RunType';
-import {TargetType} from './TargetType';
-import {Output} from './output/Output';
+import {DropDownMenu} from './DropDown.js';
+import {Documentation} from './Documentation.js';
+import {RunType} from './RunType.js';
+import {TargetType} from './TargetType.js';
+import {Output} from './output/Output.js';
 
 export class CommandBox {
 

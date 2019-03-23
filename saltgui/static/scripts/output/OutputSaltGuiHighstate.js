@@ -1,4 +1,4 @@
-import {Output} from './Output';
+import {Output} from './Output.js';
 
 export class OutputSaltGuiHighstate {
 

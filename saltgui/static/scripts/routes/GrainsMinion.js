@@ -1,7 +1,7 @@
-import {PageRoute} from './Page';
-import {Route} from './Route';
-import {Output} from '../output/Output';
-import {DropDownMenu} from '../DropDown';
+import {PageRoute} from './Page.js';
+import {Route} from './Route.js';
+import {Output} from '../output/Output.js';
+import {DropDownMenu} from '../DropDown.js';
 
 export class GrainsMinionRoute extends PageRoute {
 

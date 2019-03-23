@@ -1,7 +1,6 @@
-import {PageRoute} from './Page';
-import {Route} from './Route';
-import {DropDownMenu} from '../DropDown';
-import {Output} from '../output/Output';
+import {PageRoute} from './Page.js';
+import {Route} from './Route.js';
+import {DropDownMenu} from '../DropDown.js';
 
 export class KeysRoute extends PageRoute {
 

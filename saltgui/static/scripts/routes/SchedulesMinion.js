@@ -1,8 +1,8 @@
-import {PageRoute} from './Page';
-import {Route} from './Route';
-import {Output} from '../output/Output';
-import {SchedulesRoute} from './Schedules';
-import {DropDownMenu} from '../DropDown';
+import {PageRoute} from './Page.js';
+import {Route} from './Route.js';
+import {Output} from '../output/Output.js';
+import {SchedulesRoute} from './Schedules.js';
+import {DropDownMenu} from '../DropDown.js';
 
 export class SchedulesMinionRoute extends PageRoute {
 
