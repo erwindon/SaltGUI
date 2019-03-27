@@ -50,7 +50,7 @@
     "test:prepare:tests": "babel ./tests/ -x .js -d ./tests2",
     "test:unit": "mocha tests2/unit/ --trace-warnings --check-leaks --reporter spec",
     "test:cleanup": "rm --recursive tests2 saltgui/static2",
-    "test:functional": "mocha --trace-warnings --check-leaks --reporter spec tests2/functional/"
+    "test:functional": "mocha --trace-warnings --check-leaks --reporter spec tests/functional/"
   },
   "dependencies": {
     "chai": "^4.2.0",
