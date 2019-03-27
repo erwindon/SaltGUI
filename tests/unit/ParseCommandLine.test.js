@@ -4,7 +4,8 @@ const assert = require('chai').assert;
 if (!global.window)
   global.window = new Object({});
 
-require('../../saltgui/static/scripts/ParseCommandLine');
+// path contains "static2" because that is where the derived code will be
+require('../../saltgui/static2/scripts/ParseCommandLine.js');
 
 
 describe('Unittests for ParseCommandLine.js', function() {

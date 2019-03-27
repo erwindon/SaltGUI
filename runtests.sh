@@ -17,7 +17,10 @@ npm run jslint
 npm run stylelint
 
 # run the unittests tests before docker for failing fast
+npm run test:prepare:saltgui
+npm run test:prepare:tests
 npm run test:unit
+npm run test:cleanup
 
 # start a salt master, three salt minions and saltgui to run tests on
 docker-compose -f docker/docker-compose.yml up -d

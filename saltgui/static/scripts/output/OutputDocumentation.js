@@ -78,6 +78,10 @@ export class OutputDocumentation {
 
   // reduce the search key to match the data in the response
   static reduceFilterKey(filterKey) {
+    if(typeof filterKey !== "string") {
+      // TODO: when/why
+      return "";
+    }
     if(filterKey === "wheel") {
       return "";
     }
