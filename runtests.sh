@@ -17,7 +17,8 @@ npm run eslint
 npm run stylelint
 
 # run the unittests tests before docker for failing fast
-npm run test:unit
+# the coverage test will repeat all this
+#npm run test:unit
 
 # run the unittests tests and create coverage report
 npm run test:coverage
