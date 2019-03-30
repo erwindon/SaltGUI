@@ -33,13 +33,6 @@ window.elapsedToString = function(date) {
   }
 };
 
-window.createElement = function(type, className, content) {
-  const element = document.createElement(type);
-  element.classList.add(className);
-  if(content !== "") element.innerHTML = content;
-  return element;
-};
-
 window.getQueryParam2 = function(url, name) {
   const questionmarkPos = url.indexOf("?");
   if(questionmarkPos < 0) return undefined;
