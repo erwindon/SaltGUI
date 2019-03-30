@@ -169,6 +169,17 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.11.0 (2018-03-30)
+- Migrated from yarn to npm (smarletta)
+- Separated unit tests and functional tests (smarletta)
+- Standardized filenames (smarletta)
+- Converted to JS modules (smarletta)
+- Added coverage report for unit tests (smarletta)
+- Close job details now returns to previous page (dawidmalina)
+- Fixed small layout issues (erwindon)
+- Standardized internal api functions (erwindon)
+- Removed some unused functions (erwindon)
+
 ## 1.10.1 (2018-02-24)
 - Small bugfix for copy of ip-number (erwindon)
 
