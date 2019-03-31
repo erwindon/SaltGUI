@@ -13,8 +13,15 @@ export class Utils {
   }
 
   static getQueryParam(name) {
-    if(!window.location) return undefined;
-    return Utils.getQueryParam2(window.location.href, name);
+    let w = null;
+    try {
+      w = window;
+    }
+    catch(error) {
+      return;
+    }
+    if(!w || !w.location) return undefined;
+    return Utils.getQueryParam2(w.location.href, name);
   }
 
 }

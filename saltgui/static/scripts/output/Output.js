@@ -31,7 +31,14 @@ export class Output {
   static isOutputFormatAllowed(requestedOutputFormat) {
     let supportedOutputFormats = null;
     // window.localStorage is not defined during unit testing
-    if(window.localStorage) supportedOutputFormats = window.localStorage.getItem("output_formats");
+    let w = null;
+    try {
+      w = window;
+    }
+    catch(error) {
+      // void
+    }
+    if(w && w.localStorage) supportedOutputFormats = w.localStorage.getItem("output_formats");
     if(supportedOutputFormats === "undefined") supportedOutputFormats = null;
     if(supportedOutputFormats === null) supportedOutputFormats = "doc,saltguihighstate,json";
     return supportedOutputFormats.includes(requestedOutputFormat);
