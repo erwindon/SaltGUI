@@ -167,6 +167,10 @@ describe('Unittests for Output.js', function() {
     result = OutputNested.formatNESTED(outputData);
     assert.equal(result, "txt");
 
+    outputData = ["txt1\ntxt2\ntxt3"];
+    result = OutputNested.formatNESTED(outputData);
+    assert.equal(result, "-\u00A0txt1\n  txt2\n  txt3");
+
     outputData = [];
     result = OutputNested.formatNESTED(outputData);
     assert.equal(result, "");
@@ -183,6 +187,28 @@ describe('Unittests for Output.js', function() {
       "-\u00A03\n" +
       "-\u00A04\n" +
       "-\u00A05");
+
+    outputData = [{"a":1},{"a":1},[1,2],7,{"a":""},{"a":null}];
+    result = OutputNested.formatNESTED(outputData);
+    assert.equal(result,
+      "|_\n" +
+      "  ----------\n" +
+      "  a:\n" +
+      "      1\n" +
+      "|_\n" +
+      "  ----------\n" +
+      "  a:\n" +
+      "      1\n" +
+      "|_\n" +
+      "  -\u00A01\n" +
+      "  -\u00A02\n" +
+      "-\u00A07\n" +
+      "|_\n" +
+      "  ----------\n" +
+      "  a:\n" +
+      "|_\n" +
+      "  ----------\n" +
+      "  a:");
 
     outputData = {};
     result = OutputNested.formatNESTED(outputData);

@@ -12,14 +12,10 @@ export class Utils {
     return undefined;
   }
 
+  /* istanbul ignore next */
   static getQueryParam(name) {
     let w = null;
-    try {
-      w = window;
-    }
-    catch(error) {
-      return;
-    }
+    try { w = window; } catch(error) { /* VOID */ }
     if(!w || !w.location) return undefined;
     return Utils.getQueryParam2(w.location.href, name);
   }

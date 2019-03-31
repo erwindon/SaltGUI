@@ -20,7 +20,7 @@ export class OutputNested {
       for(const line of ret.split("\n")) {
         let line_prefix = prefix;
         if(!first_line)
-          line_prefix = ".".repeat(prefix.length);
+          line_prefix = " ".repeat(prefix.length);
         out.push(OutputNested.ustring(indent, line, line_prefix));
         first_line = false;
       }
@@ -43,7 +43,11 @@ export class OutputNested {
       for(const key of Object.keys(ret).sort()) {
         const val = ret[key];
         out.push(OutputNested.ustring(indent, key, prefix, ':'));
-        if(val !== null && val !== "") {
+        if(val === null) {
+          // VOID
+        } else if(val === "") {
+          // VOID
+        } else {
           OutputNested.display(val, indent + 4, '', out);
         }
       }
