@@ -264,7 +264,7 @@ export class PageRoute extends Route {
         targetField = document.querySelector(".jobs #job" + k + " .status");
       } else {
         // start with same text as for _addJob
-        targetText = window.makeTargetText(job["Target-type"], job.Target) + ", ";
+        targetText = TargetType.makeTargetText(job["Target-type"], job.Target) + ", ";
         targetField = document.querySelector(".jobs #job" + k + " .target");
       }
       // then add the operational statistics
@@ -294,7 +294,7 @@ export class PageRoute extends Route {
     const td = document.createElement("td");
 
     td.id = "job" + job.id;
-    const targetText = window.makeTargetText(job["Target-type"], job.Target);
+    const targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
     td.appendChild(Route._createDiv("target", targetText));
 
     const functionText = job.Function;
@@ -321,7 +321,7 @@ export class PageRoute extends Route {
     const jidText = job.id;
     tr.appendChild(Route._createTd("job" + job.id, jidText));
 
-    let targetText = window.makeTargetText(job["Target-type"], job.Target);
+    let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
     if(targetText.length > 50) {
       // prevent column becoming too wide
       targetText = targetText.substring(0, 50) + "...";
@@ -350,7 +350,7 @@ export class PageRoute extends Route {
     const td = Route._createTd("status", "loading...");
     td.classList.add("no_status");
     tr.appendChild(td);
-    
+
     // fill out the number of columns to that of the header
     while(tr.cells.length < container.parentElement.tHead.rows[0].cells.length) {
       tr.appendChild(Route._createTd("", ""));

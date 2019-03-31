@@ -107,4 +107,22 @@ export class TargetType {
     return targetType;
   }
 
+  static makeTargetText(targetType, targetPattern) {
+    // note that "glob" is the most common case
+    // when used from the command-line, that target-type
+    // is not even specified.
+    // therefore we suppress that one
+
+    // note that due to bug in 2018.3, all finished jobs
+    // will be shown as if of type "list"
+    // therefore we suppress that one
+
+    let returnText = "";
+    if(targetType !== "glob" && targetType !== "list") {
+      returnText = targetType + " ";
+    }
+    returnText += targetPattern;
+    return returnText;
+  }
+
 }

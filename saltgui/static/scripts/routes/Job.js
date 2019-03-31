@@ -13,7 +13,7 @@ export class JobRoute extends Route {
 
   onShow() {
     const job = this;
-    const id = decodeURIComponent(window.getQueryParam("id"));
+    const id = decodeURIComponent(Utils.getQueryParam("id"));
     return new Promise(function(resolve, reject) {
       job.resolvePromise = resolve;
       job.router.api.getRunnerJobsListJob(id).then(job._onJobData);
@@ -118,7 +118,7 @@ export class JobRoute extends Route {
     }
 
     const functionText = commandText + " on " +
-      window.makeTargetText(info["Target-type"], info.Target);
+      TargetType.makeTargetText(info["Target-type"], info.Target);
     jobinfo.querySelector(".function").innerText = functionText;
 
     jobinfo.querySelector(".time").innerText = Output.dateTimeStr(info.StartTime);

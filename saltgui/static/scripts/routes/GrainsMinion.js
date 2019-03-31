@@ -22,7 +22,7 @@ export class GrainsMinionRoute extends PageRoute {
   onShow() {
     const minions = this;
 
-    const minion = decodeURIComponent(window.getQueryParam("minion"));
+    const minion = decodeURIComponent(Utils.getQueryParam("minion"));
 
     const title = document.getElementById("grainsminion_title");
     title.innerText = "Grains on " + minion;
@@ -37,7 +37,7 @@ export class GrainsMinionRoute extends PageRoute {
   }
 
   _showGrains(data) {
-    const minion = decodeURIComponent(window.getQueryParam("minion"));
+    const minion = decodeURIComponent(Utils.getQueryParam("minion"));
 
     const grains = data.return[0][minion];
 

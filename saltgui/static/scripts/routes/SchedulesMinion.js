@@ -23,7 +23,7 @@ export class SchedulesMinionRoute extends PageRoute {
   onShow() {
     const minions = this;
 
-    const minion = decodeURIComponent(window.getQueryParam("minion"));
+    const minion = decodeURIComponent(Utils.getQueryParam("minion"));
 
     // preliminary title
     const title = document.getElementById("schedulesminion_title");
@@ -39,7 +39,7 @@ export class SchedulesMinionRoute extends PageRoute {
   }
 
   _showSchedules(data) {
-    const minion = decodeURIComponent(window.getQueryParam("minion"));
+    const minion = decodeURIComponent(Utils.getQueryParam("minion"));
 
     let schedules = data.return[0][minion];
     schedules = SchedulesRoute._fixMinion(schedules);

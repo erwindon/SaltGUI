@@ -22,7 +22,7 @@ export class PillarsMinionRoute extends PageRoute {
   onShow() {
     const minions = this;
 
-    const minion = decodeURIComponent(window.getQueryParam("minion"));
+    const minion = decodeURIComponent(Utils.getQueryParam("minion"));
 
     const title = document.getElementById("pillarsminion_title");
     title.innerText = "Pillars on " + minion;
@@ -37,7 +37,7 @@ export class PillarsMinionRoute extends PageRoute {
   }
 
   _showPillars(data) {
-    const minion = decodeURIComponent(window.getQueryParam("minion"));
+    const minion = decodeURIComponent(Utils.getQueryParam("minion"));
 
     const pillars = data.return[0][minion];
 
