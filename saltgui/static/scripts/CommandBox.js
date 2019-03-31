@@ -1,6 +1,7 @@
 import {Documentation} from './Documentation.js';
 import {DropDownMenu} from './DropDown.js';
 import {Output} from './output/Output.js';
+import {ParseCommandLine} from './ParseCommandLine.js';
 import {RunType} from './RunType.js';
 import {TargetType} from './TargetType.js';
 
@@ -232,7 +233,7 @@ export class CommandBox {
     // collection for named parameters
     const kwargs = { };
 
-    const ret = window.parseCommandLine(toRun, args, kwargs);
+    const ret = ParseCommandLine.parseCommandLine(toRun, args, kwargs);
     if(ret !== null) {
       // that is an error message being returned
       this._showError(ret);
