@@ -17,6 +17,10 @@
 
 export class ParseCommandLine {
 
+  static getPatJid() {
+    return /^[2-9][0-9][0-9][0-9][01][0-9][0-3][0-9][0-2][0-9][0-5][0-9][0-5][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$/;
+  }
+
   static parseCommandLine(toRun, args, params) {
 
     // note that "none" is not case-insensitive, but "null" is
@@ -24,8 +28,6 @@ export class ParseCommandLine {
 
     const patBooleanFalse = /^(false|False|FALSE)$/;
     const patBooleanTrue = /^(true|True|TRUE)$/;
-
-    const patJid = /^[2-9][0-9][0-9][0-9][01][0-9][0-3][0-9][0-2][0-9][0-5][0-9][0-5][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$/;
 
     const patInteger = /^((0)|([-+]?[1-9][0-9]*))$/;
 
@@ -121,7 +123,7 @@ export class ParseCommandLine {
           value = false;
         } else if(patBooleanTrue.test(str)) {
           value = true;
-        } else if(patJid.test(str)) {
+        } else if(ParseCommandLine.getPatJid().test(str)) {
           // jids look like numbers but must be strings
           value = str;
         } else if(patInteger.test(str)) {

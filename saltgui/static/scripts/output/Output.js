@@ -4,6 +4,7 @@ import {OutputJson} from './OutputJson.js';
 import {OutputNested} from './OutputNested.js';
 import {OutputSaltGuiHighstate} from './OutputSaltGuiHighstate.js';
 import {OutputYaml} from './OutputYaml.js';
+import {ParseCommandLine} from '../ParseCommandLine.js';
 
 // Functions to turn responses from the salt system into visual information
 // The following variations exist:
@@ -80,8 +81,7 @@ export class Output {
 
     // replace all returned JIDs to links
     // typically found in the output of an async job
-    // patJid is defined in scripts/parsecmdline.js
-    if(hostResponse.match(patJid)) {
+    if(hostResponse.match(ParseCommandLine.getPatJid())) {
       const a = document.createElement("a");
       a.href = "/job?id=" + encodeURIComponent(hostResponse);
       a.innerText = hostResponse;
