@@ -1,17 +1,17 @@
-import {LoginRoute} from './routes/Login.js';
-import {MinionsRoute} from './routes/Minions.js';
-import {KeysRoute} from './routes/Keys.js';
-import {GrainsRoute} from './routes/Grains.js';
+import {API} from './Api.js';
+import {CommandBox} from './CommandBox.js';
 import {GrainsMinionRoute} from './routes/GrainsMinion.js';
-import {SchedulesRoute} from './routes/Schedules.js';
-import {SchedulesMinionRoute} from './routes/SchedulesMinion.js';
-import {PillarsRoute} from './routes/Pillars.js';
-import {PillarsMinionRoute} from './routes/PillarsMinion.js';
+import {GrainsRoute} from './routes/Grains.js';
 import {JobRoute} from './routes/Job.js';
 import {JobsRoute} from './routes/Jobs.js';
+import {KeysRoute} from './routes/Keys.js';
+import {LoginRoute} from './routes/Login.js';
+import {MinionsRoute} from './routes/Minions.js';
+import {PillarsMinionRoute} from './routes/PillarsMinion.js';
+import {PillarsRoute} from './routes/Pillars.js';
+import {SchedulesMinionRoute} from './routes/SchedulesMinion.js';
+import {SchedulesRoute} from './routes/Schedules.js';
 import {TemplatesRoute} from './routes/Templates.js';
-import {CommandBox} from './CommandBox.js';
-import {API} from './Api.js';
 
 export class Router {
 

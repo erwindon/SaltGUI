@@ -1,5 +1,5 @@
-import {PageRoute} from './Page.js';
 import {Output} from '../output/Output.js';
+import {PageRoute} from './Page.js';
 
 export class JobsRoute extends PageRoute {
 
