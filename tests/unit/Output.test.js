@@ -95,6 +95,10 @@ describe('Unittests for Output.js', function() {
     result = OutputYaml.formatYAML(outputData);
     assert.equal(result, "undefined");
 
+    outputData = false;
+    result = OutputYaml.formatYAML(outputData);
+    assert.equal(result, "false");
+
     outputData = 123;
     result = OutputYaml.formatYAML(outputData);
     assert.equal(result, "123");
@@ -102,6 +106,14 @@ describe('Unittests for Output.js', function() {
     outputData = "txt";
     result = OutputYaml.formatYAML(outputData);
     assert.equal(result, "txt");
+
+    outputData = " ";
+    result = OutputYaml.formatYAML(outputData);
+    assert.equal(result, "' '");
+
+    outputData = "";
+    result = OutputJson.formatJSON(outputData);
+    assert.equal(result, "\"\"");
 
     outputData = [];
     result = OutputYaml.formatYAML(outputData);
@@ -125,12 +137,12 @@ describe('Unittests for Output.js', function() {
     assert.equal(result, "{ }");
 
     // unordered input
-    outputData = {"a":11,"c":22,"b":33};
+    outputData = {"a":11,"c":22,"b":null};
     result = OutputYaml.formatYAML(outputData);
     // ordered output
     assert.equal(result,
       "a: 11\n" +
-      "b: 33\n" +
+      "b: null\n" +
       "c: 22");
 
     // a more complex object, unordered input

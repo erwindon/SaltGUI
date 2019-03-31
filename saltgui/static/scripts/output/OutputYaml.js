@@ -95,6 +95,7 @@ export class OutputYaml {
       } else if(typeof item === "object") {
         out += "\n" + " ".repeat(indentLevel + indentStep) + OutputYaml.formatYAML(item, indentLevel + indentStep);
       } else {
+        /* istanbul ignore next */
         out += "x" + OutputYaml.formatYAML(item, indentLevel + indentStep);
       }
       separator = "\n" + " ".repeat(indentLevel);
