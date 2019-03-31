@@ -35,8 +35,8 @@ export class JobRoute extends Route {
       window.history.back();
     });
 
-    const argumentsText = this._decodeArgumentsText(info.Arguments[0]);
-    const commandText = info.Function + " " + argumentsText;
+    const argumentsText = this._decodeArgumentsText(info.Arguments);
+    const commandText = info.Function + argumentsText;
     const jobinfo = document.getElementById("job_page");
     const menuSection = jobinfo.querySelector(".job_menu");
     const menu = new DropDownMenu(menuSection);

@@ -1,3 +1,4 @@
+import {Output} from '../output/Output.js';
 import {TargetType} from '../TargetType.js';
 
 export class Route {
@@ -96,30 +97,40 @@ export class Route {
   }
 
   _decodeArgumentsText(rawArguments) {
-    const rawObject = rawArguments;
-    let argumentsText = "";
 
-    switch (typeof rawObject) {
-    case "undefined":
-      argumentsText = "";
-      break;
-    case "object": {      
-      // object args need special treatment
-      const keys = Object.keys(rawObject).sort();
-      for(const key of keys) {
-        // remove speciall parameters like __kwargs__
-        if(!key.includes("__")) {
-          argumentsText = argumentsText + key + "=" + rawObject[key];
+    if(rawArguments === undefined) {
+      // no arguments
+      return "";
+    }
+
+    if(typeof rawArguments !== "object") {
+      // expecting an array (which is an object)
+      // just return the representation of anything else
+      return " " + JSON.stringify(rawObject);
+    }
+
+    if(!Array.isArray(rawArguments)) {
+      // expecting an array
+      // just return the representation of anything else
+      return " " + JSON.stringify(rawObject);
+    }
+
+    let ret = "";
+    for(const obj of rawArguments) {
+      // all KWARGS are one entry in the parameters array
+      if(typeof obj === "object" && "__kwarg__" in obj) {
+        const keys = Object.keys(obj).sort();
+        for(const key of keys) {
+          if(key === "__kwarg__") continue;
+          ret += " " + key + "=" + Output.formatObject(obj[key]);
         }
+      } else {
+        let s = Output.formatObject(obj);
+        ret += " " + s.replace(/\n/g, " ");
       }
-      break;
-    }
-    default:
-      argumentsText = JSON.stringify(rawObject);
-      break;
     }
 
-    return argumentsText;
+    return ret;
   }
 
 }

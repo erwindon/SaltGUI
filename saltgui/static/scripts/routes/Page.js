@@ -328,8 +328,8 @@ export class PageRoute extends Route {
     }
     tr.appendChild(Route._createTd("target", targetText));
 
-    const argumentsText = this._decodeArgumentsText(job.Arguments[0]);
-    let functionText = job.Function + " " + argumentsText;
+    const argumentsText = this._decodeArgumentsText(job.Arguments);
+    let functionText = job.Function + argumentsText;
     if(functionText.length > 50) {
       // prevent column becoming too wide
       functionText = functionText.substring(0, 50) + "...";
