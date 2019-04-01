@@ -343,7 +343,7 @@ export class Output {
       // regular highstate display
       if(!fndRepresentation && isHighStateOutput && Output.isOutputFormatAllowed("highstate")) {
         hostLabel = OutputHighstate.getHighStateLabel(hostname, hostResponse);
-        hostOutput = OutputHighstate.getHighStateOutput(hostResponse);
+        hostOutput = OutputHighstate.getHighStateOutput(hostname, hostResponse);
         hostMultiLine = true;
         fndRepresentation = true;
       }
