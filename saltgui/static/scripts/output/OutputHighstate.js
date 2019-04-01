@@ -18,12 +18,12 @@ export class OutputHighstate {
   }
 
   static getDurationClauseMillis(millis) {
-    let ms = Math.round(millis * 1000) / 1000;
+    const ms = Math.round(millis * 1000) / 1000;
     return `${ms} ms`;
   }
 
   static getDurationClauseSecs(millis) {
-    let s = Math.round(millis) / 1000;
+    const s = Math.round(millis) / 1000;
     return `${s} s`;
   }
 
@@ -120,12 +120,13 @@ export class OutputHighstate {
       }
 
       taskSpan.innerText = txt;
-      if(!task.result)
-	taskSpan.style.color = "red";
-      else if(hasChanges)
-	taskSpan.style.color = "aqua";
-      else
+      if(!task.result) {
+        taskSpan.style.color = "red";
+      } else if(hasChanges) {
+        taskSpan.style.color = "aqua";
+      } else {
         taskSpan.style.color = "lime";
+      }
       taskDiv.append(taskSpan);
 
       div.append(taskDiv);
@@ -164,13 +165,15 @@ export class OutputHighstate {
       div.append(cSpan);
     }
 
+    const failedSpan = document.createElement("span");
+    txt = "\nFailed:    " + failed;
+    failedSpan.innerText = txt;
     if(failed > 0) {
-      const failedSpan = document.createElement("span");
-      txt = "\nFailed:    " + failed;
-      failedSpan.innerText = txt;
       failedSpan.style.color = "red";
-      div.append(failedSpan);
+    } else {
+      failedSpan.style.color = "aqua";
     }
+    div.append(failedSpan);
 
     const totalsSpan = document.createElement("span");
     txt = "\n------------";
