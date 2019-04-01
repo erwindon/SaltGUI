@@ -109,15 +109,23 @@ export class OutputHighstate {
 
       txt += "\n     Changes:";
 
+      let hasChanges = false;
       if(task.hasOwnProperty("changes")) {
         const str = JSON.stringify(task.changes);
         if(str !== "{}") {
+          hasChanges = true;
           txt += "\n" + OutputNested.formatNESTED(task.changes, 14);
           changes += 1;
         }
       }
 
       taskSpan.innerText = txt;
+      if(!task.result)
+	taskSpan.style.color = "red";
+      else if(hasChanges)
+	taskSpan.style.color = "aqua";
+      else
+        taskSpan.style.color = "lime";
       taskDiv.append(taskSpan);
 
       div.append(taskDiv);
@@ -126,14 +134,51 @@ export class OutputHighstate {
     const summarySpan = document.createElement("span");
     let txt = "\nSummary for " + hostname;
     txt += "\n------------";
-    txt += "\nSucceeded: " + succeeded;
-    if(changes > 0) txt += " (changed=" + changes + ")";
-    txt += "\nFailed:    " + failed;
-    txt += "\n------------";
+    summarySpan.innerText = txt;
+    summarySpan.style.color = "aqua";
+    div.append(summarySpan);
+
+    const succeededSpan = document.createElement("span");
+    txt = "\nSucceeded: " + succeeded;
+    succeededSpan.innerText = txt;
+    succeededSpan.style.color = "lime";
+    div.append(succeededSpan);
+
+    if(changes > 0) {
+      const oSpan = document.createElement("span");
+      txt = " (";
+      oSpan.innerText = txt;
+      oSpan.style.color = "white";
+      div.append(oSpan);
+
+      const changedSpan = document.createElement("span");
+      txt = "changed=" + changes;
+      changedSpan.innerText = txt;
+      changedSpan.style.color = "lime";
+      div.append(changedSpan);
+
+      const cSpan = document.createElement("span");
+      txt = ")";
+      cSpan.innerText = txt;
+      cSpan.style.color = "white";
+      div.append(cSpan);
+    }
+
+    if(failed > 0) {
+      const failedSpan = document.createElement("span");
+      txt = "\nFailed:    " + failed;
+      failedSpan.innerText = txt;
+      failedSpan.style.color = "red";
+      div.append(failedSpan);
+    }
+
+    const totalsSpan = document.createElement("span");
+    txt = "\n------------";
     txt += "\nTotal states run: " + (succeeded + skipped + failed);
     txt += "\nTotal run time: " + OutputHighstate.getDurationClauseSecs(total_millis);
-    summarySpan.innerText = txt;
-    div.append(summarySpan);
+    totalsSpan.innerText = txt;
+    totalsSpan.style.color = "aqua";
+    div.append(totalsSpan);
 
     return div;
   }
