@@ -3,9 +3,9 @@ FROM centos:7.6.1810
 LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
 LABEL name=salt-minion
 LABEL project="SaltGUI testing"
-LABEL version=2018.3.3
+LABEL version=2019.2.0
 
-ENV SALT_VERSION=2018.3.3
+ENV SALT_VERSION=2019.2.0
 ENV DEBIAN_FRONTEND=noninteractive
 
 # add saltstack key and install dependencies
