@@ -125,7 +125,7 @@ export class Route {
           ret += " " + key + "=" + Output.formatObject(obj[key]);
         }
       } else {
-        let s = Output.formatObject(obj);
+        const s = Output.formatObject(obj);
         ret += " " + s.replace(/\n/g, " ");
       }
     }
