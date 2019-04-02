@@ -1,4 +1,5 @@
 import {Output} from './Output.js';
+import {OutputNested} from './OutputNested.js';
 
 export class OutputHighstate {
 
@@ -16,17 +17,14 @@ export class OutputHighstate {
     return true;
   }
 
-  static getDurationClause(millis) {
-    if(millis === 1) {
-      return `${millis} millisecond`;
-    }
-    if(millis < 1000) {
-      return `${millis} milliseconds`;
-    }
-    if(millis === 1000) {
-      return `${millis/1000} second`;
-    }
-    return `${millis/1000} seconds`;
+  static getDurationClauseMillis(millis) {
+    const ms = Math.round(millis * 1000) / 1000;
+    return `${ms} ms`;
+  }
+
+  static getDurationClauseSecs(millis) {
+    const s = Math.round(millis) / 1000;
+    return `${s} s`;
   }
 
   static getHighStateLabel(hostname, hostResponse) {
@@ -48,7 +46,7 @@ export class OutputHighstate {
     return Output.getHostnameHtml(hostname, "host_success");
   }
 
-  static getHighStateOutput(hostResponse) {
+  static getHighStateOutput(hostname, hostResponse) {
 
     // The tasks are in an (unordered) object with uninteresting keys
     // convert it to an array that is in execution order
@@ -74,180 +72,116 @@ export class OutputHighstate {
     let changes = 0;
     for(const task of tasks) {
 
-      const taskDiv = document.createElement("div");
-
-      const span = document.createElement("span");
       if(task.result === null) {
-        // 2714 = HEAVY CHECK MARK
-        span.style.color = "yellow";
-        span.innerText = "\u2714";
         skipped += 1;
       } else if(task.result) {
-        // 2714 = HEAVY CHECK MARK
-        span.style.color = "green";
-        span.innerText = "\u2714";
         succeeded += 1;
       } else {
-        // 2718 = HEAVY BALLOT X
-        span.style.color = "red";
-        span.innerText = "\u2718";
         failed += 1;
-      }
-      taskDiv.append(span);
-
-      taskDiv.append(document.createTextNode(" "));
-
-      if(task.name) {
-        taskDiv.append(document.createTextNode(task.name));
-      } else {
-        // make sure that the checkbox/ballot-x is on a reasonable line
-        // also for the next "from" clause (if any)
-        taskDiv.append(document.createTextNode("(anonymous task)"));
-      }
-
-      if(task.__id__ && task.__id__ !== task.name) {
-        taskDiv.append(document.createTextNode(" id=" + encodeURIComponent(task.__id__)));
-      }
-
-      if(task.__sls__) {
-        taskDiv.append(document.createTextNode(
-          " (from " + task.__sls__.replace(".", "/") + ".sls)"));
       }
 
       const components = task.___key___.split("_|-");
-      taskDiv.append(document.createElement("br"));
-      taskDiv.append(document.createTextNode(
-        indent + "Function is " + components[0] + "." + components[3]));
 
-      if(task.comment) {
-        taskDiv.append(document.createElement("br"));
-        let txt = task.comment;
-        // trim extra whitespace
-        txt = txt.replace(/[ \r\n]+$/g, "");
-        // indent extra lines
-        txt = txt.replace(/[\n]+/g, "\n" + indent);
-        taskDiv.append(document.createTextNode(indent + txt));
+      const taskDiv = document.createElement("div");
+
+      const taskSpan = document.createElement("span");
+      let txt = "----------";
+
+      if(task.name)
+        txt += "\n          ID: " + task.name;
+      else
+        txt += "\n          ID: (anonymous task)";
+
+      txt += "\n    Function: " + components[0] + "." + components[3];
+
+      txt += "\n      Result: " + JSON.stringify(task.result);
+
+      if(task.comment)
+        txt += "\n     Comment: " + task.comment;
+
+      if(task.start_time)
+        txt += "\n     Started: " + task.start_time;
+
+      if(task.duration) {
+        txt += "\n    Duration: " + OutputHighstate.getDurationClauseMillis(task.duration);
+        total_millis += task.duration;
       }
 
+      txt += "\n     Changes:";
+
+      let hasChanges = false;
       if(task.hasOwnProperty("changes")) {
-        if(typeof task.changes !== "object" || Array.isArray(task.changes)) {
-          taskDiv.append(document.createElement("br"));
-          taskDiv.append(document.createTextNode(indent + JSON.stringify(task.changes)));
-        } else {
-          for(const key of Object.keys(task.changes).sort()) {
-            changes = changes + 1;
-            const change = task.changes[key];
-            // 25BA = BLACK RIGHT-POINTING POINTER
-            // don't use arrows here, these are higher than a regular
-            // text-line and disturb the text-flow
-            if(typeof change === "string" && change.includes("\n")) {
-              taskDiv.append(document.createElement("br"));
-              // show multi-line text as a separate block
-              taskDiv.append(document.createTextNode(indent + key + ":"));
-              const lines = change.trim().split("\n");
-              for(const line of lines) {
-                taskDiv.append(document.createElement("br"));
-                taskDiv.append(document.createTextNode("      " + line));
-              }
-            } else if(typeof change !== "object" || Array.isArray(task.change)) {
-              // show all other non-objects in a simple way
-              taskDiv.append(document.createElement("br"));
-              taskDiv.append(document.createTextNode(
-                indent + key + ": " +
-                JSON.stringify(change)));
-            } else {
-              // treat old->new first
-              if(change.hasOwnProperty("old") && change.hasOwnProperty("new")) {
-                taskDiv.append(document.createElement("br"));
-                // place changes on one line
-                taskDiv.append(document.createTextNode(
-                  indent + key + ": " +
-                  JSON.stringify(change.old) + " \u25BA " +
-                  JSON.stringify(change.new)));
-                delete change.old;
-                delete change.new;
-              }
-              // then show whatever remains
-              for(const taskkey of Object.keys(change).sort()) {
-                taskDiv.append(document.createElement("br"));
-                taskDiv.append(document.createTextNode(
-                  indent + key + ": " + taskkey + ": " +
-                  JSON.stringify(change[taskkey])));
-              }
-            }
-          }
+        const str = JSON.stringify(task.changes);
+        if(str !== "{}") {
+          hasChanges = true;
+          txt += "\n" + OutputNested.formatNESTED(task.changes, 14);
+          changes += 1;
         }
       }
 
-      if(task.hasOwnProperty("start_time")) {
-        taskDiv.append(document.createElement("br"));
-        taskDiv.append(document.createTextNode(
-          indent + "Started at " + task.start_time));
+      taskSpan.innerText = txt;
+      if(!task.result) {
+        taskSpan.style.color = "red";
+      } else if(hasChanges) {
+        taskSpan.style.color = "aqua";
+      } else {
+        taskSpan.style.color = "lime";
       }
-
-      if(task.hasOwnProperty("duration")) {
-        const millis = Math.round(task.duration);
-        total_millis += millis;
-        if(millis >= 10) {
-          // anything below 10ms is not worth reporting
-          // report only the "slow" jobs
-          // it still counts for the grand total thought
-          taskDiv.append(document.createElement("br"));
-          taskDiv.append(document.createTextNode(
-            indent + "Duration " + OutputHighstate.getDurationClause(millis)));
-        }
-      }
-
-      // show any unknown attribute of a task
-      // do not use Object.entries, that is not supported by the test framework
-      for(const key of Object.keys(task)) {
-        const item = task[key];
-        if(key === "___key___") continue; // ignored, generated by us
-        if(key === "__id__") continue; // handled
-        if(key === "__sls__") continue; // handled
-        if(key === "__run_num__") continue; // handled, not shown
-        if(key === "changes") continue; // handled
-        if(key === "comment") continue; // handled
-        if(key === "duration") continue; // handled
-        if(key === "host") continue; // ignored, same as host
-        if(key === "name") continue; // handled
-        if(key === "pchanges") continue; // ignored, also ignored by cli
-        if(key === "result") continue; // handled
-        if(key === "start_time") continue; // handled
-        taskDiv.append(document.createElement("br"));
-        taskDiv.append(document.createTextNode(
-          indent + key + " = " + JSON.stringify(item)));
-      }
+      taskDiv.append(taskSpan);
 
       div.append(taskDiv);
     }
 
-    // add a summary line
-    let line = "";
+    const summarySpan = document.createElement("span");
+    let txt = "\nSummary for " + hostname;
+    txt += "\n------------";
+    summarySpan.innerText = txt;
+    summarySpan.style.color = "aqua";
+    div.append(summarySpan);
 
-    if(succeeded) line += ", " + succeeded + " succeeded";
-    if(skipped) line += ", " + skipped + " skipped";
-    if(failed) line += ", " + failed + " failed";
-    const total = succeeded + skipped + failed;
-    if(total !== succeeded && total !== skipped && total !== failed) {
-      line += ", " + (succeeded + skipped + failed) + " total";
+    const succeededSpan = document.createElement("span");
+    txt = "\nSucceeded: " + succeeded;
+    succeededSpan.innerText = txt;
+    succeededSpan.style.color = "lime";
+    div.append(succeededSpan);
+
+    if(changes > 0) {
+      const oSpan = document.createElement("span");
+      txt = " (";
+      oSpan.innerText = txt;
+      oSpan.style.color = "white";
+      div.append(oSpan);
+
+      const changedSpan = document.createElement("span");
+      txt = "changed=" + changes;
+      changedSpan.innerText = txt;
+      changedSpan.style.color = "lime";
+      div.append(changedSpan);
+
+      const cSpan = document.createElement("span");
+      txt = ")";
+      cSpan.innerText = txt;
+      cSpan.style.color = "white";
+      div.append(cSpan);
     }
 
-    // note that the number of changes may be higher or lower
-    // than the number of tasks. tasks may contribute multiple
-    // changes, or tasks may have no changes.
-    if(changes === 1) line += ", " + changes + " change";
-    else if(changes) line += ", " + changes + " changes";
-
-    // multiple durations and significant?
-    if(total > 1 && total_millis >= 10) {
-      line += ", " + OutputHighstate.getDurationClause(total_millis);
+    const failedSpan = document.createElement("span");
+    txt = "\nFailed:    " + failed;
+    failedSpan.innerText = txt;
+    if(failed > 0) {
+      failedSpan.style.color = "red";
+    } else {
+      failedSpan.style.color = "aqua";
     }
+    div.append(failedSpan);
 
-    if(line) {
-      div.append(document.createTextNode(line.substring(2)));
-    }
-
+    const totalsSpan = document.createElement("span");
+    txt = "\n------------";
+    txt += "\nTotal states run: " + (succeeded + skipped + failed);
+    txt += "\nTotal run time: " + OutputHighstate.getDurationClauseSecs(total_millis);
+    totalsSpan.innerText = txt;
+    totalsSpan.style.color = "aqua";
+    div.append(totalsSpan);
 
     return div;
   }

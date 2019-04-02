@@ -56,7 +56,7 @@ export class OutputNested {
   }
 
   static formatNESTED(value, indentLevel=0) {
-    const lines = OutputNested.display(value, 0, '', []);
+    const lines = OutputNested.display(value, indentLevel, '', []);
     return lines.join('\n');
   }
 
