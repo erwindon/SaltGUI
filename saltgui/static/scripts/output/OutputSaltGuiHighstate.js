@@ -108,6 +108,7 @@ export class OutputSaltGuiHighstate {
           JSON.stringify(change[taskkey])));
       }
     }
+    return changes;
   }
 
   static getHighStateOutput(hostResponse) {
