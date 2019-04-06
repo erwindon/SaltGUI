@@ -13,6 +13,7 @@ export class PageRoute extends Route {
     this._runningJobs = this._runningJobs.bind(this);
     this._updateJobs = this._updateJobs.bind(this);
     this._updateMinions = this._updateMinions.bind(this);
+    this._getJobDetails = this._getJobDetails.bind(this);
   }
 
   _updateMinions(data) {
@@ -287,7 +288,7 @@ export class PageRoute extends Route {
 
     // update all finished jobs
     for(const tr of document.querySelector("table#jobs tbody").rows) {
-      const statusField = tr.querySelector(".no_status");
+      const statusField = tr.querySelector(".status.no_status");
       if(!statusField) continue;
       statusField.classList.remove("no_status");
       statusField.innerText = "done";
@@ -353,13 +354,27 @@ export class PageRoute extends Route {
     menu.addMenuItem("Show&nbsp;details", function(evt) {
       window.location.assign("/job?id=" + encodeURIComponent(job.id));
     }.bind(this));
+    menu.addMenuItem("Update&nbsp;details", function(evt) {
+      this._getJobDetails(job.id);
+      evt.stopPropagation();
+    }.bind(this));
     menu.addMenuItem("Re-run&nbsp;job...", function(evt) {
       this._runFullCommand(evt, job["Target-type"], job.Target, functionText);
     }.bind(this));
 
-    const td = Route._createTd("status", "loading...");
-    td.classList.add("no_status");
-    tr.appendChild(td);
+    const tdStatus = Route._createTd("status", "loading...");
+    tdStatus.classList.add("no_status");
+    tr.appendChild(tdStatus);
+
+    const tdDetails = Route._createTd("details", "(click)");
+    tdDetails.classList.add("no_status");
+    tdDetails.addEventListener("click", evt => {
+      tdDetails.classList.add("no_status");
+      tdDetails.innerText = "loading...";
+      this._getJobDetails(job.id);
+      evt.stopPropagation();
+      });
+    tr.appendChild(tdDetails);
 
     // fill out the number of columns to that of the header
     while(tr.cells.length < container.parentElement.tHead.rows[0].cells.length) {
@@ -391,6 +406,71 @@ export class PageRoute extends Route {
       if(a.id < b.id) return 1;
       if(a.id > b.id) return -1;
       return 0;
+    });
+  }
+
+  _showJobDetailSummary(jobid, data) {
+    data = data.return[0];
+
+    let str = "";
+
+    if(data.Minions.length === 1)
+      str = "1 minion";
+    else
+      str = data.Minions.length + " minions";
+
+    let keyCount = Object.keys(data.Result).length;
+    str += ", ";
+    if(keyCount == data.Minions.length)
+      str += "<span style='color: green'>";
+    else
+      str += "<span style='color: red'>";
+    if(keyCount === 1)
+      str += "1 result";
+    else
+      str += "" + keyCount + " results";
+    str += "</span>";
+
+    const summary = { };
+    for(const minion in data.Result) {
+      const result = data.Result[minion];
+      // use keys that can conveniently be sorted
+      const key = (result.success ? "0-" : "1-") + result.retcode;
+      if(summary.hasOwnProperty(key))
+        summary[key] += 1;
+      else
+        summary[key] = 1;
+    }
+
+    const keys = Object.keys(summary).sort();
+    for(const key of keys) {
+      str += ", ";
+      if(key === "0-0") {
+        // don't show the retcode here
+        str += "<span style='color: green'>";
+        str += summary[key] + " success";
+        str += "</span>";
+      } else if(key.startsWith("0-")) {
+        str += "<span style='color: orange'>";
+        str += summary[key] + " success(" + key.substr(2) + ")";
+        str += "</span>";
+      } else { // if(key.startsWith("1-"))
+        str += "<span style='color: red'>";
+        str += summary[key] + " failure(" + key.substr(2) + ")";
+        str += "</span>";
+      }
+    }
+
+    const detailsField = document.querySelector(".jobs #job" + jobid + " .details");
+    if(!detailsField) return;
+    detailsField.innerHTML = str;
+    detailsField.classList.remove("no_status");
+  }
+
+  _getJobDetails(jobid) {
+    let p = this;
+    this.router.api.getRunnerJobsListJob(jobid).then(data => {
+      p._showJobDetailSummary(jobid, data);
     });
   }
 
