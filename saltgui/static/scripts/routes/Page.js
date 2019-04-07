@@ -267,6 +267,12 @@ export class PageRoute extends Route {
         targetText = TargetType.makeTargetText(job["Target-type"], job.Target) + ", ";
         targetField = document.querySelector(".jobs #job" + k + " .target");
       }
+      if(targetText.length > 50) {
+        // prevent column becoming too wide
+        // yes, the addition of running/returned may again make
+        // the string longer than 50 characters, we accept that
+        targetText = targetText.substring(0, 50) + "...";
+      }
       // then add the operational statistics
       if(job.Running.length > 0)
         targetText = targetText + job.Running.length + " running";
@@ -294,7 +300,11 @@ export class PageRoute extends Route {
     const td = document.createElement("td");
 
     td.id = "job" + job.id;
-    const targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
+    let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
+    if(targetText.length > 50) {
+      // prevent column becoming too wide
+      targetText = targetText.substring(0, 50) + "...";
+    }
     td.appendChild(Route._createDiv("target", targetText));
 
     const functionText = job.Function;
