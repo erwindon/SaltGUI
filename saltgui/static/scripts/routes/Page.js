@@ -312,7 +312,7 @@ export class PageRoute extends Route {
 
     container.appendChild(tr);
 
-    tr.addEventListener("click", this._createJobListener(job.id));
+    tr.addEventListener("click", evt => window.location.assign("/job?id=" + encodeURIComponent(job.id)));
   }
 
   _addDetailedJob(container, job) {
@@ -359,13 +359,6 @@ export class PageRoute extends Route {
     container.appendChild(tr);
 
     tr.addEventListener("click", evt => window.location.assign("/job?id=" + encodeURIComponent(job.id)));
-  }
-
-  _createJobListener(id) {
-    const router = this.router;
-    return function() {
-      window.location.assign("/job?id=" + encodeURIComponent(id));
-    };
   }
 
   _jobsToArray(jobs) {
