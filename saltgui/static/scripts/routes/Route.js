@@ -48,6 +48,13 @@ export class Route {
     return div;
   }
 
+  static _createSpan(className, content) {
+    const span = document.createElement("span");
+    if(className) span.className = className;
+    span.innerText = content;
+    return span;
+  }
+
   _runCommand(evt, targetString, commandString) {
     this._runFullCommand(evt, "", targetString, commandString);
   }

@@ -373,7 +373,7 @@ export class PageRoute extends Route {
       tdDetails.innerText = "loading...";
       this._getJobDetails(job.id);
       evt.stopPropagation();
-      });
+    });
     tr.appendChild(tdDetails);
 
     // fill out the number of columns to that of the header
@@ -419,7 +419,7 @@ export class PageRoute extends Route {
     else
       str = data.Minions.length + " minions";
 
-    let keyCount = Object.keys(data.Result).length;
+    const keyCount = Object.keys(data.Result).length;
     str += ", ";
     if(keyCount == data.Minions.length)
       str += "<span style='color: green'>";
@@ -468,7 +468,7 @@ export class PageRoute extends Route {
   }
 
   _getJobDetails(jobid) {
-    let p = this;
+    const p = this;
     this.router.api.getRunnerJobsListJob(jobid).then(data => {
       p._showJobDetailSummary(jobid, data);
     });
