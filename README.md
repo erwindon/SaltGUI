@@ -278,3 +278,9 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## 1.0.0 (2018-03-07)
 - Original release with some styling fixes and with enabled highstate functionality.
+
+## (2017-11-15)
+- New maintainer (maerteijn)
+
+## (2016-07-20)
+- Initial version (oliverdunk)
