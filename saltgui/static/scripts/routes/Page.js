@@ -336,7 +336,7 @@ export class PageRoute extends Route {
     }
     tr.appendChild(Route._createTd("function", functionText));
 
-    const startTimeText = job.StartTime;
+    const startTimeText = Output.dateTimeStr(job.StartTime);
     tr.appendChild(Route._createTd("starttime", startTimeText));
 
     const menu = new DropDownMenu(tr);
