@@ -169,7 +169,7 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
-## 1.11.0 (2018-03-30)
+## 1.11.0 (2019-03-30)
 - Migrated from yarn to npm (smarletta)
 - Separated unit tests and functional tests (smarletta)
 - Standardized filenames (smarletta)
@@ -180,15 +180,15 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 - Standardized internal api functions (erwindon)
 - Removed some unused functions (erwindon)
 
-## 1.10.1 (2018-02-24)
+## 1.10.1 (2019-02-24)
 - Small bugfix for copy of ip-number (erwindon)
 
-## 1.10.0 (2018-02-12)
+## 1.10.0 (2019-02-12)
 - Improved navigation: made rows clickable (erwindon)
 - Fixed invisible menu in small width screens (dawidmalina/erwindon)
 - Set display of keys to monospace (erwindon)
 
-## 1.9.0 (2018-02-06)
+## 1.9.0 (2019-02-06)
 - Added more control over output format (erwindon)
 - Added link to GitHub project on login page (dawidmalina)
 - Added separate Jobs page (dawidmalina)
@@ -199,7 +199,7 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 - Show which jobs are still running (erwindon)
 - Added re-run functionality for jobs (erwindon/dawidmalina)
 
-## 1.8.0 (2018-01-13)
+## 1.8.0 (2019-01-13)
 - Improved testing support (erwindon/dawidmalina)
 - Allow most tables to be sorted (erwindon/dawidmalina)
 - Added support for non-secret pillars (erwindon/dawidmalina)
