@@ -10,8 +10,9 @@ export class PageRoute extends Route {
     super(path, name, page_selector, menuitem_selector, router);
 
     this._runCommand = this._runCommand.bind(this);
-    this._runningJobs = this._runningJobs.bind(this);
-    this._updateJobs = this._updateJobs.bind(this);
+    this._handleRunnerJobsActive = this._handleRunnerJobsActive.bind(this);
+    this._startRunningJobs = this._startRunningJobs.bind(this);
+    this._handleRunnerJobsListJobs = this._handleRunnerJobsListJobs.bind(this);
     this._updateMinions = this._updateMinions.bind(this);
   }
 
@@ -198,12 +199,12 @@ export class PageRoute extends Route {
     container.appendChild(tr);
   }
 
-  _updateJobs(data, numberOfJobs = 7, detailedJob = false) {
+  _handleRunnerJobsListJobs(data, numberOfJobs = 7) {
     const jobContainer = this.getPageElement().querySelector(".jobs tbody");
     const jobs = this._jobsToArray(data.return[0]);
     this._sortJobs(jobs);
 
-    //Add <numberOfJobs> most recent jobs
+    // Add <numberOfJobs> most recent jobs
     let shown = 0;
     let i = 0;
     while(shown < numberOfJobs && jobs[i] !== undefined) {
@@ -250,7 +251,7 @@ export class PageRoute extends Route {
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
-  _runningJobs(data, jobsStatus = false) {
+  _showRunnerJobsActive(data) {
     const jobs = data.return[0];
 
     // update all running jobs

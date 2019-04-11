@@ -12,7 +12,7 @@ export class PillarsMinionRoute extends PageRoute {
     this.keysLoaded = false;
     this.jobsLoaded = false;
 
-    this._showPillars = this._showPillars.bind(this);
+    this._handleLocalPillarItems = this._handleLocalPillarItems.bind(this);
 
     this.page_element.querySelector("#button_close_pillarsminion").addEventListener("click", _ => {
       this.router.goTo("/pillars");
@@ -30,13 +30,13 @@ export class PillarsMinionRoute extends PageRoute {
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
       if(minions.keysLoaded && minions.jobsLoaded) resolve();
-      minions.router.api.getLocalPillarItems(minion).then(minions._showPillars);
-      minions.router.api.getRunnerJobsListJobs().then(minions._updateJobs);
-      minions.router.api.getRunnerJobsActive().then(minions._runningJobs);
+      minions.router.api.getLocalPillarItems(minion).then(minions._handleLocalPillarItems);
+      minions.router.api.getRunnerJobsListJobs().then(minions._handleRunnerJobsListJobs);
+      minions.router.api.getRunnerJobsActive().then(minions._handleRunnerJobsActive);
     });
   }
 
-  _showPillars(data) {
+  _handleLocalPillarItems(data) {
     const minion = decodeURIComponent(Utils.getQueryParam("minion"));
 
     const pillars = data.return[0][minion];

@@ -10,7 +10,7 @@ export class PillarsRoute extends PageRoute {
     this.keysLoaded = false;
     this.jobsLoaded = false;
 
-    this._updateKeys = this._updateKeys.bind(this);
+    this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
     this._updateMinion = this._updateMinion.bind(this);
   }
 
@@ -21,13 +21,13 @@ export class PillarsRoute extends PageRoute {
       minions.resolvePromise = resolve;
       if(minions.keysLoaded && minions.jobsLoaded) resolve();
       minions.router.api.getLocalPillarObfuscate(null).then(minions._updateMinions);
-      minions.router.api.getWheelKeyListAll().then(minions._updateKeys);
-      minions.router.api.getRunnerJobsListJobs().then(minions._updateJobs);
-      minions.router.api.getRunnerJobsActive().then(minions._runningJobs);
+      minions.router.api.getWheelKeyListAll().then(minions._handleWheelKeyListAll);
+      minions.router.api.getRunnerJobsListJobs().then(minions._handleRunnerJobsListJobs);
+      minions.router.api.getRunnerJobsActive().then(minions._handleRunnerJobsActive);
     });
   }
 
-  _updateKeys(data) {
+  _handleWheelKeyListAll(data) {
     const keys = data.return[0].data.return;
 
     const list = this.getPageElement().querySelector('#minions');

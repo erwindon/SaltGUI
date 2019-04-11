@@ -8,7 +8,7 @@ export class TemplatesRoute extends PageRoute {
     super("^[\/]templates$", "Templates", "#page_templates", "#button_templates", router);
     this.jobsLoaded = false;
 
-    this._updateTemplates = this._updateTemplates.bind(this);
+    this._handleWheelConfigValues = this._handleWheelConfigValues.bind(this);
     this._applyTemplate = this._applyTemplate.bind(this);
   }
 
@@ -17,13 +17,13 @@ export class TemplatesRoute extends PageRoute {
     return new Promise(function(resolve, reject) {
       templates.resolvePromise = resolve;
       if(templates.jobsLoaded) resolve();
-      templates.router.api.getRunnerJobsListJobs().then(templates._updateJobs);
-      templates.router.api.getRunnerJobsActive().then(templates._runningJobs);
-      templates.router.api.getWheelConfigValues().then(templates._updateTemplates);
+      templates.router.api.getRunnerJobsListJobs().then(templates._handleRunnerJobsListJobs);
+      templates.router.api.getRunnerJobsActive().then(templates._handleRunnerJobsActive);
+      templates.router.api.getWheelConfigValues().then(templates._handleWheelConfigValues);
     });
   }
 
-  _updateTemplates(data) {
+  _handleWheelConfigValues(data) {
     const container = this.getPageElement().querySelector(".templates");
     
     // should we update it or just use from cache (see commandbox) ?

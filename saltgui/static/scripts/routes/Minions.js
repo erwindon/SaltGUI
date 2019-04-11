@@ -9,7 +9,7 @@ export class MinionsRoute extends PageRoute {
     this.keysLoaded = false;
     this.jobsLoaded = false;
 
-    this._updateKeys = this._updateKeys.bind(this);
+    this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
   }
 
   onShow() {
@@ -19,15 +19,15 @@ export class MinionsRoute extends PageRoute {
       minions.resolvePromise = resolve;
       if(minions.keysLoaded && minions.jobsLoaded) resolve();
       minions.router.api.getLocalGrainsItems(null).then(minions._updateMinions);
-      minions.router.api.getWheelKeyListAll().then(minions._updateKeys);
-      minions.router.api.getRunnerJobsListJobs().then(minions._updateJobs);
-      minions.router.api.getRunnerJobsActive().then(minions._runningJobs);
+      minions.router.api.getWheelKeyListAll().then(minions._handleWheelKeyListAll);
+      minions.router.api.getRunnerJobsListJobs().then(minions._handleRunnerJobsListJobs);
+      minions.router.api.getRunnerJobsActive().then(minions._handleRunnerJobsActive);
       //we need these functions to populate the dropdown boxes
-      minions.router.api.getWheelConfigValues().then(minions._configvalues);
+      minions.router.api.getWheelConfigValues().then(minions._handleWheelConfigValues);
     });
   }
 
-  _configvalues(data) {
+  _handleWheelConfigValues(data) {
     // store for later use
 
     const templates = data.return[0].data.return.saltgui_templates;
@@ -50,7 +50,7 @@ export class MinionsRoute extends PageRoute {
     window.localStorage.setItem("datetime_fraction_digits", JSON.stringify(datetime_fraction_digits));
   }
 
-  _updateKeys(data) {
+  _handleWheelKeyListAll(data) {
     const keys = data.return[0].data.return;
 
     const list = this.getPageElement().querySelector("#minions");

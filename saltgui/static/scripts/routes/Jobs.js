@@ -14,10 +14,10 @@ export class JobsRoute extends PageRoute {
       jobs.resolvePromise = resolve;
       if(jobs.jobsLoaded) resolve();
       jobs.router.api.getRunnerJobsListJobs().then(data => {
-        jobs._updateJobs(data, 50, true);
+        jobs._handleRunnerJobsListJobs(data, 50);
       });
       jobs.router.api.getRunnerJobsActive().then(data => {
-        jobs._runningJobs(data, true);
+        jobs._showRunnerJobsActive(data);
       });
     });
   }
