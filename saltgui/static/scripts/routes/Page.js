@@ -210,6 +210,9 @@ export class PageRoute extends Route {
     while(shown < numberOfJobs && jobs[i] !== undefined) {
       const job = jobs[i];
       i = i + 1;
+
+      // These jobs are likely started by the SaltGUI
+      // do not display them
       if(job.Function === "grains.append") continue;
       if(job.Function === "grains.delkey") continue;
       if(job.Function === "grains.delval") continue;
@@ -240,18 +243,16 @@ export class PageRoute extends Route {
       if(job.Function === "wheel.key.reject") continue;
       if(job.Function === "wheel.key.finger") continue;
 
-      if(detailedJob === true) {
-        this._addDetailedJob(jobContainer, job);
-      } else {
-        this._addJob(jobContainer, job);
-      }
+      // Note that "Jobs" has a specialized version
+      this._addJob(jobContainer, job);
+
       shown = shown + 1;
     }
     this.jobsLoaded = true;
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
-  _showRunnerJobsActive(data) {
+  _handleRunnerJobsActive(data) {
     const jobs = data.return[0];
 
     // update all running jobs
@@ -275,50 +276,66 @@ export class PageRoute extends Route {
         targetText = targetText.substring(0, 50) + "...";
       }
       // then add the operational statistics
+      let statusText = "";
       if(job.Running.length > 0)
-        targetText = targetText + job.Running.length + " running";
+        statusText = statusText + ", " + job.Running.length + " running";
       if(job.Returned.length > 0)
-        targetText = targetText + ", " + job.Returned.length + " returned";
+        statusText = statusText + ", " + job.Returned.length + " returned";
 
+      const statusDiv = this.page_element.querySelector("table.jobs td#job" + k + " div.status");
       // the field may not (yet) be on the screen
-      if(!targetField) continue;
-      targetField.classList.remove("no_status");
-      targetField.innerText = targetText;
+      if(!statusDiv) continue;
+
+      statusDiv.classList.remove("no_status");
+      statusDiv.innerText = statusText.substring(2);
+      Utils.addToolTip(statusDiv, "Click to refresh");
     }
 
-    // update all finished jobs
-    for(const tr of document.querySelector("table#jobs tbody").rows) {
-      const statusField = tr.querySelector(".no_status");
-      if(!statusField) continue;
-      statusField.classList.remove("no_status");
-      statusField.innerText = "done";
-    }
   }
 
   _addJob(container, job) {
     const tr = document.createElement("tr");
 
     const td = document.createElement("td");
-
     td.id = "job" + job.id;
+
     let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
     if(targetText.length > 50) {
       // prevent column becoming too wide
       targetText = targetText.substring(0, 50) + "...";
     }
-    td.appendChild(Route._createDiv("target", targetText));
+    const targetDiv = Route._createDiv("target", targetText);
+    td.appendChild(targetDiv);
 
     const functionText = job.Function;
-    td.appendChild(Route._createDiv("function", functionText));
+    const functionDiv = Route._createDiv("function", functionText);
+    td.appendChild(functionDiv);
+
+    const statusDiv = Route._createDiv("status", "loading...");
+    /* effectively also the whole column, but it does not look like a column on screen */
+    statusDiv.addEventListener("click", evt => {
+      // show "loading..." only once, but we are updating the whole column
+      statusDiv.classList.add("no_status");
+      statusDiv.innerText = "loading...";
+      this._startRunningJobs();
+      evt.stopPropagation();
+    });
+    td.appendChild(statusDiv);
 
     const startTimeText = Output.dateTimeStr(job.StartTime);
-    td.appendChild(Route._createDiv("time", startTimeText));
+    const startTimeDiv = Route._createDiv("time", startTimeText);
+    td.appendChild(startTimeDiv);
 
     tr.appendChild(td);
 
     const menu = new DropDownMenu(tr);
     menu.addMenuItem("Show&nbsp;details", function(evt) {
       window.location.assign("/job?id=" + encodeURIComponent(job.id));
+    }.bind(this));
+    menu.addMenuItem("Update&nbsp;status", function(evt) {
+      statusDiv.classList.add("no_status");
+      statusDiv.innerText = "loading...";
+      this._startRunningJobs();
     }.bind(this));
 
     container.appendChild(tr);
@@ -326,50 +343,11 @@ export class PageRoute extends Route {
     tr.addEventListener("click", evt => window.location.assign("/job?id=" + encodeURIComponent(job.id)));
   }
 
-  _addDetailedJob(container, job) {
-    const tr = document.createElement("tr");
-    tr.id = "job" + job.id;
-    const jidText = job.id;
-    tr.appendChild(Route._createTd("job" + job.id, jidText));
-
-    let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
-    if(targetText.length > 50) {
-      // prevent column becoming too wide
-      targetText = targetText.substring(0, 50) + "...";
-    }
-    tr.appendChild(Route._createTd("target", targetText));
-
-    const argumentsText = this._decodeArgumentsText(job.Arguments);
-    let functionText = job.Function + argumentsText;
-    if(functionText.length > 50) {
-      // prevent column becoming too wide
-      functionText = functionText.substring(0, 50) + "...";
-    }
-    tr.appendChild(Route._createTd("function", functionText));
-
-    const startTimeText = Output.dateTimeStr(job.StartTime);
-    tr.appendChild(Route._createTd("starttime", startTimeText));
-
-    const menu = new DropDownMenu(tr);
-    menu.addMenuItem("Show&nbsp;details", function(evt) {
-      window.location.assign("/job?id=" + encodeURIComponent(job.id));
-    }.bind(this));
-    menu.addMenuItem("Re-run&nbsp;job...", function(evt) {
-      this._runFullCommand(evt, job["Target-type"], job.Target, functionText);
-    }.bind(this));
-
-    const td = Route._createTd("status", "loading...");
-    td.classList.add("no_status");
-    tr.appendChild(td);
-
-    // fill out the number of columns to that of the header
-    while(tr.cells.length < container.parentElement.tHead.rows[0].cells.length) {
-      tr.appendChild(Route._createTd("", ""));
-    }
-
-    container.appendChild(tr);
-
-    tr.addEventListener("click", evt => window.location.assign("/job?id=" + encodeURIComponent(job.id)));
+  _startRunningJobs() {
+    const p = this;
+    this.router.api.getRunnerJobsActive().then(data => {
+      p._handleRunnerJobsActive(data);
+    });
   }
 
   _jobsToArray(jobs) {
