@@ -75,6 +75,7 @@ export class DropDownMenu {
   callback(evt, theCallback, value) {
     this._value = value;
     theCallback(evt);
+    evt.stopPropagation();
   }
 
   setTitle(title) {
