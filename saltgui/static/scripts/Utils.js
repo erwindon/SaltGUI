@@ -1,3 +1,5 @@
+import {Route} from './routes/Route.js';
+
 export class Utils {
 
   static getQueryParam2(url, name) {
@@ -18,6 +20,23 @@ export class Utils {
     try { w = window; } catch(error) { /* VOID */ }
     if(!w || !w.location) return undefined;
     return Utils.getQueryParam2(w.location.href, name);
+  }
+
+  static addToolTip(tooltipHost, tooltipText) {
+    const tooltipSpan = Route._createSpan("", tooltipText);
+    tooltipSpan.classList.add("tooltiptext");
+    tooltipHost.classList.add("tooltip");
+
+    // remove the old tooltip...
+    for(var i = tooltipHost.children.length - 1; i >= 0; i--) {
+      var child = tooltipHost.children[i];
+      if(child.classList.contains("tooltiptext")) {
+        tooltipHost.removeChild(child);
+      }
+    }
+
+    // ...then add the new tooltip
+    tooltipHost.appendChild(tooltipSpan);
   }
 
 }

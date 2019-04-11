@@ -13,9 +13,9 @@ export class SchedulesMinionRoute extends PageRoute {
     this.keysLoaded = false;
     this.jobsLoaded = false;
 
-    this._showSchedules = this._showSchedules.bind(this);
+    this._handleLocalScheduleList = this._handleLocalScheduleList.bind(this);
 
-    document.querySelector("#button_close_schedulesminion").addEventListener("click", _ => {
+    this.page_element.querySelector("#button_close_schedulesminion").addEventListener("click", _ => {
       this.router.goTo("/schedules");
     });
   }
@@ -32,13 +32,13 @@ export class SchedulesMinionRoute extends PageRoute {
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
       if(minions.keysLoaded && minions.jobsLoaded) resolve();
-      minions.router.api.getLocalScheduleList(minion).then(minions._showSchedules);
-      minions.router.api.getRunnerJobsListJobs().then(minions._updateJobs);
-      minions.router.api.getRunnerJobsActive().then(minions._runningJobs);
+      minions.router.api.getLocalScheduleList(minion).then(minions._handleLocalScheduleList);
+      minions.router.api.getRunnerJobsListJobs().then(minions._handleRunnerJobsListJobs);
+      minions.router.api.getRunnerJobsActive().then(minions._handleRunnerJobsActive);
     });
   }
 
-  _showSchedules(data) {
+  _handleLocalScheduleList(data) {
     const minion = decodeURIComponent(Utils.getQueryParam("minion"));
 
     let schedules = data.return[0][minion];

@@ -72,9 +72,10 @@ export class DropDownMenu {
     this.verifyAll();
   }
 
-  callback(evt, callback, value) {
+  callback(evt, theCallback, value) {
     this._value = value;
-    callback(evt);
+    theCallback(evt);
+    evt.stopPropagation();
   }
 
   setTitle(title) {

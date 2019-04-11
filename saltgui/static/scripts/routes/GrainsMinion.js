@@ -12,9 +12,9 @@ export class GrainsMinionRoute extends PageRoute {
     this.keysLoaded = false;
     this.jobsLoaded = false;
 
-    this._showGrains = this._showGrains.bind(this);
+    this._handleLocalGrainsItems = this._handleLocalGrainsItems.bind(this);
 
-    document.querySelector("#button_close_grainsminion").addEventListener("click", _ => {
+    this.page_element.querySelector("#button_close_grainsminion").addEventListener("click", _ => {
       this.router.goTo("/grains");
     });
   }
@@ -30,13 +30,13 @@ export class GrainsMinionRoute extends PageRoute {
     return new Promise(function(resolve, reject) {
       minions.resolvePromise = resolve;
       if(minions.keysLoaded && minions.jobsLoaded) resolve();
-      minions.router.api.getLocalGrainsItems(minion).then(minions._showGrains);
-      minions.router.api.getRunnerJobsListJobs().then(minions._updateJobs);
-      minions.router.api.getRunnerJobsActive().then(minions._runningJobs);
+      minions.router.api.getLocalGrainsItems(minion).then(minions._handleLocalGrainsItems);
+      minions.router.api.getRunnerJobsListJobs().then(minions._handleRunnerJobsListJobs);
+      minions.router.api.getRunnerJobsActive().then(minions._handleRunnerJobsActive);
     });
   }
 
-  _showGrains(data) {
+  _handleLocalGrainsItems(data) {
     const minion = decodeURIComponent(Utils.getQueryParam("minion"));
 
     const grains = data.return[0][minion];

@@ -74,7 +74,8 @@ table tr td {
   white-space: nowrap;
 }
 
-.jobs td.no_status {
+.jobs td.no_status,
+.jobs td > span.no_status {
   color: gray;
 }
 
@@ -129,52 +130,19 @@ table tr td:last-of-type {
   display: inline;
 }
 
-.minions td.address {
+.minions td.address > span {
   color: #3f51b5;
-  cursor: pointer;
+  cursor: copy;
   position: relative;
 }
 
-.minions td.address::before,
-.minions td.address::after {
-  opacity: 0;
-  pointer-events: none;
+.jobs td.details > span,
+.jobs td.status > span {
+  position: relative;
 }
 
-.minions td.address::before {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  margin: 0 0 5px -50px;
-  padding: 5px 7px;
-  border-radius: 3px;
-  background-color: hsla(0, 0%, 20%, 0.9);
-  color: #fff;
-  content: "Click to copy";
-  text-align: center;
-  font-size: 14px;
-}
-
-.minions td.address:focus::before {
-  content: "Copied!";
-  left: 68%;
-}
-
-.minions td.address::after {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  margin-left: -5px;
-  width: 0;
-  border-top: 5px solid hsla(0, 0%, 20%, 0.9);
-  border-right: 5px solid transparent;
-  border-left: 5px solid transparent;
-  content: " ";
-}
-
-.minions td.address:hover::before,
-.minions td.address:hover::after {
-  opacity: 1;
+.minions td.address:focus > span {
+  cursor: pointer;
 }
 
 .minions td.accepted {
@@ -219,6 +187,10 @@ table tr td:last-of-type {
 
 .jobs td .time {
   font-size: 11px;
+}
+
+.jobs td .status {
+  font-size: 12px;
 }
 
 .job-list {

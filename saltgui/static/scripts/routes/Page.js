@@ -10,8 +10,9 @@ export class PageRoute extends Route {
     super(path, name, page_selector, menuitem_selector, router);
 
     this._runCommand = this._runCommand.bind(this);
-    this._runningJobs = this._runningJobs.bind(this);
-    this._updateJobs = this._updateJobs.bind(this);
+    this._handleRunnerJobsActive = this._handleRunnerJobsActive.bind(this);
+    this._startRunningJobs = this._startRunningJobs.bind(this);
+    this._handleRunnerJobsListJobs = this._handleRunnerJobsListJobs.bind(this);
     this._updateMinions = this._updateMinions.bind(this);
   }
 
@@ -125,19 +126,23 @@ export class PageRoute extends Route {
 
     const ipv4 = this._getBestIpNumber(minion);
     if(ipv4) {
-      const address = Route._createTd("status", ipv4);
+      const addressTd = Route._createTd("status", "");
+      const addressSpan = Route._createSpan("status2", ipv4);
+      addressTd.appendChild(addressSpan);
       // ipnumbers do not sort well, reformat into something sortable
       const ipv4parts = ipv4.split(".");
       let sorttable_customkey = "";
       if(ipv4parts.length === 4) {
         // never mind adding '.'; this is only a sort-key
         for(let i = 0; i < 4; i++) sorttable_customkey += ipv4parts[i].padStart(3, "0");
-        address.setAttribute("sorttable_customkey", sorttable_customkey);
+        addressTd.setAttribute("sorttable_customkey", sorttable_customkey);
       }
-      address.classList.add("address");
-      address.setAttribute("tabindex", -1);
-      address.addEventListener("click", this._copyAddress);
-      element.appendChild(address);
+      addressTd.classList.add("address");
+      addressTd.setAttribute("tabindex", -1);
+      addressSpan.addEventListener("click", this._copyAddress);
+      addressSpan.addEventListener("mouseout", this._restoreClickToCopy);
+      Utils.addToolTip(addressSpan, "Click to copy");
+      element.appendChild(addressTd);
     } else {
       const accepted = Route._createTd("status", "accepted");
       accepted.classList.add("accepted");
@@ -198,17 +203,20 @@ export class PageRoute extends Route {
     container.appendChild(tr);
   }
 
-  _updateJobs(data, numberOfJobs = 7, detailedJob = false) {
+  _handleRunnerJobsListJobs(data, numberOfJobs = 7) {
     const jobContainer = this.getPageElement().querySelector(".jobs tbody");
     const jobs = this._jobsToArray(data.return[0]);
     this._sortJobs(jobs);
 
-    //Add <numberOfJobs> most recent jobs
+    // Add <numberOfJobs> most recent jobs
     let shown = 0;
     let i = 0;
     while(shown < numberOfJobs && jobs[i] !== undefined) {
       const job = jobs[i];
       i = i + 1;
+
+      // These jobs are likely started by the SaltGUI
+      // do not display them
       if(job.Function === "grains.append") continue;
       if(job.Function === "grains.delkey") continue;
       if(job.Function === "grains.delval") continue;
@@ -239,85 +247,95 @@ export class PageRoute extends Route {
       if(job.Function === "wheel.key.reject") continue;
       if(job.Function === "wheel.key.finger") continue;
 
-      if(detailedJob === true) {
-        this._addDetailedJob(jobContainer, job);
-      } else {
-        this._addJob(jobContainer, job);
-      }
+      // Note that "Jobs" has a specialized version
+      this._addJob(jobContainer, job);
+
       shown = shown + 1;
     }
     this.jobsLoaded = true;
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
-  _runningJobs(data, jobsStatus = false) {
+  _handleRunnerJobsActive(data) {
     const jobs = data.return[0];
+
+    // mark all jobs as done, then re-update the running jobs
+    for(const tr of this.page_element.querySelector("table.jobs tbody").rows) {
+      const statusDiv = tr.querySelector("div.status");
+      if(!statusDiv) continue;
+      statusDiv.classList.add("no_status");
+      statusDiv.innerText = "done";
+      // we show the tooltip here so that the user is invited to click on this
+      // the user then sees other rows being updated without becoming invisible
+      Utils.addToolTip(statusDiv, "Click to refresh");
+    }
 
     // update all running jobs
     for(const k in jobs)
     {
       const job = jobs[k];
 
-      let targetText = "";
-      let targetField;
-      if(jobsStatus === true) {
-        targetField = document.querySelector(".jobs #job" + k + " .status");
-      } else {
-        // start with same text as for _addJob
-        targetText = TargetType.makeTargetText(job["Target-type"], job.Target) + ", ";
-        targetField = document.querySelector(".jobs #job" + k + " .target");
-      }
-      if(targetText.length > 50) {
-        // prevent column becoming too wide
-        // yes, the addition of running/returned may again make
-        // the string longer than 50 characters, we accept that
-        targetText = targetText.substring(0, 50) + "...";
-      }
       // then add the operational statistics
+      let statusText = "";
       if(job.Running.length > 0)
-        targetText = targetText + job.Running.length + " running";
+        statusText = statusText + ", " + job.Running.length + " running";
       if(job.Returned.length > 0)
-        targetText = targetText + ", " + job.Returned.length + " returned";
+        statusText = statusText + ", " + job.Returned.length + " returned";
 
+      const statusDiv = this.page_element.querySelector("table.jobs td#job" + k + " div.status");
       // the field may not (yet) be on the screen
-      if(!targetField) continue;
-      targetField.classList.remove("no_status");
-      targetField.innerText = targetText;
+      if(!statusDiv) continue;
+
+      statusDiv.classList.remove("no_status");
+      statusDiv.innerText = statusText.substring(2);
+      Utils.addToolTip(statusDiv, "Click to refresh");
     }
 
-    // update all finished jobs
-    for(const tr of document.querySelector("table#jobs tbody").rows) {
-      const statusField = tr.querySelector(".no_status");
-      if(!statusField) continue;
-      statusField.classList.remove("no_status");
-      statusField.innerText = "done";
-    }
   }
 
   _addJob(container, job) {
     const tr = document.createElement("tr");
 
     const td = document.createElement("td");
-
     td.id = "job" + job.id;
+
     let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
     if(targetText.length > 50) {
       // prevent column becoming too wide
       targetText = targetText.substring(0, 50) + "...";
     }
-    td.appendChild(Route._createDiv("target", targetText));
+    const targetDiv = Route._createDiv("target", targetText);
+    td.appendChild(targetDiv);
 
     const functionText = job.Function;
-    td.appendChild(Route._createDiv("function", functionText));
+    const functionDiv = Route._createDiv("function", functionText);
+    td.appendChild(functionDiv);
+
+    const statusDiv = Route._createDiv("status", "loading...");
+    /* effectively also the whole column, but it does not look like a column on screen */
+    statusDiv.addEventListener("click", evt => {
+      // show "loading..." only once, but we are updating the whole column
+      statusDiv.classList.add("no_status");
+      statusDiv.innerText = "loading...";
+      this._startRunningJobs();
+      evt.stopPropagation();
+    });
+    td.appendChild(statusDiv);
 
     const startTimeText = Output.dateTimeStr(job.StartTime);
-    td.appendChild(Route._createDiv("time", startTimeText));
+    const startTimeDiv = Route._createDiv("time", startTimeText);
+    td.appendChild(startTimeDiv);
 
     tr.appendChild(td);
 
     const menu = new DropDownMenu(tr);
     menu.addMenuItem("Show&nbsp;details", function(evt) {
       window.location.assign("/job?id=" + encodeURIComponent(job.id));
+    }.bind(this));
+    menu.addMenuItem("Update&nbsp;status", function(evt) {
+      statusDiv.classList.add("no_status");
+      statusDiv.innerText = "loading...";
+      this._startRunningJobs();
     }.bind(this));
 
     container.appendChild(tr);
@@ -325,50 +343,11 @@ export class PageRoute extends Route {
     tr.addEventListener("click", evt => window.location.assign("/job?id=" + encodeURIComponent(job.id)));
   }
 
-  _addDetailedJob(container, job) {
-    const tr = document.createElement("tr");
-    tr.id = "job" + job.id;
-    const jidText = job.id;
-    tr.appendChild(Route._createTd("job" + job.id, jidText));
-
-    let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
-    if(targetText.length > 50) {
-      // prevent column becoming too wide
-      targetText = targetText.substring(0, 50) + "...";
-    }
-    tr.appendChild(Route._createTd("target", targetText));
-
-    const argumentsText = this._decodeArgumentsText(job.Arguments);
-    let functionText = job.Function + argumentsText;
-    if(functionText.length > 50) {
-      // prevent column becoming too wide
-      functionText = functionText.substring(0, 50) + "...";
-    }
-    tr.appendChild(Route._createTd("function", functionText));
-
-    const startTimeText = Output.dateTimeStr(job.StartTime);
-    tr.appendChild(Route._createTd("starttime", startTimeText));
-
-    const menu = new DropDownMenu(tr);
-    menu.addMenuItem("Show&nbsp;details", function(evt) {
-      window.location.assign("/job?id=" + encodeURIComponent(job.id));
-    }.bind(this));
-    menu.addMenuItem("Re-run&nbsp;job...", function(evt) {
-      this._runFullCommand(evt, job["Target-type"], job.Target, functionText);
-    }.bind(this));
-
-    const td = Route._createTd("status", "loading...");
-    td.classList.add("no_status");
-    tr.appendChild(td);
-
-    // fill out the number of columns to that of the header
-    while(tr.cells.length < container.parentElement.tHead.rows[0].cells.length) {
-      tr.appendChild(Route._createTd("", ""));
-    }
-
-    container.appendChild(tr);
-
-    tr.addEventListener("click", evt => window.location.assign("/job?id=" + encodeURIComponent(job.id)));
+  _startRunningJobs() {
+    const p = this;
+    this.router.api.getRunnerJobsActive().then(data => {
+      p._handleRunnerJobsActive(data);
+    });
   }
 
   _jobsToArray(jobs) {
@@ -399,12 +378,20 @@ export class PageRoute extends Route {
     const selection = window.getSelection();
     const range = document.createRange();
 
-    range.selectNodeContents(target);
+    range.selectNodeContents(target.firstChild);
     selection.removeAllRanges();
     selection.addRange(range);
     document.execCommand("copy");
+    selection.removeAllRanges();
+
+    Utils.addToolTip(target, "Copied!");
 
     evt.stopPropagation();
+  }
+
+  _restoreClickToCopy(evt) {
+    const target = evt.target;
+    Utils.addToolTip(target, "Click to copy");
   }
 
 }

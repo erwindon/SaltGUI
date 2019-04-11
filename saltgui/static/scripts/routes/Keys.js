@@ -9,8 +9,8 @@ export class KeysRoute extends PageRoute {
     this.keysLoaded = false;
     this.jobsLoaded = false;
 
-    this._updateKeys = this._updateKeys.bind(this);
-    this._updateKeysFingerprint = this._updateKeysFingerprint.bind(this);
+    this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
+    this._handleWheelKeyFinger = this._handleWheelKeyFinger.bind(this);
   }
 
   onShow() {
@@ -21,26 +21,26 @@ export class KeysRoute extends PageRoute {
     Promise.all([p1, p2])
       .then(function(data){
         // process result of 1st promise
-        keys._updateKeys(data[0]);
+        keys._handleWheelKeyListAll(data[0]);
         // process result of 2nd promise
-        keys._updateKeysFingerprint(data[1]);
+        keys._handleWheelKeyFinger(data[1]);
       });
     return new Promise(function(resolve, reject) {
       keys.resolvePromise = resolve;
       if(keys.keysLoaded && keys.jobsLoaded) resolve();
-      keys.router.api.getRunnerJobsListJobs().then(keys._updateJobs);
-      keys.router.api.getRunnerJobsActive().then(keys._runningJobs);
+      keys.router.api.getRunnerJobsListJobs().then(keys._handleRunnerJobsListJobs);
+      keys.router.api.getRunnerJobsActive().then(keys._handleRunnerJobsActive);
     });
   }
 
-  _updateKeysFingerprint(data) {
+  _handleWheelKeyFinger(data) {
     const keys = data.return[0].data.return;
 
     for(const property of Object.keys(keys)) {
       if(property === "local") continue;
       const hosts = keys[property];
       for(const hostname of Object.keys(hosts)) {
-        const item = document.querySelector("#" + hostname + " .os");
+        const item = this.page_element.querySelector("#" + hostname + " .os");
         if(item) {
           // remove td.os for accepted minions and add td.fingerprint
           item.parentElement.insertBefore(Route._createTd("fingerprint", ""), item);
@@ -48,14 +48,14 @@ export class KeysRoute extends PageRoute {
         }
 
         // update td.fingerprint with fingerprint value
-        const fingerprintElement = document.querySelector("#" + hostname + " .fingerprint");
+        const fingerprintElement = this.page_element.querySelector("#" + hostname + " .fingerprint");
         const fingerprint = hosts[hostname];
         if(fingerprintElement) fingerprintElement.innerText = fingerprint;
       }
     }
   }
 
-  _updateKeys(data) {
+  _handleWheelKeyListAll(data) {
     const keys = data.return[0].data.return;
     const list = this.getPageElement().querySelector("#minions");
 
