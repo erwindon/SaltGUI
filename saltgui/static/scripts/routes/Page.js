@@ -126,19 +126,23 @@ export class PageRoute extends Route {
 
     const ipv4 = this._getBestIpNumber(minion);
     if(ipv4) {
-      const address = Route._createTd("status", ipv4);
+      const addressTd = Route._createTd("status", "");
+      const addressSpan = Route._createSpan("status2", ipv4);
+      addressTd.appendChild(addressSpan);
       // ipnumbers do not sort well, reformat into something sortable
       const ipv4parts = ipv4.split(".");
       let sorttable_customkey = "";
       if(ipv4parts.length === 4) {
         // never mind adding '.'; this is only a sort-key
         for(let i = 0; i < 4; i++) sorttable_customkey += ipv4parts[i].padStart(3, "0");
-        address.setAttribute("sorttable_customkey", sorttable_customkey);
+        addressTd.setAttribute("sorttable_customkey", sorttable_customkey);
       }
-      address.classList.add("address");
-      address.setAttribute("tabindex", -1);
-      address.addEventListener("click", this._copyAddress);
-      element.appendChild(address);
+      addressTd.classList.add("address");
+      addressTd.setAttribute("tabindex", -1);
+      addressSpan.addEventListener("click", this._copyAddress);
+      addressSpan.addEventListener("mouseout", this._restoreClickToCopy);
+      Utils.addToolTip(addressSpan, "Click to copy");
+      element.appendChild(addressTd);
     } else {
       const accepted = Route._createTd("status", "accepted");
       accepted.classList.add("accepted");
@@ -255,26 +259,22 @@ export class PageRoute extends Route {
   _handleRunnerJobsActive(data) {
     const jobs = data.return[0];
 
+    // mark all jobs as done, then re-update the running jobs
+    for(const tr of this.page_element.querySelector("table.jobs tbody").rows) {
+      const statusDiv = tr.querySelector("div.status");
+      if(!statusDiv) continue;
+      statusDiv.classList.add("no_status");
+      statusDiv.innerText = "done";
+      // we show the tooltip here so that the user is invited to click on this
+      // the user then sees other rows being updated without becoming invisible
+      Utils.addToolTip(statusDiv, "Click to refresh");
+    }
+
     // update all running jobs
     for(const k in jobs)
     {
       const job = jobs[k];
 
-      let targetText = "";
-      let targetField;
-      if(jobsStatus === true) {
-        targetField = document.querySelector(".jobs #job" + k + " .status");
-      } else {
-        // start with same text as for _addJob
-        targetText = TargetType.makeTargetText(job["Target-type"], job.Target) + ", ";
-        targetField = document.querySelector(".jobs #job" + k + " .target");
-      }
-      if(targetText.length > 50) {
-        // prevent column becoming too wide
-        // yes, the addition of running/returned may again make
-        // the string longer than 50 characters, we accept that
-        targetText = targetText.substring(0, 50) + "...";
-      }
       // then add the operational statistics
       let statusText = "";
       if(job.Running.length > 0)
@@ -378,12 +378,20 @@ export class PageRoute extends Route {
     const selection = window.getSelection();
     const range = document.createRange();
 
-    range.selectNodeContents(target);
+    range.selectNodeContents(target.firstChild);
     selection.removeAllRanges();
     selection.addRange(range);
     document.execCommand("copy");
+    selection.removeAllRanges();
+
+    Utils.addToolTip(target, "Copied!");
 
     evt.stopPropagation();
+  }
+
+  _restoreClickToCopy(evt) {
+    const target = evt.target;
+    Utils.addToolTip(target, "Click to copy");
   }
 
 }
