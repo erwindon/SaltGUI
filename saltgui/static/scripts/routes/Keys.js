@@ -40,7 +40,7 @@ export class KeysRoute extends PageRoute {
       if(property === "local") continue;
       const hosts = keys[property];
       for(const hostname of Object.keys(hosts)) {
-        const item = document.querySelector("#" + hostname + " .os");
+        const item = this.page_element.querySelector("#" + hostname + " .os");
         if(item) {
           // remove td.os for accepted minions and add td.fingerprint
           item.parentElement.insertBefore(Route._createTd("fingerprint", ""), item);
@@ -48,7 +48,7 @@ export class KeysRoute extends PageRoute {
         }
 
         // update td.fingerprint with fingerprint value
-        const fingerprintElement = document.querySelector("#" + hostname + " .fingerprint");
+        const fingerprintElement = this.page_element.querySelector("#" + hostname + " .fingerprint");
         const fingerprint = hosts[hostname];
         if(fingerprintElement) fingerprintElement.innerText = fingerprint;
       }

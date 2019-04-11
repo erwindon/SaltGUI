@@ -14,7 +14,7 @@ export class GrainsMinionRoute extends PageRoute {
 
     this._showGrains = this._showGrains.bind(this);
 
-    document.querySelector("#button_close_grainsminion").addEventListener("click", _ => {
+    this.page_element.querySelector("#button_close_grainsminion").addEventListener("click", _ => {
       this.router.goTo("/grains");
     });
   }

@@ -14,7 +14,7 @@ export class PillarsMinionRoute extends PageRoute {
 
     this._showPillars = this._showPillars.bind(this);
 
-    document.querySelector("#button_close_pillarsminion").addEventListener("click", _ => {
+    this.page_element.querySelector("#button_close_pillarsminion").addEventListener("click", _ => {
       this.router.goTo("/pillars");
     });
   }

@@ -24,7 +24,7 @@ export class GrainsRoute extends PageRoute {
       this._previewGrains = [ ];
     }
     // add all the required columns
-    const tr = document.querySelector("#page_grains thead tr");
+    const tr = this.page_element.querySelector("#page_grains thead tr");
     while(tr.childElementCount > 6) {
       tr.removeChild(tr.lastChild);
     }
@@ -37,11 +37,11 @@ export class GrainsRoute extends PageRoute {
     // The new columns are not yet sortable, make sure they are.
     // First detroy all the default sorting handlers.
     // A (deep)copy of an element does not copy its handlers.
-    const oldHead = document.querySelector("#page_grains table thead");
+    const oldHead = this.page_element.querySelector("#page_grains table thead");
     const newHead = oldHead.cloneNode(true);
     oldHead.parentNode.replaceChild(newHead, oldHead);
     // Now re-start sorting logic.
-    sorttable.makeSortable(document.querySelector("#page_grains table"));
+    sorttable.makeSortable(this.page_element.querySelector("#page_grains table"));
   }
 
   onShow() {
