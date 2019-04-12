@@ -32,7 +32,7 @@ export class PageRoute extends Route {
       if(minion_info === false) {
         this._updateOfflineMinion(list, hostname);
       } else {
-        this._updateMinion(list, minion_info, hostname);
+        this._updateMinion(list, minion_info, hostname, minions);
       }
     }
   }
@@ -67,7 +67,7 @@ export class PageRoute extends Route {
     element.appendChild(offline);
   }
 
-  _getBestIpNumber(minion) {
+  _getBestIpNumber(minion, allMinions) {
     if(!minion) return null;
     const ipv4 = minion.fqdn_ip4;
     if(!ipv4) return null;
@@ -105,26 +105,63 @@ export class PageRoute extends Route {
       return s;
     }
 
-    // no public IP number
-    // get the private IP number (if any)
-    for(const s of ipv4) {
-      // local = 127.0.0.0/8
-      if(s.startsWith("127.")) continue;
-      // not a local address, therefore it is private
-      return s;
+    let canUseC = this._canUseIpRange(allMinions, "192.168.")
+    let canUseB = this._canUseIpRange(allMinions, "172.")
+    let canUseA = this._canUseIpRange(allMinions, "10.")
+    if(!canUseC && !canUseB && !canUseA) {
+      // give up when we cannot use anything
+      canUseC = true;
+      canUseB = true;
+      canUseA = true;
     }
 
-    // just pick the first one, should then be a local address
+    // no public IP number found
+    // get the private IP number (if any)
+    // See https://nl.wikipedia.org/wiki/RFC_1918
+    // prefer C class, then B class, then A class
+    for(const s of ipv4) {
+      // C = 192.168.x.x
+      if(canUseC && s.startsWith("192.168.")) return s;
+    }
+    for(const s of ipv4) {
+      // B = 172.16.0.0 .. 172.31.255.255
+      // never mind the sub-ranges
+      if(canUseB && s.startsWith("172.")) return s;
+    }
+    for(const s of ipv4) {
+      // A = 10.x.x.x
+      if(canUseA && s.startsWith("10.")) return s;
+    }
+
+    // just pick the first one, should then be a local address (127.x.x.x)
     return ipv4[0];
   }
 
-  _updateMinion(container, minion, hostname) {
+  // find whether the given IP-prefix is unique
+  // within the list of grains
+  // if so, it is eligible for display
+  _canUseIpRange(minions, prefix) {
+    const cnt = { };
+    for(const minion in minions) {
+      const grains = minions[minion];
+      if(!grains.fqdn_ip4) continue;
+      if(!Array.isArray(grains.fqdn_ip4)) continue;
+      for(const ip of grains.fqdn_ip4) {
+        if(!ip.startsWith(prefix)) continue;
+        if(ip in cnt) return false;
+        cnt[ip] = 1;
+      }
+    }
+    return true;
+  }
+
+  _updateMinion(container, minion, hostname, allMinions) {
 
     const element = this._getElement(container, hostname);
 
     element.appendChild(Route._createTd("hostname", hostname));
 
-    const ipv4 = this._getBestIpNumber(minion);
+    const ipv4 = this._getBestIpNumber(minion, allMinions);
     if(ipv4) {
       const addressTd = Route._createTd("status", "");
       const addressSpan = Route._createSpan("status2", ipv4);

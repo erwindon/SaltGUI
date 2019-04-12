@@ -61,8 +61,8 @@ export class PillarsRoute extends PageRoute {
     element.appendChild(Route._createTd("run-command-button", ""));
   }
 
-  _updateMinion(container, minion, hostname) {
-    super._updateMinion(container, null, hostname);
+  _updateMinion(container, minion, hostname, allMinions) {
+    super._updateMinion(container, null, hostname, allMinions);
 
     const element = document.getElementById(hostname);
 
