@@ -81,18 +81,20 @@ export class PillarsMinionRoute extends PageRoute {
 
       // menu comes before this data if there was any
 
+      const pillar_value = Route._createTd("", "");
+
       // 8 bullet characters
       const value_hidden = "\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF";
-      const pillar_hidden = Route._createTd("pillar_hidden", value_hidden);
+      const pillar_hidden = Route._createDiv("pillar_hidden", value_hidden);
       // initially use the hidden view
-      pillar.appendChild(pillar_hidden);
+      pillar_value.appendChild(pillar_hidden);
 
       const value_shown = Output.formatObject(pillars[k]);
-      const pillar_shown = Route._createTd("pillar_shown", value_shown);
+      const pillar_shown = Route._createDiv("pillar_shown", value_shown);
       // initially hide the normal view
       pillar_shown.style.display = "none";
       // add the non-masked representation, not shown yet
-      pillar.appendChild(pillar_shown);
+      pillar_value.appendChild(pillar_shown);
 
       // show public pillars immediatelly
       for(let i = 0; i < public_pillars.length; i++) {
@@ -103,6 +105,8 @@ export class PillarsMinionRoute extends PageRoute {
           break;
         }
       }
+
+      pillar.appendChild(pillar_value);
 
       pillar_hidden.addEventListener("click", function(evt) {
         pillar_hidden.style.display = "none";
