@@ -2,16 +2,7 @@
   width: 100%;
 }
 
-.schedules li .schedule_name {
-  font-weight: 500;
-  font-size: 17px;
-  min-width: 120px;
-}
-
-.schedules li .schedule_value {
-  font-weight: 500;
-  font-size: 17px;
-  font-family: inherit;
+td.schedule_value {
   white-space: pre-wrap;
 }
 
