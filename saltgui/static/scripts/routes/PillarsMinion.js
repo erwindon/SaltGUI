@@ -86,6 +86,7 @@ export class PillarsMinionRoute extends PageRoute {
       // 8 bullet characters
       const value_hidden = "\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF";
       const pillar_hidden = Route._createDiv("pillar_hidden", value_hidden);
+      Utils.addToolTip(pillar_hidden, "Click to show");
       // initially use the hidden view
       pillar_value.appendChild(pillar_hidden);
 
@@ -93,6 +94,7 @@ export class PillarsMinionRoute extends PageRoute {
       const pillar_shown = Route._createDiv("pillar_shown", value_shown);
       // initially hide the normal view
       pillar_shown.style.display = "none";
+      Utils.addToolTip(pillar_shown, "Click to hide");
       // add the non-masked representation, not shown yet
       pillar_value.appendChild(pillar_shown);
 

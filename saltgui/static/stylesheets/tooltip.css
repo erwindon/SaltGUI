@@ -16,7 +16,7 @@
   position: absolute;
   /* float the tooltip above its target */
   z-index: 1;
-  bottom: 140%;
+  bottom: calc(100% + 8px);
   /* center the tooltip above its target */
   left: 50%;
   transform: translate(-50%, 0);
@@ -27,10 +27,12 @@
 }
 
 .tooltip:hover {
+  /* only slightly darker than 'whitesmoke(#f5f5f5)' */
   background-color: #e0e0e0;
 }
 
 .tooltip .tooltiptext::after {
+  font-size: 8px;
   content: " ";
   position: absolute;
   top: 100%;
