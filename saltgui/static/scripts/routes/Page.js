@@ -108,12 +108,6 @@ export class PageRoute extends Route {
     let canUseC = this._canUseIpRange(allMinions, "192.168.")
     let canUseB = this._canUseIpRange(allMinions, "172.")
     let canUseA = this._canUseIpRange(allMinions, "10.")
-    if(!canUseC && !canUseB && !canUseA) {
-      // give up when we cannot use anything
-      canUseC = true;
-      canUseB = true;
-      canUseA = true;
-    }
 
     // no public IP number found
     // get the private IP number (if any)
@@ -131,6 +125,22 @@ export class PageRoute extends Route {
     for(const s of ipv4) {
       // A = 10.x.x.x
       if(canUseA && s.startsWith("10.")) return s;
+    }
+
+    // no luck...
+    // try again, but without the restrictions
+    for(const s of ipv4) {
+      // C = 192.168.x.x
+      if(s.startsWith("192.168.")) return s;
+    }
+    for(const s of ipv4) {
+      // B = 172.16.0.0 .. 172.31.255.255
+      // never mind the sub-ranges
+      if(s.startsWith("172.")) return s;
+    }
+    for(const s of ipv4) {
+      // A = 10.x.x.x
+      if(s.startsWith("10.")) return s;
     }
 
     // just pick the first one, should then be a local address (127.x.x.x)
