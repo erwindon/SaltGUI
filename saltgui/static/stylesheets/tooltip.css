@@ -14,9 +14,11 @@
   border-right: 5px solid transparent;
   border-left: 5px solid transparent;
   position: absolute;
+
   /* float the tooltip above its target */
   z-index: 1;
   bottom: calc(100% + 8px);
+
   /* center the tooltip above its target */
   left: 50%;
   transform: translate(-50%, 0);

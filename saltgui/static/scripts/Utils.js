@@ -28,8 +28,8 @@ export class Utils {
     tooltipHost.classList.add("tooltip");
 
     // remove the old tooltip...
-    for(var i = tooltipHost.children.length - 1; i >= 0; i--) {
-      var child = tooltipHost.children[i];
+    for(let i = tooltipHost.children.length - 1; i >= 0; i--) {
+      const child = tooltipHost.children[i];
       if(child.classList.contains("tooltiptext")) {
         tooltipHost.removeChild(child);
       }

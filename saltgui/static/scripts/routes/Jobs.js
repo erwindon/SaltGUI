@@ -117,7 +117,7 @@ export class JobsRoute extends PageRoute {
       const job = jobs[k];
 
       let targetText = "";
-      let targetField = this.page_element.querySelector(".jobs tr#job" + k + " td.status span");
+      const targetField = this.page_element.querySelector(".jobs tr#job" + k + " td.status span");
       if(targetText.length > 50) {
         // prevent column becoming too wide
         // yes, the addition of running/returned may again make

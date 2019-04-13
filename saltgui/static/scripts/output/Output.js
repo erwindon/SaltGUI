@@ -224,6 +224,28 @@ export class Output {
         txt = cntResponses + " responses";
       }
 
+      const summary = { };
+      for(const minion in response) {
+        const result = response[minion];
+        // use keys that can conveniently be sorted
+        const key = (result.success ? "0-" : "1-") + result.retcode;
+        if(!summary.hasOwnProperty(key)) summary[key] = 0;
+        summary[key] += 1;
+      }
+
+      const keys = Object.keys(summary).sort();
+      for(const key of keys) {
+        txt += ", ";
+        if(key === "0-0") {
+          // don't show the retcode here
+          txt += summary[key] + " success";
+        } else if(key.startsWith("0-")) {
+          txt += summary[key] + " success(" + key.substr(2) + ")";
+        } else { // if(key.startsWith("1-"))
+          txt += summary[key] + " failure(" + key.substr(2) + ")";
+        }
+      }
+
       if(cntMinions !== cntResponses) {
         txt = txt + ", " + (cntMinions - cntResponses) + " no response";
       }
