@@ -2,13 +2,14 @@
 
 # always cleanup the docker images when something goes wrong
 function cleanupdocker {
-    docker-compose -f docker/docker-compose.yml rm -f -s
+    docker-compose --file docker/docker-compose.yml rm --force --stop
 }
 trap cleanupdocker EXIT
 
 set -e
+
 # add testing packages
-npm i
+npm install
 
 # first see if we write es6 compatible js
 npm run eslint
@@ -24,7 +25,7 @@ npm run stylelint
 npm run test:coverage
 
 # start a salt master, three salt minions and saltgui to run tests on
-docker-compose -f docker/docker-compose.yml up -d
+docker-compose --file docker/docker-compose.yml up --detach
 
 # wait until all are up
 npm run wait-for-docker
