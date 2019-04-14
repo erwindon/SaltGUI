@@ -169,6 +169,24 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.12.0 (2019-04-14)
+- improved tooltips; added tooltips on more places (erwindon)
+- improved job summary: show number of succeeded/failed (erwindon)
+- fixed small issue with display of pillars (erwindon)
+- fixed small issue with display of schedules (erwindon)
+- added job-details column to jobs overview (erwindon)
+- code cleanup: use consistent callback names (erwindon)
+- code cleanup: better use of the page framework (erwindon)
+- fixed dates in changelog (dawidmalina)
+- completed historic overview in changelog (erwindon)
+- fixes for maximum text in columns (erwindon)
+- fix datetime display; always obey set format (erwindon)
+- fixed missing summary of changes for SaltGuiHighstate (erwindon)
+- added original highstate output format (erwindon)
+- updated salt version to 2019.2.0 for docker images (erwindon)
+- all js code is now in modules (erwindon)
+- some more small fixes (erwindon)
+
 ## 1.11.0 (2019-03-30)
 - Migrated from yarn to npm (smarletta)
 - Separated unit tests and functional tests (smarletta)
