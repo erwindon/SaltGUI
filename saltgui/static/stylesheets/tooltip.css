@@ -3,7 +3,7 @@
   display: inline-block;
 }
 
-.tooltip .tooltiptext {
+.tooltip > .tooltiptext {
   visibility: hidden;
   font-size: 14px;
   background-color: hsla(0, 0%, 20%, 0.8);
@@ -24,7 +24,7 @@
   transform: translate(-50%, 0);
 }
 
-.tooltip:hover .tooltiptext {
+.tooltip:hover > .tooltiptext {
   visibility: visible;
 }
 
@@ -33,7 +33,7 @@
   background-color: #e0e0e0;
 }
 
-.tooltip .tooltiptext::after {
+.tooltip > .tooltiptext::after {
   font-size: 8px;
   content: " ";
   position: absolute;
