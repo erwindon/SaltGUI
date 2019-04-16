@@ -100,6 +100,9 @@ export class KeysRoute extends PageRoute {
       this.getPageElement().querySelector(".minion-list").appendChild(div);
     }
 
+    const th = this.getPageElement().querySelector("th");
+    sorttable.innerSortFunction.apply(th, []);
+
     this.keysLoaded = true;
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }

@@ -35,6 +35,9 @@ export class PageRoute extends Route {
         this._updateMinion(list, minion_info, hostname);
       }
     }
+
+    const th = this.getPageElement().querySelector("th");
+    sorttable.innerSortFunction.apply(th, []);
   }
 
   _getElement(container, id) {

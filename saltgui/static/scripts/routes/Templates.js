@@ -34,6 +34,9 @@ export class TemplatesRoute extends PageRoute {
       const template = templates[key];
       this._addTemplate(container, key, template);
     }
+
+    const th = this.getPageElement().querySelector("th");
+    sorttable.innerSortFunction.apply(th, []);
   }
 
   _addTemplate(container, name, template) {

@@ -126,6 +126,9 @@ export class SchedulesMinionRoute extends PageRoute {
       tr.addEventListener("click", evt => this._runCommand(evt, minion, cmd));
     }
 
+    const th = this.getPageElement().querySelector("th");
+    sorttable.innerSortFunction.apply(th, []);
+
     if(!keys.length) {
       const noSchedulesMsg = Route._createDiv("msg", "No schedules found");
       container.tBodies[0].appendChild(noSchedulesMsg);

@@ -64,6 +64,7 @@ table tr th {
   text-align: left;
   min-width: 20px;
   white-space: nowrap;
+  cursor: pointer;
 }
 
 table tr td {

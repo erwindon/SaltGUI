@@ -148,6 +148,8 @@ export class JobsRoute extends PageRoute {
       Utils.addToolTip(statusField, "Click to refresh column");
     }
 
+    const th = this.getPageElement().querySelector("th");
+    sorttable.innerSortFunction.apply(th, []);
   }
 
   _getJobDetails(jobid) {
