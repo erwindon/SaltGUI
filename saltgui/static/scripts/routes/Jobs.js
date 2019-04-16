@@ -149,6 +149,8 @@ export class JobsRoute extends PageRoute {
     }
 
     const th = this.getPageElement().querySelector("th");
+    // sort twice to get the sorting reversed
+    sorttable.innerSortFunction.apply(th, []);
     sorttable.innerSortFunction.apply(th, []);
   }
 

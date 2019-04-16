@@ -368,8 +368,8 @@ export class PageRoute extends Route {
 
   _sortJobs(jobs) {
     jobs.sort(function(a, b){
-      // The id is already a integer value based on the date, let's use
-      // it to sort the jobs
+      // The id is already a string value based on the date,
+      // let's use it to sort the jobs
       if(a.id < b.id) return 1;
       if(a.id > b.id) return -1;
       return 0;
