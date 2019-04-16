@@ -1,6 +1,7 @@
 import {DropDownMenu} from '../DropDown.js';
 import {PageRoute} from './Page.js';
 import {Route} from './Route.js';
+import {Utils} from '../Utils.js';
 
 export class KeysRoute extends PageRoute {
 
@@ -100,8 +101,7 @@ export class KeysRoute extends PageRoute {
       this.getPageElement().querySelector(".minion-list").appendChild(div);
     }
 
-    const th = this.getPageElement().querySelector("th");
-    sorttable.innerSortFunction.apply(th, []);
+    Utils.showTableSortable(this.getPageElement());
 
     this.keysLoaded = true;
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();

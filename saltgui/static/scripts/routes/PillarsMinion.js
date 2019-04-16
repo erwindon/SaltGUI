@@ -123,8 +123,7 @@ export class PillarsMinionRoute extends PageRoute {
       container.tBodies[0].appendChild(pillar);
     }
 
-    const th = this.getPageElement().querySelector("th");
-    sorttable.innerSortFunction.apply(th, []);
+    Utils.showTableSortable(this.getPageElement());
 
     if(!keys.length) {
       const noPillarsMsg = Route._createTd("msg", "No pillars found");

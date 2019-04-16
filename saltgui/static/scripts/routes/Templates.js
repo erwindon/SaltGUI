@@ -1,6 +1,7 @@
 import {DropDownMenu} from '../DropDown.js';
 import {PageRoute} from './Page.js';
 import {Route} from './Route.js';
+import {Utils} from '../Utils.js';
 
 export class TemplatesRoute extends PageRoute {
 
@@ -35,8 +36,7 @@ export class TemplatesRoute extends PageRoute {
       this._addTemplate(container, key, template);
     }
 
-    const th = this.getPageElement().querySelector("th");
-    sorttable.innerSortFunction.apply(th, []);
+    Utils.showTableSortable(this.getPageElement());
   }
 
   _addTemplate(container, name, template) {

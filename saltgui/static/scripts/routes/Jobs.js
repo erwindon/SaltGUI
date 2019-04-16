@@ -148,10 +148,7 @@ export class JobsRoute extends PageRoute {
       Utils.addToolTip(statusField, "Click to refresh column");
     }
 
-    const th = this.getPageElement().querySelector("th");
-    // sort twice to get the sorting reversed
-    sorttable.innerSortFunction.apply(th, []);
-    sorttable.innerSortFunction.apply(th, []);
+    Utils.showTableSortable(this.getPageElement(), true);
   }
 
   _getJobDetails(jobid) {

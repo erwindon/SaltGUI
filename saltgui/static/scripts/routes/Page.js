@@ -36,8 +36,7 @@ export class PageRoute extends Route {
       }
     }
 
-    const th = this.getPageElement().querySelector("th");
-    sorttable.innerSortFunction.apply(th, []);
+    Utils.showTableSortable(this.getPageElement());
   }
 
   _getElement(container, id) {
