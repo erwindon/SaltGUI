@@ -8,7 +8,7 @@ export class JobRoute extends Route {
 
   constructor(router) {
     super("^[\/]job$", "Job", "#page_job", "", router);
-    this._onJobData = this._onJobData.bind(this);
+    this._handleRunnerJobsListJob = this._handleRunnerJobsListJob.bind(this);
   }
 
   onShow() {
@@ -16,7 +16,7 @@ export class JobRoute extends Route {
     const id = decodeURIComponent(Utils.getQueryParam("id"));
     return new Promise(function(resolve, reject) {
       job.resolvePromise = resolve;
-      job.router.api.getRunnerJobsListJob(id).then(job._onJobData);
+      job.router.api.getRunnerJobsListJob(id).then(job._handleRunnerJobsListJob);
     });
   }
 
@@ -26,7 +26,7 @@ export class JobRoute extends Route {
     return true;
   }
 
-  _onJobData(data) {
+  _handleRunnerJobsListJob(data) {
     const job = this;
     const info = data.return[0];
     job.getPageElement().querySelector(".output").innerText = "";
