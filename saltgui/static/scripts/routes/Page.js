@@ -78,6 +78,7 @@ export class PageRoute extends Route {
 
     // get the public IP number (if any)
     for(const s of ipv4) {
+      // See https://nl.wikipedia.org/wiki/RFC_1918
       // local = 127.0.0.0/8
       if(s.startsWith("127.")) continue;
       // private A = 10.0.0.0/8
@@ -105,26 +106,77 @@ export class PageRoute extends Route {
       return s;
     }
 
-    let canUseC = this._canUseIpRange(allMinions, "192.168.")
-    let canUseB = this._canUseIpRange(allMinions, "172.")
-    let canUseA = this._canUseIpRange(allMinions, "10.")
+    // No public IP was found
+    // find a common prefix in all available IP numbers
+    // Then return a number with such prefix
+
+    // First we gather all (resonable) prefixes
+    // Only use byte-boundaries for networks
+    // Must match a subnet of A, B or C network
+    const prefixes = { };
+    for(const minion in allMinions) {
+      const grains = allMinions[minion];
+      if(!grains.fqdn_ip4) continue;
+      if(!Array.isArray(grains.fqdn_ip4)) continue;
+      for(const ip of grains.fqdn_ip4) {
+        const parts = ip.split(".");
+        if(ip.startsWith("10.")) {
+          prefixes[parts[0] + "."] = true;
+        }
+        if(ip.startsWith("10.") ||
+           ip.startsWith("172.16.") ||
+           ip.startsWith("172.17.") ||
+           ip.startsWith("172.18.") ||
+           ip.startsWith("172.19.") ||
+           ip.startsWith("172.20.") ||
+           ip.startsWith("172.21.") ||
+           ip.startsWith("172.22.") ||
+           ip.startsWith("172.23.") ||
+           ip.startsWith("172.24.") ||
+           ip.startsWith("172.25.") ||
+           ip.startsWith("172.26.") ||
+           ip.startsWith("172.27.") ||
+           ip.startsWith("172.28.") ||
+           ip.startsWith("172.29.") ||
+           ip.startsWith("172.30.") ||
+           ip.startsWith("172.31.") ||
+           ip.startsWith("192.168.")) {
+          prefixes[parts[0] + "." + parts[1] + "."] = true;
+          prefixes[parts[0] + "." + parts[1] + "." + parts[2] + "."] = true;
+        }
+      }
+    }
+
+    // Then we look whether each minion uses the prefix
+    // When at least one minion does not use the subnet,
+    //    then it is not a suitable subnet
+    for(const p in prefixes) {
+      for(const minion in allMinions) {
+        let cnt = 0;
+        const grains = allMinions[minion];
+        if(!grains.fqdn_ip4) continue;
+        if(!Array.isArray(grains.fqdn_ip4)) continue;
+        for(const ip of grains.fqdn_ip4) {
+          if(!ip.startsWith(p)) continue;
+          cnt++;
+        }
+        // multiple or unused?
+        //    then it is not a suitable subnet
+        if(cnt !== 1) {
+          prefixes[p] = false;
+          continue;
+        }
+      }
+    }
 
     // no public IP number found
     // get the private IP number (if any)
-    // See https://nl.wikipedia.org/wiki/RFC_1918
-    // prefer C class, then B class, then A class
-    for(const s of ipv4) {
-      // C = 192.168.x.x
-      if(canUseC && s.startsWith("192.168.")) return s;
-    }
-    for(const s of ipv4) {
-      // B = 172.16.0.0 .. 172.31.255.255
-      // never mind the sub-ranges
-      if(canUseB && s.startsWith("172.")) return s;
-    }
-    for(const s of ipv4) {
-      // A = 10.x.x.x
-      if(canUseA && s.startsWith("10.")) return s;
+    // when it matches one of the common prefixes
+    for(const p in prefixes) {
+      if(!prefixes[p]) continue;
+      for(const s of ipv4) {
+        if(s.startsWith(p)) return s;
+      }
     }
 
     // no luck...
@@ -145,24 +197,6 @@ export class PageRoute extends Route {
 
     // just pick the first one, should then be a local address (127.x.x.x)
     return ipv4[0];
-  }
-
-  // find whether the given IP-prefix is unique
-  // within the list of grains
-  // if so, it is eligible for display
-  _canUseIpRange(minions, prefix) {
-    const cnt = { };
-    for(const minion in minions) {
-      const grains = minions[minion];
-      if(!grains.fqdn_ip4) continue;
-      if(!Array.isArray(grains.fqdn_ip4)) continue;
-      for(const ip of grains.fqdn_ip4) {
-        if(!ip.startsWith(prefix)) continue;
-        if(ip in cnt) return false;
-        cnt[ip] = 1;
-      }
-    }
-    return true;
   }
 
   _updateMinion(container, minion, hostname, allMinions) {
