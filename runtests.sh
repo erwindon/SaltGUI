@@ -25,7 +25,8 @@ npm run stylelint
 npm run test:coverage
 
 # start a salt master, three salt minions and saltgui to run tests on
-docker-compose --file docker/docker-compose.yml up --detach
+# Don't use --detach; travis docker does not understand it
+docker-compose --file docker/docker-compose.yml up -d
 
 # wait until all are up
 npm run wait-for-docker
