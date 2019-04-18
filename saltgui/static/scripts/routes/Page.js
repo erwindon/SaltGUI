@@ -266,13 +266,13 @@ export class PageRoute extends Route {
 
     // mark all jobs as done, then re-update the running jobs
     for(const tr of this.page_element.querySelector("table.jobs tbody").rows) {
-      const statusDiv = tr.querySelector("div.status");
-      if(!statusDiv) continue;
-      statusDiv.classList.add("no_status");
-      statusDiv.innerText = "done";
+      const statusSpan = tr.querySelector("span.status");
+      if(!statusSpan) continue;
+      statusSpan.classList.add("no_status");
+      statusSpan.innerText = "done";
       // we show the tooltip here so that the user is invited to click on this
       // the user then sees other rows being updated without becoming invisible
-      Utils.addToolTip(statusDiv, "Click to refresh");
+      Utils.addToolTip(statusSpan, "Click to refresh");
     }
 
     // update all running jobs
@@ -287,13 +287,13 @@ export class PageRoute extends Route {
       if(job.Returned.length > 0)
         statusText = statusText + ", " + job.Returned.length + " returned";
 
-      const statusDiv = this.page_element.querySelector("table.jobs td#job" + k + " div.status");
+      const statusSpan = this.page_element.querySelector("table.jobs td#job" + k + " span.status");
       // the field may not (yet) be on the screen
-      if(!statusDiv) continue;
+      if(!statusSpan) continue;
 
-      statusDiv.classList.remove("no_status");
-      statusDiv.innerText = statusText.substring(2);
-      Utils.addToolTip(statusDiv, "Click to refresh");
+      statusSpan.classList.remove("no_status");
+      statusSpan.innerText = statusText.substring(2);
+      Utils.addToolTip(statusSpan, "Click to refresh");
     }
 
   }
@@ -316,16 +316,16 @@ export class PageRoute extends Route {
     const functionDiv = Route._createDiv("function", functionText);
     td.appendChild(functionDiv);
 
-    const statusDiv = Route._createDiv("status", "loading...");
+    const statusSpan = Route._createSpan("status", "loading...");
     /* effectively also the whole column, but it does not look like a column on screen */
-    statusDiv.addEventListener("click", evt => {
+    statusSpan.addEventListener("click", evt => {
       // show "loading..." only once, but we are updating the whole column
-      statusDiv.classList.add("no_status");
-      statusDiv.innerText = "loading...";
+      statusSpan.classList.add("no_status");
+      statusSpan.innerText = "loading...";
       this._startRunningJobs();
       evt.stopPropagation();
     });
-    td.appendChild(statusDiv);
+    td.appendChild(statusSpan);
 
     const startTimeText = Output.dateTimeStr(job.StartTime);
     const startTimeDiv = Route._createDiv("time", startTimeText);
@@ -338,8 +338,8 @@ export class PageRoute extends Route {
       window.location.assign("/job?id=" + encodeURIComponent(job.id));
     }.bind(this));
     menu.addMenuItem("Update&nbsp;status", function(evt) {
-      statusDiv.classList.add("no_status");
-      statusDiv.innerText = "loading...";
+      statusSpan.classList.add("no_status");
+      statusSpan.innerText = "loading...";
       this._startRunningJobs();
     }.bind(this));
 
