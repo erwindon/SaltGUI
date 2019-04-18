@@ -97,6 +97,6 @@ export class GrainsMinionRoute extends PageRoute {
       grain.addEventListener("click", evt => this._runCommand(evt, minion, "grains.setval \"" + k + "\" " + JSON.stringify(grains[k])));
     }
 
-    Utils.showTableSortable(this.getPageElement());
+    Utils.showTableSortable(this.getPageElement(), "grains");
   }
 }

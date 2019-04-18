@@ -39,11 +39,11 @@ export class Utils {
     tooltipHost.appendChild(tooltipSpan);
   }
 
-  static showTableSortable(start, reverseSort = false) {
-    const th = start.querySelector("th");
+  static showTableSortable(start, tableClass, reverseSort = false) {
+    const th = start.querySelector("table." + tableClass + " th");
     sorttable.innerSortFunction.apply(th, []);
     if(reverseSort) sorttable.innerSortFunction.apply(th, []);
-    const tr = start.querySelector("tr");
+    const tr = start.querySelector("table." + tableClass + " tr");
     for(const th of tr.childNodes) {
       if(th.classList.contains("sorttable_nosort")) continue;
       // the tooltip is too bulky to use, skip for now

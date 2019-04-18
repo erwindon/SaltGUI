@@ -35,8 +35,6 @@ export class PageRoute extends Route {
         this._updateMinion(list, minion_info, hostname);
       }
     }
-
-    Utils.showTableSortable(this.getPageElement());
   }
 
   _getElement(container, id) {
@@ -205,7 +203,7 @@ export class PageRoute extends Route {
     container.appendChild(tr);
   }
 
-  _handleRunnerJobsListJobs(data, numberOfJobs = 7) {
+  _handleRunnerJobsListJobs(data, hasHeader = false, numberOfJobs = 7) {
     const jobContainer = this.getPageElement().querySelector(".jobs tbody");
     const jobs = this._jobsToArray(data.return[0]);
     this._sortJobs(jobs);
@@ -254,6 +252,11 @@ export class PageRoute extends Route {
 
       shown = shown + 1;
     }
+
+    if(hasHeader) {
+      Utils.showTableSortable(this.getPageElement(), "jobs", true);
+    }
+
     this.jobsLoaded = true;
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }

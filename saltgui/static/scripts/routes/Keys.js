@@ -101,7 +101,7 @@ export class KeysRoute extends PageRoute {
       this.getPageElement().querySelector(".minion-list").appendChild(div);
     }
 
-    Utils.showTableSortable(this.getPageElement());
+    Utils.showTableSortable(this.getPageElement(), "minions");
 
     this.keysLoaded = true;
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();

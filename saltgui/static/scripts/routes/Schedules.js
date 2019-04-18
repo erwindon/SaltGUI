@@ -1,6 +1,7 @@
 import {DropDownMenu} from '../DropDown.js';
 import {PageRoute} from './Page.js';
 import {Route} from './Route.js';
+import {Utils} from '../Utils.js';
 
 export class SchedulesRoute extends PageRoute {
 
@@ -61,6 +62,8 @@ export class SchedulesRoute extends PageRoute {
 
       element.addEventListener("click", evt => window.location.assign("schedulesminion?minion=" + encodeURIComponent(hostname)));
     }
+
+    Utils.showTableSortable(this.getPageElement(), "minions");
 
     this.keysLoaded = true;
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();

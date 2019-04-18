@@ -1,6 +1,7 @@
 import {DropDownMenu} from '../DropDown.js';
 import {PageRoute} from './Page.js';
 import {Route} from './Route.js';
+import {Utils} from '../Utils.js';
 
 export class PillarsRoute extends PageRoute {
 
@@ -43,6 +44,8 @@ export class PillarsRoute extends PageRoute {
 
       element.addEventListener("click", evt => window.location.assign("pillarsminion?minion=" + encodeURIComponent(hostname)));
     }
+
+    Utils.showTableSortable(this.getPageElement(), "minions");
 
     this.keysLoaded = true;
     if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();

@@ -20,7 +20,7 @@ export class JobsRoute extends PageRoute {
       jobs.resolvePromise = resolve;
       if(jobs.jobsLoaded) resolve();
       jobs.router.api.getRunnerJobsListJobs().then(data => {
-        jobs._handleRunnerJobsListJobs(data, 50);
+        jobs._handleRunnerJobsListJobs(data, true, 50);
       });
       jobs.router.api.getRunnerJobsActive().then(data => {
         jobs._handleRunnerJobsActive(data);
@@ -147,8 +147,6 @@ export class JobsRoute extends PageRoute {
       // the user then sees other rows being updated without becoming invisible
       Utils.addToolTip(statusField, "Click to refresh column");
     }
-
-    Utils.showTableSortable(this.getPageElement(), true);
   }
 
   _getJobDetails(jobid) {
