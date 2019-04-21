@@ -157,9 +157,9 @@ export class JobRoute extends Route {
         const noResponseSpan = this.getPageElement().querySelector("pre.output div#" + minion + " span.noresponse");
         if(!noResponseSpan) continue;
         // show that this minion is still active on the request
-	noResponseSpan.innerHTML = noResponseSpan.innerHTML.replace("no response", "active");
-	noResponseSpan.classList.remove("noresponse");
-	noResponseSpan.classList.add("active");
+        noResponseSpan.innerHTML = noResponseSpan.innerHTML.replace("no response", "active");
+        noResponseSpan.classList.remove("noresponse");
+        noResponseSpan.classList.add("active");
       }
     }
   }
