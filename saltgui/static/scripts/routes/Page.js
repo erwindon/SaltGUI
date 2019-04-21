@@ -25,6 +25,8 @@ export class PageRoute extends Route {
     // save for the autocompletion
     window.localStorage.setItem("minions", JSON.stringify(hostnames));
 
+    const ipNumberPrefixes = this._getIpNumberPrefixes(minions);
+
     for(const hostname of hostnames) {
       const minion_info = minions[hostname];
 
@@ -67,49 +69,7 @@ export class PageRoute extends Route {
     element.appendChild(offline);
   }
 
-  _getBestIpNumber(minion, allMinions) {
-    if(!minion) return null;
-    const ipv4 = minion.fqdn_ip4;
-    if(!ipv4) return null;
-    // either a string or something strange
-    if(!Array.isArray(ipv4)) return ipv4;
-
-    // so, it is an array
-
-    // get the public IP number (if any)
-    for(const s of ipv4) {
-      // See https://nl.wikipedia.org/wiki/RFC_1918
-      // local = 127.0.0.0/8
-      if(s.startsWith("127.")) continue;
-      // private A = 10.0.0.0/8
-      if(s.startsWith("10.")) continue;
-      // private B = 172.16.0.0/20
-      if(s.startsWith("172.16.")) continue;
-      if(s.startsWith("172.17.")) continue;
-      if(s.startsWith("172.18.")) continue;
-      if(s.startsWith("172.19.")) continue;
-      if(s.startsWith("172.20.")) continue;
-      if(s.startsWith("172.21.")) continue;
-      if(s.startsWith("172.22.")) continue;
-      if(s.startsWith("172.23.")) continue;
-      if(s.startsWith("172.24.")) continue;
-      if(s.startsWith("172.25.")) continue;
-      if(s.startsWith("172.26.")) continue;
-      if(s.startsWith("172.27.")) continue;
-      if(s.startsWith("172.28.")) continue;
-      if(s.startsWith("172.29.")) continue;
-      if(s.startsWith("172.30.")) continue;
-      if(s.startsWith("172.31.")) continue;
-      // private C = 192.168.0.0/16
-      if(s.startsWith("192.168.")) continue;
-      // not a local/private address, therefore it is public
-      return s;
-    }
-
-    // No public IP was found
-    // find a common prefix in all available IP numbers
-    // Then return a number with such prefix
-
+  _getIpNumberPrefixes(allMinions) {
     // First we gather all (resonable) prefixes
     // Only use byte-boundaries for networks
     // Must match a subnet of A, B or C network
@@ -164,16 +124,65 @@ export class PageRoute extends Route {
         //    then it is not a suitable subnet
         if(cnt !== 1) {
           prefixes[p] = false;
-          continue;
+          break;
         }
       }
     }
 
-    // no public IP number found
+    // actually remove the unused prefixes
+    for(const p in prefixes) {
+      if(!prefixes[p]) {
+        delete prefixes[p];
+      }
+    }
+
+    return prefixes;
+  }
+
+  _getBestIpNumber(minion, prefixes) {
+    if(!minion) return null;
+    const ipv4 = minion.fqdn_ip4;
+    if(!ipv4) return null;
+    // either a string or something strange
+    if(!Array.isArray(ipv4)) return ipv4;
+
+    // so, it is an array
+
+    // get the public IP number (if any)
+    for(const s of ipv4) {
+      // See https://nl.wikipedia.org/wiki/RFC_1918
+      // local = 127.0.0.0/8
+      if(s.startsWith("127.")) continue;
+      // private A = 10.0.0.0/8
+      if(s.startsWith("10.")) continue;
+      // private B = 172.16.0.0/20
+      if(s.startsWith("172.16.")) continue;
+      if(s.startsWith("172.17.")) continue;
+      if(s.startsWith("172.18.")) continue;
+      if(s.startsWith("172.19.")) continue;
+      if(s.startsWith("172.20.")) continue;
+      if(s.startsWith("172.21.")) continue;
+      if(s.startsWith("172.22.")) continue;
+      if(s.startsWith("172.23.")) continue;
+      if(s.startsWith("172.24.")) continue;
+      if(s.startsWith("172.25.")) continue;
+      if(s.startsWith("172.26.")) continue;
+      if(s.startsWith("172.27.")) continue;
+      if(s.startsWith("172.28.")) continue;
+      if(s.startsWith("172.29.")) continue;
+      if(s.startsWith("172.30.")) continue;
+      if(s.startsWith("172.31.")) continue;
+      // private C = 192.168.0.0/16
+      if(s.startsWith("192.168.")) continue;
+      // not a local/private address, therefore it is public
+      return s;
+    }
+
+    // No public IP was found
+    // Use a common prefix in all available IP numbers
     // get the private IP number (if any)
     // when it matches one of the common prefixes
     for(const p in prefixes) {
-      if(!prefixes[p]) continue;
       for(const s of ipv4) {
         if(s.startsWith(p)) return s;
       }
@@ -199,13 +208,13 @@ export class PageRoute extends Route {
     return ipv4[0];
   }
 
-  _updateMinion(container, minion, hostname, allMinions) {
+  _updateMinion(container, minion, hostname, prefixes) {
 
     const element = this._getElement(container, hostname);
 
     element.appendChild(Route._createTd("hostname", hostname));
 
-    const ipv4 = this._getBestIpNumber(minion, allMinions);
+    const ipv4 = this._getBestIpNumber(minion, prefixes);
     if(ipv4) {
       const addressTd = Route._createTd("status", "");
       const addressSpan = Route._createSpan("status2", ipv4);
