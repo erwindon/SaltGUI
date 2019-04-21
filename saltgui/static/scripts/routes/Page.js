@@ -323,6 +323,7 @@ export class PageRoute extends Route {
       if(job.Function === "saltutil.refresh_grains") continue;
       if(job.Function === "saltutil.refresh_pillar") continue;
       if(job.Function === "saltutil.running") continue;
+      if(job.Function === "saltutil.signal_job") continue;
       if(job.Function === "schedule.delete") continue;
       if(job.Function === "schedule.disable") continue;
       if(job.Function === "schedule.disable_job") continue;

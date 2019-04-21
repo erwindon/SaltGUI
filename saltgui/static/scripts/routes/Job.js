@@ -121,6 +121,12 @@ export class JobRoute extends Route {
       }.bind(this));
     }
 
+    // 6: kill with original target pattern
+    const jid = decodeURIComponent(Utils.getQueryParam("id"));
+    menu.addMenuItem("Terminate&nbsp;job...", function(evt) {
+      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.signal_job " + jid + " 15");
+    }.bind(this));
+
     const functionText = commandText + " on " +
       TargetType.makeTargetText(info["Target-type"], info.Target);
     jobinfo.querySelector(".function").innerText = functionText;
