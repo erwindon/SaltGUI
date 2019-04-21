@@ -154,10 +154,31 @@ export class JobRoute extends Route {
     for(const minionInfo of info.Running) {
       // each minionInfo is like {'minion': pid}
       for(const minion in minionInfo) {
+        const pid = minionInfo[minion];
         const noResponseSpan = this.getPageElement().querySelector("pre.output div#" + minion + " span.noresponse");
         if(!noResponseSpan) continue;
+
         // show that this minion is still active on the request
-        noResponseSpan.innerHTML = noResponseSpan.innerHTML.replace("no response", "active");
+        noResponseSpan.innerText = "(active) ";
+
+        const linkPsProcInfo = document.createElement("a");
+        linkPsProcInfo.innerText = "info";
+        linkPsProcInfo.style.cursor = "pointer";
+        linkPsProcInfo.addEventListener("click", evt => {
+          this._runFullCommand(evt, "list", minion, "ps.proc_info " + pid);
+        });
+        noResponseSpan.appendChild(linkPsProcInfo);
+
+        noResponseSpan.appendChild(document.createTextNode(" "));
+
+        const linkPsKillPid = document.createElement("a");
+        linkPsKillPid.innerText = "kill";
+        linkPsKillPid.style.cursor = "pointer";
+        linkPsKillPid.addEventListener("click", evt => {
+          this._runFullCommand(evt, "list", minion, "ps.kill_pid " + pid);
+        });
+        noResponseSpan.appendChild(linkPsKillPid);
+
         noResponseSpan.classList.remove("noresponse");
         noResponseSpan.classList.add("active");
       }

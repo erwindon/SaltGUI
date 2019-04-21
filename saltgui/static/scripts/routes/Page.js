@@ -314,6 +314,8 @@ export class PageRoute extends Route {
       if(job.Function === "grains.setval") continue;
       if(job.Function === "pillar.items") continue;
       if(job.Function === "pillar.obfuscate") continue;
+      if(job.Function === "ps.proc_info") continue;
+      if(job.Function === "ps.kill_pid") continue;
       if(job.Function === "runner.jobs.active") continue;
       if(job.Function === "runner.jobs.list_job") continue;
       if(job.Function === "runner.jobs.list_jobs") continue;
