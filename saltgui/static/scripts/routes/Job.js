@@ -139,16 +139,16 @@ export class JobRoute extends Route {
   _handleRunnerJobsActive(id, data) {
     const info = data.return[0][id];
 
-    const summarySpan = this.getPageElement().querySelector("pre.output span#summary");
-    if(!summarySpan) return;
+    const summaryJobsActiveSpan = this.getPageElement().querySelector("pre.output span#summary_jobsactive");
+    if(!summaryJobsActiveSpan) return;
 
     // when the job is already completely done, nothing is returned
     if(!info) {
-      summarySpan.innerText = "done, " + summarySpan.innerText;
+      summaryJobsActiveSpan.innerText = "done, ";
       return;
     }
 
-    summarySpan.innerText = info.Running.length + " active, " + summarySpan.innerText;
+    summaryJobsActiveSpan.innerText = info.Running.length + " active, ";
 
     // update the minion details
     for(const minionInfo of info.Running) {

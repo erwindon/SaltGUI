@@ -211,8 +211,14 @@ export class Output {
        !Output.isAsyncOutput(response)) {
       // runners/wheel responses are not per minion
       // Do not produce a #response line for async-start confirmation
-      const span = document.createElement("span");
-      span.id = "summary";
+
+      // for the result of jobs.active
+      const summaryJobsActiveSpan = document.createElement("span");
+      summaryJobsActiveSpan.id = "summary_jobsactive";
+
+      // for the result of jobs.list_job
+      const summaryJobsListJobSpan = document.createElement("span");
+      summaryJobsListJobSpan.id = "summary_listjob";
 
       const cntResponses = Object.keys(response).length;
       const cntMinions = minions.length;
@@ -258,8 +264,10 @@ export class Output {
       // some room for the triangle
       txt = txt + " ";
 
-      span.innerText = txt;
-      allDiv.appendChild(span);
+      allDiv.appendChild(summaryJobsActiveSpan);
+
+      summaryJobsListJobSpan.innerText = txt;
+      allDiv.appendChild(summaryJobsListJobSpan);
     }
 
     const masterTriangle = document.createElement("span");
