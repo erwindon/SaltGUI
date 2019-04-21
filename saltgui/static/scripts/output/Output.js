@@ -215,6 +215,7 @@ export class Output {
       // for the result of jobs.active
       const summaryJobsActiveSpan = document.createElement("span");
       summaryJobsActiveSpan.id = "summary_jobsactive";
+      summaryJobsActiveSpan.innerText = "(loading), ";
 
       // for the result of jobs.list_job
       const summaryJobsListJobSpan = document.createElement("span");
