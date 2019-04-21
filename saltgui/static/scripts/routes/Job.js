@@ -9,6 +9,7 @@ export class JobRoute extends Route {
   constructor(router) {
     super("^[\/]job$", "Job", "#page_job", "", router);
     this._handleRunnerJobsListJob = this._handleRunnerJobsListJob.bind(this);
+    this._handleRunnerJobsActive = this._handleRunnerJobsActive.bind(this);
   }
 
   onShow() {
@@ -17,6 +18,9 @@ export class JobRoute extends Route {
     return new Promise(function(resolve, reject) {
       job.resolvePromise = resolve;
       job.router.api.getRunnerJobsListJob(id).then(job._handleRunnerJobsListJob);
+      job.router.api.getRunnerJobsActive().then(data => {
+        job._handleRunnerJobsActive(id, data);
+      });
     });
   }
 
@@ -132,4 +136,25 @@ export class JobRoute extends Route {
     this.resolvePromise();
   }
 
+  _handleRunnerJobsActive(id, data) {
+    const info = data.return[0][id];
+
+    const summarySpan = this.getPageElement().querySelector("pre.output span#summary");
+    if(info.Running.length > 0 && summarySpan) {
+      summarySpan.innerText = info.Running.length + " active, " + summarySpan.innerText;
+    }
+
+    // update the minion details
+    for(const minionInfo of info.Running) {
+      // each minionInfo is like {'minion': pid}
+      for(const minion in minionInfo) {
+        const noResponseSpan = this.getPageElement().querySelector("pre.output div#" + minion + " span.noresponse");
+        if(!noResponseSpan) continue;
+        // show that this minion is still active on the request
+	noResponseSpan.innerHTML = noResponseSpan.innerHTML.replace("no response", "active");
+	noResponseSpan.classList.remove("noresponse");
+	noResponseSpan.classList.add("active");
+      }
+    }
+  }
 }

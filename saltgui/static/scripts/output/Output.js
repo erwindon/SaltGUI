@@ -212,6 +212,7 @@ export class Output {
       // runners/wheel responses are not per minion
       // Do not produce a #response line for async-start confirmation
       const span = document.createElement("span");
+      span.id = "summary";
 
       const cntResponses = Object.keys(response).length;
       const cntMinions = minions.length;
@@ -323,6 +324,7 @@ export class Output {
 
       if(!fndRepresentation && !response.hasOwnProperty(hostname)) {
         hostOutput = Output.getTextOutput("(no response)");
+        hostOutput.classList.add("noresponse");
         fndRepresentation = true;
       }
 
@@ -386,6 +388,7 @@ export class Output {
 
       // compose the actual output
       const div = document.createElement("div");
+      div.id = hostname;
 
       div.append(hostLabel);
 
