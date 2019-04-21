@@ -268,7 +268,7 @@ export class PageRoute extends Route {
     for(const tr of this.page_element.querySelector("table.jobs tbody").rows) {
       const statusSpan = tr.querySelector("span.status");
       if(!statusSpan) continue;
-      statusSpan.classList.add("no_status");
+      statusSpan.classList.remove("no_status");
       statusSpan.innerText = "done";
       // we show the tooltip here so that the user is invited to click on this
       // the user then sees other rows being updated without becoming invisible
@@ -291,11 +291,9 @@ export class PageRoute extends Route {
       // the field may not (yet) be on the screen
       if(!statusSpan) continue;
 
-      statusSpan.classList.remove("no_status");
       statusSpan.innerText = statusText.substring(2);
       Utils.addToolTip(statusSpan, "Click to refresh");
     }
-
   }
 
   _addJob(container, job) {
@@ -317,6 +315,7 @@ export class PageRoute extends Route {
     td.appendChild(functionDiv);
 
     const statusSpan = Route._createSpan("status", "loading...");
+    statusSpan.classList.add("no_status");
     /* effectively also the whole column, but it does not look like a column on screen */
     statusSpan.addEventListener("click", evt => {
       // show "loading..." only once, but we are updating the whole column
