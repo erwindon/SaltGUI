@@ -1,4 +1,5 @@
 import {Output} from '../output/Output.js';
+import {ParseCommandLine} from '../ParseCommandLine.js';
 import {TargetType} from '../TargetType.js';
 
 export class Route {
@@ -131,6 +132,10 @@ export class Route {
           if(key === "__kwarg__") continue;
           ret += " " + key + "=" + Output.formatObject(obj[key]);
         }
+      } else if(typeof obj === "string" &&
+                ParseCommandLine.getPatJid().test(obj)) {
+        // prevent quotes being added on JIDs
+        ret += " " + obj;
       } else {
         const s = Output.formatObject(obj);
         ret += " " + s.replace(/\n/g, " ");
