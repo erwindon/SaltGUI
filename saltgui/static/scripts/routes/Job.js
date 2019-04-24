@@ -123,7 +123,7 @@ export class JobRoute extends Route {
 
     // 6: kill with original target pattern
     const jid = decodeURIComponent(Utils.getQueryParam("id"));
-    menu.addMenuItem("Terminate&nbsp;job...", function(evt) {
+    this.terminateJobMenuItem = menu.addMenuItem("Terminate&nbsp;job...", function(evt) {
       this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.signal_job " + jid + " 15");
     }.bind(this));
 
@@ -151,6 +151,10 @@ export class JobRoute extends Route {
     // when the job is already completely done, nothing is returned
     if(!info) {
       summaryJobsActiveSpan.innerText = "done, ";
+      if(this.terminateJobMenuItem) {
+        // nothing left to terminate
+        this.terminateJobMenuItem.style.display = "none";
+      }
       return;
     }
 
