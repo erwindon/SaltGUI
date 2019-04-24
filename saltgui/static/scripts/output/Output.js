@@ -211,7 +211,15 @@ export class Output {
        !Output.isAsyncOutput(response)) {
       // runners/wheel responses are not per minion
       // Do not produce a #response line for async-start confirmation
-      const span = document.createElement("span");
+
+      // for the result of jobs.active
+      const summaryJobsActiveSpan = document.createElement("span");
+      summaryJobsActiveSpan.id = "summary_jobsactive";
+      summaryJobsActiveSpan.innerText = "(loading), ";
+
+      // for the result of jobs.list_job
+      const summaryJobsListJobSpan = document.createElement("span");
+      summaryJobsListJobSpan.id = "summary_listjob";
 
       const cntResponses = Object.keys(response).length;
       const cntMinions = minions.length;
@@ -257,8 +265,10 @@ export class Output {
       // some room for the triangle
       txt = txt + " ";
 
-      span.innerText = txt;
-      allDiv.appendChild(span);
+      allDiv.appendChild(summaryJobsActiveSpan);
+
+      summaryJobsListJobSpan.innerText = txt;
+      allDiv.appendChild(summaryJobsListJobSpan);
     }
 
     const masterTriangle = document.createElement("span");
@@ -323,6 +333,7 @@ export class Output {
 
       if(!fndRepresentation && !response.hasOwnProperty(hostname)) {
         hostOutput = Output.getTextOutput("(no response)");
+        hostOutput.classList.add("noresponse");
         fndRepresentation = true;
       }
 
@@ -386,6 +397,7 @@ export class Output {
 
       // compose the actual output
       const div = document.createElement("div");
+      div.id = hostname;
 
       div.append(hostLabel);
 

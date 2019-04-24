@@ -50,6 +50,11 @@ pre .hostname {
   color: #4caf50;
 }
 
+pre span.active {
+  color: greenyellow;
+  font-weight: bold;
+}
+
 table {
   min-width: 100%;
   border-spacing: 5px;

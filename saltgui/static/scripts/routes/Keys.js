@@ -97,7 +97,8 @@ export class KeysRoute extends PageRoute {
     if(hostnames_rejected.length === 0)
       summary += ", no rejected keys";
     if(summary) {
-      const div = Route._createDiv("msg", summary.replace(/, n/, "N"));
+      // remove the first comma and capitalize the first word
+      const div = Route._createDiv("msg", summary.replace(/, no/, "No"));
       this.getPageElement().querySelector(".minion-list").appendChild(div);
     }
 
