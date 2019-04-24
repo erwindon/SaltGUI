@@ -79,7 +79,7 @@ export class SchedulesRoute extends PageRoute {
     element.appendChild(Route._createTd("run-command-button", ""));
   }
 
-  _updateMinion(container, minion, hostname) {
+  _updateMinion(container, minion, hostname, allMinions) {
 
     minion = SchedulesRoute._fixMinion(minion);
 

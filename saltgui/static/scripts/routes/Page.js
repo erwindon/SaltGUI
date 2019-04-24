@@ -25,6 +25,8 @@ export class PageRoute extends Route {
     // save for the autocompletion
     window.localStorage.setItem("minions", JSON.stringify(hostnames));
 
+    const ipNumberPrefixes = this._getIpNumberPrefixes(minions);
+
     for(const hostname of hostnames) {
       const minion_info = minions[hostname];
 
@@ -32,7 +34,7 @@ export class PageRoute extends Route {
       if(minion_info === false) {
         this._updateOfflineMinion(list, hostname);
       } else {
-        this._updateMinion(list, minion_info, hostname);
+        this._updateMinion(list, minion_info, hostname, minions);
       }
     }
   }
@@ -67,7 +69,77 @@ export class PageRoute extends Route {
     element.appendChild(offline);
   }
 
-  _getBestIpNumber(minion) {
+  _getIpNumberPrefixes(allMinions) {
+    // First we gather all (resonable) prefixes
+    // Only use byte-boundaries for networks
+    // Must match a subnet of A, B or C network
+    const prefixes = { };
+    for(const minion in allMinions) {
+      const grains = allMinions[minion];
+      if(!grains.fqdn_ip4) continue;
+      if(!Array.isArray(grains.fqdn_ip4)) continue;
+      for(const ip of grains.fqdn_ip4) {
+        const parts = ip.split(".");
+        if(ip.startsWith("10.")) {
+          prefixes[parts[0] + "."] = true;
+        }
+        if(ip.startsWith("10.") ||
+           ip.startsWith("172.16.") ||
+           ip.startsWith("172.17.") ||
+           ip.startsWith("172.18.") ||
+           ip.startsWith("172.19.") ||
+           ip.startsWith("172.20.") ||
+           ip.startsWith("172.21.") ||
+           ip.startsWith("172.22.") ||
+           ip.startsWith("172.23.") ||
+           ip.startsWith("172.24.") ||
+           ip.startsWith("172.25.") ||
+           ip.startsWith("172.26.") ||
+           ip.startsWith("172.27.") ||
+           ip.startsWith("172.28.") ||
+           ip.startsWith("172.29.") ||
+           ip.startsWith("172.30.") ||
+           ip.startsWith("172.31.") ||
+           ip.startsWith("192.168.")) {
+          prefixes[parts[0] + "." + parts[1] + "."] = true;
+          prefixes[parts[0] + "." + parts[1] + "." + parts[2] + "."] = true;
+        }
+      }
+    }
+
+    // Then we look whether each minion uses the prefix
+    // When at least one minion does not use the subnet,
+    //    then it is not a suitable subnet
+    for(const p in prefixes) {
+      for(const minion in allMinions) {
+        let cnt = 0;
+        const grains = allMinions[minion];
+        if(!grains.fqdn_ip4) continue;
+        if(!Array.isArray(grains.fqdn_ip4)) continue;
+        for(const ip of grains.fqdn_ip4) {
+          if(!ip.startsWith(p)) continue;
+          cnt++;
+        }
+        // multiple or unused?
+        //    then it is not a suitable subnet
+        if(cnt !== 1) {
+          prefixes[p] = false;
+          break;
+        }
+      }
+    }
+
+    // actually remove the unused prefixes
+    for(const p in prefixes) {
+      if(!prefixes[p]) {
+        delete prefixes[p];
+      }
+    }
+
+    return prefixes;
+  }
+
+  _getBestIpNumber(minion, prefixes) {
     if(!minion) return null;
     const ipv4 = minion.fqdn_ip4;
     if(!ipv4) return null;
@@ -78,6 +150,7 @@ export class PageRoute extends Route {
 
     // get the public IP number (if any)
     for(const s of ipv4) {
+      // See https://nl.wikipedia.org/wiki/RFC_1918
       // local = 127.0.0.0/8
       if(s.startsWith("127.")) continue;
       // private A = 10.0.0.0/8
@@ -105,26 +178,43 @@ export class PageRoute extends Route {
       return s;
     }
 
-    // no public IP number
+    // No public IP was found
+    // Use a common prefix in all available IP numbers
     // get the private IP number (if any)
-    for(const s of ipv4) {
-      // local = 127.0.0.0/8
-      if(s.startsWith("127.")) continue;
-      // not a local address, therefore it is private
-      return s;
+    // when it matches one of the common prefixes
+    for(const p in prefixes) {
+      for(const s of ipv4) {
+        if(s.startsWith(p)) return s;
+      }
     }
 
-    // just pick the first one, should then be a local address
+    // no luck...
+    // try again, but without the restrictions
+    for(const s of ipv4) {
+      // C = 192.168.x.x
+      if(s.startsWith("192.168.")) return s;
+    }
+    for(const s of ipv4) {
+      // B = 172.16.0.0 .. 172.31.255.255
+      // never mind the sub-ranges
+      if(s.startsWith("172.")) return s;
+    }
+    for(const s of ipv4) {
+      // A = 10.x.x.x
+      if(s.startsWith("10.")) return s;
+    }
+
+    // just pick the first one, should then be a local address (127.x.x.x)
     return ipv4[0];
   }
 
-  _updateMinion(container, minion, hostname) {
+  _updateMinion(container, minion, hostname, prefixes) {
 
     const element = this._getElement(container, hostname);
 
     element.appendChild(Route._createTd("hostname", hostname));
 
-    const ipv4 = this._getBestIpNumber(minion);
+    const ipv4 = this._getBestIpNumber(minion, prefixes);
     if(ipv4) {
       const addressTd = Route._createTd("status", "");
       const addressSpan = Route._createSpan("status2", ipv4);

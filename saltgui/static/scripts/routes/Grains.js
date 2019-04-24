@@ -100,8 +100,8 @@ export class GrainsRoute extends PageRoute {
     }
   }
 
-  _updateMinion(container, minion, hostname) {
-    super._updateMinion(container, minion, hostname);
+  _updateMinion(container, minion, hostname, allMinions) {
+    super._updateMinion(container, minion, hostname, allMinions);
 
     const element = document.getElementById(hostname);
 
