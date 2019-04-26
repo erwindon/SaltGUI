@@ -21,11 +21,17 @@
 
 pre a {
   color: yellow;
+  cursor: pointer;
 }
 
 form a:link,
 pre a:link {
   text-decoration: none;
+}
+
+form a:hover,
+pre a:hover {
+  text-decoration: underline;
 }
 
 pre.output div {

@@ -187,7 +187,6 @@ export class JobRoute extends Route {
 
         const linkPsProcInfo = document.createElement("a");
         linkPsProcInfo.innerText = "info";
-        linkPsProcInfo.style.cursor = "pointer";
         linkPsProcInfo.addEventListener("click", evt => {
           this._runFullCommand(evt, "list", minion, "ps.proc_info " + pid);
         });
@@ -197,7 +196,6 @@ export class JobRoute extends Route {
 
         const linkPsTermPid = document.createElement("a");
         linkPsTermPid.innerText = "term";
-        linkPsTermPid.style.cursor = "pointer";
         linkPsTermPid.addEventListener("click", evt => {
           this._runFullCommand(evt, "list", minion, "ps.kill_pid " + pid + " signal=15");
         });
@@ -207,7 +205,6 @@ export class JobRoute extends Route {
 
         const linkPsKillPid = document.createElement("a");
         linkPsKillPid.innerText = "kill";
-        linkPsKillPid.style.cursor = "pointer";
         linkPsKillPid.addEventListener("click", evt => {
           this._runFullCommand(evt, "list", minion, "ps.kill_pid " + pid + " signal=9");
         });
@@ -217,7 +214,6 @@ export class JobRoute extends Route {
 
         const linkPsSignalPid = document.createElement("a");
         linkPsSignalPid.innerText = "signal";
-        linkPsSignalPid.style.cursor = "pointer";
         linkPsSignalPid.addEventListener("click", evt => {
           this._runFullCommand(evt, "list", minion, "ps.kill_pid " + pid + " signal=<signalnumber>");
         });
