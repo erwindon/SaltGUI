@@ -23,6 +23,8 @@ export class ParseCommandLine {
 
   static parseCommandLine(toRun, args, params) {
 
+    const patPlaceHolder = /^<[a-z]+>/;
+
     // note that "none" is not case-insensitive, but "null" is
     const patNull = /^(None|null|Null|NULL)$/;
 
@@ -52,6 +54,11 @@ export class ParseCommandLine {
         if(toRun === "" || toRun[0] === " ") {
           return "Must have value for named parameter '" + name + "'";
         }
+      }
+
+      if(patPlaceHolder.test(toRun)) {
+        const placeHolder = toRun.replace(/>.*/, ">");
+        return "Must fill in all placeholders, e.g. " + placeHolder;
       }
 
       // Determine whether the JSON string starts with a known

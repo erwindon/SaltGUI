@@ -45,7 +45,7 @@ export class GrainsMinionRoute extends PageRoute {
     const menu = new DropDownMenu(gmp);
     menu.addMenuItem("Add&nbsp;grain...", function(evt) {
       // use placeholders for name and value
-      this._runCommand(evt, minion, "grains.setval \"name\" \"value\"");
+      this._runCommand(evt, minion, "grains.setval <name> <value>");
     }.bind(this));
     menu.addMenuItem("Refresh&nbsp;grains...", function(evt) {
       this._runCommand(evt, minion, "saltutil.refresh_grains");
@@ -78,7 +78,7 @@ export class GrainsMinionRoute extends PageRoute {
       }.bind(this));
       if(grain_value.startsWith("[")) {
         menu.addMenuItem("Add&nbsp;value...", function(evt) {
-          this._runCommand(evt, minion, "grains.append \"" + k + "\" \"value\"");
+          this._runCommand(evt, minion, "grains.append \"" + k + "\" <value>");
         }.bind(this));
       }
       menu.addMenuItem("Delete&nbsp;key...", function(evt) {
