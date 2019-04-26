@@ -169,6 +169,13 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.13.0 (2019-04-27)
+- improved indication for sorted tables (erwindon)
+- display ip-number from likely common network (erwindon, thx jonathanuntalan-rfg)
+- enhanced display of in-progress jobs (erwindon)
+- introduced placeholders when suggesting incomplete commands (erwindon)
+- added term/kill/signal commands to jobs and processes (erwindon)
+
 ## 1.12.0 (2019-04-14)
 - improved tooltips; added tooltips on more places (erwindon)
 - improved job summary: show number of succeeded/failed (erwindon)
