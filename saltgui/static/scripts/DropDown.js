@@ -70,6 +70,7 @@ export class DropDownMenu {
     button.addEventListener("click", evt => this.callback(evt, callback, value));
     this.menuDropdownContent.appendChild(button);
     this.verifyAll();
+    return button;
   }
 
   callback(evt, theCallback, value) {

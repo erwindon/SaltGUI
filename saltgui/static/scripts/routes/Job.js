@@ -121,6 +121,18 @@ export class JobRoute extends Route {
       }.bind(this));
     }
 
+    // 6: kill with original target pattern
+    const jid = decodeURIComponent(Utils.getQueryParam("id"));
+    this.terminateJobMenuItem = menu.addMenuItem("Terminate&nbsp;job...", function(evt) {
+      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.term_job " + jid);
+    }.bind(this));
+    this.killJobMenuItem = menu.addMenuItem("Kill&nbsp;job...", function(evt) {
+      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.kill_job " + jid);
+    }.bind(this));
+    this.signalJobMenuItem = menu.addMenuItem("Signal&nbsp;job...", function(evt) {
+      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.signal_job " + jid + " signal=<signalnumber>");
+    }.bind(this));
+
     const functionText = commandText + " on " +
       TargetType.makeTargetText(info["Target-type"], info.Target);
     jobinfo.querySelector(".function").innerText = functionText;
@@ -145,6 +157,18 @@ export class JobRoute extends Route {
     // when the job is already completely done, nothing is returned
     if(!info) {
       summaryJobsActiveSpan.innerText = "done, ";
+      if(this.terminateJobMenuItem) {
+        // nothing left to terminate
+        this.terminateJobMenuItem.style.display = "none";
+      }
+      if(this.killJobMenuItem) {
+        // nothing left to kill
+        this.killJobMenuItem.style.display = "none";
+      }
+      if(this.signalJobMenuItem) {
+        // nothing left to signal
+        this.signalJobMenuItem.style.display = "none";
+      }
       return;
     }
 
@@ -154,10 +178,47 @@ export class JobRoute extends Route {
     for(const minionInfo of info.Running) {
       // each minionInfo is like {'minion': pid}
       for(const minion in minionInfo) {
+        const pid = minionInfo[minion];
         const noResponseSpan = this.getPageElement().querySelector("pre.output div#" + minion + " span.noresponse");
         if(!noResponseSpan) continue;
+
         // show that this minion is still active on the request
-        noResponseSpan.innerHTML = noResponseSpan.innerHTML.replace("no response", "active");
+        noResponseSpan.innerText = "(active) ";
+
+        const linkPsProcInfo = document.createElement("a");
+        linkPsProcInfo.innerText = "info";
+        linkPsProcInfo.addEventListener("click", evt => {
+          this._runFullCommand(evt, "list", minion, "ps.proc_info " + pid);
+        });
+        noResponseSpan.appendChild(linkPsProcInfo);
+
+        noResponseSpan.appendChild(document.createTextNode(" "));
+
+        const linkPsTermPid = document.createElement("a");
+        linkPsTermPid.innerText = "term";
+        linkPsTermPid.addEventListener("click", evt => {
+          this._runFullCommand(evt, "list", minion, "ps.kill_pid " + pid + " signal=15");
+        });
+        noResponseSpan.appendChild(linkPsTermPid);
+
+        noResponseSpan.appendChild(document.createTextNode(" "));
+
+        const linkPsKillPid = document.createElement("a");
+        linkPsKillPid.innerText = "kill";
+        linkPsKillPid.addEventListener("click", evt => {
+          this._runFullCommand(evt, "list", minion, "ps.kill_pid " + pid + " signal=9");
+        });
+        noResponseSpan.appendChild(linkPsKillPid);
+
+        noResponseSpan.appendChild(document.createTextNode(" "));
+
+        const linkPsSignalPid = document.createElement("a");
+        linkPsSignalPid.innerText = "signal";
+        linkPsSignalPid.addEventListener("click", evt => {
+          this._runFullCommand(evt, "list", minion, "ps.kill_pid " + pid + " signal=<signalnumber>");
+        });
+        noResponseSpan.appendChild(linkPsSignalPid);
+
         noResponseSpan.classList.remove("noresponse");
         noResponseSpan.classList.add("active");
       }
