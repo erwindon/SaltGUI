@@ -124,7 +124,13 @@ export class JobRoute extends Route {
     // 6: kill with original target pattern
     const jid = decodeURIComponent(Utils.getQueryParam("id"));
     this.terminateJobMenuItem = menu.addMenuItem("Terminate&nbsp;job...", function(evt) {
-      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.signal_job " + jid + " 15");
+      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.term_job " + jid);
+    }.bind(this));
+    this.killJobMenuItem = menu.addMenuItem("Kill&nbsp;job...", function(evt) {
+      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.kill_job " + jid);
+    }.bind(this));
+    this.signalJobMenuItem = menu.addMenuItem("Signal&nbsp;job...", function(evt) {
+      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.signal_job " + jid + " signal=<signalnumber>");
     }.bind(this));
 
     const functionText = commandText + " on " +
@@ -155,6 +161,14 @@ export class JobRoute extends Route {
         // nothing left to terminate
         this.terminateJobMenuItem.style.display = "none";
       }
+      if(this.killJobMenuItem) {
+        // nothing left to kill
+        this.killJobMenuItem.style.display = "none";
+      }
+      if(this.signalJobMenuItem) {
+        // nothing left to signal
+        this.signalJobMenuItem.style.display = "none";
+      }
       return;
     }
 
@@ -181,13 +195,33 @@ export class JobRoute extends Route {
 
         noResponseSpan.appendChild(document.createTextNode(" "));
 
+        const linkPsTermPid = document.createElement("a");
+        linkPsTermPid.innerText = "term";
+        linkPsTermPid.style.cursor = "pointer";
+        linkPsTermPid.addEventListener("click", evt => {
+          this._runFullCommand(evt, "list", minion, "ps.kill_pid " + pid + " signal=15");
+        });
+        noResponseSpan.appendChild(linkPsTermPid);
+
+        noResponseSpan.appendChild(document.createTextNode(" "));
+
         const linkPsKillPid = document.createElement("a");
         linkPsKillPid.innerText = "kill";
         linkPsKillPid.style.cursor = "pointer";
         linkPsKillPid.addEventListener("click", evt => {
-          this._runFullCommand(evt, "list", minion, "ps.kill_pid " + pid);
+          this._runFullCommand(evt, "list", minion, "ps.kill_pid " + pid + " signal=9");
         });
         noResponseSpan.appendChild(linkPsKillPid);
+
+        noResponseSpan.appendChild(document.createTextNode(" "));
+
+        const linkPsSignalPid = document.createElement("a");
+        linkPsSignalPid.innerText = "signal";
+        linkPsSignalPid.style.cursor = "pointer";
+        linkPsSignalPid.addEventListener("click", evt => {
+          this._runFullCommand(evt, "list", minion, "ps.kill_pid " + pid + " signal=<signalnumber>");
+        });
+        noResponseSpan.appendChild(linkPsSignalPid);
 
         noResponseSpan.classList.remove("noresponse");
         noResponseSpan.classList.add("active");
