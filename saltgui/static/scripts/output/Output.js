@@ -176,7 +176,7 @@ export class Output {
 
   // the orchestrator for the output
   // determines what format should be used and uses that
-  static addResponseOutput(outputContainer, minions, response, command) {
+  static addResponseOutput(outputContainer, minions, response, command, initialStatus) {
 
     // remove old content
     outputContainer.innerText = "";
@@ -215,7 +215,7 @@ export class Output {
       // for the result of jobs.active
       const summaryJobsActiveSpan = document.createElement("span");
       summaryJobsActiveSpan.id = "summary_jobsactive";
-      summaryJobsActiveSpan.innerText = "(loading), ";
+      summaryJobsActiveSpan.innerText = initialStatus + ", ";
 
       // for the result of jobs.list_job
       const summaryJobsListJobSpan = document.createElement("span");

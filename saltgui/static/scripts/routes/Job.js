@@ -131,7 +131,7 @@ export class JobRoute extends Route {
     // use same formatter as direct commands
     let minions = ["WHEEL"];
     if(info.Minions) minions = info.Minions;
-    Output.addResponseOutput(output, minions, info.Result, info.Function);
+    Output.addResponseOutput(output, minions, info.Result, info.Function, "(loading)");
 
     this.resolvePromise();
   }
