@@ -48,7 +48,8 @@ export class JobRoute extends Route {
     const menu = new DropDownMenu(menuSection);
 
     // 1: re-run with original target pattern
-    menu.addMenuItem("Re-run&nbsp;job...", function(evt) {
+    // 2011 = NON-BREAKING HYPHEN
+    menu.addMenuItem("Re&#x2011;run&nbsp;job...", function(evt) {
       myThis._runFullCommand(evt, info["Target-type"], info.Target, commandText);
     }.bind(this));
 
@@ -65,7 +66,8 @@ export class JobRoute extends Route {
     }
     if(minionList) {
       const lst = minionList.substring(1);
-      menu.addMenuItem("Re-run&nbsp;job&nbsp;on&nbsp;all&nbsp;minions...", function(evt) {
+      // 2011 = NON-BREAKING HYPHEN
+      menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;all&nbsp;minions...", function(evt) {
         this._runFullCommand(evt, "list", lst, commandText);
       }.bind(this));
     }
@@ -86,7 +88,8 @@ export class JobRoute extends Route {
     // otherwise the #4 or #5 is sufficient
     if(has1 && has2 && minionList) {
       const lst = minionList.substring(1);
-      menu.addMenuItem("Re-run&nbsp;job&nbsp;on&nbsp;unsuccessful&nbsp;minions...", function(evt) {
+      // 2011 = NON-BREAKING HYPHEN
+      menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;unsuccessful&nbsp;minions...", function(evt) {
         this._runFullCommand(evt, "list", lst, commandText);
       }.bind(this));
     }
@@ -102,7 +105,8 @@ export class JobRoute extends Route {
     }
     if(minionList) {
       const lst = minionList.substring(1);
-      menu.addMenuItem("Re-run&nbsp;job&nbsp;on&nbsp;failed&nbsp;minions...", function(evt) {
+      // 2011 = NON-BREAKING HYPHEN
+      menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;failed&nbsp;minions...", function(evt) {
         this._runFullCommand(evt, "list", lst, commandText);
       }.bind(this));
     }
@@ -118,7 +122,8 @@ export class JobRoute extends Route {
     }
     if(minionList) {
       const lst = minionList.substring(1);
-      menu.addMenuItem("Re-run&nbsp;job&nbsp;on&nbsp;non&nbsp;responding&nbsp;minions...", function(evt) {
+      // 2011 = NON-BREAKING HYPHEN
+      menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;non&nbsp;responding&nbsp;minions...", function(evt) {
         this._runFullCommand(evt, "list", lst, commandText);
       }.bind(this));
     }

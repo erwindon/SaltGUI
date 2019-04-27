@@ -57,7 +57,8 @@ export class JobsRoute extends PageRoute {
     menu.addMenuItem("Show&nbsp;details", function(evt) {
       window.location.assign("/job?id=" + encodeURIComponent(job.id));
     }.bind(this));
-    menu.addMenuItem("Re-run&nbsp;job...", function(evt) {
+    // 2011 = NON-BREAKING HYPHEN
+    menu.addMenuItem("Re&#x2011;run&nbsp;job...", function(evt) {
       this._runFullCommand(evt, job["Target-type"], job.Target, functionText);
     }.bind(this));
 
