@@ -29,12 +29,16 @@ export class SchedulesMinionRoute extends PageRoute {
     const title = document.getElementById("schedulesminion_title");
     title.innerText = "Schedules on " + minion;
 
+    const localScheduleListPromise = this.router.api.getLocalScheduleList(minion);
+    const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
+
     return new Promise(function(resolve, reject) {
       myThis.resolvePromise = resolve;
       if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
-      myThis.router.api.getLocalScheduleList(minion).then(myThis._handleLocalScheduleList);
-      myThis.router.api.getRunnerJobsListJobs().then(myThis._handleRunnerJobsListJobs);
-      myThis.router.api.getRunnerJobsActive().then(myThis._handleRunnerJobsActive);
+      localScheduleListPromise.then(myThis._handleLocalScheduleList);
+      runnerJobsListJobsPromise.then(myThis._handleRunnerJobsListJobs);
+      runnerJobsActivePromise.then(myThis._handleRunnerJobsActive);
     });
   }
 

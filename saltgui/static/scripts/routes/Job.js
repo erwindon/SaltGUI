@@ -16,10 +16,14 @@ export class JobRoute extends Route {
     const myThis = this;
 
     const id = decodeURIComponent(Utils.getQueryParam("id"));
+
+    const runnerJobsListJobPromise = this.router.api.getRunnerJobsListJob(id);
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
+
     return new Promise(function(resolve, reject) {
       myThis.resolvePromise = resolve;
-      myThis.router.api.getRunnerJobsListJob(id).then(myThis._handleRunnerJobsListJob);
-      myThis.router.api.getRunnerJobsActive().then(data => {
+      runnerJobsListJobPromise.then(myThis._handleRunnerJobsListJob);
+      runnerJobsActivePromise.then(data => {
         myThis._handleRunnerJobsActive(id, data);
       });
     });

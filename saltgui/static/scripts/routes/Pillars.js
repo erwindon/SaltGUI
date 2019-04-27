@@ -18,13 +18,18 @@ export class PillarsRoute extends PageRoute {
   onShow() {
     const myThis = this;
 
+    const wheelKeyListAllPromise = this.router.api.getWheelKeyListAll();
+    const localPillarObfuscatePromise = this.router.api.getLocalPillarObfuscate(null);
+    const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
+
     return new Promise(function(resolve, reject) {
       myThis.resolvePromise = resolve;
       if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
-      myThis.router.api.getLocalPillarObfuscate(null).then(myThis._updateMinions);
-      myThis.router.api.getWheelKeyListAll().then(myThis._handleWheelKeyListAll);
-      myThis.router.api.getRunnerJobsListJobs().then(myThis._handleRunnerJobsListJobs);
-      myThis.router.api.getRunnerJobsActive().then(myThis._handleRunnerJobsActive);
+      wheelKeyListAllPromise.then(myThis._handleWheelKeyListAll);
+      localPillarObfuscatePromise.then(myThis._updateMinions);
+      runnerJobsListJobsPromise.then(myThis._handleRunnerJobsListJobs);
+      runnerJobsActivePromise.then(myThis._handleRunnerJobsActive);
     });
   }
 

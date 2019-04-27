@@ -16,15 +16,22 @@ export class MinionsRoute extends PageRoute {
   onShow() {
     const myThis = this;
 
+    const wheelKeyListAllPromise = this.router.api.getWheelKeyListAll();
+    const localGrainsItemsPromise = this.router.api.getLocalGrainsItems(null);
+    const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
+    //we need these functions to populate the dropdown boxes
+    const wheelConfigValuesPromise = this.router.api.getWheelConfigValues();
+
     return new Promise(function(resolve, reject) {
       myThis.resolvePromise = resolve;
       if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
-      myThis.router.api.getLocalGrainsItems(null).then(myThis._updateMinions);
-      myThis.router.api.getWheelKeyListAll().then(myThis._handleWheelKeyListAll);
-      myThis.router.api.getRunnerJobsListJobs().then(myThis._handleRunnerJobsListJobs);
-      myThis.router.api.getRunnerJobsActive().then(myThis._handleRunnerJobsActive);
+      wheelKeyListAllPromise.then(myThis._handleWheelKeyListAll);
+      localGrainsItemsPromise.then(myThis._updateMinions);
+      runnerJobsListJobsPromise.then(myThis._handleRunnerJobsListJobs);
+      runnerJobsActivePromise.then(myThis._handleRunnerJobsActive);
       //we need these functions to populate the dropdown boxes
-      myThis.router.api.getWheelConfigValues().then(myThis._handleWheelConfigValues);
+      wheelConfigValuesPromise.then(myThis._handleWheelConfigValues);
     });
   }
 

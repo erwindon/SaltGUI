@@ -17,13 +17,16 @@ export class JobsRoute extends PageRoute {
   onShow() {
     const myThis = this;
 
+    const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
+
     return new Promise(function(resolve, reject) {
       myThis.resolvePromise = resolve;
       if(myThis.jobsLoaded) resolve();
-      myThis.router.api.getRunnerJobsListJobs().then(data => {
+      runnerJobsListJobsPromise.then(data => {
         myThis._handleRunnerJobsListJobs(data, true, 50);
       });
-      myThis.router.api.getRunnerJobsActive().then(data => {
+      runnerJobsActivePromise.then(data => {
         myThis._handleRunnerJobsActive(data);
       });
     });
@@ -152,9 +155,12 @@ export class JobsRoute extends PageRoute {
   }
 
   _getJobDetails(jobid) {
-    const p = this;
-    this.router.api.getRunnerJobsListJob(jobid).then(data => {
-      p._handleRunnerJobsListJob(jobid, data);
+    const myThis = this;
+
+    const runnerJobsListJobPromise = this.router.api.getRunnerJobsListJob(jobid);
+
+    runnerJobsListJobPromise.then(data => {
+      myThis._handleRunnerJobsListJob(jobid, data);
     });
   }
 

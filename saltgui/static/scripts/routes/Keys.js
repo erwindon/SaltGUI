@@ -17,21 +17,24 @@ export class KeysRoute extends PageRoute {
   onShow() {
     const myThis = this;
 
-    const p1 = this.router.api.getWheelKeyListAll();
-    const p2 = this.router.api.getWheelKeyFinger();
+    const wheelKeyListAllPromise = this.router.api.getWheelKeyListAll();
+    const wheelKeyFingerPromise = this.router.api.getWheelKeyFinger();
+    const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    Promise.all([p1, p2])
+    Promise.all([wheelKeyListAllPromise, wheelKeyFingerPromise])
       .then(function(data){
         // process result of 1st promise
         myThis._handleWheelKeyListAll(data[0]);
         // process result of 2nd promise
         myThis._handleWheelKeyFinger(data[1]);
       });
+
     return new Promise(function(resolve, reject) {
       myThis.resolvePromise = resolve;
       if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
-      myThis.router.api.getRunnerJobsListJobs().then(myThis._handleRunnerJobsListJobs);
-      myThis.router.api.getRunnerJobsActive().then(myThis._handleRunnerJobsActive);
+      runnerJobsListJobsPromise.then(myThis._handleRunnerJobsListJobs);
+      runnerJobsActivePromise.then(myThis._handleRunnerJobsActive);
     });
   }
 

@@ -16,12 +16,16 @@ export class TemplatesRoute extends PageRoute {
   onShow() {
     const myThis = this;
 
+    const wheelConfigValuesPromise = this.router.api.getWheelConfigValues();
+    const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
+
     return new Promise(function(resolve, reject) {
       myThis.resolvePromise = resolve;
       if(myThis.jobsLoaded) resolve();
-      myThis.router.api.getRunnerJobsListJobs().then(myThis._handleRunnerJobsListJobs);
-      myThis.router.api.getRunnerJobsActive().then(myThis._handleRunnerJobsActive);
-      myThis.router.api.getWheelConfigValues().then(myThis._handleWheelConfigValues);
+      wheelConfigValuesPromise.then(myThis._handleWheelConfigValues);
+      runnerJobsListJobsPromise.then(myThis._handleRunnerJobsListJobs);
+      runnerJobsActivePromise.then(myThis._handleRunnerJobsActive);
     });
   }
 

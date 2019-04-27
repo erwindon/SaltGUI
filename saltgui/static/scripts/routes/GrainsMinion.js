@@ -27,12 +27,16 @@ export class GrainsMinionRoute extends PageRoute {
     const title = document.getElementById("grainsminion_title");
     title.innerText = "Grains on " + minion;
 
+    const localGrainsItemsPromise = this.router.api.getLocalGrainsItems(minion);
+    const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
+
     return new Promise(function(resolve, reject) {
       myThis.resolvePromise = resolve;
       if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
-      myThis.router.api.getLocalGrainsItems(minion).then(myThis._handleLocalGrainsItems);
-      myThis.router.api.getRunnerJobsListJobs().then(myThis._handleRunnerJobsListJobs);
-      myThis.router.api.getRunnerJobsActive().then(myThis._handleRunnerJobsActive);
+      localGrainsItemsPromise.then(myThis._handleLocalGrainsItems);
+      runnerJobsListJobsPromise.then(myThis._handleRunnerJobsListJobs);
+      runnerJobsActivePromise.then(myThis._handleRunnerJobsActive);
     });
   }
 

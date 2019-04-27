@@ -27,12 +27,16 @@ export class PillarsMinionRoute extends PageRoute {
     const title = document.getElementById("pillarsminion_title");
     title.innerText = "Pillars on " + minion;
 
+    const localPillarItemsPromise = this.router.api.getLocalPillarItems(minion);
+    const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
+
     return new Promise(function(resolve, reject) {
       myThis.resolvePromise = resolve;
       if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
-      myThis.router.api.getLocalPillarItems(minion).then(myThis._handleLocalPillarItems);
-      myThis.router.api.getRunnerJobsListJobs().then(myThis._handleRunnerJobsListJobs);
-      myThis.router.api.getRunnerJobsActive().then(myThis._handleRunnerJobsActive);
+      localPillarItemsPromise.then(myThis._handleLocalPillarItems);
+      runnerJobsListJobsPromise.then(myThis._handleRunnerJobsListJobs);
+      runnerJobsActivePromise.then(myThis._handleRunnerJobsActive);
     });
   }
 
