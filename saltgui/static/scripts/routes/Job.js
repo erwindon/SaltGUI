@@ -145,7 +145,15 @@ export class JobRoute extends Route {
     // use same formatter as direct commands
     let minions = ["WHEEL"];
     if(info.Minions) minions = info.Minions;
-    Output.addResponseOutput(output, minions, info.Result, info.Function, "(loading)");
+    let initialStatus = "(loading)";
+    if(Object.keys(info.Result).length === info.Minions.length) {
+      // we have all the results
+      // that means we are done
+      // don't wait for RunnerJobsActive to also tell us that we are done
+      // RunnerJobsActive remains running and will overwrite with the same
+      initialStatus = "done";
+    }
+    Output.addResponseOutput(output, minions, info.Result, info.Function, initialStatus);
 
     this.resolvePromise();
   }
