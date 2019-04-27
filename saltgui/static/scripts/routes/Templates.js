@@ -7,7 +7,6 @@ export class TemplatesRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]templates$", "Templates", "#page_templates", "#button_templates", router);
-    this.jobsLoaded = false;
 
     this._handleWheelConfigValues = this._handleWheelConfigValues.bind(this);
     this._applyTemplate = this._applyTemplate.bind(this);
@@ -20,12 +19,13 @@ export class TemplatesRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    return new Promise(function(resolve, reject) {
-      myThis.resolvePromise = resolve;
-      if(myThis.jobsLoaded) resolve();
-      wheelConfigValuesPromise.then(myThis._handleWheelConfigValues);
-      runnerJobsListJobsPromise.then(myThis._handleRunnerJobsListJobs);
-      runnerJobsActivePromise.then(myThis._handleRunnerJobsActive);
+    wheelConfigValuesPromise.then(myThis._handleWheelConfigValues);
+
+    runnerJobsListJobsPromise.then(data => {
+      myThis._handleRunnerJobsListJobs(data);
+      runnerJobsActivePromise.then(data => {
+        myThis._handleRunnerJobsActive(data);
+      });
     });
   }
 

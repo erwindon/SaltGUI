@@ -20,9 +20,8 @@ export class JobRoute extends Route {
     const runnerJobsListJobPromise = this.router.api.getRunnerJobsListJob(id);
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    return new Promise(function(resolve, reject) {
-      myThis.resolvePromise = resolve;
-      runnerJobsListJobPromise.then(myThis._handleRunnerJobsListJob);
+    runnerJobsListJobPromise.then(data => {
+      myThis._handleRunnerJobsListJob(data);
       runnerJobsActivePromise.then(data => {
         myThis._handleRunnerJobsActive(id, data);
       });
@@ -166,8 +165,6 @@ export class JobRoute extends Route {
       this.signalJobMenuItem.style.display = "none";
     }
     Output.addResponseOutput(output, minions, info.Result, info.Function, initialStatus);
-
-    this.resolvePromise();
   }
 
   _handleRunnerJobsActive(id, data) {

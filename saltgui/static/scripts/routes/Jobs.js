@@ -9,7 +9,6 @@ export class JobsRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]jobs$", "Jobs", "#page_jobs", "#button_jobs", router);
-    this.jobsLoaded = false;
 
     this._getJobDetails = this._getJobDetails.bind(this);
   }
@@ -20,16 +19,12 @@ export class JobsRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    return new Promise(function(resolve, reject) {
-      myThis.resolvePromise = resolve;
-      if(myThis.jobsLoaded) resolve();
-      runnerJobsListJobsPromise.then(data => {
-        myThis._handleRunnerJobsListJobs(data, true, 50);
-      });
+    runnerJobsListJobsPromise.then(data => {
+      myThis._handleRunnerJobsListJobs(data, true, 50);
       runnerJobsActivePromise.then(data => {
         myThis._handleRunnerJobsActive(data);
       });
-    });
+    }); 
   }
 
   _addJob(container, job) {

@@ -9,9 +9,6 @@ export class GrainsMinionRoute extends PageRoute {
   constructor(router) {
     super("^[\/]grainsminion$", "Grains", "#page_grainsminion", "#button_grains", router);
 
-    this.keysLoaded = false;
-    this.jobsLoaded = false;
-
     this._handleLocalGrainsItems = this._handleLocalGrainsItems.bind(this);
 
     this.page_element.querySelector("#button_close_grainsminion").addEventListener("click", _ => {
@@ -31,13 +28,14 @@ export class GrainsMinionRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    return new Promise(function(resolve, reject) {
-      myThis.resolvePromise = resolve;
-      if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
-      localGrainsItemsPromise.then(myThis._handleLocalGrainsItems);
-      runnerJobsListJobsPromise.then(myThis._handleRunnerJobsListJobs);
-      runnerJobsActivePromise.then(myThis._handleRunnerJobsActive);
-    });
+    localGrainsItemsPromise.then(myThis._handleLocalGrainsItems);
+
+    runnerJobsListJobsPromise.then(data => {
+      myThis._handleRunnerJobsListJobs(data);
+      runnerJobsActivePromise.then(data => {
+        myThis._handleRunnerJobsActive(data);
+      });
+    }); 
   }
 
   _handleLocalGrainsItems(data) {

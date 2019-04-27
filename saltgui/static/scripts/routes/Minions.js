@@ -7,8 +7,6 @@ export class MinionsRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]$", "Minions", "#page_minions", "#button_minions", router);
-    this.keysLoaded = false;
-    this.jobsLoaded = false;
 
     this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
   }
@@ -23,16 +21,22 @@ export class MinionsRoute extends PageRoute {
     //we need these functions to populate the dropdown boxes
     const wheelConfigValuesPromise = this.router.api.getWheelConfigValues();
 
-    return new Promise(function(resolve, reject) {
-      myThis.resolvePromise = resolve;
-      if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
-      wheelKeyListAllPromise.then(myThis._handleWheelKeyListAll);
-      localGrainsItemsPromise.then(myThis._updateMinions);
-      runnerJobsListJobsPromise.then(myThis._handleRunnerJobsListJobs);
-      runnerJobsActivePromise.then(myThis._handleRunnerJobsActive);
-      //we need these functions to populate the dropdown boxes
-      wheelConfigValuesPromise.then(myThis._handleWheelConfigValues);
+    wheelKeyListAllPromise.then(data => {
+      myThis._handleWheelKeyListAll(data);
+      localGrainsItemsPromise.then(data => {
+        myThis._updateMinions(data);
+      });
     });
+
+    runnerJobsListJobsPromise.then(data => {
+      myThis._handleRunnerJobsListJobs(data);
+      runnerJobsActivePromise.then(data => {
+        myThis._handleRunnerJobsActive(data);
+      });
+    }); 
+
+    //we need these functions to populate the dropdown boxes
+    wheelConfigValuesPromise.then(myThis._handleWheelConfigValues);
   }
 
   _handleWheelConfigValues(data) {
@@ -76,9 +80,6 @@ export class MinionsRoute extends PageRoute {
     }
 
     Utils.showTableSortable(this.getPageElement(), "minions");
-
-    this.keysLoaded = true;
-    if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
   _updateOfflineMinion(container, hostname) {

@@ -7,8 +7,6 @@ export class SchedulesRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]schedules$", "Schedules", "#page_schedules", "#button_schedules", router);
-    this.keysLoaded = false;
-    this.jobsLoaded = false;
 
     this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
     this._updateMinion = this._updateMinion.bind(this);
@@ -22,14 +20,19 @@ export class SchedulesRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    return new Promise(function(resolve, reject) {
-      myThis.resolvePromise = resolve;
-      if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
-      wheelKeyListAllPromise.then(myThis._handleWheelKeyListAll);
-      localScheduleListPromise.then(myThis._updateMinions, myThis._updateMinions);
-      runnerJobsListJobsPromise.then(myThis._handleRunnerJobsListJobs);
-      runnerJobsActivePromise.then(myThis._handleRunnerJobsActive);
+    wheelKeyListAllPromise.then(data => {
+      myThis._handleWheelKeyListAll(data);
+      localScheduleListPromise.then(data => {
+        myThis._updateMinions(data);
+      });
     });
+
+    runnerJobsListJobsPromise.then(data => {
+      myThis._handleRunnerJobsListJobs(data);
+      runnerJobsActivePromise.then(data => {
+        myThis._handleRunnerJobsActive(data);
+      });
+    }); 
   }
 
   // This one has some historic ballast:
@@ -68,9 +71,6 @@ export class SchedulesRoute extends PageRoute {
     }
 
     Utils.showTableSortable(this.getPageElement(), "minions");
-
-    this.keysLoaded = true;
-    if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
   _updateOfflineMinion(container, hostname) {

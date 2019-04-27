@@ -7,8 +7,6 @@ export class KeysRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]keys$", "Keys", "#page_keys", "#button_keys", router);
-    this.keysLoaded = false;
-    this.jobsLoaded = false;
 
     this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
     this._handleWheelKeyFinger = this._handleWheelKeyFinger.bind(this);
@@ -22,20 +20,19 @@ export class KeysRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    Promise.all([wheelKeyListAllPromise, wheelKeyFingerPromise])
-      .then(function(data){
-        // process result of 1st promise
-        myThis._handleWheelKeyListAll(data[0]);
-        // process result of 2nd promise
-        myThis._handleWheelKeyFinger(data[1]);
+    wheelKeyListAllPromise.then(data => {
+      myThis._handleWheelKeyListAll(data);
+      wheelKeyFingerPromise.then(data => {
+        myThis._handleWheelKeyFinger(data);
       });
-
-    return new Promise(function(resolve, reject) {
-      myThis.resolvePromise = resolve;
-      if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
-      runnerJobsListJobsPromise.then(myThis._handleRunnerJobsListJobs);
-      runnerJobsActivePromise.then(myThis._handleRunnerJobsActive);
     });
+
+    runnerJobsListJobsPromise.then(data => {
+      myThis._handleRunnerJobsListJobs(data);
+      runnerJobsActivePromise.then(data => {
+        myThis._handleRunnerJobsActive(data);
+      });
+    }); 
   }
 
   _handleWheelKeyFinger(data) {
@@ -107,9 +104,6 @@ export class KeysRoute extends PageRoute {
     }
 
     Utils.showTableSortable(this.getPageElement(), "minions");
-
-    this.keysLoaded = true;
-    if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
   _updateOfflineMinion(container, hostname) {

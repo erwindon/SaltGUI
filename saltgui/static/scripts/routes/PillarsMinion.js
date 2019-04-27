@@ -9,9 +9,6 @@ export class PillarsMinionRoute extends PageRoute {
   constructor(router) {
     super("^[\/]pillarsminion$", "Pillars", "#page_pillarsminion", "#button_pillars", router);
 
-    this.keysLoaded = false;
-    this.jobsLoaded = false;
-
     this._handleLocalPillarItems = this._handleLocalPillarItems.bind(this);
 
     this.page_element.querySelector("#button_close_pillarsminion").addEventListener("click", _ => {
@@ -31,13 +28,14 @@ export class PillarsMinionRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    return new Promise(function(resolve, reject) {
-      myThis.resolvePromise = resolve;
-      if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
-      localPillarItemsPromise.then(myThis._handleLocalPillarItems);
-      runnerJobsListJobsPromise.then(myThis._handleRunnerJobsListJobs);
-      runnerJobsActivePromise.then(myThis._handleRunnerJobsActive);
-    });
+    localPillarItemsPromise.then(myThis._handleLocalPillarItems);
+
+    runnerJobsListJobsPromise.then(data => {
+      myThis._handleRunnerJobsListJobs(data);
+      runnerJobsActivePromise.then(data => {
+        myThis._handleRunnerJobsActive(data);
+      });
+    }); 
   }
 
   _handleLocalPillarItems(data) {
