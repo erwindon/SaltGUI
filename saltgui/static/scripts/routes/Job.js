@@ -157,6 +157,9 @@ export class JobRoute extends Route {
       // don't wait for RunnerJobsActive to also tell us that we are done
       // RunnerJobsActive remains running and will overwrite with the same
       initialStatus = "done";
+      this.terminateJobMenuItem.style.display = "none";
+      this.killJobMenuItem.style.display = "none";
+      this.signalJobMenuItem.style.display = "none";
     }
     Output.addResponseOutput(output, minions, info.Result, info.Function, initialStatus);
 
