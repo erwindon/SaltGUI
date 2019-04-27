@@ -8,6 +8,8 @@ import {TargetType} from './TargetType.js';
 export class CommandBox {
 
   constructor(api) {
+    const myThis = this;
+
     this.api = api;
     this._getRunParams = this._getRunParams.bind(this);
     this._onRun = this._onRun.bind(this);
@@ -30,7 +32,6 @@ export class CommandBox {
     if(!templatesText || templatesText === "undefined") templatesText = "{}";
     const templates = JSON.parse(templatesText);
     const keys = Object.keys(templates).sort();
-    const page = this;
     for(const key of keys) {
       const template = templates[key];
       let description = template["description"];
@@ -38,7 +39,7 @@ export class CommandBox {
       menu.addMenuItem(
         description,
         function() {
-          page._applyTemplate(template);
+          myThis._applyTemplate(template);
         }
       );
     }

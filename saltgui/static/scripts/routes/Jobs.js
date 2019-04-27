@@ -15,15 +15,16 @@ export class JobsRoute extends PageRoute {
   }
 
   onShow() {
-    const jobs = this;
+    const myThis = this;
+
     return new Promise(function(resolve, reject) {
-      jobs.resolvePromise = resolve;
-      if(jobs.jobsLoaded) resolve();
-      jobs.router.api.getRunnerJobsListJobs().then(data => {
-        jobs._handleRunnerJobsListJobs(data, true, 50);
+      myThis.resolvePromise = resolve;
+      if(myThis.jobsLoaded) resolve();
+      myThis.router.api.getRunnerJobsListJobs().then(data => {
+        myThis._handleRunnerJobsListJobs(data, true, 50);
       });
-      jobs.router.api.getRunnerJobsActive().then(data => {
-        jobs._handleRunnerJobsActive(data);
+      myThis.router.api.getRunnerJobsActive().then(data => {
+        myThis._handleRunnerJobsActive(data);
       });
     });
   }

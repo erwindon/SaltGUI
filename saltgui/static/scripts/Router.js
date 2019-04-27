@@ -55,12 +55,10 @@ export class Router {
   }
 
   _registerEventListeners() {
-    const router = this;
-
     document.querySelector(".logo")
       .addEventListener("click", _ => {
         if(window.location.pathname === "/login") return;
-        router.goTo("/");
+        this.goTo("/");
       });
 
     document.querySelector("#button_minions1")
@@ -158,7 +156,8 @@ export class Router {
   }
 
   showRoute(route) {
-    const router = this;
+    const myThis = this;
+
     route.getPageElement().style.display = "";
 
     const minionMenuItem = document.getElementById("button_minions1");
@@ -185,17 +184,17 @@ export class Router {
       elem2.classList.add("menu_item_active");
     }
 
-    router.switchingRoute = true;
+    this.switchingRoute = true;
 
     const afterLoad = function(route) {
-      if(router.currentRoute !== undefined) {
-        router.hideRoute(router.currentRoute);
+      if(myThis.currentRoute !== undefined) {
+        myThis.hideRoute(myThis.currentRoute);
       }
 
-      router.currentRoute = route;
-      document.title = "SaltGUI - " + router.currentRoute.getName();
-      router.currentRoute.getPageElement().className = "route current";
-      router.switchingRoute = false;
+      myThis.currentRoute = route;
+      document.title = "SaltGUI - " + myThis.currentRoute.getName();
+      myThis.currentRoute.getPageElement().className = "route current";
+      myThis.switchingRoute = false;
     };
 
     let response;

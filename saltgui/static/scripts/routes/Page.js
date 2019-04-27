@@ -443,9 +443,10 @@ export class PageRoute extends Route {
   }
 
   _startRunningJobs() {
-    const p = this;
+    const myThis = this;
+
     this.router.api.getRunnerJobsActive().then(data => {
-      p._handleRunnerJobsActive(data);
+      myThis._handleRunnerJobsActive(data);
     });
   }
 

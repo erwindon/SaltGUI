@@ -21,7 +21,7 @@ export class SchedulesMinionRoute extends PageRoute {
   }
 
   onShow() {
-    const minions = this;
+    const myThis = this;
 
     const minion = decodeURIComponent(Utils.getQueryParam("minion"));
 
@@ -30,11 +30,11 @@ export class SchedulesMinionRoute extends PageRoute {
     title.innerText = "Schedules on " + minion;
 
     return new Promise(function(resolve, reject) {
-      minions.resolvePromise = resolve;
-      if(minions.keysLoaded && minions.jobsLoaded) resolve();
-      minions.router.api.getLocalScheduleList(minion).then(minions._handleLocalScheduleList);
-      minions.router.api.getRunnerJobsListJobs().then(minions._handleRunnerJobsListJobs);
-      minions.router.api.getRunnerJobsActive().then(minions._handleRunnerJobsActive);
+      myThis.resolvePromise = resolve;
+      if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
+      myThis.router.api.getLocalScheduleList(minion).then(myThis._handleLocalScheduleList);
+      myThis.router.api.getRunnerJobsListJobs().then(myThis._handleRunnerJobsListJobs);
+      myThis.router.api.getRunnerJobsActive().then(myThis._handleRunnerJobsActive);
     });
   }
 

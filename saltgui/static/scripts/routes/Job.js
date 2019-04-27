@@ -13,13 +13,14 @@ export class JobRoute extends Route {
   }
 
   onShow() {
-    const job = this;
+    const myThis = this;
+
     const id = decodeURIComponent(Utils.getQueryParam("id"));
     return new Promise(function(resolve, reject) {
-      job.resolvePromise = resolve;
-      job.router.api.getRunnerJobsListJob(id).then(job._handleRunnerJobsListJob);
-      job.router.api.getRunnerJobsActive().then(data => {
-        job._handleRunnerJobsActive(id, data);
+      myThis.resolvePromise = resolve;
+      myThis.router.api.getRunnerJobsListJob(id).then(myThis._handleRunnerJobsListJob);
+      myThis.router.api.getRunnerJobsActive().then(data => {
+        myThis._handleRunnerJobsActive(id, data);
       });
     });
   }
@@ -31,9 +32,10 @@ export class JobRoute extends Route {
   }
 
   _handleRunnerJobsListJob(data) {
-    const job = this;
+    const myThis = this;
+
     const info = data.return[0];
-    job.getPageElement().querySelector(".output").innerText = "";
+    this.getPageElement().querySelector(".output").innerText = "";
 
     document.querySelector("#button_close_job").addEventListener("click", _ => {
       window.history.back();
@@ -47,7 +49,7 @@ export class JobRoute extends Route {
 
     // 1: re-run with original target pattern
     menu.addMenuItem("Re-run&nbsp;job...", function(evt) {
-      this._runFullCommand(evt, info["Target-type"], info.Target, commandText);
+      myThis._runFullCommand(evt, info["Target-type"], info.Target, commandText);
     }.bind(this));
 
     // 2: re-run list of minions
@@ -139,7 +141,7 @@ export class JobRoute extends Route {
 
     jobinfo.querySelector(".time").innerText = Output.dateTimeStr(info.StartTime);
 
-    const output = job.getPageElement().querySelector(".output");
+    const output = this.getPageElement().querySelector(".output");
     // use same formatter as direct commands
     let minions = ["WHEEL"];
     if(info.Minions) minions = info.Minions;

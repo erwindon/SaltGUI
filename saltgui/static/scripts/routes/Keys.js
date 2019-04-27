@@ -15,22 +15,23 @@ export class KeysRoute extends PageRoute {
   }
 
   onShow() {
-    const keys = this;
-    const p1 = keys.router.api.getWheelKeyListAll();
-    const p2 = keys.router.api.getWheelKeyFinger();
+    const myThis = this;
+
+    const p1 = this.router.api.getWheelKeyListAll();
+    const p2 = this.router.api.getWheelKeyFinger();
 
     Promise.all([p1, p2])
       .then(function(data){
         // process result of 1st promise
-        keys._handleWheelKeyListAll(data[0]);
+        myThis._handleWheelKeyListAll(data[0]);
         // process result of 2nd promise
-        keys._handleWheelKeyFinger(data[1]);
+        myThis._handleWheelKeyFinger(data[1]);
       });
     return new Promise(function(resolve, reject) {
-      keys.resolvePromise = resolve;
-      if(keys.keysLoaded && keys.jobsLoaded) resolve();
-      keys.router.api.getRunnerJobsListJobs().then(keys._handleRunnerJobsListJobs);
-      keys.router.api.getRunnerJobsActive().then(keys._handleRunnerJobsActive);
+      myThis.resolvePromise = resolve;
+      if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
+      myThis.router.api.getRunnerJobsListJobs().then(myThis._handleRunnerJobsListJobs);
+      myThis.router.api.getRunnerJobsActive().then(myThis._handleRunnerJobsActive);
     });
   }
 

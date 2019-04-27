@@ -46,15 +46,15 @@ export class GrainsRoute extends PageRoute {
   }
 
   onShow() {
-    const minions = this;
+    const myThis = this;
 
     return new Promise(function(resolve, reject) {
-      minions.resolvePromise = resolve;
-      if(minions.keysLoaded && minions.jobsLoaded) resolve();
-      minions.router.api.getLocalGrainsItems(null).then(minions._updateMinions);
-      minions.router.api.getWheelKeyListAll().then(minions._handleWheelKeyListAll);
-      minions.router.api.getRunnerJobsListJobs().then(minions._handleRunnerJobsListJobs);
-      minions.router.api.getRunnerJobsActive().then(minions._handleRunnerJobsActive);
+      myThis.resolvePromise = resolve;
+      if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
+      myThis.router.api.getLocalGrainsItems(null).then(myThis._updateMinions);
+      myThis.router.api.getWheelKeyListAll().then(myThis._handleWheelKeyListAll);
+      myThis.router.api.getRunnerJobsListJobs().then(myThis._handleRunnerJobsListJobs);
+      myThis.router.api.getRunnerJobsActive().then(myThis._handleRunnerJobsActive);
     });
   }
 

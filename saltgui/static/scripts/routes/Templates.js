@@ -14,13 +14,14 @@ export class TemplatesRoute extends PageRoute {
   }
 
   onShow() {
-    const templates = this;
+    const myThis = this;
+
     return new Promise(function(resolve, reject) {
-      templates.resolvePromise = resolve;
-      if(templates.jobsLoaded) resolve();
-      templates.router.api.getRunnerJobsListJobs().then(templates._handleRunnerJobsListJobs);
-      templates.router.api.getRunnerJobsActive().then(templates._handleRunnerJobsActive);
-      templates.router.api.getWheelConfigValues().then(templates._handleWheelConfigValues);
+      myThis.resolvePromise = resolve;
+      if(myThis.jobsLoaded) resolve();
+      myThis.router.api.getRunnerJobsListJobs().then(myThis._handleRunnerJobsListJobs);
+      myThis.router.api.getRunnerJobsActive().then(myThis._handleRunnerJobsActive);
+      myThis.router.api.getWheelConfigValues().then(myThis._handleWheelConfigValues);
     });
   }
 
