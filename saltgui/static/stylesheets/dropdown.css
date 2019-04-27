@@ -4,10 +4,6 @@
   cursor: pointer;
 }
 
-header .menu-dropdown {
-  font-size: 45px;
-}
-
 /* Dropdown Content (Hidden by Default) */
 .run-command-button .menu-dropdown-content {
   display: none;
@@ -36,7 +32,6 @@ header .menu-dropdown {
 }
 
 /* Change color of menu-dropdown links on hover */
-.dropdown .dropdown-content div:hover,
 .run-command-button .menu-dropdown-content div:hover {
   background: rgba(0, 0, 0, 0.15);
   color: #4caf50;

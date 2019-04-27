@@ -32,10 +32,6 @@
   font-size: 18px;
 }
 
-#login-form input[type='success'] {
-  width: 100%;
-}
-
 #login-form select {
   color: black;
   width: 100%;

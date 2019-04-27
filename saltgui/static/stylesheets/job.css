@@ -7,45 +7,6 @@
   font-weight: normal;
 }
 
-#page_job .task {
-  color: white;
-  font-family: monospace;
-  padding: 3px 8px;
-  border-radius: 2px;
-  background-color: #4caf50;
-  cursor: default;
-  display: block;
-  white-space: pre-wrap;
-}
-
-#page_job .task.host_failure {
-  background-color: rgba(218, 41, 28, 0.31);
-  color: black;
-}
-
-#page_job .host {
-  background-color: #f9f9f9;
-  padding: 12px 20px 12px 20px;
-  cursor: pointer;
-  border: 1px solid #e6e6e6;
-  max-height: 300px;
-  overflow-y: scroll;
-}
-
-#page_job .host:hover {
-  background-color: #efefef;
-}
-
-#page_job .host h1 {
-  font-size: 18px;
-  font-weight: normal;
-}
-
-#page_job .task .comment,
-#page_job .task .duration {
-  font-size: 12px;
-}
-
 #page_job .job_menu {
   display: inline;
 }

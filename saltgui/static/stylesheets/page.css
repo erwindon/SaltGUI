@@ -13,12 +13,6 @@
   width: 100%;
 }
 
-.collapsed {
-  color: red;
-  max-height: calc(1em + 8px);
-  overflow-y: hidden;
-}
-
 pre a {
   color: yellow;
   cursor: pointer;
@@ -86,7 +80,6 @@ table tr td {
   white-space: nowrap;
 }
 
-.jobs td.no_status,
 .jobs td > span.no_status {
   color: gray;
 }
@@ -151,10 +144,6 @@ table tr td:last-of-type {
 .jobs td.details > span,
 .jobs td.status > span {
   position: relative;
-}
-
-.minions td.address:focus > span {
-  cursor: pointer;
 }
 
 .minions td.accepted {

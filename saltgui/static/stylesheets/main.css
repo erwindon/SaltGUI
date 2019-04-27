@@ -1,6 +1,4 @@
-*,
-*::before,
-*::after {
+* {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -230,18 +228,12 @@ select {
 }
 
 input:focus {
-  outline: none;
   border: 2px solid rgba(76, 175, 80, 0.53);
 }
 
 input[disabled] {
   opacity: 0.2;
   cursor: default;
-}
-
-input[type='submit']:active:not([disabled]) {
-  transform: scale(0.98);
-  box-shadow: 0 3px 1px rgba(33, 33, 33, 0.2);
 }
 
 *:focus {
