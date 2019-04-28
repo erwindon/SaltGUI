@@ -20,9 +20,14 @@ export class KeysRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    wheelKeyListAllPromise.then(data => {
-      myThis._handleWheelKeyListAll(data);
-      wheelKeyFingerPromise.then(data => {
+    wheelKeyListAllPromise.then(data1 => {
+      myThis._handleWheelKeyListAll(data1);
+      wheelKeyFingerPromise.then(data2 => {
+        myThis._handleWheelKeyFinger(data2);
+      }, data3 => {
+        const data = {"return":[{}]};
+        for(const k of data1.return[0].data.return.minions)
+          data.return[0][k] = JSON.stringify(data3);
         myThis._handleWheelKeyFinger(data);
       });
     });

@@ -20,9 +20,17 @@ export class PillarsRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    wheelKeyListAllPromise.then(myThis._handleWheelKeyListAll);
-
-    localPillarObfuscatePromise.then(myThis._updateMinions);
+    wheelKeyListAllPromise.then(data1 => {
+      myThis._handleWheelKeyListAll(data1);
+      localPillarObfuscatePromise.then(data2 => {
+        myThis._updateMinions(data2);
+      }, data3 => {
+        const data = {"return":[{}]};
+        for(const k of data1.return[0].data.return.minions)
+          data.return[0][k] = JSON.stringify(data3);
+        myThis._updateMinions(data);
+      });
+    });
 
     runnerJobsListJobsPromise.then(data => {
       myThis._handleRunnerJobsListJobs(data);
@@ -67,17 +75,26 @@ export class PillarsRoute extends PageRoute {
 
     const element = document.getElementById(hostname);
 
-    const cnt = Object.keys(minion).length;
+    let cnt;
     let pillarInfoText;
-    if(cnt === 0) {
-      pillarInfoText = "No pillars";
-    } else if(cnt === 1) {
-      pillarInfoText = cnt + " pillar";
+    if(typeof minion === "object") {
+      cnt = Object.keys(minion).length;
+      if(cnt === 0) {
+        pillarInfoText = "No pillars";
+      } else if(cnt === 1) {
+        pillarInfoText = cnt + " pillar";
+      } else {
+        pillarInfoText = cnt + " pillars";
+      }
     } else {
-      pillarInfoText = cnt + " pillars";
+      cnt = -1;
+      pillarInfoText = "(error)";
     }
     const pillarInfoTd = Route._createTd("pillarinfo", pillarInfoText);
     pillarInfoTd.setAttribute("sorttable_customkey", cnt);
+    if(typeof minion !== "object") {
+      Utils.addToolTip(pillarInfoTd, minion);
+    }
     element.appendChild(pillarInfoTd);
 
     const menu = new DropDownMenu(element);

@@ -50,9 +50,14 @@ export class GrainsRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    wheelKeyListAllPromise.then(data => {
-      myThis._handleWheelKeyListAll(data);
-      localGrainsItemsPromise.then(data => {
+    wheelKeyListAllPromise.then(data1 => {
+      myThis._handleWheelKeyListAll(data1);
+      localGrainsItemsPromise.then(data2 => {
+        myThis._updateMinions(data2);
+      }, data3 => {
+        const data = {"return":[{}]};
+        for(const k of data1.return[0].data.return.minions)
+          data.return[0][k] = JSON.stringify(data3);
         myThis._updateMinions(data);
       });
     });
@@ -109,11 +114,18 @@ export class GrainsRoute extends PageRoute {
 
     const element = document.getElementById(hostname);
 
-    const cnt = Object.keys(minion).length;
-    const grainInfoText = cnt + " grains";
-    const grainInfoTd = Route._createTd("graininfo", grainInfoText);
-    grainInfoTd.setAttribute("sorttable_customkey", cnt);
-    element.appendChild(grainInfoTd);
+    if(typeof minion === "object") {
+      const cnt = Object.keys(minion).length;
+      const grainInfoText = cnt + " grains";
+      const grainInfoTd = Route._createTd("graininfo", grainInfoText);
+      grainInfoTd.setAttribute("sorttable_customkey", cnt);
+      element.appendChild(grainInfoTd);
+    } else {
+      const grainInfoTd = Route._createTd("graininfo", "(error)");
+      grainInfoTd.setAttribute("sorttable_customkey", -1);
+      if(typeof minion === "string") Utils.addToolTip(grainInfoTd, minion);
+      element.appendChild(grainInfoTd);
+    }
 
     const menu = new DropDownMenu(element);
     this._addMenuItemShowGrains(menu, hostname);
@@ -125,9 +137,14 @@ export class GrainsRoute extends PageRoute {
     for(let i = 0; i < this._previewGrains.length; i++) {
       const td = document.createElement("td");
       const grainName = this._previewGrains[i];
-      if(grainName in minion) {
-        td.innerText = Output.formatObject(minion[grainName]);
-        td.classList.add("grain_value");
+      if(typeof minion === "object") {
+        if(grainName in minion) {
+          td.innerText = Output.formatObject(minion[grainName]);
+          td.classList.add("grain_value");
+        }
+      } else {
+        td.innerText = "(error)";
+        Utils.addToolTip(td, minion);
       }
       element.appendChild(td);
     }

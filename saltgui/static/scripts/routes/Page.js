@@ -240,15 +240,22 @@ export class PageRoute extends Route {
     }
 
     let saltversion = "---";
-    if(minion && minion.saltversion) saltversion = minion.saltversion;
-    if(minion) element.appendChild(Route._createTd("saltversion", saltversion));
+    if(typeof minion === "string") saltversion = "(error)";
+    else if(minion && minion.saltversion) saltversion = minion.saltversion;
+    if(minion) {
+      const td = Route._createTd("saltversion", saltversion);
+      if(typeof minion === "string") Utils.addToolTip(td, minion);
+      element.appendChild(td);
+    }
 
     let os = "---";
-    if(minion && minion.os && minion.osrelease) os = minion.os + " " + minion.osrelease;
+    if(typeof minion === "string") os = "(error)";
+    else if(minion && minion.os && minion.osrelease) os = minion.os + " " + minion.osrelease;
     else if(minion && minion.os) os = minion.os;
     if(minion) {
       const td = Route._createTd("os", os);
-      if(minion.os) {
+      if(typeof minion === "string") Utils.addToolTip(td, minion);
+      if(minion.os && typeof minion !== "string") {
         const img = document.createElement("img");
         img.setAttribute("src", "static/images/os-" + minion.os.replace(" ", "-").toLowerCase() + ".png");
         img.classList.add("osimage");

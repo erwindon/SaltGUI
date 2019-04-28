@@ -20,9 +20,14 @@ export class SchedulesRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    wheelKeyListAllPromise.then(data => {
-      myThis._handleWheelKeyListAll(data);
-      localScheduleListPromise.then(data => {
+    wheelKeyListAllPromise.then(data1 => {
+      myThis._handleWheelKeyListAll(data1);
+      localScheduleListPromise.then(data2 => {
+        myThis._updateMinions(data2);
+      }, data3 => {
+        const data = {"return":[{}]};
+        for(const k of data1.return[0].data.return.minions)
+          data.return[0][k] = JSON.stringify(data3);
         myThis._updateMinions(data);
       });
     });
@@ -39,6 +44,7 @@ export class SchedulesRoute extends PageRoute {
   // Meta-data is returned on the same level as
   // the list of scheduled items
   static _fixMinion(data) {
+    if(typeof data !== "object") return data;
     const ret = { "schedules": {}, "enabled": true };
     for(const k in data) {
       if(k === "enabled") {
@@ -87,10 +93,17 @@ export class SchedulesRoute extends PageRoute {
 
     minion = SchedulesRoute._fixMinion(minion);
 
-    const cnt = Object.keys(minion.schedules).length;
-    let scheduleinfo = cnt + " schedule" + (cnt === 1 ? "" : "s");
-    if(!minion.enabled)
-      scheduleinfo += " (disabled)";
+    let scheduleinfo;
+    let cnt;
+    if(typeof minion === "object") {
+      cnt = Object.keys(minion.schedules).length;
+      scheduleinfo = cnt + " schedule" + (cnt === 1 ? "" : "s");
+      if(!minion.enabled)
+        scheduleinfo += " (disabled)";
+    } else {
+      cnt = -1;
+      scheduleinfo = "(error)";
+    }
 
     let element = document.getElementById(hostname);
     if(element === null) {
@@ -111,6 +124,9 @@ export class SchedulesRoute extends PageRoute {
     element.appendChild(statusDiv);
 
     const td = Route._createTd("scheduleinfo", scheduleinfo);
+    if(typeof minion !== "object") {
+      Utils.addToolTip(td, minion);
+    }
     td.setAttribute("sorttable_customkey", cnt);
     element.appendChild(td);
 
