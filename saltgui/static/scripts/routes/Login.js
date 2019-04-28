@@ -54,7 +54,8 @@ export class LoginRoute extends Route {
     notice.focus(); //Used to trigger a reflow (to restart animation)
     notice.className = "notice-wrapper show";
 
-    this.router.goTo("/");
+    // allow the success message to be seen
+    setTimeout(_ => this.router.goTo("/"), 1000);
   }
 
   onLoginFailure() {
