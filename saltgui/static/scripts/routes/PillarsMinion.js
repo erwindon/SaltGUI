@@ -86,6 +86,7 @@ export class PillarsMinionRoute extends PageRoute {
       // 8 bullet characters
       const value_hidden = "\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF";
       const pillar_hidden = Route._createDiv("pillar_hidden", value_hidden);
+      pillar_hidden.style.display = "inline-block";
       Utils.addToolTip(pillar_hidden, "Click to show");
       // initially use the hidden view
       pillar_value.appendChild(pillar_hidden);
@@ -103,7 +104,7 @@ export class PillarsMinionRoute extends PageRoute {
         if(public_pillars[i] && public_pillars[i].test(k)) {
           // same code as when clicking the hidden value
           pillar_hidden.style.display = "none";
-          pillar_shown.style.display = "";
+          pillar_shown.style.display = "inline-block";
           break;
         }
       }
@@ -112,12 +113,12 @@ export class PillarsMinionRoute extends PageRoute {
 
       pillar_hidden.addEventListener("click", function(evt) {
         pillar_hidden.style.display = "none";
-        pillar_shown.style.display = "";
+        pillar_shown.style.display = "inline-block";
       });
 
       pillar_shown.addEventListener("click", function(evt) {
         pillar_shown.style.display = "none";
-        pillar_hidden.style.display = "";
+        pillar_hidden.style.display = "inline-block";
       });
 
       container.tBodies[0].appendChild(pillar);
