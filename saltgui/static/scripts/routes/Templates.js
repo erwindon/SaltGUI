@@ -19,7 +19,11 @@ export class TemplatesRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    wheelConfigValuesPromise.then(myThis._handleWheelConfigValues);
+    wheelConfigValuesPromise.then(data => {
+      myThis._handleWheelConfigValues(data);
+    }, data => {
+      myThis._handleWheelConfigValues(JSON.stringify(data));
+    });
 
     runnerJobsListJobsPromise.then(data => {
       myThis._handleRunnerJobsListJobs(data);
@@ -35,7 +39,18 @@ export class TemplatesRoute extends PageRoute {
 
   _handleWheelConfigValues(data) {
     const container = this.getPageElement().querySelector(".templates");
-    
+
+    if(typeof data != "object") {
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.innerText = "(error)";
+      td.colSpan = 99;
+      Utils.addToolTip(td, data);
+      tr.appendChild(td);
+      container.appendChild(tr);
+      return;
+    }
+
     // should we update it or just use from cache (see commandbox) ?
     const templates = data.return[0].data.return.saltgui_templates;
     window.localStorage.setItem("templates", JSON.stringify(templates));

@@ -307,10 +307,7 @@ export class PageRoute extends Route {
       const tr = document.createElement("tr");
       const td = document.createElement("td");
       td.innerText = "(error)";
-      // colSpan=7 for Jobs page
-      // colSpan=1 is sufficient for orther pages,
-      // but too much is also good
-      td.colSpan = "7";
+      td.colSpan = 99;
       Utils.addToolTip(td, data);
       tr.appendChild(td);
       jobContainer.appendChild(tr);

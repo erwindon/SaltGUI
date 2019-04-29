@@ -31,6 +31,8 @@ export class MinionsRoute extends PageRoute {
           data.return[0][k] = JSON.stringify(data3);
         myThis._updateMinions(data);
       });
+    }, data => {
+      myThis._handleWheelKeyListAll(JSON.stringify(data));
     });
 
     runnerJobsListJobsPromise.then(data => {
@@ -45,7 +47,11 @@ export class MinionsRoute extends PageRoute {
     }); 
 
     //we need these functions to populate the dropdown boxes
-    wheelConfigValuesPromise.then(myThis._handleWheelConfigValues);
+    wheelConfigValuesPromise.then(data => {
+      myThis._handleWheelConfigValues(data);
+    }, data => {
+      // never mind
+    });
   }
 
   _handleWheelConfigValues(data) {
@@ -72,9 +78,20 @@ export class MinionsRoute extends PageRoute {
   }
 
   _handleWheelKeyListAll(data) {
-    const keys = data.return[0].data.return;
-
     const list = this.getPageElement().querySelector("#minions");
+
+    if(typeof data !== "object") {
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.innerText = "(error)";
+      td.colSpan = 99;
+      Utils.addToolTip(td, data);
+      tr.appendChild(td);
+      list.appendChild(tr);
+      return;
+    }
+
+    const keys = data.return[0].data.return;
 
     const hostnames = keys.minions.sort();
     for(const hostname of hostnames) {

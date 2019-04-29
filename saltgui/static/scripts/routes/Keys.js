@@ -25,11 +25,13 @@ export class KeysRoute extends PageRoute {
       wheelKeyFingerPromise.then(data2 => {
         myThis._handleWheelKeyFinger(data2);
       }, data3 => {
-        const data = {"return":[{}]};
+        const data = {"return":[{"data":{"return":{"minions":{}}}}]};
         for(const k of data1.return[0].data.return.minions)
-          data.return[0][k] = JSON.stringify(data3);
+          data.return[0]["data"]["return"]["minions"][k] = JSON.stringify(data3);
         myThis._handleWheelKeyFinger(data);
       });
+    }, data => {
+      myThis._handleWheelKeyListAll(JSON.stringify(data));
     });
 
     runnerJobsListJobsPromise.then(data => {
@@ -61,14 +63,32 @@ export class KeysRoute extends PageRoute {
         // update td.fingerprint with fingerprint value
         const fingerprintElement = this.page_element.querySelector("#" + hostname + " .fingerprint");
         const fingerprint = hosts[hostname];
-        if(fingerprintElement) fingerprintElement.innerText = fingerprint;
+        if(!fingerprintElement) continue;
+        if(fingerprint.startsWith("{")) {
+          fingerprintElement.innerText = "(error)";
+          Utils.addToolTip(fingerprintElement, fingerprint);
+          continue;
+        }
+        fingerprintElement.innerText = fingerprint;
       }
     }
   }
 
   _handleWheelKeyListAll(data) {
-    const keys = data.return[0].data.return;
     const list = this.getPageElement().querySelector("#minions");
+
+    if(typeof data !== "object") {
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.innerText = "(error)";
+      td.colSpan = 99;
+      Utils.addToolTip(td, data);
+      tr.appendChild(td);
+      list.appendChild(tr);
+      return;
+    }
+
+    const keys = data.return[0].data.return;
 
     // Unaccepted goes first because that is where the user must decide
     const hostnames_pre = keys.minions_pre.sort();
