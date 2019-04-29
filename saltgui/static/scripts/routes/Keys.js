@@ -22,12 +22,12 @@ export class KeysRoute extends PageRoute {
 
     wheelKeyListAllPromise.then(data1 => {
       myThis._handleWheelKeyListAll(data1);
-      wheelKeyFingerPromise.then(data2 => {
-        myThis._handleWheelKeyFinger(data2);
-      }, data3 => {
+      wheelKeyFingerPromise.then(data => {
+        myThis._handleWheelKeyFinger(data);
+      }, data2 => {
         const data = {"return":[{"data":{"return":{"minions":{}}}}]};
         for(const k of data1.return[0].data.return.minions)
-          data.return[0]["data"]["return"]["minions"][k] = JSON.stringify(data3);
+          data.return[0]["data"]["return"]["minions"][k] = JSON.stringify(data2);
         myThis._handleWheelKeyFinger(data);
       });
     }, data => {

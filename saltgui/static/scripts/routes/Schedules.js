@@ -22,12 +22,12 @@ export class SchedulesRoute extends PageRoute {
 
     wheelKeyListAllPromise.then(data1 => {
       myThis._handleWheelKeyListAll(data1);
-      localScheduleListPromise.then(data2 => {
-        myThis._updateMinions(data2);
-      }, data3 => {
+      localScheduleListPromise.then(data => {
+        myThis._updateMinions(data);
+      }, data2 => {
         const data = {"return":[{}]};
         for(const k of data1.return[0].data.return.minions)
-          data.return[0][k] = JSON.stringify(data3);
+          data.return[0][k] = JSON.stringify(data2);
         myThis._updateMinions(data);
       });
     }, data => {
