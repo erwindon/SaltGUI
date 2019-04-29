@@ -40,7 +40,11 @@ export class SchedulesMinionRoute extends PageRoute {
       myThis._handleRunnerJobsListJobs(data);
       runnerJobsActivePromise.then(data => {
         myThis._handleRunnerJobsActive(data);
+      }, data => {
+        myThis._handleRunnerJobsActive(JSON.stringify(data));
       });
+    }, data => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
     }); 
   }
 

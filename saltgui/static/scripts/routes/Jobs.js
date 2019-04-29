@@ -23,7 +23,11 @@ export class JobsRoute extends PageRoute {
       myThis._handleRunnerJobsListJobs(data, true, 50);
       runnerJobsActivePromise.then(data => {
         myThis._handleRunnerJobsActive(data);
+      }, data => {
+        myThis._handleRunnerJobsActive(JSON.stringify(data));
       });
+    }, data => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
     }); 
   }
 
@@ -109,6 +113,19 @@ export class JobsRoute extends PageRoute {
   }
 
   _handleRunnerJobsActive(data) {
+
+    if(typeof data !== "object") {
+      // update all jobs (page) with the error message
+      for(const tr of this.page_element.querySelector("table#jobs tbody").rows) {
+        const statusField = tr.querySelector("td.status span.no_status");
+        if(!statusField) continue;
+        statusField.classList.remove("no_status");
+        statusField.innerText = "(error)";
+        Utils.addToolTip(statusField, data);
+      }
+      return;
+    }
+
     const jobs = data.return[0];
 
     // update all running jobs
@@ -156,10 +173,22 @@ export class JobsRoute extends PageRoute {
 
     runnerJobsListJobPromise.then(data => {
       myThis._handleRunnerJobsListJob(jobid, data);
+    }, data => {
+      myThis._handleRunnerJobsListJob(jobid, JSON.stringify(data));
     });
   }
 
   _handleRunnerJobsListJob(jobid, data) {
+
+    if(typeof data !== "object") {
+      const detailsSpan = this.page_element.querySelector(".jobs #job" + jobid + " td.details span");
+      if(!detailsSpan) return;
+      detailsSpan.innerText = "(error)";
+      detailsSpan.classList.remove("no_status");
+      Utils.addToolTip(detailsSpan, data);
+      return;
+    }
+
     data = data.return[0];
 
     let str = "";

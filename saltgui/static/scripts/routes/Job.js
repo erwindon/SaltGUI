@@ -24,7 +24,11 @@ export class JobRoute extends Route {
       myThis._handleRunnerJobsListJob(data);
       runnerJobsActivePromise.then(data => {
         myThis._handleRunnerJobsActive(id, data);
+      }, data => {
+        myThis._handleRunnerJobsActive(JSON.stringify(data));
       });
+    }, data => {
+      myThis._handleRunnerJobsListJob(JSON.stringify(data));
     });
   }
 
@@ -37,12 +41,19 @@ export class JobRoute extends Route {
   _handleRunnerJobsListJob(data) {
     const myThis = this;
 
-    const info = data.return[0];
-    this.getPageElement().querySelector(".output").innerText = "";
-
     document.querySelector("#button_close_job").addEventListener("click", _ => {
       window.history.back();
     });
+
+    if(typeof data !== "object") {
+      const pre = this.getPageElement().querySelector(".output");
+      pre.innerText = "(error)";
+      Utils.addToolTip(pre, data);
+      return;
+    }
+
+    const info = data.return[0];
+    this.getPageElement().querySelector(".output").innerText = "";
 
     const argumentsText = this._decodeArgumentsText(info.Arguments);
     const commandText = info.Function + argumentsText;

@@ -302,6 +302,21 @@ export class PageRoute extends Route {
 
   _handleRunnerJobsListJobs(data, hasHeader = false, numberOfJobs = 7) {
     const jobContainer = this.getPageElement().querySelector(".jobs tbody");
+
+    if(typeof data !== "object") {
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.innerText = "(error)";
+      // colSpan=7 for Jobs page
+      // colSpan=1 is sufficient for orther pages,
+      // but too much is also good
+      td.colSpan = "7";
+      Utils.addToolTip(td, data);
+      tr.appendChild(td);
+      jobContainer.appendChild(tr);
+      return;
+    }
+
     const jobs = this._jobsToArray(data.return[0]);
     this._sortJobs(jobs);
 
@@ -361,7 +376,19 @@ export class PageRoute extends Route {
   }
 
   _handleRunnerJobsActive(data) {
-    const jobs = data.return[0];
+
+    if(typeof data !== "object") {
+      for(const tr of this.page_element.querySelector("table.jobs tbody").rows) {
+        const statusSpan = tr.querySelector("span.status");
+        if(!statusSpan) continue;
+        statusSpan.classList.remove("no_status");
+        statusSpan.innerText = "(error)";
+        // we show the tooltip here so that the user is invited to click on this
+        // the user then sees other rows being updated without becoming invisible
+        Utils.addToolTip(statusSpan, data);
+      }
+      return;
+    }
 
     // mark all jobs as done, then re-update the running jobs
     for(const tr of this.page_element.querySelector("table.jobs tbody").rows) {
@@ -373,6 +400,8 @@ export class PageRoute extends Route {
       // the user then sees other rows being updated without becoming invisible
       Utils.addToolTip(statusSpan, "Click to refresh");
     }
+
+    const jobs = data.return[0];
 
     // update all running jobs
     for(const k in jobs)
@@ -451,6 +480,8 @@ export class PageRoute extends Route {
 
     this.router.api.getRunnerJobsActive().then(data => {
       myThis._handleRunnerJobsActive(data);
+    }, data => {
+      myThis._handleRunnerJobsActive(JSON.stringify(data));
     });
   }
 
