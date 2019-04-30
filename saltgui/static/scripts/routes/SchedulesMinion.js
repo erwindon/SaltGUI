@@ -71,8 +71,10 @@ export class SchedulesMinionRoute extends PageRoute {
     if(typeof data !== "object") {
       const tr = document.createElement('tr');
       const td = document.createElement('td');
+      td.innerText = "(error)";
+      td.colSpan = 99;
+      Utils.addToolTip(td, data);
       tr.appendChild(td);
-      td.innerText = data;
       container.tBodies[0].appendChild(tr);
       return;
     }

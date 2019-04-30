@@ -47,6 +47,7 @@ The following configuration is a mimimum set of permissions, so that SaltGUI can
         - jobs.list_jobs
       - '@wheel':
         - config.values
+        - key.finger
         - key.list_all
 ```
 Adititional permissions are needed to run the commands associated with the popupmenu items.

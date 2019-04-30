@@ -8,6 +8,8 @@ export class KeysRoute extends PageRoute {
   constructor(router) {
     super("^[\/]keys$", "Keys", "#page_keys", "#button_keys", router);
 
+    this.fingerprintPattern = /^[0-9a-f:]+$/i;
+
     this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
     this._handleWheelKeyFinger = this._handleWheelKeyFinger.bind(this);
   }
@@ -64,7 +66,7 @@ export class KeysRoute extends PageRoute {
         const fingerprintElement = this.page_element.querySelector("#" + hostname + " .fingerprint");
         const fingerprint = hosts[hostname];
         if(!fingerprintElement) continue;
-        if(fingerprint.startsWith("{")) {
+        if(!fingerprint.match(this.fingerprintPattern)) {
           fingerprintElement.innerText = "(error)";
           Utils.addToolTip(fingerprintElement, fingerprint);
           continue;

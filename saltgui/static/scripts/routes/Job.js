@@ -25,7 +25,7 @@ export class JobRoute extends Route {
       runnerJobsActivePromise.then(data => {
         myThis._handleRunnerJobsActive(id, data);
       }, data => {
-        myThis._handleRunnerJobsActive(JSON.stringify(data));
+        myThis._handleRunnerJobsActive(id, JSON.stringify(data));
       });
     }, data => {
       myThis._handleRunnerJobsListJob(JSON.stringify(data));
@@ -179,10 +179,16 @@ export class JobRoute extends Route {
   }
 
   _handleRunnerJobsActive(id, data) {
-    const info = data.return[0][id];
-
     const summaryJobsActiveSpan = this.getPageElement().querySelector("pre.output span#summary_jobsactive");
     if(!summaryJobsActiveSpan) return;
+
+    if(typeof data !== "object") {
+      summaryJobsActiveSpan.innerText = "(error), ";
+      Utils.addToolTip(summaryJobsActiveSpan, data);
+      return;
+    }
+
+    const info = data.return[0][id];
 
     // when the job is already completely done, nothing is returned
     if(!info) {
