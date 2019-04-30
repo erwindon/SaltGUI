@@ -22,6 +22,11 @@ describe('Unittests for ParseCommandLine.js', function() {
     result = ParseCommandLine.parseCommandLine("{\"test\"", args, params);
     assert.equal(result, "No valid dictionary found");
 
+    // remaining placeholder
+    args = []; params = {};
+    result = ParseCommandLine.parseCommandLine("aap <noot> mies", args, params);
+    assert.equal(result, "Must fill in all placeholders, e.g. <noot>");
+
     // GENERAL WHITESPACE HANDLING
 
     args = []; params = {};
