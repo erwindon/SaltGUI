@@ -79,16 +79,7 @@ export class KeysRoute extends PageRoute {
   _handleWheelKeyListAll(data) {
     const list = this.getPageElement().querySelector("#minions");
 
-    if(typeof data !== "object") {
-      const tr = document.createElement("tr");
-      const td = document.createElement("td");
-      td.innerText = "(error)";
-      td.colSpan = 99;
-      Utils.addToolTip(td, data);
-      tr.appendChild(td);
-      list.appendChild(tr);
-      return;
-    }
+    if(PageRoute.showErrorRowInstead(list, data)) return;
 
     const keys = data.return[0].data.return;
 

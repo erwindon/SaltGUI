@@ -303,16 +303,7 @@ export class PageRoute extends Route {
   _handleRunnerJobsListJobs(data, hasHeader = false, numberOfJobs = 7) {
     const jobContainer = this.getPageElement().querySelector(".jobs tbody");
 
-    if(typeof data !== "object") {
-      const tr = document.createElement("tr");
-      const td = document.createElement("td");
-      td.innerText = "(error)";
-      td.colSpan = 99;
-      Utils.addToolTip(td, data);
-      tr.appendChild(td);
-      jobContainer.appendChild(tr);
-      return;
-    }
+    if(PageRoute.showErrorRowInstead(jobContainer, data)) return;
 
     const jobs = this._jobsToArray(data.return[0]);
     this._sortJobs(jobs);
@@ -526,4 +517,22 @@ export class PageRoute extends Route {
     Utils.addToolTip(target, "Click to copy");
   }
 
+  static showErrorRowInstead(table, data) {
+    if(typeof data === "object") {
+      // not an error
+      return false;
+    }
+
+    const td = document.createElement("td");
+    td.innerText = "(error)";
+    td.colSpan = 99;
+    Utils.addToolTip(td, data);
+
+    const tr = document.createElement("tr");
+    tr.appendChild(td);
+
+    table.appendChild(tr);
+
+    return true;
+  }
 }

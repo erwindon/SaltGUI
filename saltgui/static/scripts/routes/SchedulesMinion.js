@@ -68,16 +68,7 @@ export class SchedulesMinionRoute extends PageRoute {
       container.tBodies[0].deleteRow(0);
     }
 
-    if(typeof data !== "object") {
-      const tr = document.createElement('tr');
-      const td = document.createElement('td');
-      td.innerText = "(error)";
-      td.colSpan = 99;
-      Utils.addToolTip(td, data);
-      tr.appendChild(td);
-      container.tBodies[0].appendChild(tr);
-      return;
-    }
+    if(PageRoute.showErrorRowInstead(container.tBodies[0], data)) return;
 
     let schedules = data.return[0][minion];
     schedules = SchedulesRoute._fixMinion(schedules);
