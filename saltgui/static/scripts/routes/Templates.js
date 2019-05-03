@@ -52,6 +52,7 @@ export class TemplatesRoute extends PageRoute {
     }
 
     Utils.showTableSortable(this.getPageElement(), "templates");
+    Utils.showTableSearchable(this.getPageElement(), "templates");
   }
 
   _addTemplate(container, name, template) {

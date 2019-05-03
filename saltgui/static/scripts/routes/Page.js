@@ -361,6 +361,7 @@ export class PageRoute extends Route {
     if(hasHeader) {
       Utils.showTableSortable(this.getPageElement(), "jobs", true);
     }
+    Utils.showTableSearchable(this.getPageElement(), "jobs");
   }
 
   _handleRunnerJobsActive(data) {

@@ -85,6 +85,7 @@ export class SchedulesRoute extends PageRoute {
     }
 
     Utils.showTableSortable(this.getPageElement(), "minions");
+    Utils.showTableSearchable(this.getPageElement(), "minions");
   }
 
   _updateOfflineMinion(container, hostname) {

@@ -57,4 +57,26 @@ export class Utils {
     Utils.addToolTip(span, errorMessage);
     td.appendChild(span);
   }
+
+  static showTableSearchable(start, tableClass) {
+    const table = start.querySelector("table." + tableClass);
+    const input = document.createElement("input");
+    input.style.width = "100%";
+    // D83D+DD0D = 1F50D = LEFT-POINTING MAGNIFYING GLASS
+    input.placeholder = "\uD83D\uDD0D";
+    input.onkeyup = ev => {
+      const txt = input.value.toUpperCase();
+      for(const row of table.tBodies[0].rows) {
+        let show = false;
+        for(const cell of row.cells) {
+          if(cell.innerText.toUpperCase().includes(txt)) show = true;
+        }
+        if(show)
+          row.classList.remove("nofiltermatch");
+        else
+          row.classList.add("nofiltermatch");
+      }
+    };
+    table.parentNode.insertBefore(input, table);
+  }
 }
