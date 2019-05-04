@@ -69,7 +69,9 @@ export class Utils {
       for(const row of table.tBodies[0].rows) {
         let show = false;
         for(const cell of row.cells) {
-          if(cell.innerText.toUpperCase().includes(txt)) show = true;
+          // do not use "innerText"
+          // that one does not handle hidden text
+          if(cell.textContent.toUpperCase().includes(txt)) show = true;
         }
         if(show)
           row.classList.remove("nofiltermatch");
