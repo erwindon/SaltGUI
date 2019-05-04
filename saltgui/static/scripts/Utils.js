@@ -78,6 +78,19 @@ export class Utils {
         else
           row.classList.add("nofiltermatch");
       }
+      const hilitor = new Hilitor(start, "." + tableClass + " tbody");
+      hilitor.setMatchType("open");
+      hilitor.setEndRegExp(/^$/);
+      hilitor.setBreakRegExp(/^$/);
+      // turn the text into a regexp
+      let pattern = "";
+      for(const chr of txt) {
+        if((chr >= 'A' && chr <= 'Z') || (chr >= '0' && chr <= '9'))
+          pattern += chr;
+        else
+          pattern += "\\" + chr;
+      }
+      hilitor.apply(pattern);
     };
     table.parentNode.insertBefore(input, table);
   }

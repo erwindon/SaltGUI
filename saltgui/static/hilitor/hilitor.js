@@ -1,11 +1,13 @@
 // Original JavaScript code by Chirp Internet: www.chirp.com.au
 // Please acknowledge use of this code by including this header.
 
-function Hilitor(id, tag)
+//function Hilitor(id, tag)
+function Hilitor(start, id, tag)
 {
 
   // private variables
-  var targetNode = document.getElementById(id) || document.body;
+  //var targetNode = document.getElementById(id) || document.body;
+  const targetNode = start.querySelector(id);
   var hiliteTag = tag || "MARK";
   var skipTags = new RegExp("^(?:" + hiliteTag + "|SCRIPT|FORM|SPAN)$");
   var colors = ["#ff6", "#a0ffff", "#9f9", "#f99", "#f6f"];
