@@ -63,9 +63,13 @@ export class Utils {
     const input = document.createElement("input");
     input.style.width = "100%";
     // D83D+DD0D = 1F50D = LEFT-POINTING MAGNIFYING GLASS
-    input.placeholder = "\uD83D\uDD0D";
+    input.placeholder = "\uD83D\uDD0D ESC to dismiss";
     input.onkeyup = ev => {
-      const txt = input.value.toUpperCase();
+      let txt = input.value.toUpperCase();
+      if(ev.keyCode === 27) {
+        // user presses ESCAPE
+        txt = "";
+      }
       for(const row of table.tBodies[0].rows) {
         let show = false;
         for(const cell of row.cells) {
@@ -79,6 +83,12 @@ export class Utils {
           row.classList.add("nofiltermatch");
       }
       const hilitor = new Hilitor(start, "." + tableClass + " tbody");
+      if(ev.keyCode === 27) {
+        // user presses ESCAPE
+        hilitor.remove();
+        input.style.display = "none";
+        return;
+      }
       hilitor.setMatchType("open");
       hilitor.setEndRegExp(/^$/);
       hilitor.setBreakRegExp(/^$/);
