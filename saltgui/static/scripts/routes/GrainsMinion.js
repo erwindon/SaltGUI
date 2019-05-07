@@ -69,7 +69,7 @@ export class GrainsMinionRoute extends PageRoute {
     // fix that by re-adding the minion list
     gmp.appendChild(container);
 
-    if(PageRoute.showErrorRowInstead(container.tBodies[0].appendChild, data)) return;
+    if(PageRoute.showErrorRowInstead(container.tBodies[0], data)) return;
 
     const grains = data.return[0][minion];
 
