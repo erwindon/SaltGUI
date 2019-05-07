@@ -50,4 +50,11 @@ export class Utils {
       //Utils.addToolTip(th, "Click to sort");
     }
   }
+
+  static addErrorToTableCell(td, errorMessage) {
+    const span = document.createElement("span");
+    span.innerText = "(error)";
+    Utils.addToolTip(span, errorMessage);
+    td.appendChild(span);
+  }
 }

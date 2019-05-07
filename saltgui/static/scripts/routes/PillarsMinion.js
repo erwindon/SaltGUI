@@ -9,9 +9,6 @@ export class PillarsMinionRoute extends PageRoute {
   constructor(router) {
     super("^[\/]pillarsminion$", "Pillars", "#page_pillarsminion", "#button_pillars", router);
 
-    this.keysLoaded = false;
-    this.jobsLoaded = false;
-
     this._handleLocalPillarItems = this._handleLocalPillarItems.bind(this);
 
     this.page_element.querySelector("#button_close_pillarsminion").addEventListener("click", _ => {
@@ -27,19 +24,30 @@ export class PillarsMinionRoute extends PageRoute {
     const title = document.getElementById("pillarsminion_title");
     title.innerText = "Pillars on " + minion;
 
-    return new Promise(function(resolve, reject) {
-      myThis.resolvePromise = resolve;
-      if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
-      myThis.router.api.getLocalPillarItems(minion).then(myThis._handleLocalPillarItems);
-      myThis.router.api.getRunnerJobsListJobs().then(myThis._handleRunnerJobsListJobs);
-      myThis.router.api.getRunnerJobsActive().then(myThis._handleRunnerJobsActive);
+    const localPillarItemsPromise = this.router.api.getLocalPillarItems(minion);
+    const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
+
+    localPillarItemsPromise.then(data => {
+      myThis._handleLocalPillarItems(data);
+    }, data => {
+      myThis._handleLocalPillarItems(JSON.stringify(data));
     });
+
+    runnerJobsListJobsPromise.then(data => {
+      myThis._handleRunnerJobsListJobs(data);
+      runnerJobsActivePromise.then(data => {
+        myThis._handleRunnerJobsActive(data);
+      }, data => {
+        myThis._handleRunnerJobsActive(JSON.stringify(data));
+      });
+    }, data => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
+    }); 
   }
 
   _handleLocalPillarItems(data) {
     const minion = decodeURIComponent(Utils.getQueryParam("minion"));
-
-    const pillars = data.return[0][minion];
 
     const pmp = document.getElementById("pillarsminion_page");
     const menu = new DropDownMenu(pmp);
@@ -55,7 +63,9 @@ export class PillarsMinionRoute extends PageRoute {
       container.tBodies[0].deleteRow(0);
     }
 
-    if(!pillars) return;
+    if(PageRoute.showErrorRowInstead(container.tBodies[0], data)) return;
+
+    const pillars = data.return[0][minion];
 
     // collect the public pillars and compile their regexps
     let publicPillarsText = window.localStorage.getItem("public_pillars");

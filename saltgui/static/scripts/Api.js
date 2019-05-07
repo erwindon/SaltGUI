@@ -63,7 +63,7 @@ export class API {
       params.tgt_type = "glob";
       params.tgt = "*";
     }
-    return this.apiRequest("POST", "/", params).catch(console.error);
+    return this.apiRequest("POST", "/", params);
   }
 
   getLocalPillarItems(minion) {
@@ -78,7 +78,7 @@ export class API {
       params.tgt_type = "glob";
       params.tgt = "*";
     }
-    return this.apiRequest("POST", "/", params).catch(console.error);
+    return this.apiRequest("POST", "/", params);
   }
 
   getLocalPillarObfuscate(minion) {
@@ -93,7 +93,7 @@ export class API {
       params.tgt_type = "glob";
       params.tgt = "*";
     }
-    return this.apiRequest("POST", "/", params).catch(console.error);
+    return this.apiRequest("POST", "/", params);
   }
 
   getLocalScheduleList(minion) {
@@ -109,7 +109,7 @@ export class API {
       params.tgt_type = "glob";
       params.tgt = "*";
     }
-    return this.apiRequest("POST", "/", params).catch(console.error);
+    return this.apiRequest("POST", "/", params);
   }
 
   getRunnerJobsActive() {
@@ -117,7 +117,7 @@ export class API {
       client: "runner",
       fun: "jobs.active"
     };
-    return this.apiRequest("POST", "/", params).catch(console.error);
+    return this.apiRequest("POST", "/", params);
   }
 
   getRunnerJobsListJob(id) {
@@ -126,7 +126,7 @@ export class API {
       fun: "jobs.list_job",
       jid: id
     };
-    return this.apiRequest("POST", "/", params).catch(console.error);
+    return this.apiRequest("POST", "/", params);
   }
 
   getRunnerJobsListJobs() {
@@ -134,7 +134,7 @@ export class API {
       client: "runner",
       fun: "jobs.list_jobs"
     };
-    return this.apiRequest("POST", "/", params).catch(console.error);
+    return this.apiRequest("POST", "/", params);
   }
 
   getWheelConfigValues() {
@@ -142,7 +142,7 @@ export class API {
       client: "wheel",
       fun: "config.values"
     };
-    return this.apiRequest("POST", "/", params).catch(console.error);
+    return this.apiRequest("POST", "/", params);
   }
 
   getWheelKeyFinger() {
@@ -151,7 +151,7 @@ export class API {
       fun: "key.finger",
       match: "*"
     };
-    return this.apiRequest("POST", "/", params).catch(console.error);
+    return this.apiRequest("POST", "/", params);
   }
 
   getWheelKeyListAll() {
@@ -159,7 +159,7 @@ export class API {
       client: "wheel",
       fun: "key.list_all",
     };
-    return this.apiRequest("POST", "/", params).catch(console.error);
+    return this.apiRequest("POST", "/", params);
   }
 
   apiRequest(method, route, params) {

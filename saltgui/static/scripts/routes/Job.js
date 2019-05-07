@@ -16,12 +16,19 @@ export class JobRoute extends Route {
     const myThis = this;
 
     const id = decodeURIComponent(Utils.getQueryParam("id"));
-    return new Promise(function(resolve, reject) {
-      myThis.resolvePromise = resolve;
-      myThis.router.api.getRunnerJobsListJob(id).then(myThis._handleRunnerJobsListJob);
-      myThis.router.api.getRunnerJobsActive().then(data => {
+
+    const runnerJobsListJobPromise = this.router.api.getRunnerJobsListJob(id);
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
+
+    runnerJobsListJobPromise.then(data => {
+      myThis._handleRunnerJobsListJob(data);
+      runnerJobsActivePromise.then(data => {
         myThis._handleRunnerJobsActive(id, data);
+      }, data => {
+        myThis._handleRunnerJobsActive(id, JSON.stringify(data));
       });
+    }, data => {
+      myThis._handleRunnerJobsListJob(JSON.stringify(data));
     });
   }
 
@@ -34,12 +41,19 @@ export class JobRoute extends Route {
   _handleRunnerJobsListJob(data) {
     const myThis = this;
 
-    const info = data.return[0];
-    this.getPageElement().querySelector(".output").innerText = "";
-
     document.querySelector("#button_close_job").addEventListener("click", _ => {
       window.history.back();
     });
+
+    if(typeof data !== "object") {
+      const pre = this.getPageElement().querySelector(".output");
+      pre.innerText = "";
+      Utils.addErrorToTableCell(pre, data);
+      return;
+    }
+
+    const info = data.return[0];
+    this.getPageElement().querySelector(".output").innerText = "";
 
     const argumentsText = this._decodeArgumentsText(info.Arguments);
     const commandText = info.Function + argumentsText;
@@ -162,19 +176,23 @@ export class JobRoute extends Route {
       this.signalJobMenuItem.style.display = "none";
     }
     Output.addResponseOutput(output, minions, info.Result, info.Function, initialStatus);
-
-    this.resolvePromise();
   }
 
   _handleRunnerJobsActive(id, data) {
-    const info = data.return[0][id];
-
     const summaryJobsActiveSpan = this.getPageElement().querySelector("pre.output span#summary_jobsactive");
     if(!summaryJobsActiveSpan) return;
 
+    if(typeof data !== "object") {
+      summaryJobsActiveSpan.innerText = "(error)";
+      Utils.addToolTip(summaryJobsActiveSpan, data);
+      return;
+    }
+
+    const info = data.return[0][id];
+
     // when the job is already completely done, nothing is returned
     if(!info) {
-      summaryJobsActiveSpan.innerText = "done, ";
+      summaryJobsActiveSpan.innerText = "done";
       if(this.terminateJobMenuItem) {
         // nothing left to terminate
         this.terminateJobMenuItem.style.display = "none";
@@ -190,7 +208,7 @@ export class JobRoute extends Route {
       return;
     }
 
-    summaryJobsActiveSpan.innerText = info.Running.length + " active, ";
+    summaryJobsActiveSpan.innerText = info.Running.length + " active";
 
     // update the minion details
     for(const minionInfo of info.Running) {

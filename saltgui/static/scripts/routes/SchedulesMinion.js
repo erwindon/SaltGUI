@@ -10,9 +10,6 @@ export class SchedulesMinionRoute extends PageRoute {
   constructor(router) {
     super("^[\/]schedulesminion$", "Schedules", "#page_schedulesminion", "#button_schedules", router);
 
-    this.keysLoaded = false;
-    this.jobsLoaded = false;
-
     this._handleLocalScheduleList = this._handleLocalScheduleList.bind(this);
 
     this.page_element.querySelector("#button_close_schedulesminion").addEventListener("click", _ => {
@@ -29,25 +26,30 @@ export class SchedulesMinionRoute extends PageRoute {
     const title = document.getElementById("schedulesminion_title");
     title.innerText = "Schedules on " + minion;
 
-    return new Promise(function(resolve, reject) {
-      myThis.resolvePromise = resolve;
-      if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
-      myThis.router.api.getLocalScheduleList(minion).then(myThis._handleLocalScheduleList);
-      myThis.router.api.getRunnerJobsListJobs().then(myThis._handleRunnerJobsListJobs);
-      myThis.router.api.getRunnerJobsActive().then(myThis._handleRunnerJobsActive);
+    const localScheduleListPromise = this.router.api.getLocalScheduleList(minion);
+    const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
+
+    localScheduleListPromise.then(data => {
+      myThis._handleLocalScheduleList(data);
+    }, data => {
+      myThis._handleLocalScheduleList(JSON.stringify(data));
     });
+
+    runnerJobsListJobsPromise.then(data => {
+      myThis._handleRunnerJobsListJobs(data);
+      runnerJobsActivePromise.then(data => {
+        myThis._handleRunnerJobsActive(data);
+      }, data => {
+        myThis._handleRunnerJobsActive(JSON.stringify(data));
+      });
+    }, data => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
+    }); 
   }
 
   _handleLocalScheduleList(data) {
     const minion = decodeURIComponent(Utils.getQueryParam("minion"));
-
-    let schedules = data.return[0][minion];
-    schedules = SchedulesRoute._fixMinion(schedules);
-
-    const title = document.getElementById("schedulesminion_title");
-    let txt = "Schedules on " + minion;
-    if(!schedules.enabled) txt += " (disabled)";
-    title.innerText = txt;
 
     const page = document.getElementById("schedulesminion_page");
 
@@ -66,8 +68,15 @@ export class SchedulesMinionRoute extends PageRoute {
       container.tBodies[0].deleteRow(0);
     }
 
+    if(PageRoute.showErrorRowInstead(container.tBodies[0], data)) return;
 
-    if(!schedules) return;
+    let schedules = data.return[0][minion];
+    schedules = SchedulesRoute._fixMinion(schedules);
+
+    const title = document.getElementById("schedulesminion_title");
+    let txt = "Schedules on " + minion;
+    if(!schedules.enabled) txt += " (disabled)";
+    title.innerText = txt;
 
     const keys = Object.keys(schedules.schedules).sort();
     for(const k of keys) {

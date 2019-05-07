@@ -9,9 +9,6 @@ export class GrainsMinionRoute extends PageRoute {
   constructor(router) {
     super("^[\/]grainsminion$", "Grains", "#page_grainsminion", "#button_grains", router);
 
-    this.keysLoaded = false;
-    this.jobsLoaded = false;
-
     this._handleLocalGrainsItems = this._handleLocalGrainsItems.bind(this);
 
     this.page_element.querySelector("#button_close_grainsminion").addEventListener("click", _ => {
@@ -27,19 +24,36 @@ export class GrainsMinionRoute extends PageRoute {
     const title = document.getElementById("grainsminion_title");
     title.innerText = "Grains on " + minion;
 
-    return new Promise(function(resolve, reject) {
-      myThis.resolvePromise = resolve;
-      if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
-      myThis.router.api.getLocalGrainsItems(minion).then(myThis._handleLocalGrainsItems);
-      myThis.router.api.getRunnerJobsListJobs().then(myThis._handleRunnerJobsListJobs);
-      myThis.router.api.getRunnerJobsActive().then(myThis._handleRunnerJobsActive);
+    const localGrainsItemsPromise = this.router.api.getLocalGrainsItems(minion);
+    const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
+
+    localGrainsItemsPromise.then(data => {
+      myThis._handleLocalGrainsItems(data);
+    }, data => {
+      myThis._handleLocalGrainsItems(JSON.stringify(data));
     });
+
+    runnerJobsListJobsPromise.then(data => {
+      myThis._handleRunnerJobsListJobs(data);
+      runnerJobsActivePromise.then(data => {
+        myThis._handleRunnerJobsActive(data);
+      }, data => {
+        myThis._handleRunnerJobsActive(JSON.stringify(data));
+      });
+    }, data => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
+    }); 
   }
 
   _handleLocalGrainsItems(data) {
     const minion = decodeURIComponent(Utils.getQueryParam("minion"));
 
-    const grains = data.return[0][minion];
+    const container = document.getElementById("grainsminion_list");
+
+    while(container.tBodies[0].rows.length > 0) {
+      container.tBodies[0].deleteRow(0);
+    }
 
     const gmp = document.getElementById("grainsminion_page");
     const menu = new DropDownMenu(gmp);
@@ -51,17 +65,13 @@ export class GrainsMinionRoute extends PageRoute {
       this._runCommand(evt, minion, "saltutil.refresh_grains");
     }.bind(this));
 
-    const container = document.getElementById("grainsminion_list");
-
     // new menu's are always added at the bottom of the div
     // fix that by re-adding the minion list
     gmp.appendChild(container);
 
-    while(container.tBodies[0].rows.length > 0) {
-      container.tBodies[0].deleteRow(0);
-    }
+    if(PageRoute.showErrorRowInstead(container.tBodies[0], data)) return;
 
-    if(!grains) return;
+    const grains = data.return[0][minion];
 
     const keys = Object.keys(grains).sort();
     for(const k of keys) {

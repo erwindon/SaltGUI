@@ -7,7 +7,6 @@ export class TemplatesRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]templates$", "Templates", "#page_templates", "#button_templates", router);
-    this.jobsLoaded = false;
 
     this._handleWheelConfigValues = this._handleWheelConfigValues.bind(this);
     this._applyTemplate = this._applyTemplate.bind(this);
@@ -16,18 +15,33 @@ export class TemplatesRoute extends PageRoute {
   onShow() {
     const myThis = this;
 
-    return new Promise(function(resolve, reject) {
-      myThis.resolvePromise = resolve;
-      if(myThis.jobsLoaded) resolve();
-      myThis.router.api.getRunnerJobsListJobs().then(myThis._handleRunnerJobsListJobs);
-      myThis.router.api.getRunnerJobsActive().then(myThis._handleRunnerJobsActive);
-      myThis.router.api.getWheelConfigValues().then(myThis._handleWheelConfigValues);
+    const wheelConfigValuesPromise = this.router.api.getWheelConfigValues();
+    const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
+
+    wheelConfigValuesPromise.then(data => {
+      myThis._handleWheelConfigValues(data);
+    }, data => {
+      myThis._handleWheelConfigValues(JSON.stringify(data));
+    });
+
+    runnerJobsListJobsPromise.then(data => {
+      myThis._handleRunnerJobsListJobs(data);
+      runnerJobsActivePromise.then(data => {
+        myThis._handleRunnerJobsActive(data);
+      }, data => {
+        myThis._handleRunnerJobsActive(JSON.stringify(data));
+      });
+    }, data => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
     });
   }
 
   _handleWheelConfigValues(data) {
     const container = this.getPageElement().querySelector(".templates");
-    
+
+    if(PageRoute.showErrorRowInstead(container, data)) return;
+
     // should we update it or just use from cache (see commandbox) ?
     const templates = data.return[0].data.return.saltgui_templates;
     window.localStorage.setItem("templates", JSON.stringify(templates));

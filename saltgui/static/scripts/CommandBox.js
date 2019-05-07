@@ -121,6 +121,8 @@ export class CommandBox {
 
     func.then(response => {
       this._onRunReturn(response.return[0], command);
+    }, response => {
+      this._showError(JSON.stringify(response));
     });
   }
 
@@ -218,7 +220,7 @@ export class CommandBox {
   }
 
   _showError(message) {
-    this._onRunReturn(message, "");
+    this._onRunReturn("ERROR:\n\n" + message, "");
   }
 
   _getRunParams(tgtType, target, toRun) {
@@ -309,10 +311,6 @@ export class CommandBox {
       // { "jid": "20180718173942195461", "minions": [ ... ] }
     }
 
-    return this.api.apiRequest("POST", "/", params)
-      .catch(error => {
-        this._showError(error.message);
-        return error;
-      });
+    return this.api.apiRequest("POST", "/", params);
   }
 }

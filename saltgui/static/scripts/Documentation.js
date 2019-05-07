@@ -91,9 +91,11 @@ export class Documentation {
 
     const tgtType = TargetType.menuTargetType._value;
 
-    this.commandbox._getRunParams(tgtType, target, docCommand).then(
-      response => this.commandbox._onRunReturn(response.return[0], dummyCommand)
-    );
+    this.commandbox._getRunParams(tgtType, target, docCommand).then(response => {
+      this.commandbox._onRunReturn(response.return[0], dummyCommand);
+    }, response => {
+      this.commandbox._onRunReturn("DOCUMENTATION ERROR:\n\n" + JSON.stringify(response), dummyCommand);
+    });
   }
 
 }

@@ -240,15 +240,22 @@ export class PageRoute extends Route {
     }
 
     let saltversion = "---";
-    if(minion && minion.saltversion) saltversion = minion.saltversion;
-    if(minion) element.appendChild(Route._createTd("saltversion", saltversion));
+    if(typeof minion === "string") saltversion = "";
+    else if(minion && minion.saltversion) saltversion = minion.saltversion;
+    if(minion) {
+      const td = Route._createTd("saltversion", saltversion);
+      if(typeof minion === "string") Utils.addErrorToTableCell(td, minion);
+      element.appendChild(td);
+    }
 
     let os = "---";
-    if(minion && minion.os && minion.osrelease) os = minion.os + " " + minion.osrelease;
+    if(typeof minion === "string") os = "";
+    else if(minion && minion.os && minion.osrelease) os = minion.os + " " + minion.osrelease;
     else if(minion && minion.os) os = minion.os;
     if(minion) {
       const td = Route._createTd("os", os);
-      if(minion.os) {
+      if(typeof minion === "string") Utils.addErrorToTableCell(td, minion);
+      if(minion.os && typeof minion !== "string") {
         const img = document.createElement("img");
         img.setAttribute("src", "static/images/os-" + minion.os.replace(" ", "-").toLowerCase() + ".png");
         img.classList.add("osimage");
@@ -295,6 +302,9 @@ export class PageRoute extends Route {
 
   _handleRunnerJobsListJobs(data, hasHeader = false, numberOfJobs = 7) {
     const jobContainer = this.getPageElement().querySelector(".jobs tbody");
+
+    if(PageRoute.showErrorRowInstead(jobContainer, data)) return;
+
     const jobs = this._jobsToArray(data.return[0]);
     this._sortJobs(jobs);
 
@@ -351,13 +361,22 @@ export class PageRoute extends Route {
     if(hasHeader) {
       Utils.showTableSortable(this.getPageElement(), "jobs", true);
     }
-
-    this.jobsLoaded = true;
-    if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
   _handleRunnerJobsActive(data) {
-    const jobs = data.return[0];
+
+    if(typeof data !== "object") {
+      for(const tr of this.page_element.querySelector("table.jobs tbody").rows) {
+        const statusSpan = tr.querySelector("span.status");
+        if(!statusSpan) continue;
+        statusSpan.classList.remove("no_status");
+        statusSpan.innerText = "(error)";
+        // we show the tooltip here so that the user is invited to click on this
+        // the user then sees other rows being updated without becoming invisible
+        Utils.addToolTip(statusSpan, data);
+      }
+      return;
+    }
 
     // mark all jobs as done, then re-update the running jobs
     for(const tr of this.page_element.querySelector("table.jobs tbody").rows) {
@@ -369,6 +388,8 @@ export class PageRoute extends Route {
       // the user then sees other rows being updated without becoming invisible
       Utils.addToolTip(statusSpan, "Click to refresh");
     }
+
+    const jobs = data.return[0];
 
     // update all running jobs
     for(const k in jobs)
@@ -447,6 +468,8 @@ export class PageRoute extends Route {
 
     this.router.api.getRunnerJobsActive().then(data => {
       myThis._handleRunnerJobsActive(data);
+    }, data => {
+      myThis._handleRunnerJobsActive(JSON.stringify(data));
     });
   }
 
@@ -494,4 +517,24 @@ export class PageRoute extends Route {
     Utils.addToolTip(target, "Click to copy");
   }
 
+  static showErrorRowInstead(table, data) {
+    if(typeof data === "object") {
+      // not an error
+      return false;
+    }
+
+    const td = document.createElement("td");
+    td.colSpan = 99;
+    const span = document.createElement("span");
+    span.innerText = "(error)";
+    Utils.addToolTip(span, data);
+    td.appendChild(span);
+
+    const tr = document.createElement("tr");
+    tr.appendChild(td);
+
+    table.appendChild(tr);
+
+    return true;
+  }
 }

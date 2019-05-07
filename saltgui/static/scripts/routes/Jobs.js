@@ -9,7 +9,6 @@ export class JobsRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]jobs$", "Jobs", "#page_jobs", "#button_jobs", router);
-    this.jobsLoaded = false;
 
     this._getJobDetails = this._getJobDetails.bind(this);
   }
@@ -17,16 +16,19 @@ export class JobsRoute extends PageRoute {
   onShow() {
     const myThis = this;
 
-    return new Promise(function(resolve, reject) {
-      myThis.resolvePromise = resolve;
-      if(myThis.jobsLoaded) resolve();
-      myThis.router.api.getRunnerJobsListJobs().then(data => {
-        myThis._handleRunnerJobsListJobs(data, true, 50);
-      });
-      myThis.router.api.getRunnerJobsActive().then(data => {
+    const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
+
+    runnerJobsListJobsPromise.then(data => {
+      myThis._handleRunnerJobsListJobs(data, true, 50);
+      runnerJobsActivePromise.then(data => {
         myThis._handleRunnerJobsActive(data);
+      }, data => {
+        myThis._handleRunnerJobsActive(JSON.stringify(data));
       });
-    });
+    }, data => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
+    }); 
   }
 
   _addJob(container, job) {
@@ -111,6 +113,19 @@ export class JobsRoute extends PageRoute {
   }
 
   _handleRunnerJobsActive(data) {
+
+    if(typeof data !== "object") {
+      // update all jobs (page) with the error message
+      for(const tr of this.page_element.querySelector("table#jobs tbody").rows) {
+        const statusField = tr.querySelector("td.status span.no_status");
+        if(!statusField) continue;
+        statusField.classList.remove("no_status");
+        statusField.innerText = "(error)";
+        Utils.addToolTip(statusField, data);
+      }
+      return;
+    }
+
     const jobs = data.return[0];
 
     // update all running jobs
@@ -152,13 +167,28 @@ export class JobsRoute extends PageRoute {
   }
 
   _getJobDetails(jobid) {
-    const p = this;
-    this.router.api.getRunnerJobsListJob(jobid).then(data => {
-      p._handleRunnerJobsListJob(jobid, data);
+    const myThis = this;
+
+    const runnerJobsListJobPromise = this.router.api.getRunnerJobsListJob(jobid);
+
+    runnerJobsListJobPromise.then(data => {
+      myThis._handleRunnerJobsListJob(jobid, data);
+    }, data => {
+      myThis._handleRunnerJobsListJob(jobid, JSON.stringify(data));
     });
   }
 
   _handleRunnerJobsListJob(jobid, data) {
+
+    if(typeof data !== "object") {
+      const detailsSpan = this.page_element.querySelector(".jobs #job" + jobid + " td.details span");
+      if(!detailsSpan) return;
+      detailsSpan.innerText = "(error)";
+      detailsSpan.classList.remove("no_status");
+      Utils.addToolTip(detailsSpan, data);
+      return;
+    }
+
     data = data.return[0];
 
     let str = "";

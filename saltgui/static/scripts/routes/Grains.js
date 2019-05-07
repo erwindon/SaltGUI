@@ -9,9 +9,6 @@ export class GrainsRoute extends PageRoute {
   constructor(router) {
     super("^[\/]grains$", "Grains", "#page_grains", "#button_grains", router);
 
-    this.keysLoaded = false;
-    this.jobsLoaded = false;
-
     this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
     this._updateMinion = this._updateMinion.bind(this);
 
@@ -48,20 +45,43 @@ export class GrainsRoute extends PageRoute {
   onShow() {
     const myThis = this;
 
-    return new Promise(function(resolve, reject) {
-      myThis.resolvePromise = resolve;
-      if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
-      myThis.router.api.getLocalGrainsItems(null).then(myThis._updateMinions);
-      myThis.router.api.getWheelKeyListAll().then(myThis._handleWheelKeyListAll);
-      myThis.router.api.getRunnerJobsListJobs().then(myThis._handleRunnerJobsListJobs);
-      myThis.router.api.getRunnerJobsActive().then(myThis._handleRunnerJobsActive);
+    const wheelKeyListAllPromise = this.router.api.getWheelKeyListAll();
+    const localGrainsItemsPromise = this.router.api.getLocalGrainsItems(null);
+    const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
+
+    wheelKeyListAllPromise.then(data1 => {
+      myThis._handleWheelKeyListAll(data1);
+      localGrainsItemsPromise.then(data => {
+        myThis._updateMinions(data);
+      }, data2 => {
+        const data = {"return":[{}]};
+        for(const k of data1.return[0].data.return.minions)
+          data.return[0][k] = JSON.stringify(data2);
+        myThis._updateMinions(data);
+      });
+    }, data => {
+      myThis._handleWheelKeyListAll(JSON.stringify(data));
     });
+
+    runnerJobsListJobsPromise.then(data => {
+      myThis._handleRunnerJobsListJobs(data);
+      runnerJobsActivePromise.then(data => {
+        myThis._handleRunnerJobsActive(data);
+      }, data => {
+        myThis._handleRunnerJobsActive(JSON.stringify(data));
+      });
+    }, data => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
+    }); 
   }
 
   _handleWheelKeyListAll(data) {
-    const keys = data.return[0].data.return;
-
     const list = this.getPageElement().querySelector('#minions');
+
+    if(PageRoute.showErrorRowInstead(list, data)) return;
+
+    const keys = data.return[0].data.return;
 
     const hostnames = keys.minions.sort();
     for(const hostname of hostnames) {
@@ -80,9 +100,6 @@ export class GrainsRoute extends PageRoute {
     }
 
     Utils.showTableSortable(this.getPageElement(), "minions");
-
-    this.keysLoaded = true;
-    if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
   _updateOfflineMinion(container, hostname) {
@@ -105,11 +122,17 @@ export class GrainsRoute extends PageRoute {
 
     const element = document.getElementById(hostname);
 
-    const cnt = Object.keys(minion).length;
-    const grainInfoText = cnt + " grains";
-    const grainInfoTd = Route._createTd("graininfo", grainInfoText);
-    grainInfoTd.setAttribute("sorttable_customkey", cnt);
-    element.appendChild(grainInfoTd);
+    if(typeof minion === "object") {
+      const cnt = Object.keys(minion).length;
+      const grainInfoText = cnt + " grains";
+      const grainInfoTd = Route._createTd("graininfo", grainInfoText);
+      grainInfoTd.setAttribute("sorttable_customkey", cnt);
+      element.appendChild(grainInfoTd);
+    } else {
+      const grainInfoTd = Route._createTd("", "");
+      Utils.addErrorToTableCell(grainInfoTd, minion);
+      element.appendChild(grainInfoTd);
+    }
 
     const menu = new DropDownMenu(element);
     this._addMenuItemShowGrains(menu, hostname);
@@ -121,9 +144,13 @@ export class GrainsRoute extends PageRoute {
     for(let i = 0; i < this._previewGrains.length; i++) {
       const td = document.createElement("td");
       const grainName = this._previewGrains[i];
-      if(grainName in minion) {
-        td.innerText = Output.formatObject(minion[grainName]);
-        td.classList.add("grain_value");
+      if(typeof minion === "object") {
+        if(grainName in minion) {
+          td.innerText = Output.formatObject(minion[grainName]);
+          td.classList.add("grain_value");
+        }
+      } else {
+        Utils.addErrorToTableCell(td, minion);
       }
       element.appendChild(td);
     }

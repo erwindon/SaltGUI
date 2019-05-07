@@ -215,7 +215,7 @@ export class Output {
       // for the result of jobs.active
       const summaryJobsActiveSpan = document.createElement("span");
       summaryJobsActiveSpan.id = "summary_jobsactive";
-      summaryJobsActiveSpan.innerText = initialStatus + ", ";
+      summaryJobsActiveSpan.innerText = initialStatus;
 
       // for the result of jobs.list_job
       const summaryJobsListJobSpan = document.createElement("span");
@@ -224,12 +224,12 @@ export class Output {
       const cntResponses = Object.keys(response).length;
       const cntMinions = minions.length;
 
-      let txt;
+      let txt = ", ";
 
       if(cntResponses === 1) {
-        txt = cntResponses + " response";
+        txt += cntResponses + " response";
       } else {
-        txt = cntResponses + " responses";
+        txt += cntResponses + " responses";
       }
 
       const summary = { };

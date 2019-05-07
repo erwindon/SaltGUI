@@ -7,8 +7,6 @@ export class SchedulesRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]schedules$", "Schedules", "#page_schedules", "#button_schedules", router);
-    this.keysLoaded = false;
-    this.jobsLoaded = false;
 
     this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
     this._updateMinion = this._updateMinion.bind(this);
@@ -17,21 +15,42 @@ export class SchedulesRoute extends PageRoute {
   onShow() {
     const myThis = this;
 
-    return new Promise(function(resolve, reject) {
-      myThis.resolvePromise = resolve;
-      if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
-      myThis.router.api.getLocalScheduleList(null)
-        .then(myThis._updateMinions, myThis._updateMinions);
-      myThis.router.api.getWheelKeyListAll().then(myThis._handleWheelKeyListAll);
-      myThis.router.api.getRunnerJobsListJobs().then(myThis._handleRunnerJobsListJobs);
-      myThis.router.api.getRunnerJobsActive().then(myThis._handleRunnerJobsActive);
+    const wheelKeyListAllPromise = this.router.api.getWheelKeyListAll();
+    const localScheduleListPromise = this.router.api.getLocalScheduleList(null);
+    const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
+
+    wheelKeyListAllPromise.then(data1 => {
+      myThis._handleWheelKeyListAll(data1);
+      localScheduleListPromise.then(data => {
+        myThis._updateMinions(data);
+      }, data2 => {
+        const data = {"return":[{}]};
+        for(const k of data1.return[0].data.return.minions)
+          data.return[0][k] = JSON.stringify(data2);
+        myThis._updateMinions(data);
+      });
+    }, data => {
+      myThis._handleWheelKeyListAll(JSON.stringify(data));
     });
+
+    runnerJobsListJobsPromise.then(data => {
+      myThis._handleRunnerJobsListJobs(data);
+      runnerJobsActivePromise.then(data => {
+        myThis._handleRunnerJobsActive(data);
+      }, data => {
+        myThis._handleRunnerJobsActive(JSON.stringify(data));
+      });
+    }, data => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
+    }); 
   }
 
   // This one has some historic ballast:
   // Meta-data is returned on the same level as
   // the list of scheduled items
   static _fixMinion(data) {
+    if(typeof data !== "object") return data;
     const ret = { "schedules": {}, "enabled": true };
     for(const k in data) {
       if(k === "enabled") {
@@ -47,9 +66,11 @@ export class SchedulesRoute extends PageRoute {
   }
 
   _handleWheelKeyListAll(data) {
-    const keys = data.return[0].data.return;
-
     const list = this.getPageElement().querySelector('#minions');
+
+    if(PageRoute.showErrorRowInstead(list, data)) return;
+
+    const keys = data.return[0].data.return;
 
     const hostnames = keys.minions.sort();
     for(const hostname of hostnames) {
@@ -64,9 +85,6 @@ export class SchedulesRoute extends PageRoute {
     }
 
     Utils.showTableSortable(this.getPageElement(), "minions");
-
-    this.keysLoaded = true;
-    if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
   _updateOfflineMinion(container, hostname) {
@@ -83,22 +101,7 @@ export class SchedulesRoute extends PageRoute {
 
     minion = SchedulesRoute._fixMinion(minion);
 
-    const cnt = Object.keys(minion.schedules).length;
-    let scheduleinfo = cnt + " schedule" + (cnt === 1 ? "" : "s");
-    if(!minion.enabled)
-      scheduleinfo += " (disabled)";
-
-    let element = document.getElementById(hostname);
-    if(element === null) {
-      // offline minion not found on screen...
-      // construct a basic element that can be updated here
-      element = document.createElement('tr');
-      element.id = hostname;
-      container.appendChild(element);
-    }
-    while(element.firstChild) {
-      element.removeChild(element.firstChild);
-    }
+    const element = this._getElement(container, hostname);
 
     element.appendChild(Route._createTd("hostname", hostname));
 
@@ -106,7 +109,22 @@ export class SchedulesRoute extends PageRoute {
     statusDiv.classList.add("accepted");
     element.appendChild(statusDiv);
 
+    let cnt;
+    let scheduleinfo;
+    if(typeof minion === "object") {
+      cnt = Object.keys(minion.schedules).length;
+      scheduleinfo = cnt + " schedule" + (cnt === 1 ? "" : "s");
+      if(!minion.enabled)
+        scheduleinfo += " (disabled)";
+    } else {
+      cnt = -1;
+      scheduleinfo = "";
+    }
+
     const td = Route._createTd("scheduleinfo", scheduleinfo);
+    if(typeof minion !== "object") {
+      Utils.addErrorToTableCell(td, minion);
+    }
     td.setAttribute("sorttable_customkey", cnt);
     element.appendChild(td);
 

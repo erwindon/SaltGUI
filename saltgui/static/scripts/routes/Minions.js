@@ -7,8 +7,6 @@ export class MinionsRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]$", "Minions", "#page_minions", "#button_minions", router);
-    this.keysLoaded = false;
-    this.jobsLoaded = false;
 
     this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
   }
@@ -16,15 +14,43 @@ export class MinionsRoute extends PageRoute {
   onShow() {
     const myThis = this;
 
-    return new Promise(function(resolve, reject) {
-      myThis.resolvePromise = resolve;
-      if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
-      myThis.router.api.getLocalGrainsItems(null).then(myThis._updateMinions);
-      myThis.router.api.getWheelKeyListAll().then(myThis._handleWheelKeyListAll);
-      myThis.router.api.getRunnerJobsListJobs().then(myThis._handleRunnerJobsListJobs);
-      myThis.router.api.getRunnerJobsActive().then(myThis._handleRunnerJobsActive);
-      //we need these functions to populate the dropdown boxes
-      myThis.router.api.getWheelConfigValues().then(myThis._handleWheelConfigValues);
+    const wheelKeyListAllPromise = this.router.api.getWheelKeyListAll();
+    const localGrainsItemsPromise = this.router.api.getLocalGrainsItems(null);
+    const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
+    //we need these functions to populate the dropdown boxes
+    const wheelConfigValuesPromise = this.router.api.getWheelConfigValues();
+
+    wheelKeyListAllPromise.then(data1 => {
+      myThis._handleWheelKeyListAll(data1);
+      localGrainsItemsPromise.then(data => {
+        myThis._updateMinions(data);
+      }, data2 => {
+        const data = {"return":[{}]};
+        for(const k of data1.return[0].data.return.minions)
+          data.return[0][k] = JSON.stringify(data2);
+        myThis._updateMinions(data);
+      });
+    }, data => {
+      myThis._handleWheelKeyListAll(JSON.stringify(data));
+    });
+
+    runnerJobsListJobsPromise.then(data => {
+      myThis._handleRunnerJobsListJobs(data);
+      runnerJobsActivePromise.then(data => {
+        myThis._handleRunnerJobsActive(data);
+      }, data => {
+        myThis._handleRunnerJobsActive(JSON.stringify(data));
+      });
+    }, data => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
+    }); 
+
+    //we need these functions to populate the dropdown boxes
+    wheelConfigValuesPromise.then(data => {
+      myThis._handleWheelConfigValues(data);
+    }, data => {
+      // never mind
     });
   }
 
@@ -52,9 +78,11 @@ export class MinionsRoute extends PageRoute {
   }
 
   _handleWheelKeyListAll(data) {
-    const keys = data.return[0].data.return;
-
     const list = this.getPageElement().querySelector("#minions");
+
+    if(PageRoute.showErrorRowInstead(list, data)) return;
+
+    const keys = data.return[0].data.return;
 
     const hostnames = keys.minions.sort();
     for(const hostname of hostnames) {
@@ -69,9 +97,6 @@ export class MinionsRoute extends PageRoute {
     }
 
     Utils.showTableSortable(this.getPageElement(), "minions");
-
-    this.keysLoaded = true;
-    if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
   _updateOfflineMinion(container, hostname) {

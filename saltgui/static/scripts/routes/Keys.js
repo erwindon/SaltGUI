@@ -7,8 +7,8 @@ export class KeysRoute extends PageRoute {
 
   constructor(router) {
     super("^[\/]keys$", "Keys", "#page_keys", "#button_keys", router);
-    this.keysLoaded = false;
-    this.jobsLoaded = false;
+
+    this.fingerprintPattern = /^[0-9a-f:]+$/i;
 
     this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
     this._handleWheelKeyFinger = this._handleWheelKeyFinger.bind(this);
@@ -17,22 +17,35 @@ export class KeysRoute extends PageRoute {
   onShow() {
     const myThis = this;
 
-    const p1 = this.router.api.getWheelKeyListAll();
-    const p2 = this.router.api.getWheelKeyFinger();
+    const wheelKeyListAllPromise = this.router.api.getWheelKeyListAll();
+    const wheelKeyFingerPromise = this.router.api.getWheelKeyFinger();
+    const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    Promise.all([p1, p2])
-      .then(function(data){
-        // process result of 1st promise
-        myThis._handleWheelKeyListAll(data[0]);
-        // process result of 2nd promise
-        myThis._handleWheelKeyFinger(data[1]);
+    wheelKeyListAllPromise.then(data1 => {
+      myThis._handleWheelKeyListAll(data1);
+      wheelKeyFingerPromise.then(data => {
+        myThis._handleWheelKeyFinger(data);
+      }, data2 => {
+        const data = {"return":[{"data":{"return":{"minions":{}}}}]};
+        for(const k of data1.return[0].data.return.minions)
+          data.return[0]["data"]["return"]["minions"][k] = JSON.stringify(data2);
+        myThis._handleWheelKeyFinger(data);
       });
-    return new Promise(function(resolve, reject) {
-      myThis.resolvePromise = resolve;
-      if(myThis.keysLoaded && myThis.jobsLoaded) resolve();
-      myThis.router.api.getRunnerJobsListJobs().then(myThis._handleRunnerJobsListJobs);
-      myThis.router.api.getRunnerJobsActive().then(myThis._handleRunnerJobsActive);
+    }, data => {
+      myThis._handleWheelKeyListAll(JSON.stringify(data));
     });
+
+    runnerJobsListJobsPromise.then(data => {
+      myThis._handleRunnerJobsListJobs(data);
+      runnerJobsActivePromise.then(data => {
+        myThis._handleRunnerJobsActive(data);
+      }, data => {
+        myThis._handleRunnerJobsActive(JSON.stringify(data));
+      });
+    }, data => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
+    }); 
   }
 
   _handleWheelKeyFinger(data) {
@@ -52,14 +65,22 @@ export class KeysRoute extends PageRoute {
         // update td.fingerprint with fingerprint value
         const fingerprintElement = this.page_element.querySelector("#" + hostname + " .fingerprint");
         const fingerprint = hosts[hostname];
-        if(fingerprintElement) fingerprintElement.innerText = fingerprint;
+        if(!fingerprintElement) continue;
+        if(!fingerprint.match(this.fingerprintPattern)) {
+          Utils.addErrorToTableCell(fingerprintElement, fingerprint);
+          continue;
+        }
+        fingerprintElement.innerText = fingerprint;
       }
     }
   }
 
   _handleWheelKeyListAll(data) {
-    const keys = data.return[0].data.return;
     const list = this.getPageElement().querySelector("#minions");
+
+    if(PageRoute.showErrorRowInstead(list, data)) return;
+
+    const keys = data.return[0].data.return;
 
     // Unaccepted goes first because that is where the user must decide
     const hostnames_pre = keys.minions_pre.sort();
@@ -104,9 +125,6 @@ export class KeysRoute extends PageRoute {
     }
 
     Utils.showTableSortable(this.getPageElement(), "minions");
-
-    this.keysLoaded = true;
-    if(this.keysLoaded && this.jobsLoaded) this.resolvePromise();
   }
 
   _updateOfflineMinion(container, hostname) {
