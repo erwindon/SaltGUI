@@ -101,8 +101,16 @@ export class SchedulesRoute extends PageRoute {
 
     minion = SchedulesRoute._fixMinion(minion);
 
-    let scheduleinfo;
+    const element = this._getElement(container, hostname);
+
+    element.appendChild(Route._createTd("hostname", hostname));
+
+    const statusDiv = Route._createTd("status", "accepted");
+    statusDiv.classList.add("accepted");
+    element.appendChild(statusDiv);
+
     let cnt;
+    let scheduleinfo;
     if(typeof minion === "object") {
       cnt = Object.keys(minion.schedules).length;
       scheduleinfo = cnt + " schedule" + (cnt === 1 ? "" : "s");
@@ -112,24 +120,6 @@ export class SchedulesRoute extends PageRoute {
       cnt = -1;
       scheduleinfo = "(error)";
     }
-
-    let element = document.getElementById(hostname);
-    if(element === null) {
-      // offline minion not found on screen...
-      // construct a basic element that can be updated here
-      element = document.createElement('tr');
-      element.id = hostname;
-      container.appendChild(element);
-    }
-    while(element.firstChild) {
-      element.removeChild(element.firstChild);
-    }
-
-    element.appendChild(Route._createTd("hostname", hostname));
-
-    const statusDiv = Route._createTd("status", "accepted");
-    statusDiv.classList.add("accepted");
-    element.appendChild(statusDiv);
 
     const td = Route._createTd("scheduleinfo", scheduleinfo);
     if(typeof minion !== "object") {
