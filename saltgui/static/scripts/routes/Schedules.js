@@ -118,12 +118,12 @@ export class SchedulesRoute extends PageRoute {
         scheduleinfo += " (disabled)";
     } else {
       cnt = -1;
-      scheduleinfo = "(error)";
+      scheduleinfo = "";
     }
 
     const td = Route._createTd("scheduleinfo", scheduleinfo);
     if(typeof minion !== "object") {
-      Utils.addToolTip(td, minion);
+      Utils.addErrorToTableCell(td, minion);
     }
     td.setAttribute("sorttable_customkey", cnt);
     element.appendChild(td);

@@ -67,8 +67,7 @@ export class KeysRoute extends PageRoute {
         const fingerprint = hosts[hostname];
         if(!fingerprintElement) continue;
         if(!fingerprint.match(this.fingerprintPattern)) {
-          fingerprintElement.innerText = "(error)";
-          Utils.addToolTip(fingerprintElement, fingerprint);
+          Utils.addErrorToTableCell(fingerprintElement, fingerprint);
           continue;
         }
         fingerprintElement.innerText = fingerprint;

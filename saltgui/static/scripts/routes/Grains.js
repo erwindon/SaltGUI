@@ -129,9 +129,8 @@ export class GrainsRoute extends PageRoute {
       grainInfoTd.setAttribute("sorttable_customkey", cnt);
       element.appendChild(grainInfoTd);
     } else {
-      const grainInfoTd = Route._createTd("graininfo", "(error)");
-      grainInfoTd.setAttribute("sorttable_customkey", -1);
-      if(typeof minion === "string") Utils.addToolTip(grainInfoTd, minion);
+      const grainInfoTd = Route._createTd("", "");
+      Utils.addErrorToTableCell(grainInfoTd, minion);
       element.appendChild(grainInfoTd);
     }
 
@@ -151,8 +150,7 @@ export class GrainsRoute extends PageRoute {
           td.classList.add("grain_value");
         }
       } else {
-        td.innerText = "(error)";
-        Utils.addToolTip(td, minion);
+        Utils.addErrorToTableCell(td, minion);
       }
       element.appendChild(td);
     }

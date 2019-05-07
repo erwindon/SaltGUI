@@ -240,21 +240,21 @@ export class PageRoute extends Route {
     }
 
     let saltversion = "---";
-    if(typeof minion === "string") saltversion = "(error)";
+    if(typeof minion === "string") saltversion = "";
     else if(minion && minion.saltversion) saltversion = minion.saltversion;
     if(minion) {
       const td = Route._createTd("saltversion", saltversion);
-      if(typeof minion === "string") Utils.addToolTip(td, minion);
+      if(typeof minion === "string") Utils.addErrorToTableCell(td, minion);
       element.appendChild(td);
     }
 
     let os = "---";
-    if(typeof minion === "string") os = "(error)";
+    if(typeof minion === "string") os = "";
     else if(minion && minion.os && minion.osrelease) os = minion.os + " " + minion.osrelease;
     else if(minion && minion.os) os = minion.os;
     if(minion) {
       const td = Route._createTd("os", os);
-      if(typeof minion === "string") Utils.addToolTip(td, minion);
+      if(typeof minion === "string") Utils.addErrorToTableCell(td, minion);
       if(minion.os && typeof minion !== "string") {
         const img = document.createElement("img");
         img.setAttribute("src", "static/images/os-" + minion.os.replace(" ", "-").toLowerCase() + ".png");
@@ -524,9 +524,11 @@ export class PageRoute extends Route {
     }
 
     const td = document.createElement("td");
-    td.innerText = "(error)";
     td.colSpan = 99;
-    Utils.addToolTip(td, data);
+    const span = document.createElement("span");
+    span.innerText = "(error)";
+    Utils.addToolTip(span, data);
+    td.appendChild(span);
 
     const tr = document.createElement("tr");
     tr.appendChild(td);

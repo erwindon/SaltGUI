@@ -47,8 +47,8 @@ export class JobRoute extends Route {
 
     if(typeof data !== "object") {
       const pre = this.getPageElement().querySelector(".output");
-      pre.innerText = "(error)";
-      Utils.addToolTip(pre, data);
+      pre.innerText = "";
+      Utils.addErrorToTableCell(pre, data);
       return;
     }
 
@@ -183,7 +183,7 @@ export class JobRoute extends Route {
     if(!summaryJobsActiveSpan) return;
 
     if(typeof data !== "object") {
-      summaryJobsActiveSpan.innerText = "(error), ";
+      summaryJobsActiveSpan.innerText = "(error)";
       Utils.addToolTip(summaryJobsActiveSpan, data);
       return;
     }
@@ -192,7 +192,7 @@ export class JobRoute extends Route {
 
     // when the job is already completely done, nothing is returned
     if(!info) {
-      summaryJobsActiveSpan.innerText = "done, ";
+      summaryJobsActiveSpan.innerText = "done";
       if(this.terminateJobMenuItem) {
         // nothing left to terminate
         this.terminateJobMenuItem.style.display = "none";
@@ -208,7 +208,7 @@ export class JobRoute extends Route {
       return;
     }
 
-    summaryJobsActiveSpan.innerText = info.Running.length + " active, ";
+    summaryJobsActiveSpan.innerText = info.Running.length + " active";
 
     // update the minion details
     for(const minionInfo of info.Running) {

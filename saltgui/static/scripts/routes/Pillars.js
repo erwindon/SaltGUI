@@ -96,12 +96,12 @@ export class PillarsRoute extends PageRoute {
       }
     } else {
       cnt = -1;
-      pillarInfoText = "(error)";
+      pillarInfoText = "";
     }
     const pillarInfoTd = Route._createTd("pillarinfo", pillarInfoText);
     pillarInfoTd.setAttribute("sorttable_customkey", cnt);
     if(typeof minion !== "object") {
-      Utils.addToolTip(pillarInfoTd, minion);
+      Utils.addErrorToTableCell(pillarInfoTd, minion);
     }
     element.appendChild(pillarInfoTd);
 
