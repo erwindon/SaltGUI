@@ -308,6 +308,72 @@ export class PageRoute extends Route {
     const jobs = this._jobsToArray(data.return[0]);
     this._sortJobs(jobs);
 
+    // collect the list of hidden minions
+    let hideJobsText = window.localStorage.getItem("hide_jobs");
+    if(!hideJobsText || hideJobsText === "undefined") {
+      hideJobsText = "[]";
+    }
+    this._hideJobs = JSON.parse(hideJobsText);
+    if(!Array.isArray(this._hideJobs)) {
+      this._hideJobs = [ ];
+    }
+    // collect the list of hidden minions
+    let showJobsText = window.localStorage.getItem("show_jobs");
+    if(!showJobsText || showJobsText === "undefined") {
+      showJobsText = "[]";
+    }
+    this._showJobs = JSON.parse(showJobsText);
+    if(!Array.isArray(this._showJobs)) {
+      this._showJobs = [ ];
+    }
+
+    // These jobs are likely started by the SaltGUI
+    // do not display them
+    this._hideJobs.push("beacons.add");
+    this._hideJobs.push("beacons.delete");
+    this._hideJobs.push("beacons.disable");
+    this._hideJobs.push("beacons.disable_beacon");
+    this._hideJobs.push("beacons.enable");
+    this._hideJobs.push("beacons.enable_beacon");
+    this._hideJobs.push("beacons.list");
+    this._hideJobs.push("beacons.modify");
+    this._hideJobs.push("beacons.reset");
+    this._hideJobs.push("beacons.save");
+    this._hideJobs.push("grains.append");
+    this._hideJobs.push("grains.delkey");
+    this._hideJobs.push("grains.delval");
+    this._hideJobs.push("grains.items");
+    this._hideJobs.push("grains.setval");
+    this._hideJobs.push("pillar.items");
+    this._hideJobs.push("pillar.obfuscate");
+    this._hideJobs.push("ps.kill_pid");
+    this._hideJobs.push("ps.proc_info");
+    this._hideJobs.push("runner.jobs.active");
+    this._hideJobs.push("runner.jobs.list_job");
+    this._hideJobs.push("runner.jobs.list_jobs");
+    this._hideJobs.push("saltutil.find_job");
+    this._hideJobs.push("saltutil.kill_job");
+    this._hideJobs.push("saltutil.refresh_grains");
+    this._hideJobs.push("saltutil.refresh_pillar");
+    this._hideJobs.push("saltutil.running");
+    this._hideJobs.push("saltutil.signal_job");
+    this._hideJobs.push("saltutil.term_job");
+    this._hideJobs.push("schedule.delete");
+    this._hideJobs.push("schedule.disable");
+    this._hideJobs.push("schedule.disable_job");
+    this._hideJobs.push("schedule.enable");
+    this._hideJobs.push("schedule.enable_job");
+    this._hideJobs.push("schedule.list");
+    this._hideJobs.push("schedule.modify");
+    this._hideJobs.push("schedule.run_job");
+    this._hideJobs.push("sys.doc");
+    this._hideJobs.push("wheel.config.values");
+    this._hideJobs.push("wheel.key.accept");
+    this._hideJobs.push("wheel.key.delete");
+    this._hideJobs.push("wheel.key.finger");
+    this._hideJobs.push("wheel.key.list_all");
+    this._hideJobs.push("wheel.key.reject");
+
     // Add <numberOfJobs> most recent jobs
     let shown = 0;
     let i = 0;
@@ -315,52 +381,9 @@ export class PageRoute extends Route {
       const job = jobs[i];
       i = i + 1;
 
-      // These jobs are likely started by the SaltGUI
-      // do not display them
-      if(job.Function === "beacons.add") continue;
-      if(job.Function === "beacons.delete") continue;
-      if(job.Function === "beacons.disable") continue;
-      if(job.Function === "beacons.disable_beacon") continue;
-      if(job.Function === "beacons.enable") continue;
-      if(job.Function === "beacons.enable_beacon") continue;
-      if(job.Function === "beacons.list") continue;
-      if(job.Function === "beacons.modify") continue;
-      if(job.Function === "beacons.reset") continue;
-      if(job.Function === "beacons.save") continue;
-      if(job.Function === "grains.append") continue;
-      if(job.Function === "grains.delkey") continue;
-      if(job.Function === "grains.delval") continue;
-      if(job.Function === "grains.items") continue;
-      if(job.Function === "grains.setval") continue;
-      if(job.Function === "pillar.items") continue;
-      if(job.Function === "pillar.obfuscate") continue;
-      if(job.Function === "ps.proc_info") continue;
-      if(job.Function === "ps.kill_pid") continue;
-      if(job.Function === "runner.jobs.active") continue;
-      if(job.Function === "runner.jobs.list_job") continue;
-      if(job.Function === "runner.jobs.list_jobs") continue;
-      if(job.Function === "saltutil.find_job") continue;
-      if(job.Function === "saltutil.kill_job") continue;
-      if(job.Function === "saltutil.refresh_grains") continue;
-      if(job.Function === "saltutil.refresh_pillar") continue;
-      if(job.Function === "saltutil.running") continue;
-      if(job.Function === "saltutil.signal_job") continue;
-      if(job.Function === "saltutil.term_job") continue;
-      if(job.Function === "schedule.delete") continue;
-      if(job.Function === "schedule.disable") continue;
-      if(job.Function === "schedule.disable_job") continue;
-      if(job.Function === "schedule.enable") continue;
-      if(job.Function === "schedule.enable_job") continue;
-      if(job.Function === "schedule.list") continue;
-      if(job.Function === "schedule.modify") continue;
-      if(job.Function === "schedule.run_job") continue;
-      if(job.Function === "sys.doc") continue;
-      if(job.Function === "wheel.config.values") continue;
-      if(job.Function === "wheel.key.accept") continue;
-      if(job.Function === "wheel.key.delete") continue;
-      if(job.Function === "wheel.key.list_all") continue;
-      if(job.Function === "wheel.key.reject") continue;
-      if(job.Function === "wheel.key.finger") continue;
+      if(this._hideJobs.includes(job.Function) && !this._showJobs.includes(job.Function)) {
+        continue;
+      }
 
       // Note that "Jobs" has a specialized version
       this._addJob(jobContainer, job);
