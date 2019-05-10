@@ -81,6 +81,19 @@ h1 {
   opacity: 0.8;
 }
 
+.search {
+  font-weight: bold;
+  font-size: 18px;
+  color: #888;
+  cursor: pointer;
+  margin-top: 4px;
+  margin-left: 8px;
+}
+
+.search:hover {
+  opacity: 0.8;
+}
+
 .nearlyvisiblebutton {
   display: block;
   float: right;

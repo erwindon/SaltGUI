@@ -87,6 +87,9 @@ function Hilitor(start, id, tag)
     if(!matchRegExp) return;
     if(skipTags.test(node.nodeName)) return;
 
+    // dont highlight inside dropdown menus
+    if(node.classList && node.classList.contains("run-command-button")) return;
+
     if(node.hasChildNodes()) {
       for(var i=0; i < node.childNodes.length; i++)
         this.hiliteWords(node.childNodes[i]);
@@ -112,7 +115,8 @@ function Hilitor(start, id, tag)
   // remove highlighting
   this.remove = function()
   {
-    var arr = document.getElementsByTagName(hiliteTag);
+    //var arr = document.getElementsByTagName(hiliteTag);
+    var arr = targetNode.getElementsByTagName(hiliteTag);
     while(arr.length && (el = arr[0])) {
       var parent = el.parentNode;
       parent.replaceChild(el.firstChild, el);

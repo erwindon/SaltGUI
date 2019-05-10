@@ -135,7 +135,7 @@ export class PillarsMinionRoute extends PageRoute {
     }
 
     Utils.showTableSortable(this.getPageElement(), "pillars");
-    Utils.showTableSearchable(this.getPageElement(), "pillars");
+    Utils.makeTableSearchable(this.getPageElement(), "pillars");
 
     if(!keys.length) {
       const noPillarsMsg = Route._createTd("msg", "No pillars found");

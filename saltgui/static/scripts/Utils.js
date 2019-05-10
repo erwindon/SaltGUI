@@ -39,11 +39,11 @@ export class Utils {
     tooltipHost.appendChild(tooltipSpan);
   }
 
-  static showTableSortable(start, tableClass, reverseSort = false) {
-    const th = start.querySelector("table." + tableClass + " th");
+  static showTableSortable(startElement, tableClass, reverseSort = false) {
+    const th = startElement.querySelector("table." + tableClass + " th");
     sorttable.innerSortFunction.apply(th, []);
     if(reverseSort) sorttable.innerSortFunction.apply(th, []);
-    const tr = start.querySelector("table." + tableClass + " tr");
+    const tr = startElement.querySelector("table." + tableClass + " tr");
     for(const th of tr.childNodes) {
       if(th.classList.contains("sorttable_nosort")) continue;
       // the tooltip is too bulky to use, skip for now
@@ -58,50 +58,111 @@ export class Utils {
     td.appendChild(span);
   }
 
-  static showTableSearchable(start, tableClass) {
-    const table = start.querySelector("table." + tableClass);
-    const input = document.createElement("input");
-    input.style.width = "100%";
-    // D83D+DD0D = 1F50D = LEFT-POINTING MAGNIFYING GLASS
-    input.placeholder = "\uD83D\uDD0D ESC to dismiss";
-    input.onkeyup = ev => {
-      let txt = input.value.toUpperCase();
-      if(ev.keyCode === 27) {
-        // user presses ESCAPE
-        txt = "";
-      }
-      for(const row of table.tBodies[0].rows) {
-        let show = false;
-        for(const cell of row.cells) {
-          // do not use "innerText"
-          // that one does not handle hidden text
-          if(cell.textContent.toUpperCase().includes(txt)) show = true;
-        }
-        if(show)
-          row.classList.remove("nofiltermatch");
-        else
-          row.classList.add("nofiltermatch");
-      }
-      const hilitor = new Hilitor(start, "." + tableClass + " tbody");
-      if(ev.keyCode === 27) {
-        // user presses ESCAPE
-        hilitor.remove();
-        input.style.display = "none";
-        return;
-      }
-      hilitor.setMatchType("open");
-      hilitor.setEndRegExp(/^$/);
-      hilitor.setBreakRegExp(/^$/);
-      // turn the text into a regexp
-      let pattern = "";
-      for(const chr of txt) {
-        if((chr >= 'A' && chr <= 'Z') || (chr >= '0' && chr <= '9'))
-          pattern += chr;
-        else
-          pattern += "\\" + chr;
-      }
-      hilitor.apply(pattern);
+  static hasTextContent(obj, txt) {
+    if(obj.classList && obj.classList.contains("run-command-button"))
+      return false;
+    for(const childNode of obj.childNodes)
+      if(this.hasTextContent(childNode, txt))
+        return true;
+    if(obj.nodeType !== 3) // NODE_TEXT
+      return false;
+    return obj.textContent.toUpperCase().includes(txt);
+  }
+
+  static makeTableSearchable(startElement, tableClass) {
+    // initially there is nothing
+    let button_search = startElement.querySelector("table." + tableClass + " search");
+    if(button_search) return;
+    button_search = document.createElement("span");
+    button_search.id = "button_search";
+    button_search.classList.add("search");
+    // 1F50D = LEFT-POINTING MAGNIFYING GLASS
+    // FE0E = VARIATION SELECTOR-15 (render as text)
+    button_search.innerHTML = "&#x1f50d;&#xFE0E;";
+    button_search.onclick = ev => {
+      Utils.hideShowTableSearchBar(startElement, tableClass);
     };
-    table.parentNode.insertBefore(input, table);
+    const table = startElement.querySelector("table." + tableClass);
+    table.parentElement.insertBefore(button_search, table);
+  }
+
+  static hideShowTableSearchBar(startElement, tableClass) {
+    // remove all highlights
+    const hilitor = new Hilitor(startElement, "table." + tableClass + " tbody");
+    hilitor.remove();
+
+    // show rows in all tables
+    const allFM = startElement.querySelectorAll("table." + tableClass + " .nofiltermatch");
+    for(const fm of allFM)
+      fm.classList.remove("nofiltermatch");
+
+    const table = startElement.querySelector("table." + tableClass);
+
+    // hide/show search box
+    let input = startElement.querySelector("input.xx" + tableClass);
+    if(!input) {
+      input = document.createElement("input");
+      input.style.width = "100%";
+      input.style.display = "none";
+      input.classList.add("filtertext");
+      input.classList.add("xx" + tableClass);
+      // D83D+DD0D = 1F50D = LEFT-POINTING MAGNIFYING GLASS
+      input.placeholder = "\uD83D\uDD0D";
+      input.onkeyup = ev => {
+        if(ev.key == "Escape") {
+          Utils.updateFilter(table, "");
+          Utils.hideShowTableSearchBar(startElement, tableClass);
+          return;
+        }
+        Utils.updateFilter(table, input.value);
+      };
+      table.parentElement.insertBefore(input, table);
+    }
+    if(input.style.display == "none") {
+      Utils.updateFilter(table, input.value);
+      input.style.display = "";
+    } else {
+      Utils.updateFilter(table, "");
+      input.style.display = "none";
+    }
+    input.focus();
+  }
+
+  static updateFilter(table, txt) {
+    // remove highlighting before re-comparing
+    // as it affects the texts
+    const hilitor = new Hilitor(table, "tbody");
+    hilitor.remove();
+
+    // find text
+    txt = txt.toUpperCase();
+    for(const row of table.tBodies[0].rows) {
+      let show = false;
+      for(const cell of row.cells) {
+        // do not use "innerText"
+        // that one does not handle hidden text
+        if(Utils.hasTextContent(cell, txt)) show = true;
+      }
+      if(show)
+        row.classList.remove("nofiltermatch");
+      else
+        row.classList.add("nofiltermatch");
+    }
+
+    // show the result
+    hilitor.setMatchType("open");
+    hilitor.setEndRegExp(/^$/);
+    hilitor.setBreakRegExp(/^$/);
+
+    // turn the text into a regexp
+    let pattern = "";
+    for(const chr of txt) {
+      if((chr >= 'A' && chr <= 'Z') || (chr >= '0' && chr <= '9'))
+        pattern += chr;
+      else
+        pattern += "\\" + chr;
+    }
+
+    hilitor.apply(pattern);
   }
 }

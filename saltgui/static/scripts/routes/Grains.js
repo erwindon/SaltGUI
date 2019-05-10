@@ -100,7 +100,7 @@ export class GrainsRoute extends PageRoute {
     }
 
     Utils.showTableSortable(this.getPageElement(), "minions");
-    Utils.showTableSearchable(this.getPageElement(), "minions");
+    Utils.makeTableSearchable(this.getPageElement(), "minions");
   }
 
   _updateOfflineMinion(container, hostname) {
