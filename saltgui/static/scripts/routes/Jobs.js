@@ -200,7 +200,7 @@ export class JobsRoute extends PageRoute {
 
     const keyCount = Object.keys(data.Result).length;
     str += ", ";
-    if(keyCount == data.Minions.length)
+    if(keyCount === data.Minions.length)
       str += "<span style='color: green'>";
     else
       str += "<span style='color: red'>";

@@ -143,8 +143,20 @@ export class CommandBox {
     document.body.style["overflow-y"] = "hidden";
     document.querySelector(".run-command pre").innerText = "Waiting for command...";
 
-    const target = document.querySelector(".run-command #target").value;
-    TargetType.autoSelectTargetType(target);
+    const target = document.querySelector(".run-command #target");
+    TargetType.autoSelectTargetType(target.value);
+    target.onkeyup = ev => {
+      if(ev.key === "Escape") {
+        this._hideManualRun(ev);
+      }
+    };
+
+    const command = document.querySelector(".run-command #command");
+    command.onkeyup = ev => {
+      if(ev.key === "Escape") {
+        this._hideManualRun(ev);
+      }
+    };
 
     RunType.setRunTypeDefault();
 
@@ -170,12 +182,14 @@ export class CommandBox {
       }
     }
 
+    document.querySelector(".run-command #target").focus();
+
     evt.stopPropagation();
   }
 
   _hideManualRun(evt) {
     //Don't close if they click inside the window
-    if(evt.target.className !== "popup" && evt.target.className !== "nearlyvisiblebutton") return;
+    if(evt.type === "click" && evt.target.className !== "popup" && evt.target.className !== "nearlyvisiblebutton") return;
 
     const manualRun = document.querySelector("#popup_runcommand");
     manualRun.style.display = "none";
