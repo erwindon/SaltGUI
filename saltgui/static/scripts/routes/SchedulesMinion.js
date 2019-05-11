@@ -67,6 +67,17 @@ export class SchedulesMinionRoute extends PageRoute {
     let schedules = data.return[0][minion];
     schedules = SchedulesRoute._fixMinion(schedules);
 
+    if(schedules === undefined) {
+      const noSchedulesMsg = Route._createDiv("msg", "Unknown minion '" + minion + "'");
+      container.tBodies[0].appendChild(noSchedulesMsg);
+      return;
+    }
+    if(schedules === false) {
+      const noSchedulesMsg = Route._createDiv("msg", "Minion '" + minion + "' did not answer");
+      container.tBodies[0].appendChild(noSchedulesMsg);
+      return;
+    }
+
     const title = document.getElementById("schedulesminion_title");
     let txt = "Schedules on " + minion;
     if(!schedules.enabled) txt += " (disabled)";

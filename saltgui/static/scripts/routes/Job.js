@@ -55,6 +55,13 @@ export class JobRoute extends Route {
     const info = data.return[0];
     this.getPageElement().querySelector(".output").innerText = "";
 
+    if(info.Error) {
+      output.innerText = info.Error + " (" + jid + ")";
+      this.getPageElement().querySelector(".function").innerText = "ERROR";
+      this.getPageElement().querySelector(".time").innerText = Output.dateTimeStr(info.StartTime);
+      return;
+    }
+
     const argumentsText = this._decodeArgumentsText(info.Arguments);
     const commandText = info.Function + argumentsText;
     const jobinfo = document.getElementById("job_page");

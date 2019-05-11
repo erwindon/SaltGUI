@@ -46,20 +46,31 @@ export class PillarsMinionRoute extends PageRoute {
     }); 
   }
 
-    const pmp = document.getElementById("pillarsminion_page");
-    const menu = new DropDownMenu(pmp);
   _handleLocalPillarItems(data, minion) {
+    const page = document.getElementById("pillarsminion_page");
+    const menu = new DropDownMenu(page);
     this._addMenuItemRefreshPillar(menu, minion);
 
     const container = document.getElementById("pillarsminion_list");
 
     // new menu's are always added at the bottom of the div
     // fix that by re-adding the minion list
-    pmp.appendChild(container);
+    page.appendChild(container);
 
     if(PageRoute.showErrorRowInstead(container.tBodies[0], data)) return;
 
     const pillars = data.return[0][minion];
+
+    if(pillars === undefined) {
+      const noPillarsMsg = Route._createDiv("msg", "Unknown minion '" + minion + "'");
+      container.tBodies[0].appendChild(noPillarsMsg);
+      return;
+    }
+    if(pillars === false) {
+      const noPillarsMsg = Route._createDiv("msg", "Minion '" + minion + "' did not answer");
+      container.tBodies[0].appendChild(noPillarsMsg);
+      return;
+    }
 
     // collect the public pillars and compile their regexps
     let publicPillarsText = window.localStorage.getItem("public_pillars");
