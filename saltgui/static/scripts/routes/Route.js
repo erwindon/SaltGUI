@@ -66,12 +66,15 @@ export class Route {
     const command = document.querySelector("#command");
     const targetbox = document.querySelector("#targetbox");
 
+    if(!targetString) targetString = "";
     // handle https://github.com/saltstack/salt/issues/48734
     if(targetString === "unknown-target") {
       // target was lost...
       targetString = "";
       targettype = "";
     }
+
+    if(!commandString) commandString = "";
     if(commandString.startsWith("wheel.") && targetString.endsWith("_master")) {
       // target was {hostname}_master...
       // too bad when the real hostname is actually like that :-(
@@ -83,9 +86,6 @@ export class Route {
       targetString = "";
       targettype = "";
     }
-
-    if(!targetString) targetString = "";
-    if(!commandString) commandString = "";
 
     if(targettype) {
       let tt = targettype;
