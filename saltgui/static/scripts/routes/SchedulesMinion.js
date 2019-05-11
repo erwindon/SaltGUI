@@ -136,6 +136,7 @@ export class SchedulesMinionRoute extends PageRoute {
     }
 
     Utils.showTableSortable(this.getPageElement(), "schedules");
+    Utils.makeTableSearchable(this.getPageElement(), "schedules");
 
     if(!keys.length) {
       const noSchedulesMsg = Route._createDiv("msg", "No schedules found");

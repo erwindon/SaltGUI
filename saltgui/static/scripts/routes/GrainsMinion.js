@@ -108,5 +108,6 @@ export class GrainsMinionRoute extends PageRoute {
     }
 
     Utils.showTableSortable(this.getPageElement(), "grains");
+    Utils.makeTableSearchable(this.getPageElement(), "grains");
   }
 }

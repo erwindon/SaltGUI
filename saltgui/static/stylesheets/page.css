@@ -208,6 +208,10 @@ table tr td:last-of-type {
   cursor: pointer;
 }
 
+.nofiltermatch {
+  display: none;
+}
+
 @media (max-width: 800px) {
   .minions {
     min-width: 0;
