@@ -41,19 +41,19 @@ export class JobRoute extends Route {
   _handleRunnerJobsListJob(data, jid) {
     const myThis = this;
 
+    const output = this.getPageElement().querySelector(".output");
+
     document.querySelector("#button_close_job").addEventListener("click", _ => {
       window.history.back();
     });
 
     if(typeof data !== "object") {
-      const pre = this.getPageElement().querySelector(".output");
-      pre.innerText = "";
-      Utils.addErrorToTableCell(pre, data);
+      output.innerText = "";
+      Utils.addErrorToTableCell(output, data);
       return;
     }
 
     const info = data.return[0];
-    this.getPageElement().querySelector(".output").innerText = "";
 
     if(info.Error) {
       output.innerText = info.Error + " (" + jid + ")";
@@ -62,10 +62,12 @@ export class JobRoute extends Route {
       return;
     }
 
+    output.innerText = "";
+
+    // use same formatter as direct commands
     const argumentsText = this._decodeArgumentsText(info.Arguments);
     const commandText = info.Function + argumentsText;
-    const jobinfo = document.getElementById("job_page");
-    const menuSection = jobinfo.querySelector(".job_menu");
+    const menuSection = this.getPageElement().querySelector(".job_menu");
     const menu = new DropDownMenu(menuSection);
 
     // 1: re-run with original target pattern
@@ -141,12 +143,10 @@ export class JobRoute extends Route {
 
     const functionText = commandText + " on " +
       TargetType.makeTargetText(info["Target-type"], info.Target);
-    jobinfo.querySelector(".function").innerText = functionText;
+    this.getPageElement().querySelector(".function").innerText = functionText;
 
-    jobinfo.querySelector(".time").innerText = Output.dateTimeStr(info.StartTime);
+    this.getPageElement().querySelector(".time").innerText = Output.dateTimeStr(info.StartTime);
 
-    const output = this.getPageElement().querySelector(".output");
-    // use same formatter as direct commands
     let minions = ["WHEEL"];
     if(info.Minions) minions = info.Minions;
     let initialStatus = "(loading)";
