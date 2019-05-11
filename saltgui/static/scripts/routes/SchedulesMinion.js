@@ -52,12 +52,8 @@ export class SchedulesMinionRoute extends PageRoute {
     const page = document.getElementById("schedulesminion_page");
 
     const menu = new DropDownMenu(page);
-    menu.addMenuItem("Enable&nbsp;scheduler...", function(evt) {
-      this._runCommand(evt, minion, "schedule.enable");
-    }.bind(this));
-    menu.addMenuItem("Disable&nbsp;scheduler...", function(evt) {
-      this._runCommand(evt, minion, "schedule.disable");
-    }.bind(this));
+    this._addMenuItemEnableScheduler(menu, minion);
+    this._addMenuItemDisableScheduler(menu, minion);
 
     const container = document.getElementById("schedulesminion_list");
     page.append(container);
@@ -110,24 +106,11 @@ export class SchedulesMinionRoute extends PageRoute {
       for(const key in schedule) {
         cmd = cmd + " " + key + "=" + JSON.stringify(schedule[key]);
       }
-      menu.addMenuItem("Modify&nbsp;job...", function(evt) {
-        this._runCommand(evt, minion, cmd);
-      }.bind(this));
-      menu.addMenuItem("Enable&nbsp;job...", function(evt) {
-        this._runCommand(evt, minion, "schedule.enable_job " + k);
-      }.bind(this));
-      menu.addMenuItem("Disable&nbsp;job...", function(evt) {
-        this._runCommand(evt, minion, "schedule.disable_job " + k);
-      }.bind(this));
-      menu.addMenuItem("Delete&nbsp;job...", function(evt) {
-        this._runCommand(evt, minion, "schedule.delete " + k);
-      }.bind(this));
-      menu.addMenuItem("Run&nbsp;job...", function(evt) {
-        let cmd = "schedule.run_job";
-        if(isJobDisabled) cmd += " force=true";
-        cmd += " " + k;
-        this._runCommand(evt, minion, cmd);
-      }.bind(this));
+      this._addMenuItemModifyJob(menu, minion, cmd);
+      this._addMenuItemEnableJob(menu, minion, k);
+      this._addMenuItemDisableJob(menu, minion, k);
+      this._addMenuItemDeleteJob(menu, minion, k);
+      this._addMenuItemRunJob(menu, minion, k, isJobDisabled);
 
       // menu comes before this data on purpose
       const schedule_value = Output.formatObject(schedule);
@@ -147,5 +130,50 @@ export class SchedulesMinionRoute extends PageRoute {
       const noSchedulesMsg = Route._createDiv("msg", "No schedules found");
       container.tBodies[0].appendChild(noSchedulesMsg);
     }
+  }
+
+  _addMenuItemEnableScheduler(menu, minion) {
+    menu.addMenuItem("Enable&nbsp;scheduler...", function(evt) {
+      this._runCommand(evt, minion, "schedule.enable");
+    }.bind(this));
+  }
+
+  _addMenuItemDisableScheduler(menu, minion) {
+    menu.addMenuItem("Disable&nbsp;scheduler...", function(evt) {
+      this._runCommand(evt, minion, "schedule.disable");
+    }.bind(this));
+  }
+
+  _addMenuItemModifyJob(menu, minion, cmd) {
+    menu.addMenuItem("Modify&nbsp;job...", function(evt) {
+      this._runCommand(evt, minion, cmd);
+    }.bind(this));
+  }
+
+  _addMenuItemEnableJob(menu, minion, name) {
+    menu.addMenuItem("Enable&nbsp;job...", function(evt) {
+      this._runCommand(evt, minion, "schedule.enable_job " + name);
+    }.bind(this));
+  }
+
+  _addMenuItemDisableJob(menu, minion, name) {
+    menu.addMenuItem("Disable&nbsp;job...", function(evt) {
+      this._runCommand(evt, minion, "schedule.disable_job " + name);
+    }.bind(this));
+  }
+
+  _addMenuItemDeleteJob(menu, minion, name) {
+    menu.addMenuItem("Delete&nbsp;job...", function(evt) {
+      this._runCommand(evt, minion, "schedule.delete " + name);
+    }.bind(this));
+  }
+
+  _addMenuItemRunJob(menu, minion, name, isJobDisabled) {
+    menu.addMenuItem("Run&nbsp;job...", function(evt) {
+      let cmd = "schedule.run_job";
+      if(isJobDisabled) cmd += " force=true";
+      cmd += " " + name;
+      this._runCommand(evt, minion, cmd);
+    }.bind(this));
   }
 }

@@ -69,10 +69,7 @@ export class JobRoute extends Route {
     const menu = new DropDownMenu(menuSection);
 
     // 1: re-run with original target pattern
-    // 2011 = NON-BREAKING HYPHEN
-    menu.addMenuItem("Re&#x2011;run&nbsp;job...", function(evt) {
-      myThis._runFullCommand(evt, info["Target-type"], info.Target, commandText);
-    }.bind(this));
+    this._addMenuItemRerunJob(menu, info, commandText);
 
     // 2: re-run list of minions
     let minionList = "";
@@ -87,10 +84,7 @@ export class JobRoute extends Route {
     }
     if(minionList) {
       const lst = minionList.substring(1);
-      // 2011 = NON-BREAKING HYPHEN
-      menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;all&nbsp;minions...", function(evt) {
-        this._runFullCommand(evt, "list", lst, commandText);
-      }.bind(this));
+      this._addMenuItemRerunJobOnAllMinions(menu, lst, commandText);
     }
 
     // 3: re-run all failed (error+timeout)
@@ -109,10 +103,7 @@ export class JobRoute extends Route {
     // otherwise the #4 or #5 is sufficient
     if(has1 && has2 && minionList) {
       const lst = minionList.substring(1);
-      // 2011 = NON-BREAKING HYPHEN
-      menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;unsuccessful&nbsp;minions...", function(evt) {
-        this._runFullCommand(evt, "list", lst, commandText);
-      }.bind(this));
+      this._addMenuItemRerunJobOnUnsuccessfulMinions(menu, lst, commandText);
     }
 
     // 4: re-run all failed (error)
@@ -126,10 +117,7 @@ export class JobRoute extends Route {
     }
     if(minionList) {
       const lst = minionList.substring(1);
-      // 2011 = NON-BREAKING HYPHEN
-      menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;failed&nbsp;minions...", function(evt) {
-        this._runFullCommand(evt, "list", lst, commandText);
-      }.bind(this));
+      this._addMenuItemRerunJobOnFailedMinions(menu, lst, commandText);
     }
 
     // 5: re-run all failed (timeout)
@@ -143,22 +131,13 @@ export class JobRoute extends Route {
     }
     if(minionList) {
       const lst = minionList.substring(1);
-      // 2011 = NON-BREAKING HYPHEN
-      menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;non&nbsp;responding&nbsp;minions...", function(evt) {
-        this._runFullCommand(evt, "list", lst, commandText);
-      }.bind(this));
+      this._addMenuItemRerunJobOnNonRespondingMinions(menu, lst, commandText);
     }
 
     // 6: kill with original target pattern
-    this.terminateJobMenuItem = menu.addMenuItem("Terminate&nbsp;job...", function(evt) {
-      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.term_job " + jid);
-    }.bind(this));
-    this.killJobMenuItem = menu.addMenuItem("Kill&nbsp;job...", function(evt) {
-      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.kill_job " + jid);
-    }.bind(this));
-    this.signalJobMenuItem = menu.addMenuItem("Signal&nbsp;job...", function(evt) {
-      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.signal_job " + jid + " signal=<signalnumber>");
-    }.bind(this));
+    this._addMenuItemTerminateJob(menu, info, jid);
+    this._addMenuItemKillJob(menu, info, jid);
+    this._addMenuItemSignalJob(menu, info, jid);
 
     const functionText = commandText + " on " +
       TargetType.makeTargetText(info["Target-type"], info.Target);
@@ -182,6 +161,59 @@ export class JobRoute extends Route {
       this.signalJobMenuItem.style.display = "none";
     }
     Output.addResponseOutput(output, minions, info.Result, info.Function, initialStatus);
+  }
+
+  _addMenuItemRerunJob(menu, info, commandText) {
+    // 2011 = NON-BREAKING HYPHEN
+    menu.addMenuItem("Re&#x2011;run&nbsp;job...", function(evt) {
+      this._runFullCommand(evt, info["Target-type"], info.Target, commandText);
+    }.bind(this));
+  }
+
+  _addMenuItemRerunJobOnAllMinions(menu, lst, commandText) {
+    // 2011 = NON-BREAKING HYPHEN
+    menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;all&nbsp;minions...", function(evt) {
+      this._runFullCommand(evt, "list", lst, commandText);
+    }.bind(this));
+  }
+
+  _addMenuItemRerunJobOnUnsuccessfulMinions(menu, lst, commandText) {
+    // 2011 = NON-BREAKING HYPHEN
+    menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;unsuccessful&nbsp;minions...", function(evt) {
+      this._runFullCommand(evt, "list", lst, commandText);
+    }.bind(this));
+  }
+
+  _addMenuItemRerunJobOnFailedMinions(menu, lst, commandText) {
+    // 2011 = NON-BREAKING HYPHEN
+    menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;failed&nbsp;minions...", function(evt) {
+      this._runFullCommand(evt, "list", lst, commandText);
+    }.bind(this));
+  }
+
+  _addMenuItemRerunJobOnNonRespondingMinions(menu, lst, commandText) {
+    // 2011 = NON-BREAKING HYPHEN
+    menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;non&nbsp;responding&nbsp;minions...", function(evt) {
+      this._runFullCommand(evt, "list", lst, commandText);
+    }.bind(this));
+  }
+
+  _addMenuItemTerminateJob(menu, info, jid) {
+    this.terminateJobMenuItem = menu.addMenuItem("Terminate&nbsp;job...", function(evt) {
+      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.term_job " + jid);
+    }.bind(this));
+  }
+
+  _addMenuItemKillJob(menu, info, jid) {
+    this.killJobMenuItem = menu.addMenuItem("Kill&nbsp;job...", function(evt) {
+      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.kill_job " + jid);
+    }.bind(this));
+  }
+
+  _addMenuItemSignalJob(menu, info, jid) {
+    this.signalJobMenuItem = menu.addMenuItem("Signal&nbsp;job...", function(evt) {
+      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.signal_job " + jid + " signal=<signalnumber>");
+    }.bind(this));
   }
 
   _handleRunnerJobsActive(id, data) {

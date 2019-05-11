@@ -129,6 +129,7 @@ export class SchedulesRoute extends PageRoute {
     td.setAttribute("sorttable_customkey", cnt);
     element.appendChild(td);
 
+    // final dropdownmenu
     const menu = new DropDownMenu(element);
     this._addMenuItemShowSchedules(menu, hostname);
 

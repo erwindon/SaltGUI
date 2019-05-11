@@ -56,13 +56,8 @@ export class JobsRoute extends PageRoute {
     tr.appendChild(Route._createTd("starttime", startTimeText));
 
     const menu = new DropDownMenu(tr);
-    menu.addMenuItem("Show&nbsp;details", function(evt) {
-      window.location.assign("/job?id=" + encodeURIComponent(job.id));
-    }.bind(this));
-    // 2011 = NON-BREAKING HYPHEN
-    menu.addMenuItem("Re&#x2011;run&nbsp;job...", function(evt) {
-      this._runFullCommand(evt, job["Target-type"], job.Target, functionText);
-    }.bind(this));
+    this._addMenuItemShowDetails(menu, job);
+    this._addMenuItemRerunJob(menu, job, argumentsText);
 
     const tdStatus = Route._createTd("status", "");
     const spanStatus = Route._createSpan("status2", "loading...");
@@ -77,11 +72,7 @@ export class JobsRoute extends PageRoute {
     tdStatus.appendChild(spanStatus);
     tr.appendChild(tdStatus);
 
-    menu.addMenuItem("Update&nbsp;status", function(evt) {
-      spanStatus.classList.add("no_status");
-      spanStatus.innerText = "loading...";
-      this._startRunningJobs();
-    }.bind(this));
+    this._addMenuItemUpdateStatus(menu, spanStatus);
 
     const tdDetails = Route._createTd("details", "");
     const spanDetails = Route._createSpan("details2", "(click)");
@@ -96,11 +87,7 @@ export class JobsRoute extends PageRoute {
     tdDetails.appendChild(spanDetails);
     tr.appendChild(tdDetails);
 
-    menu.addMenuItem("Update&nbsp;details", function(evt) {
-      spanDetails.classList.add("no_status");
-      spanDetails.innerText = "loading...";
-      this._getJobDetails(job.id);
-    }.bind(this));
+    this._addMenuItemUpdateDetails(menu, spanDetails, job);
 
     // fill out the number of columns to that of the header
     while(tr.cells.length < container.parentElement.tHead.rows[0].cells.length) {
@@ -110,6 +97,35 @@ export class JobsRoute extends PageRoute {
     container.appendChild(tr);
 
     tr.addEventListener("click", evt => window.location.assign("/job?id=" + encodeURIComponent(job.id)));
+  }
+
+  _addMenuItemShowDetails(menu, job) {
+    menu.addMenuItem("Show&nbsp;details", function(evt) {
+      window.location.assign("/job?id=" + encodeURIComponent(job.id));
+    }.bind(this));
+  }
+
+  _addMenuItemRerunJob(menu, job, argumentsText) {
+    // 2011 = NON-BREAKING HYPHEN
+    menu.addMenuItem("Re&#x2011;run&nbsp;job...", function(evt) {
+      this._runFullCommand(evt, job["Target-type"], job.Target, job.Function + argumentsText);
+    }.bind(this));
+  }
+
+  _addMenuItemUpdateStatus(menu, spanStatus) {
+    menu.addMenuItem("Update&nbsp;status", function(evt) {
+      spanStatus.classList.add("no_status");
+      spanStatus.innerText = "loading...";
+      this._startRunningJobs();
+    }.bind(this));
+  }
+
+  _addMenuItemUpdateDetails(menu, spanDetails, job) {
+    menu.addMenuItem("Update&nbsp;details", function(evt) {
+      spanDetails.classList.add("no_status");
+      spanDetails.innerText = "loading...";
+      this._getJobDetails(job.id);
+    }.bind(this));
   }
 
   _handleRunnerJobsActive(data) {

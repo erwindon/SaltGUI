@@ -450,18 +450,26 @@ export class PageRoute extends Route {
     tr.appendChild(td);
 
     const menu = new DropDownMenu(tr);
+    this._addMenuItemShowDetails(menu, job);
+    this._addMenuItemUpdateStatus(menu, statusSpan);
+
+    container.appendChild(tr);
+
+    tr.addEventListener("click", evt => window.location.assign("/job?id=" + encodeURIComponent(job.id)));
+  }
+
+  _addMenuItemShowDetails(menu, job) {
     menu.addMenuItem("Show&nbsp;details", function(evt) {
       window.location.assign("/job?id=" + encodeURIComponent(job.id));
     }.bind(this));
+  }
+
+  _addMenuItemUpdateStatus(menu, statusSpan) {
     menu.addMenuItem("Update&nbsp;status", function(evt) {
       statusSpan.classList.add("no_status");
       statusSpan.innerText = "loading...";
       this._startRunningJobs();
     }.bind(this));
-
-    container.appendChild(tr);
-
-    tr.addEventListener("click", evt => window.location.assign("/job?id=" + encodeURIComponent(job.id)));
   }
 
   _startRunningJobs() {

@@ -47,22 +47,16 @@ export class GrainsMinionRoute extends PageRoute {
   }
 
   _handleLocalGrainsItems(data, minion) {
+    const page = document.getElementById("grainsminion_page");
+    const menu = new DropDownMenu(page);
+    this._addMenuItemAddGrain(menu, minion);
+    this._addMenuItemRefreshGrains(menu, minion);
 
     const container = document.getElementById("grainsminion_list");
 
-    const gmp = document.getElementById("grainsminion_page");
-    const menu = new DropDownMenu(gmp);
-    menu.addMenuItem("Add&nbsp;grain...", function(evt) {
-      // use placeholders for name and value
-      this._runCommand(evt, minion, "grains.setval <name> <value>");
-    }.bind(this));
-    menu.addMenuItem("Refresh&nbsp;grains...", function(evt) {
-      this._runCommand(evt, minion, "saltutil.refresh_grains");
-    }.bind(this));
-
     // new menu's are always added at the bottom of the div
     // fix that by re-adding the minion list
-    gmp.appendChild(container);
+    page.appendChild(container);
 
     if(PageRoute.showErrorRowInstead(container.tBodies[0], data)) return;
 
@@ -89,20 +83,12 @@ export class GrainsMinionRoute extends PageRoute {
       const grain_value = Output.formatObject(grains[k]);
 
       const menu = new DropDownMenu(grain);
-      menu.addMenuItem("Edit&nbsp;grain...", function(evt) {
-        this._runCommand(evt, minion, "grains.setval \"" + k + "\" " + JSON.stringify(grains[k]));
-      }.bind(this));
+      this._addMenuItemEditGrain(menu, minion, k, grains);
       if(grain_value.startsWith("[")) {
-        menu.addMenuItem("Add&nbsp;value...", function(evt) {
-          this._runCommand(evt, minion, "grains.append \"" + k + "\" <value>");
-        }.bind(this));
+        this._addMenuItemAddValue(menu, minion, k);
       }
-      menu.addMenuItem("Delete&nbsp;key...", function(evt) {
-        this._runCommand(evt, minion, "grains.delkey \"" + k + "\"");
-      }.bind(this));
-      menu.addMenuItem("Delete&nbsp;value...", function(evt) {
-        this._runCommand(evt, minion, "grains.delval \"" + k + "\"");
-      }.bind(this));
+      this._addMenuItemDeleteKey(menu, minion, k);
+      this._addMenuItemDeleteValue(menu, minion, k);
 
       // menu comes before this data on purpose
       const value = Route._createTd("grain_value", grain_value);
@@ -115,5 +101,43 @@ export class GrainsMinionRoute extends PageRoute {
 
     Utils.showTableSortable(this.getPageElement(), "grains");
     Utils.makeTableSearchable(this.getPageElement(), "grains");
+  }
+
+  _addMenuItemAddGrain(menu, minion) {
+    menu.addMenuItem("Add&nbsp;grain...", function(evt) {
+      // use placeholders for name and value
+      this._runCommand(evt, minion, "grains.setval <name> <value>");
+    }.bind(this));
+  }
+
+  _addMenuItemRefreshGrains(menu, minion) {
+    menu.addMenuItem("Refresh&nbsp;grains...", function(evt) {
+      this._runCommand(evt, minion, "saltutil.refresh_grains");
+    }.bind(this));
+  }
+
+  _addMenuItemEditGrain(menu, minion, key, grains) {
+    menu.addMenuItem("Edit&nbsp;grain...", function(evt) {
+      this._runCommand(evt, minion,
+        "grains.setval \"" + key + "\" " + JSON.stringify(grains[key]));
+    }.bind(this));
+  }
+
+  _addMenuItemAddValue(menu, minion, key) {
+    menu.addMenuItem("Add&nbsp;value...", function(evt) {
+      this._runCommand(evt, minion, "grains.append \"" + key + "\" <value>");
+    }.bind(this));
+  }
+
+  _addMenuItemDeleteKey(menu, minion, key) {
+    menu.addMenuItem("Delete&nbsp;key...", function(evt) {
+      this._runCommand(evt, minion, "grains.delkey \"" + key + "\"");
+    }.bind(this));
+  }
+
+  _addMenuItemDeleteValue(menu, minion, key) {
+    menu.addMenuItem("Delete&nbsp;value...", function(evt) {
+      this._runCommand(evt, minion, "grains.delval \"" + key + "\"");
+    }.bind(this));
   }
 }
