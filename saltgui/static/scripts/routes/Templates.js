@@ -9,7 +9,6 @@ export class TemplatesRoute extends PageRoute {
     super("^[\/]templates$", "Templates", "#page_templates", "#button_templates", router);
 
     this._handleWheelConfigValues = this._handleWheelConfigValues.bind(this);
-    this._applyTemplate = this._applyTemplate.bind(this);
   }
 
   onShow() {
@@ -91,17 +90,16 @@ export class TemplatesRoute extends PageRoute {
     }
 
     const menu = new DropDownMenu(tr);
-    menu.addMenuItem("Apply&nbsp;template...", function(evt) {
-      this._applyTemplate(evt, targettype, target, command);
-    }.bind(this));
+    this._addMenuItemApplyTemplate(menu, targettype, target, command);
 
     container.tBodies[0].appendChild(tr);
 
-    tr.addEventListener("click", evt => this._applyTemplate(evt, targettype, target, command));
+    tr.addEventListener("click", evt => this._runFullCommand(evt, targettype, target, command));
   }
 
-  _applyTemplate(evt, targettype, target, command) {
-    this._runFullCommand(evt, targettype, target, command);
+  _addMenuItemApplyTemplate(menu, targettype, target, command) {
+    menu.addMenuItem("Apply&nbsp;template...", function(evt) {
+      this._runFullCommand(evt, targettype, target, command);
+    }.bind(this));
   }
-
 }
