@@ -56,7 +56,10 @@ export class SchedulesMinionRoute extends PageRoute {
     this._addMenuItemDisableScheduler(menu, minion);
 
     const container = document.getElementById("schedulesminion_list");
-    page.append(container);
+
+    // new menu's are always added at the bottom of the div
+    // fix that by re-adding the minion list
+    page.appendChild(container);
 
     if(PageRoute.showErrorRowInstead(container.tBodies[0], data)) return;
 
