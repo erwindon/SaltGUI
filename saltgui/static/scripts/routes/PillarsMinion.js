@@ -29,9 +29,9 @@ export class PillarsMinionRoute extends PageRoute {
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     localPillarItemsPromise.then(data => {
-      myThis._handleLocalPillarItems(data);
+      myThis._handleLocalPillarItems(data, minion);
     }, data => {
-      myThis._handleLocalPillarItems(JSON.stringify(data));
+      myThis._handleLocalPillarItems(JSON.stringify(data), minion);
     });
 
     runnerJobsListJobsPromise.then(data => {
@@ -46,11 +46,9 @@ export class PillarsMinionRoute extends PageRoute {
     }); 
   }
 
-  _handleLocalPillarItems(data) {
-    const minion = decodeURIComponent(Utils.getQueryParam("minion"));
-
     const pmp = document.getElementById("pillarsminion_page");
     const menu = new DropDownMenu(pmp);
+  _handleLocalPillarItems(data, minion) {
     this._addMenuItemRefreshPillar(menu, minion);
 
     const container = document.getElementById("pillarsminion_list");

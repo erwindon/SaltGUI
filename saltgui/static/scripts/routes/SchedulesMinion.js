@@ -31,9 +31,9 @@ export class SchedulesMinionRoute extends PageRoute {
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     localScheduleListPromise.then(data => {
-      myThis._handleLocalScheduleList(data);
+      myThis._handleLocalScheduleList(data, minion);
     }, data => {
-      myThis._handleLocalScheduleList(JSON.stringify(data));
+      myThis._handleLocalScheduleList(JSON.stringify(data), minion);
     });
 
     runnerJobsListJobsPromise.then(data => {
@@ -48,9 +48,7 @@ export class SchedulesMinionRoute extends PageRoute {
     }); 
   }
 
-  _handleLocalScheduleList(data) {
-    const minion = decodeURIComponent(Utils.getQueryParam("minion"));
-
+  _handleLocalScheduleList(data, minion) {
     const page = document.getElementById("schedulesminion_page");
 
     const menu = new DropDownMenu(page);

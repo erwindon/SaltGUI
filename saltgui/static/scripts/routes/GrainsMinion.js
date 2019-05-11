@@ -29,9 +29,9 @@ export class GrainsMinionRoute extends PageRoute {
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     localGrainsItemsPromise.then(data => {
-      myThis._handleLocalGrainsItems(data);
+      myThis._handleLocalGrainsItems(data, minion);
     }, data => {
-      myThis._handleLocalGrainsItems(JSON.stringify(data));
+      myThis._handleLocalGrainsItems(JSON.stringify(data), minion);
     });
 
     runnerJobsListJobsPromise.then(data => {
@@ -46,8 +46,7 @@ export class GrainsMinionRoute extends PageRoute {
     }); 
   }
 
-  _handleLocalGrainsItems(data) {
-    const minion = decodeURIComponent(Utils.getQueryParam("minion"));
+  _handleLocalGrainsItems(data, minion) {
 
     const container = document.getElementById("grainsminion_list");
 

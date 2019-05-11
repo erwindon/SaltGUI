@@ -21,14 +21,14 @@ export class JobRoute extends Route {
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     runnerJobsListJobPromise.then(data => {
-      myThis._handleRunnerJobsListJob(data);
+      myThis._handleRunnerJobsListJob(data, id);
       runnerJobsActivePromise.then(data => {
         myThis._handleRunnerJobsActive(id, data);
       }, data => {
         myThis._handleRunnerJobsActive(id, JSON.stringify(data));
       });
     }, data => {
-      myThis._handleRunnerJobsListJob(JSON.stringify(data));
+      myThis._handleRunnerJobsListJob(JSON.stringify(data), id);
     });
   }
 
@@ -38,7 +38,7 @@ export class JobRoute extends Route {
     return true;
   }
 
-  _handleRunnerJobsListJob(data) {
+  _handleRunnerJobsListJob(data, jid) {
     const myThis = this;
 
     document.querySelector("#button_close_job").addEventListener("click", _ => {
@@ -143,7 +143,6 @@ export class JobRoute extends Route {
     }
 
     // 6: kill with original target pattern
-    const jid = decodeURIComponent(Utils.getQueryParam("id"));
     this.terminateJobMenuItem = menu.addMenuItem("Terminate&nbsp;job...", function(evt) {
       this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.term_job " + jid);
     }.bind(this));
