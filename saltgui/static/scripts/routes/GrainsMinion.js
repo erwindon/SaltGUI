@@ -51,10 +51,6 @@ export class GrainsMinionRoute extends PageRoute {
 
     const container = document.getElementById("grainsminion_list");
 
-    while(container.tBodies[0].rows.length > 0) {
-      container.tBodies[0].deleteRow(0);
-    }
-
     const gmp = document.getElementById("grainsminion_page");
     const menu = new DropDownMenu(gmp);
     menu.addMenuItem("Add&nbsp;grain...", function(evt) {

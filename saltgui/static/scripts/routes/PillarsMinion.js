@@ -59,10 +59,6 @@ export class PillarsMinionRoute extends PageRoute {
     // fix that by re-adding the minion list
     pmp.appendChild(container);
 
-    while(container.tBodies[0].rows.length > 0) {
-      container.tBodies[0].deleteRow(0);
-    }
-
     if(PageRoute.showErrorRowInstead(container.tBodies[0], data)) return;
 
     const pillars = data.return[0][minion];
