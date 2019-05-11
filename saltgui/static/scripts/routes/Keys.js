@@ -95,8 +95,8 @@ export class KeysRoute extends PageRoute {
       // preliminary dropdown menu
       const element = document.getElementById(hostname);
       const menu = new DropDownMenu(element);
-      this._addMenuItemReject(menu, hostname, " include_accepted=true");
-      this._addMenuItemDelete(menu, hostname, "");
+      this._addMenuItemRejectKey(menu, hostname, " include_accepted=true");
+      this._addMenuItemDeleteKey(menu, hostname, "");
     }
 
     const hostnames_denied = keys.minions_denied.sort();
@@ -136,9 +136,10 @@ export class KeysRoute extends PageRoute {
     // force same columns on all rows
     element.appendChild(Route._createTd("fingerprint", ""));
 
+    // final dropdownmenu
     const menu = new DropDownMenu(element);
-    this._addMenuItemReject(menu, hostname, " include_accepted=true");
-    this._addMenuItemDelete(menu, hostname, "");
+    this._addMenuItemRejectKey(menu, hostname, " include_accepted=true");
+    this._addMenuItemDeleteKey(menu, hostname, "");
   }
 
   _addRejectedMinion(container, hostname) {
@@ -153,9 +154,10 @@ export class KeysRoute extends PageRoute {
     // force same columns on all rows
     element.appendChild(Route._createTd("fingerprint", ""));
 
+    // final dropdownmenu
     const menu = new DropDownMenu(element);
-    this._addMenuItemDelete(menu, hostname, "");
-    this._addMenuItemAccept(menu, hostname, " include_rejected=true");
+    this._addMenuItemDeleteKey(menu, hostname, "");
+    this._addMenuItemAcceptKey(menu, hostname, " include_rejected=true");
 
     container.tBodies[0].appendChild(element);
   }
@@ -172,10 +174,11 @@ export class KeysRoute extends PageRoute {
     // force same columns on all rows
     element.appendChild(Route._createTd("fingerprint", ""));
 
+    // final dropdownmenu
     const menu = new DropDownMenu(element);
-    this._addMenuItemAccept(menu, hostname, " include_denied=true");
-    this._addMenuItemReject(menu, hostname, " include_denied=true");
-    this._addMenuItemDelete(menu, hostname, "");
+    this._addMenuItemAcceptKey(menu, hostname, " include_denied=true");
+    this._addMenuItemRejectKey(menu, hostname, " include_denied=true");
+    this._addMenuItemDeleteKey(menu, hostname, "");
 
     container.tBodies[0].appendChild(element);
   }
@@ -192,27 +195,28 @@ export class KeysRoute extends PageRoute {
     // force same columns on all rows
     element.appendChild(Route._createTd("fingerprint", ""));
 
+    // final dropdownmenu
     const menu = new DropDownMenu(element);
-    this._addMenuItemAccept(menu, hostname, "");
-    this._addMenuItemReject(menu, hostname, "");
-    this._addMenuItemDelete(menu, hostname, "");
+    this._addMenuItemAcceptKey(menu, hostname, "");
+    this._addMenuItemRejectKey(menu, hostname, "");
+    this._addMenuItemDeleteKey(menu, hostname, "");
 
     container.tBodies[0].appendChild(element);
   }
 
-  _addMenuItemAccept(menu, hostname, extra) {
+  _addMenuItemAcceptKey(menu, hostname, extra) {
     menu.addMenuItem("Accept&nbsp;key...", function(evt) {
       this._runCommand(evt, hostname, "wheel.key.accept" + extra);
     }.bind(this));
   }
 
-  _addMenuItemReject(menu, hostname, extra) {
+  _addMenuItemRejectKey(menu, hostname, extra) {
     menu.addMenuItem("Reject&nbsp;key...", function(evt) {
       this._runCommand(evt, hostname, "wheel.key.reject" + extra);
     }.bind(this));
   }
 
-  _addMenuItemDelete(menu, hostname, extra) {
+  _addMenuItemDeleteKey(menu, hostname, extra) {
     menu.addMenuItem("Delete&nbsp;key...", function(evt) {
       this._runCommand(evt, hostname, "wheel.key.delete" + extra);
     }.bind(this));
