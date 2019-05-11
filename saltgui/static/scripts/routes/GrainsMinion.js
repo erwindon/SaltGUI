@@ -84,9 +84,7 @@ export class GrainsMinionRoute extends PageRoute {
 
       const menu = new DropDownMenu(grain);
       this._addMenuItemEditGrain(menu, minion, k, grains);
-      if(grain_value.startsWith("[")) {
-        this._addMenuItemAddValue(menu, minion, k);
-      }
+      this._addMenuItemAddValueWhenNeeded(menu, minion, k, grain_value);
       this._addMenuItemDeleteKey(menu, minion, k);
       this._addMenuItemDeleteValue(menu, minion, k);
 
@@ -123,7 +121,10 @@ export class GrainsMinionRoute extends PageRoute {
     }.bind(this));
   }
 
-  _addMenuItemAddValue(menu, minion, key) {
+  _addMenuItemAddValueWhenNeeded(menu, minion, key, grain_value) {
+    if(!grain_value.startsWith("[")) {
+      return;
+    }
     menu.addMenuItem("Add&nbsp;value...", function(evt) {
       this._runCommand(evt, minion, "grains.append \"" + key + "\" <value>");
     }.bind(this));

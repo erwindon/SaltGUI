@@ -74,67 +74,16 @@ export class JobRoute extends Route {
     this._addMenuItemRerunJob(menu, info, commandText);
 
     // 2: re-run list of minions
-    let minionList = "";
-    if(info.Minions) {
-      for(const m of info.Minions) {
-        minionList += "," + m;
-      }
-    }
-    if(minionList && minionList === "," + info.Minions[0]) {
-      // suppress a trivial case
-      minionList = null;
-    }
-    if(minionList) {
-      const lst = minionList.substring(1);
-      this._addMenuItemRerunJobOnAllMinions(menu, lst, commandText);
-    }
+    this._addMenuItemRerunJobOnAllMinionsWhenNeeded(menu, info, commandText);
 
     // 3: re-run all failed (error+timeout)
-    minionList = "";
-    let has1 = false, has2 = false;
-    if(info.Minions) {
-      for(const m of info.Minions) {
-        if(!(m in info.Result)) has1 = true;
-        if(m in info.Result && !this._isResultOk(info.Result[m])) has2 = true;
-        if(!(m in info.Result) || !this._isResultOk(info.Result[m])) {
-          minionList += "," + m;
-        }
-      }
-    }
-    // only when we have both types in the list
-    // otherwise the #4 or #5 is sufficient
-    if(has1 && has2 && minionList) {
-      const lst = minionList.substring(1);
-      this._addMenuItemRerunJobOnUnsuccessfulMinions(menu, lst, commandText);
-    }
+    this._addMenuItemRerunJobOnUnsuccessfulMinionsWhenNeeded(menu, info, commandText);
 
     // 4: re-run all failed (error)
-    minionList = "";
-    if(info.Minions) {
-      for(const m of info.Minions) {
-        if(m in info.Result && !this._isResultOk(info.Result[m])) {
-          minionList += "," + m;
-        }
-      }
-    }
-    if(minionList) {
-      const lst = minionList.substring(1);
-      this._addMenuItemRerunJobOnFailedMinions(menu, lst, commandText);
-    }
+    this._addMenuItemRerunJobOnFailedMinionsWhenNeeded(menu, info, commandText);
 
     // 5: re-run all failed (timeout)
-    minionList = "";
-    if(info.Minions) {
-      for(const m of info.Minions) {
-        if(!(m in info.Result)) {
-          minionList += "," + m;
-        }
-      }
-    }
-    if(minionList) {
-      const lst = minionList.substring(1);
-      this._addMenuItemRerunJobOnNonRespondingMinions(menu, lst, commandText);
-    }
+    this._addMenuItemRerunJobOnNonRespondingMinionsWhenNeeded(menu, info, commandText);
 
     // 6: kill with original target pattern
     this._addMenuItemTerminateJob(menu, info, jid);
@@ -170,28 +119,88 @@ export class JobRoute extends Route {
     }.bind(this));
   }
 
-  _addMenuItemRerunJobOnAllMinions(menu, lst, commandText) {
+  _addMenuItemRerunJobOnAllMinionsWhenNeeded(menu, info, commandText) {
+    if(!info.Minions) return;
+
+    let minionList = "";
+    for(const m of info.Minions) {
+      minionList += "," + m;
+    }
+
+    // suppress an empty list
+    if(!minionList) return;
+
+    // suppress a trivial case
+    if(minionList === "," + info.Minions[0]) return;
+
+    const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
     menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;all&nbsp;minions...", function(evt) {
       this._runFullCommand(evt, "list", lst, commandText);
     }.bind(this));
   }
 
-  _addMenuItemRerunJobOnUnsuccessfulMinions(menu, lst, commandText) {
+  _addMenuItemRerunJobOnUnsuccessfulMinionsWhenNeeded(menu, info, commandText) {
+    if(!info.Minions) return;
+
+    let minionList = "";
+    let has1 = false, has2 = false;
+    for(const m of info.Minions) {
+      if(!(m in info.Result)) has1 = true;
+      if(m in info.Result && !this._isResultOk(info.Result[m])) has2 = true;
+      if(!(m in info.Result) || !this._isResultOk(info.Result[m])) {
+        minionList += "," + m;
+      }
+    }
+
+    // suppress an empty list
+    if(!minionList) return;
+
+    // only when we have both types in the list
+    // otherwise the #4 or #5 is sufficient
+    if(!has1 || !has2) return;
+
+    const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
     menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;unsuccessful&nbsp;minions...", function(evt) {
       this._runFullCommand(evt, "list", lst, commandText);
     }.bind(this));
   }
 
-  _addMenuItemRerunJobOnFailedMinions(menu, lst, commandText) {
+  _addMenuItemRerunJobOnFailedMinionsWhenNeeded(menu, info, commandText) {
+    if(!info.Minions) return;
+
+    let minionList = "";
+    for(const m of info.Minions) {
+      if(m in info.Result && !this._isResultOk(info.Result[m])) {
+        minionList += "," + m;
+      }
+    }
+
+    // suppress an empty list
+    if(!minionList) return;
+
+    const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
     menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;failed&nbsp;minions...", function(evt) {
       this._runFullCommand(evt, "list", lst, commandText);
     }.bind(this));
   }
 
-  _addMenuItemRerunJobOnNonRespondingMinions(menu, lst, commandText) {
+  _addMenuItemRerunJobOnNonRespondingMinionsWhenNeeded(menu, info, commandText) {
+    if(!info.Minions) return;
+
+    let minionList = "";
+    for(const m of info.Minions) {
+      if(!(m in info.Result)) {
+        minionList += "," + m;
+      }
+    }
+
+    // suppress an empty list
+    if(!minionList) return;
+
+    const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
     menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;non&nbsp;responding&nbsp;minions...", function(evt) {
       this._runFullCommand(evt, "list", lst, commandText);
