@@ -51,17 +51,29 @@ export class SchedulesRoute extends PageRoute {
   // the list of scheduled items
   static _fixMinion(data) {
     if(typeof data !== "object") return data;
+
     const ret = { "schedules": {}, "enabled": true };
+
     for(const k in data) {
+      // "enabled" is always a boolean (when present)
       if(k === "enabled") {
         ret.enabled = data.enabled;
         continue;
       }
+
+      // correct for empty list that returns this dummy value
       if(k === "schedule" && JSON.stringify(data[k]) === "{}") {
         continue;
       }
+
       ret.schedules[k] = data[k];
+
+      // Since 2019.02, splay is always added, even when not set
+      // so remove it when it has an empty value
+      if(ret.schedules[k]["splay"] === null)
+        delete ret.schedules[k]["splay"];
     }
+
     return ret;
   }
 

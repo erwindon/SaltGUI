@@ -6,6 +6,6 @@ td.schedule_value {
   white-space: pre-wrap;
 }
 
-.disabled_schedule {
+td.disabled_schedule {
   color: gray;
 }

@@ -51,6 +51,22 @@ export class API {
       });
   }
 
+  getLocalBeaconsList(minion) {
+    const params = {
+      client: "local",
+      fun: "beacons.list",
+      kwarg: { return_yaml: false }
+    };
+    if(minion) {
+      params.tgt_type = "list";
+      params.tgt = minion;
+    } else {
+      params.tgt_type = "glob";
+      params.tgt = "*";
+    }
+    return this.apiRequest("POST", "/", params);
+  }
+
   getLocalGrainsItems(minion) {
     const params = {
       client: "local",

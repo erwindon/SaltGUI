@@ -1,0 +1,15 @@
+td.beacon_value {
+  white-space: pre-wrap;
+}
+
+#page_beacons {
+  width: 100%;
+}
+
+.beacons {
+  padding: 0;
+}
+
+td.disabled_beacon {
+  color: gray;
+}

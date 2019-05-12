@@ -317,6 +317,12 @@ export class PageRoute extends Route {
 
       // These jobs are likely started by the SaltGUI
       // do not display them
+      if(job.Function === "beacons.disable") continue;
+      if(job.Function === "beacons.disable_beacon") continue;
+      if(job.Function === "beacons.enable") continue;
+      if(job.Function === "beacons.enable_beacon") continue;
+      if(job.Function === "beacons.list") continue;
+      if(job.Function === "beacons.modify") continue;
       if(job.Function === "grains.append") continue;
       if(job.Function === "grains.delkey") continue;
       if(job.Function === "grains.delval") continue;

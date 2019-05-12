@@ -1,5 +1,4 @@
-#page_minions,
-#page_keys {
+#page_minions {
   width: 100%;
 }
 
@@ -88,6 +87,8 @@ table tr td {
 .templates td,
 .jobs th,
 .jobs td,
+.beacons th,
+.beacons td,
 .schedules th,
 .schedules td,
 .pillars th,
