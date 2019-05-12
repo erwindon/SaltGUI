@@ -83,6 +83,9 @@ export class BeaconsRoute extends PageRoute {
         continue;
       }
 
+      // make one object from the settings
+      // eliminates one layer in the datamodel
+      // and looks much better
       const newdata = { };
       for(const elem of data[k])
         for(const p in elem)

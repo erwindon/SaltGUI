@@ -144,6 +144,7 @@ export class PillarsMinionRoute extends PageRoute {
 
     if(!keys.length) {
       const noPillarsMsg = Route._createTd("msg", "No pillars found");
+      noPillarsMsg.colSpan = 99;
       container.tBodies[0].appendChild(noPillarsMsg);
     }
   }

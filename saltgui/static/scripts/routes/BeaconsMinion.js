@@ -47,8 +47,11 @@ export class BeaconsMinionRoute extends PageRoute {
   _handleLocalBeaconsList(data, minion) {
     const page = document.getElementById("beaconsminion_page");
     const menu = new DropDownMenu(page);
-    this._addMenuItemBeaconDisable(menu, minion);
-    this._addMenuItemBeaconEnable(menu, minion);
+    this._addMenuItemBeaconsDisable(menu, minion);
+    this._addMenuItemBeaconsEnable(menu, minion);
+    this._addMenuItemBeaconsAdd(menu, minion);
+    this._addMenuItemBeaconsReset(menu, minion);
+    this._addMenuItemBeaconsSave(menu, minion);
 
     const container = document.getElementById("beaconsminion_list");
 
@@ -98,8 +101,9 @@ export class BeaconsMinionRoute extends PageRoute {
       for(const key in beacon) {
         cmd = cmd + " " + key + "=" + JSON.stringify(beacon[key]);
       }
-      this._addMenuItemBeaconDisableBeacon(menu, minion, k);
-      this._addMenuItemBeaconEnableBeacon(menu, minion, k);
+      this._addMenuItemBeaconsDisableBeacon(menu, minion, k);
+      this._addMenuItemBeaconsEnableBeacon(menu, minion, k);
+      this._addMenuItemBeaconsDelete(menu, minion, k);
 
       // menu comes before this data on purpose
       const beacon_value = Output.formatObject(beacon);
@@ -119,31 +123,56 @@ export class BeaconsMinionRoute extends PageRoute {
 
     if(!keys.length) {
       const noBeaconsMsg = Route._createTd("msg", "No beacons found");
+      noBeaconsMsg.colSpan = 99;
       container.tBodies[0].appendChild(noBeaconsMsg);
     }
   }
 
-  _addMenuItemBeaconDisable(menu, minion) {
+  _addMenuItemBeaconsDisable(menu, minion) {
     menu.addMenuItem("Disable&nbsp;beacons...", function(evt) {
       this._runCommand(evt, minion, "beacons.disable");
     }.bind(this));
   }
 
-  _addMenuItemBeaconEnable(menu, minion) {
+  _addMenuItemBeaconsEnable(menu, minion) {
     menu.addMenuItem("Enable&nbsp;beacons...", function(evt) {
       this._runCommand(evt, minion, "beacons.enable");
     }.bind(this));
   }
 
-  _addMenuItemBeaconDisableBeacon(menu, minion, key) {
+  _addMenuItemBeaconsAdd(menu, minion) {
+    menu.addMenuItem("Add&nbsp;beacon...", function(evt) {
+      this._runCommand(evt, minion, "beacons.add <name> <data>");
+    }.bind(this));
+  }
+
+  _addMenuItemBeaconsReset(menu, minion) {
+    menu.addMenuItem("Reset&nbsp;beacons...", function(evt) {
+      this._runCommand(evt, minion, "beacons.reset");
+    }.bind(this));
+  }
+
+  _addMenuItemBeaconsSave(menu, minion) {
+    menu.addMenuItem("Save&nbsp;beacons...", function(evt) {
+      this._runCommand(evt, minion, "beacons.save");
+    }.bind(this));
+  }
+
+  _addMenuItemBeaconsDisableBeacon(menu, minion, key) {
     menu.addMenuItem("Disable&nbsp;beacon...", function(evt) {
       this._runCommand(evt, minion, "beacons.disable_beacon " + key);
     }.bind(this));
   }
 
-  _addMenuItemBeaconEnableBeacon(menu, minion, key) {
+  _addMenuItemBeaconsEnableBeacon(menu, minion, key) {
     menu.addMenuItem("Enable&nbsp;beacon...", function(evt) {
       this._runCommand(evt, minion, "beacons.enable_beacon " + key);
+    }.bind(this));
+  }
+
+  _addMenuItemBeaconsDelete(menu, minion, key) {
+    menu.addMenuItem("Delete&nbsp;beacon...", function(evt) {
+      this._runCommand(evt, minion, "beacons.delete " + key);
     }.bind(this));
   }
 }
