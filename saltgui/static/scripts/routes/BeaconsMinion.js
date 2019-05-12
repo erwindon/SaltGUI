@@ -46,18 +46,8 @@ export class BeaconsMinionRoute extends PageRoute {
 
   _handleLocalBeaconsList(data, minion) {
     const page = document.getElementById("beaconsminion_page");
-    const menu = new DropDownMenu(page);
-    this._addMenuItemBeaconsDisable(menu, minion);
-    this._addMenuItemBeaconsEnable(menu, minion);
-    this._addMenuItemBeaconsAdd(menu, minion);
-    this._addMenuItemBeaconsReset(menu, minion);
-    this._addMenuItemBeaconsSave(menu, minion);
 
     const container = document.getElementById("beaconsminion_list");
-
-    // new menu's are always added at the bottom of the div
-    // fix that by re-adding the minion list
-    page.appendChild(container);
 
     if(PageRoute.showErrorRowInstead(container.tBodies[0], data)) return;
 
@@ -75,6 +65,16 @@ export class BeaconsMinionRoute extends PageRoute {
       container.tBodies[0].appendChild(noBeaconsMsg);
       return;
     }
+
+    const menu = new DropDownMenu(page);
+    this._addMenuItemBeaconsDisableWhenNeeded(menu, minion, beacons);
+    this._addMenuItemBeaconsEnableWhenNeeded(menu, minion, beacons);
+    this._addMenuItemBeaconsAdd(menu, minion);
+    this._addMenuItemBeaconsReset(menu, minion);
+    this._addMenuItemBeaconsSave(menu, minion);
+    // new menu's are always added at the bottom of the div
+    // fix that by re-adding the minion list
+    page.appendChild(container);
 
     const title = document.getElementById("beaconsminion_title");
     let txt = "Beacons on " + minion;
@@ -101,8 +101,8 @@ export class BeaconsMinionRoute extends PageRoute {
       for(const key in beacon) {
         cmd = cmd + " " + key + "=" + JSON.stringify(beacon[key]);
       }
-      this._addMenuItemBeaconsDisableBeacon(menu, minion, k);
-      this._addMenuItemBeaconsEnableBeacon(menu, minion, k);
+      this._addMenuItemBeaconsDisableBeaconWhenNeeded(menu, minion, k, beacon);
+      this._addMenuItemBeaconsEnableBeaconWhenNeeded(menu, minion, k, beacon);
       this._addMenuItemBeaconsDelete(menu, minion, k);
 
       // menu comes before this data on purpose
@@ -128,13 +128,15 @@ export class BeaconsMinionRoute extends PageRoute {
     }
   }
 
-  _addMenuItemBeaconsDisable(menu, minion) {
+  _addMenuItemBeaconsDisableWhenNeeded(menu, minion, beacons) {
+    if(beacons.enabled === false) return;
     menu.addMenuItem("Disable&nbsp;beacons...", function(evt) {
       this._runCommand(evt, minion, "beacons.disable");
     }.bind(this));
   }
 
-  _addMenuItemBeaconsEnable(menu, minion) {
+  _addMenuItemBeaconsEnableWhenNeeded(menu, minion, beacons) {
+    if(beacons.enabled !== false) return;
     menu.addMenuItem("Enable&nbsp;beacons...", function(evt) {
       this._runCommand(evt, minion, "beacons.enable");
     }.bind(this));
@@ -158,13 +160,15 @@ export class BeaconsMinionRoute extends PageRoute {
     }.bind(this));
   }
 
-  _addMenuItemBeaconsDisableBeacon(menu, minion, key) {
+  _addMenuItemBeaconsDisableBeaconWhenNeeded(menu, minion, key, beacon) {
+    if(beacon.enabled === false) return;
     menu.addMenuItem("Disable&nbsp;beacon...", function(evt) {
       this._runCommand(evt, minion, "beacons.disable_beacon " + key);
     }.bind(this));
   }
 
-  _addMenuItemBeaconsEnableBeacon(menu, minion, key) {
+  _addMenuItemBeaconsEnableBeaconWhenNeeded(menu, minion, key, beacon) {
+    if(beacon.enabled !== false) return;
     menu.addMenuItem("Enable&nbsp;beacon...", function(evt) {
       this._runCommand(evt, minion, "beacons.enable_beacon " + key);
     }.bind(this));
