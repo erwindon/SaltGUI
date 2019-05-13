@@ -51,15 +51,7 @@ export class SchedulesMinionRoute extends PageRoute {
   _handleLocalScheduleList(data, minion) {
     const page = document.getElementById("schedulesminion_page");
 
-    const menu = new DropDownMenu(page);
-    this._addMenuItemEnableScheduler(menu, minion);
-    this._addMenuItemDisableScheduler(menu, minion);
-
     const container = document.getElementById("schedulesminion_list");
-
-    // new menu's are always added at the bottom of the div
-    // fix that by re-adding the minion list
-    page.appendChild(container);
 
     if(PageRoute.showErrorRowInstead(container.tBodies[0], data)) return;
 
@@ -79,8 +71,15 @@ export class SchedulesMinionRoute extends PageRoute {
 
     const title = document.getElementById("schedulesminion_title");
     let txt = "Schedules on " + minion;
-    if(!schedules.enabled) txt += " (disabled)";
+    if(schedules.enabled === false) txt += " (disabled)";
     title.innerText = txt;
+
+    const menu = new DropDownMenu(page);
+    this._addMenuItemEnableSchedulerWhenNeeded(menu, minion, schedules);
+    this._addMenuItemDisableSchedulerWhenNeeded(menu, minion, schedules);
+    // new menu's are always added at the bottom of the div
+    // fix that by re-adding the minion list
+    page.appendChild(container);
 
     const keys = Object.keys(schedules.schedules).sort();
     for(const k of keys) {
@@ -90,11 +89,11 @@ export class SchedulesMinionRoute extends PageRoute {
       // simplify the schedule information
       if("name" in schedule)
         delete schedule.name;
-      if("enabled" in schedule && schedule.enabled)
+      if(schedule.enabled === true)
         delete schedule.enabled;
-      if("jid_include" in schedule && schedule.jid_include)
+      if(schedule.jid_include === true)
         delete schedule.jid_include;
-      if("maxrunning" in schedule && schedule.maxrunning === 1)
+      if(schedule.maxrunning === 1)
         delete schedule.maxrunning;
 
       const tr = document.createElement('tr');
@@ -102,28 +101,27 @@ export class SchedulesMinionRoute extends PageRoute {
       const name = Route._createTd("schedule_name", k);
       tr.appendChild(name);
 
-      const isJobDisabled = schedule.hasOwnProperty("enabled") && !schedule.enabled;
-
       const menu = new DropDownMenu(tr);
-      let cmd = "schedule.modify " + k;
+      let scheduleModifyCmd = "schedule.modify " + k;
       for(const key in schedule) {
-        cmd = cmd + " " + key + "=" + JSON.stringify(schedule[key]);
+        scheduleModifyCmd += " " + key + "=" + JSON.stringify(schedule[key]);
       }
-      this._addMenuItemModifyJob(menu, minion, cmd);
-      this._addMenuItemEnableJob(menu, minion, k);
-      this._addMenuItemDisableJob(menu, minion, k);
+      this._addMenuItemModifyJob(menu, minion, scheduleModifyCmd);
+      this._addMenuItemEnableJobWhenNeeded(menu, minion, k, schedule);
+      this._addMenuItemDisableJobWhenNeeded(menu, minion, k, schedule);
       this._addMenuItemDeleteJob(menu, minion, k);
-      this._addMenuItemRunJob(menu, minion, k, isJobDisabled);
+      this._addMenuItemRunJob(menu, minion, k, schedule);
 
       // menu comes before this data on purpose
       const schedule_value = Output.formatObject(schedule);
       const value = Route._createTd("schedule_value", schedule_value);
-      if(isJobDisabled) value.classList.add("disabled_schedule");
+      if(schedule.enabled === false) value.classList.add("disabled_schedule");
+      if(schedules.enabled === false) value.classList.add("disabled_schedule");
       tr.appendChild(value);
 
       container.tBodies[0].appendChild(tr);
 
-      tr.addEventListener("click", evt => this._runCommand(evt, minion, cmd));
+      tr.addEventListener("click", evt => this._runCommand(evt, minion, scheduleModifyCmd));
     }
 
     Utils.showTableSortable(this.getPageElement(), "schedules");
@@ -135,31 +133,35 @@ export class SchedulesMinionRoute extends PageRoute {
     }
   }
 
-  _addMenuItemEnableScheduler(menu, minion) {
+  _addMenuItemEnableSchedulerWhenNeeded(menu, minion, schedules) {
+    if(schedules.enabled !== false) return;
     menu.addMenuItem("Enable&nbsp;scheduler...", function(evt) {
       this._runCommand(evt, minion, "schedule.enable");
     }.bind(this));
   }
 
-  _addMenuItemDisableScheduler(menu, minion) {
+  _addMenuItemDisableSchedulerWhenNeeded(menu, minion, schedules) {
+    if(schedules.enabled === false) return;
     menu.addMenuItem("Disable&nbsp;scheduler...", function(evt) {
       this._runCommand(evt, minion, "schedule.disable");
     }.bind(this));
   }
 
-  _addMenuItemModifyJob(menu, minion, cmd) {
+  _addMenuItemModifyJob(menu, minion, scheduleModifyCmd) {
     menu.addMenuItem("Modify&nbsp;job...", function(evt) {
-      this._runCommand(evt, minion, cmd);
+      this._runCommand(evt, minion, scheduleModifyCmd);
     }.bind(this));
   }
 
-  _addMenuItemEnableJob(menu, minion, name) {
+  _addMenuItemEnableJobWhenNeeded(menu, minion, name, schedule) {
+    if(schedule.enabled !== false) return;
     menu.addMenuItem("Enable&nbsp;job...", function(evt) {
       this._runCommand(evt, minion, "schedule.enable_job " + name);
     }.bind(this));
   }
 
-  _addMenuItemDisableJob(menu, minion, name) {
+  _addMenuItemDisableJobWhenNeeded(menu, minion, name, schedule) {
+    if(schedule.enabled === false) return;
     menu.addMenuItem("Disable&nbsp;job...", function(evt) {
       this._runCommand(evt, minion, "schedule.disable_job " + name);
     }.bind(this));
@@ -171,12 +173,12 @@ export class SchedulesMinionRoute extends PageRoute {
     }.bind(this));
   }
 
-  _addMenuItemRunJob(menu, minion, name, isJobDisabled) {
+  _addMenuItemRunJob(menu, minion, name, schedule) {
     menu.addMenuItem("Run&nbsp;job...", function(evt) {
-      let cmd = "schedule.run_job";
-      if(isJobDisabled) cmd += " force=true";
-      cmd += " " + name;
-      this._runCommand(evt, minion, cmd);
+      let scheduleRunJobCmd = "schedule.run_job";
+      if(schedule.enabled === false) scheduleRunJobCmd += " force=true";
+      scheduleRunJobCmd += " " + name;
+      this._runCommand(evt, minion, scheduleRunJobCmd);
     }.bind(this));
   }
 }

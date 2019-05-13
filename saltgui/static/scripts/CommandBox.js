@@ -205,6 +205,15 @@ export class CommandBox {
     const command = document.querySelector(".run-command #command").value.split(" ")[0];
     const output = document.querySelector(".run-command pre").innerText;
     const screenModifyingCommands = [
+      "beacons.add",
+      "beacons.delete",
+      "beacons.delete",
+      "beacons.disable",
+      "beacons.disable_beacon",
+      "beacons.enable",
+      "beacons.enable_beacon",
+      "beacons.modify",
+      "beacons.reset",
       "grains.append",
       "grains.delkey",
       "grains.delval",

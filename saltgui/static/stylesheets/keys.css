@@ -1,3 +1,7 @@
-.fingerprint {
+#page_keys {
+  width: 100%;
+}
+
+td.fingerprint {
   font-family: monospace;
 }

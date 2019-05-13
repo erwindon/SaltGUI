@@ -1,5 +1,4 @@
-.grains .grain_value,
-#page_grains .grain_value {
+td.grain_value {
   white-space: pre-wrap;
 }
 

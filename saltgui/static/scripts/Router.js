@@ -1,4 +1,6 @@
 import {API} from './Api.js';
+import {BeaconsMinionRoute} from './routes/BeaconsMinion.js';
+import {BeaconsRoute} from './routes/Beacons.js';
 import {CommandBox} from './CommandBox.js';
 import {GrainsMinionRoute} from './routes/GrainsMinion.js';
 import {GrainsRoute} from './routes/Grains.js';
@@ -30,6 +32,8 @@ export class Router {
     this.registerRoute(new SchedulesMinionRoute(this));
     this.registerRoute(new PillarsRoute(this));
     this.registerRoute(new PillarsMinionRoute(this));
+    this.registerRoute(new BeaconsRoute(this));
+    this.registerRoute(new BeaconsMinionRoute(this));
     this.registerRoute(new JobRoute(this));
     this.registerRoute(new JobsRoute(this));
     this.registerRoute(new TemplatesRoute(this));
@@ -95,6 +99,15 @@ export class Router {
     document.querySelector("#button_pillars2")
       .addEventListener('click', _ => {
         window.location.replace("/pillars");
+      });
+
+    document.querySelector("#button_beacons1")
+      .addEventListener('click', _ => {
+        window.location.replace("/beacons");
+      });
+    document.querySelector("#button_beacons2")
+      .addEventListener('click', _ => {
+        window.location.replace("/beacons");
       });
 
     document.querySelector("#button_keys1")
@@ -171,7 +184,7 @@ export class Router {
     if(elem1) {
       elem1.classList.add("menu_item_active");
       // activate also parent menu item if child element is selected
-      if(elem1.id === "button_pillars1" || elem1.id === "button_schedules1" || elem1.id === "button_grains1") {
+      if(elem1.id === "button_pillars1" || elem1.id === "button_schedules1" || elem1.id === "button_grains1" || elem1.id === "button_beacons1") {
         minionMenuItem.classList.add("menu_item_active");
       }
       if(elem1.id === "button_jobs1" || elem1.id === "button_templates1") {

@@ -10,6 +10,7 @@
     <link rel='stylesheet' type='text/css' href='static/stylesheets/grains.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/schedules.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/pillars.css' />
+    <link rel='stylesheet' type='text/css' href='static/stylesheets/beacons.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/dropdown.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/tooltip.css' />
     <link rel='shortcut icon' href='static/images/icon.png' />
@@ -26,6 +27,7 @@
             <div class="run-command-button menu_item" id='button_grains1'>grains</div>
             <div class="run-command-button menu_item" id='button_schedules1'>schedules</div>
             <div class="run-command-button menu_item" id='button_pillars1'>pillars</div>
+            <div class="run-command-button menu_item" id='button_beacons1'>beacons</div>
           </div>
         </div>
         <div class='menu_item' id='button_keys1'>keys</div>
@@ -48,6 +50,7 @@
             <div class="run-command-button menu_item" id='button_grains2'>-&nbsp;grains</div>
             <div class="run-command-button menu_item" id='button_schedules2'>-&nbsp;schedules</div>
             <div class="run-command-button menu_item" id='button_pillars2'>-&nbsp;pillars</div>
+            <div class="run-command-button menu_item" id='button_beacons2'>-&nbsp;beacons</div>
             <div class='run-command-button menu_item' id='button_keys2'>keys</div>
             <div class="run-command-button menu_item" id="button_jobs2">jobs</div>
             <div class='run-command-button menu_item menuitem_hidden' id='button_templates2'>-&nbsp;templates</div>
@@ -239,6 +242,45 @@
             <table id="pillarsminion_list" class='pillars highlightrows sortable'>
               <thead>
                 <tr><th>Name</th><th>Value</th></tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+          <div class='panel job-list'>
+            <h1>Recent Jobs</h1>
+            <table class='jobs highlightrows'><tbody></tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <div class='route' id='page_beacons'>
+        <div class='dashboard'>
+          <div class='panel minion-list'>
+            <h1>Beacons</h1>
+            <table id="minions" class='minions highlightrows sortable'>
+              <thead>
+                <tr><th>Minion</th><th>Status</th><th>Beacons</th><th class="sorttable_nosort"></th></tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+          <div class='panel job-list'>
+            <h1>Recent Jobs</h1>
+            <table class='jobs highlightrows'><tbody></tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <div class='route' id='page_beaconsminion'>
+        <div class='dashboard'>
+          <div id="beaconsminion_page" class='panel minion-list'>
+            <div class='nearlyvisiblebutton' id='button_close_beaconsminion'>&#x2715;</div>
+            <h1 id="beaconsminion_title">Beacons on ...</h1>
+            <table id="beaconsminion_list" class='beacons highlightrows sortable'>
+              <thead>
+                <tr><th>Name</th><th class="sorttable_nosort"></th><th>Value</th></tr>
               </thead>
               <tbody>
               </tbody>
