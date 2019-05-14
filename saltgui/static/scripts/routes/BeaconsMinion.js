@@ -106,11 +106,15 @@ export class BeaconsMinionRoute extends PageRoute {
       this._addMenuItemBeaconsDelete(menu, minion, k);
 
       // menu comes before this data on purpose
-      const beacon_value = Output.formatObject(beacon);
-      const value = Route._createTd("beacon_value", beacon_value);
+      const beacon_config = Output.formatObject(beacon);
+      const value = Route._createTd("beacon_config", beacon_config);
       if(beacons.enabled === false) value.classList.add("disabled_beacon");
       if(beacon.enabled === false) value.classList.add("disabled_beacon");
       tr.appendChild(value);
+
+      const beacon_value = Route._createTd("beacon_value", "(waiting)");
+      beacon_value.classList.add("waiting");
+      tr.appendChild(beacon_value);
 
       container.tBodies[0].appendChild(tr);
 
@@ -178,5 +182,30 @@ export class BeaconsMinionRoute extends PageRoute {
     menu.addMenuItem("Delete&nbsp;beacon...", function(evt) {
       this._runCommand(evt, minion, "beacons.delete " + key);
     }.bind(this));
+  }
+
+  static handleEvent(tag, data) {
+    const minion = decodeURIComponent(Utils.getQueryParam("minion"));
+    const prefix = "salt/beacon/" + minion + "/";
+    if(!tag.startsWith(prefix)) return;
+    const table = document.getElementById("beaconsminion_list");
+    let name = tag.substring(prefix.length);
+    if(name.endsWith("/")) name = name.substring(0, name.length-1);
+    for(const row of table.tBodies[0].rows) {
+      if(row.getElementsByTagName("td")[0].innerText !== name) continue;
+      let txt = "";
+      if(data["_stamp"]) {
+        txt += Output.dateTimeStr(data["_stamp"]) + "\n";
+        delete data["_stamp"];
+      }
+      if(data["id"] === minion) {
+        delete data["id"];
+      }
+      txt += Output.formatObject(data);
+      const td = row.getElementsByTagName("td")[3];
+      td.classList.remove("waiting");
+      td.innerText = txt;
+      break;
+    }
   }
 }

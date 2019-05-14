@@ -1,3 +1,5 @@
+import {BeaconsMinionRoute} from './routes/BeaconsMinion.js';
+
 export class HTTPError extends Error {
   constructor(status, message) {
     super();
@@ -6,10 +8,12 @@ export class HTTPError extends Error {
   }
 }
 
-
 export class API {
   constructor(apiurl="") {
     this.APIURL = apiurl;
+
+    //this.getEvents = this.getEvents.bind(this);
+    this.getEvents();
   }
 
   isAuthenticated() {
@@ -201,5 +205,27 @@ export class API {
         // do it ourselves
         throw new HTTPError(response.status, response.statusText);
       });
+  }
+
+  getEvents() {
+    const token = window.sessionStorage.getItem("token");
+    const source = new EventSource('/events?token=' + token);
+    //source.onopen = function() { console.info('Listening for events...'); };
+    source.onerror = function(err) { console.error(err); };
+    source.onmessage = function(message) {
+      const saltEvent = JSON.parse(message.data);
+      const tag = saltEvent.tag;
+      const data = saltEvent.data;
+
+      // erase the public key value when it is present
+      // it is long and boring (so not because it is a secret)
+      if(data.pub) data.pub = "...";
+
+      // salt/beacon/<minion>/<beacon>/
+      if(tag.startsWith("salt/beacon/"))
+      {
+        BeaconsMinionRoute.handleEvent(tag, data);
+      }
+    }.bind(this);
   }
 }
