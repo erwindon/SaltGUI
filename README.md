@@ -17,6 +17,7 @@ A new open source web interface for managing a SaltStack server. Built using van
 - View the values for grains for a particular minion
 - View the schedules for a particular minion
 - View the values for pillars for a particular minion
+- View the beacons for a particular minion
 
 
 ## Quick start using PAM as authentication method
