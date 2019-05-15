@@ -170,6 +170,16 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.14.0 (2019-05-14)
+- implemented management of beacons (erwindon)
+- added search function for tables (erwindon)
+- major cleanup of js-promise handling (erwindon)
+- re-organized all menu item creations (erwindon)
+- better validations on url parameters (erwindon)
+- js and css code cleanups (erwindon)
+- small layout fixes (erwindon)
+- additional testing (dawidmalina)
+
 ## 1.13.0 (2019-04-27)
 - improved indication for sorted tables (erwindon)
 - display ip-number from likely common network (erwindon, thx jonathanuntalan-rfg)
