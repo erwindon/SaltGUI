@@ -66,6 +66,11 @@ export class MinionsRoute extends PageRoute {
     const preview_grains = data.return[0].data.return.saltgui_preview_grains;
     window.localStorage.setItem("preview_grains", JSON.stringify(preview_grains));
 
+    const hide_jobs = data.return[0].data.return.saltgui_hide_jobs;
+    window.localStorage.setItem("hide_jobs", JSON.stringify(hide_jobs));
+    const show_jobs = data.return[0].data.return.saltgui_show_jobs;
+    window.localStorage.setItem("show_jobs", JSON.stringify(show_jobs));
+
     let nodegroups = data.return[0].data.return.nodegroups;
     if(!nodegroups) nodegroups = {};
     window.localStorage.setItem("nodegroups", JSON.stringify(nodegroups));

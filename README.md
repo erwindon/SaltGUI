@@ -105,6 +105,27 @@ saltgui_templates:
         command: test.version
 ```
 
+## Jobs
+SaltGUI shows a maximum of 7 jobs in on the right-hand-side of the screen.
+SaltGUI shows a maximum of 50 jobs on the dedicated jobs page.
+Commands that are used internally in SaltGUI are hidden.
+
+Additional commands to hide can be configured
+in salt master configuration file `/etc/salt/master`.
+e.g.:
+```
+saltgui_hide_jobs:
+    - test.ping
+```
+
+Commands that are normally hidden can be made visible using configuration
+in salt master configuration file `/etc/salt/master`.
+e.g.:
+```
+saltgui_show_jobs:
+    - grains.items
+```
+
 ## Grains
 Selected grains can be previewed on the Grains page.
 The names of these grains can be configured
