@@ -200,6 +200,11 @@ table tr td:last-of-type {
   flex-basis: 50%;
 }
 
+#page_jobs .job-list {
+  /* no right panel here */
+  flex-basis: 100%;
+}
+
 #jobs_page {
   margin-right: 0;
 }

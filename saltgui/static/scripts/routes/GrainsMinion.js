@@ -100,6 +100,11 @@ export class GrainsMinionRoute extends PageRoute {
 
     Utils.showTableSortable(this.getPageElement(), "grains");
     Utils.makeTableSearchable(this.getPageElement(), "grains");
+
+    const msg = this.page_element.querySelector("div.minion-list .msg");
+    const txt = Utils.txtZeroOneMany(keys.length,
+      "No grains", "{0} grain", "{0} grains");
+    msg.innerText = txt;
   }
 
   _addMenuItemAddGrain(menu, minion) {

@@ -67,6 +67,11 @@ export class PillarsRoute extends PageRoute {
 
     Utils.showTableSortable(this.getPageElement(), "minions");
     Utils.makeTableSearchable(this.getPageElement(), "minions");
+
+    const msg = this.page_element.querySelector("div.minion-list .msg");
+    const txt = Utils.txtZeroOneMany(hostnames.length,
+      "No minions", "{0} minion", "{0} minions");
+    msg.innerText = txt;
   }
 
   _updateOfflineMinion(container, hostname) {

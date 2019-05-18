@@ -165,4 +165,12 @@ export class Utils {
 
     hilitor.apply(pattern);
   }
+
+  static txtZeroOneMany(cnt, zeroText, oneText, manyText) {
+    let txt = manyText;
+    if(cnt === 0) txt = zeroText;
+    if(cnt === 1) txt = oneText;
+    txt = txt.replace("{0}", cnt);
+    return txt;
+  }
 }

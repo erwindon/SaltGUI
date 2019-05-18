@@ -52,6 +52,11 @@ export class TemplatesRoute extends PageRoute {
 
     Utils.showTableSortable(this.getPageElement(), "templates");
     Utils.makeTableSearchable(this.getPageElement(), "templates");
+
+    const msg = this.page_element.querySelector("div.templates-list .msg");
+    const txt = Utils.txtZeroOneMany(keys.length,
+      "No templates", "{0} template", "{0} templates");
+    msg.innerText = txt;
   }
 
   _addTemplate(container, name, template) {

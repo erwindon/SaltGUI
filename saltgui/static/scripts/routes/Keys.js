@@ -110,19 +110,17 @@ export class KeysRoute extends PageRoute {
     }
 
     let summary = "";
-    if(hostnames_pre.length === 0)
-      summary += ", no unaccepted keys";
-    if(hostnames_accepted.length === 0)
-      summary += ", no accepted keys";
-    if(hostnames_denied.length === 0)
-      summary += ", no denied keys";
-    if(hostnames_rejected.length === 0)
-      summary += ", no rejected keys";
-    if(summary) {
-      // remove the first comma and capitalize the first word
-      const div = Route._createDiv("msg", summary.replace(/, no/, "No"));
-      this.getPageElement().querySelector(".minion-list").appendChild(div);
-    }
+    summary += ", " + Utils.txtZeroOneMany(hostnames_pre.length,
+	"no unaccepted keys", "{0} unaccepted key", "{0} unaccepted keys");
+    summary += ", " + Utils.txtZeroOneMany(hostnames_accepted.length,
+	"no accepted keys", "{0} accepted key", "{0} accepted keys");
+    summary += ", " + Utils.txtZeroOneMany(hostnames_denied.length,
+	"no denied keys", "{0} denied key", "{0} denied keys");
+    summary += ", " + Utils.txtZeroOneMany(hostnames_rejected.length,
+	"no rejected keys", "{0} rejected key", "{0} rejected keys");
+    const msg = this.getPageElement().querySelector(".minion-list .msg");
+    // remove the first comma and capitalize the first word
+    msg.innerText = summary.replace(/^, no/, "No");
 
     Utils.showTableSortable(this.getPageElement(), "minions");
     Utils.makeTableSearchable(this.getPageElement(), "minions");

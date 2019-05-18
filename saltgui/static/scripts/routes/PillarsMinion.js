@@ -143,11 +143,10 @@ export class PillarsMinionRoute extends PageRoute {
     Utils.showTableSortable(this.getPageElement(), "pillars");
     Utils.makeTableSearchable(this.getPageElement(), "pillars");
 
-    if(!keys.length) {
-      const noPillarsMsg = Route._createTd("msg", "No pillars found");
-      noPillarsMsg.colSpan = 99;
-      container.tBodies[0].appendChild(noPillarsMsg);
-    }
+    const msg = this.page_element.querySelector("div.minion-list .msg");
+    const txt = Utils.txtZeroOneMany(keys.length,
+      "No pillars", "{0} pillar", "{0} pillars");
+    msg.innerText = txt;
   }
 
   _addMenuItemRefreshPillar(menu, hostname) {

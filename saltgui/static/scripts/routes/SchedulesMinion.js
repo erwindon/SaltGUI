@@ -128,10 +128,10 @@ export class SchedulesMinionRoute extends PageRoute {
     Utils.showTableSortable(this.getPageElement(), "schedules");
     Utils.makeTableSearchable(this.getPageElement(), "schedules");
 
-    if(!keys.length) {
-      const noSchedulesMsg = Route._createDiv("msg", "No schedules found");
-      container.tBodies[0].appendChild(noSchedulesMsg);
-    }
+    const msg = this.page_element.querySelector("div.minion-list .msg");
+    txt = Utils.txtZeroOneMany(keys.length,
+      "No schedules", "{0} schedule", "{0} schedules");
+    msg.innerText = txt;
   }
 
   _addMenuItemEnableSchedulerWhenNeeded(menu, minion, schedules) {

@@ -300,7 +300,7 @@ export class PageRoute extends Route {
     container.appendChild(tr);
   }
 
-  _handleRunnerJobsListJobs(data, hasHeader = false, numberOfJobs = 7) {
+  _handleRunnerJobsListJobs(data, hasHeader = false, maxNumberOfJobs = 7) {
     const jobContainer = this.getPageElement().querySelector(".jobs tbody");
 
     if(PageRoute.showErrorRowInstead(jobContainer, data)) return;
@@ -374,27 +374,39 @@ export class PageRoute extends Route {
     this._hideJobs.push("wheel.key.list_all");
     this._hideJobs.push("wheel.key.reject");
 
-    // Add <numberOfJobs> most recent jobs
-    let shown = 0;
-    let i = 0;
-    while(shown < numberOfJobs && jobs[i] !== undefined) {
-      const job = jobs[i];
-      i = i + 1;
+    let numberOfJobsShown = 0;
+    let numberOfJobsEligible = 0;
+    let numberOfJobsPresent = jobs.length;
+    for(const job of jobs) {
 
       if(this._hideJobs.includes(job.Function) && !this._showJobs.includes(job.Function)) {
         continue;
       }
 
+      numberOfJobsEligible++;
+
+      // Add only <maxNumberOfJobs> most recent jobs
+      if(numberOfJobsShown >= maxNumberOfJobs) continue;
+
       // Note that "Jobs" has a specialized version
       this._addJob(jobContainer, job);
 
-      shown = shown + 1;
+      numberOfJobsShown++;
     }
 
     if(hasHeader) {
       Utils.showTableSortable(this.getPageElement(), "jobs", true);
     }
     Utils.makeTableSearchable(this.getPageElement(), "jobs");
+
+    const msg = this.page_element.querySelector("div.job-list .msg");
+    let txt = Utils.txtZeroOneMany(numberOfJobsShown,
+      "No jobs shown", "{0} job shown", "{0} jobs shown");
+    txt += Utils.txtZeroOneMany(numberOfJobsEligible,
+      "", ", {0} job eligible", ", {0} jobs eligible");
+    txt += Utils.txtZeroOneMany(numberOfJobsPresent,
+      "", ", {0} job present", ", {0} jobs present");
+    msg.innerText = txt;
   }
 
   _handleRunnerJobsActive(data) {

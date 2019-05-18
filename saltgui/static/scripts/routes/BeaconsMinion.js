@@ -126,11 +126,10 @@ export class BeaconsMinionRoute extends PageRoute {
     Utils.showTableSortable(this.getPageElement(), "beacons");
     Utils.makeTableSearchable(this.getPageElement(), "beacons");
 
-    if(!keys.length) {
-      const noBeaconsMsg = Route._createTd("msg", "No beacons found");
-      noBeaconsMsg.colSpan = 99;
-      container.tBodies[0].appendChild(noBeaconsMsg);
-    }
+    const msg = this.page_element.querySelector("div.minion-list .msg");
+    txt = Utils.txtZeroOneMany(keys.length,
+      "No beacons", "{0} beacon", "{0} beacons");
+    msg.innerText = txt;
   }
 
   _addMenuItemBeaconsDisableWhenNeeded(menu, minion, beacons) {

@@ -19,6 +19,8 @@ export class JobsRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
+    const page = document.getElementById("jobs_page");
+
     runnerJobsListJobsPromise.then(data => {
       myThis._handleRunnerJobsListJobs(data, true, 50);
       runnerJobsActivePromise.then(data => {
