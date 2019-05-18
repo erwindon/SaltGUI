@@ -77,9 +77,10 @@ export class SchedulesMinionRoute extends PageRoute {
     const menu = new DropDownMenu(page);
     this._addMenuItemEnableSchedulerWhenNeeded(menu, minion, schedules);
     this._addMenuItemDisableSchedulerWhenNeeded(menu, minion, schedules);
+
     // new menu's are always added at the bottom of the div
-    // fix that by re-adding the minion list
-    page.appendChild(container);
+    // fix that by re-adding it to its proper place
+    page.insertBefore(menu.menuDropdown, title.nextSibling);
 
     const keys = Object.keys(schedules.schedules).sort();
     for(const k of keys) {

@@ -54,8 +54,9 @@ export class PillarsMinionRoute extends PageRoute {
     const container = document.getElementById("pillarsminion_list");
 
     // new menu's are always added at the bottom of the div
-    // fix that by re-adding the minion list
-    page.appendChild(container);
+    // fix that by re-adding it to its proper place
+    const title = document.getElementById("pillarsminion_title");
+    page.insertBefore(menu.menuDropdown, title.nextSibling);
 
     if(PageRoute.showErrorRowInstead(container.tBodies[0], data)) return;
 

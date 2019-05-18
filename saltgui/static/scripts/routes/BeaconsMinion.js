@@ -66,20 +66,21 @@ export class BeaconsMinionRoute extends PageRoute {
       return;
     }
 
+    const title = document.getElementById("beaconsminion_title");
+    let txt = "Beacons on " + minion;
+    if(beacons.enabled === false) txt += " (disabled)";
+    title.innerText = txt;
+
     const menu = new DropDownMenu(page);
     this._addMenuItemBeaconsDisableWhenNeeded(menu, minion, beacons);
     this._addMenuItemBeaconsEnableWhenNeeded(menu, minion, beacons);
     this._addMenuItemBeaconsAdd(menu, minion);
     this._addMenuItemBeaconsReset(menu, minion);
     this._addMenuItemBeaconsSave(menu, minion);
-    // new menu's are always added at the bottom of the div
-    // fix that by re-adding the minion list
-    page.appendChild(container);
 
-    const title = document.getElementById("beaconsminion_title");
-    let txt = "Beacons on " + minion;
-    if(beacons.enabled === false) txt += " (disabled)";
-    title.innerText = txt;
+    // new menu's are always added at the bottom of the div
+    // fix that by re-adding it to its proper place
+    page.insertBefore(menu.menuDropdown, title.nextSibling);
 
     const keys = Object.keys(beacons.beacons).sort();
     for(const k of keys) {
