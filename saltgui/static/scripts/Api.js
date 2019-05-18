@@ -210,8 +210,14 @@ export class API {
   getEvents() {
     const token = window.sessionStorage.getItem("token");
     const source = new EventSource('/events?token=' + token);
-    //source.onopen = function() { console.info('Listening for events...'); };
-    source.onerror = function(err) { console.error(err); };
+    source.onopen = function() {
+      //console.info('Listening for events...');
+    };
+    source.onerror = function(err) {
+      // Don't show the error
+      // It appears with every page-load
+      //console.error(err);
+    };
     source.onmessage = function(message) {
       const saltEvent = JSON.parse(message.data);
       const tag = saltEvent.tag;
