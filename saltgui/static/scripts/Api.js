@@ -209,6 +209,7 @@ export class API {
 
   getEvents() {
     const token = window.sessionStorage.getItem("token");
+    if(!token) return;
     const source = new EventSource('/events?token=' + token);
     source.onopen = function() {
       //console.info('Listening for events...');
