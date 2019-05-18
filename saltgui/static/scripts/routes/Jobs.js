@@ -16,13 +16,33 @@ export class JobsRoute extends PageRoute {
   onShow() {
     const myThis = this;
 
+    const patInteger = /^((0)|([-+]?[1-9][0-9]*))$/;
+
+    const maxJobs = 50;
+    let cnt = decodeURIComponent(Utils.getQueryParam("cnt", "" + maxJobs));
+    if(cnt === "all")
+      cnt = 10000;
+    else if(cnt.match(patInteger))
+      cnt = parseInt(cnt);
+    else
+      // pretend parameter was not present
+      cnt = maxJobs;
+
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     const page = document.getElementById("jobs_page");
+    const menu = new DropDownMenu(page);
+    this._addMenuItemShowAllWhenNeeded(menu);
+    this._addMenuItemShowSomeWhenNeeded(menu);
+
+    // new menu's are always added at the bottom of the div
+    // fix that by re-adding it to its proper place
+    const title = document.getElementById("jobs_title");
+    page.insertBefore(menu.menuDropdown, title.nextSibling);
 
     runnerJobsListJobsPromise.then(data => {
-      myThis._handleRunnerJobsListJobs(data, true, 50);
+      myThis._handleRunnerJobsListJobs(data, true, cnt);
       runnerJobsActivePromise.then(data => {
         myThis._handleRunnerJobsActive(data);
       }, data => {
@@ -31,6 +51,23 @@ export class JobsRoute extends PageRoute {
     }, data => {
       myThis._handleRunnerJobsListJobs(JSON.stringify(data));
     }); 
+  }
+
+  _addMenuItemShowAllWhenNeeded(menu) {
+    let cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
+    if(cnt === "all") return;
+    menu.addMenuItem("Show&nbsp;all&nbsp;jobs", function(evt) {
+      window.location.assign("jobs?cnt=all");
+    }.bind(this));
+  }
+
+  _addMenuItemShowSomeWhenNeeded(menu) {
+    const maxJobs = 50;
+    let cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
+    if(cnt === ""+maxJobs) return;
+    menu.addMenuItem("Show&nbsp;first&nbsp;" + maxJobs + "&nbsp;jobs", function(evt) {
+      window.location.assign("jobs?cnt=" + maxJobs);
+    }.bind(this));
   }
 
   _addJob(container, job) {
