@@ -40,17 +40,18 @@ export class JobsRoute extends PageRoute {
     tr.appendChild(Route._createTd("job" + job.id, jidText));
 
     let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
-    if(targetText.length > 50) {
+    const maxTextLength = 50;
+    if(targetText.length > maxTextLength) {
       // prevent column becoming too wide
-      targetText = targetText.substring(0, 50) + "...";
+      targetText = targetText.substring(0, maxTextLength) + "...";
     }
     tr.appendChild(Route._createTd("target", targetText));
 
     const argumentsText = this._decodeArgumentsText(job.Arguments);
     let functionText = job.Function + argumentsText;
-    if(functionText.length > 50) {
+    if(functionText.length > maxTextLength) {
       // prevent column becoming too wide
-      functionText = functionText.substring(0, 50) + "...";
+      functionText = functionText.substring(0, maxTextLength) + "...";
     }
     tr.appendChild(Route._createTd("function", functionText));
 
@@ -153,11 +154,12 @@ export class JobsRoute extends PageRoute {
 
       let targetText = "";
       const targetField = this.page_element.querySelector(".jobs tr#job" + k + " td.status span");
-      if(targetText.length > 50) {
+      const maxTextLength = 50;
+      if(targetText.length > maxTextLength) {
         // prevent column becoming too wide
         // yes, the addition of running/returned may again make
         // the string longer than 50 characters, we accept that
-        targetText = targetText.substring(0, 50) + "...";
+        targetText = targetText.substring(0, maxTextLength) + "...";
       }
       // then add the operational statistics
       if(job.Running.length > 0)
