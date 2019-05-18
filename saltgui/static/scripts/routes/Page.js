@@ -465,9 +465,10 @@ export class PageRoute extends Route {
     td.id = "job" + job.id;
 
     let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
-    if(targetText.length > 50) {
+    const maxTextLength = 50;
+    if(targetText.length > maxTextLength) {
       // prevent column becoming too wide
-      targetText = targetText.substring(0, 50) + "...";
+      targetText = targetText.substring(0, maxTextLength) + "...";
     }
     const targetDiv = Route._createDiv("target", targetText);
     td.appendChild(targetDiv);
