@@ -109,7 +109,7 @@ export class Utils {
       // D83D+DD0D = 1F50D = LEFT-POINTING MAGNIFYING GLASS
       input.placeholder = "\uD83D\uDD0D";
       input.onkeyup = ev => {
-        if(ev.key == "Escape") {
+        if(ev.key === "Escape") {
           Utils.updateFilter(table, "");
           Utils.hideShowTableSearchBar(startElement, tableClass);
           return;
@@ -118,7 +118,7 @@ export class Utils {
       };
       table.parentElement.insertBefore(input, table);
     }
-    if(input.style.display == "none") {
+    if(input.style.display === "none") {
       Utils.updateFilter(table, input.value);
       input.style.display = "";
     } else {
