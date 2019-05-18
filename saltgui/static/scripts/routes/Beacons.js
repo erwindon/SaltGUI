@@ -12,12 +12,6 @@ export class BeaconsRoute extends PageRoute {
     this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
     this._updateMinion = this._updateMinion.bind(this);
 
-    // add all the required columns
-    const tr = this.page_element.querySelector("#page_beacons thead tr");
-    while(tr.childElementCount > 6) {
-      tr.removeChild(tr.lastChild);
-    }
-
     // The new columns are not yet sortable, make sure they are.
     // First detroy all the default sorting handlers.
     // A (deep)copy of an element does not copy its handlers.
@@ -165,11 +159,6 @@ export class BeaconsRoute extends PageRoute {
 
     const menu = new DropDownMenu(element);
     this._addMenuItemShowBeacons(menu, hostname);
-
-    // add all the required columns
-    while(element.childElementCount > 6) {
-      element.removeChild(element.lastChild);
-    }
 
     element.addEventListener("click", evt => window.location.assign("beaconsminion?minion=" + encodeURIComponent(hostname)));
   }

@@ -21,11 +21,8 @@ export class GrainsRoute extends PageRoute {
     if(!Array.isArray(this._previewGrains)) {
       this._previewGrains = [ ];
     }
-    // add all the required columns
+    // add the preview columns
     const tr = this.page_element.querySelector("#page_grains thead tr");
-    while(tr.childElementCount > 6) {
-      tr.removeChild(tr.lastChild);
-    }
     for(let i = 0; i < this._previewGrains.length; i++) {
       const th = document.createElement("th");
       th.innerText = this._previewGrains[i];
@@ -143,10 +140,7 @@ export class GrainsRoute extends PageRoute {
     const menu = new DropDownMenu(element);
     this._addMenuItemShowGrains(menu, hostname);
 
-    // add all the required columns
-    while(element.childElementCount > 6) {
-      element.removeChild(element.lastChild);
-    }
+    // add the preview columns
     for(let i = 0; i < this._previewGrains.length; i++) {
       const td = document.createElement("td");
       const grainName = this._previewGrains[i];
