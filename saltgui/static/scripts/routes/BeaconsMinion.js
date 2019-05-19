@@ -184,7 +184,7 @@ export class BeaconsMinionRoute extends PageRoute {
     }.bind(this));
   }
 
-  static handleEvent(tag, data) {
+  handleSaltBeaconEvent(tag, data) {
     const minion = decodeURIComponent(Utils.getQueryParam("minion"));
     const prefix = "salt/beacon/" + minion + "/";
     if(!tag.startsWith(prefix)) return;

@@ -51,6 +51,12 @@ export class Utils {
     }
   }
 
+  static tableReSort(startElement) {
+    const th = startElement.querySelector("table th");
+    sorttable.innerSortFunction.apply(th, []);
+    sorttable.innerSortFunction.apply(th, []);
+  }
+
   static addErrorToTableCell(td, errorMessage) {
     const span = document.createElement("span");
     span.innerText = "(error)";

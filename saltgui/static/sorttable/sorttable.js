@@ -91,7 +91,7 @@ sorttable = {
 	      headrow[i].sorttable_tbody = table.tBodies[0];
 	      dean_addEvent(headrow[i],"click", sorttable.innerSortFunction = function(e) {
 
-          if (this.className.search(/\bsorttable_sorted\b/) != -1) {
+          if (false && this.className.search(/\bsorttable_sorted\b/) != -1) {
             // if we're already sorted by this column, just
             // reverse the table, which is quicker
             sorttable.reverse(this.sorttable_tbody);
@@ -105,7 +105,7 @@ sorttable = {
             this.appendChild(sortrevind);
             return;
           }
-          if (this.className.search(/\bsorttable_sorted_reverse\b/) != -1) {
+          if (false && this.className.search(/\bsorttable_sorted_reverse\b/) != -1) {
             // if we're already sorted by this column in reverse, just
             // re-reverse the table, which is quicker
             sorttable.reverse(this.sorttable_tbody);

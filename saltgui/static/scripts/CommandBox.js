@@ -231,9 +231,6 @@ export class CommandBox {
       "schedule.enable_job",
       "schedule.modify",
       "schedule.run_job",
-      "wheel.key.accept",
-      "wheel.key.delete",
-      "wheel.key.reject",
     ];
     if(screenModifyingCommands.includes(command) && output !== "Waiting for command...") {
       location.reload();
