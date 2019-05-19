@@ -89,7 +89,7 @@ export class SchedulesRoute extends PageRoute {
       this._addMinion(list, hostname, 1);
 
       // preliminary dropdown menu
-      const element = document.getElementById(hostname);
+      const element = list.querySelector("#" + hostname);
       const menu = new DropDownMenu(element);
       this._addMenuItemShowSchedules(menu, hostname);
 
@@ -108,7 +108,7 @@ export class SchedulesRoute extends PageRoute {
   _updateOfflineMinion(container, hostname) {
     super._updateOfflineMinion(container, hostname);
 
-    const element = document.getElementById(hostname);
+    const element = container.querySelector("#" + hostname);
 
     // force same columns on all rows
     element.appendChild(Route._createTd("scheduleinfo", ""));

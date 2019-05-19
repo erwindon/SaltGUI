@@ -85,7 +85,7 @@ export class GrainsRoute extends PageRoute {
       this._addMinion(list, hostname, 1 + this._previewGrains.length);
 
       // preliminary dropdown menu
-      const element = document.getElementById(hostname);
+      const element = list.querySelector("#" + hostname);
       const menu = new DropDownMenu(element);
       this._addMenuItemShowGrains(menu, hostname);
 
@@ -108,7 +108,7 @@ export class GrainsRoute extends PageRoute {
   _updateOfflineMinion(container, hostname) {
     super._updateOfflineMinion(container, hostname);
 
-    const element = document.getElementById(hostname);
+    const element = container.querySelector("#" + hostname);
 
     // force same columns on all rows
     element.appendChild(Route._createTd("saltversion", ""));
@@ -123,7 +123,7 @@ export class GrainsRoute extends PageRoute {
   _updateMinion(container, minion, hostname, allMinions) {
     super._updateMinion(container, minion, hostname, allMinions);
 
-    const element = document.getElementById(hostname);
+    const element = container.querySelector("#" + hostname);
 
     if(typeof minion === "object") {
       const cnt = Object.keys(minion).length;

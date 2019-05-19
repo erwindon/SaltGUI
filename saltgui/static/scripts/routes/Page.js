@@ -40,7 +40,7 @@ export class PageRoute extends Route {
   }
 
   _getElement(container, id) {
-    let element = document.getElementById(id);
+    let element = container.querySelector("#" + id);
 
     if(element === null) {
       // minion not found on screen...
@@ -267,7 +267,7 @@ export class PageRoute extends Route {
 
   _addMinion(container, hostname, freeColumns = 0) {
 
-    let element = document.getElementById(hostname);
+    let element = container.querySelector("#" + hostname);
     if(element !== null) {
       // minion already on screen...
       return;

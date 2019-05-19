@@ -129,7 +129,7 @@ export class KeysRoute extends PageRoute {
   _updateOfflineMinion(container, hostname) {
     super._updateOfflineMinion(container, hostname);
 
-    const element = document.getElementById(hostname);
+    const element = container.querySelector("#" + hostname);
 
     // force same columns on all rows
     element.appendChild(Route._createTd("fingerprint", ""));

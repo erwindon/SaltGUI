@@ -102,7 +102,7 @@ export class BeaconsRoute extends PageRoute {
       this._addMinion(list, hostname, 1);
 
       // preliminary dropdown menu
-      const element = document.getElementById(hostname);
+      const element = list.querySelector("#" + hostname);
       const menu = new DropDownMenu(element);
       this._addMenuItemShowBeacons(menu, hostname);
 
@@ -121,7 +121,7 @@ export class BeaconsRoute extends PageRoute {
   _updateOfflineMinion(container, hostname) {
     super._updateOfflineMinion(container, hostname);
 
-    const element = document.getElementById(hostname);
+    const element = container.querySelector("#" + hostname);
 
     // force same columns on all rows
     element.appendChild(Route._createTd("beaconinfo", ""));
@@ -134,7 +134,7 @@ export class BeaconsRoute extends PageRoute {
 
     super._updateMinion(container, null, hostname, allMinions);
 
-    const element = document.getElementById(hostname);
+    const element = container.querySelector("#" + hostname);
 
     if(typeof minion === "object") {
       const cnt = Object.keys(minion.beacons).length;
