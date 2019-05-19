@@ -376,7 +376,7 @@ export class PageRoute extends Route {
 
     let numberOfJobsShown = 0;
     let numberOfJobsEligible = 0;
-    let numberOfJobsPresent = jobs.length;
+    const numberOfJobsPresent = jobs.length;
     for(const job of jobs) {
 
       if(this._hideJobs.includes(job.Function) && !this._showJobs.includes(job.Function)) {

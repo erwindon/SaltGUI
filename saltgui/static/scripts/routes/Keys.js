@@ -111,13 +111,13 @@ export class KeysRoute extends PageRoute {
 
     let summary = "";
     summary += ", " + Utils.txtZeroOneMany(hostnames_pre.length,
-	"no unaccepted keys", "{0} unaccepted key", "{0} unaccepted keys");
+      "no unaccepted keys", "{0} unaccepted key", "{0} unaccepted keys");
     summary += ", " + Utils.txtZeroOneMany(hostnames_accepted.length,
-	"no accepted keys", "{0} accepted key", "{0} accepted keys");
+      "no accepted keys", "{0} accepted key", "{0} accepted keys");
     summary += ", " + Utils.txtZeroOneMany(hostnames_denied.length,
-	"no denied keys", "{0} denied key", "{0} denied keys");
+      "no denied keys", "{0} denied key", "{0} denied keys");
     summary += ", " + Utils.txtZeroOneMany(hostnames_rejected.length,
-	"no rejected keys", "{0} rejected key", "{0} rejected keys");
+      "no rejected keys", "{0} rejected key", "{0} rejected keys");
     const msg = this.getPageElement().querySelector(".minion-list .msg");
     // remove the first comma and capitalize the first word
     msg.innerText = summary.replace(/^, no/, "No");

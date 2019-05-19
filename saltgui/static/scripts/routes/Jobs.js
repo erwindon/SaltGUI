@@ -54,7 +54,7 @@ export class JobsRoute extends PageRoute {
   }
 
   _addMenuItemShowAllWhenNeeded(menu) {
-    let cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
+    const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     if(cnt === "all") return;
     menu.addMenuItem("Show&nbsp;all&nbsp;jobs", function(evt) {
       window.location.assign("jobs?cnt=all");
@@ -63,7 +63,7 @@ export class JobsRoute extends PageRoute {
 
   _addMenuItemShowSomeWhenNeeded(menu) {
     const maxJobs = 50;
-    let cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
+    const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     if(cnt === ""+maxJobs) return;
     menu.addMenuItem("Show&nbsp;first&nbsp;" + maxJobs + "&nbsp;jobs", function(evt) {
       window.location.assign("jobs?cnt=" + maxJobs);
