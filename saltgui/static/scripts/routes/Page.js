@@ -379,11 +379,12 @@ export class PageRoute extends Route {
     const numberOfJobsPresent = jobs.length;
     for(const job of jobs) {
 
-      if(this._hideJobs.includes(job.Function) && !this._showJobs.includes(job.Function)) {
+      if(!this._hideJobs.includes(job.Function) ||
+         this._showJobs.includes(job.Function)) {
+        numberOfJobsEligible++;
+      } else if(maxNumberOfJobs !== 99999) {
         continue;
       }
-
-      numberOfJobsEligible++;
 
       // Add only <maxNumberOfJobs> most recent jobs
       if(numberOfJobsShown >= maxNumberOfJobs) continue;

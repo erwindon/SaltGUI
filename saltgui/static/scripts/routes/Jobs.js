@@ -20,8 +20,11 @@ export class JobsRoute extends PageRoute {
 
     const maxJobs = 50;
     let cnt = decodeURIComponent(Utils.getQueryParam("cnt", "" + maxJobs));
-    if(cnt === "all")
+    if(cnt === "eligible")
       cnt = 10000;
+    else if(cnt === "all")
+      // magic value to ignore all filters
+      cnt = 99999;
     else if(cnt.match(patInteger))
       cnt = parseInt(cnt);
     else
@@ -33,8 +36,9 @@ export class JobsRoute extends PageRoute {
 
     const page = document.getElementById("jobs_page");
     const menu = new DropDownMenu(page);
-    this._addMenuItemShowAllWhenNeeded(menu);
     this._addMenuItemShowSomeWhenNeeded(menu);
+    this._addMenuItemShowEligibleWhenNeeded(menu);
+    this._addMenuItemShowAllWhenNeeded(menu);
 
     // new menu's are always added at the bottom of the div
     // fix that by re-adding it to its proper place
@@ -53,20 +57,28 @@ export class JobsRoute extends PageRoute {
     }); 
   }
 
-  _addMenuItemShowAllWhenNeeded(menu) {
-    const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
-    if(cnt === "all") return;
-    menu.addMenuItem("Show&nbsp;all&nbsp;jobs", function(evt) {
-      window.location.assign("jobs?cnt=all");
-    }.bind(this));
-  }
-
   _addMenuItemShowSomeWhenNeeded(menu) {
     const maxJobs = 50;
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     if(cnt === ""+maxJobs) return;
     menu.addMenuItem("Show&nbsp;first&nbsp;" + maxJobs + "&nbsp;jobs", function(evt) {
       window.location.assign("jobs?cnt=" + maxJobs);
+    }.bind(this));
+  }
+
+  _addMenuItemShowEligibleWhenNeeded(menu) {
+    const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
+    if(cnt === "eligible") return;
+    menu.addMenuItem("Show&nbsp;eligible&nbsp;jobs", function(evt) {
+      window.location.assign("jobs?cnt=eligible");
+    }.bind(this));
+  }
+
+  _addMenuItemShowAllWhenNeeded(menu) {
+    const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
+    if(cnt === "all") return;
+    menu.addMenuItem("Show&nbsp;all&nbsp;jobs", function(evt) {
+      window.location.assign("jobs?cnt=all");
     }.bind(this));
   }
 
