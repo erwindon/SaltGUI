@@ -237,9 +237,10 @@ export class JobsRoute extends PageRoute {
 
   _handleRunnerJobsListJob(jobid, data) {
 
+    const detailsSpan = this.page_element.querySelector(".jobs #job" + jobid + " td.details span");
+    if(!detailsSpan) return;
+
     if(typeof data !== "object") {
-      const detailsSpan = this.page_element.querySelector(".jobs #job" + jobid + " td.details span");
-      if(!detailsSpan) return;
       detailsSpan.innerText = "(error)";
       detailsSpan.classList.remove("no_status");
       Utils.addToolTip(detailsSpan, data);
@@ -247,6 +248,14 @@ export class JobsRoute extends PageRoute {
     }
 
     data = data.return[0];
+
+    if(data.Error) {
+      // typically happens for jobs that are expired from jobs-cache
+      detailsSpan.innerText = "(error)";
+      detailsSpan.classList.remove("no_status");
+      Utils.addToolTip(detailsSpan, data.Error);
+      return;
+    }
 
     let str = "";
 
@@ -295,8 +304,6 @@ export class JobsRoute extends PageRoute {
       }
     }
 
-    const detailsSpan = this.page_element.querySelector(".jobs #job" + jobid + " td.details span");
-    if(!detailsSpan) return;
     detailsSpan.innerHTML = str;
     detailsSpan.classList.remove("no_status");
     Utils.addToolTip(detailsSpan, "Click to refresh");
