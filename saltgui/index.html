@@ -103,6 +103,8 @@
         <div class='dashboard'>
           <div class='panel minion-list'>
             <h1>Minions</h1>
+            <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
+            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
             <table id="minions" class='minions highlightrows sortable'>
               <thead>
                 <tr><th>Minion</th><th>Status</th><th>Salt&nbsp;version</th><th>OS&nbsp;version</th><th class="sorttable_nosort"></th></tr>
@@ -114,6 +116,7 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
+            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
             <table class='jobs highlightrows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
@@ -124,6 +127,7 @@
         <div class='dashboard'>
           <div class='panel minion-list'>
             <h1>Keys</h1>
+            <input style="display: none" class="filtertext" list="listkeys" placeholder="&#x1F50D;">
             <table id="minions" class='minions sortable'>
               <thead>
                 <tr><th>Minion</th><th>Status</th><th>Fingerprint</th><th class="sorttable_nosort"></th></tr>
@@ -135,6 +139,7 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
+            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
             <table class='jobs highlightrows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
@@ -145,6 +150,7 @@
         <div class='dashboard'>
           <div class='panel minion-list'>
             <h1>Grains</h1>
+            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
             <table id="minions" class='minions highlightrows sortable'>
               <thead>
                 <tr><th>Minion</th><th>Status</th><th>Salt&nbsp;version</th><th>OS&nbsp;version</th><th>Grains</th><th class="sorttable_nosort"></th></tr>
@@ -156,6 +162,7 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
+            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
             <table class='jobs highlightrows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
@@ -167,6 +174,7 @@
           <div id="grainsminion_page" class='panel minion-list'>
             <div class='nearlyvisiblebutton' id='button_close_grainsminion'>&#x2715;</div>
             <h1 id="grainsminion_title">Grains on ...</h1>
+            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
             <table id="grainsminion_list" class='grains highlightrows sortable'>
               <thead>
                 <tr><th>Name</th><th class="sorttable_nosort"></th><th>Value</th></tr>
@@ -178,6 +186,7 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
+            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
             <table class='jobs highlightrows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
@@ -188,6 +197,7 @@
         <div class='dashboard'>
           <div class='panel minion-list'>
             <h1>Schedules</h1>
+            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
             <table id="minions" class='minions highlightrows sortable'>
               <thead>
                 <tr><th>Minion</th><th>Status</th><th>Schedules</th><th class="sorttable_nosort"></th></tr>
@@ -199,6 +209,7 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
+            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
             <table class='jobs highlightrows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
@@ -210,6 +221,7 @@
           <div id="schedulesminion_page" class='panel minion-list'>
             <div class='nearlyvisiblebutton' id='button_close_schedulesminion'>&#x2715;</div>
             <h1 id="schedulesminion_title">Schedules on ...</h1>
+            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
             <table id="schedulesminion_list" class='schedules highlightrows sortable'>
               <thead>
                 <tr><th>Name</th><th class="sorttable_nosort"></th><th>Details</th></tr>
@@ -221,6 +233,7 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
+            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
             <table class='jobs highlightrows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
@@ -231,6 +244,7 @@
         <div class='dashboard'>
           <div class='panel minion-list'>
             <h1>Pillars</h1>
+            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
             <table id="minions" class='minions highlightrows sortable'>
               <thead>
                 <tr><th>Minion</th><th>Status</th><th>Pillars</th><th class="sorttable_nosort"></th></tr>
@@ -242,6 +256,7 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
+            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
             <table class='jobs highlightrows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
@@ -253,6 +268,7 @@
           <div id="pillarsminion_page" class='panel minion-list'>
             <div class='nearlyvisiblebutton' id='button_close_pillarsminion'>&#x2715;</div>
             <h1 id="pillarsminion_title">Pillars on ...</h1>
+            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
             <table id="pillarsminion_list" class='pillars highlightrows sortable'>
               <thead>
                 <tr><th>Name</th><th>Value</th></tr>
@@ -264,6 +280,7 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
+            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
             <table class='jobs highlightrows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
@@ -274,6 +291,7 @@
         <div class='dashboard'>
           <div class='panel minion-list'>
             <h1>Beacons</h1>
+            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
             <table id="minions" class='minions highlightrows sortable'>
               <thead>
                 <tr><th>Minion</th><th>Status</th><th>Beacons</th><th class="sorttable_nosort"></th></tr>
@@ -285,6 +303,7 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
+            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
             <table class='jobs highlightrows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
@@ -296,6 +315,7 @@
           <div id="beaconsminion_page" class='panel minion-list'>
             <div class='nearlyvisiblebutton' id='button_close_beaconsminion'>&#x2715;</div>
             <h1 id="beaconsminion_title">Beacons on ...</h1>
+            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
             <table id="beaconsminion_list" class='beacons highlightrows sortable'>
               <thead>
                 <tr><th>Name</th><th class="sorttable_nosort"></th><th>Config</th><th>Value</th></tr>
@@ -307,6 +327,7 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
+            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
             <table class='jobs highlightrows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
@@ -327,6 +348,7 @@
         <div class='dashboard'>
           <div id='jobs_page' class='panel job-list'>
             <h1 id="jobs_title">Recent Jobs</h1>
+            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
             <table id="jobs" class='jobs highlightrows sortable'>
               <thead>
                 <tr><th>JID</th><th>Target</th><th>Function</th><th>Start Time</th><th class="sorttable_nosort"></th><th>Status</th><th>Details</th></tr>
@@ -343,6 +365,7 @@
         <div class='dashboard'>
           <div class='panel templates-list'>
             <h1>Templates</h1>
+            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
             <table id="templates" class='templates highlightrows sortable'>
               <thead>
                 <tr><th>Name</th><th>Description</th><th>Target</th><th>Command</th><th class="sorttable_nosort"></th></tr>
@@ -354,6 +377,7 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
+            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
             <table class='jobs highlightrows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
@@ -372,6 +396,19 @@
         <pre class='output'>Waiting for command...</pre>
       </div>
     </div>
+
+    <datalist id="listkeys">
+      <option value="accepted">
+      <option value="denied">
+      <option value="rejected">
+      <option value="unaccepted">
+    </datalist>
+
+    <datalist id="listjobs">
+      <option value="done">
+      <option value="returned">
+      <option value="running">
+    </datalist>
 
     <!-- see https://www.kryogenix.org/code/browser/sorttable/ -->
     <script src="static/sorttable/sorttable.js"></script>

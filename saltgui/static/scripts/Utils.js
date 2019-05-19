@@ -39,11 +39,11 @@ export class Utils {
     tooltipHost.appendChild(tooltipSpan);
   }
 
-  static showTableSortable(startElement, tableClass, reverseSort = false) {
-    const th = startElement.querySelector("table." + tableClass + " th");
+  static showTableSortable(startElement, reverseSort = false) {
+    const th = startElement.querySelector("table th");
     sorttable.innerSortFunction.apply(th, []);
     if(reverseSort) sorttable.innerSortFunction.apply(th, []);
-    const tr = startElement.querySelector("table." + tableClass + " tr");
+    const tr = startElement.querySelector("table tr");
     for(const th of tr.childNodes) {
       if(th.classList.contains("sorttable_nosort")) continue;
       // the tooltip is too bulky to use, skip for now
@@ -69,55 +69,45 @@ export class Utils {
     return obj.textContent.toUpperCase().includes(txt);
   }
 
-  static makeTableSearchable(startElement, tableClass) {
-    // initially there is nothing
-    let button_search = startElement.querySelector("table." + tableClass + " search");
-    if(button_search) return;
-    button_search = document.createElement("span");
-    button_search.id = "button_search";
+  static makeTableSearchable(startElement) {
+    const button_search = document.createElement("span");
     button_search.classList.add("search");
     // 1F50D = LEFT-POINTING MAGNIFYING GLASS
     // FE0E = VARIATION SELECTOR-15 (render as text)
     button_search.innerHTML = "&#x1f50d;&#xFE0E;";
     button_search.onclick = ev => {
-      Utils.hideShowTableSearchBar(startElement, tableClass);
+      Utils.hideShowTableSearchBar(startElement);
     };
-    const table = startElement.querySelector("table." + tableClass);
+    const table = startElement.querySelector("table");
     table.parentElement.insertBefore(button_search, table);
   }
 
-  static hideShowTableSearchBar(startElement, tableClass) {
+  static hideShowTableSearchBar(startElement) {
     // remove all highlights
-    const hilitor = new Hilitor(startElement, "table." + tableClass + " tbody");
+    const hilitor = new Hilitor(startElement, "table tbody");
     hilitor.remove();
 
     // show rows in all tables
-    const allFM = startElement.querySelectorAll("table." + tableClass + " .nofiltermatch");
+    const allFM = startElement.querySelectorAll("table .nofiltermatch");
     for(const fm of allFM)
       fm.classList.remove("nofiltermatch");
 
-    const table = startElement.querySelector("table." + tableClass);
+    const table = startElement.querySelector("table");
 
     // hide/show search box
-    let input = startElement.querySelector("input.xx" + tableClass);
-    if(!input) {
-      input = document.createElement("input");
-      input.style.width = "100%";
-      input.style.display = "none";
-      input.classList.add("filtertext");
-      input.classList.add("xx" + tableClass);
-      // D83D+DD0D = 1F50D = LEFT-POINTING MAGNIFYING GLASS
-      input.placeholder = "\uD83D\uDD0D";
-      input.onkeyup = ev => {
-        if(ev.key === "Escape") {
-          Utils.updateFilter(table, "");
-          Utils.hideShowTableSearchBar(startElement, tableClass);
-          return;
-        }
-        Utils.updateFilter(table, input.value);
-      };
-      table.parentElement.insertBefore(input, table);
-    }
+    const input = startElement.querySelector("input.filtertext");
+    input.onkeyup = ev => {
+      if(ev.key === "Escape") {
+        Utils.updateFilter(table, "");
+        Utils.hideShowTableSearchBar(startElement);
+        return;
+      }
+    };
+    input.oninput = ev => {
+      Utils.updateFilter(table, input.value);
+    };
+
+    table.parentElement.insertBefore(input, table);
     if(input.style.display === "none") {
       Utils.updateFilter(table, input.value);
       input.style.display = "";

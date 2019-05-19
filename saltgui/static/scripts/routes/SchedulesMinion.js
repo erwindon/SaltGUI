@@ -125,8 +125,8 @@ export class SchedulesMinionRoute extends PageRoute {
       tr.addEventListener("click", evt => this._runCommand(evt, minion, scheduleModifyCmd));
     }
 
-    Utils.showTableSortable(this.getPageElement(), "schedules");
-    Utils.makeTableSearchable(this.getPageElement(), "schedules");
+    Utils.showTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
 
     const msg = this.page_element.querySelector("div.minion-list .msg");
     txt = Utils.txtZeroOneMany(keys.length,

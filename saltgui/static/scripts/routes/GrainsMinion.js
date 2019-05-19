@@ -98,8 +98,8 @@ export class GrainsMinionRoute extends PageRoute {
       grain.addEventListener("click", evt => this._runCommand(evt, minion, "grains.setval \"" + k + "\" " + JSON.stringify(grains[k])));
     }
 
-    Utils.showTableSortable(this.getPageElement(), "grains");
-    Utils.makeTableSearchable(this.getPageElement(), "grains");
+    Utils.showTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
 
     const msg = this.page_element.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(keys.length,

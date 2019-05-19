@@ -123,8 +123,8 @@ export class BeaconsMinionRoute extends PageRoute {
       tr.addEventListener("click", evt => this._runCommand(evt, minion, "beacons.modify " + k + " " + JSON.stringify(beacons0[k])));
     }
 
-    Utils.showTableSortable(this.getPageElement(), "beacons");
-    Utils.makeTableSearchable(this.getPageElement(), "beacons");
+    Utils.showTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
 
     const msg = this.page_element.querySelector("div.minion-list .msg");
     txt = Utils.txtZeroOneMany(keys.length,

@@ -122,8 +122,8 @@ export class KeysRoute extends PageRoute {
     // remove the first comma and capitalize the first word
     msg.innerText = summary.replace(/^, no/, "No");
 
-    Utils.showTableSortable(this.getPageElement(), "minions");
-    Utils.makeTableSearchable(this.getPageElement(), "minions");
+    Utils.showTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
   }
 
   _updateOfflineMinion(container, hostname) {

@@ -140,8 +140,8 @@ export class PillarsMinionRoute extends PageRoute {
       container.tBodies[0].appendChild(pillar);
     }
 
-    Utils.showTableSortable(this.getPageElement(), "pillars");
-    Utils.makeTableSearchable(this.getPageElement(), "pillars");
+    Utils.showTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
 
     const msg = this.page_element.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(keys.length,

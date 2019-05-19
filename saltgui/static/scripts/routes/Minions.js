@@ -101,8 +101,8 @@ export class MinionsRoute extends PageRoute {
       element.addEventListener("click", evt => this._runCommand(evt, hostname, "state.apply"));
     }
 
-    Utils.showTableSortable(this.getPageElement(), "minions");
-    Utils.makeTableSearchable(this.getPageElement(), "minions");
+    Utils.showTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
 
     const msg = this.page_element.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(hostnames.length,

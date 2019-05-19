@@ -65,8 +65,8 @@ export class PillarsRoute extends PageRoute {
       element.addEventListener("click", evt => window.location.assign("pillarsminion?minion=" + encodeURIComponent(hostname)));
     }
 
-    Utils.showTableSortable(this.getPageElement(), "minions");
-    Utils.makeTableSearchable(this.getPageElement(), "minions");
+    Utils.showTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
 
     const msg = this.page_element.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(hostnames.length,

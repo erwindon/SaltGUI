@@ -218,6 +218,10 @@ table tr td:last-of-type {
   display: none;
 }
 
+.filtertext {
+  width: 100%;
+}
+
 @media (max-width: 800px) {
   .minions {
     min-width: 0;
