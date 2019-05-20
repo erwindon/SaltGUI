@@ -269,12 +269,8 @@ export class JobsRoute extends PageRoute {
       return;
     }
 
-    let str = "";
-
-    if(data.Minions.length === 1)
-      str = "1 minion";
-    else
-      str = data.Minions.length + " minions";
+    let str = Utils.txtZeroOneMany(data.Minions.length,
+      "no minions", "{0} minion", "{0} minions");
 
     const keyCount = Object.keys(data.Result).length;
     str += ", ";
@@ -282,10 +278,8 @@ export class JobsRoute extends PageRoute {
       str += "<span style='color: green'>";
     else
       str += "<span style='color: red'>";
-    if(keyCount === 1)
-      str += "1 result";
-    else
-      str += "" + keyCount + " results";
+    str += Utils.txtZeroOneMany(keyCount,
+      "no results", "{0} result", "{0} results");
     str += "</span>";
 
     const summary = { };
@@ -301,19 +295,20 @@ export class JobsRoute extends PageRoute {
     for(const key of keys) {
       str += ", ";
       if(key === "0-0") {
-        // don't show the retcode here
         str += "<span style='color: green'>";
-        str += summary[key] + " success";
-        str += "</span>";
+        str += Utils.txtZeroOneMany(summary[key], "", "{0} success", "{0} successes");
       } else if(key.startsWith("0-")) {
         str += "<span style='color: orange'>";
-        str += summary[key] + " success(" + key.substr(2) + ")";
-        str += "</span>";
+        str += Utils.txtZeroOneMany(summary[key], "", "{0} success", "{0} successes");
       } else { // if(key.startsWith("1-"))
         str += "<span style='color: red'>";
-        str += summary[key] + " failure(" + key.substr(2) + ")";
-        str += "</span>";
+        str += Utils.txtZeroOneMany(summary[key], "", "{0} failure", "{0} failures");
       }
+      if(key !== "0-0") {
+        // don't show the retcode for real success
+        str += "(" + key.substr(2) + ")";
+      }
+      str += "</span>";
     }
 
     detailsSpan.innerHTML = str;

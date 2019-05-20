@@ -1,4 +1,5 @@
 import {Output} from './Output.js';
+import {Utils} from '../Utils.js';
 
 export class OutputSaltGuiHighstate {
 
@@ -6,16 +7,11 @@ export class OutputSaltGuiHighstate {
   // the implementation from OutputHighstate is (re)used
 
   static getDurationClause(millis) {
-    if(millis === 1) {
-      return `${millis} millisecond`;
-    }
     if(millis < 1000) {
-      return `${millis} milliseconds`;
+      return Utils.txtZeroOneMany(millis,
+        "{0} milliseconds", "{0} millisecond", "{0} milliseconds");
     }
-    if(millis === 1000) {
-      return `${millis/1000} second`;
-    }
-    return `${millis/1000} seconds`;
+    return Utils.txtZeroOneMany(millis / 1000, "", "{0} second", "{0} seconds");
   }
 
   static getHighStateLabel(hostname, hostResponse) {
@@ -251,8 +247,7 @@ export class OutputSaltGuiHighstate {
     // note that the number of changes may be higher or lower
     // than the number of tasks. tasks may contribute multiple
     // changes, or tasks may have no changes.
-    if(changes === 1) line += ", " + changes + " change";
-    else if(changes) line += ", " + changes + " changes";
+    line += Utils.txtZeroOneMany(changes, "", ", {0} change", ", {0} changes");
 
     // multiple durations and significant?
     if(total > 1 && total_millis >= 10) {

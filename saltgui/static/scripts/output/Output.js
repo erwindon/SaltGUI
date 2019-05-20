@@ -5,6 +5,7 @@ import {OutputNested} from './OutputNested.js';
 import {OutputSaltGuiHighstate} from './OutputSaltGuiHighstate.js';
 import {OutputYaml} from './OutputYaml.js';
 import {ParseCommandLine} from '../ParseCommandLine.js';
+import {Utils} from '../Utils.js';
 
 // Functions to turn responses from the salt system into visual information
 // The following variations exist:
@@ -226,11 +227,8 @@ export class Output {
 
       let txt = ", ";
 
-      if(cntResponses === 1) {
-        txt += cntResponses + " response";
-      } else {
-        txt += cntResponses + " responses";
-      }
+      txt += Utils.txtZeroOneMany(cntResponses,
+        "no responses", "{0} response", "{0} responses");
 
       const summary = { };
       for(const minion in response) {
@@ -247,19 +245,21 @@ export class Output {
       const keys = Object.keys(summary).sort();
       for(const key of keys) {
         txt += ", ";
-        if(key === "0-0") {
-          // don't show the retcode here
-          txt += summary[key] + " success";
-        } else if(key.startsWith("0-")) {
-          txt += summary[key] + " success(" + key.substr(2) + ")";
+        if(key.startsWith("0-")) {
+          txt += Utils.txtZeroOneMany(summary[key],
+            "", "{0} success", "{0} successes");
         } else { // if(key.startsWith("1-"))
-          txt += summary[key] + " failure(" + key.substr(2) + ")";
+          txt += Utils.txtZeroOneMany(summary[key],
+            "", "{0} failure", "{0} failures");
+        }
+        if(key !== "0-0") {
+          // don't show the retcode for real success
+          txt += "(" + key.substr(2) + ")";
         }
       }
 
-      if(cntMinions !== cntResponses) {
-        txt = txt + ", " + (cntMinions - cntResponses) + " no response";
-      }
+      txt += Utils.txtZeroOneMany(cntMinions - cntResponses,
+        "", ", {0} no response", ", {0} no responses");
 
       if(cntResponses > 0 && cntMinions !== cntResponses) {
         txt = txt + ", " + cntMinions + " total";

@@ -138,14 +138,8 @@ export class BeaconsRoute extends PageRoute {
 
     if(typeof minion === "object") {
       const cnt = Object.keys(minion.beacons).length;
-      let beaconInfoText;
-      if(cnt === 0) {
-        beaconInfoText = "No beacons";
-      } else if(cnt === 1) {
-        beaconInfoText = cnt + " beacon";
-      } else {
-        beaconInfoText = cnt + " beacons";
-      }
+      let beaconInfoText = Utils.txtZeroOneMany(cnt,
+        "no beacons", "{0} beacon", "{0} beacons");
       if(!minion.enabled)
         beaconInfoText += " (disabled)";
       const beaconInfoTd = Route._createTd("beaconinfo", beaconInfoText);

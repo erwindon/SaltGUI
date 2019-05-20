@@ -93,13 +93,8 @@ export class PillarsRoute extends PageRoute {
     let pillarInfoText;
     if(typeof minion === "object") {
       cnt = Object.keys(minion).length;
-      if(cnt === 0) {
-        pillarInfoText = "No pillars";
-      } else if(cnt === 1) {
-        pillarInfoText = cnt + " pillar";
-      } else {
-        pillarInfoText = cnt + " pillars";
-      }
+      pillarInfoText = Utils.txtZeroOneMany(cnt,
+        "no pillars", "{0} pillar", "{0} pillars");
     } else {
       cnt = -1;
       pillarInfoText = "";

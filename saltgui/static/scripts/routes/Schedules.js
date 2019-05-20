@@ -131,7 +131,8 @@ export class SchedulesRoute extends PageRoute {
     let scheduleinfo;
     if(typeof minion === "object") {
       cnt = Object.keys(minion.schedules).length;
-      scheduleinfo = cnt + " schedule" + (cnt === 1 ? "" : "s");
+      scheduleinfo = Utils.txtZeroOneMany(cnt,
+        "no schedules", "{0} schedule", "{0} schedules");
       if(!minion.enabled)
         scheduleinfo += " (disabled)";
     } else {
