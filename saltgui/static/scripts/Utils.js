@@ -88,6 +88,12 @@ export class Utils {
     table.parentElement.insertBefore(button_search, table);
   }
 
+  static addTableHelp(startElement, txt) {
+    const button_help = startElement.querySelector("#help");
+    button_help.classList.add("search");
+    Utils.addToolTip(button_help, txt);
+  }
+
   static hideShowTableSearchBar(startElement) {
     // remove all highlights
     const hilitor = new Hilitor(startElement, "table tbody");

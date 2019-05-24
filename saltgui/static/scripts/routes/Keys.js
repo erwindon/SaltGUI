@@ -105,6 +105,7 @@ export class KeysRoute extends PageRoute {
 
     this.updateTableSummary(list);
 
+    Utils.addTableHelp(this.getPageElement(), "The content of this page is\nautomatically refreshed.");
     Utils.showTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement());
   }
