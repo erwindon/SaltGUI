@@ -592,6 +592,10 @@ export class PageRoute extends Route {
 
     table.appendChild(tr);
 
+    // hide the "(loading)" message
+    const msgSpan = table.parentElement.parentElement.querySelector(".msg");
+    if(msgSpan !== null) msgSpan.style.display = "none";
+
     return true;
   }
 }
