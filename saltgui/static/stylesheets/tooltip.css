@@ -13,6 +13,7 @@
   border-right: 5px solid transparent;
   border-left: 5px solid transparent;
   position: absolute;
+  white-space: pre;
 
   /* float the tooltip above its target */
   z-index: 1;

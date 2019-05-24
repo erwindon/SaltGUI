@@ -57,9 +57,9 @@ export class KeysRoute extends PageRoute {
       for(const hostname of Object.keys(hosts)) {
         const item = this.page_element.querySelector("#" + hostname + " .os");
         if(item) {
-          // remove td.os for accepted minions and add td.fingerprint
-          item.parentElement.insertBefore(Route._createTd("fingerprint", ""), item);
-          item.parentElement.removeChild(item);
+          // remove td.os for known minions and add td.fingerprint
+          item.classList.remove("os");
+          item.classList.add("fingerprint");
         }
 
         // update td.fingerprint with fingerprint value
@@ -90,13 +90,7 @@ export class KeysRoute extends PageRoute {
 
     const hostnames_accepted = keys.minions.sort();
     for(const hostname of hostnames_accepted) {
-      this._addMinion(list, hostname, 1);
-
-      // preliminary dropdown menu
-      const element = document.getElementById(hostname);
-      const menu = new DropDownMenu(element);
-      this._addMenuItemRejectKey(menu, hostname, " include_accepted=true");
-      this._addMenuItemDeleteKey(menu, hostname, "");
+      this._addAcceptedMinion(list, hostname);
     }
 
     const hostnames_denied = keys.minions_denied.sort();
@@ -109,32 +103,48 @@ export class KeysRoute extends PageRoute {
       this._addRejectedMinion(list, hostname);
     }
 
-    let summary = "";
-    summary += ", " + Utils.txtZeroOneMany(hostnames_pre.length,
-      "no unaccepted keys", "{0} unaccepted key", "{0} unaccepted keys");
-    summary += ", " + Utils.txtZeroOneMany(hostnames_accepted.length,
-      "no accepted keys", "{0} accepted key", "{0} accepted keys");
-    summary += ", " + Utils.txtZeroOneMany(hostnames_denied.length,
-      "no denied keys", "{0} denied key", "{0} denied keys");
-    summary += ", " + Utils.txtZeroOneMany(hostnames_rejected.length,
-      "no rejected keys", "{0} rejected key", "{0} rejected keys");
-    const msg = this.getPageElement().querySelector(".minion-list .msg");
-    // remove the first comma and capitalize the first word
-    msg.innerText = summary.replace(/^, no/, "No");
+    this.updateTableSummary(list);
 
+    Utils.addTableHelp(this.getPageElement(), "The content of this page is\nautomatically refreshed.");
     Utils.showTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement());
   }
 
-  _updateOfflineMinion(container, hostname) {
-    super._updateOfflineMinion(container, hostname);
+  updateTableSummary(list) {
+    const cnt = { };
+    cnt["unaccepted"] = 0;
+    cnt["accepted"] = 0;
+    cnt["denied"] = 0;
+    cnt["rejected"] = 0;
+    const tbody = list.querySelector("table tbody");
+    for(const tr of tbody.children) {
+      const statusText = tr.querySelector("td.status").innerText;  
+      if(cnt[statusText] === undefined) cnt[statusText] = 0;
+      cnt[statusText]++;
+    }
 
+    let summary = "";
+    for(const key of Object.keys(cnt).sort()) {
+      summary += ", " + Utils.txtZeroOneMany(cnt[key],
+        "no " + key + " keys",
+        "{0} " + key + " key",
+        "{0} " + key + " keys");
+    }
+
+    // remove the first comma
+    summary = summary.replace(/^, /, "");
+    // capitalize the first word (can only be "no")
+    summary = summary.replace(/^no/, "No");
+
+    const msg = this.getPageElement().querySelector(".minion-list .msg");
+    msg.innerText = summary;
+  }
+
+  _addAcceptedMinion(container, hostname) {
+    this._addMinion(container, hostname, 1);
+
+    // preliminary dropdown menu
     const element = container.querySelector("#" + hostname);
-
-    // force same columns on all rows
-    element.appendChild(Route._createTd("fingerprint", ""));
-
-    // final dropdownmenu
     const menu = new DropDownMenu(element);
     this._addMenuItemRejectKey(menu, hostname, " include_accepted=true");
     this._addMenuItemDeleteKey(menu, hostname, "");
@@ -150,7 +160,8 @@ export class KeysRoute extends PageRoute {
     element.appendChild(rejected);
 
     // force same columns on all rows
-    element.appendChild(Route._createTd("fingerprint", ""));
+    // do not use class "fingerprint" yet
+    element.appendChild(Route._createTd("os", "loading..."));
 
     // final dropdownmenu
     const menu = new DropDownMenu(element);
@@ -170,7 +181,8 @@ export class KeysRoute extends PageRoute {
     element.appendChild(denied);
 
     // force same columns on all rows
-    element.appendChild(Route._createTd("fingerprint", ""));
+    // do not use class "fingerprint" yet
+    element.appendChild(Route._createTd("os", "loading..."));
 
     // final dropdownmenu
     const menu = new DropDownMenu(element);
@@ -191,7 +203,8 @@ export class KeysRoute extends PageRoute {
     element.appendChild(pre);
 
     // force same columns on all rows
-    element.appendChild(Route._createTd("fingerprint", ""));
+    // do not use class "fingerprint" yet
+    element.appendChild(Route._createTd("os", "loading..."));
 
     // final dropdownmenu
     const menu = new DropDownMenu(element);
@@ -218,5 +231,63 @@ export class KeysRoute extends PageRoute {
     menu.addMenuItem("Delete&nbsp;key...", function(evt) {
       this._runCommand(evt, hostname, "wheel.key.delete" + extra);
     }.bind(this));
+  }
+
+  handleSaltAuthEvent(tag, data) {
+    const page = document.getElementById("page_keys");
+    const list = page.querySelector("#minions");
+    const tr = page.querySelector("table tr#" + data.id);
+    if(tr) {
+      const status = tr.querySelector(".status");
+      // drop all other classes (accepted, rejected, etc)
+      if(data.act === "accept") {
+        status.className = "status";
+        status.classList.add("accepted");
+        status.innerText = "accepted";
+      } else if(data.act === "reject") {
+        status.className = "status";
+        status.classList.add("rejected");
+        status.innerText = "rejected";
+      } else if(data.act === "pend") {
+        status.className = "status";
+        status.classList.add("unaccepted");
+        status.innerText = "unaccepted";
+      } else if(data.act === "delete") {
+        // "-1" due to the <tr> for the header that is inside <thead>
+        tr.parentNode.deleteRow(tr.rowIndex - 1);
+      } else {
+        // unknown status
+        // do not update screen
+      }
+      // keep the fingerprint
+    } else {
+      if(data.act === "pend") {
+        this._addPreMinion(list, data.id);
+        Utils.tableReSort(this.getPageElement());
+      } else if(data.act === "accept") {
+        this._addAcceptedMinion(list, data.id);
+        Utils.tableReSort(this.getPageElement());
+      } else if(data.act === "reject") {
+        this._addRejectedMinion(list, data.id);
+        Utils.tableReSort(this.getPageElement());
+      } else if(data.act === "delete") {
+        // delete of an unknown minion, never mind
+      } else {
+        // unknown status
+        // do not update screen
+      }
+      // we do not have the fingerprint yet
+      // pre-fill with a dummy value and then retrieve the actual value
+      const fingerprintSpan = page.querySelector("table tr#" + data.id + " .fingerprint");
+      if(fingerprintSpan) fingerprintSpan.innerText = "(refresh page for fingerprint)";
+      const wheelKeyFingerPromise = this.router.api.getWheelKeyFinger(data.id);
+      wheelKeyFingerPromise.then(this._handleWheelKeyFinger);
+    }
+
+    this.updateTableSummary(list);
+  }
+
+  handleSaltKeyEvent(tag, data) {
+    this.handleSaltAuthEvent(tag, data);
   }
 }

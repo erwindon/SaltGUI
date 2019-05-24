@@ -18,14 +18,15 @@ import {TemplatesRoute} from './routes/Templates.js';
 export class Router {
 
   constructor() {
-    this.api = new API();
+    this.api = new API(this);
     this.commandbox = new CommandBox(this.api);
     this.currentRoute = undefined;
     this.routes = [];
 
     this.registerRoute(new LoginRoute(this));
     this.registerRoute(new MinionsRoute(this));
-    this.registerRoute(new KeysRoute(this));
+    this.keysRoute = new KeysRoute(this);
+    this.registerRoute(this.keysRoute);
     this.registerRoute(new GrainsRoute(this));
     this.registerRoute(new GrainsMinionRoute(this));
     this.registerRoute(new SchedulesRoute(this));
@@ -33,7 +34,8 @@ export class Router {
     this.registerRoute(new PillarsRoute(this));
     this.registerRoute(new PillarsMinionRoute(this));
     this.registerRoute(new BeaconsRoute(this));
-    this.registerRoute(new BeaconsMinionRoute(this));
+    this.beaconsMinionRoute = new BeaconsMinionRoute(this);
+    this.registerRoute(this.beaconsMinionRoute);
     this.registerRoute(new JobRoute(this));
     this.registerRoute(new JobsRoute(this));
     this.registerRoute(new TemplatesRoute(this));

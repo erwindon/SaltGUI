@@ -51,6 +51,12 @@ export class Utils {
     }
   }
 
+  static tableReSort(startElement) {
+    const th = startElement.querySelector("table th");
+    sorttable.innerSortFunction.apply(th, []);
+    sorttable.innerSortFunction.apply(th, []);
+  }
+
   static addErrorToTableCell(td, errorMessage) {
     const span = document.createElement("span");
     span.innerText = "(error)";
@@ -80,6 +86,12 @@ export class Utils {
     };
     const table = startElement.querySelector("table");
     table.parentElement.insertBefore(button_search, table);
+  }
+
+  static addTableHelp(startElement, txt) {
+    const button_help = startElement.querySelector("#help");
+    button_help.classList.add("search");
+    Utils.addToolTip(button_help, txt);
   }
 
   static hideShowTableSearchBar(startElement) {

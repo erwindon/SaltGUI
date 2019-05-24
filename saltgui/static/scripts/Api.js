@@ -1,5 +1,3 @@
-import {BeaconsMinionRoute} from './routes/BeaconsMinion.js';
-
 export class HTTPError extends Error {
   constructor(status, message) {
     super();
@@ -9,11 +7,11 @@ export class HTTPError extends Error {
 }
 
 export class API {
-  constructor(apiurl="") {
+  constructor(router, apiurl="") {
     this.APIURL = apiurl;
 
     //this.getEvents = this.getEvents.bind(this);
-    this.getEvents();
+    this.getEvents(router);
   }
 
   isAuthenticated() {
@@ -165,12 +163,16 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getWheelKeyFinger() {
+  getWheelKeyFinger(minion) {
     const params = {
       client: "wheel",
-      fun: "key.finger",
-      match: "*"
+      fun: "key.finger"
     };
+    if(minion) {
+      params.match = minion;
+    } else {
+      params.match = "*";
+    }
     return this.apiRequest("POST", "/", params);
   }
 
@@ -207,9 +209,10 @@ export class API {
       });
   }
 
-  getEvents() {
+  getEvents(router) {
     const token = window.sessionStorage.getItem("token");
     if(!token) return;
+
     const source = new EventSource('/events?token=' + token);
     source.onopen = function() {
       //console.info('Listening for events...');
@@ -231,7 +234,17 @@ export class API {
       // salt/beacon/<minion>/<beacon>/
       if(tag.startsWith("salt/beacon/"))
       {
-        BeaconsMinionRoute.handleEvent(tag, data);
+        // new beacon-value is received
+        router.beaconsMinionRoute.handleSaltBeaconEvent(tag, data);
+      }
+      else if(tag === "salt/auth")
+      {
+        // new key has been received
+        router.keysRoute.handleSaltAuthEvent(tag, data);
+      }
+      else if(tag === "salt/key")
+      {
+        router.keysRoute.handleSaltKeyEvent(tag, data);
       }
     }.bind(this);
   }

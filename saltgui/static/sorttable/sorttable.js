@@ -91,7 +91,7 @@ sorttable = {
 	      headrow[i].sorttable_tbody = table.tBodies[0];
 	      dean_addEvent(headrow[i],"click", sorttable.innerSortFunction = function(e) {
 
-          if (this.className.search(/\bsorttable_sorted\b/) != -1) {
+          if (false && this.className.search(/\bsorttable_sorted\b/) != -1) {
             // if we're already sorted by this column, just
             // reverse the table, which is quicker
             sorttable.reverse(this.sorttable_tbody);
@@ -105,7 +105,7 @@ sorttable = {
             this.appendChild(sortrevind);
             return;
           }
-          if (this.className.search(/\bsorttable_sorted_reverse\b/) != -1) {
+          if (false && this.className.search(/\bsorttable_sorted_reverse\b/) != -1) {
             // if we're already sorted by this column in reverse, just
             // re-reverse the table, which is quicker
             sorttable.reverse(this.sorttable_tbody);
@@ -133,12 +133,22 @@ sorttable = {
           sortrevind = document.getElementById('sorttable_sortrevind');
           if (sortrevind) { sortrevind.parentNode.removeChild(sortrevind); }
 
-          this.className += ' sorttable_sorted';
-          sortfwdind = document.createElement('span');
-          sortfwdind.id = "sorttable_sortfwdind";
-          // u2193 = DOWNWARDS ARROW
-          sortfwdind.innerHTML = stIsIE ? '&nbsp<font face="webdings">6</font>' : '&nbsp;\u2193';
-          this.appendChild(sortfwdind);
+          const reverse = sortfwdind !== null;
+          if(sortfwdind) {
+            this.className += ' sorttable_sorted_reverse';
+            sortrevind = document.createElement('span');
+            sortrevind.id = "sorttable_sortrevind";
+            // u2191 = UPWARDS ARROW
+            sortrevind.innerHTML = stIsIE ? '&nbsp;<font face="webdings">5</font>' : '&nbsp;\u2191';
+            this.appendChild(sortrevind);
+          } else {
+            this.className += ' sorttable_sorted';
+            sortfwdind = document.createElement('span');
+            sortfwdind.id = "sorttable_sortfwdind";
+            // u2193 = DOWNWARDS ARROW
+            sortfwdind.innerHTML = stIsIE ? '&nbsp;<font face="webdings">6</font>' : '&nbsp;\u2193';
+            this.appendChild(sortfwdind);
+          }
 
 	        // build an array to sort. This is a Schwartzian transform thing,
 	        // i.e., we "decorate" each row with the actual sort key,
@@ -154,6 +164,7 @@ sorttable = {
 	        //sorttable.shaker_sort(row_array, this.sorttable_sortfunction);
 	        /* and comment out this one */
 	        row_array.sort(this.sorttable_sortfunction);
+          if(reverse) row_array.reverse();
 
 	        tb = this.sorttable_tbody;
 	        for (var j=0; j<row_array.length; j++) {
