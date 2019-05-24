@@ -27,16 +27,31 @@ export class PageRoute extends Route {
 
     const ipNumberPrefixes = this._getIpNumberPrefixes(minions);
 
+    let cntOnline = 0;
+    let cntOffline = 0;
     for(const hostname of hostnames) {
       const minion_info = minions[hostname];
 
       // minions can be offline, then the info will be false
       if(minion_info === false) {
         this._updateOfflineMinion(list, hostname);
+        cntOffline++;
       } else {
         this._updateMinion(list, minion_info, hostname, minions);
+        cntOnline++;
       }
     }
+
+    const msg = this.page_element.querySelector("div.minion-list .msg");
+    let txt = Utils.txtZeroOneMany(hostnames.length,
+      "No minions", "{0} minion", "{0} minions");
+    if(cntOnline !== hostnames.length)
+      txt += ", " + Utils.txtZeroOneMany(cntOnline,
+        "none online", "{0} online", "{0} online");
+    if(cntOffline > 0)
+      txt += ", " + Utils.txtZeroOneMany(cntOffline,
+        "none offline", "{0} offline", "{0} offline");
+    msg.innerText = txt;
   }
 
   _getElement(container, id) {
