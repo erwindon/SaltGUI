@@ -218,8 +218,6 @@ pre.output {
   padding: 10px;
   border-radius: 2px;
   white-space: pre-wrap;
-  max-width: calc(100% - 10px);
-  width: calc(100% - 10px);
 }
 
 .run-command pre.output {
