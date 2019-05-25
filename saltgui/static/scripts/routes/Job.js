@@ -50,6 +50,7 @@ export class JobRoute extends Route {
     if(typeof data !== "object") {
       output.innerText = "";
       Utils.addErrorToTableCell(output, data);
+      this.getPageElement().querySelector(".function").innerText = "ERROR";
       return;
     }
 
