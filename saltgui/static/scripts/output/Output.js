@@ -234,6 +234,7 @@ export class Output {
       for(const minion in response) {
         const result = response[minion];
         // when full_return is not used, the result is simpler
+        if(result === null) continue;
         if(typeof result !== "object") continue;
         if(!("success" in result)) continue;
         // use keys that can conveniently be sorted
