@@ -55,6 +55,11 @@ export class BeaconsMinionRoute extends PageRoute {
 
     const beacons = BeaconsRoute._fixMinion(beacons0);
 
+    const title = document.getElementById("beaconsminion_title");
+    let txt = "Beacons on " + minion;
+    if(beacons && beacons.enabled === false) txt += " (disabled)";
+    title.innerText = txt;
+
     if(beacons === undefined) {
       const msg = this.page_element.querySelector("div.minion-list .msg");
       msg.innerText = "Unknown minion '" + minion + "'";
@@ -65,11 +70,6 @@ export class BeaconsMinionRoute extends PageRoute {
       msg.innerText = "Minion '" + minion + "' did not answer";
       return;
     }
-
-    const title = document.getElementById("beaconsminion_title");
-    let txt = "Beacons on " + minion;
-    if(beacons.enabled === false) txt += " (disabled)";
-    title.innerText = txt;
 
     const menu = new DropDownMenu(page);
     this._addMenuItemBeaconsDisableWhenNeeded(menu, minion, beacons);

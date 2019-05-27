@@ -58,6 +58,11 @@ export class SchedulesMinionRoute extends PageRoute {
     let schedules = data.return[0][minion];
     schedules = SchedulesRoute._fixMinion(schedules);
 
+    const title = document.getElementById("schedulesminion_title");
+    let txt = "Schedules on " + minion;
+    if(schedules && schedules.enabled === false) txt += " (disabled)";
+    title.innerText = txt;
+
     if(schedules === undefined) {
       const msg = this.page_element.querySelector("div.minion-list .msg");
       msg.innerText = "Unknown minion '" + minion + "'";
@@ -68,11 +73,6 @@ export class SchedulesMinionRoute extends PageRoute {
       msg.innerText = "Minion '" + minion + "' did not answer";
       return;
     }
-
-    const title = document.getElementById("schedulesminion_title");
-    let txt = "Schedules on " + minion;
-    if(schedules.enabled === false) txt += " (disabled)";
-    title.innerText = txt;
 
     const menu = new DropDownMenu(page);
     this._addMenuItemEnableSchedulerWhenNeeded(menu, minion, schedules);
