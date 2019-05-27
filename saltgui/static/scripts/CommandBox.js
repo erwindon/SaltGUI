@@ -182,6 +182,10 @@ export class CommandBox {
       }
     }
 
+    // give another field (which does not have a list) focus first
+    // because when a field gets focus 2 times in a row,
+    // the dropdown box opens, and we don't want that...
+    document.querySelector(".run-command #command").focus();
     document.querySelector(".run-command #target").focus();
 
     evt.stopPropagation();
