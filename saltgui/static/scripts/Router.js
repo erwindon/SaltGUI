@@ -186,10 +186,14 @@ export class Router {
     if(elem1) {
       elem1.classList.add("menu_item_active");
       // activate also parent menu item if child element is selected
-      if(elem1.id === "button_pillars1" || elem1.id === "button_schedules1" || elem1.id === "button_grains1" || elem1.id === "button_beacons1") {
+      if(elem1.id === "button_pillars1" ||
+         elem1.id === "button_schedules1" ||
+         elem1.id === "button_grains1" ||
+         elem1.id === "button_beacons1") {
         minionMenuItem.classList.add("menu_item_active");
       }
-      if(elem1.id === "button_jobs1" || elem1.id === "button_templates1") {
+      if(elem1.id === "button_jobs1" ||
+         elem1.id === "button_templates1") {
         jobsMenuItem.classList.add("menu_item_active");
       }
     }
