@@ -63,13 +63,13 @@ export class PillarsMinionRoute extends PageRoute {
     const pillars = data.return[0][minion];
 
     if(pillars === undefined) {
-      const noPillarsMsg = Route._createDiv("msg", "Unknown minion '" + minion + "'");
-      container.tBodies[0].appendChild(noPillarsMsg);
+      const msg = this.page_element.querySelector("div.minion-list .msg");
+      msg.innerText = "Unknown minion '" + minion + "'";
       return;
     }
     if(pillars === false) {
-      const noPillarsMsg = Route._createDiv("msg", "Minion '" + minion + "' did not answer");
-      container.tBodies[0].appendChild(noPillarsMsg);
+      const msg = this.page_element.querySelector("div.minion-list .msg");
+      msg.innerText = "Minion '" + minion + "' did not answer";
       return;
     }
 

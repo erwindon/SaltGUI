@@ -64,13 +64,13 @@ export class GrainsMinionRoute extends PageRoute {
     const grains = data.return[0][minion];
 
     if(grains === undefined) {
-      const noGrainsMsg = Route._createDiv("msg", "Unknown minion '" + minion + "'");
-      container.tBodies[0].appendChild(noGrainsMsg);
+      const msg = this.page_element.querySelector("div.minion-list .msg");
+      msg.innerText = "Unknown minion '" + minion + "'";
       return;
     }
     if(grains === false) {
-      const noGrainsMsg = Route._createDiv("msg", "Minion '" + minion + "' did not answer");
-      container.tBodies[0].appendChild(noGrainsMsg);
+      const msg = this.page_element.querySelector("div.minion-list .msg");
+      msg.innerText = "Minion '" + minion + "' did not answer";
       return;
     }
 

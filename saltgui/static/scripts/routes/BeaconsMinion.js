@@ -56,13 +56,13 @@ export class BeaconsMinionRoute extends PageRoute {
     const beacons = BeaconsRoute._fixMinion(beacons0);
 
     if(beacons === undefined) {
-      const noBeaconsMsg = Route._createDiv("msg", "Unknown minion '" + minion + "'");
-      container.tBodies[0].appendChild(noBeaconsMsg);
+      const msg = this.page_element.querySelector("div.minion-list .msg");
+      msg.innerText = "Unknown minion '" + minion + "'";
       return;
     }
     if(beacons === false) {
-      const noBeaconsMsg = Route._createDiv("msg", "Minion '" + minion + "' did not answer");
-      container.tBodies[0].appendChild(noBeaconsMsg);
+      const msg = this.page_element.querySelector("div.minion-list .msg");
+      msg.innerText = "Minion '" + minion + "' did not answer";
       return;
     }
 
