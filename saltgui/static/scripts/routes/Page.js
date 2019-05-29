@@ -461,9 +461,9 @@ export class PageRoute extends Route {
 
       // then add the operational statistics
       let statusText = "";
-      if(job.Running.length > 0)
+      if(job.Running && job.Running.length > 0)
         statusText = statusText + ", " + job.Running.length + " running";
-      if(job.Returned.length > 0)
+      if(job.Returned && job.Returned.length > 0)
         statusText = statusText + ", " + job.Returned.length + " returned";
 
       const statusSpan = this.page_element.querySelector("table.jobs td#job" + k + " span.status");
