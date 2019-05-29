@@ -175,4 +175,18 @@ export class Utils {
     txt = txt.replace("{0}", cnt);
     return txt;
   }
+
+  // MinionIds cannot directly be used as IDs for HTML elements
+  // the id may contain characters that are not allowed in an ID
+  // btoa is the base64 encoder
+  static getIdFromMinionId(minionId) {
+    const patEqualSigns = /==*/;
+    return "m" + btoa(minionId).replace(patEqualSigns, "");
+  }
+
+  // JobIds are in the format 20190529175411210984
+  // so just adding a prefix is sufficient
+  static getIdFromJobId(jobId) {
+    return "j" + jobId;
+  }
 }

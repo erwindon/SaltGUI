@@ -75,7 +75,7 @@ export class PageRoute extends Route {
   }
 
   _updateOfflineMinion(container, hostname) {
-    const element = this._getElement(container, hostname);
+    const element = this._getElement(container, Utils.getIdFromMinionId(hostname));
 
     element.appendChild(Route._createTd("hostname", hostname));
 
@@ -225,7 +225,7 @@ export class PageRoute extends Route {
 
   _updateMinion(container, minion, hostname, prefixes) {
 
-    const element = this._getElement(container, hostname);
+    const element = this._getElement(container, Utils.getIdFromMinionId(hostname));
 
     element.appendChild(Route._createTd("hostname", hostname));
 
@@ -282,14 +282,14 @@ export class PageRoute extends Route {
 
   _addMinion(container, hostname, freeColumns = 0) {
 
-    let element = container.querySelector("#" + hostname);
+    let element = container.querySelector("#" + Utils.getIdFromMinionId(hostname));
     if(element !== null) {
       // minion already on screen...
       return;
     }
 
     element = document.createElement("tr");
-    element.id = hostname;
+    element.id = Utils.getIdFromMinionId(hostname);
 
     element.appendChild(Route._createTd("hostname", hostname));
 
@@ -479,7 +479,7 @@ export class PageRoute extends Route {
     const tr = document.createElement("tr");
 
     const td = document.createElement("td");
-    td.id = "job" + job.id;
+    td.id = Utils.getIdFromJobId(job.id);
 
     let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
     const maxTextLength = 50;

@@ -401,7 +401,7 @@ export class Output {
 
       // compose the actual output
       const div = document.createElement("div");
-      div.id = hostname;
+      div.id = Utils.getIdFromMinionId(hostname);
 
       div.append(hostLabel);
 

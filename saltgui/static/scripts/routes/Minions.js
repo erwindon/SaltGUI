@@ -94,7 +94,7 @@ export class MinionsRoute extends PageRoute {
       this._addMinion(list, hostname, 1);
 
       // preliminary dropdown menu
-      const element = list.querySelector("#" + hostname);
+      const element = list.querySelector("#" + Utils.getIdFromMinionId(hostname));
       const menu = new DropDownMenu(element);
       this._addMenuItemStateApply(menu, hostname);
 
@@ -113,7 +113,7 @@ export class MinionsRoute extends PageRoute {
   _updateOfflineMinion(container, hostname) {
     super._updateOfflineMinion(container, hostname);
 
-    const element = container.querySelector("#" + hostname);
+    const element = container.querySelector("#" + Utils.getIdFromMinionId(hostname));
 
     // force same columns on all rows
     element.appendChild(Route._createTd("saltversion", ""));
@@ -124,7 +124,7 @@ export class MinionsRoute extends PageRoute {
   _updateMinion(container, minion, hostname, allMinions) {
     super._updateMinion(container, minion, hostname, allMinions);
 
-    const element = container.querySelector("#" + hostname);
+    const element = container.querySelector("#" + Utils.getIdFromMinionId(hostname));
     const menu = new DropDownMenu(element);
     this._addMenuItemStateApply(menu, hostname);
 

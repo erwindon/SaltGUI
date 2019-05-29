@@ -55,7 +55,7 @@ export class KeysRoute extends PageRoute {
       if(property === "local") continue;
       const hosts = keys[property];
       for(const hostname of Object.keys(hosts)) {
-        const item = this.page_element.querySelector("#" + hostname + " .os");
+        const item = this.page_element.querySelector("#" + Utils.getIdFromMinionId(hostname) + " .os");
         if(item) {
           // remove td.os for known minions and add td.fingerprint
           item.classList.remove("os");
@@ -63,7 +63,7 @@ export class KeysRoute extends PageRoute {
         }
 
         // update td.fingerprint with fingerprint value
-        const fingerprintElement = this.page_element.querySelector("#" + hostname + " .fingerprint");
+        const fingerprintElement = this.page_element.querySelector("#" + Utils.getIdFromMinionId(hostname) + " .fingerprint");
         const fingerprint = hosts[hostname];
         if(!fingerprintElement) continue;
         if(!fingerprint.match(this.fingerprintPattern)) {
@@ -144,14 +144,14 @@ export class KeysRoute extends PageRoute {
     this._addMinion(container, hostname, 1);
 
     // preliminary dropdown menu
-    const element = container.querySelector("#" + hostname);
+    const element = container.querySelector("#" + Utils.getIdFromMinionId(hostname));
     const menu = new DropDownMenu(element);
     this._addMenuItemRejectKey(menu, hostname, " include_accepted=true");
     this._addMenuItemDeleteKey(menu, hostname, "");
   }
 
   _addRejectedMinion(container, hostname) {
-    const element = this._getElement(container, hostname);
+    const element = this._getElement(container, Utils.getIdFromMinionId(hostname));
 
     element.appendChild(Route._createTd("hostname", hostname));
 
@@ -172,7 +172,7 @@ export class KeysRoute extends PageRoute {
   }
 
   _addDeniedMinion(container, hostname) {
-    const element = this._getElement(container, hostname);
+    const element = this._getElement(container, Utils.getIdFromMinionId(hostname));
 
     element.appendChild(Route._createTd("hostname", hostname));
 
@@ -194,7 +194,7 @@ export class KeysRoute extends PageRoute {
   }
 
   _addPreMinion(container, hostname) {
-    const element = this._getElement(container, hostname);
+    const element = this._getElement(container, Utils.getIdFromMinionId(hostname));
 
     element.appendChild(Route._createTd("hostname", hostname));
 
@@ -236,7 +236,7 @@ export class KeysRoute extends PageRoute {
   handleSaltAuthEvent(tag, data) {
     const page = document.getElementById("page_keys");
     const list = page.querySelector("#minions");
-    const tr = page.querySelector("table tr#" + data.id);
+    const tr = page.querySelector("table tr#" + Utils.getIdFromMinionId(data.id));
     if(tr) {
       const status = tr.querySelector(".status");
       // drop all other classes (accepted, rejected, etc)
@@ -278,7 +278,7 @@ export class KeysRoute extends PageRoute {
       }
       // we do not have the fingerprint yet
       // pre-fill with a dummy value and then retrieve the actual value
-      const fingerprintSpan = page.querySelector("table tr#" + data.id + " .fingerprint");
+      const fingerprintSpan = page.querySelector("table tr#" + Utils.getIdFromMinionId(data.id) + " .fingerprint");
       if(fingerprintSpan) fingerprintSpan.innerText = "(refresh page for fingerprint)";
       const wheelKeyFingerPromise = this.router.api.getWheelKeyFinger(data.id);
       wheelKeyFingerPromise.then(this._handleWheelKeyFinger);

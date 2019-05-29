@@ -84,9 +84,9 @@ export class JobsRoute extends PageRoute {
 
   _addJob(container, job) {
     const tr = document.createElement("tr");
-    tr.id = "job" + job.id;
+    tr.id = Utils.getIdFromJobId(job.id);
     const jidText = job.id;
-    tr.appendChild(Route._createTd("job" + job.id, jidText));
+    tr.appendChild(Route._createTd(Utils.getIdFromJobId(job.id), jidText));
 
     let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
     const maxTextLength = 50;
