@@ -191,6 +191,20 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.15.0 (2019-06-02)
+- choose number of jobs visible on Jobs page (erwindon, thx elipsion)
+- fixed problems with element ids (erwindon, thx lordfolken)
+- show beacon values (erwindon)
+- summary line for all pages (erwindon)
+- do not claim events after session timeout (erwindon)
+- properly handle details refresh of jobs that have now expired (erwindon)
+- add standard texts to table filter textfield (erwindon)
+- do not use getElementById for non-unique elements (erwindon)
+- use standard function for texts that apply 0, 1 or many times (erwindon)
+- use asynchronous updates for Keys page (erwindon)
+- prevent crash on NULL output (erwindon)
+- small layout fixes (erwindon)
+
 ## 1.14.0 (2019-05-14)
 - implemented management of beacons (erwindon)
 - added search function for tables (erwindon)
