@@ -466,7 +466,7 @@ export class PageRoute extends Route {
       if(job.Returned && job.Returned.length > 0)
         statusText = statusText + ", " + job.Returned.length + " returned";
 
-      const statusSpan = this.page_element.querySelector("table.jobs td#job" + k + " span.status");
+      const statusSpan = this.page_element.querySelector("table.jobs td#" + Utils.getIdFromJobId(k) + " span.status");
       // the field may not (yet) be on the screen
       if(!statusSpan) continue;
 

@@ -202,7 +202,7 @@ export class JobsRoute extends PageRoute {
       const job = jobs[k];
 
       let targetText = "";
-      const targetField = this.page_element.querySelector(".jobs tr#job" + k + " td.status span");
+      const targetField = this.page_element.querySelector(".jobs tr#" + Utils.getIdFromJobId(k) + " td.status span");
       const maxTextLength = 50;
       if(targetText.length > maxTextLength) {
         // prevent column becoming too wide
@@ -249,7 +249,7 @@ export class JobsRoute extends PageRoute {
 
   _handleRunnerJobsListJob(jobid, data) {
 
-    const detailsSpan = this.page_element.querySelector(".jobs #job" + jobid + " td.details span");
+    const detailsSpan = this.page_element.querySelector(".jobs #" + Utils.getIdFromJobId(jobid) + " td.details span");
     if(!detailsSpan) return;
 
     if(typeof data !== "object") {
