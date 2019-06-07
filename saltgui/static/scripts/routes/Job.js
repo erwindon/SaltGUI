@@ -263,7 +263,7 @@ export class JobRoute extends Route {
       // each minionInfo is like {'minion': pid}
       for(const minion in minionInfo) {
         const pid = minionInfo[minion];
-        const noResponseSpan = this.getPageElement().querySelector("pre.output div#" + minion + " span.noresponse");
+        const noResponseSpan = this.getPageElement().querySelector("pre.output div#" + Utils.getIdFromMinionId(minion) + " span.noresponse");
         if(!noResponseSpan) continue;
 
         // show that this minion is still active on the request

@@ -191,6 +191,9 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.15.2 (2019-06-07)
+- Fixed problem with job status fields not updating since 1.15.0 (erwindon)
+
 ## 1.15.1 (2019-06-04)
 - Fixed problem with job status fields not updating since 1.15.0 (erwindon)
 
