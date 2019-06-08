@@ -177,7 +177,7 @@ export class Output {
 
   // the orchestrator for the output
   // determines what format should be used and uses that
-  static addResponseOutput(outputContainer, minions, response, command, initialStatus) {
+  static addResponseOutput(outputContainer, pJobId, minions, response, command, initialStatus) {
 
     // remove old content
     outputContainer.innerText = "";
@@ -373,7 +373,7 @@ export class Output {
       // enhanced highstate display
       if(!fndRepresentation && isHighStateOutput && Output.isOutputFormatAllowed("saltguihighstate")) {
         hostLabel = OutputSaltGuiHighstate.getHighStateLabel(hostname, hostResponse);
-        hostOutput = OutputSaltGuiHighstate.getHighStateOutput(hostResponse);
+        hostOutput = OutputSaltGuiHighstate.getHighStateOutput(hostname, pJobId, hostResponse);
         hostMultiLine = true;
         fndRepresentation = true;
       }

@@ -131,7 +131,8 @@ export class CommandBox {
     let minions = Object.keys(response);
     if(command.startsWith("runners.")) minions = ["RUNNER"];
     if(command.startsWith("wheel.")) minions = ["WHEEL"];
-    Output.addResponseOutput(outputContainer, minions, response, command, "done");
+    // do not suppress the jid (even when we can)
+    Output.addResponseOutput(outputContainer, null, minions, response, command, "done");
     const button = document.querySelector(".run-command input[type='submit']");
     button.disabled = false;
   }

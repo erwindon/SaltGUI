@@ -107,7 +107,7 @@ export class OutputSaltGuiHighstate {
     return changes;
   }
 
-  static getHighStateOutput(hostResponse) {
+  static getHighStateOutput(pMinionId, pJobId, hostResponse) {
 
     // The tasks are in an (unordered) object with uninteresting keys
     // convert it to an array that is in execution order
@@ -225,6 +225,8 @@ export class OutputSaltGuiHighstate {
         if(key === "pchanges") continue; // ignored, also ignored by cli
         if(key === "result") continue; // handled
         if(key === "start_time") continue; // handled
+        if(key === "jid" && item === pJobId) continue; // trivial
+        if(key === "id" && item === pMinionId) continue; // trivial
         taskDiv.append(document.createElement("br"));
         taskDiv.append(document.createTextNode(
           indent + key + " = " + JSON.stringify(item)));

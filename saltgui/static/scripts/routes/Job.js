@@ -110,7 +110,7 @@ export class JobRoute extends Route {
       this.killJobMenuItem.style.display = "none";
       this.signalJobMenuItem.style.display = "none";
     }
-    Output.addResponseOutput(output, minions, info.Result, info.Function, initialStatus);
+    Output.addResponseOutput(output, jid, minions, info.Result, info.Function, initialStatus);
   }
 
   _addMenuItemRerunJob(menu, info, commandText) {
