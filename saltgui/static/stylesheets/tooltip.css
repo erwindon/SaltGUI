@@ -8,10 +8,8 @@
   background-color: rgba(76, 175, 80, 0.8); /* #4caf50 */
   color: white;
   text-align: center;
-  padding: 5px 0;
+  padding: 7px;
   border-radius: 3px;
-  border-right: 5px solid transparent;
-  border-left: 5px solid transparent;
   position: absolute;
   white-space: pre;
 
@@ -24,18 +22,22 @@
   transform: translate(-50%, 0);
 }
 
-.tooltip:hover > .tooltiptext {
-  visibility: visible;
-}
-
 .tooltip:hover {
   /* only slightly darker than 'whitesmoke(#f5f5f5)' */
   background-color: #e0e0e0;
 }
 
+.tooltip:hover > .tooltiptext {
+  visibility: visible;
+}
+
+pre.output .tooltip > .tooltiptext {
+  background-color: rgba(76, 175, 80, 0.8); /* #4caf50 */
+}
+
 pre.output .tooltip:hover {
-  /* only slightly lighter than '#272727' */
-  background-color: #404040;
+  /* only slightly lighter than 'whitesmoke(#272727)' */
+  background-color: #484848;
 }
 
 .tooltip > .tooltiptext::after {
@@ -48,4 +50,8 @@ pre.output .tooltip:hover {
   border-width: 5px;
   border-style: solid;
   border-color: rgba(76, 175, 80, 0.8) transparent transparent transparent;
+}
+
+pre.output .tooltip > .tooltiptext::after {
+  border-color: rgba(76, 175, 80, 0.8) transparent transparent transparent; /* #4caf50 */
 }

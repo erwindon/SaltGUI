@@ -104,7 +104,7 @@ export class JobRoute extends Route {
     input.focus();
   }
 
-  _handleRunnerJobsListJob(data, jid) {
+  _handleRunnerJobsListJob(data, pJobId) {
     const myThis = this;
 
     const output = this.getPageElement().querySelector(".output");
@@ -123,7 +123,7 @@ export class JobRoute extends Route {
     const info = data.return[0];
 
     if(info.Error) {
-      output.innerText = info.Error + " (" + jid + ")";
+      output.innerText = info.Error + " (" + pJobId + ")";
       this.getPageElement().querySelector(".function").innerText = "ERROR";
       this.getPageElement().querySelector(".time").innerText = Output.dateTimeStr(info.StartTime);
       return;
@@ -153,9 +153,9 @@ export class JobRoute extends Route {
     this._addMenuItemRerunJobOnNonRespondingMinionsWhenNeeded(menu, info, commandText);
 
     // 6: kill with original target pattern
-    this._addMenuItemTerminateJob(menu, info, jid);
-    this._addMenuItemKillJob(menu, info, jid);
-    this._addMenuItemSignalJob(menu, info, jid);
+    this._addMenuItemTerminateJob(menu, info, pJobId);
+    this._addMenuItemKillJob(menu, info, pJobId);
+    this._addMenuItemSignalJob(menu, info, pJobId);
 
     const functionText = commandText + " on " +
       TargetType.makeTargetText(info["Target-type"], info.Target);
@@ -181,7 +181,33 @@ export class JobRoute extends Route {
       this.killJobMenuItem.style.display = "none";
       this.signalJobMenuItem.style.display = "none";
     }
-    Output.addResponseOutput(output, jid, minions, info.Result, info.Function, initialStatus);
+    Output.addResponseOutput(output, pJobId, minions, info.Result, info.Function, initialStatus);
+
+    // replace any jobid
+    const patJid = Output.getPatEmbeddedJid();
+    let html = output.innerHTML;
+    html = html.replace(patJid, "<a class='linkjid' id='linkjid\$&'>\$&</a>");
+    output.innerHTML = html;
+    const links = output.querySelectorAll(".linkjid");
+    for(const link of links) {
+      const linkToJid = link.id.replace("linkjid", "");
+
+      if(linkToJid === pJobId) {
+        link.classList.add("disabled");
+        Utils.addToolTip(link, "this job");
+      }
+      else
+      {
+        link.addEventListener("click", evt => {
+          myThis.router.showRoute(myThis.router.jobRoute, {"jid": linkToJid});
+        });
+      }
+
+      // no longer needed
+      link.removeAttribute("id");
+      link.classList.remove("linkjid");
+      if(!link.classList.length) link.removeAttribute("class");
+    }
   }
 
   _addMenuItemRerunJob(menu, info, commandText) {
@@ -279,21 +305,21 @@ export class JobRoute extends Route {
     }.bind(this));
   }
 
-  _addMenuItemTerminateJob(menu, info, jid) {
+  _addMenuItemTerminateJob(menu, info, pJobId) {
     this.terminateJobMenuItem = menu.addMenuItem("Terminate&nbsp;job...", function(evt) {
-      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.term_job " + jid);
+      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.term_job " + pJobId);
     }.bind(this));
   }
 
-  _addMenuItemKillJob(menu, info, jid) {
+  _addMenuItemKillJob(menu, info, pJobId) {
     this.killJobMenuItem = menu.addMenuItem("Kill&nbsp;job...", function(evt) {
-      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.kill_job " + jid);
+      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.kill_job " + pJobId);
     }.bind(this));
   }
 
-  _addMenuItemSignalJob(menu, info, jid) {
+  _addMenuItemSignalJob(menu, info, pJobId) {
     this.signalJobMenuItem = menu.addMenuItem("Signal&nbsp;job...", function(evt) {
-      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.signal_job " + jid + " signal=<signalnumber>");
+      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.signal_job " + pJobId + " signal=<signalnumber>");
     }.bind(this));
   }
 

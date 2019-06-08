@@ -12,6 +12,14 @@
   width: 100%;
 }
 
+pre a.disabled {
+  color: inherit;
+}
+
+pre a.disabled:hover {
+  text-decoration: none;
+}
+
 pre a {
   color: yellow;
   cursor: pointer;
