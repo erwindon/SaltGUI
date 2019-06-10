@@ -240,18 +240,19 @@ export class KeysRoute extends PageRoute {
     if(tr) {
       const status = tr.querySelector(".status");
       // drop all other classes (accepted, rejected, etc)
+      // do not update screen when nothing changed; that keeps any search highlight
       if(data.act === "accept") {
         status.className = "status";
         status.classList.add("accepted");
-        status.innerText = "accepted";
+        if(status.innerText !== "accepted") status.innerText = "accepted";
       } else if(data.act === "reject") {
         status.className = "status";
         status.classList.add("rejected");
-        status.innerText = "rejected";
+        if(status.innerText !== "rejected") status.innerText = "rejected";
       } else if(data.act === "pend") {
         status.className = "status";
         status.classList.add("unaccepted");
-        status.innerText = "unaccepted";
+        if(status.innerText !== "unaccepted") status.innerText = "unaccepted";
       } else if(data.act === "delete") {
         // "-1" due to the <tr> for the header that is inside <thead>
         tr.parentNode.deleteRow(tr.rowIndex - 1);
