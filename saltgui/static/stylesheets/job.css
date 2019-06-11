@@ -11,3 +11,7 @@
 #page_job .job_menu {
   display: inline;
 }
+
+#page_job .highlight-task {
+  background-color: gray;
+}

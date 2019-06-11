@@ -175,8 +175,7 @@ export class Output {
     return str.substring(0, dotPos + datetime_fraction_digits_nr + 1);
   }
 
-
-  // TODO
+  // add the status summary
   static addHighStateSummary(div, pMinionId, pTasks) {
 
     for(const task of pTasks) {
@@ -239,8 +238,15 @@ export class Output {
       span.addEventListener("click", _ => {
         const showId = Utils.getIdFromMinionId(pMinionId + "." + task.__id__);
         const element = document.getElementById(showId);
-	// behavior: smooth is ok, the destination is nearby
-	// block: since block is below our summary, nearest is equivalent to end
+
+        // show where the information is
+        element.classList.add("highlight-task");
+        setTimeout(_ => { 
+          element.classList.remove("highlight-task");
+        }, 1000);
+
+        // behavior: smooth is ok, the destination is nearby
+        // block: since block is below our summary, nearest is equivalent to end
         element.scrollIntoView({behavior: "smooth", block: "nearest"});
       });
 
