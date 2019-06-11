@@ -99,7 +99,7 @@ export class PillarsMinionRoute extends PageRoute {
 
       const pillar_value = Route._createTd("", "");
 
-      // 8 bullet characters
+      // 25CF = BLACK CIRCLE, 8 of these
       const value_hidden = "\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF";
       const pillar_hidden = Route._createDiv("pillar_hidden", value_hidden);
       pillar_hidden.style.display = "inline-block";

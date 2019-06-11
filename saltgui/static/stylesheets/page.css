@@ -39,14 +39,28 @@ pre.output div:first-of-type {
 pre .hostname.host_failure {
   color: red;
 }
+pre .task_failure {
+  color: red;
+}
 
 pre .hostname.host_skips,
 pre .hostname.host_noresponse {
   color: yellow;
 }
+pre .task_skipped {
+  color: yellow;
+}
 
 pre .hostname {
   color: #4caf50;
+}
+pre .task_success_nochanges {
+  color: #4caf50;
+}
+pre .task_success_withchanges {
+  color: #4caf50;
+  text-decoration-line: overline underline;
+  text-decoration-style: double;
 }
 
 pre span.active {

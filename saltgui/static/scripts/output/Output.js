@@ -5,6 +5,7 @@ import {OutputNested} from './OutputNested.js';
 import {OutputSaltGuiHighstate} from './OutputSaltGuiHighstate.js';
 import {OutputYaml} from './OutputYaml.js';
 import {ParseCommandLine} from '../ParseCommandLine.js';
+import {Route} from '../routes/Route.js';
 import {Utils} from '../Utils.js';
 
 // Functions to turn responses from the salt system into visual information
@@ -172,6 +173,81 @@ export class Output {
     if(datetime_fraction_digits_nr === 0) dotPos -= 1;
 
     return str.substring(0, dotPos + datetime_fraction_digits_nr + 1);
+  }
+
+
+  // TODO
+  static addHighStateSummary(div, pMinionId, pTasks) {
+
+    for(const task of pTasks) {
+      // 25CF = BLACK CIRCLE
+      const span = Route._createSpan("", "\u25CF");
+
+      let txt = task.__id__;
+      if(task.__sls__) txt += "\n" + task.__sls__.replace(/[.]/g, "/") + ".sls";
+
+      if(!task.result) {
+        span.classList.add("task_failure");
+      } else if(task.result === null) {
+        span.classList.add("task_skips");
+      } else if(typeof task.changes !== "object") {
+        // actually we don't know since there is no proper changelist
+        span.classList.add("task_success_nochanges");
+        txt += "\n'changes' has type " + typeof task.changes;
+      } else if(Array.isArray(task.changes)) {
+        // actually we don't know since there is no proper changelist
+        span.classList.add("task_success_nochanges");
+        txt += "\n'changes' is an array";
+      } else if(Object.keys(task.changes).length) {
+        span.classList.add("task_success_withchanges");
+        const nrChanges = Object.keys(task.changes).length;
+        txt += "\n" + Utils.txtZeroOneMany(nrChanges, "", nrChanges + " change", nrChanges + " changes");
+      } else {
+        span.classList.add("task_success_nochanges");
+        //txt += "\nno changes";
+      }
+  
+      for(const key in task) {
+        if(key === "___key___") continue;
+        if(key === "__id__") continue;
+        if(key === "__jid__") continue;
+        if(key === "__orchestration__") continue;
+        if(key === "__run_num__") continue;
+        if(key === "__sls__") continue;
+        if(key === "_stamp") continue;
+        if(key === "changes") continue;
+        if(key === "comment") continue;
+        if(key === "duration") continue;
+        if(key === "fun") continue;
+        if(key === "id") continue;
+        if(key === "jid") continue;
+        if(key === "name") continue;
+        if(key === "pchanges") continue;
+        if(key === "return") continue;
+        if(key === "skip_watch") continue;
+        if(key === "start_time") continue;
+        if(key === "success") continue;
+        // skip trivial info: result = true
+        if(key === "result" && task[key]) continue;
+        txt += "\n" + key + " = ";
+        if(typeof task.changes === "object")
+          txt += JSON.stringify(task[key]);
+        else
+          txt += task[key];
+      }
+
+      span.addEventListener("click", _ => {
+        const showId = Utils.getIdFromMinionId(pMinionId + "." + task.__id__);
+        const element = document.getElementById(showId);
+	// behavior: smooth is ok, the destination is nearby
+	// block: since block is below our summary, nearest is equivalent to end
+        element.scrollIntoView({behavior: "smooth", block: "nearest"});
+      });
+
+      Utils.addToolTip(span, txt);
+
+      div.append(span);
+    }
   }
 
 
@@ -370,19 +446,38 @@ export class Output {
       // it might be highstate output
       const commandCmd = command.trim().replace(/ .*/, "");
       const isHighStateOutput = OutputHighstate.isHighStateOutput(commandCmd, hostResponse);
+
+      const tasks = [];
+      if(isHighStateOutput) {
+        // The tasks are in an (unordered) object with uninteresting keys
+        // convert it to an array that is in execution order
+        // first put all the values in an array
+        Object.keys(hostResponse).forEach(
+          function(taskKey) {
+            hostResponse[taskKey].___key___ = taskKey;
+            tasks.push(hostResponse[taskKey]);
+          }
+        );
+        // then sort the array
+        tasks.sort(function(a, b) { return a.__run_num__ - b.__run_num__; } );
+      }
+
+      let addHighStateSummaryFlag = false;
       // enhanced highstate display
       if(!fndRepresentation && isHighStateOutput && Output.isOutputFormatAllowed("saltguihighstate")) {
         hostLabel = OutputSaltGuiHighstate.getHighStateLabel(hostname, hostResponse);
-        hostOutput = OutputSaltGuiHighstate.getHighStateOutput(hostname, pJobId, hostResponse);
+        hostOutput = OutputSaltGuiHighstate.getHighStateOutput(hostname, pJobId, tasks);
         hostMultiLine = true;
         fndRepresentation = true;
+        addHighStateSummaryFlag = true;
       }
       // regular highstate display
       if(!fndRepresentation && isHighStateOutput && Output.isOutputFormatAllowed("highstate")) {
         hostLabel = OutputHighstate.getHighStateLabel(hostname, hostResponse);
-        hostOutput = OutputHighstate.getHighStateOutput(hostname, hostResponse);
+        hostOutput = OutputHighstate.getHighStateOutput(hostname, tasks);
         hostMultiLine = true;
         fndRepresentation = true;
+        addHighStateSummaryFlag = true;
       }
 
       // nothing special? then it is normal output
@@ -416,9 +511,6 @@ export class Output {
         triangle.innerText = "\u25bd";
         triangle.style = "cursor: pointer";
         triangle.classList.add("triangle");
-        div.appendChild(triangle);
-        div.appendChild(document.createElement("br"));
-
         triangle.addEventListener("click", _ => {
           // 25B7 = WHITE RIGHT-POINTING TRIANGLE
           // 25BD = WHITE DOWN-POINTING TRIANGLE
@@ -430,6 +522,14 @@ export class Output {
             hostOutput.style.display = "none";
           }
         });
+        div.appendChild(triangle);
+
+        if(addHighStateSummaryFlag) {
+           div.appendChild(document.createTextNode(" "));
+           Output.addHighStateSummary(div, hostname, tasks);
+        }
+
+        div.appendChild(document.createElement("br"));
       }
 
       div.append(hostOutput);

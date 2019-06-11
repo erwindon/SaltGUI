@@ -93,11 +93,14 @@ export class OutputSaltGuiHighstate {
           indent + key + ": " +
           JSON.stringify(change.old) + " \u25BA " +
           JSON.stringify(change.new)));
-        delete change.old;
-        delete change.new;
       }
       // then show whatever remains
       for(const taskkey of Object.keys(change).sort()) {
+
+        // we already provided this as summary: old->new
+        if(taskkey === "old" && change.hasOwnProperty("new")) continue;
+        if(taskkey === "new" && change.hasOwnProperty("old")) continue;
+
         taskDiv.append(document.createElement("br"));
         taskDiv.append(document.createTextNode(
           indent + key + ": " + taskkey + ": " +
@@ -107,20 +110,7 @@ export class OutputSaltGuiHighstate {
     return changes;
   }
 
-  static getHighStateOutput(pMinionId, pJobId, hostResponse) {
-
-    // The tasks are in an (unordered) object with uninteresting keys
-    // convert it to an array that is in execution order
-    // first put all the values in an array
-    const tasks = [];
-    Object.keys(hostResponse).forEach(
-      function(taskKey) {
-        hostResponse[taskKey].___key___ = taskKey;
-        tasks.push(hostResponse[taskKey]);
-      }
-    );
-    // then sort the array
-    tasks.sort(function(a, b) { return a.__run_num__ - b.__run_num__; } );
+  static getHighStateOutput(pMinionId, pJobId, pTasks) {
 
     const indent = "    ";
 
@@ -131,9 +121,10 @@ export class OutputSaltGuiHighstate {
     let skipped = 0;
     let total_millis = 0;
     let changes = 0;
-    for(const task of tasks) {
+    for(const task of pTasks) {
 
       const taskDiv = document.createElement("div");
+      taskDiv.id = Utils.getIdFromMinionId(pMinionId + "." + task.__id__);
 
       const span = document.createElement("span");
       if(task.result === null) {

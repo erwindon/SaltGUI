@@ -46,20 +46,7 @@ export class OutputHighstate {
     return Output.getHostnameHtml(hostname, "host_success");
   }
 
-  static getHighStateOutput(hostname, hostResponse) {
-
-    // The tasks are in an (unordered) object with uninteresting keys
-    // convert it to an array that is in execution order
-    // first put all the values in an array
-    const tasks = [];
-    Object.keys(hostResponse).forEach(
-      function(taskKey) {
-        hostResponse[taskKey].___key___ = taskKey;
-        tasks.push(hostResponse[taskKey]);
-      }
-    );
-    // then sort the array
-    tasks.sort(function(a, b) { return a.__run_num__ - b.__run_num__; } );
+  static getHighStateOutput(hostname, pTasks) {
 
     const indent = "    ";
 
@@ -70,7 +57,7 @@ export class OutputHighstate {
     let skipped = 0;
     let total_millis = 0;
     let changes = 0;
-    for(const task of tasks) {
+    for(const task of pTasks) {
 
       if(task.result === null) {
         skipped += 1;
@@ -83,6 +70,7 @@ export class OutputHighstate {
       const components = task.___key___.split("_|-");
 
       const taskDiv = document.createElement("div");
+      taskDiv.id = Utils.getIdFromMinionId(hostname + "." + task.__id__);
 
       const taskSpan = document.createElement("span");
       let txt = "----------";
