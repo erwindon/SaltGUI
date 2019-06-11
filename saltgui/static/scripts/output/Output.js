@@ -508,6 +508,12 @@ export class Output {
 
       div.appendChild(document.createTextNode(": "));
 
+      if(addHighStateSummaryFlag) {
+        // showing the summary is more important
+        // than hiding a useless open/close indicator
+        hostMultiLine = true;
+      }
+
       // multiple line, collapsible
       // 25B7 = WHITE RIGHT-POINTING TRIANGLE
       // 25BD = WHITE DOWN-POINTING TRIANGLE
