@@ -243,6 +243,7 @@ export class Output {
         element.classList.add("highlight-task");
         setTimeout(_ => { 
           element.classList.remove("highlight-task");
+          if(!element.classList.length) element.removeAttribute("class");
         }, 1000);
 
         // behavior: smooth is ok, the destination is nearby
