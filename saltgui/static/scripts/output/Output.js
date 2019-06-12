@@ -544,6 +544,15 @@ export class Output {
         div.appendChild(document.createElement("br"));
       }
 
+      // move back to the top of the host, that makes
+      // it easier to select the next highstate part
+      // or just collapse it and see the next minion
+      hostOutput.addEventListener("click", _ => {
+        const showId = Utils.getIdFromMinionId(hostname);
+        const element = document.getElementById(showId);
+        element.scrollIntoView({behavior: "smooth", block: "start"});
+      });
+
       div.append(hostOutput);
 
       outputContainer.append(div);
