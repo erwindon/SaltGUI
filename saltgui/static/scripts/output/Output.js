@@ -183,29 +183,36 @@ export class Output {
       const span = Route._createSpan("", "\u25CF");
 
       let txt = task.__id__;
-      if(task.__sls__) txt += "\n" + task.__sls__.replace(/[.]/g, "/") + ".sls";
+      if(task.__sls__) {
+        txt += "\n" + task.__sls__.replace(/[.]/g, "/") + ".sls";
+      }
 
-      if(!task.result) {
-        span.classList.add("task_failure");
-      } else if(task.result === null) {
-        span.classList.add("task_skips");
+      let nrChanges = 0;
+      if(!task.changes) {
+        //txt += "\nno changes";
       } else if(typeof task.changes !== "object") {
-        // actually we don't know since there is no proper changelist
-        span.classList.add("task_success_nochanges");
+        nrChanges = 1;
         txt += "\n'changes' has type " + typeof task.changes;
       } else if(Array.isArray(task.changes)) {
-        // actually we don't know since there is no proper changelist
-        span.classList.add("task_success_nochanges");
+        nrChanges = task.changes.length;
         txt += "\n'changes' is an array";
-      } else if(Object.keys(task.changes).length) {
-        span.classList.add("task_success_withchanges");
-        const nrChanges = Object.keys(task.changes).length;
-        txt += "\n" + Utils.txtZeroOneMany(nrChanges, "", nrChanges + " change", nrChanges + " changes");
+        txt += Utils.txtZeroOneMany(nrChanges, "", "\n" + nrChanges + " change", "\n" + nrChanges + " changes");
       } else {
-        span.classList.add("task_success_nochanges");
-        //txt += "\nno changes";
+        nrChanges = Object.keys(task.changes).length;
+        txt += Utils.txtZeroOneMany(nrChanges, "", "\n" + nrChanges + " change", "\n" + nrChanges + " changes");
       }
   
+      if(task.result === null) {
+        span.classList.add("task_skipped");
+      } else if(!task.result) {
+        span.classList.add("task_failure");
+      } else {
+        span.classList.add("task_success");
+      }
+      if(nrChanges) {
+        span.classList.add("task_changes");
+      }
+
       for(const key in task) {
         if(key === "___key___") continue;
         if(key === "__id__") continue;

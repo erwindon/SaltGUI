@@ -54,11 +54,11 @@ pre .task_skipped {
 pre .hostname {
   color: #4caf50;
 }
-pre .task_success_nochanges {
+pre .task_success {
   color: #4caf50;
 }
-pre .task_success_withchanges {
-  color: #4caf50;
+
+pre .task_changes {
   text-decoration-line: overline underline;
   text-decoration-style: double;
 }
