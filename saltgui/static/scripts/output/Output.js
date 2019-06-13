@@ -243,6 +243,16 @@ export class Output {
       }
 
       span.addEventListener("click", _ => {
+
+        // show the output, it might be hidden
+        const hostDivId = Utils.getIdFromMinionId(pMinionId);
+        const hostDiv = document.getElementById(hostDivId);
+        const triangle = hostDiv.querySelector("span.triangle")
+        // 25BD = WHITE DOWN-POINTING TRIANGLE
+        triangle.innerText = "\u25bd";
+        const outputDiv = hostDiv.querySelector("div");
+        outputDiv.style.display = "";
+
         const showId = Utils.getIdFromMinionId(pMinionId + "." + task.__id__);
         const element = document.getElementById(showId);
 
@@ -366,6 +376,7 @@ export class Output {
     }
 
     const masterTriangle = document.createElement("span");
+    // 25BD = WHITE DOWN-POINTING TRIANGLE
     masterTriangle.innerText = "\u25bd";
     masterTriangle.style = "cursor: pointer";
     allDiv.appendChild(masterTriangle);
