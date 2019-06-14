@@ -40,6 +40,7 @@ pre .hostname.host_failure {
   color: red;
 }
 pre .task_failure {
+  cursor: pointer;
   color: red;
 }
 
@@ -48,6 +49,7 @@ pre .hostname.host_noresponse {
   color: yellow;
 }
 pre .task_skipped {
+  cursor: pointer;
   color: yellow;
 }
 
@@ -55,6 +57,7 @@ pre .hostname {
   color: #4caf50;
 }
 pre .task_success {
+  cursor: pointer;
   color: #4caf50;
 }
 
