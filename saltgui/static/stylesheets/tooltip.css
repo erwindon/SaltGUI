@@ -47,7 +47,7 @@ pre.output .tooltip:hover {
   content: " ";
   position: absolute;
   top: 100%;
-  left: 50%;
+  left: calc(50% - 2.5px);
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
