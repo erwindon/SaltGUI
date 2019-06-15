@@ -80,6 +80,9 @@ export class MinionsRoute extends PageRoute {
 
     const datetime_fraction_digits = data.return[0].data.return.saltgui_datetime_fraction_digits;
     window.localStorage.setItem("datetime_fraction_digits", JSON.stringify(datetime_fraction_digits));
+
+    const tooltip_mode = data.return[0].data.return.saltgui_tooltip_mode;
+    window.localStorage.setItem("tooltip_mode", tooltip_mode);
   }
 
   _handleWheelKeyListAll(data) {
