@@ -245,16 +245,14 @@ export class Output {
       span.addEventListener("click", _ => {
 
         // show the output, it might be hidden
-        const hostDivId = Utils.getIdFromMinionId(pMinionId);
-        const hostDiv = document.getElementById(hostDivId);
-        const triangle = hostDiv.querySelector("span.triangle")
+        const triangle = div.querySelector("span.triangle")
         // 25BD = WHITE DOWN-POINTING TRIANGLE
         triangle.innerText = "\u25bd";
-        const outputDiv = hostDiv.querySelector("div");
+        const outputDiv = div.querySelector("div");
         outputDiv.style.display = "";
 
         const showId = Utils.getIdFromMinionId(pMinionId + "." + task.__id__);
-        const element = document.getElementById(showId);
+        const element = div.querySelector("#" + showId);
 
         // show where the information is
         element.classList.add("highlight-task");
@@ -567,9 +565,7 @@ export class Output {
       // it easier to select the next highstate part
       // or just collapse it and see the next minion
       hostOutput.addEventListener("click", _ => {
-        const showId = Utils.getIdFromMinionId(hostname);
-        const element = document.getElementById(showId);
-        element.scrollIntoView({behavior: "smooth", block: "start"});
+        div.scrollIntoView({behavior: "smooth", block: "start"});
       });
 
       div.append(hostOutput);
