@@ -16,7 +16,7 @@
   white-space: pre;
 
   /* float the tooltip above its target */
-  z-index: 1;
+  z-index: 10;
   bottom: calc(100% + 8px);
 
   /* center the tooltip above its target */
