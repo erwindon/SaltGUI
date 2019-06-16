@@ -35,3 +35,8 @@ docker build -f dockerfile-saltminion-debian --tag erwindon/saltgui-saltminion-d
 ```
 docker build -f dockerfile-saltminion-ubuntu --tag erwindon/saltgui-saltminion-ubuntu:2019.2.0 .
 ```
+
+## saltgui-nginx (separated) based on ubuntu
+```
+docker build -f dockerfile-saltgui-nginx --tag erwindon/saltgui-nginx:1.14.0 .
+```

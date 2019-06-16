@@ -7,8 +7,8 @@ export class HTTPError extends Error {
 }
 
 export class API {
-  constructor(router, apiurl="") {
-    this.APIURL = apiurl;
+  constructor(router) {
+    this.APIURL = config.API_URL;
 
     //this.getEvents = this.getEvents.bind(this);
     this.getEvents(router);

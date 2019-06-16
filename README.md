@@ -164,6 +164,47 @@ This is then the built-in version from the brower.
 Typical effect is that it is shown slightly delayed and that is looks a bit primitive.
 The only other allowed value is "none", with the effect that no tooltips are shown at all.
 
+## Separate SaltGUI host
+In some specific environments you might not be able to server SaltGUI directly from salt-api.
+In this case you might want to configure web server (for example NGINX) to server SaltGui 
+and use it as proxy to salt-api such that requests are answered from the same origin from the browser point of view.
+
+Simple NGINX configuration might looks like this:
+```
+server {
+  listen       80;
+  server_name  _;
+  root         /data/www;
+  index        index.html;
+
+  # handle internal api (proxy)
+  location /api/ {
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-NginX-Proxy true;
+      proxy_pass http://saltmaster-local:3333/;
+      proxy_ssl_session_reuse off;
+      proxy_set_header Host $http_host;
+      proxy_redirect off;
+  }
+
+  # handle saltgui web page
+  location / {
+    try_files $uri /index.html;
+  }
+
+}
+```
+
+The value of the `API_URL` in the `config.js` file shall point to path where salt-api is exposed. 
+```
+const config = {
+  API_URL: '/api'
+};
+```
+
+> Currenlty you can't use totally independend Salt-api without proxy as support for CORS preflight request is not properly support.
+
 ## Development environment with Docker
 To make life a bit easier for testing SaltGUI or setting up a local development environment you can use the provided docker-compose setup in this repository to run a saltmaster with three minions, including SaltGUI:
 ```
