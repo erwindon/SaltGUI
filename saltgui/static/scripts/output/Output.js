@@ -250,6 +250,7 @@ export class Output {
           txt += task[key];
       }
 
+      let myNr = nr;
       span.addEventListener("click", _ => {
 
         // show the output, it might be hidden
@@ -259,7 +260,7 @@ export class Output {
         const outputDiv = div.querySelector("div");
         outputDiv.style.display = "";
 
-        const showId = Utils.getIdFromMinionId(pMinionId + "." + nr);
+        const showId = Utils.getIdFromMinionId(pMinionId + "." + myNr);
         const element = div.querySelector("#" + showId);
 
         // show where the information is
