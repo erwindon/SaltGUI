@@ -5,7 +5,7 @@
 .tooltip > .tooltiptext {
   visibility: hidden;
   font-size: 14px;
-  background-color: hsla(0, 0%, 20%, 0.8);
+  background-color: rgba(76, 175, 80, 0.8); /* #4caf50 */
   color: white;
   text-align: center;
   padding: 5px 0;
@@ -33,6 +33,11 @@
   background-color: #e0e0e0;
 }
 
+pre.output .tooltip:hover {
+  /* only slightly lighter than '#272727' */
+  background-color: #404040;
+}
+
 .tooltip > .tooltiptext::after {
   font-size: 8px;
   content: " ";
@@ -42,5 +47,5 @@
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: hsla(0, 0%, 20%, 0.8) transparent transparent transparent;
+  border-color: rgba(76, 175, 80, 0.8) transparent transparent transparent;
 }
