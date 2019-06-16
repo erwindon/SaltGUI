@@ -18,6 +18,8 @@ function Hilitor(start, id, tag)
   var openLeft = false;
   var openRight = false;
 
+  var nrHilites = 0;
+
   // characters to strip from start and end of the input string
   var endRegExp = new RegExp('^[^\\w]+|[^\\w]+$', "g");
 
@@ -96,7 +98,9 @@ function Hilitor(start, id, tag)
         this.hiliteWords(node.childNodes[i]);
     }
     if(node.nodeType == 3) { // NODE_TEXT
-      if((nv = node.nodeValue) && (regs = matchRegExp.exec(nv))) {
+      // limit the number of highlighted matches to 25 otherwise the DOM grows rediculously
+      // and performance drops with it. and it is still a good first indication.
+      if(this.nrHilites <= 25 && (nv = node.nodeValue) && (regs = matchRegExp.exec(nv))) {
         if(!wordColor[regs[0].toLowerCase()]) {
           wordColor[regs[0].toLowerCase()] = colors[colorIdx++ % colors.length];
         }
@@ -109,6 +113,8 @@ function Hilitor(start, id, tag)
         var after = node.splitText(regs.index);
         after.nodeValue = after.nodeValue.substring(regs[0].length);
         node.parentNode.insertBefore(match, after);
+
+        this.nrHilites++;
       }
     };
   };
@@ -123,6 +129,7 @@ function Hilitor(start, id, tag)
       parent.replaceChild(el.firstChild, el);
       parent.normalize();
     }
+    this.nrHilites = 0;
   };
 
   // start highlighting at target node
