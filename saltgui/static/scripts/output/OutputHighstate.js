@@ -57,8 +57,10 @@ export class OutputHighstate {
     let skipped = 0;
     let total_millis = 0;
     let changes = 0;
+    let nr = 0;
     for(const task of pTasks) {
 
+      nr += 1;
       if(task.result === null) {
         skipped += 1;
       } else if(task.result) {
@@ -70,7 +72,7 @@ export class OutputHighstate {
       const components = task.___key___.split("_|-");
 
       const taskDiv = document.createElement("div");
-      taskDiv.id = Utils.getIdFromMinionId(hostname + "." + task.__id__);
+      taskDiv.id = Utils.getIdFromMinionId(hostname + "." + nr);
 
       const taskSpan = document.createElement("span");
       let txt = "----------";

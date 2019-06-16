@@ -32,6 +32,7 @@
   /* only slightly darker than 'whitesmoke(#f5f5f5)' */
   background-color: #e0e0e0;
 }
+
 pre.output .tooltip:hover {
   /* only slightly lighter than '#272727' */
   background-color: #404040;

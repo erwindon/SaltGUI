@@ -121,10 +121,13 @@ export class OutputSaltGuiHighstate {
     let skipped = 0;
     let total_millis = 0;
     let changes = 0;
+    let nr = 0;
     for(const task of pTasks) {
 
+      nr += 1;
+
       const taskDiv = document.createElement("div");
-      taskDiv.id = Utils.getIdFromMinionId(pMinionId + "." + task.__id__);
+      taskDiv.id = Utils.getIdFromMinionId(pMinionId + "." + nr);
 
       const span = document.createElement("span");
       if(task.result === null) {

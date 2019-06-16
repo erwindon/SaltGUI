@@ -178,11 +178,19 @@ export class Output {
   // add the status summary
   static addHighStateSummary(div, pMinionId, pTasks) {
 
+    let nr = 0;
+
     for(const task of pTasks) {
+
+      nr += 1;
+
       // 25CF = BLACK CIRCLE
       const span = Route._createSpan("", "\u25CF");
 
-      let txt = task.__id__;
+      let txt = task.name;
+      if(task.__id__ && task.__id__ !== task.name) {
+        txt += "\n" + task.__id__;
+      }
       if(task.__sls__) {
         txt += "\n" + task.__sls__.replace(/[.]/g, "/") + ".sls";
       }
@@ -245,13 +253,13 @@ export class Output {
       span.addEventListener("click", _ => {
 
         // show the output, it might be hidden
-        const triangle = div.querySelector("span.triangle")
+        const triangle = div.querySelector("span.triangle");
         // 25BD = WHITE DOWN-POINTING TRIANGLE
         triangle.innerText = "\u25bd";
         const outputDiv = div.querySelector("div");
         outputDiv.style.display = "";
 
-        const showId = Utils.getIdFromMinionId(pMinionId + "." + task.__id__);
+        const showId = Utils.getIdFromMinionId(pMinionId + "." + nr);
         const element = div.querySelector("#" + showId);
 
         // show where the information is
@@ -554,8 +562,8 @@ export class Output {
         div.appendChild(triangle);
 
         if(addHighStateSummaryFlag) {
-           div.appendChild(document.createTextNode(" "));
-           Output.addHighStateSummary(div, hostname, tasks);
+          div.appendChild(document.createTextNode(" "));
+          Output.addHighStateSummary(div, hostname, tasks);
         }
 
         div.appendChild(document.createElement("br"));
