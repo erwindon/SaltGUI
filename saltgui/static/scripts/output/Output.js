@@ -313,6 +313,7 @@ export class Output {
     }
 
     const allDiv = document.createElement("div");
+    allDiv.classList.add("nohide");
 
     if(!command.startsWith("runners.") &&
        !command.startsWith("wheel.") &&

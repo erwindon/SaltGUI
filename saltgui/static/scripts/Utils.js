@@ -123,27 +123,27 @@ export class Utils {
     const input = startElement.querySelector("input.filtertext");
     input.onkeyup = ev => {
       if(ev.key === "Escape") {
-        Utils.updateFilter(table, "");
+        Utils.updateTableFilter(table, "");
         Utils.hideShowTableSearchBar(startElement);
         return;
       }
     };
     input.oninput = ev => {
-      Utils.updateFilter(table, input.value);
+      Utils.updateTableFilter(table, input.value);
     };
 
     table.parentElement.insertBefore(input, table);
     if(input.style.display === "none") {
-      Utils.updateFilter(table, input.value);
+      Utils.updateTableFilter(table, input.value);
       input.style.display = "";
     } else {
-      Utils.updateFilter(table, "");
+      Utils.updateTableFilter(table, "");
       input.style.display = "none";
     }
     input.focus();
   }
 
-  static updateFilter(table, txt) {
+  static updateTableFilter(table, txt) {
     // remove highlighting before re-comparing
     // as it affects the texts
     const hilitor = new Hilitor(table, "tbody");

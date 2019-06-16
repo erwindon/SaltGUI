@@ -38,6 +38,72 @@ export class JobRoute extends Route {
     return true;
   }
 
+  static updateOutputFilter(output, txt) {
+    // remove highlighting before re-comparing
+    // as it affects the texts
+    const hilitor = new Hilitor(output);
+    hilitor.remove();
+
+    // find text
+    txt = txt.toUpperCase();
+    for(const div of output.querySelectorAll("div")) {
+      if(div.classList.contains("nohide")) continue;
+      if(Utils.hasTextContent(div, txt))
+        div.classList.remove("nofiltermatch");
+      else
+        div.classList.add("nofiltermatch");
+    }
+
+    // show the result
+    hilitor.setMatchType("open");
+    hilitor.setEndRegExp(/^$/);
+    hilitor.setBreakRegExp(/^$/);
+
+    // turn the text into a regexp
+    let pattern = "";
+    for(const chr of txt) {
+      if((chr >= 'A' && chr <= 'Z') || (chr >= '0' && chr <= '9'))
+        pattern += chr;
+      else
+        pattern += "\\" + chr;
+    }
+
+    hilitor.apply(pattern);
+  }
+
+  static hideShowOutputSearchBar(startElement) {
+    // remove all highlights
+    const hilitor = new Hilitor(startElement);
+    hilitor.remove();
+
+    // show all output
+    const allFM = startElement.querySelectorAll(".nofiltermatch");
+    for(const fm of allFM)
+      fm.classList.remove("nofiltermatch");
+
+    // hide/show search box
+    const input = startElement.parentElement.querySelector("input.filtertext");
+    input.onkeyup = ev => {
+      if(ev.key === "Escape") {
+        JobRoute.updateOutputFilter(startElement, "");
+        JobRoute.hideShowOutputSearchBar(startElement);
+        return;
+      }
+    };
+    input.oninput = ev => {
+      JobRoute.updateOutputFilter(startElement, input.value);
+    };
+
+    if(input.style.display === "none") {
+      JobRoute.updateOutputFilter(startElement, input.value);
+      input.style.display = "";
+    } else {
+      JobRoute.updateOutputFilter(startElement, "");
+      input.style.display = "none";
+    }
+    input.focus();
+  }
+
   _handleRunnerJobsListJob(data, jid) {
     const myThis = this;
 
@@ -97,6 +163,11 @@ export class JobRoute extends Route {
 
     this.getPageElement().querySelector(".time").innerText = Output.dateTimeStr(info.StartTime);
 
+    const searchButton = this.getPageElement().querySelector("span.search");
+    searchButton.addEventListener("click", evt => {
+      JobRoute.hideShowOutputSearchBar(output);
+    });
+    
     let minions = ["WHEEL"];
     if(info.Minions) minions = info.Minions;
     let initialStatus = "(loading)";
