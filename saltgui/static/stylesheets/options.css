@@ -1,0 +1,16 @@
+td.option_value {
+  white-space: pre-wrap;
+}
+
+#page_options {
+  width: 100%;
+}
+
+#page_options input {
+  width: initial;
+  min-width: initial;
+}
+
+#page_options label {
+  margin-right: 20px;
+}

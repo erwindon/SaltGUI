@@ -9,6 +9,7 @@ import {JobsRoute} from './routes/Jobs.js';
 import {KeysRoute} from './routes/Keys.js';
 import {LoginRoute} from './routes/Login.js';
 import {MinionsRoute} from './routes/Minions.js';
+import {OptionsRoute} from './routes/Options.js';
 import {PillarsMinionRoute} from './routes/PillarsMinion.js';
 import {PillarsRoute} from './routes/Pillars.js';
 import {SchedulesMinionRoute} from './routes/SchedulesMinion.js';
@@ -37,6 +38,7 @@ export class Router {
     this.registerRoute(this.jobRoute = new JobRoute(this));
     this.registerRoute(new JobsRoute(this));
     this.registerRoute(new TemplatesRoute(this));
+    this.registerRoute(new OptionsRoute(this));
 
     // show template menu item if templates defined
     const templatesText = window.localStorage.getItem("templates");
