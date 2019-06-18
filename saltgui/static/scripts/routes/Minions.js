@@ -18,8 +18,6 @@ export class MinionsRoute extends PageRoute {
     const localGrainsItemsPromise = this.router.api.getLocalGrainsItems(null);
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
-    //we need these functions to populate the dropdown boxes
-    const wheelConfigValuesPromise = this.router.api.getWheelConfigValues();
 
     wheelKeyListAllPromise.then(pData1 => {
       myThis._handleWheelKeyListAll(pData1);
