@@ -68,6 +68,15 @@ export class Router {
       });
     document.querySelector(".logo")
       .addEventListener("dblclick", _ => {
+        if (window.getSelection) {
+          if (window.getSelection().empty) {  // Chrome
+            window.getSelection().empty();
+          } else if (window.getSelection().removeAllRanges) {  // Firefox
+            window.getSelection().removeAllRanges();
+          }
+        } else if (document.selection) {  // IE?
+          document.selection.empty();
+        }
         if(window.location.pathname === "/login") return;
         this.goTo("/options");
       });
