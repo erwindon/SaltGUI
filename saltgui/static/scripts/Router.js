@@ -66,6 +66,11 @@ export class Router {
         if(window.location.pathname === "/login") return;
         this.goTo("/");
       });
+    document.querySelector(".logo")
+      .addEventListener("dblclick", _ => {
+        if(window.location.pathname === "/login") return;
+        this.goTo("/options");
+      });
 
     document.querySelector("#button-minions1")
       .addEventListener("click", pClickEvent =>
