@@ -23,6 +23,19 @@ export class Utils {
   }
 
   static addToolTip(tooltipHost, tooltipText) {
+
+    // Users may want to switch this on to improve browser performance
+    const tooltip_mode = window.localStorage.getItem("tooltip_mode");
+
+    if(tooltip_mode === "none") {
+      return;
+    }
+
+    if(tooltip_mode === "simple") {
+      tooltipHost.setAttribute("title", tooltipText);
+      return;
+    }
+
     const tooltipSpan = Route._createSpan("", tooltipText);
     tooltipSpan.classList.add("tooltiptext");
     tooltipHost.classList.add("tooltip");
