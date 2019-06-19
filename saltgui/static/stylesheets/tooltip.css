@@ -38,11 +38,6 @@ pre.output .tooltip:hover {
   background-color: #404040;
 }
 
-pre.output .tooltip:hover {
-  /* only slightly lighter than '#272727' */
-  background-color: #404040;
-}
-
 .tooltip > .tooltiptext::after {
   font-size: 8px;
   content: " ";

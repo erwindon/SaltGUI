@@ -250,7 +250,7 @@ export class Output {
           txt += task[key];
       }
 
-      let myNr = nr;
+      const myNr = nr;
       span.addEventListener("click", _ => {
 
         // show the output, it might be hidden
