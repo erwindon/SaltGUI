@@ -175,6 +175,7 @@
       <div class='route' id='page_grainsminion'>
         <div class='dashboard'>
           <div id="grainsminion_page" class='panel minion-list'>
+            <!-- 2715 = MULTIPLICATION X -->
             <div class='nearlyvisiblebutton' id='button_close_grainsminion'>&#x2715;</div>
             <h1 id="grainsminion_title">Grains on ...</h1>
             <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
@@ -341,8 +342,11 @@
         <div id="job_page" class='panel job-info'>
           <div class='nearlyvisiblebutton' id='button_close_job'>&#x2715;</div>
           <h1 id="job_title" class='function'>&nbsp;</h1>
-          <div class='job_menu'></div>
+          <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
+          <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+          <div class='job_menu'><span class="search">&#x1f50d;&#xFE0E;</span></div>
           <h2 class='time'></h2>
+          <input style="display: none" class="filtertext" list="listjob" placeholder="&#x1F50D;">
           <pre class="output">...</pre>
         </div>
       </div>
@@ -411,6 +415,13 @@
       <option value="done">
       <option value="returned">
       <option value="running">
+    </datalist>
+
+    <datalist id="listjob">
+      <option value="no response">
+      <option value="success = ">
+      <option value="retcode = ">
+      <option value="and was started at">
     </datalist>
 
     <!-- see https://www.kryogenix.org/code/browser/sorttable/ -->
