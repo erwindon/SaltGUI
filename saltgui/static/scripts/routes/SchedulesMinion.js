@@ -105,7 +105,11 @@ export class SchedulesMinionRoute extends PageRoute {
       const menu = new DropDownMenu(tr);
       let scheduleModifyCmd = "schedule.modify " + k;
       for(const key in schedule) {
-        scheduleModifyCmd += " " + key + "=" + JSON.stringify(schedule[key]);
+        if(key === "args")
+          scheduleModifyCmd += " " + "job_args";
+        else
+          scheduleModifyCmd += " " + key;
+        scheduleModifyCmd += "=" + JSON.stringify(schedule[key]);
       }
       this._addMenuItemModifyJob(menu, minion, scheduleModifyCmd);
       this._addMenuItemEnableJobWhenNeeded(menu, minion, k, schedule);
