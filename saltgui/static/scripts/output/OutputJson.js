@@ -38,9 +38,10 @@ export class OutputJson {
       return "{ }";
     }
 
-    if(!Array.isArray(value) && Object.keys(value).length === 1 && typeof Object.values(value)[0] !== "object") {
+    // do not use Object.values as eslint does understand that
+    if(!Array.isArray(value) && Object.keys(value).length === 1 && typeof value[Object.keys(value)[0]] !== "object") {
       // show the brackets for a simple object a bit wider apart
-      return "{ " + JSON.stringify(Object.keys(value)[0]) + ": " + JSON.stringify(Object.values(value)[0]) + " }";
+      return "{ " + JSON.stringify(Object.keys(value)[0]) + ": " + JSON.stringify(value[Object.keys(value)[0]]) + " }";
     }
 
     return null;
