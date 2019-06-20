@@ -79,16 +79,16 @@ describe('Unittests for Output.js', function() {
     result = OutputJson.formatJSON(outputData);
     // ordered output
     assert.equal(result, 
-//      "{\n" +
-//      "    \"ip6_interfaces\": {\n" +
-//      "        \"eth0\": [\n" +
-//      "            \"fe80::20d:3aff:fe38:576b\"\n" +
-//      "        ],\n" +
-//      "        \"lo\": [\n" +
-//      "            \"::1\"\n" +
-//      "        ]\n" +
-//      "    }\n" +
-//      "}");
+      // "{\n" +
+      // "    \"ip6_interfaces\": {\n" +
+      // "        \"eth0\": [\n" +
+      // "            \"fe80::20d:3aff:fe38:576b\"\n" +
+      // "        ],\n" +
+      // "        \"lo\": [\n" +
+      // "            \"::1\"\n" +
+      // "        ]\n" +
+      // "    }\n" +
+      // "}");
       "{\n" +
       "    \"ip6_interfaces\": {\n" +
       "        \"eth0\": [ \"fe80::20d:3aff:fe38:576b\" ],\n" +
