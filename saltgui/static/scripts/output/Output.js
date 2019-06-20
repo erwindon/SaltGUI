@@ -472,7 +472,7 @@ export class Output {
       // an array is an object, but treat it separatelly
       if(!fndRepresentation && Array.isArray(hostResponse)) {
         hostOutput = Output.getNormalOutput(hostResponse);
-        hostMultiLine = hostResponse.length > 0;
+        hostMultiLine = hostOutput.tagName === "DIV";
         fndRepresentation = true;
       }
 
@@ -516,7 +516,7 @@ export class Output {
       // nothing special? then it is normal output
       if(!fndRepresentation) {
         hostOutput = Output.getNormalOutput(hostResponse);
-        hostMultiLine = Object.keys(hostResponse).length > 0;
+        hostMultiLine = hostOutput.includes("\n");
       }
 
       // one response does not need to be collapsible

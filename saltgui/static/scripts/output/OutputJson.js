@@ -28,9 +28,19 @@ export class OutputJson {
       return "[ ]";
     }
 
+    if(Array.isArray(value) && value.length === 1 && typeof value[0] !== "object") {
+      // show the brackets for a simple array a bit wider apart
+      return "[ " + JSON.stringify(value[0]) + " ]";
+    }
+
     if(!Array.isArray(value) && Object.keys(value).length === 0) {
       // show the brackets for an empty object a bit wider apart
       return "{ }";
+    }
+
+    if(!Array.isArray(value) && Object.keys(value).length === 1 && typeof Object.values(value)[0] !== "object") {
+      // show the brackets for a simple object a bit wider apart
+      return "{ " + JSON.stringify(Object.keys(value)[0]) + ": " + JSON.stringify(Object.values(value)[0]) + " }";
     }
 
     return null;
