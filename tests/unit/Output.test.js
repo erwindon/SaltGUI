@@ -34,8 +34,14 @@ describe('Unittests for Output.js', function() {
 
     outputData = [1];
     result = OutputJson.formatJSON(outputData);
-    assert.equal(result, "[\n" +
-      "    1\n" +
+    assert.equal(result, "[ 1 ]");
+
+    outputData = [1,2];
+    result = OutputJson.formatJSON(outputData);
+    assert.equal(result,
+      "[\n" +
+      "    1,\n" +
+      "    2\n" +
       "]");
 
     outputData = [1,2,3,4,5];
@@ -53,6 +59,10 @@ describe('Unittests for Output.js', function() {
     result = OutputJson.formatJSON(outputData);
     assert.equal(result, "{ }");
 
+    outputData = {"a":11};
+    result = OutputJson.formatJSON(outputData);
+    assert.equal(result, "{ \"a\": 11 }");
+
     // unordered input
     outputData = {"a":11,"c":22,"b":33};
     result = OutputJson.formatJSON(outputData);
@@ -69,14 +79,20 @@ describe('Unittests for Output.js', function() {
     result = OutputJson.formatJSON(outputData);
     // ordered output
     assert.equal(result, 
+      // "{\n" +
+      // "    \"ip6_interfaces\": {\n" +
+      // "        \"eth0\": [\n" +
+      // "            \"fe80::20d:3aff:fe38:576b\"\n" +
+      // "        ],\n" +
+      // "        \"lo\": [\n" +
+      // "            \"::1\"\n" +
+      // "        ]\n" +
+      // "    }\n" +
+      // "}");
       "{\n" +
       "    \"ip6_interfaces\": {\n" +
-      "        \"eth0\": [\n" +
-      "            \"fe80::20d:3aff:fe38:576b\"\n" +
-      "        ],\n" +
-      "        \"lo\": [\n" +
-      "            \"::1\"\n" +
-      "        ]\n" +
+      "        \"eth0\": [ \"fe80::20d:3aff:fe38:576b\" ],\n" +
+      "        \"lo\": [ \"::1\" ]\n" +
       "    }\n" +
       "}");
 
