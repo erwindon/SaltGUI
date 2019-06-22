@@ -521,12 +521,6 @@ export class Output {
         hostMultiLine = hostOutput.includes("\n");
       }
 
-      // one response does not need to be collapsible
-      const cnt = Object.keys(response).length;
-      if(cnt === 1) {
-        hostMultiLine = false;
-      }
-
       if(hostMultiLine) nrMultiLineBlocks += 1;
 
       // compose the actual output
