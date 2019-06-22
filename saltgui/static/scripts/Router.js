@@ -25,8 +25,7 @@ export class Router {
 
     this.registerRoute(new LoginRoute(this));
     this.registerRoute(new MinionsRoute(this));
-    this.keysRoute = new KeysRoute(this);
-    this.registerRoute(this.keysRoute);
+    this.registerRoute(this.keysRoute = new KeysRoute(this));
     this.registerRoute(new GrainsRoute(this));
     this.registerRoute(new GrainsMinionRoute(this));
     this.registerRoute(new SchedulesRoute(this));
@@ -34,8 +33,7 @@ export class Router {
     this.registerRoute(new PillarsRoute(this));
     this.registerRoute(new PillarsMinionRoute(this));
     this.registerRoute(new BeaconsRoute(this));
-    this.beaconsMinionRoute = new BeaconsMinionRoute(this);
-    this.registerRoute(this.beaconsMinionRoute);
+    this.registerRoute(this.beaconsMinionRoute = new BeaconsMinionRoute(this));
     this.registerRoute(new JobRoute(this));
     this.registerRoute(new JobsRoute(this));
     this.registerRoute(new TemplatesRoute(this));

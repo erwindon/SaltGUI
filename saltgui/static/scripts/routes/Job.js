@@ -199,7 +199,7 @@ export class JobRoute extends Route {
       else
       {
         link.addEventListener("click", evt => {
-          myThis.router.showRoute(myThis.router.jobRoute, {"jid": linkToJid});
+          window.location.assign("job?id=" + linkToJid);
         });
       }
 
