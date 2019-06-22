@@ -580,6 +580,7 @@ export class Output {
         });
       }
 
+      hostOutput.classList.add("minion-output");
       div.append(hostOutput);
 
       outputContainer.append(div);

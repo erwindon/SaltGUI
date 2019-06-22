@@ -184,10 +184,17 @@ export class JobRoute extends Route {
     Output.addResponseOutput(output, pJobId, minions, info.Result, info.Function, initialStatus);
 
     // replace any jobid
+    // Don't do this with output.innerHTML as there are already
+    // event handlers in place, whicgh the will be removed
     const patJid = Output.getPatEmbeddedJid();
-    let html = output.innerHTML;
-    html = html.replace(patJid, "<a class='linkjid' id='linkjid\$&'>\$&</a>");
-    output.innerHTML = html;
+    const elements = output.querySelectorAll(".minion-output");
+    for(const element of elements) {
+      console.log("element", element);
+      let html = element.innerHTML;
+      html = html.replace(patJid, "<a class='linkjid' id='linkjid\$&'>\$&</a>");
+      element.innerHTML = html;
+    }
+
     const links = output.querySelectorAll(".linkjid");
     for(const link of links) {
       const linkToJid = link.id.replace("linkjid", "");
