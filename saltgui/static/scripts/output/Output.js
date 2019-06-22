@@ -421,11 +421,13 @@ export class Output {
     // this is more generic and it simplifies the handlers
     for(const hostname of minions.sort()) {
 
-      const isSuccess = true;
-      const retCode = 0;
+      let isSuccess = true;
+      let retCode = 0;
 
       let hostResponse = response[hostname];
       if(Output.hasProperties(hostResponse, ["retcode", "return", "success"])) {
+        isSuccess = hostResponse.success;
+        retCode = hostResponse.retcode;
         hostResponse = hostResponse.return;
       }
       else if(command.startsWith("runner.") && hostResponse && hostResponse.hasOwnProperty("return")) {
