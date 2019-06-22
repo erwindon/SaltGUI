@@ -570,9 +570,11 @@ export class Output {
       // move back to the top of the host, that makes
       // it easier to select the next highstate part
       // or just collapse it and see the next minion
-      hostOutput.addEventListener("click", _ => {
-        div.scrollIntoView({behavior: "smooth", block: "start"});
-      });
+      if(isHighStateOutput) {
+        hostOutput.addEventListener("click", _ => {
+          div.scrollIntoView({behavior: "smooth", block: "start"});
+        });
+      }
 
       div.append(hostOutput);
 
