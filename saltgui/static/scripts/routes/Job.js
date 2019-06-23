@@ -113,6 +113,11 @@ export class JobRoute extends Route {
       window.history.back();
     });
 
+    const searchButton = this.getPageElement().querySelector("span.search");
+    searchButton.addEventListener("click", evt => {
+      JobRoute.hideShowOutputSearchBar(output);
+    });
+
     if(typeof data !== "object") {
       output.innerText = "";
       Utils.addErrorToTableCell(output, data);
@@ -163,11 +168,6 @@ export class JobRoute extends Route {
 
     this.getPageElement().querySelector(".time").innerText = Output.dateTimeStr(info.StartTime);
 
-    const searchButton = this.getPageElement().querySelector("span.search");
-    searchButton.addEventListener("click", evt => {
-      JobRoute.hideShowOutputSearchBar(output);
-    });
-    
     let minions = ["WHEEL"];
     if(info.Minions) minions = info.Minions;
     let initialStatus = "(loading)";
