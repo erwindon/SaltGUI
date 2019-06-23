@@ -120,7 +120,7 @@ export class Output {
   // note: do not return a text-node
   static getNormalOutput(hostResponse) {
     const content = Output.formatObject(hostResponse);
-    const element = document.createElement(content.includes("\n") ? "div" : "span");
+    const element = document.createElement(Utils.isMultiLineString(content) ? "div" : "span");
     element.innerText = content;
     return element;
   }
@@ -439,7 +439,7 @@ export class Output {
       }
 
       let hostOutput = null;
-      let hostMultiLine = null;
+      let hostMultiLine = false;
       let fndRepresentation = false;
 
       // the standard label is the hostname,
@@ -458,7 +458,7 @@ export class Output {
 
       if(!fndRepresentation && typeof hostResponse === "string") {
         hostOutput = Output.getTextOutput(hostResponse);
-        hostMultiLine = hostResponse.includes("\n");
+        hostMultiLine = Utils.isMultiLineString(hostResponse);
         fndRepresentation = true;
       }
 
@@ -522,9 +522,9 @@ export class Output {
       // nothing special? then it is normal output
       if(!fndRepresentation) {
         hostOutput = Output.getNormalOutput(hostResponse);
-        if(typeof hostOutput !== "string") {
+        if(hostOutput.tagName === "DIV") {
           hostMultiLine = true;
-        } else if(typeof hostOutput === "string" && hostOutput.includes("\n")) {
+        } else if(typeof hostOutput === "string" && Utils.isMultiLineString(hostOutput)) {
           hostMultiLine = true;
         }
       }

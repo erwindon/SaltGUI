@@ -51,7 +51,7 @@ export class OutputSaltGuiHighstate {
 
       const change = task.changes[key];
 
-      if(typeof change === "string" && change.includes("\n")) {
+      if(typeof change === "string" && Utils.isMultiLineString(change)) {
         taskDiv.append(document.createElement("br"));
         // show multi-line text as a separate block
         taskDiv.append(document.createTextNode(indent + key + ":"));

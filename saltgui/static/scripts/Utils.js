@@ -202,4 +202,10 @@ export class Utils {
   static getIdFromJobId(jobId) {
     return "j" + jobId;
   }
+
+  static isMultiLineString(pStr) {
+    if(pStr.includes("\r")) return true;
+    if(pStr.includes("\n")) return true;
+    return false;
+  }
 }
