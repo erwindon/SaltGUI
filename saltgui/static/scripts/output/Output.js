@@ -522,7 +522,9 @@ export class Output {
       // nothing special? then it is normal output
       if(!fndRepresentation) {
         hostOutput = Output.getNormalOutput(hostResponse);
-        if(typeof hostOutput === "string" && hostOutput.includes("\n")) {
+        if(typeof hostOutput !== "string") {
+          hostMultiLine = true;
+        } else if(typeof hostOutput === "string" && hostOutput.includes("\n")) {
           hostMultiLine = true;
         }
       }

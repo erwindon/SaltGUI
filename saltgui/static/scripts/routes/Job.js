@@ -189,7 +189,6 @@ export class JobRoute extends Route {
     const patJid = Output.getPatEmbeddedJid();
     const elements = output.querySelectorAll(".minion-output");
     for(const element of elements) {
-      console.log("element", element);
       let html = element.innerHTML;
       html = html.replace(patJid, "<a class='linkjid' id='linkjid\$&'>\$&</a>");
       element.innerHTML = html;
