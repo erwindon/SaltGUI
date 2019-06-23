@@ -107,6 +107,8 @@ export class SchedulesMinionRoute extends PageRoute {
       for(const key in schedule) {
         if(key === "args")
           scheduleModifyCmd += " " + "job_args";
+        else if(key === "kwargs")
+          scheduleModifyCmd += " " + "job_kwargs";
         else
           scheduleModifyCmd += " " + key;
         scheduleModifyCmd += "=" + JSON.stringify(schedule[key]);
