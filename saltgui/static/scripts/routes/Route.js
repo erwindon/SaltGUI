@@ -126,7 +126,7 @@ export class Route {
     let ret = "";
     for(const obj of rawArguments) {
       // all KWARGS are one entry in the parameters array
-      if(typeof obj === "object" && "__kwarg__" in obj) {
+      if(obj && typeof obj === "object" && "__kwarg__" in obj) {
         const keys = Object.keys(obj).sort();
         for(const key of keys) {
           if(key === "__kwarg__") continue;
