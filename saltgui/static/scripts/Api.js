@@ -7,9 +7,7 @@ export class HTTPError extends Error {
 }
 
 export class API {
-  constructor(router, apiurl="") {
-    this.APIURL = apiurl;
-
+  constructor(router) {
     //this.getEvents = this.getEvents.bind(this);
     this.getEvents(router);
   }
@@ -185,7 +183,7 @@ export class API {
   }
 
   apiRequest(method, route, params) {
-    const location = this.APIURL + route;
+    const location = config.API_URL + route;
     const token = window.sessionStorage.getItem("token");
     const headers = {
       "Accept": "application/json",
