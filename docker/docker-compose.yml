@@ -33,7 +33,7 @@ services:
       - saltmaster-local
     restart: on-failure
 
-  # This example will demonstrate how to use nginx for saltgui and proxy to salt-api
+  # This example will demonstrate how to use NGINX for SaltGUI and proxy to salt-api
   # saltgui-nginx:
   #   image: erwindon/saltgui-nginx:1.14.0
   #   hostname: saltgui-nginx
