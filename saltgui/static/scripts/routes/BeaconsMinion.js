@@ -123,6 +123,7 @@ export class BeaconsMinionRoute extends PageRoute {
       tr.addEventListener("click", evt => this._runCommand(evt, minion, "beacons.modify " + k + " " + JSON.stringify(beacons0[k])));
     }
 
+    Utils.addTableHelp(this.getPageElement(), "The content of column 'Value'\nis automatically refreshed");
     Utils.showTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement());
 
