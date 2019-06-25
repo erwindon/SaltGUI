@@ -1,4 +1,4 @@
-#page_minions {
+#page-minions {
   width: 100%;
 }
 
@@ -44,35 +44,35 @@ pre.output div:first-of-type {
   margin-top: 0;
 }
 
-pre .hostname.host_failure {
+pre .minion-id.host-failure {
   color: red;
 }
 
-pre .task_failure {
+pre .task-failure {
   cursor: pointer;
   color: red;
 }
 
-pre .hostname.host_skips,
-pre .hostname.host_noresponse {
+pre .minion-id.host-skips,
+pre .minion-id.host-no-response {
   color: yellow;
 }
 
-pre .task_skipped {
+pre .task-skipped {
   cursor: pointer;
   color: yellow;
 }
 
-pre .hostname {
+pre .minion-id {
   color: #4caf50;
 }
 
-pre .task_success {
+pre .task-success {
   cursor: pointer;
   color: #4caf50;
 }
 
-pre .task_changes {
+pre .task-changes {
   text-decoration-line: overline underline;
   text-decoration-style: double;
 }
@@ -107,7 +107,7 @@ table tr td {
   white-space: nowrap;
 }
 
-.jobs td > span.no_status {
+.jobs td > span.no-status {
   color: gray;
 }
 
@@ -143,11 +143,11 @@ table tr td:last-of-type {
   padding-right: 0;
 }
 
-.value_none {
+.value-none {
   opacity: 0.4;
 }
 
-.menuitem_hidden {
+.menu-item-hidden {
   display: none;
 }
 
@@ -160,7 +160,7 @@ table tr td:last-of-type {
   color: #2e7d32;
 }
 
-#templatemenuhere {
+#template-menu-here {
   display: inline;
 }
 
@@ -198,7 +198,7 @@ table tr td:last-of-type {
   box-sizing: content-box;
 }
 
-#popup_runcommand {
+#popup-run-command {
   display: none;
 }
 
@@ -228,25 +228,25 @@ table tr td:last-of-type {
   flex-basis: 50%;
 }
 
-#page_jobs .job-list {
+#page-jobs .job-list {
   /* no right panel here */
   flex-basis: 100%;
 }
 
-#jobs_page {
+#jobs-panel {
   margin-right: 0;
 }
 
-.highlightrows tbody tr:hover {
+.highlight-rows tbody tr:hover {
   background-color: whitesmoke;
   cursor: pointer;
 }
 
-.nofiltermatch {
+.no-filter-match {
   display: none;
 }
 
-.filtertext {
+.filter-text {
   width: 100%;
 }
 

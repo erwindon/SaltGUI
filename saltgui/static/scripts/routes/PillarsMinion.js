@@ -7,11 +7,11 @@ import {Utils} from '../Utils.js';
 export class PillarsMinionRoute extends PageRoute {
 
   constructor(router) {
-    super("^[\/]pillarsminion$", "Pillars", "#page_pillarsminion", "#button_pillars", router);
+    super("^[\/]pillarsminion$", "Pillars", "#page-pillars-minion", "#button-pillars", router);
 
     this._handleLocalPillarItems = this._handleLocalPillarItems.bind(this);
 
-    this.page_element.querySelector("#button_close_pillarsminion").addEventListener("click", _ => {
+    this.page_element.querySelector("#pillars-minion-button-close").addEventListener("click", _ => {
       this.router.goTo("/pillars");
     });
   }
@@ -21,7 +21,7 @@ export class PillarsMinionRoute extends PageRoute {
 
     const minion = decodeURIComponent(Utils.getQueryParam("minion"));
 
-    const title = document.getElementById("pillarsminion_title");
+    const title = document.getElementById("pillars-minion-title");
     title.innerText = "Pillars on " + minion;
 
     const localPillarItemsPromise = this.router.api.getLocalPillarItems(minion);
@@ -47,15 +47,15 @@ export class PillarsMinionRoute extends PageRoute {
   }
 
   _handleLocalPillarItems(data, minion) {
-    const page = document.getElementById("pillarsminion_page");
+    const page = document.getElementById("pillars-minion-panel");
     const menu = new DropDownMenu(page);
     this._addMenuItemRefreshPillar(menu, minion);
 
-    const container = document.getElementById("pillarsminion_list");
+    const container = document.getElementById("pillars-minion-list");
 
     // new menu's are always added at the bottom of the div
     // fix that by re-adding it to its proper place
-    const title = document.getElementById("pillarsminion_title");
+    const title = document.getElementById("pillars-minion-title");
     page.insertBefore(menu.menuDropdown, title.nextSibling);
 
     if(PageRoute.showErrorRowInstead(container.tBodies[0], data)) return;
@@ -92,7 +92,7 @@ export class PillarsMinionRoute extends PageRoute {
     for(const k of keys) {
       const pillar = document.createElement('tr');
 
-      const name = Route._createTd("pillar_name", k);
+      const name = Route._createTd("pillar-name", k);
       pillar.appendChild(name);
 
       // menu comes before this data if there was any
@@ -101,14 +101,14 @@ export class PillarsMinionRoute extends PageRoute {
 
       // 25CF = BLACK CIRCLE, 8 of these
       const value_hidden = "\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF";
-      const pillar_hidden = Route._createDiv("pillar_hidden", value_hidden);
+      const pillar_hidden = Route._createDiv("pillar-hidden", value_hidden);
       pillar_hidden.style.display = "inline-block";
       Utils.addToolTip(pillar_hidden, "Click to show");
       // initially use the hidden view
       pillar_value.appendChild(pillar_hidden);
 
       const value_shown = Output.formatObject(pillars[k]);
-      const pillar_shown = Route._createDiv("pillar_shown", value_shown);
+      const pillar_shown = Route._createDiv("pillar-shown", value_shown);
       // initially hide the normal view
       pillar_shown.style.display = "none";
       Utils.addToolTip(pillar_shown, "Click to hide");

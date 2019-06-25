@@ -73,7 +73,7 @@ describe('Funtional tests', function() {
         .click('#login-submit')
         .wait( () => {
           // we wait here for the loginpage to be hidden
-          const loginpage = document.querySelector('#page_login');
+          const loginpage = document.querySelector('#page-login');
           return loginpage.style.display === 'none';
         })
         .end()
@@ -92,13 +92,13 @@ describe('Funtional tests', function() {
         .click('#login-submit')
         .wait( () => {
           // we wait here for the loginpage to be hidden
-          const loginpage = document.querySelector('#page_login');
+          const loginpage = document.querySelector('#page-login');
           return loginpage.style.display === 'none';
         })
-        .click('#button_logout1')
+        .click('#button-logout1')
         .wait( () => {
           // we wait here for the loginpage to be shown
-          const loginpage = document.querySelector('#page_login');
+          const loginpage = document.querySelector('#page-login');
           console.log(loginpage.style.display);
           return loginpage.style.display === '';
         })

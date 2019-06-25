@@ -77,7 +77,7 @@ export class PageRoute extends Route {
   _updateOfflineMinion(container, hostname) {
     const element = this._getElement(container, Utils.getIdFromMinionId(hostname));
 
-    element.appendChild(Route._createTd("hostname", hostname));
+    element.appendChild(Route._createTd("minion-id", hostname));
 
     const offline = Route._createTd("status", "offline");
     offline.classList.add("offline");
@@ -227,7 +227,7 @@ export class PageRoute extends Route {
 
     const element = this._getElement(container, Utils.getIdFromMinionId(hostname));
 
-    element.appendChild(Route._createTd("hostname", hostname));
+    element.appendChild(Route._createTd("minion-id", hostname));
 
     const ipv4 = this._getBestIpNumber(minion, prefixes);
     if(ipv4) {
@@ -291,7 +291,7 @@ export class PageRoute extends Route {
     element = document.createElement("tr");
     element.id = Utils.getIdFromMinionId(hostname);
 
-    element.appendChild(Route._createTd("hostname", hostname));
+    element.appendChild(Route._createTd("minion-id", hostname));
 
     const minion = Route._createTd("status", "accepted");
     minion.classList.add("accepted");
@@ -309,7 +309,7 @@ export class PageRoute extends Route {
 
   _addNone(container) {
     const tr = document.createElement("tr");
-    const td = Route._createTd("hostname", "none");
+    const td = Route._createTd("minion-id", "none");
     td.setAttribute("colspan", container.rows[0].cells.length);
     tr.appendChild(td);
     container.appendChild(tr);
@@ -432,7 +432,7 @@ export class PageRoute extends Route {
       for(const tr of this.page_element.querySelector("table.jobs tbody").rows) {
         const statusSpan = tr.querySelector("span.status");
         if(!statusSpan) continue;
-        statusSpan.classList.remove("no_status");
+        statusSpan.classList.remove("no-status");
         statusSpan.innerText = "(error)";
         // we show the tooltip here so that the user is invited to click on this
         // the user then sees other rows being updated without becoming invisible
@@ -445,7 +445,7 @@ export class PageRoute extends Route {
     for(const tr of this.page_element.querySelector("table.jobs tbody").rows) {
       const statusSpan = tr.querySelector("span.status");
       if(!statusSpan) continue;
-      statusSpan.classList.remove("no_status");
+      statusSpan.classList.remove("no-status");
       statusSpan.innerText = "done";
       // we show the tooltip here so that the user is invited to click on this
       // the user then sees other rows being updated without becoming invisible
@@ -495,11 +495,11 @@ export class PageRoute extends Route {
     td.appendChild(functionDiv);
 
     const statusSpan = Route._createSpan("status", "loading...");
-    statusSpan.classList.add("no_status");
+    statusSpan.classList.add("no-status");
     /* effectively also the whole column, but it does not look like a column on screen */
     statusSpan.addEventListener("click", evt => {
       // show "loading..." only once, but we are updating the whole column
-      statusSpan.classList.add("no_status");
+      statusSpan.classList.add("no-status");
       statusSpan.innerText = "loading...";
       this._startRunningJobs();
       evt.stopPropagation();
@@ -529,7 +529,7 @@ export class PageRoute extends Route {
 
   _addMenuItemUpdateStatus(menu, statusSpan) {
     menu.addMenuItem("Update&nbsp;status", function(evt) {
-      statusSpan.classList.add("no_status");
+      statusSpan.classList.add("no-status");
       statusSpan.innerText = "loading...";
       this._startRunningJobs();
     }.bind(this));

@@ -41,9 +41,9 @@ export class Router {
     // show template menu item if templates defined
     const templatesText = window.localStorage.getItem("templates");
     if(templatesText && templatesText !== "undefined") {
-      const item1 = document.querySelector("#button_templates1");
+      const item1 = document.querySelector("#button-templates1");
       item1.style.display = "inline-block";
-      const item2 = document.querySelector("#button_templates2");
+      const item2 = document.querySelector("#button-templates2");
       item2.style.display = "inline-block";
     }
 
@@ -65,85 +65,85 @@ export class Router {
         this.goTo("/");
       });
 
-    document.querySelector("#button_minions1")
+    document.querySelector("#button-minions1")
       .addEventListener("click", _ => {
         window.location.replace("/");
       });
-    document.querySelector("#button_minions2")
+    document.querySelector("#button-minions2")
       .addEventListener("click", _ => {
         window.location.replace("/");
       });
 
-    document.querySelector("#button_grains1")
+    document.querySelector("#button-grains1")
       .addEventListener('click', _ => {
         window.location.replace("/grains");
       });
-    document.querySelector("#button_grains2")
+    document.querySelector("#button-grains2")
       .addEventListener('click', _ => {
         window.location.replace("/grains");
       });
 
-    document.querySelector("#button_schedules1")
+    document.querySelector("#button-schedules1")
       .addEventListener('click', _ => {
         window.location.replace("/schedules");
       });
-    document.querySelector("#button_schedules2")
+    document.querySelector("#button-schedules2")
       .addEventListener('click', _ => {
         window.location.replace("/schedules");
       });
 
-    document.querySelector("#button_pillars1")
+    document.querySelector("#button-pillars1")
       .addEventListener('click', _ => {
         window.location.replace("/pillars");
       });
-    document.querySelector("#button_pillars2")
+    document.querySelector("#button-pillars2")
       .addEventListener('click', _ => {
         window.location.replace("/pillars");
       });
 
-    document.querySelector("#button_beacons1")
+    document.querySelector("#button-beacons1")
       .addEventListener('click', _ => {
         window.location.replace("/beacons");
       });
-    document.querySelector("#button_beacons2")
+    document.querySelector("#button-beacons2")
       .addEventListener('click', _ => {
         window.location.replace("/beacons");
       });
 
-    document.querySelector("#button_keys1")
+    document.querySelector("#button-keys1")
       .addEventListener("click", _ => {
         window.location.replace("/keys");
       });
-    document.querySelector("#button_keys2")
+    document.querySelector("#button-keys2")
       .addEventListener("click", _ => {
         window.location.replace("/keys");
       });
 
-    document.querySelector("#button_jobs1")
+    document.querySelector("#button-jobs1")
       .addEventListener('click', _ => {
         window.location.replace("/jobs");
       });
-    document.querySelector("#button_jobs2")
+    document.querySelector("#button-jobs2")
       .addEventListener('click', _ => {
         window.location.replace("/jobs");
       });
 
-    document.querySelector("#button_templates1")
+    document.querySelector("#button-templates1")
       .addEventListener('click', _ => {
         window.location.replace("/templates");
       });
-    document.querySelector("#button_templates2")
+    document.querySelector("#button-templates2")
       .addEventListener('click', _ => {
         window.location.replace("/templates");
       });
 
-    document.querySelector("#button_logout1")
+    document.querySelector("#button-logout1")
       .addEventListener("click", _ => {
         this.api.logout().then(() => {
           window.location.replace("/");
         });
       });
-    document.querySelector("#button_logout2")
+    document.querySelector("#button-logout2")
       .addEventListener("click", _ => {
         this.api.logout().then(() => {
           window.location.replace("/");
@@ -173,32 +173,32 @@ export class Router {
 
     route.getPageElement().style.display = "";
 
-    const minionMenuItem = document.getElementById("button_minions1");
-    const jobsMenuItem = document.getElementById("button_jobs1");
+    const minionMenuItem = document.getElementById("button-minions1");
+    const jobsMenuItem = document.getElementById("button-jobs1");
 
-    Array.from(document.querySelectorAll(".menu_item_active")).forEach(
-      function (e){ e.classList.remove("menu_item_active"); }
+    Array.from(document.querySelectorAll(".menu-item-active")).forEach(
+      function (e){ e.classList.remove("menu-item-active"); }
     );
 
     const elem1 = route.getMenuItemElement1();
     if(elem1) {
-      elem1.classList.add("menu_item_active");
+      elem1.classList.add("menu-item-active");
       // activate also parent menu item if child element is selected
-      if(elem1.id === "button_pillars1" ||
-         elem1.id === "button_schedules1" ||
-         elem1.id === "button_grains1" ||
-         elem1.id === "button_beacons1") {
-        minionMenuItem.classList.add("menu_item_active");
+      if(elem1.id === "button-pillars1" ||
+         elem1.id === "button-schedules1" ||
+         elem1.id === "button-grains1" ||
+         elem1.id === "button-beacons1") {
+        minionMenuItem.classList.add("menu-item-active");
       }
-      if(elem1.id === "button_jobs1" ||
-         elem1.id === "button_templates1") {
-        jobsMenuItem.classList.add("menu_item_active");
+      if(elem1.id === "button-jobs1" ||
+         elem1.id === "button-templates1") {
+        jobsMenuItem.classList.add("menu-item-active");
       }
     }
 
     const elem2 = route.getMenuItemElement2();
     if(elem2) {
-      elem2.classList.add("menu_item_active");
+      elem2.classList.add("menu-item-active");
     }
 
     this.switchingRoute = true;

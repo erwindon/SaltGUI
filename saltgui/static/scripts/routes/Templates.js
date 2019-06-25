@@ -6,7 +6,7 @@ import {Utils} from '../Utils.js';
 export class TemplatesRoute extends PageRoute {
 
   constructor(router) {
-    super("^[\/]templates$", "Templates", "#page_templates", "#button_templates", router);
+    super("^[\/]templates$", "Templates", "#page-templates", "#button-templates", router);
 
     this._handleWheelConfigValues = this._handleWheelConfigValues.bind(this);
   }
@@ -67,7 +67,7 @@ export class TemplatesRoute extends PageRoute {
     // calculate description
     const description = template["description"];
     if(!description) {
-      tr.appendChild(Route._createTd("description value_none", "(none)"));
+      tr.appendChild(Route._createTd("description value-none", "(none)"));
     } else {
       tr.appendChild(Route._createTd("description", description));
     }
@@ -77,7 +77,7 @@ export class TemplatesRoute extends PageRoute {
     // calculate target
     const target = template["target"];
     if(!targettype && !target) {
-      tr.appendChild(Route._createTd("target value_none", "(none)"));
+      tr.appendChild(Route._createTd("target value-none", "(none)"));
     } else if(/* targettype && */ !target) {
       tr.appendChild(Route._createTd("target", targettype));
     } else if(!targettype /* && target */) {
@@ -89,7 +89,7 @@ export class TemplatesRoute extends PageRoute {
     // calculate command
     const command = template["command"];
     if(!command) {
-      tr.appendChild(Route._createTd("command value_none", "(none)"));
+      tr.appendChild(Route._createTd("command value-none", "(none)"));
     } else {
       tr.appendChild(Route._createTd("command", command));
     }

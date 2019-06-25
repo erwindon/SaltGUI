@@ -8,11 +8,11 @@ import {Utils} from '../Utils.js';
 export class BeaconsMinionRoute extends PageRoute {
 
   constructor(router) {
-    super("^[\/]beaconsminion$", "Beacons", "#page_beaconsminion", "#button_beacons", router);
+    super("^[\/]beaconsminion$", "Beacons", "#page-beacons-minion", "#button-beacons", router);
 
     this._handleLocalBeaconsList = this._handleLocalBeaconsList.bind(this);
 
-    this.page_element.querySelector("#button_close_beaconsminion").addEventListener("click", _ => {
+    this.page_element.querySelector("#beacons-minion-button-close").addEventListener("click", _ => {
       this.router.goTo("/beacons");
     });
   }
@@ -45,9 +45,9 @@ export class BeaconsMinionRoute extends PageRoute {
   }
 
   _handleLocalBeaconsList(data, minion) {
-    const page = document.getElementById("beaconsminion_page");
+    const page = document.getElementById("beacons-minion-panel");
 
-    const container = document.getElementById("beaconsminion_list");
+    const container = document.getElementById("beacons-minion-list");
 
     if(PageRoute.showErrorRowInstead(container.tBodies[0], data)) return;
 
@@ -55,7 +55,7 @@ export class BeaconsMinionRoute extends PageRoute {
 
     const beacons = BeaconsRoute._fixMinion(beacons0);
 
-    const title = document.getElementById("beaconsminion_title");
+    const title = document.getElementById("beacons-minion-title");
     let txt = "Beacons on " + minion;
     if(beacons && beacons.enabled === false) txt += " (disabled)";
     title.innerText = txt;
@@ -86,7 +86,7 @@ export class BeaconsMinionRoute extends PageRoute {
     for(const k of keys) {
       const tr = document.createElement('tr');
 
-      const name = Route._createTd("beacon_name", k);
+      const name = Route._createTd("beacon-name", k);
       tr.appendChild(name);
 
       const beacon = beacons.beacons[k];
@@ -108,13 +108,13 @@ export class BeaconsMinionRoute extends PageRoute {
 
       // menu comes before this data on purpose
       const beacon_config = Output.formatObject(beacon);
-      const value = Route._createTd("beacon_config", beacon_config);
-      if(beacons.enabled === false) value.classList.add("disabled_beacon");
-      if(beacon.enabled === false) value.classList.add("disabled_beacon");
+      const value = Route._createTd("beacon-config", beacon_config);
+      if(beacons.enabled === false) value.classList.add("beacon-disabled");
+      if(beacon.enabled === false) value.classList.add("beacon-disabled");
       tr.appendChild(value);
 
-      const beacon_value = Route._createTd("beacon_value", "(waiting)");
-      beacon_value.classList.add("waiting");
+      const beacon_value = Route._createTd("beacon-value", "(waiting)");
+      beacon_value.classList.add("beacon-waiting");
       tr.appendChild(beacon_value);
 
       container.tBodies[0].appendChild(tr);
@@ -189,7 +189,7 @@ export class BeaconsMinionRoute extends PageRoute {
     const minion = decodeURIComponent(Utils.getQueryParam("minion"));
     const prefix = "salt/beacon/" + minion + "/";
     if(!tag.startsWith(prefix)) return;
-    const table = document.getElementById("beaconsminion_list");
+    const table = document.getElementById("beacons-minion-list");
     let name = tag.substring(prefix.length);
     if(name.endsWith("/")) name = name.substring(0, name.length-1);
     for(const row of table.tBodies[0].rows) {
@@ -204,7 +204,7 @@ export class BeaconsMinionRoute extends PageRoute {
       }
       txt += Output.formatObject(data);
       const td = row.getElementsByTagName("td")[3];
-      td.classList.remove("waiting");
+      td.classList.remove("beacon-waiting");
       td.innerText = txt;
       break;
     }

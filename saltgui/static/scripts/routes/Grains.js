@@ -7,7 +7,7 @@ import {Utils} from '../Utils.js';
 export class GrainsRoute extends PageRoute {
 
   constructor(router) {
-    super("^[\/]grains$", "Grains", "#page_grains", "#button_grains", router);
+    super("^[\/]grains$", "Grains", "#page-grains", "#button-grains", router);
 
     this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
     this._updateMinion = this._updateMinion.bind(this);
@@ -22,7 +22,7 @@ export class GrainsRoute extends PageRoute {
       this._previewGrains = [ ];
     }
     // add the preview columns
-    const tr = this.page_element.querySelector("#page_grains thead tr");
+    const tr = this.page_element.querySelector("#page-grains thead tr");
     for(let i = 0; i < this._previewGrains.length; i++) {
       const th = document.createElement("th");
       th.innerText = this._previewGrains[i];
@@ -32,11 +32,11 @@ export class GrainsRoute extends PageRoute {
     // The new columns are not yet sortable, make sure they are.
     // First detroy all the default sorting handlers.
     // A (deep)copy of an element does not copy its handlers.
-    const oldHead = this.page_element.querySelector("#page_grains table thead");
+    const oldHead = this.page_element.querySelector("#page-grains table thead");
     const newHead = oldHead.cloneNode(true);
     oldHead.parentNode.replaceChild(newHead, oldHead);
     // Now re-start sorting logic.
-    sorttable.makeSortable(this.page_element.querySelector("#page_grains table"));
+    sorttable.makeSortable(this.page_element.querySelector("#page-grains table"));
   }
 
   onShow() {
@@ -147,7 +147,7 @@ export class GrainsRoute extends PageRoute {
       if(typeof minion === "object") {
         if(grainName in minion) {
           td.innerText = Output.formatObject(minion[grainName]);
-          td.classList.add("grain_value");
+          td.classList.add("grain-value");
         }
       } else {
         Utils.addErrorToTableCell(td, minion);

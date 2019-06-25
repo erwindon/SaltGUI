@@ -19,7 +19,7 @@ export class DropDownMenu {
     this.menuDropdown = Route._createDiv("run-command-button", "");
 
     switch (element.id) {
-    case "cmdbox":
+    case "cmd-box":
       // 1F4D6 (D83D+DCD6) = A BOOK
       this.menuButton = Route._createDiv("menu-dropdown", "\uD83D\uDCD6");
       // hide the menu until it receives menu-items

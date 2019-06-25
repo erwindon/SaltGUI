@@ -250,7 +250,7 @@ export class OutputDocumentation {
         out = out.replace(/\n\n\n*/gm, "\n\n");
 
         outputContainer.innerHTML +=
-          "<div><span class='hostname'>" + key + "</span>:</br><pre style='height: initial; overflow-y: initial;'>" + out + "</pre></div>";
+          "<div><span class='minion-id'>" + key + "</span>:</br><pre style='height: initial; overflow-y: initial;'>" + out + "</pre></div>";
       }
     }
   }

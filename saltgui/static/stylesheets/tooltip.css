@@ -2,7 +2,7 @@
   position: relative;
 }
 
-.tooltip > .tooltiptext {
+.tooltip > .tooltip-text {
   visibility: hidden;
   font-size: 14px;
   background-color: rgba(76, 175, 80, 0.8); /* #4caf50 */
@@ -27,20 +27,20 @@
   background-color: #e0e0e0;
 }
 
-.tooltip:hover > .tooltiptext {
+.tooltip:hover > .tooltip-text {
   visibility: visible;
 }
 
-pre.output .tooltip > .tooltiptext {
+pre.output .tooltip > .tooltip-text {
   background-color: rgba(76, 175, 80, 0.8); /* #4caf50 */
 }
 
 pre.output .tooltip:hover {
-  /* only slightly lighter than 'whitesmoke(#272727)' */
+  /* only slightly lighter than '#272727' */
   background-color: #484848;
 }
 
-.tooltip > .tooltiptext::after {
+.tooltip > .tooltip-text::after {
   font-size: 8px;
   content: " ";
   position: absolute;
@@ -52,6 +52,6 @@ pre.output .tooltip:hover {
   border-color: rgba(76, 175, 80, 0.8) transparent transparent transparent;
 }
 
-pre.output .tooltip > .tooltiptext::after {
+pre.output .tooltip > .tooltip-text::after {
   border-color: rgba(76, 175, 80, 0.8) transparent transparent transparent; /* #4caf50 */
 }

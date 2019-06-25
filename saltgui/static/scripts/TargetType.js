@@ -3,7 +3,7 @@ import {DropDownMenu} from './DropDown.js';
 export class TargetType {
 
   static createMenu() {
-    const targetbox = document.getElementById("targetbox");
+    const targetbox = document.getElementById("target-box");
     TargetType.menuTargetType = new DropDownMenu(targetbox);
     // do not show the menu title at first
     TargetType.menuTargetType.addMenuItem("Normal", this.manualUpdateTargetTypeText, "glob");

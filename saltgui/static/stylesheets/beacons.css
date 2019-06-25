@@ -1,12 +1,12 @@
-td.beacon_config {
+td.beacon-config {
   white-space: pre;
 }
 
-td.beacon_value {
+td.beacon-value {
   white-space: pre-wrap;
 }
 
-#page_beacons {
+#page-beacons {
   width: 100%;
 }
 
@@ -14,7 +14,7 @@ td.beacon_value {
   padding: 0;
 }
 
-td.disabled_beacon,
-td.waiting {
+td.beacon-disabled,
+td.beacon-waiting {
   color: gray;
 }

@@ -1,4 +1,4 @@
-#page_login {
+#page-login {
   display: flex;
   justify-content: center;
   width: 100%;
@@ -38,7 +38,7 @@
   font-size: 14px;
 }
 
-#login-form select option#eauth_default {
+#login-form select option#eauth-default {
   color: gray;
 }
 
@@ -69,12 +69,12 @@
 }
 
 .notice-wrapper.show {
-  animation-name: shownotice;
+  animation-name: show-notice;
   animation-iteration-count: 1;
   animation-duration: 5s;
 }
 
-@keyframes shownotice {
+@keyframes show-notice {
   0% { height: 0; }
   20% { height: 38px; }
   80% { height: 38px; }

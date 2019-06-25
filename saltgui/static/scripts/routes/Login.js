@@ -3,7 +3,7 @@ import {Route} from './Route.js';
 export class LoginRoute extends Route {
 
   constructor(router) {
-    super("^[\/]login$", "Login", "#page_login", "", router);
+    super("^[\/]login$", "Login", "#page-login", "", router);
 
     this.loginPending = false;
 

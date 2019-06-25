@@ -37,13 +37,13 @@ export class Utils {
     }
 
     const tooltipSpan = Route._createSpan("", tooltipText);
-    tooltipSpan.classList.add("tooltiptext");
+    tooltipSpan.classList.add("tooltip-text");
     tooltipHost.classList.add("tooltip");
 
     // remove the old tooltip...
     for(let i = tooltipHost.children.length - 1; i >= 0; i--) {
       const child = tooltipHost.children[i];
-      if(child.classList.contains("tooltiptext")) {
+      if(child.classList.contains("tooltip-text")) {
         tooltipHost.removeChild(child);
       }
     }
@@ -113,14 +113,14 @@ export class Utils {
     hilitor.remove();
 
     // show rows in all tables
-    const allFM = startElement.querySelectorAll("table .nofiltermatch");
+    const allFM = startElement.querySelectorAll("table .no-filter-match");
     for(const fm of allFM)
-      fm.classList.remove("nofiltermatch");
+      fm.classList.remove("no-filter-match");
 
     const table = startElement.querySelector("table");
 
     // hide/show search box
-    const input = startElement.querySelector("input.filtertext");
+    const input = startElement.querySelector("input.filter-text");
     input.onkeyup = ev => {
       if(ev.key === "Escape") {
         Utils.updateTableFilter(table, "");
@@ -159,9 +159,9 @@ export class Utils {
         if(Utils.hasTextContent(cell, txt)) show = true;
       }
       if(show)
-        row.classList.remove("nofiltermatch");
+        row.classList.remove("no-filter-match");
       else
-        row.classList.add("nofiltermatch");
+        row.classList.add("no-filter-match");
     }
 
     // show the result

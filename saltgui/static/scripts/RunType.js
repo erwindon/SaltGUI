@@ -3,7 +3,7 @@ import {DropDownMenu} from './DropDown.js';
 export class RunType {
 
   static createMenu() {
-    const runblock = document.getElementById("runblock");
+    const runblock = document.getElementById("run-block");
     RunType.menuRunType = new DropDownMenu(runblock);
     // do not show the menu title at first
     RunType.menuRunType.setTitle("");

@@ -6,7 +6,7 @@ import {Utils} from '../Utils.js';
 export class SchedulesRoute extends PageRoute {
 
   constructor(router) {
-    super("^[\/]schedules$", "Schedules", "#page_schedules", "#button_schedules", router);
+    super("^[\/]schedules$", "Schedules", "#page-schedules", "#button-schedules", router);
 
     this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
     this._updateMinion = this._updateMinion.bind(this);
@@ -121,7 +121,7 @@ export class SchedulesRoute extends PageRoute {
 
     const element = this._getElement(container, Utils.getIdFromMinionId(hostname));
 
-    element.appendChild(Route._createTd("hostname", hostname));
+    element.appendChild(Route._createTd("minion-id", hostname));
 
     const statusDiv = Route._createTd("status", "accepted");
     statusDiv.classList.add("accepted");

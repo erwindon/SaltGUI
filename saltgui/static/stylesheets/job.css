@@ -1,17 +1,17 @@
-#page_job .job-info {
+#page-job .job-info {
   margin: 10px;
 }
 
-#page_job .time {
+#page-job .time {
   font-size: 15px;
   font-weight: normal;
   margin-bottom: 10px;
 }
 
-#page_job .job_menu {
+#page-job .job-menu {
   display: inline;
 }
 
-#page_job .highlight-task {
+#page-job .highlight-task {
   background-color: gray;
 }

@@ -8,7 +8,7 @@ import {Utils} from '../Utils.js';
 export class JobsRoute extends PageRoute {
 
   constructor(router) {
-    super("^[\/]jobs$", "Jobs", "#page_jobs", "#button_jobs", router);
+    super("^[\/]jobs$", "Jobs", "#page-jobs", "#button-jobs", router);
 
     this._getJobDetails = this._getJobDetails.bind(this);
   }
@@ -34,7 +34,7 @@ export class JobsRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    const page = document.getElementById("jobs_page");
+    const page = document.getElementById("jobs-panel");
     const menu = new DropDownMenu(page);
     this._addMenuItemShowSomeWhenNeeded(menu);
     this._addMenuItemShowEligibleWhenNeeded(menu);
@@ -42,7 +42,7 @@ export class JobsRoute extends PageRoute {
 
     // new menu's are always added at the bottom of the div
     // fix that by re-adding it to its proper place
-    const title = document.getElementById("jobs_title");
+    const title = document.getElementById("jobs-title");
     page.insertBefore(menu.menuDropdown, title.nextSibling);
 
     runnerJobsListJobsPromise.then(data => {
@@ -113,10 +113,10 @@ export class JobsRoute extends PageRoute {
 
     const tdStatus = Route._createTd("status", "");
     const spanStatus = Route._createSpan("status2", "loading...");
-    spanStatus.classList.add("no_status");
+    spanStatus.classList.add("no-status");
     spanStatus.addEventListener("click", evt => {
       // show "loading..." only once, but we are updating the whole column
-      spanStatus.classList.add("no_status");
+      spanStatus.classList.add("no-status");
       spanStatus.innerText = "loading...";
       this._startRunningJobs();
       evt.stopPropagation();
@@ -128,9 +128,9 @@ export class JobsRoute extends PageRoute {
 
     const tdDetails = Route._createTd("details", "");
     const spanDetails = Route._createSpan("details2", "(click)");
-    spanDetails.classList.add("no_status");
+    spanDetails.classList.add("no-status");
     spanDetails.addEventListener("click", evt => {
-      spanDetails.classList.add("no_status");
+      spanDetails.classList.add("no-status");
       spanDetails.innerText = "loading...";
       this._getJobDetails(job.id);
       evt.stopPropagation();
@@ -166,7 +166,7 @@ export class JobsRoute extends PageRoute {
 
   _addMenuItemUpdateStatus(menu, spanStatus) {
     menu.addMenuItem("Update&nbsp;status", function(evt) {
-      spanStatus.classList.add("no_status");
+      spanStatus.classList.add("no-status");
       spanStatus.innerText = "loading...";
       this._startRunningJobs();
     }.bind(this));
@@ -174,7 +174,7 @@ export class JobsRoute extends PageRoute {
 
   _addMenuItemUpdateDetails(menu, spanDetails, job) {
     menu.addMenuItem("Update&nbsp;details", function(evt) {
-      spanDetails.classList.add("no_status");
+      spanDetails.classList.add("no-status");
       spanDetails.innerText = "loading...";
       this._getJobDetails(job.id);
     }.bind(this));
@@ -185,9 +185,9 @@ export class JobsRoute extends PageRoute {
     if(typeof data !== "object") {
       // update all jobs (page) with the error message
       for(const tr of this.page_element.querySelector("table#jobs tbody").rows) {
-        const statusField = tr.querySelector("td.status span.no_status");
+        const statusField = tr.querySelector("td.status span.no-status");
         if(!statusField) continue;
-        statusField.classList.remove("no_status");
+        statusField.classList.remove("no-status");
         statusField.innerText = "(error)";
         Utils.addToolTip(statusField, data);
       }
@@ -218,16 +218,16 @@ export class JobsRoute extends PageRoute {
 
       // the field may not (yet) be on the screen
       if(!targetField) continue;
-      targetField.classList.remove("no_status");
+      targetField.classList.remove("no-status");
       targetField.innerText = targetText;
       Utils.addToolTip(targetField, "Click to refresh column");
     }
 
     // update all finished jobs (page)
     for(const tr of this.page_element.querySelector("table#jobs tbody").rows) {
-      const statusField = tr.querySelector("td.status span.no_status");
+      const statusField = tr.querySelector("td.status span.no-status");
       if(!statusField) continue;
-      statusField.classList.remove("no_status");
+      statusField.classList.remove("no-status");
       statusField.innerText = "done";
       // we show the tooltip here so that the user is invited to click on this
       // the user then sees other rows being updated without becoming invisible
@@ -254,7 +254,7 @@ export class JobsRoute extends PageRoute {
 
     if(typeof data !== "object") {
       detailsSpan.innerText = "(error)";
-      detailsSpan.classList.remove("no_status");
+      detailsSpan.classList.remove("no-status");
       Utils.addToolTip(detailsSpan, data);
       return;
     }
@@ -264,7 +264,7 @@ export class JobsRoute extends PageRoute {
     if(data.Error) {
       // typically happens for jobs that are expired from jobs-cache
       detailsSpan.innerText = "(error)";
-      detailsSpan.classList.remove("no_status");
+      detailsSpan.classList.remove("no-status");
       Utils.addToolTip(detailsSpan, data.Error);
       return;
     }
@@ -312,7 +312,7 @@ export class JobsRoute extends PageRoute {
     }
 
     detailsSpan.innerHTML = str;
-    detailsSpan.classList.remove("no_status");
+    detailsSpan.classList.remove("no-status");
     Utils.addToolTip(detailsSpan, "Click to refresh");
   }
 

@@ -6,7 +6,7 @@ import {Utils} from '../Utils.js';
 export class KeysRoute extends PageRoute {
 
   constructor(router) {
-    super("^[\/]keys$", "Keys", "#page_keys", "#button_keys", router);
+    super("^[\/]keys$", "Keys", "#page-keys", "#button-keys", router);
 
     this.fingerprintPattern = /^[0-9a-f:]+$/i;
 
@@ -153,7 +153,7 @@ export class KeysRoute extends PageRoute {
   _addRejectedMinion(container, hostname) {
     const element = this._getElement(container, Utils.getIdFromMinionId(hostname));
 
-    element.appendChild(Route._createTd("hostname", hostname));
+    element.appendChild(Route._createTd("minion-id", hostname));
 
     const rejected = Route._createTd("status", "rejected");
     rejected.classList.add("rejected");
@@ -174,7 +174,7 @@ export class KeysRoute extends PageRoute {
   _addDeniedMinion(container, hostname) {
     const element = this._getElement(container, Utils.getIdFromMinionId(hostname));
 
-    element.appendChild(Route._createTd("hostname", hostname));
+    element.appendChild(Route._createTd("minion-id", hostname));
 
     const denied = Route._createTd("status", "denied");
     denied.classList.add("denied");
@@ -196,7 +196,7 @@ export class KeysRoute extends PageRoute {
   _addPreMinion(container, hostname) {
     const element = this._getElement(container, Utils.getIdFromMinionId(hostname));
 
-    element.appendChild(Route._createTd("hostname", hostname));
+    element.appendChild(Route._createTd("minion-id", hostname));
 
     const pre = Route._createTd("status", "unaccepted");
     pre.classList.add("unaccepted");
@@ -234,7 +234,7 @@ export class KeysRoute extends PageRoute {
   }
 
   handleSaltAuthEvent(tag, data) {
-    const page = document.getElementById("page_keys");
+    const page = document.getElementById("page-keys");
     const list = page.querySelector("#minions");
     const tr = page.querySelector("table tr#" + Utils.getIdFromMinionId(data.id));
     if(tr) {

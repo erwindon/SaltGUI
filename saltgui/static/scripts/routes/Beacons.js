@@ -7,7 +7,7 @@ import {Utils} from '../Utils.js';
 export class BeaconsRoute extends PageRoute {
 
   constructor(router) {
-    super("^[\/]beacons$", "Beacons", "#page_beacons", "#button_beacons", router);
+    super("^[\/]beacons$", "Beacons", "#page-beacons", "#button-beacons", router);
 
     this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
     this._updateMinion = this._updateMinion.bind(this);
@@ -15,11 +15,11 @@ export class BeaconsRoute extends PageRoute {
     // The new columns are not yet sortable, make sure they are.
     // First detroy all the default sorting handlers.
     // A (deep)copy of an element does not copy its handlers.
-    const oldHead = this.page_element.querySelector("#page_beacons table thead");
+    const oldHead = this.page_element.querySelector("#page-beacons table thead");
     const newHead = oldHead.cloneNode(true);
     oldHead.parentNode.replaceChild(newHead, oldHead);
     // Now re-start sorting logic.
-    sorttable.makeSortable(this.page_element.querySelector("#page_beacons table"));
+    sorttable.makeSortable(this.page_element.querySelector("#page-beacons table"));
   }
 
   onShow() {

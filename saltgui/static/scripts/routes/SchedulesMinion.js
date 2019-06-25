@@ -8,11 +8,11 @@ import {Utils} from '../Utils.js';
 export class SchedulesMinionRoute extends PageRoute {
 
   constructor(router) {
-    super("^[\/]schedulesminion$", "Schedules", "#page_schedulesminion", "#button_schedules", router);
+    super("^[\/]schedulesminion$", "Schedules", "#page-schedules-minion", "#button-schedules", router);
 
     this._handleLocalScheduleList = this._handleLocalScheduleList.bind(this);
 
-    this.page_element.querySelector("#button_close_schedulesminion").addEventListener("click", _ => {
+    this.page_element.querySelector("#schedules-minion-button-close").addEventListener("click", _ => {
       this.router.goTo("/schedules");
     });
   }
@@ -23,7 +23,7 @@ export class SchedulesMinionRoute extends PageRoute {
     const minion = decodeURIComponent(Utils.getQueryParam("minion"));
 
     // preliminary title
-    const title = document.getElementById("schedulesminion_title");
+    const title = document.getElementById("schedules-minion-title");
     title.innerText = "Schedules on " + minion;
 
     const localScheduleListPromise = this.router.api.getLocalScheduleList(minion);
@@ -49,16 +49,16 @@ export class SchedulesMinionRoute extends PageRoute {
   }
 
   _handleLocalScheduleList(data, minion) {
-    const page = document.getElementById("schedulesminion_page");
+    const page = document.getElementById("schedules-minion-panel");
 
-    const container = document.getElementById("schedulesminion_list");
+    const container = document.getElementById("schedules-minion-list");
 
     if(PageRoute.showErrorRowInstead(container.tBodies[0], data)) return;
 
     let schedules = data.return[0][minion];
     schedules = SchedulesRoute._fixMinion(schedules);
 
-    const title = document.getElementById("schedulesminion_title");
+    const title = document.getElementById("schedules-minion-title");
     let txt = "Schedules on " + minion;
     if(schedules && schedules.enabled === false) txt += " (disabled)";
     title.innerText = txt;
@@ -99,7 +99,7 @@ export class SchedulesMinionRoute extends PageRoute {
 
       const tr = document.createElement('tr');
 
-      const name = Route._createTd("schedule_name", k);
+      const name = Route._createTd("schedule-name", k);
       tr.appendChild(name);
 
       const menu = new DropDownMenu(tr);
@@ -121,9 +121,9 @@ export class SchedulesMinionRoute extends PageRoute {
 
       // menu comes before this data on purpose
       const schedule_value = Output.formatObject(schedule);
-      const value = Route._createTd("schedule_value", schedule_value);
-      if(schedule.enabled === false) value.classList.add("disabled_schedule");
-      if(schedules.enabled === false) value.classList.add("disabled_schedule");
+      const value = Route._createTd("schedule-value", schedule_value);
+      if(schedule.enabled === false) value.classList.add("schedule-disabled");
+      if(schedules.enabled === false) value.classList.add("schedule-disabled");
       tr.appendChild(value);
 
       container.tBodies[0].appendChild(tr);

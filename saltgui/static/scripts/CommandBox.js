@@ -17,7 +17,7 @@ export class CommandBox {
     this._showManualRun = this._showManualRun.bind(this);
     this._hideManualRun = this._hideManualRun.bind(this);
 
-    const cmdbox = document.querySelector(".run-command #cmdbox");
+    const cmdbox = document.querySelector(".run-command #cmd-box");
     this.cmdmenu = new DropDownMenu(cmdbox);
 
     this.documentation = new Documentation(this);
@@ -26,7 +26,7 @@ export class CommandBox {
     RunType.createMenu();
     TargetType.createMenu();
 
-    const title = document.querySelector(".run-command #templatemenuhere");
+    const title = document.querySelector(".run-command #template-menu-here");
     const menu = new DropDownMenu(title);
     let templatesText = window.localStorage.getItem("templates");
     if(!templatesText || templatesText === "undefined") templatesText = "{}";
@@ -46,11 +46,11 @@ export class CommandBox {
   }
 
   _registerEventListeners() {
-    document.querySelector("#popup_runcommand")
+    document.querySelector("#popup-run-command")
       .addEventListener("click", this._hideManualRun);
-    document.querySelector("#button_manualrun")
+    document.querySelector("#button-manual-run")
       .addEventListener("click", this._showManualRun);
-    document.querySelector("#button_close_cmd")
+    document.querySelector("#button-close-cmd")
       .addEventListener("click", this._hideManualRun);
 
     document.querySelector(".run-command input[type='submit']")
@@ -68,7 +68,7 @@ export class CommandBox {
 
     if(template.targettype) {
       let tt = template.targettype;
-      const targetbox = document.querySelector("#targetbox");
+      const targetbox = document.querySelector("#target-box");
       // show the extended selection controls when
       targetbox.style.display = "inherit";
       if(tt !== "glob" && tt !== "list" && tt !== "compound" && tt !== "nodegroup") {
@@ -138,7 +138,7 @@ export class CommandBox {
   }
 
   _showManualRun(evt) {
-    const manualRun = document.querySelector("#popup_runcommand");
+    const manualRun = document.querySelector("#popup-run-command");
     manualRun.style.display = "block";
 
     document.body.style["overflow-y"] = "hidden";
@@ -162,7 +162,7 @@ export class CommandBox {
     RunType.setRunTypeDefault();
 
     // (re-)populate the dropdown box
-    const targetlist = document.getElementById("targetlist");
+    const targetlist = document.getElementById("target-list");
     while(targetlist.firstChild) {
       targetlist.removeChild(targetlist.firstChild);
     }
@@ -194,9 +194,9 @@ export class CommandBox {
 
   _hideManualRun(evt) {
     //Don't close if they click inside the window
-    if(evt.type === "click" && evt.target.className !== "popup" && evt.target.className !== "nearlyvisiblebutton") return;
+    if(evt.type === "click" && evt.target.className !== "popup" && evt.target.className !== "nearly-visible-button") return;
 
-    const manualRun = document.querySelector("#popup_runcommand");
+    const manualRun = document.querySelector("#popup-run-command");
     manualRun.style.display = "none";
 
     document.body.style["overflow-y"] = "scroll";

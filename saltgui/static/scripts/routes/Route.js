@@ -64,7 +64,7 @@ export class Route {
     this.router.commandbox._showManualRun(evt);
     const target = document.querySelector("#target");
     const command = document.querySelector("#command");
-    const targetbox = document.querySelector("#targetbox");
+    const targetbox = document.querySelector("#target-box");
 
     if(!targetString) targetString = "";
     // handle https://github.com/saltstack/salt/issues/48734

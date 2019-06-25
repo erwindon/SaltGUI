@@ -39,12 +39,12 @@ export class OutputHighstate {
     }
 
     if(anyFailures) {
-      return Output.getHostnameHtml(hostname, "host_failure");
+      return Output.getHostnameHtml(hostname, "host-failure");
     }
     if(anySkips) {
-      return Output.getHostnameHtml(hostname, "host_skips");
+      return Output.getHostnameHtml(hostname, "host-skips");
     }
-    return Output.getHostnameHtml(hostname, "host_success");
+    return Output.getHostnameHtml(hostname, "host-success");
   }
 
   static getHighStateOutput(hostname, pTasks) {

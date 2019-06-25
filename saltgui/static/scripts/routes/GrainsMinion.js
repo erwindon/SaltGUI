@@ -7,11 +7,11 @@ import {Utils} from '../Utils.js';
 export class GrainsMinionRoute extends PageRoute {
 
   constructor(router) {
-    super("^[\/]grainsminion$", "Grains", "#page_grainsminion", "#button_grains", router);
+    super("^[\/]grainsminion$", "Grains", "#page-grains-minion", "#button-grains", router);
 
     this._handleLocalGrainsItems = this._handleLocalGrainsItems.bind(this);
 
-    this.page_element.querySelector("#button_close_grainsminion").addEventListener("click", _ => {
+    this.page_element.querySelector("#grains-minion-button-close").addEventListener("click", _ => {
       this.router.goTo("/grains");
     });
   }
@@ -21,7 +21,7 @@ export class GrainsMinionRoute extends PageRoute {
 
     const minion = decodeURIComponent(Utils.getQueryParam("minion"));
 
-    const title = document.getElementById("grainsminion_title");
+    const title = document.getElementById("grains-minion-title");
     title.innerText = "Grains on " + minion;
 
     const localGrainsItemsPromise = this.router.api.getLocalGrainsItems(minion);
@@ -47,16 +47,16 @@ export class GrainsMinionRoute extends PageRoute {
   }
 
   _handleLocalGrainsItems(data, minion) {
-    const page = document.getElementById("grainsminion_page");
+    const page = document.getElementById("grains-minion-panel");
     const menu = new DropDownMenu(page);
     this._addMenuItemAddGrain(menu, minion);
     this._addMenuItemRefreshGrains(menu, minion);
 
-    const container = document.getElementById("grainsminion_list");
+    const container = document.getElementById("grains-minion-list");
 
     // new menu's are always added at the bottom of the div
     // fix that by re-adding it to its proper place
-    const title = document.getElementById("grainsminion_title");
+    const title = document.getElementById("grains-minion-title");
     page.insertBefore(menu.menuDropdown, title.nextSibling);
 
     if(PageRoute.showErrorRowInstead(container.tBodies[0], data)) return;
@@ -78,7 +78,7 @@ export class GrainsMinionRoute extends PageRoute {
     for(const k of keys) {
       const grain = document.createElement('tr');
 
-      const name = Route._createTd("grain_name", k);
+      const name = Route._createTd("grain-name", k);
       grain.appendChild(name);
 
       const grain_value = Output.formatObject(grains[k]);
@@ -90,7 +90,7 @@ export class GrainsMinionRoute extends PageRoute {
       this._addMenuItemDeleteValue(menu, minion, k);
 
       // menu comes before this data on purpose
-      const value = Route._createTd("grain_value", grain_value);
+      const value = Route._createTd("grain-value", grain_value);
       grain.appendChild(value);
 
       container.tBodies[0].appendChild(grain);

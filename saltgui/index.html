@@ -22,39 +22,39 @@
 <!-- full menu -->
       <div class="fullmenu">
         <div class="dropdown">
-          <div class="menu_item" id="button_minions1">minions</div>
+          <div class="menu-item" id="button-minions1">minions</div>
           <div class="dropdown-content">
-            <div class="run-command-button menu_item" id='button_grains1'>grains</div>
-            <div class="run-command-button menu_item" id='button_schedules1'>schedules</div>
-            <div class="run-command-button menu_item" id='button_pillars1'>pillars</div>
-            <div class="run-command-button menu_item" id='button_beacons1'>beacons</div>
+            <div class="run-command-button menu-item" id='button-grains1'>grains</div>
+            <div class="run-command-button menu-item" id='button-schedules1'>schedules</div>
+            <div class="run-command-button menu-item" id='button-pillars1'>pillars</div>
+            <div class="run-command-button menu-item" id='button-beacons1'>beacons</div>
           </div>
         </div>
-        <div class='menu_item' id='button_keys1'>keys</div>
+        <div class='menu-item' id='button-keys1'>keys</div>
         <div class="dropdown">
-          <div class="menu_item" id="button_jobs1">jobs</div>
+          <div class="menu-item" id="button-jobs1">jobs</div>
           <div class="dropdown-content">
-            <div class='run-command-button menu_item menuitem_hidden' id='button_templates1'>templates</div>
+            <div class='run-command-button menu-item menu-item-hidden' id='button-templates1'>templates</div>
           </div>
         </div>
-        <div class='menu_item' id='button_logout1'>logout</div>
+        <div class='menu-item' id='button-logout1'>logout</div>
       </div>
 <!-- mini menu -->
-      <div class='fab' id='button_manualrun'>&gt;_</div>
+      <div class='fab' id='button-manual-run'>&gt;_</div>
       <div class="minimenu">
         <div class="dropdown">
           <!-- 2261 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger") -->
-          <div class="menu_item">&#x2261;</div>
+          <div class="menu-item">&#x2261;</div>
           <div class="dropdown-content">
-            <div class="run-command-button menu_item" id="button_minions2">minions</div>
-            <div class="run-command-button menu_item" id='button_grains2'>-&nbsp;grains</div>
-            <div class="run-command-button menu_item" id='button_schedules2'>-&nbsp;schedules</div>
-            <div class="run-command-button menu_item" id='button_pillars2'>-&nbsp;pillars</div>
-            <div class="run-command-button menu_item" id='button_beacons2'>-&nbsp;beacons</div>
-            <div class='run-command-button menu_item' id='button_keys2'>keys</div>
-            <div class="run-command-button menu_item" id="button_jobs2">jobs</div>
-            <div class='run-command-button menu_item menuitem_hidden' id='button_templates2'>-&nbsp;templates</div>
-            <div class='run-command-button menu_item' id='button_logout2'>logout</div>
+            <div class="run-command-button menu-item" id="button-minions2">minions</div>
+            <div class="run-command-button menu-item" id='button-grains2'>-&nbsp;grains</div>
+            <div class="run-command-button menu-item" id='button-schedules2'>-&nbsp;schedules</div>
+            <div class="run-command-button menu-item" id='button-pillars2'>-&nbsp;pillars</div>
+            <div class="run-command-button menu-item" id='button-beacons2'>-&nbsp;beacons</div>
+            <div class='run-command-button menu-item' id='button-keys2'>keys</div>
+            <div class="run-command-button menu-item" id="button-jobs2">jobs</div>
+            <div class='run-command-button menu-item menu-item-hidden' id='button-templates2'>-&nbsp;templates</div>
+            <div class='run-command-button menu-item' id='button-logout2'>logout</div>
           </div>
         </div>
       </div>
@@ -62,7 +62,7 @@
 
     <div class='route-container'>
 
-      <div class='route' id='page_login'>
+      <div class='route' id='page-login'>
         <form method='post' id='login-form'>
           <h1>SaltGUI</h1>
           <div class='notice-wrapper'>
@@ -71,7 +71,7 @@
           <input id='password' type='password' placeholder='Password' />
           <select id='eauth'>
             <!-- see https://docs.saltstack.com/en/latest/ref/auth/all/index.html -->
-            <option id='eauth_default' value="default">Type</option>
+            <option id='eauth-default' value="default">Type</option>
             <optgroup label="standard" />
               <option value="pam">pam</option>
             </optgroup>
@@ -99,13 +99,13 @@
         </form>
       </div>
 
-      <div class='route' id='page_minions'>
+      <div class='route' id='page-minions'>
         <div class='dashboard'>
           <div class='panel minion-list'>
             <h1>Minions</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
-            <table id="minions" class='minions highlightrows sortable'>
+            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
+            <table id="minions" class='minions highlight-rows sortable'>
               <thead>
                 <tr><th>Minion</th><th>Status</th><th>Salt&nbsp;version</th><th>OS&nbsp;version</th><th class="sorttable_nosort"></th></tr>
               </thead>
@@ -116,21 +116,21 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
-            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
-            <table class='jobs highlightrows'><tbody></tbody></table>
+            <input style="display: none" class="filter-text" list="list-jobs" placeholder="&#x1F50D;">
+            <table class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
       </div>
 
-      <div class='route' id='page_keys'>
+      <div class='route' id='page-keys'>
         <div class='dashboard'>
           <div class='panel minion-list'>
             <h1>Keys</h1>
             <!-- 2753 = BLACK QUESTION MARK ORNAMENT -->
             <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
             <span id="help" style="float: right; cursor: help">&#x2753;&#xFE0E;</span>
-            <input style="display: none" class="filtertext" list="listkeys" placeholder="&#x1F50D;">
+            <input style="display: none" class="filter-text" list="list-keys" placeholder="&#x1F50D;">
             <table id="minions" class='minions sortable'>
               <thead>
                 <tr><th>Minion</th><th>Status</th><th>Fingerprint</th><th class="sorttable_nosort"></th></tr>
@@ -142,19 +142,19 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
-            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
-            <table class='jobs highlightrows'><tbody></tbody></table>
+            <input style="display: none" class="filter-text" list="list-jobs" placeholder="&#x1F50D;">
+            <table class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
       </div>
 
-      <div class='route' id='page_grains'>
+      <div class='route' id='page-grains'>
         <div class='dashboard'>
           <div class='panel minion-list'>
             <h1>Grains</h1>
-            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
-            <table id="minions" class='minions highlightrows sortable'>
+            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
+            <table id="minions" class='minions highlight-rows sortable'>
               <thead>
                 <tr><th>Minion</th><th>Status</th><th>Salt&nbsp;version</th><th>OS&nbsp;version</th><th>Grains</th><th class="sorttable_nosort"></th></tr>
               </thead>
@@ -165,21 +165,21 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
-            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
-            <table class='jobs highlightrows'><tbody></tbody></table>
+            <input style="display: none" class="filter-text" list="list-jobs" placeholder="&#x1F50D;">
+            <table class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
       </div>
 
-      <div class='route' id='page_grainsminion'>
+      <div class='route' id='page-grains-minion'>
         <div class='dashboard'>
-          <div id="grainsminion_page" class='panel minion-list'>
+          <div id="grains-minion-panel" class='panel minion-list'>
             <!-- 2715 = MULTIPLICATION X -->
-            <div class='nearlyvisiblebutton' id='button_close_grainsminion'>&#x2715;</div>
-            <h1 id="grainsminion_title">Grains on ...</h1>
-            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
-            <table id="grainsminion_list" class='grains highlightrows sortable'>
+            <div class='nearly-visible-button' id='grains-minion-button-close'>&#x2715;</div>
+            <h1 id="grains-minion-title">Grains on ...</h1>
+            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
+            <table id="grains-minion-list" class='grains highlight-rows sortable'>
               <thead>
                 <tr><th>Name</th><th class="sorttable_nosort"></th><th>Value</th></tr>
               </thead>
@@ -190,19 +190,19 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
-            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
-            <table class='jobs highlightrows'><tbody></tbody></table>
+            <input style="display: none" class="filter-text" list="list-jobs" placeholder="&#x1F50D;">
+            <table class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
       </div>
 
-      <div class='route' id='page_schedules'>
+      <div class='route' id='page-schedules'>
         <div class='dashboard'>
           <div class='panel minion-list'>
             <h1>Schedules</h1>
-            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
-            <table id="minions" class='minions highlightrows sortable'>
+            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
+            <table id="minions" class='minions highlight-rows sortable'>
               <thead>
                 <tr><th>Minion</th><th>Status</th><th>Schedules</th><th class="sorttable_nosort"></th></tr>
               </thead>
@@ -213,20 +213,20 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
-            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
-            <table class='jobs highlightrows'><tbody></tbody></table>
+            <input style="display: none" class="filter-text" list="list-jobs" placeholder="&#x1F50D;">
+            <table class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
       </div>
 
-      <div class='route' id='page_schedulesminion'>
+      <div class='route' id='page-schedules-minion'>
         <div class='dashboard'>
-          <div id="schedulesminion_page" class='panel minion-list'>
-            <div class='nearlyvisiblebutton' id='button_close_schedulesminion'>&#x2715;</div>
-            <h1 id="schedulesminion_title">Schedules on ...</h1>
-            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
-            <table id="schedulesminion_list" class='schedules highlightrows sortable'>
+          <div id="schedules-minion-panel" class='panel minion-list'>
+            <div class='nearly-visible-button' id='schedules-minion-button-close'>&#x2715;</div>
+            <h1 id="schedules-minion-title">Schedules on ...</h1>
+            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
+            <table id="schedules-minion-list" class='schedules highlight-rows sortable'>
               <thead>
                 <tr><th>Name</th><th class="sorttable_nosort"></th><th>Details</th></tr>
               </thead>
@@ -237,19 +237,19 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
-            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
-            <table class='jobs highlightrows'><tbody></tbody></table>
+            <input style="display: none" class="filter-text" list="list-jobs" placeholder="&#x1F50D;">
+            <table class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
       </div>
 
-      <div class='route' id='page_pillars'>
+      <div class='route' id='page-pillars'>
         <div class='dashboard'>
           <div class='panel minion-list'>
             <h1>Pillars</h1>
-            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
-            <table id="minions" class='minions highlightrows sortable'>
+            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
+            <table id="minions" class='minions highlight-rows sortable'>
               <thead>
                 <tr><th>Minion</th><th>Status</th><th>Pillars</th><th class="sorttable_nosort"></th></tr>
               </thead>
@@ -260,20 +260,20 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
-            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
-            <table class='jobs highlightrows'><tbody></tbody></table>
+            <input style="display: none" class="filter-text" list="list-jobs" placeholder="&#x1F50D;">
+            <table class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
       </div>
 
-      <div class='route' id='page_pillarsminion'>
+      <div class='route' id='page-pillars-minion'>
         <div class='dashboard'>
-          <div id="pillarsminion_page" class='panel minion-list'>
-            <div class='nearlyvisiblebutton' id='button_close_pillarsminion'>&#x2715;</div>
-            <h1 id="pillarsminion_title">Pillars on ...</h1>
-            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
-            <table id="pillarsminion_list" class='pillars highlightrows sortable'>
+          <div id="pillars-minion-panel" class='panel minion-list'>
+            <div class='nearly-visible-button' id='pillars-minion-button-close'>&#x2715;</div>
+            <h1 id="pillars-minion-title">Pillars on ...</h1>
+            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
+            <table id="pillars-minion-list" class='pillars highlight-rows sortable'>
               <thead>
                 <tr><th>Name</th><th>Value</th></tr>
               </thead>
@@ -284,19 +284,19 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
-            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
-            <table class='jobs highlightrows'><tbody></tbody></table>
+            <input style="display: none" class="filter-text" list="list-jobs" placeholder="&#x1F50D;">
+            <table class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
       </div>
 
-      <div class='route' id='page_beacons'>
+      <div class='route' id='page-beacons'>
         <div class='dashboard'>
           <div class='panel minion-list'>
             <h1>Beacons</h1>
-            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
-            <table id="minions" class='minions highlightrows sortable'>
+            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
+            <table id="minions" class='minions highlight-rows sortable'>
               <thead>
                 <tr><th>Minion</th><th>Status</th><th>Beacons</th><th class="sorttable_nosort"></th></tr>
               </thead>
@@ -307,23 +307,23 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
-            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
-            <table class='jobs highlightrows'><tbody></tbody></table>
+            <input style="display: none" class="filter-text" list="list-jobs" placeholder="&#x1F50D;">
+            <table class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
       </div>
 
-      <div class='route' id='page_beaconsminion'>
+      <div class='route' id='page-beacons-minion'>
         <div class='dashboard'>
-          <div id="beaconsminion_page" class='panel minion-list'>
-            <div class='nearlyvisiblebutton' id='button_close_beaconsminion'>&#x2715;</div>
-            <h1 id="beaconsminion_title">Beacons on ...</h1>
-            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
+          <div id="beacons-minion-panel" class='panel minion-list'>
+            <div class='nearly-visible-button' id='beacons-minion-button-close'>&#x2715;</div>
+            <h1 id="beacons-minion-title">Beacons on ...</h1>
             <!-- 2753 = BLACK QUESTION MARK ORNAMENT -->
             <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
             <span id="help" style="float: right; cursor: help; margin-right: 20px">&#x2753;&#xFE0E;</span>
-            <table id="beaconsminion_list" class='beacons highlightrows sortable'>
+            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
+            <table id="beacons-minion-list" class='beacons highlight-rows sortable'>
               <thead>
                 <tr><th>Name</th><th class="sorttable_nosort"></th><th>Config</th><th>Value</th></tr>
               </thead>
@@ -334,32 +334,32 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
-            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
-            <table class='jobs highlightrows'><tbody></tbody></table>
+            <input style="display: none" class="filter-text" list="list-jobs" placeholder="&#x1F50D;">
+            <table class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
       </div>
 
-      <div class='route' id='page_job'>
-        <div id="job_page" class='panel job-info'>
-          <div class='nearlyvisiblebutton' id='button_close_job'>&#x2715;</div>
-          <h1 id="job_title" class='function'>&nbsp;</h1>
+      <div class='route' id='page-job'>
+        <div id="job-panel" class='panel job-info'>
+          <div class='nearly-visible-button' id='job-button-close'>&#x2715;</div>
+          <h1 id="job-title" class='function'>&nbsp;</h1>
           <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
           <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
-          <div class='job_menu'><span class="search">&#x1f50d;&#xFE0E;</span></div>
+          <div class='job-menu'><span class="search">&#x1f50d;&#xFE0E;</span></div>
           <h2 class='time'></h2>
-          <input style="display: none" class="filtertext" list="listjob" placeholder="&#x1F50D;">
+          <input style="display: none" class="filter-text" list="list-job" placeholder="&#x1F50D;">
           <pre class="output">...</pre>
         </div>
       </div>
 
-      <div class='route' id='page_jobs'>
+      <div class='route' id='page-jobs'>
         <div class='dashboard'>
-          <div id='jobs_page' class='panel job-list'>
-            <h1 id="jobs_title">Recent Jobs</h1>
-            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
-            <table id="jobs" class='jobs highlightrows sortable'>
+          <div id='jobs-panel' class='panel job-list'>
+            <h1 id="jobs-title">Recent Jobs</h1>
+            <input style="display: none" class="filter-text" list="list-jobs" placeholder="&#x1F50D;">
+            <table id="jobs" class='jobs highlight-rows sortable'>
               <thead>
                 <tr><th>JID</th><th>Target</th><th>Function</th><th>Start Time</th><th class="sorttable_nosort"></th><th>Status</th><th>Details</th></tr>
               </thead>
@@ -371,12 +371,12 @@
         </div>
       </div>
 
-      <div class='route' id='page_templates'>
+      <div class='route' id='page-templates'>
         <div class='dashboard'>
           <div class='panel templates-list'>
             <h1>Templates</h1>
-            <input style="display: none" class="filtertext" placeholder="&#x1F50D;">
-            <table id="templates" class='templates highlightrows sortable'>
+            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
+            <table id="templates" class='templates highlight-rows sortable'>
               <thead>
                 <tr><th>Name</th><th>Description</th><th>Target</th><th>Command</th><th class="sorttable_nosort"></th></tr>
               </thead>
@@ -387,8 +387,8 @@
           </div>
           <div class='panel job-list'>
             <h1>Recent Jobs</h1>
-            <input style="display: none" class="filtertext" list="listjobs" placeholder="&#x1F50D;">
-            <table class='jobs highlightrows'><tbody></tbody></table>
+            <input style="display: none" class="filter-text" list="list-jobs" placeholder="&#x1F50D;">
+            <table class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
@@ -396,31 +396,31 @@
 
     </div>
 
-    <div class='popup' id='popup_runcommand'>
+    <div class='popup' id='popup-run-command'>
       <div class='run-command'>
-        <div class='nearlyvisiblebutton' id='button_close_cmd'>&#x2715;</div>
-        <div><h1>Manual Run</h1><p id="templatemenuhere"></p></div>
-        <div id="targetbox"><input list="targetlist" id='target' type='text' placeholder="Target"/><datalist id="targetlist"/></div>
-        <div id="cmdbox"><input id='command' type='text' placeholder="Command"/></div>
-        <div id="runblock"><input id="run_command" type='submit' value="Run command"/></div>
+        <div class='nearly-visible-button' id='button-close-cmd'>&#x2715;</div>
+        <div><h1>Manual Run</h1><p id="template-menu-here"></p></div>
+        <div id="target-box"><input list="target-list" id='target' type='text' placeholder="Target"/><datalist id="target-list"/></div>
+        <div id="cmd-box"><input id='command' type='text' placeholder="Command"/></div>
+        <div id="run-block"><input id="run-command" type='submit' value="Run command"/></div>
         <pre class='output'>Waiting for command...</pre>
       </div>
     </div>
 
-    <datalist id="listkeys">
+    <datalist id="list-keys">
       <option value="accepted">
       <option value="denied">
       <option value="rejected">
       <option value="unaccepted">
     </datalist>
 
-    <datalist id="listjobs">
+    <datalist id="list-jobs">
       <option value="done">
       <option value="returned">
       <option value="running">
     </datalist>
 
-    <datalist id="listjob">
+    <datalist id="list-job">
       <option value="no response">
       <option value="success = ">
       <option value="retcode = ">

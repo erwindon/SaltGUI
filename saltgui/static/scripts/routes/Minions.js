@@ -6,7 +6,7 @@ import {Utils} from '../Utils.js';
 export class MinionsRoute extends PageRoute {
 
   constructor(router) {
-    super("^[\/]$", "Minions", "#page_minions", "#button_minions", router);
+    super("^[\/]$", "Minions", "#page-minions", "#button-minions", router);
 
     this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
   }

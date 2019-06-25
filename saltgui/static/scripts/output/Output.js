@@ -64,7 +64,7 @@ export class Output {
   // compose the host/minion-name label that is shown with each response
   static getHostnameHtml(hostname, extraClass="") {
     const span = document.createElement("span");
-    span.classList.add("hostname");
+    span.classList.add("minion-id");
     if(extraClass) span.classList.add(extraClass);
     span.innerText = hostname;
     return span;
@@ -215,14 +215,14 @@ export class Output {
       }
   
       if(task.result === null) {
-        span.classList.add("task_skipped");
+        span.classList.add("task-skipped");
       } else if(!task.result) {
-        span.classList.add("task_failure");
+        span.classList.add("task-failure");
       } else {
-        span.classList.add("task_success");
+        span.classList.add("task-success");
       }
       if(nrChanges) {
-        span.classList.add("task_changes");
+        span.classList.add("task-changes");
       }
 
       for(const key in task) {
@@ -327,12 +327,12 @@ export class Output {
 
       // for the result of jobs.active
       const summaryJobsActiveSpan = document.createElement("span");
-      summaryJobsActiveSpan.id = "summary_jobsactive";
+      summaryJobsActiveSpan.id = "summary-jobs-active";
       summaryJobsActiveSpan.innerText = initialStatus;
 
       // for the result of jobs.list_job
       const summaryJobsListJobSpan = document.createElement("span");
-      summaryJobsListJobSpan.id = "summary_listjob";
+      summaryJobsListJobSpan.id = "summary-list-job";
 
       const cntResponses = Object.keys(response).length;
       const cntMinions = minions.length;
@@ -445,9 +445,9 @@ export class Output {
       // the standard label is the hostname,
       // future: colored based on the successflag
       // future: colored based on the retcode
-      let hostClass = "host_success";
-      if(!isSuccess) hostClass = "host_failure";
-      if(!response.hasOwnProperty(hostname)) hostClass = "host_noresponse";
+      let hostClass = "host-success";
+      if(!isSuccess) hostClass = "host-failure";
+      if(!response.hasOwnProperty(hostname)) hostClass = "host-no-response";
       let hostLabel = Output.getHostnameHtml(hostname, hostClass);
 
       if(!fndRepresentation && !response.hasOwnProperty(hostname)) {

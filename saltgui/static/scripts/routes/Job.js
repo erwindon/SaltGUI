@@ -7,7 +7,7 @@ import {Utils} from '../Utils.js';
 export class JobRoute extends Route {
 
   constructor(router) {
-    super("^[\/]job$", "Job", "#page_job", "", router);
+    super("^[\/]job$", "Job", "#page-job", "", router);
     this._handleRunnerJobsListJob = this._handleRunnerJobsListJob.bind(this);
     this._handleRunnerJobsActive = this._handleRunnerJobsActive.bind(this);
   }
@@ -49,9 +49,9 @@ export class JobRoute extends Route {
     for(const div of output.querySelectorAll("div")) {
       if(div.classList.contains("nohide")) continue;
       if(Utils.hasTextContent(div, txt))
-        div.classList.remove("nofiltermatch");
+        div.classList.remove("no-filter-match");
       else
-        div.classList.add("nofiltermatch");
+        div.classList.add("no-filter-match");
     }
 
     // show the result
@@ -77,12 +77,12 @@ export class JobRoute extends Route {
     hilitor.remove();
 
     // show all output
-    const allFM = startElement.querySelectorAll(".nofiltermatch");
+    const allFM = startElement.querySelectorAll(".no-filter-match");
     for(const fm of allFM)
-      fm.classList.remove("nofiltermatch");
+      fm.classList.remove("no-filter-match");
 
     // hide/show search box
-    const input = startElement.parentElement.querySelector("input.filtertext");
+    const input = startElement.parentElement.querySelector("input.filter-text");
     input.onkeyup = ev => {
       if(ev.key === "Escape") {
         JobRoute.updateOutputFilter(startElement, "");
@@ -109,7 +109,7 @@ export class JobRoute extends Route {
 
     const output = this.getPageElement().querySelector(".output");
 
-    document.querySelector("#button_close_job").addEventListener("click", _ => {
+    document.querySelector("#job-button-close").addEventListener("click", _ => {
       window.history.back();
     });
 
@@ -139,7 +139,7 @@ export class JobRoute extends Route {
     // use same formatter as direct commands
     const argumentsText = this._decodeArgumentsText(info.Arguments);
     const commandText = info.Function + argumentsText;
-    const menuSection = this.getPageElement().querySelector(".job_menu");
+    const menuSection = this.getPageElement().querySelector(".job-menu");
     const menu = new DropDownMenu(menuSection);
 
     // 1: re-run with original target pattern
@@ -330,7 +330,7 @@ export class JobRoute extends Route {
   }
 
   _handleRunnerJobsActive(id, data) {
-    const summaryJobsActiveSpan = this.getPageElement().querySelector("pre.output span#summary_jobsactive");
+    const summaryJobsActiveSpan = this.getPageElement().querySelector("pre.output span#summary-jobs-active");
     if(!summaryJobsActiveSpan) return;
 
     if(typeof data !== "object") {

@@ -1,4 +1,4 @@
-#page_pillars {
+#page-pillars {
   width: 100%;
 }
 
@@ -6,11 +6,11 @@
   padding: 0;
 }
 
-.pillar_hidden {
+.pillar-hidden {
   cursor: pointer;
 }
 
-.pillar_shown {
+.pillar-shown {
   cursor: pointer;
   white-space: pre;
 }

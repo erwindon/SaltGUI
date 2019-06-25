@@ -1,11 +1,11 @@
-#page_schedules {
+#page-schedules {
   width: 100%;
 }
 
-td.schedule_value {
+td.schedule-value {
   white-space: pre-wrap;
 }
 
-td.disabled_schedule {
+td.schedule-disabled {
   color: gray;
 }
