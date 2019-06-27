@@ -6,8 +6,8 @@ import {Utils} from '../Utils.js';
 
 export class PageRoute extends Route {
 
-  constructor(path, name, page_selector, menuitem_selector, router) {
-    super(path, name, page_selector, menuitem_selector, router);
+  constructor(path, name, pPageSelector, pMenuItemSelector, router) {
+    super(path, name, pPageSelector, pMenuItemSelector, router);
 
     this._runCommand = this._runCommand.bind(this);
     this._handleRunnerJobsActive = this._handleRunnerJobsActive.bind(this);
@@ -16,36 +16,36 @@ export class PageRoute extends Route {
     this._updateMinions = this._updateMinions.bind(this);
   }
 
-  _updateMinions(data) {
-    const minions = data.return[0];
+  _updateMinions(pData) {
+    const minions = pData.return[0];
 
     const list = this.getPageElement().querySelector("#minions");
-    const hostnames = Object.keys(minions).sort();
+    const minionIds = Object.keys(minions).sort();
 
     // save for the autocompletion
-    window.localStorage.setItem("minions", JSON.stringify(hostnames));
+    window.localStorage.setItem("minions", JSON.stringify(minionIds));
 
     const ipNumberPrefixes = this._getIpNumberPrefixes(minions);
 
     let cntOnline = 0;
     let cntOffline = 0;
-    for(const hostname of hostnames) {
-      const minion_info = minions[hostname];
+    for(const minionId of minionIds) {
+      const minion_info = minions[minionId];
 
       // minions can be offline, then the info will be false
       if(minion_info === false) {
-        this._updateOfflineMinion(list, hostname);
+        this._updateOfflineMinion(list, minionId);
         cntOffline++;
       } else {
-        this._updateMinion(list, minion_info, hostname, minions);
+        this._updateMinion(list, minion_info, minionId, minions);
         cntOnline++;
       }
     }
 
-    const msg = this.page_element.querySelector("div.minion-list .msg");
-    let txt = Utils.txtZeroOneMany(hostnames.length,
+    const msg = this.pageElement.querySelector("div.minion-list .msg");
+    let txt = Utils.txtZeroOneMany(minionIds.length,
       "No minions", "{0} minion", "{0} minions");
-    if(cntOnline !== hostnames.length)
+    if(cntOnline !== minionIds.length)
       txt += ", " + Utils.txtZeroOneMany(cntOnline,
         "none online", "{0} online", "{0} online");
     if(cntOffline > 0)
@@ -54,43 +54,43 @@ export class PageRoute extends Route {
     msg.innerText = txt;
   }
 
-  _getElement(container, id) {
-    let element = container.querySelector("#" + id);
+  _getElement(pContainer, id) {
+    let minionTr = pContainer.querySelector("#" + id);
 
-    if(element === null) {
+    if(minionTr === null) {
       // minion not found on screen...
       // construct a basic element that can be updated
-      element = document.createElement("tr");
-      element.id = id;
-      container.appendChild(element);
-      return element;
+      minionTr = document.createElement("tr");
+      minionTr.id = id;
+      pContainer.appendChild(minionTr);
+      return minionTr;
     }
 
     // remove existing content
-    while(element.firstChild) {
-      element.removeChild(element.firstChild);
+    while(minionTr.firstChild) {
+      minionTr.removeChild(minionTr.firstChild);
     }
 
-    return element;
+    return minionTr;
   }
 
-  _updateOfflineMinion(container, hostname) {
-    const element = this._getElement(container, Utils.getIdFromMinionId(hostname));
+  _updateOfflineMinion(pContainer, pMinionId) {
+    const minionTr = this._getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    element.appendChild(Route._createTd("minion-id", hostname));
+    minionTr.appendChild(Route._createTd("minion-id", pMinionId));
 
     const offline = Route._createTd("status", "offline");
     offline.classList.add("offline");
-    element.appendChild(offline);
+    minionTr.appendChild(offline);
   }
 
-  _getIpNumberPrefixes(allMinions) {
+  _getIpNumberPrefixes(pAllMinionsGrains) {
     // First we gather all (resonable) prefixes
     // Only use byte-boundaries for networks
     // Must match a subnet of A, B or C network
     const prefixes = { };
-    for(const minion in allMinions) {
-      const grains = allMinions[minion];
+    for(const minionId in pAllMinionsGrains) {
+      const grains = pAllMinionsGrains[minionId];
       if(!grains.fqdn_ip4) continue;
       if(!Array.isArray(grains.fqdn_ip4)) continue;
       for(const ip of grains.fqdn_ip4) {
@@ -126,9 +126,9 @@ export class PageRoute extends Route {
     // When at least one minion does not use the subnet,
     //    then it is not a suitable subnet
     for(const p in prefixes) {
-      for(const minion in allMinions) {
+      for(const minionId in pAllMinionsGrains) {
         let cnt = 0;
-        const grains = allMinions[minion];
+        const grains = pAllMinionsGrains[minionId];
         if(!grains.fqdn_ip4) continue;
         if(!Array.isArray(grains.fqdn_ip4)) continue;
         for(const ip of grains.fqdn_ip4) {
@@ -154,9 +154,9 @@ export class PageRoute extends Route {
     return prefixes;
   }
 
-  _getBestIpNumber(minion, prefixes) {
-    if(!minion) return null;
-    const ipv4 = minion.fqdn_ip4;
+  _getBestIpNumber(pMinionData, prefixes) {
+    if(!pMinionData) return null;
+    const ipv4 = pMinionData.fqdn_ip4;
     if(!ipv4) return null;
     // either a string or something strange
     if(!Array.isArray(ipv4)) return ipv4;
@@ -223,13 +223,13 @@ export class PageRoute extends Route {
     return ipv4[0];
   }
 
-  _updateMinion(container, minion, hostname, prefixes) {
+  _updateMinion(pContainer, pMinionData, pMinionId, prefixes) {
 
-    const element = this._getElement(container, Utils.getIdFromMinionId(hostname));
+    const minionTr = this._getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    element.appendChild(Route._createTd("minion-id", hostname));
+    minionTr.appendChild(Route._createTd("minion-id", pMinionId));
 
-    const ipv4 = this._getBestIpNumber(minion, prefixes);
+    const ipv4 = this._getBestIpNumber(pMinionData, prefixes);
     if(ipv4) {
       const addressTd = Route._createTd("status", "");
       const addressSpan = Route._createSpan("status2", ipv4);
@@ -247,80 +247,80 @@ export class PageRoute extends Route {
       addressSpan.addEventListener("click", this._copyAddress);
       addressSpan.addEventListener("mouseout", this._restoreClickToCopy);
       Utils.addToolTip(addressSpan, "Click to copy");
-      element.appendChild(addressTd);
+      minionTr.appendChild(addressTd);
     } else {
       const accepted = Route._createTd("status", "accepted");
       accepted.classList.add("accepted");
-      element.appendChild(accepted);
+      minionTr.appendChild(accepted);
     }
 
     let saltversion = "---";
-    if(typeof minion === "string") saltversion = "";
-    else if(minion && minion.saltversion) saltversion = minion.saltversion;
-    if(minion) {
+    if(typeof pMinionData === "string") saltversion = "";
+    else if(pMinionData && pMinionData.saltversion) saltversion = pMinionData.saltversion;
+    if(pMinionData) {
       const td = Route._createTd("saltversion", saltversion);
-      if(typeof minion === "string") Utils.addErrorToTableCell(td, minion);
-      element.appendChild(td);
+      if(typeof pMinionData === "string") Utils.addErrorToTableCell(td, pMinionData);
+      minionTr.appendChild(td);
     }
 
     let os = "---";
-    if(typeof minion === "string") os = "";
-    else if(minion && minion.os && minion.osrelease) os = minion.os + " " + minion.osrelease;
-    else if(minion && minion.os) os = minion.os;
-    if(minion) {
+    if(typeof pMinionData === "string") os = "";
+    else if(pMinionData && pMinionData.os && pMinionData.osrelease) os = pMinionData.os + " " + pMinionData.osrelease;
+    else if(pMinionData && pMinionData.os) os = pMinionData.os;
+    if(pMinionData) {
       const td = Route._createTd("os", os);
-      if(typeof minion === "string") Utils.addErrorToTableCell(td, minion);
-      if(minion.os && typeof minion !== "string") {
+      if(typeof pMinionData === "string") Utils.addErrorToTableCell(td, pMinionData);
+      if(pMinionData.os && typeof pMinionData !== "string") {
         const img = document.createElement("img");
-        img.setAttribute("src", "static/images/os-" + minion.os.replace(" ", "-").toLowerCase() + ".png");
+        img.setAttribute("src", "static/images/os-" + pMinionData.os.replace(" ", "-").toLowerCase() + ".png");
         img.classList.add("osimage");
         td.prepend(img);
       }
-      element.appendChild(td);
+      minionTr.appendChild(td);
     }
   }
 
-  _addMinion(container, hostname, freeColumns = 0) {
+  _addMinion(pContainer, pMinionId, freeColumns = 0) {
 
-    let element = container.querySelector("#" + Utils.getIdFromMinionId(hostname));
-    if(element !== null) {
+    let minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
+    if(minionTr !== null) {
       // minion already on screen...
       return;
     }
 
-    element = document.createElement("tr");
-    element.id = Utils.getIdFromMinionId(hostname);
+    minionTr = document.createElement("tr");
+    minionTr.id = Utils.getIdFromMinionId(pMinionId);
 
-    element.appendChild(Route._createTd("minion-id", hostname));
+    minionTr.appendChild(Route._createTd("minion-id", pMinionId));
 
-    const minion = Route._createTd("status", "accepted");
-    minion.classList.add("accepted");
-    element.appendChild(minion);
+    const minionTd = Route._createTd("status", "accepted");
+    minionTd.classList.add("accepted");
+    minionTr.appendChild(minionTd);
 
-    element.appendChild(Route._createTd("os", "loading..."));
+    minionTr.appendChild(Route._createTd("os", "loading..."));
 
     // fill out the number of columns to that of the header
-    while(element.cells.length < container.tHead.rows[0].cells.length - freeColumns) {
-      element.appendChild(Route._createTd("", ""));
+    while(minionTr.cells.length < pContainer.tHead.rows[0].cells.length - freeColumns) {
+      minionTr.appendChild(Route._createTd("", ""));
     }
 
-    container.tBodies[0].appendChild(element);
+    pContainer.tBodies[0].appendChild(minionTr);
   }
 
-  _addNone(container) {
+  _addNone(pContainer) {
     const tr = document.createElement("tr");
     const td = Route._createTd("minion-id", "none");
-    td.setAttribute("colspan", container.rows[0].cells.length);
+    td.setAttribute("colspan", pContainer.rows[0].cells.length);
     tr.appendChild(td);
-    container.appendChild(tr);
+    pContainer.appendChild(tr);
   }
 
-  _handleRunnerJobsListJobs(data, hasHeader = false, maxNumberOfJobs = 7) {
+  _handleRunnerJobsListJobs(pData, hasHeader = false, pMaxNumberOfJobs = 7) {
     const jobContainer = this.getPageElement().querySelector(".jobs tbody");
 
-    if(PageRoute.showErrorRowInstead(jobContainer, data)) return;
+    if(PageRoute.showErrorRowInstead(jobContainer, pData)) return;
 
-    const jobs = this._jobsToArray(data.return[0]);
+    const jobs = this._jobsToArray(pData.return[0]);
     this._sortJobs(jobs);
 
     // collect the list of hidden minions
@@ -397,12 +397,12 @@ export class PageRoute extends Route {
       if(!this._hideJobs.includes(job.Function) ||
          this._showJobs.includes(job.Function)) {
         numberOfJobsEligible++;
-      } else if(maxNumberOfJobs !== 99999) {
+      } else if(pMaxNumberOfJobs !== 99999) {
         continue;
       }
 
-      // Add only <maxNumberOfJobs> most recent jobs
-      if(numberOfJobsShown >= maxNumberOfJobs) continue;
+      // Add only <pMaxNumberOfJobs> most recent jobs
+      if(numberOfJobsShown >= pMaxNumberOfJobs) continue;
 
       // Note that "Jobs" has a specialized version
       this._addJob(jobContainer, job);
@@ -416,7 +416,7 @@ export class PageRoute extends Route {
     }
     Utils.makeTableSearchable(page);
 
-    const msg = this.page_element.querySelector("div.job-list .msg");
+    const msg = this.pageElement.querySelector("div.job-list .msg");
     let txt = Utils.txtZeroOneMany(numberOfJobsShown,
       "No jobs shown", "{0} job shown", "{0} jobs shown");
     txt += Utils.txtZeroOneMany(numberOfJobsEligible,
@@ -426,23 +426,23 @@ export class PageRoute extends Route {
     msg.innerText = txt;
   }
 
-  _handleRunnerJobsActive(data) {
+  _handleRunnerJobsActive(pData) {
 
-    if(typeof data !== "object") {
-      for(const tr of this.page_element.querySelector("table.jobs tbody").rows) {
+    if(typeof pData !== "object") {
+      for(const tr of this.pageElement.querySelector("table.jobs tbody").rows) {
         const statusSpan = tr.querySelector("span.status");
         if(!statusSpan) continue;
         statusSpan.classList.remove("no-status");
         statusSpan.innerText = "(error)";
         // we show the tooltip here so that the user is invited to click on this
         // the user then sees other rows being updated without becoming invisible
-        Utils.addToolTip(statusSpan, data);
+        Utils.addToolTip(statusSpan, pData);
       }
       return;
     }
 
     // mark all jobs as done, then re-update the running jobs
-    for(const tr of this.page_element.querySelector("table.jobs tbody").rows) {
+    for(const tr of this.pageElement.querySelector("table.jobs tbody").rows) {
       const statusSpan = tr.querySelector("span.status");
       if(!statusSpan) continue;
       statusSpan.classList.remove("no-status");
@@ -452,7 +452,7 @@ export class PageRoute extends Route {
       Utils.addToolTip(statusSpan, "Click to refresh");
     }
 
-    const jobs = data.return[0];
+    const jobs = pData.return[0];
 
     // update all running jobs
     for(const k in jobs)
@@ -466,7 +466,7 @@ export class PageRoute extends Route {
       if(job.Returned && job.Returned.length > 0)
         statusText = statusText + ", " + job.Returned.length + " returned";
 
-      const statusSpan = this.page_element.querySelector("table.jobs td#" + Utils.getIdFromJobId(k) + " span.status");
+      const statusSpan = this.pageElement.querySelector("table.jobs td#" + Utils.getIdFromJobId(k) + " span.status");
       // the field may not (yet) be on the screen
       if(!statusSpan) continue;
 
@@ -475,10 +475,10 @@ export class PageRoute extends Route {
     }
   }
 
-  _addJob(container, job) {
+  _addJob(pContainer, job) {
     const tr = document.createElement("tr");
 
-    const td = document.createElement("td");
+    const td = Route._createTd("", "");
     td.id = Utils.getIdFromJobId(job.id);
 
     let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
@@ -516,19 +516,19 @@ export class PageRoute extends Route {
     this._addMenuItemShowDetails(menu, job);
     this._addMenuItemUpdateStatus(menu, statusSpan);
 
-    container.appendChild(tr);
+    pContainer.appendChild(tr);
 
     tr.addEventListener("click", evt => window.location.assign("/job?id=" + encodeURIComponent(job.id)));
   }
 
-  _addMenuItemShowDetails(menu, job) {
-    menu.addMenuItem("Show&nbsp;details", function(evt) {
+  _addMenuItemShowDetails(pMenu, job) {
+    pMenu.addMenuItem("Show&nbsp;details", function(evt) {
       window.location.assign("/job?id=" + encodeURIComponent(job.id));
     }.bind(this));
   }
 
-  _addMenuItemUpdateStatus(menu, statusSpan) {
-    menu.addMenuItem("Update&nbsp;status", function(evt) {
+  _addMenuItemUpdateStatus(pMenu, statusSpan) {
+    pMenu.addMenuItem("Update&nbsp;status", function(evt) {
       statusSpan.classList.add("no-status");
       statusSpan.innerText = "loading...";
       this._startRunningJobs();
@@ -538,10 +538,10 @@ export class PageRoute extends Route {
   _startRunningJobs() {
     const myThis = this;
 
-    this.router.api.getRunnerJobsActive().then(data => {
-      myThis._handleRunnerJobsActive(data);
-    }, data => {
-      myThis._handleRunnerJobsActive(JSON.stringify(data));
+    this.router.api.getRunnerJobsActive().then(pData => {
+      myThis._handleRunnerJobsActive(pData);
+    }, pData => {
+      myThis._handleRunnerJobsActive(JSON.stringify(pData));
     });
   }
 
@@ -589,17 +589,16 @@ export class PageRoute extends Route {
     Utils.addToolTip(target, "Click to copy");
   }
 
-  static showErrorRowInstead(table, data) {
-    if(typeof data === "object") {
+  static showErrorRowInstead(table, pData) {
+    if(typeof pData === "object") {
       // not an error
       return false;
     }
 
-    const td = document.createElement("td");
+    const td = Route._createTd("", "");
     td.colSpan = 99;
-    const span = document.createElement("span");
-    span.innerText = "(error)";
-    Utils.addToolTip(span, data);
+    const span = Route._createSpan("", "(error)");
+    Utils.addToolTip(span, pData);
     td.appendChild(span);
 
     const tr = document.createElement("tr");

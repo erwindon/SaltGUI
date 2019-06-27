@@ -1,5 +1,6 @@
 import {Output} from './Output.js';
 import {OutputNested} from './OutputNested.js';
+import {Route} from '../routes/Route.js';
 import {Utils} from '../Utils.js';
 
 export class OutputHighstate {
@@ -11,8 +12,8 @@ export class OutputHighstate {
     if(typeof response !== "object") return false;
     if(Array.isArray(response)) return false;
     if(command !== "state.apply" && command !== "state.highstate") return false;
-    for(const key of Object.keys(response)) {
-      const components = key.split("_|-");
+    for(const taskKey of Object.keys(response)) {
+      const components = taskKey.split("_|-");
       if(components.length !== 4) return false;
     }
     return true;
@@ -28,30 +29,30 @@ export class OutputHighstate {
     return `${s} s`;
   }
 
-  static getHighStateLabel(hostname, hostResponse) {
+  static getHighStateLabel(pMinionId, pMinionResponse) {
     let anyFailures = false;
     let anySkips = false;
     // do not use Object.entries, that is not supported by the test framework
-    for(const key of Object.keys(hostResponse)) {
-      const task = hostResponse[key];
+    for(const taskKey of Object.keys(pMinionResponse)) {
+      const task = pMinionResponse[taskKey];
       if(task.result === null) anySkips = true;
       else if(!task.result) anyFailures = true;
     }
 
     if(anyFailures) {
-      return Output.getHostnameHtml(hostname, "host-failure");
+      return Output.getMinionIdHtml(pMinionId, "host-failure");
     }
     if(anySkips) {
-      return Output.getHostnameHtml(hostname, "host-skips");
+      return Output.getMinionIdHtml(pMinionId, "host-skips");
     }
-    return Output.getHostnameHtml(hostname, "host-success");
+    return Output.getMinionIdHtml(pMinionId, "host-success");
   }
 
-  static getHighStateOutput(hostname, pTasks) {
+  static getHighStateOutput(pMinionId, pTasks) {
 
     const indent = "    ";
 
-    const div = document.createElement("div");
+    const div = Route._createDiv("", "");
 
     let succeeded = 0;
     let failed = 0;
@@ -72,10 +73,6 @@ export class OutputHighstate {
 
       const components = task.___key___.split("_|-");
 
-      const taskDiv = document.createElement("div");
-      taskDiv.id = Utils.getIdFromMinionId(hostname + "." + nr);
-
-      const taskSpan = document.createElement("span");
       let txt = "----------";
 
       if(task.name)
@@ -110,7 +107,7 @@ export class OutputHighstate {
         }
       }
 
-      taskSpan.innerText = txt;
+      const taskSpan = Route._createSpan("", txt);
       if(!task.result) {
         taskSpan.style.color = "red";
       } else if(hasChanges) {
@@ -118,47 +115,43 @@ export class OutputHighstate {
       } else {
         taskSpan.style.color = "lime";
       }
+      const taskDiv = Route._createDiv("", "");
+      taskDiv.id = Utils.getIdFromMinionId(pMinionId + "." + nr);
       taskDiv.append(taskSpan);
 
       div.append(taskDiv);
     }
 
-    const summarySpan = document.createElement("span");
-    let txt = "\nSummary for " + hostname;
+    let txt = "\nSummary for " + pMinionId;
     txt += "\n------------";
-    summarySpan.innerText = txt;
+    const summarySpan = Route._createSpan("", txt);
     summarySpan.style.color = "aqua";
     div.append(summarySpan);
 
-    const succeededSpan = document.createElement("span");
     txt = "\nSucceeded: " + succeeded;
-    succeededSpan.innerText = txt;
+    const succeededSpan = Route._createSpan("", txt);
     succeededSpan.style.color = "lime";
     div.append(succeededSpan);
 
     if(changes > 0) {
-      const oSpan = document.createElement("span");
       txt = " (";
-      oSpan.innerText = txt;
+      const oSpan = Route._createSpan("", txt);
       oSpan.style.color = "white";
       div.append(oSpan);
 
-      const changedSpan = document.createElement("span");
       txt = "changed=" + changes;
-      changedSpan.innerText = txt;
+      const changedSpan = Route._createSpan("", txt);
       changedSpan.style.color = "lime";
       div.append(changedSpan);
 
-      const cSpan = document.createElement("span");
       txt = ")";
-      cSpan.innerText = txt;
+      const cSpan = Route._createSpan("", txt);
       cSpan.style.color = "white";
       div.append(cSpan);
     }
 
-    const failedSpan = document.createElement("span");
     txt = "\nFailed:    " + failed;
-    failedSpan.innerText = txt;
+    const failedSpan = Route._createSpan("", txt);
     if(failed > 0) {
       failedSpan.style.color = "red";
     } else {
@@ -166,11 +159,10 @@ export class OutputHighstate {
     }
     div.append(failedSpan);
 
-    const totalsSpan = document.createElement("span");
     txt = "\n------------";
     txt += "\nTotal states run: " + (succeeded + skipped + failed);
     txt += "\nTotal run time: " + OutputHighstate.getDurationClauseSecs(total_millis);
-    totalsSpan.innerText = txt;
+    const totalsSpan = Route._createSpan("", txt);
     totalsSpan.style.color = "aqua";
     div.append(totalsSpan);
 

@@ -20,79 +20,79 @@ export class PillarsRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    wheelKeyListAllPromise.then(data1 => {
-      myThis._handleWheelKeyListAll(data1);
-      localPillarObfuscatePromise.then(data => {
-        myThis._updateMinions(data);
-      }, data2 => {
-        const data = {"return":[{}]};
-        for(const k of data1.return[0].data.return.minions)
-          data.return[0][k] = JSON.stringify(data2);
-        myThis._updateMinions(data);
+    wheelKeyListAllPromise.then(pData1 => {
+      myThis._handleWheelKeyListAll(pData1);
+      localPillarObfuscatePromise.then(pData => {
+        myThis._updateMinions(pData);
+      }, pData2 => {
+        const pData = {"return":[{}]};
+        for(const k of pData1.return[0].data.return.minions)
+          pData.return[0][k] = JSON.stringify(pData2);
+        myThis._updateMinions(pData);
       });
-    }, data => {
-      myThis._handleWheelKeyListAll(JSON.stringify(data));
+    }, pData => {
+      myThis._handleWheelKeyListAll(JSON.stringify(pData));
     });
 
-    runnerJobsListJobsPromise.then(data => {
-      myThis._handleRunnerJobsListJobs(data);
-      runnerJobsActivePromise.then(data => {
-        myThis._handleRunnerJobsActive(data);
-      }, data => {
-        myThis._handleRunnerJobsActive(JSON.stringify(data));
+    runnerJobsListJobsPromise.then(pData => {
+      myThis._handleRunnerJobsListJobs(pData);
+      runnerJobsActivePromise.then(pData => {
+        myThis._handleRunnerJobsActive(pData);
+      }, pData => {
+        myThis._handleRunnerJobsActive(JSON.stringify(pData));
       });
-    }, data => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
+    }, pData => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
     }); 
   }
 
-  _handleWheelKeyListAll(data) {
+  _handleWheelKeyListAll(pData) {
     const list = this.getPageElement().querySelector('#minions');
 
-    if(PageRoute.showErrorRowInstead(list, data)) return;
+    if(PageRoute.showErrorRowInstead(list, pData)) return;
 
-    const keys = data.return[0].data.return;
+    const keys = pData.return[0].data.return;
 
-    const hostnames = keys.minions.sort();
-    for(const hostname of hostnames) {
-      this._addMinion(list, hostname, 1);
+    const minionIds = keys.minions.sort();
+    for(const minionId of minionIds) {
+      this._addMinion(list, minionId, 1);
 
       // preliminary dropdown menu
-      const element = list.querySelector("#" + Utils.getIdFromMinionId(hostname));
-      const menu = new DropDownMenu(element);
-      this._addMenuItemShowPillars(menu, hostname);
+      const minionTr = list.querySelector("#" + Utils.getIdFromMinionId(minionId));
+      const menu = new DropDownMenu(minionTr);
+      this._addMenuItemShowPillars(menu, minionId);
 
-      element.addEventListener("click", evt => window.location.assign("pillarsminion?minion=" + encodeURIComponent(hostname)));
+      minionTr.addEventListener("click", evt => window.location.assign("pillarsminion?minionid=" + encodeURIComponent(minionId)));
     }
 
     Utils.showTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement());
 
-    const msg = this.page_element.querySelector("div.minion-list .msg");
-    const txt = Utils.txtZeroOneMany(hostnames.length,
+    const msg = this.pageElement.querySelector("div.minion-list .msg");
+    const txt = Utils.txtZeroOneMany(minionIds.length,
       "No minions", "{0} minion", "{0} minions");
     msg.innerText = txt;
   }
 
-  _updateOfflineMinion(container, hostname) {
-    super._updateOfflineMinion(container, hostname);
+  _updateOfflineMinion(pContainer, pMinionId) {
+    super._updateOfflineMinion(pContainer, pMinionId);
 
-    const element = container.querySelector("#" + Utils.getIdFromMinionId(hostname));
+    const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
     // force same columns on all rows
-    element.appendChild(Route._createTd("pillarinfo", ""));
-    element.appendChild(Route._createTd("run-command-button", ""));
+    minionTr.appendChild(Route._createTd("pillarinfo", ""));
+    minionTr.appendChild(Route._createTd("run-command-button", ""));
   }
 
-  _updateMinion(container, minion, hostname, allMinions) {
-    super._updateMinion(container, null, hostname, allMinions);
+  _updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
+    super._updateMinion(pContainer, null, pMinionId, pAllMinionsGrains);
 
-    const element = container.querySelector("#" + Utils.getIdFromMinionId(hostname));
+    const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
     let cnt;
     let pillarInfoText;
-    if(typeof minion === "object") {
-      cnt = Object.keys(minion).length;
+    if(typeof pMinionData === "object") {
+      cnt = Object.keys(pMinionData).length;
       pillarInfoText = Utils.txtZeroOneMany(cnt,
         "no pillars", "{0} pillar", "{0} pillars");
     } else {
@@ -101,20 +101,20 @@ export class PillarsRoute extends PageRoute {
     }
     const pillarInfoTd = Route._createTd("pillarinfo", pillarInfoText);
     pillarInfoTd.setAttribute("sorttable_customkey", cnt);
-    if(typeof minion !== "object") {
-      Utils.addErrorToTableCell(pillarInfoTd, minion);
+    if(typeof pMinionData !== "object") {
+      Utils.addErrorToTableCell(pillarInfoTd, pMinionData);
     }
-    element.appendChild(pillarInfoTd);
+    minionTr.appendChild(pillarInfoTd);
 
-    const menu = new DropDownMenu(element);
-    this._addMenuItemShowPillars(menu, hostname);
+    const menu = new DropDownMenu(minionTr);
+    this._addMenuItemShowPillars(menu, pMinionId);
 
-    element.addEventListener("click", evt => window.location.assign("pillarsminion?minion=" + encodeURIComponent(hostname)));
+    minionTr.addEventListener("click", evt => window.location.assign("pillarsminion?minionid=" + encodeURIComponent(pMinionId)));
   }
 
-  _addMenuItemShowPillars(menu, hostname) {
-    menu.addMenuItem("Show&nbsp;pillars", function(evt) {
-      window.location.assign("pillarsminion?minion=" + encodeURIComponent(hostname));
+  _addMenuItemShowPillars(pMenu, pMinionId) {
+    pMenu.addMenuItem("Show&nbsp;pillars", function(evt) {
+      window.location.assign("pillarsminion?minionid=" + encodeURIComponent(pMinionId));
     }.bind(this));
   }
 }

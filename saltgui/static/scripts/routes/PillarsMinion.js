@@ -11,7 +11,7 @@ export class PillarsMinionRoute extends PageRoute {
 
     this._handleLocalPillarItems = this._handleLocalPillarItems.bind(this);
 
-    this.page_element.querySelector("#pillars-minion-button-close").addEventListener("click", _ => {
+    this.pageElement.querySelector("#pillars-minion-button-close").addEventListener("click", _ => {
       this.router.goTo("/pillars");
     });
   }
@@ -19,57 +19,57 @@ export class PillarsMinionRoute extends PageRoute {
   onShow() {
     const myThis = this;
 
-    const minion = decodeURIComponent(Utils.getQueryParam("minion"));
+    const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
 
     const title = document.getElementById("pillars-minion-title");
-    title.innerText = "Pillars on " + minion;
+    title.innerText = "Pillars on " + minionId;
 
-    const localPillarItemsPromise = this.router.api.getLocalPillarItems(minion);
+    const localPillarItemsPromise = this.router.api.getLocalPillarItems(minionId);
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    localPillarItemsPromise.then(data => {
-      myThis._handleLocalPillarItems(data, minion);
-    }, data => {
-      myThis._handleLocalPillarItems(JSON.stringify(data), minion);
+    localPillarItemsPromise.then(pData => {
+      myThis._handleLocalPillarItems(pData, minionId);
+    }, pData => {
+      myThis._handleLocalPillarItems(JSON.stringify(pData), minionId);
     });
 
-    runnerJobsListJobsPromise.then(data => {
-      myThis._handleRunnerJobsListJobs(data);
-      runnerJobsActivePromise.then(data => {
-        myThis._handleRunnerJobsActive(data);
-      }, data => {
-        myThis._handleRunnerJobsActive(JSON.stringify(data));
+    runnerJobsListJobsPromise.then(pData => {
+      myThis._handleRunnerJobsListJobs(pData);
+      runnerJobsActivePromise.then(pData => {
+        myThis._handleRunnerJobsActive(pData);
+      }, pData => {
+        myThis._handleRunnerJobsActive(JSON.stringify(pData));
       });
-    }, data => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
+    }, pData => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
     }); 
   }
 
-  _handleLocalPillarItems(data, minion) {
-    const page = document.getElementById("pillars-minion-panel");
-    const menu = new DropDownMenu(page);
-    this._addMenuItemRefreshPillar(menu, minion);
+  _handleLocalPillarItems(pData, pMinionId) {
+    const panel = document.getElementById("pillars-minion-panel");
+    const menu = new DropDownMenu(panel);
+    this._addMenuItemRefreshPillar(menu, pMinionId);
 
     const container = document.getElementById("pillars-minion-list");
 
-    // new menu's are always added at the bottom of the div
+    // new menus are always added at the bottom of the div
     // fix that by re-adding it to its proper place
     const title = document.getElementById("pillars-minion-title");
-    page.insertBefore(menu.menuDropdown, title.nextSibling);
+    panel.insertBefore(menu.menuDropdown, title.nextSibling);
 
-    if(PageRoute.showErrorRowInstead(container.tBodies[0], data)) return;
+    if(PageRoute.showErrorRowInstead(container.tBodies[0], pData)) return;
 
-    const pillars = data.return[0][minion];
+    const pillars = pData.return[0][pMinionId];
 
     if(pillars === undefined) {
-      const msg = this.page_element.querySelector("div.minion-list .msg");
-      msg.innerText = "Unknown minion '" + minion + "'";
+      const msg = this.pageElement.querySelector("div.minion-list .msg");
+      msg.innerText = "Unknown minion '" + pMinionId + "'";
       return;
     }
     if(pillars === false) {
-      const msg = this.page_element.querySelector("div.minion-list .msg");
-      msg.innerText = "Minion '" + minion + "' did not answer";
+      const msg = this.pageElement.querySelector("div.minion-list .msg");
+      msg.innerText = "Minion '" + pMinionId + "' did not answer";
       return;
     }
 
@@ -97,7 +97,7 @@ export class PillarsMinionRoute extends PageRoute {
 
       // menu comes before this data if there was any
 
-      const pillar_value = Route._createTd("", "");
+      const pillarValueTd = Route._createTd("", "");
 
       // 25CF = BLACK CIRCLE, 8 of these
       const value_hidden = "\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF";
@@ -105,7 +105,7 @@ export class PillarsMinionRoute extends PageRoute {
       pillar_hidden.style.display = "inline-block";
       Utils.addToolTip(pillar_hidden, "Click to show");
       // initially use the hidden view
-      pillar_value.appendChild(pillar_hidden);
+      pillarValueTd.appendChild(pillar_hidden);
 
       const value_shown = Output.formatObject(pillars[k]);
       const pillar_shown = Route._createDiv("pillar-shown", value_shown);
@@ -113,7 +113,7 @@ export class PillarsMinionRoute extends PageRoute {
       pillar_shown.style.display = "none";
       Utils.addToolTip(pillar_shown, "Click to hide");
       // add the non-masked representation, not shown yet
-      pillar_value.appendChild(pillar_shown);
+      pillarValueTd.appendChild(pillar_shown);
 
       // show public pillars immediatelly
       for(let i = 0; i < public_pillars.length; i++) {
@@ -125,7 +125,7 @@ export class PillarsMinionRoute extends PageRoute {
         }
       }
 
-      pillar.appendChild(pillar_value);
+      pillar.appendChild(pillarValueTd);
 
       pillar_hidden.addEventListener("click", function(evt) {
         pillar_hidden.style.display = "none";
@@ -143,15 +143,15 @@ export class PillarsMinionRoute extends PageRoute {
     Utils.showTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement());
 
-    const msg = this.page_element.querySelector("div.minion-list .msg");
+    const msg = this.pageElement.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(keys.length,
       "No pillars", "{0} pillar", "{0} pillars");
     msg.innerText = txt;
   }
 
-  _addMenuItemRefreshPillar(menu, hostname) {
-    menu.addMenuItem("Refresh&nbsp;pillar...", function(evt) {
-      this._runCommand(evt, hostname, "saltutil.refresh_pillar");
+  _addMenuItemRefreshPillar(pMenu, pMinionId) {
+    pMenu.addMenuItem("Refresh&nbsp;pillar...", function(evt) {
+      this._runCommand(evt, pMinionId, "saltutil.refresh_pillar");
     }.bind(this));
   }
 }

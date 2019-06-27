@@ -15,11 +15,11 @@ export class BeaconsRoute extends PageRoute {
     // The new columns are not yet sortable, make sure they are.
     // First detroy all the default sorting handlers.
     // A (deep)copy of an element does not copy its handlers.
-    const oldHead = this.page_element.querySelector("#page-beacons table thead");
+    const oldHead = this.pageElement.querySelector("#page-beacons table thead");
     const newHead = oldHead.cloneNode(true);
     oldHead.parentNode.replaceChild(newHead, oldHead);
     // Now re-start sorting logic.
-    sorttable.makeSortable(this.page_element.querySelector("#page-beacons table"));
+    sorttable.makeSortable(this.pageElement.querySelector("#page-beacons table"));
   }
 
   onShow() {
@@ -30,34 +30,34 @@ export class BeaconsRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    wheelKeyListAllPromise.then(data1 => {
-      myThis._handleWheelKeyListAll(data1);
-      localBeaconsListPromise.then(data => {
-        myThis._updateMinions(data);
-      }, data2 => {
-        const data = {"return":[{}]};
-        for(const k of data1.return[0].data.return.minions)
-          data.return[0][k] = JSON.stringify(data2);
-        myThis._updateMinions(data);
+    wheelKeyListAllPromise.then(pData1 => {
+      myThis._handleWheelKeyListAll(pData1);
+      localBeaconsListPromise.then(pData => {
+        myThis._updateMinions(pData);
+      }, pData2 => {
+        const pData = {"return":[{}]};
+        for(const k of pData1.return[0].data.return.minions)
+          pData.return[0][k] = JSON.stringify(pData2);
+        myThis._updateMinions(pData);
       });
-    }, data => {
-      myThis._handleWheelKeyListAll(JSON.stringify(data));
+    }, pData => {
+      myThis._handleWheelKeyListAll(JSON.stringify(pData));
     });
 
-    runnerJobsListJobsPromise.then(data => {
-      myThis._handleRunnerJobsListJobs(data);
-      runnerJobsActivePromise.then(data => {
-        myThis._handleRunnerJobsActive(data);
-      }, data => {
-        myThis._handleRunnerJobsActive(JSON.stringify(data));
+    runnerJobsListJobsPromise.then(pData => {
+      myThis._handleRunnerJobsListJobs(pData);
+      runnerJobsActivePromise.then(pData => {
+        myThis._handleRunnerJobsActive(pData);
+      }, pData => {
+        myThis._handleRunnerJobsActive(JSON.stringify(pData));
       });
-    }, data => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
+    }, pData => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
     }); 
   }
 
-  static _fixMinion(data) {
-    if(typeof data !== "object") return data;
+  static _fixMinion(pData) {
+    if(typeof pData !== "object") return pData;
 
     // the data is an array of objects
     // where each object has one key
@@ -65,101 +65,101 @@ export class BeaconsRoute extends PageRoute {
 
     const ret = { "beacons": {}, "enabled": true };
 
-    for(const k in data) {
+    for(const k in pData) {
       // correct for empty list that returns this dummy value
-      if(k === "beacons" && JSON.stringify(data[k]) === "{}") {
+      if(k === "beacons" && JSON.stringify(pData[k]) === "{}") {
         continue;
       }
 
       // "enabled" is always a boolean (when present)
       if(k === "enabled") {
-        ret.enabled = data.enabled;
+        ret.enabled = pData.enabled;
         continue;
       }
 
       // make one object from the settings
       // eliminates one layer in the datamodel
       // and looks much better
-      const newdata = { };
-      for(const elem of data[k])
+      const newData = { };
+      for(const elem of pData[k])
         for(const p in elem)
-          newdata[p] = elem[p];
-      ret.beacons[k] = newdata;
+          newData[p] = elem[p];
+      ret.beacons[k] = newData;
     }
 
     return ret;
   }
 
-  _handleWheelKeyListAll(data) {
+  _handleWheelKeyListAll(pData) {
     const list = this.getPageElement().querySelector('#minions');
 
-    if(PageRoute.showErrorRowInstead(list, data)) return;
+    if(PageRoute.showErrorRowInstead(list, pData)) return;
 
-    const keys = data.return[0].data.return;
+    const keys = pData.return[0].data.return;
 
-    const hostnames = keys.minions.sort();
-    for(const hostname of hostnames) {
-      this._addMinion(list, hostname, 1);
+    const minionIds = keys.minions.sort();
+    for(const minionId of minionIds) {
+      this._addMinion(list, minionId, 1);
 
       // preliminary dropdown menu
-      const element = list.querySelector("#" + Utils.getIdFromMinionId(hostname));
-      const menu = new DropDownMenu(element);
-      this._addMenuItemShowBeacons(menu, hostname);
+      const minionTr = list.querySelector("#" + Utils.getIdFromMinionId(minionId));
+      const menu = new DropDownMenu(minionTr);
+      this._addMenuItemShowBeacons(menu, minionId);
 
-      element.addEventListener("click", evt => window.location.assign("beaconsminion?minion=" + encodeURIComponent(hostname)));
+      minionTr.addEventListener("click", evt => window.location.assign("beaconsminion?minionid=" + encodeURIComponent(minionId)));
     }
 
     Utils.showTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement());
 
-    const msg = this.page_element.querySelector("div.minion-list .msg");
-    const txt = Utils.txtZeroOneMany(hostnames.length,
+    const msg = this.pageElement.querySelector("div.minion-list .msg");
+    const txt = Utils.txtZeroOneMany(minionIds.length,
       "No minions", "{0} minion", "{0} minions");
     msg.innerText = txt;
   }
 
-  _updateOfflineMinion(container, hostname) {
-    super._updateOfflineMinion(container, hostname);
+  _updateOfflineMinion(pContainer, pMinionId) {
+    super._updateOfflineMinion(pContainer, pMinionId);
 
-    const element = container.querySelector("#" + Utils.getIdFromMinionId(hostname));
+    const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
     // force same columns on all rows
-    element.appendChild(Route._createTd("beaconinfo", ""));
-    element.appendChild(Route._createTd("run-command-button", ""));
+    minionTr.appendChild(Route._createTd("beaconinfo", ""));
+    minionTr.appendChild(Route._createTd("run-command-button", ""));
   }
 
-  _updateMinion(container, minion, hostname, allMinions) {
+  _updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
 
-    minion = BeaconsRoute._fixMinion(minion);
+    pMinionData = BeaconsRoute._fixMinion(pMinionData);
 
-    super._updateMinion(container, null, hostname, allMinions);
+    super._updateMinion(pContainer, null, pMinionId, pAllMinionsGrains);
 
-    const element = container.querySelector("#" + Utils.getIdFromMinionId(hostname));
+    const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
-    if(typeof minion === "object") {
-      const cnt = Object.keys(minion.beacons).length;
+    if(typeof pMinionData === "object") {
+      const cnt = Object.keys(pMinionData.beacons).length;
       let beaconInfoText = Utils.txtZeroOneMany(cnt,
         "no beacons", "{0} beacon", "{0} beacons");
-      if(!minion.enabled)
+      if(!pMinionData.enabled)
         beaconInfoText += " (disabled)";
       const beaconInfoTd = Route._createTd("beaconinfo", beaconInfoText);
       beaconInfoTd.setAttribute("sorttable_customkey", cnt);
-      element.appendChild(beaconInfoTd);
+      minionTr.appendChild(beaconInfoTd);
     } else {
       const beaconInfoTd = Route._createTd("", "");
-      Utils.addErrorToTableCell(beaconInfoTd, minion);
-      element.appendChild(beaconInfoTd);
+      Utils.addErrorToTableCell(beaconInfoTd, pMinionData);
+      minionTr.appendChild(beaconInfoTd);
     }
 
-    const menu = new DropDownMenu(element);
-    this._addMenuItemShowBeacons(menu, hostname);
+    const menu = new DropDownMenu(minionTr);
+    this._addMenuItemShowBeacons(menu, pMinionId);
 
-    element.addEventListener("click", evt => window.location.assign("beaconsminion?minion=" + encodeURIComponent(hostname)));
+    minionTr.addEventListener("click", evt => window.location.assign("beaconsminion?minionid=" + encodeURIComponent(pMinionId)));
   }
 
-  _addMenuItemShowBeacons(menu, hostname) {
-    menu.addMenuItem("Show&nbsp;beacons", function(evt) {
-      window.location.assign("beaconsminion?minion=" + encodeURIComponent(hostname));
+  _addMenuItemShowBeacons(pMenu, pMinionId) {
+    pMenu.addMenuItem("Show&nbsp;beacons", function(evt) {
+      window.location.assign("beaconsminion?minionid=" + encodeURIComponent(pMinionId));
     }.bind(this));
   }
 }

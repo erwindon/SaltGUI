@@ -1,4 +1,5 @@
 import {Output} from './Output.js';
+import {Route} from '../routes/Route.js';
 import {Utils} from '../Utils.js';
 
 export class OutputSaltGuiHighstate {
@@ -14,33 +15,33 @@ export class OutputSaltGuiHighstate {
     return Utils.txtZeroOneMany(millis / 1000, "", "{0} second", "{0} seconds");
   }
 
-  static getHighStateLabel(hostname, hostResponse) {
+  static getHighStateLabel(pMinionId, minionResponse) {
     let anyFailures = false;
     let anySkips = false;
     // do not use Object.entries, that is not supported by the test framework
-    for(const key of Object.keys(hostResponse)) {
-      const task = hostResponse[key];
+    for(const key of Object.keys(minionResponse)) {
+      const task = minionResponse[key];
       if(task.result === null) anySkips = true;
       else if(!task.result) anyFailures = true;
     }
 
     if(anyFailures) {
-      return Output.getHostnameHtml(hostname, "host-failure");
+      return Output.getMinionIdHtml(pMinionId, "host-failure");
     }
     if(anySkips) {
-      return Output.getHostnameHtml(hostname, "host-skips");
+      return Output.getMinionIdHtml(pMinionId, "host-skips");
     }
-    return Output.getHostnameHtml(hostname, "host-success");
+    return Output.getMinionIdHtml(pMinionId, "host-success");
   }
 
-  static addChangesInfo(taskDiv, task, indent) {
+  static addChangesInfo(taskDiv, task, pIndent) {
     if(!task.hasOwnProperty("changes")) {
       return 0;
     }
 
     if(typeof task.changes !== "object" || Array.isArray(task.changes)) {
       taskDiv.append(document.createElement("br"));
-      taskDiv.append(document.createTextNode(indent + JSON.stringify(task.changes)));
+      taskDiv.append(document.createTextNode(pIndent + JSON.stringify(task.changes)));
       return 0;
     }
 
@@ -54,7 +55,7 @@ export class OutputSaltGuiHighstate {
       if(typeof change === "string" && Utils.isMultiLineString(change)) {
         taskDiv.append(document.createElement("br"));
         // show multi-line text as a separate block
-        taskDiv.append(document.createTextNode(indent + key + ":"));
+        taskDiv.append(document.createTextNode(pIndent + key + ":"));
         const lines = change.trim().split("\n");
         for(const line of lines) {
           taskDiv.append(document.createElement("br"));
@@ -68,7 +69,7 @@ export class OutputSaltGuiHighstate {
           const task = change[idx];
           taskDiv.append(document.createElement("br"));
           taskDiv.append(document.createTextNode(
-            indent + key + "[" + idx + "]: " + JSON.stringify(task)));
+            pIndent + key + "[" + idx + "]: " + JSON.stringify(task)));
         }
         continue;
       }
@@ -77,7 +78,7 @@ export class OutputSaltGuiHighstate {
         // show all other non-objects in a simple way
         taskDiv.append(document.createElement("br"));
         taskDiv.append(document.createTextNode(
-          indent + key + ": " +
+          pIndent + key + ": " +
           JSON.stringify(change)));
         continue;
       }
@@ -90,7 +91,7 @@ export class OutputSaltGuiHighstate {
         // don't use arrows here, these are higher than a regular
         // text-line and disturb the text-flow
         taskDiv.append(document.createTextNode(
-          indent + key + ": " +
+          pIndent + key + ": " +
           JSON.stringify(change.old) + " \u25BA " +
           JSON.stringify(change.new)));
       }
@@ -103,7 +104,7 @@ export class OutputSaltGuiHighstate {
 
         taskDiv.append(document.createElement("br"));
         taskDiv.append(document.createTextNode(
-          indent + key + ": " + taskkey + ": " +
+          pIndent + key + ": " + taskkey + ": " +
           JSON.stringify(change[taskkey])));
       }
     }
@@ -114,7 +115,7 @@ export class OutputSaltGuiHighstate {
 
     const indent = "    ";
 
-    const div = document.createElement("div");
+    const div = Route._createDiv("", "");
 
     let succeeded = 0;
     let failed = 0;
@@ -126,10 +127,10 @@ export class OutputSaltGuiHighstate {
 
       nr += 1;
 
-      const taskDiv = document.createElement("div");
+      const taskDiv = Route._createDiv("", "");
       taskDiv.id = Utils.getIdFromMinionId(pMinionId + "." + nr);
 
-      const span = document.createElement("span");
+      const span = Route._createSpan("", "");
       if(task.result === null) {
         // 2714 = HEAVY CHECK MARK
         span.style.color = "yellow";

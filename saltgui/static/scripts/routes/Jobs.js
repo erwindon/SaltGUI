@@ -34,59 +34,59 @@ export class JobsRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    const page = document.getElementById("jobs-panel");
-    const menu = new DropDownMenu(page);
+    const panel = document.getElementById("jobs-panel");
+    const menu = new DropDownMenu(panel);
     this._addMenuItemShowSomeWhenNeeded(menu);
     this._addMenuItemShowEligibleWhenNeeded(menu);
     this._addMenuItemShowAllWhenNeeded(menu);
 
-    // new menu's are always added at the bottom of the div
+    // new menus are always added at the bottom of the div
     // fix that by re-adding it to its proper place
     const title = document.getElementById("jobs-title");
-    page.insertBefore(menu.menuDropdown, title.nextSibling);
+    panel.insertBefore(menu.menuDropdown, title.nextSibling);
 
-    runnerJobsListJobsPromise.then(data => {
-      myThis._handleRunnerJobsListJobs(data, true, cnt);
-      runnerJobsActivePromise.then(data => {
-        myThis._handleRunnerJobsActive(data);
-      }, data => {
-        myThis._handleRunnerJobsActive(JSON.stringify(data));
+    runnerJobsListJobsPromise.then(pData => {
+      myThis._handleRunnerJobsListJobs(pData, true, cnt);
+      runnerJobsActivePromise.then(pData => {
+        myThis._handleRunnerJobsActive(pData);
+      }, pData => {
+        myThis._handleRunnerJobsActive(JSON.stringify(pData));
       });
-    }, data => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
+    }, pData => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
     }); 
   }
 
-  _addMenuItemShowSomeWhenNeeded(menu) {
+  _addMenuItemShowSomeWhenNeeded(pMenu) {
     const maxJobs = 50;
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     if(cnt === ""+maxJobs) return;
-    menu.addMenuItem("Show&nbsp;first&nbsp;" + maxJobs + "&nbsp;jobs", function(evt) {
+    pMenu.addMenuItem("Show&nbsp;first&nbsp;" + maxJobs + "&nbsp;jobs", function(evt) {
       window.location.assign("jobs?cnt=" + maxJobs);
     }.bind(this));
   }
 
-  _addMenuItemShowEligibleWhenNeeded(menu) {
+  _addMenuItemShowEligibleWhenNeeded(pMenu) {
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     if(cnt === "eligible") return;
-    menu.addMenuItem("Show&nbsp;eligible&nbsp;jobs", function(evt) {
+    pMenu.addMenuItem("Show&nbsp;eligible&nbsp;jobs", function(evt) {
       window.location.assign("jobs?cnt=eligible");
     }.bind(this));
   }
 
-  _addMenuItemShowAllWhenNeeded(menu) {
+  _addMenuItemShowAllWhenNeeded(pMenu) {
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     if(cnt === "all") return;
-    menu.addMenuItem("Show&nbsp;all&nbsp;jobs", function(evt) {
+    pMenu.addMenuItem("Show&nbsp;all&nbsp;jobs", function(evt) {
       window.location.assign("jobs?cnt=all");
     }.bind(this));
   }
 
-  _addJob(container, job) {
+  _addJob(pContainer, job) {
     const tr = document.createElement("tr");
     tr.id = Utils.getIdFromJobId(job.id);
-    const jidText = job.id;
-    tr.appendChild(Route._createTd(Utils.getIdFromJobId(job.id), jidText));
+    const jobIdText = job.id;
+    tr.appendChild(Route._createTd(Utils.getIdFromJobId(job.id), jobIdText));
 
     let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
     const maxTextLength = 50;
@@ -111,90 +111,90 @@ export class JobsRoute extends PageRoute {
     this._addMenuItemShowDetails(menu, job);
     this._addMenuItemRerunJob(menu, job, argumentsText);
 
-    const tdStatus = Route._createTd("status", "");
-    const spanStatus = Route._createSpan("status2", "loading...");
-    spanStatus.classList.add("no-status");
-    spanStatus.addEventListener("click", evt => {
+    const statusTd = Route._createTd("status", "");
+    const statusSpan = Route._createSpan("status2", "loading...");
+    statusSpan.classList.add("no-status");
+    statusSpan.addEventListener("click", evt => {
       // show "loading..." only once, but we are updating the whole column
-      spanStatus.classList.add("no-status");
-      spanStatus.innerText = "loading...";
+      statusSpan.classList.add("no-status");
+      statusSpan.innerText = "loading...";
       this._startRunningJobs();
       evt.stopPropagation();
     });
-    tdStatus.appendChild(spanStatus);
-    tr.appendChild(tdStatus);
+    statusTd.appendChild(statusSpan);
+    tr.appendChild(statusTd);
 
-    this._addMenuItemUpdateStatus(menu, spanStatus);
+    this._addMenuItemUpdateStatus(menu, statusSpan);
 
-    const tdDetails = Route._createTd("details", "");
-    const spanDetails = Route._createSpan("details2", "(click)");
-    spanDetails.classList.add("no-status");
-    spanDetails.addEventListener("click", evt => {
-      spanDetails.classList.add("no-status");
-      spanDetails.innerText = "loading...";
+    const detailsTd = Route._createTd("details", "");
+    const detailsSpan = Route._createSpan("details2", "(click)");
+    detailsSpan.classList.add("no-status");
+    detailsSpan.addEventListener("click", evt => {
+      detailsSpan.classList.add("no-status");
+      detailsSpan.innerText = "loading...";
       this._getJobDetails(job.id);
       evt.stopPropagation();
     });
-    Utils.addToolTip(spanDetails, "Click to refresh");
-    tdDetails.appendChild(spanDetails);
-    tr.appendChild(tdDetails);
+    Utils.addToolTip(detailsSpan, "Click to refresh");
+    detailsTd.appendChild(detailsSpan);
+    tr.appendChild(detailsTd);
 
-    this._addMenuItemUpdateDetails(menu, spanDetails, job);
+    this._addMenuItemUpdateDetails(menu, detailsSpan, job);
 
     // fill out the number of columns to that of the header
-    while(tr.cells.length < container.parentElement.tHead.rows[0].cells.length) {
+    while(tr.cells.length < pContainer.parentElement.tHead.rows[0].cells.length) {
       tr.appendChild(Route._createTd("", ""));
     }
 
-    container.appendChild(tr);
+    pContainer.appendChild(tr);
 
     tr.addEventListener("click", evt => window.location.assign("/job?id=" + encodeURIComponent(job.id)));
   }
 
-  _addMenuItemShowDetails(menu, job) {
-    menu.addMenuItem("Show&nbsp;details", function(evt) {
+  _addMenuItemShowDetails(pMenu, job) {
+    pMenu.addMenuItem("Show&nbsp;details", function(evt) {
       window.location.assign("/job?id=" + encodeURIComponent(job.id));
     }.bind(this));
   }
 
-  _addMenuItemRerunJob(menu, job, argumentsText) {
+  _addMenuItemRerunJob(pMenu, job, argumentsText) {
     // 2011 = NON-BREAKING HYPHEN
-    menu.addMenuItem("Re&#x2011;run&nbsp;job...", function(evt) {
+    pMenu.addMenuItem("Re&#x2011;run&nbsp;job...", function(evt) {
       this._runFullCommand(evt, job["Target-type"], job.Target, job.Function + argumentsText);
     }.bind(this));
   }
 
-  _addMenuItemUpdateStatus(menu, spanStatus) {
-    menu.addMenuItem("Update&nbsp;status", function(evt) {
-      spanStatus.classList.add("no-status");
-      spanStatus.innerText = "loading...";
+  _addMenuItemUpdateStatus(pMenu, pStatusSpan) {
+    pMenu.addMenuItem("Update&nbsp;status", function(evt) {
+      pStatusSpan.classList.add("no-status");
+      pStatusSpan.innerText = "loading...";
       this._startRunningJobs();
     }.bind(this));
   }
 
-  _addMenuItemUpdateDetails(menu, spanDetails, job) {
-    menu.addMenuItem("Update&nbsp;details", function(evt) {
-      spanDetails.classList.add("no-status");
-      spanDetails.innerText = "loading...";
+  _addMenuItemUpdateDetails(pMenu, pDetailsSpan, job) {
+    pMenu.addMenuItem("Update&nbsp;details", function(evt) {
+      pDetailsSpan.classList.add("no-status");
+      pDetailsSpan.innerText = "loading...";
       this._getJobDetails(job.id);
     }.bind(this));
   }
 
-  _handleRunnerJobsActive(data) {
+  _handleRunnerJobsActive(pData) {
 
-    if(typeof data !== "object") {
+    if(typeof pData !== "object") {
       // update all jobs (page) with the error message
-      for(const tr of this.page_element.querySelector("table#jobs tbody").rows) {
+      for(const tr of this.pageElement.querySelector("table#jobs tbody").rows) {
         const statusField = tr.querySelector("td.status span.no-status");
         if(!statusField) continue;
         statusField.classList.remove("no-status");
         statusField.innerText = "(error)";
-        Utils.addToolTip(statusField, data);
+        Utils.addToolTip(statusField, pData);
       }
       return;
     }
 
-    const jobs = data.return[0];
+    const jobs = pData.return[0];
 
     // update all running jobs
     for(const k in jobs)
@@ -202,7 +202,7 @@ export class JobsRoute extends PageRoute {
       const job = jobs[k];
 
       let targetText = "";
-      const targetField = this.page_element.querySelector(".jobs tr#" + Utils.getIdFromJobId(k) + " td.status span");
+      const targetField = this.pageElement.querySelector(".jobs tr#" + Utils.getIdFromJobId(k) + " td.status span");
       const maxTextLength = 50;
       if(targetText.length > maxTextLength) {
         // prevent column becoming too wide
@@ -224,7 +224,7 @@ export class JobsRoute extends PageRoute {
     }
 
     // update all finished jobs (page)
-    for(const tr of this.page_element.querySelector("table#jobs tbody").rows) {
+    for(const tr of this.pageElement.querySelector("table#jobs tbody").rows) {
       const statusField = tr.querySelector("td.status span.no-status");
       if(!statusField) continue;
       statusField.classList.remove("no-status");
@@ -235,46 +235,46 @@ export class JobsRoute extends PageRoute {
     }
   }
 
-  _getJobDetails(jobid) {
+  _getJobDetails(pJobId) {
     const myThis = this;
 
-    const runnerJobsListJobPromise = this.router.api.getRunnerJobsListJob(jobid);
+    const runnerJobsListJobPromise = this.router.api.getRunnerJobsListJob(pJobId);
 
-    runnerJobsListJobPromise.then(data => {
-      myThis._handleRunnerJobsListJob(jobid, data);
-    }, data => {
-      myThis._handleRunnerJobsListJob(jobid, JSON.stringify(data));
+    runnerJobsListJobPromise.then(pData => {
+      myThis._handleRunnerJobsListJob(pJobId, pData);
+    }, pData => {
+      myThis._handleRunnerJobsListJob(pJobId, JSON.stringify(pData));
     });
   }
 
-  _handleRunnerJobsListJob(jobid, data) {
+  _handleRunnerJobsListJob(pJobId, pData) {
 
-    const detailsSpan = this.page_element.querySelector(".jobs #" + Utils.getIdFromJobId(jobid) + " td.details span");
+    const detailsSpan = this.pageElement.querySelector(".jobs #" + Utils.getIdFromJobId(pJobId) + " td.details span");
     if(!detailsSpan) return;
 
-    if(typeof data !== "object") {
+    if(typeof pData !== "object") {
       detailsSpan.innerText = "(error)";
       detailsSpan.classList.remove("no-status");
-      Utils.addToolTip(detailsSpan, data);
+      Utils.addToolTip(detailsSpan, pData);
       return;
     }
 
-    data = data.return[0];
+    pData = pData.return[0];
 
-    if(data.Error) {
+    if(pData.Error) {
       // typically happens for jobs that are expired from jobs-cache
       detailsSpan.innerText = "(error)";
       detailsSpan.classList.remove("no-status");
-      Utils.addToolTip(detailsSpan, data.Error);
+      Utils.addToolTip(detailsSpan, pData.Error);
       return;
     }
 
-    let str = Utils.txtZeroOneMany(data.Minions.length,
+    let str = Utils.txtZeroOneMany(pData.Minions.length,
       "no minions", "{0} minion", "{0} minions");
 
-    const keyCount = Object.keys(data.Result).length;
+    const keyCount = Object.keys(pData.Result).length;
     str += ", ";
-    if(keyCount === data.Minions.length)
+    if(keyCount === pData.Minions.length)
       str += "<span style='color: green'>";
     else
       str += "<span style='color: red'>";
@@ -283,8 +283,8 @@ export class JobsRoute extends PageRoute {
     str += "</span>";
 
     const summary = { };
-    for(const minion in data.Result) {
-      const result = data.Result[minion];
+    for(const minionId in pData.Result) {
+      const result = pData.Result[minionId];
       // use keys that can conveniently be sorted
       const key = (result.success ? "0-" : "1-") + result.retcode;
       if(!summary.hasOwnProperty(key)) summary[key] = 0;

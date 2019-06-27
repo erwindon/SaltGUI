@@ -131,7 +131,7 @@ export class ParseCommandLine {
         } else if(patBooleanTrue.test(str)) {
           value = true;
         } else if(ParseCommandLine.getPatJid().test(str)) {
-          // jids look like numbers but must be strings
+          // jobIds look like numbers but must be strings
           value = str;
         } else if(patInteger.test(str)) {
           value = parseInt(str);

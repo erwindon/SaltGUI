@@ -12,7 +12,7 @@ export class SchedulesMinionRoute extends PageRoute {
 
     this._handleLocalScheduleList = this._handleLocalScheduleList.bind(this);
 
-    this.page_element.querySelector("#schedules-minion-button-close").addEventListener("click", _ => {
+    this.pageElement.querySelector("#schedules-minion-button-close").addEventListener("click", _ => {
       this.router.goTo("/schedules");
     });
   }
@@ -20,67 +20,67 @@ export class SchedulesMinionRoute extends PageRoute {
   onShow() {
     const myThis = this;
 
-    const minion = decodeURIComponent(Utils.getQueryParam("minion"));
+    const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
 
     // preliminary title
     const title = document.getElementById("schedules-minion-title");
-    title.innerText = "Schedules on " + minion;
+    title.innerText = "Schedules on " + minionId;
 
-    const localScheduleListPromise = this.router.api.getLocalScheduleList(minion);
+    const localScheduleListPromise = this.router.api.getLocalScheduleList(minionId);
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    localScheduleListPromise.then(data => {
-      myThis._handleLocalScheduleList(data, minion);
-    }, data => {
-      myThis._handleLocalScheduleList(JSON.stringify(data), minion);
+    localScheduleListPromise.then(pData => {
+      myThis._handleLocalScheduleList(pData, minionId);
+    }, pData => {
+      myThis._handleLocalScheduleList(JSON.stringify(pData), minionId);
     });
 
-    runnerJobsListJobsPromise.then(data => {
-      myThis._handleRunnerJobsListJobs(data);
-      runnerJobsActivePromise.then(data => {
-        myThis._handleRunnerJobsActive(data);
-      }, data => {
-        myThis._handleRunnerJobsActive(JSON.stringify(data));
+    runnerJobsListJobsPromise.then(pData => {
+      myThis._handleRunnerJobsListJobs(pData);
+      runnerJobsActivePromise.then(pData => {
+        myThis._handleRunnerJobsActive(pData);
+      }, pData => {
+        myThis._handleRunnerJobsActive(JSON.stringify(pData));
       });
-    }, data => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
+    }, pData => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
     }); 
   }
 
-  _handleLocalScheduleList(data, minion) {
-    const page = document.getElementById("schedules-minion-panel");
+  _handleLocalScheduleList(pData, pMinionId) {
+    const panel = document.getElementById("schedules-minion-panel");
 
     const container = document.getElementById("schedules-minion-list");
 
-    if(PageRoute.showErrorRowInstead(container.tBodies[0], data)) return;
+    if(PageRoute.showErrorRowInstead(container.tBodies[0], pData)) return;
 
-    let schedules = data.return[0][minion];
+    let schedules = pData.return[0][pMinionId];
     schedules = SchedulesRoute._fixMinion(schedules);
 
     const title = document.getElementById("schedules-minion-title");
-    let txt = "Schedules on " + minion;
+    let txt = "Schedules on " + pMinionId;
     if(schedules && schedules.enabled === false) txt += " (disabled)";
     title.innerText = txt;
 
     if(schedules === undefined) {
-      const msg = this.page_element.querySelector("div.minion-list .msg");
-      msg.innerText = "Unknown minion '" + minion + "'";
+      const msg = this.pageElement.querySelector("div.minion-list .msg");
+      msg.innerText = "Unknown minion '" + pMinionId + "'";
       return;
     }
     if(schedules === false) {
-      const msg = this.page_element.querySelector("div.minion-list .msg");
-      msg.innerText = "Minion '" + minion + "' did not answer";
+      const msg = this.pageElement.querySelector("div.minion-list .msg");
+      msg.innerText = "Minion '" + pMinionId + "' did not answer";
       return;
     }
 
-    const menu = new DropDownMenu(page);
-    this._addMenuItemEnableSchedulerWhenNeeded(menu, minion, schedules);
-    this._addMenuItemDisableSchedulerWhenNeeded(menu, minion, schedules);
+    const menu = new DropDownMenu(panel);
+    this._addMenuItemEnableSchedulerWhenNeeded(menu, pMinionId, schedules);
+    this._addMenuItemDisableSchedulerWhenNeeded(menu, pMinionId, schedules);
 
-    // new menu's are always added at the bottom of the div
+    // new menus are always added at the bottom of the div
     // fix that by re-adding it to its proper place
-    page.insertBefore(menu.menuDropdown, title.nextSibling);
+    panel.insertBefore(menu.menuDropdown, title.nextSibling);
 
     const keys = Object.keys(schedules.schedules).sort();
     for(const k of keys) {
@@ -113,79 +113,79 @@ export class SchedulesMinionRoute extends PageRoute {
           scheduleModifyCmd += " " + key;
         scheduleModifyCmd += "=" + JSON.stringify(schedule[key]);
       }
-      this._addMenuItemModifyJob(menu, minion, scheduleModifyCmd);
-      this._addMenuItemEnableJobWhenNeeded(menu, minion, k, schedule);
-      this._addMenuItemDisableJobWhenNeeded(menu, minion, k, schedule);
-      this._addMenuItemDeleteJob(menu, minion, k);
-      this._addMenuItemRunJob(menu, minion, k, schedule);
+      this._addMenuItemModifyJob(menu, pMinionId, scheduleModifyCmd);
+      this._addMenuItemEnableJobWhenNeeded(menu, pMinionId, k, schedule);
+      this._addMenuItemDisableJobWhenNeeded(menu, pMinionId, k, schedule);
+      this._addMenuItemDeleteJob(menu, pMinionId, k);
+      this._addMenuItemRunJob(menu, pMinionId, k, schedule);
 
       // menu comes before this data on purpose
-      const schedule_value = Output.formatObject(schedule);
-      const value = Route._createTd("schedule-value", schedule_value);
-      if(schedule.enabled === false) value.classList.add("schedule-disabled");
-      if(schedules.enabled === false) value.classList.add("schedule-disabled");
-      tr.appendChild(value);
+      const scheduleValue = Output.formatObject(schedule);
+      const scheduleValueTd = Route._createTd("schedule-value", scheduleValue);
+      if(schedule.enabled === false) scheduleValueTd.classList.add("schedule-disabled");
+      if(schedules.enabled === false) scheduleValueTd.classList.add("schedule-disabled");
+      tr.appendChild(scheduleValueTd);
 
       container.tBodies[0].appendChild(tr);
 
-      tr.addEventListener("click", evt => this._runCommand(evt, minion, scheduleModifyCmd));
+      tr.addEventListener("click", evt => this._runCommand(evt, pMinionId, scheduleModifyCmd));
     }
 
     Utils.showTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement());
 
-    const msg = this.page_element.querySelector("div.minion-list .msg");
+    const msg = this.pageElement.querySelector("div.minion-list .msg");
     txt = Utils.txtZeroOneMany(keys.length,
       "No schedules", "{0} schedule", "{0} schedules");
     msg.innerText = txt;
   }
 
-  _addMenuItemEnableSchedulerWhenNeeded(menu, minion, schedules) {
+  _addMenuItemEnableSchedulerWhenNeeded(pMenu, pMinionId, schedules) {
     if(schedules.enabled !== false) return;
-    menu.addMenuItem("Enable&nbsp;scheduler...", function(evt) {
-      this._runCommand(evt, minion, "schedule.enable");
+    pMenu.addMenuItem("Enable&nbsp;scheduler...", function(evt) {
+      this._runCommand(evt, pMinionId, "schedule.enable");
     }.bind(this));
   }
 
-  _addMenuItemDisableSchedulerWhenNeeded(menu, minion, schedules) {
+  _addMenuItemDisableSchedulerWhenNeeded(pMenu, pMinionId, schedules) {
     if(schedules.enabled === false) return;
-    menu.addMenuItem("Disable&nbsp;scheduler...", function(evt) {
-      this._runCommand(evt, minion, "schedule.disable");
+    pMenu.addMenuItem("Disable&nbsp;scheduler...", function(evt) {
+      this._runCommand(evt, pMinionId, "schedule.disable");
     }.bind(this));
   }
 
-  _addMenuItemModifyJob(menu, minion, scheduleModifyCmd) {
-    menu.addMenuItem("Modify&nbsp;job...", function(evt) {
-      this._runCommand(evt, minion, scheduleModifyCmd);
+  _addMenuItemModifyJob(pMenu, pMinionId, scheduleModifyCmd) {
+    pMenu.addMenuItem("Modify&nbsp;job...", function(evt) {
+      this._runCommand(evt, pMinionId, scheduleModifyCmd);
     }.bind(this));
   }
 
-  _addMenuItemEnableJobWhenNeeded(menu, minion, name, schedule) {
+  _addMenuItemEnableJobWhenNeeded(pMenu, pMinionId, name, schedule) {
     if(schedule.enabled !== false) return;
-    menu.addMenuItem("Enable&nbsp;job...", function(evt) {
-      this._runCommand(evt, minion, "schedule.enable_job " + name);
+    pMenu.addMenuItem("Enable&nbsp;job...", function(evt) {
+      this._runCommand(evt, pMinionId, "schedule.enable_job " + name);
     }.bind(this));
   }
 
-  _addMenuItemDisableJobWhenNeeded(menu, minion, name, schedule) {
+  _addMenuItemDisableJobWhenNeeded(pMenu, pMinionId, name, schedule) {
     if(schedule.enabled === false) return;
-    menu.addMenuItem("Disable&nbsp;job...", function(evt) {
-      this._runCommand(evt, minion, "schedule.disable_job " + name);
+    pMenu.addMenuItem("Disable&nbsp;job...", function(evt) {
+      this._runCommand(evt, pMinionId, "schedule.disable_job " + name);
     }.bind(this));
   }
 
-  _addMenuItemDeleteJob(menu, minion, name) {
-    menu.addMenuItem("Delete&nbsp;job...", function(evt) {
-      this._runCommand(evt, minion, "schedule.delete " + name);
+  _addMenuItemDeleteJob(pMenu, pMinionId, name) {
+    pMenu.addMenuItem("Delete&nbsp;job...", function(evt) {
+      this._runCommand(evt, pMinionId, "schedule.delete " + name);
     }.bind(this));
   }
 
-  _addMenuItemRunJob(menu, minion, name, schedule) {
-    menu.addMenuItem("Run&nbsp;job...", function(evt) {
+  _addMenuItemRunJob(pMenu, pMinionId, name, schedule) {
+    pMenu.addMenuItem("Run&nbsp;job...", function(evt) {
       let scheduleRunJobCmd = "schedule.run_job";
       if(schedule.enabled === false) scheduleRunJobCmd += " force=true";
       scheduleRunJobCmd += " " + name;
-      this._runCommand(evt, minion, scheduleRunJobCmd);
+      this._runCommand(evt, pMinionId, scheduleRunJobCmd);
     }.bind(this));
   }
 }

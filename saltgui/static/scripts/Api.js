@@ -1,8 +1,8 @@
 export class HTTPError extends Error {
-  constructor(status, message) {
+  constructor(status, pMessage) {
     super();
     this.status = status;
-    this.message = message;
+    this.message = pMessage;
   }
 }
 
@@ -32,8 +32,8 @@ export class API {
     window.localStorage.setItem("eauth", eauth);
 
     return this.apiRequest("POST", "/login", params)
-      .then(data => {
-        const response = data.return[0];
+      .then(pData => {
+        const response = pData.return[0];
         if(Object.keys(response.perms).length === 0) {
           // we are allowed to login but there are no permissions available
           throw new HTTPError(403, "Unauthorized");
@@ -51,15 +51,15 @@ export class API {
       });
   }
 
-  getLocalBeaconsList(minion) {
+  getLocalBeaconsList(pMinionId) {
     const params = {
       client: "local",
       fun: "beacons.list",
       kwarg: { return_yaml: false }
     };
-    if(minion) {
+    if(pMinionId) {
       params.tgt_type = "list";
-      params.tgt = minion;
+      params.tgt = pMinionId;
     } else {
       params.tgt_type = "glob";
       params.tgt = "*";
@@ -67,14 +67,14 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getLocalGrainsItems(minion) {
+  getLocalGrainsItems(pMinionId) {
     const params = {
       client: "local",
       fun: "grains.items",
     };
-    if(minion) {
+    if(pMinionId) {
       params.tgt_type = "list";
-      params.tgt = minion;
+      params.tgt = pMinionId;
     } else {
       params.tgt_type = "glob";
       params.tgt = "*";
@@ -82,14 +82,14 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getLocalPillarItems(minion) {
+  getLocalPillarItems(pMinionId) {
     const params = {
       client: "local",
       fun: "pillar.items"
     };
-    if(minion) {
+    if(pMinionId) {
       params.tgt_type = "list";
-      params.tgt = minion;
+      params.tgt = pMinionId;
     } else {
       params.tgt_type = "glob";
       params.tgt = "*";
@@ -97,14 +97,14 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getLocalPillarObfuscate(minion) {
+  getLocalPillarObfuscate(pMinionId) {
     const params = {
       client: "local",
       fun: "pillar.obfuscate"
     };
-    if(minion) {
+    if(pMinionId) {
       params.tgt_type = "list";
-      params.tgt = minion;
+      params.tgt = pMinionId;
     } else {
       params.tgt_type = "glob";
       params.tgt = "*";
@@ -112,15 +112,15 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getLocalScheduleList(minion) {
+  getLocalScheduleList(pMinionId) {
     const params = {
       client: "local",
       fun: "schedule.list",
       kwarg: { return_yaml: false }
     };
-    if(minion) {
+    if(pMinionId) {
       params.tgt_type = "list";
-      params.tgt = minion;
+      params.tgt = pMinionId;
     } else {
       params.tgt_type = "glob";
       params.tgt = "*";
@@ -136,11 +136,11 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getRunnerJobsListJob(id) {
+  getRunnerJobsListJob(pJobId) {
     const params = {
       client: "runner",
       fun: "jobs.list_job",
-      jid: id
+      jid: pJobId
     };
     return this.apiRequest("POST", "/", params);
   }
@@ -161,13 +161,13 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getWheelKeyFinger(minion) {
+  getWheelKeyFinger(pMinionId) {
     const params = {
       client: "wheel",
       fun: "key.finger"
     };
-    if(minion) {
-      params.match = minion;
+    if(pMinionId) {
+      params.match = pMinionId;
     } else {
       params.match = "*";
     }
@@ -220,8 +220,8 @@ export class API {
       // It appears with every page-load
       //console.error(err);
     };
-    source.onmessage = function(message) {
-      const saltEvent = JSON.parse(message.data);
+    source.onmessage = function(pMessage) {
+      const saltEvent = JSON.parse(pMessage.data);
       const tag = saltEvent.tag;
       const data = saltEvent.data;
 

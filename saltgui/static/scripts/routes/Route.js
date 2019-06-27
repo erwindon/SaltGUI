@@ -4,14 +4,14 @@ import {TargetType} from '../TargetType.js';
 
 export class Route {
 
-  constructor(path, name, page_selector, menuitem_selector, router) {
+  constructor(path, name, pPageSelector, pMenuItemSelector, router) {
     this.path = new RegExp(path);
     this.name = name;
-    this.page_element = document.querySelector(page_selector);
+    this.pageElement = document.querySelector(pPageSelector);
     this.router = router;
-    if(menuitem_selector) {
-      this.menuitem_element1 = document.querySelector(menuitem_selector + "1");
-      this.menuitem_element2 = document.querySelector(menuitem_selector + "2");
+    if(pMenuItemSelector) {
+      this.menuitem_element1 = document.querySelector(pMenuItemSelector + "1");
+      this.menuitem_element2 = document.querySelector(pMenuItemSelector + "2");
     }
   }
 
@@ -24,7 +24,7 @@ export class Route {
   }
 
   getPageElement() {
-    return this.page_element;
+    return this.pageElement;
   }
 
   getMenuItemElement1() {
@@ -35,55 +35,55 @@ export class Route {
     return this.menuitem_element2;
   }
 
-  static _createTd(className, content) {
+  static _createTd(pClassName, pInnerText) {
     const td = document.createElement("td");
-    if(className) td.className = className;
-    td.innerText = content;
+    if(pClassName) td.className = pClassName;
+    if(pInnerText) td.innerText = pInnerText;
     return td;
   }
 
-  static _createDiv(className, content) {
+  static _createDiv(pClassName, pInnerText) {
     const div = document.createElement("div");
-    if(className) div.className = className;
-    div.innerText = content;
+    if(pClassName) div.className = pClassName;
+    if(pInnerText) div.innerText = pInnerText;
     return div;
   }
 
-  static _createSpan(className, content) {
+  static _createSpan(pClassName, pInnerText) {
     const span = document.createElement("span");
-    if(className) span.className = className;
-    span.innerText = content;
+    if(pClassName) span.className = pClassName;
+    if(pInnerText) span.innerText = pInnerText;
     return span;
   }
 
-  _runCommand(evt, targetString, commandString) {
-    this._runFullCommand(evt, "", targetString, commandString);
+  _runCommand(evt, pTargetString, pCommandString) {
+    this._runFullCommand(evt, "", pTargetString, pCommandString);
   }
 
-  _runFullCommand(evt, targettype, targetString, commandString) {
+  _runFullCommand(evt, targettype, pTargetString, pCommandString) {
     this.router.commandbox._showManualRun(evt);
     const target = document.querySelector("#target");
     const command = document.querySelector("#command");
     const targetbox = document.querySelector("#target-box");
 
-    if(!targetString) targetString = "";
+    if(!pTargetString) pTargetString = "";
     // handle https://github.com/saltstack/salt/issues/48734
-    if(targetString === "unknown-target") {
+    if(pTargetString === "unknown-target") {
       // target was lost...
-      targetString = "";
+      pTargetString = "";
       targettype = "";
     }
 
-    if(!commandString) commandString = "";
-    if(commandString.startsWith("wheel.") && targetString.endsWith("_master")) {
-      // target was {hostname}_master...
-      // too bad when the real hostname is actually like that :-(
-      targetString = "";
+    if(!pCommandString) pCommandString = "";
+    if(pCommandString.startsWith("wheel.") && pTargetString.endsWith("_master")) {
+      // target was {minionId}_master...
+      // too bad when the real minionId is actually like that :-(
+      pTargetString = "";
       targettype = "";
     }
-    if(commandString.startsWith("runners.")) {
+    if(pCommandString.startsWith("runners.")) {
       // runners do not have a target, so do not bother
-      targetString = "";
+      pTargetString = "";
       targettype = "";
     }
 
@@ -98,8 +98,8 @@ export class Route {
       TargetType.setTargetType(tt);
     }
 
-    target.value = targetString;
-    command.value = commandString;
+    target.value = pTargetString;
+    command.value = pCommandString;
     // the menu may become (in)visible due to content of command field
     this.router.commandbox.cmdmenu.verifyAll();
   }

@@ -4,21 +4,21 @@ export class DropDownMenu {
 
   // Creates an empty dropdown menu
   // The visual clue for the menu is added to the given element
-  constructor(element) {
+  constructor(pParentElement) {
 
     this.callback = this.callback.bind(this);
     this.verifyAll = this.verifyAll.bind(this);
 
     // allow reduced code on the caller side
-    if(element.tagName === "TR") {
-      const nelement = Route._createTd("", "");
-      element.appendChild(nelement);
-      element = nelement;
+    if(pParentElement.tagName === "TR") {
+      const td = Route._createTd("", "");
+      pParentElement.appendChild(td);
+      pParentElement = td;
     }
 
     this.menuDropdown = Route._createDiv("run-command-button", "");
 
-    switch (element.id) {
+    switch (pParentElement.id) {
     case "cmd-box":
       // 1F4D6 (D83D+DCD6) = A BOOK
       this.menuButton = Route._createDiv("menu-dropdown", "\uD83D\uDCD6");
@@ -37,7 +37,7 @@ export class DropDownMenu {
     this.menuDropdownContent = Route._createDiv("menu-dropdown-content", "");
     this.menuDropdown.appendChild(this.menuDropdownContent);
     this.menuDropdown.addEventListener("mouseenter", this.verifyAll);
-    element.appendChild(this.menuDropdown);
+    pParentElement.appendChild(this.menuDropdown);
   }
 
   verifyAll() {
@@ -61,20 +61,20 @@ export class DropDownMenu {
   // function is called each time the menu opens
   // This allows dynamic menuitem titles (use menuitem.innerText/innerHTML)
   // or visibility (use menuitem.style.display = "none"/"inline-block")
-  addMenuItem(title, callback, value) {
+  addMenuItem(title, callback, pValue) {
     const button = Route._createDiv("run-command-button", "...");
     if(typeof title === "string")
       button.innerHTML = title;
     else
       button.verifyCallback = title;
-    button.addEventListener("click", evt => this.callback(evt, callback, value));
+    button.addEventListener("click", evt => this.callback(evt, callback, pValue));
     this.menuDropdownContent.appendChild(button);
     this.verifyAll();
     return button;
   }
 
-  callback(evt, theCallback, value) {
-    this._value = value;
+  callback(evt, theCallback, pValue) {
+    this._value = pValue;
     theCallback(evt);
     evt.stopPropagation();
   }

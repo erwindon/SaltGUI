@@ -22,40 +22,40 @@ export class KeysRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    wheelKeyListAllPromise.then(data1 => {
-      myThis._handleWheelKeyListAll(data1);
-      wheelKeyFingerPromise.then(data => {
-        myThis._handleWheelKeyFinger(data);
-      }, data2 => {
-        const data = {"return":[{"data":{"return":{"minions":{}}}}]};
-        for(const k of data1.return[0].data.return.minions)
-          data.return[0]["data"]["return"]["minions"][k] = JSON.stringify(data2);
-        myThis._handleWheelKeyFinger(data);
+    wheelKeyListAllPromise.then(pData1 => {
+      myThis._handleWheelKeyListAll(pData1);
+      wheelKeyFingerPromise.then(pData => {
+        myThis._handleWheelKeyFinger(pData);
+      }, pData2 => {
+        const pData = {"return":[{"data":{"return":{"minions":{}}}}]};
+        for(const k of pData1.return[0].data.return.minions)
+          pData.return[0]["data"]["return"]["minions"][k] = JSON.stringify(pData2);
+        myThis._handleWheelKeyFinger(pData);
       });
-    }, data => {
-      myThis._handleWheelKeyListAll(JSON.stringify(data));
+    }, pData => {
+      myThis._handleWheelKeyListAll(JSON.stringify(pData));
     });
 
-    runnerJobsListJobsPromise.then(data => {
-      myThis._handleRunnerJobsListJobs(data);
-      runnerJobsActivePromise.then(data => {
-        myThis._handleRunnerJobsActive(data);
-      }, data => {
-        myThis._handleRunnerJobsActive(JSON.stringify(data));
+    runnerJobsListJobsPromise.then(pData => {
+      myThis._handleRunnerJobsListJobs(pData);
+      runnerJobsActivePromise.then(pData => {
+        myThis._handleRunnerJobsActive(pData);
+      }, pData => {
+        myThis._handleRunnerJobsActive(JSON.stringify(pData));
       });
-    }, data => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
+    }, pData => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
     }); 
   }
 
-  _handleWheelKeyFinger(data) {
-    const keys = data.return[0].data.return;
+  _handleWheelKeyFinger(pData) {
+    const allKeys = pData.return[0].data.return;
 
-    for(const property of Object.keys(keys)) {
+    for(const property of Object.keys(allKeys)) {
       if(property === "local") continue;
-      const hosts = keys[property];
-      for(const hostname of Object.keys(hosts)) {
-        const item = this.page_element.querySelector("#" + Utils.getIdFromMinionId(hostname) + " .os");
+      const hosts = allKeys[property];
+      for(const minionId of Object.keys(hosts)) {
+        const item = this.pageElement.querySelector("#" + Utils.getIdFromMinionId(minionId) + " .os");
         if(item) {
           // remove td.os for known minions and add td.fingerprint
           item.classList.remove("os");
@@ -63,8 +63,8 @@ export class KeysRoute extends PageRoute {
         }
 
         // update td.fingerprint with fingerprint value
-        const fingerprintElement = this.page_element.querySelector("#" + Utils.getIdFromMinionId(hostname) + " .fingerprint");
-        const fingerprint = hosts[hostname];
+        const fingerprintElement = this.pageElement.querySelector("#" + Utils.getIdFromMinionId(minionId) + " .fingerprint");
+        const fingerprint = hosts[minionId];
         if(!fingerprintElement) continue;
         if(!fingerprint.match(this.fingerprintPattern)) {
           Utils.addErrorToTableCell(fingerprintElement, fingerprint);
@@ -75,32 +75,32 @@ export class KeysRoute extends PageRoute {
     }
   }
 
-  _handleWheelKeyListAll(data) {
+  _handleWheelKeyListAll(pData) {
     const list = this.getPageElement().querySelector("#minions");
 
-    if(PageRoute.showErrorRowInstead(list, data)) return;
+    if(PageRoute.showErrorRowInstead(list, pData)) return;
 
-    const keys = data.return[0].data.return;
+    const allKeys = pData.return[0].data.return;
 
     // Unaccepted goes first because that is where the user must decide
-    const hostnames_pre = keys.minions_pre.sort();
-    for(const hostname of hostnames_pre) {
-      this._addPreMinion(list, hostname);
+    const minionIds_pre = allKeys.minions_pre.sort();
+    for(const minionId of minionIds_pre) {
+      this._addPreMinion(list, minionId);
     }
 
-    const hostnames_accepted = keys.minions.sort();
-    for(const hostname of hostnames_accepted) {
-      this._addAcceptedMinion(list, hostname);
+    const minionIds_accepted = allKeys.minions.sort();
+    for(const minionId of minionIds_accepted) {
+      this._addAcceptedMinion(list, minionId);
     }
 
-    const hostnames_denied = keys.minions_denied.sort();
-    for(const hostname of hostnames_denied) {
-      this._addDeniedMinion(list, hostname);
+    const minionIds_denied = allKeys.minions_denied.sort();
+    for(const minionId of minionIds_denied) {
+      this._addDeniedMinion(list, minionId);
     }
 
-    const hostnames_rejected = keys.minions_rejected.sort();
-    for(const hostname of hostnames_rejected) {
-      this._addRejectedMinion(list, hostname);
+    const minionIds_rejected = allKeys.minions_rejected.sort();
+    for(const minionId of minionIds_rejected) {
+      this._addRejectedMinion(list, minionId);
     }
 
     this.updateTableSummary(list);
@@ -140,120 +140,120 @@ export class KeysRoute extends PageRoute {
     msg.innerText = summary;
   }
 
-  _addAcceptedMinion(container, hostname) {
-    this._addMinion(container, hostname, 1);
+  _addAcceptedMinion(pContainer, pMinionId) {
+    this._addMinion(pContainer, pMinionId, 1);
 
     // preliminary dropdown menu
-    const element = container.querySelector("#" + Utils.getIdFromMinionId(hostname));
-    const menu = new DropDownMenu(element);
-    this._addMenuItemRejectKey(menu, hostname, " include_accepted=true");
-    this._addMenuItemDeleteKey(menu, hostname, "");
+    const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
+    const menu = new DropDownMenu(minionTr);
+    this._addMenuItemRejectKey(menu, pMinionId, " include_accepted=true");
+    this._addMenuItemDeleteKey(menu, pMinionId, "");
   }
 
-  _addRejectedMinion(container, hostname) {
-    const element = this._getElement(container, Utils.getIdFromMinionId(hostname));
+  _addRejectedMinion(pContainer, pMinionId) {
+    const minionTr = this._getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    element.appendChild(Route._createTd("minion-id", hostname));
+    minionTr.appendChild(Route._createTd("minion-id", pMinionId));
 
     const rejected = Route._createTd("status", "rejected");
     rejected.classList.add("rejected");
-    element.appendChild(rejected);
+    minionTr.appendChild(rejected);
 
     // force same columns on all rows
     // do not use class "fingerprint" yet
-    element.appendChild(Route._createTd("os", "loading..."));
+    minionTr.appendChild(Route._createTd("os", "loading..."));
 
     // final dropdownmenu
-    const menu = new DropDownMenu(element);
-    this._addMenuItemDeleteKey(menu, hostname, "");
-    this._addMenuItemAcceptKey(menu, hostname, " include_rejected=true");
+    const menu = new DropDownMenu(minionTr);
+    this._addMenuItemDeleteKey(menu, pMinionId, "");
+    this._addMenuItemAcceptKey(menu, pMinionId, " include_rejected=true");
 
-    container.tBodies[0].appendChild(element);
+    pContainer.tBodies[0].appendChild(minionTr);
   }
 
-  _addDeniedMinion(container, hostname) {
-    const element = this._getElement(container, Utils.getIdFromMinionId(hostname));
+  _addDeniedMinion(pContainer, pMinionId) {
+    const minionTr = this._getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    element.appendChild(Route._createTd("minion-id", hostname));
+    minionTr.appendChild(Route._createTd("minion-id", pMinionId));
 
     const denied = Route._createTd("status", "denied");
     denied.classList.add("denied");
-    element.appendChild(denied);
+    minionTr.appendChild(denied);
 
     // force same columns on all rows
     // do not use class "fingerprint" yet
-    element.appendChild(Route._createTd("os", "loading..."));
+    minionTr.appendChild(Route._createTd("os", "loading..."));
 
     // final dropdownmenu
-    const menu = new DropDownMenu(element);
-    this._addMenuItemAcceptKey(menu, hostname, " include_denied=true");
-    this._addMenuItemRejectKey(menu, hostname, " include_denied=true");
-    this._addMenuItemDeleteKey(menu, hostname, "");
+    const menu = new DropDownMenu(minionTr);
+    this._addMenuItemAcceptKey(menu, pMinionId, " include_denied=true");
+    this._addMenuItemRejectKey(menu, pMinionId, " include_denied=true");
+    this._addMenuItemDeleteKey(menu, pMinionId, "");
 
-    container.tBodies[0].appendChild(element);
+    pContainer.tBodies[0].appendChild(minionTr);
   }
 
-  _addPreMinion(container, hostname) {
-    const element = this._getElement(container, Utils.getIdFromMinionId(hostname));
+  _addPreMinion(pContainer, pMinionId) {
+    const minionTr = this._getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    element.appendChild(Route._createTd("minion-id", hostname));
+    minionTr.appendChild(Route._createTd("minion-id", pMinionId));
 
     const pre = Route._createTd("status", "unaccepted");
     pre.classList.add("unaccepted");
-    element.appendChild(pre);
+    minionTr.appendChild(pre);
 
     // force same columns on all rows
     // do not use class "fingerprint" yet
-    element.appendChild(Route._createTd("os", "loading..."));
+    minionTr.appendChild(Route._createTd("os", "loading..."));
 
     // final dropdownmenu
-    const menu = new DropDownMenu(element);
-    this._addMenuItemAcceptKey(menu, hostname, "");
-    this._addMenuItemRejectKey(menu, hostname, "");
-    this._addMenuItemDeleteKey(menu, hostname, "");
+    const menu = new DropDownMenu(minionTr);
+    this._addMenuItemAcceptKey(menu, pMinionId, "");
+    this._addMenuItemRejectKey(menu, pMinionId, "");
+    this._addMenuItemDeleteKey(menu, pMinionId, "");
 
-    container.tBodies[0].appendChild(element);
+    pContainer.tBodies[0].appendChild(minionTr);
   }
 
-  _addMenuItemAcceptKey(menu, hostname, extra) {
-    menu.addMenuItem("Accept&nbsp;key...", function(evt) {
-      this._runCommand(evt, hostname, "wheel.key.accept" + extra);
+  _addMenuItemAcceptKey(pMenu, pMinionId, extra) {
+    pMenu.addMenuItem("Accept&nbsp;key...", function(evt) {
+      this._runCommand(evt, pMinionId, "wheel.key.accept" + extra);
     }.bind(this));
   }
 
-  _addMenuItemRejectKey(menu, hostname, extra) {
-    menu.addMenuItem("Reject&nbsp;key...", function(evt) {
-      this._runCommand(evt, hostname, "wheel.key.reject" + extra);
+  _addMenuItemRejectKey(pMenu, pMinionId, extra) {
+    pMenu.addMenuItem("Reject&nbsp;key...", function(evt) {
+      this._runCommand(evt, pMinionId, "wheel.key.reject" + extra);
     }.bind(this));
   }
 
-  _addMenuItemDeleteKey(menu, hostname, extra) {
-    menu.addMenuItem("Delete&nbsp;key...", function(evt) {
-      this._runCommand(evt, hostname, "wheel.key.delete" + extra);
+  _addMenuItemDeleteKey(pMenu, pMinionId, extra) {
+    pMenu.addMenuItem("Delete&nbsp;key...", function(evt) {
+      this._runCommand(evt, pMinionId, "wheel.key.delete" + extra);
     }.bind(this));
   }
 
-  handleSaltAuthEvent(tag, data) {
+  handleSaltAuthEvent(pTag, pData) {
     const page = document.getElementById("page-keys");
     const list = page.querySelector("#minions");
-    const tr = page.querySelector("table tr#" + Utils.getIdFromMinionId(data.id));
+    const tr = page.querySelector("table tr#" + Utils.getIdFromMinionId(pData.id));
     if(tr) {
       const status = tr.querySelector(".status");
       // drop all other classes (accepted, rejected, etc)
       // do not update screen when nothing changed; that keeps any search highlight
-      if(data.act === "accept") {
+      if(pData.act === "accept") {
         status.className = "status";
         status.classList.add("accepted");
         if(status.innerText !== "accepted") status.innerText = "accepted";
-      } else if(data.act === "reject") {
+      } else if(pData.act === "reject") {
         status.className = "status";
         status.classList.add("rejected");
         if(status.innerText !== "rejected") status.innerText = "rejected";
-      } else if(data.act === "pend") {
+      } else if(pData.act === "pend") {
         status.className = "status";
         status.classList.add("unaccepted");
         if(status.innerText !== "unaccepted") status.innerText = "unaccepted";
-      } else if(data.act === "delete") {
+      } else if(pData.act === "delete") {
         // "-1" due to the <tr> for the header that is inside <thead>
         tr.parentNode.deleteRow(tr.rowIndex - 1);
       } else {
@@ -262,16 +262,16 @@ export class KeysRoute extends PageRoute {
       }
       // keep the fingerprint
     } else {
-      if(data.act === "pend") {
-        this._addPreMinion(list, data.id);
+      if(pData.act === "pend") {
+        this._addPreMinion(list, pData.id);
         Utils.tableReSort(this.getPageElement());
-      } else if(data.act === "accept") {
-        this._addAcceptedMinion(list, data.id);
+      } else if(pData.act === "accept") {
+        this._addAcceptedMinion(list, pData.id);
         Utils.tableReSort(this.getPageElement());
-      } else if(data.act === "reject") {
-        this._addRejectedMinion(list, data.id);
+      } else if(pData.act === "reject") {
+        this._addRejectedMinion(list, pData.id);
         Utils.tableReSort(this.getPageElement());
-      } else if(data.act === "delete") {
+      } else if(pData.act === "delete") {
         // delete of an unknown minion, never mind
       } else {
         // unknown status
@@ -279,16 +279,16 @@ export class KeysRoute extends PageRoute {
       }
       // we do not have the fingerprint yet
       // pre-fill with a dummy value and then retrieve the actual value
-      const fingerprintSpan = page.querySelector("table tr#" + Utils.getIdFromMinionId(data.id) + " .fingerprint");
+      const fingerprintSpan = page.querySelector("table tr#" + Utils.getIdFromMinionId(pData.id) + " .fingerprint");
       if(fingerprintSpan) fingerprintSpan.innerText = "(refresh page for fingerprint)";
-      const wheelKeyFingerPromise = this.router.api.getWheelKeyFinger(data.id);
+      const wheelKeyFingerPromise = this.router.api.getWheelKeyFinger(pData.id);
       wheelKeyFingerPromise.then(this._handleWheelKeyFinger);
     }
 
     this.updateTableSummary(list);
   }
 
-  handleSaltKeyEvent(tag, data) {
-    this.handleSaltAuthEvent(tag, data);
+  handleSaltKeyEvent(pTag, pData) {
+    this.handleSaltAuthEvent(pTag, pData);
   }
 }

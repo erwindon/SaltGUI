@@ -22,7 +22,7 @@ export class GrainsRoute extends PageRoute {
       this._previewGrains = [ ];
     }
     // add the preview columns
-    const tr = this.page_element.querySelector("#page-grains thead tr");
+    const tr = this.pageElement.querySelector("#page-grains thead tr");
     for(let i = 0; i < this._previewGrains.length; i++) {
       const th = document.createElement("th");
       th.innerText = this._previewGrains[i];
@@ -31,12 +31,12 @@ export class GrainsRoute extends PageRoute {
 
     // The new columns are not yet sortable, make sure they are.
     // First detroy all the default sorting handlers.
-    // A (deep)copy of an element does not copy its handlers.
-    const oldHead = this.page_element.querySelector("#page-grains table thead");
+    // A (deep)copy of a minionTr does not copy its handlers.
+    const oldHead = this.pageElement.querySelector("#page-grains table thead");
     const newHead = oldHead.cloneNode(true);
     oldHead.parentNode.replaceChild(newHead, oldHead);
     // Now re-start sorting logic.
-    sorttable.makeSortable(this.page_element.querySelector("#page-grains table"));
+    sorttable.makeSortable(this.pageElement.querySelector("#page-grains table"));
   }
 
   onShow() {
@@ -47,120 +47,120 @@ export class GrainsRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    wheelKeyListAllPromise.then(data1 => {
-      myThis._handleWheelKeyListAll(data1);
-      localGrainsItemsPromise.then(data => {
-        myThis._updateMinions(data);
-      }, data2 => {
-        const data = {"return":[{}]};
-        for(const k of data1.return[0].data.return.minions)
-          data.return[0][k] = JSON.stringify(data2);
-        myThis._updateMinions(data);
+    wheelKeyListAllPromise.then(pData1 => {
+      myThis._handleWheelKeyListAll(pData1);
+      localGrainsItemsPromise.then(pData => {
+        myThis._updateMinions(pData);
+      }, pData2 => {
+        const pData = {"return":[{}]};
+        for(const k of pData1.return[0].data.return.minions)
+          pData.return[0][k] = JSON.stringify(pData2);
+        myThis._updateMinions(pData);
       });
-    }, data => {
-      myThis._handleWheelKeyListAll(JSON.stringify(data));
+    }, pData => {
+      myThis._handleWheelKeyListAll(JSON.stringify(pData));
     });
 
-    runnerJobsListJobsPromise.then(data => {
-      myThis._handleRunnerJobsListJobs(data);
-      runnerJobsActivePromise.then(data => {
-        myThis._handleRunnerJobsActive(data);
-      }, data => {
-        myThis._handleRunnerJobsActive(JSON.stringify(data));
+    runnerJobsListJobsPromise.then(pData => {
+      myThis._handleRunnerJobsListJobs(pData);
+      runnerJobsActivePromise.then(pData => {
+        myThis._handleRunnerJobsActive(pData);
+      }, pData => {
+        myThis._handleRunnerJobsActive(JSON.stringify(pData));
       });
-    }, data => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
+    }, pData => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
     }); 
   }
 
-  _handleWheelKeyListAll(data) {
+  _handleWheelKeyListAll(pData) {
     const list = this.getPageElement().querySelector('#minions');
 
-    if(PageRoute.showErrorRowInstead(list, data)) return;
+    if(PageRoute.showErrorRowInstead(list, pData)) return;
 
-    const keys = data.return[0].data.return;
+    const keys = pData.return[0].data.return;
 
-    const hostnames = keys.minions.sort();
-    for(const hostname of hostnames) {
-      this._addMinion(list, hostname, 1 + this._previewGrains.length);
+    const minionIds = keys.minions.sort();
+    for(const minionId of minionIds) {
+      this._addMinion(list, minionId, 1 + this._previewGrains.length);
 
       // preliminary dropdown menu
-      const element = list.querySelector("#" + Utils.getIdFromMinionId(hostname));
-      const menu = new DropDownMenu(element);
-      this._addMenuItemShowGrains(menu, hostname);
+      const minionTr = list.querySelector("#" + Utils.getIdFromMinionId(minionId));
+      const menu = new DropDownMenu(minionTr);
+      this._addMenuItemShowGrains(menu, minionId);
 
       for(let i = 0; i < this._previewGrains.length; i++) {
-        element.appendChild(Route._createTd("", ""));
+        minionTr.appendChild(Route._createTd("", ""));
       }
 
-      element.addEventListener("click", evt => window.location.assign("grainsminion?minion=" + encodeURIComponent(hostname)));
+      minionTr.addEventListener("click", evt => window.location.assign("grainsminion?minionid=" + encodeURIComponent(minionId)));
     }
 
     Utils.showTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement());
 
-    const msg = this.page_element.querySelector("div.minion-list .msg");
-    const txt = Utils.txtZeroOneMany(hostnames.length,
+    const msg = this.pageElement.querySelector("div.minion-list .msg");
+    const txt = Utils.txtZeroOneMany(minionIds.length,
       "No minions", "{0} minion", "{0} minions");
     msg.innerText = txt;
   }
 
-  _updateOfflineMinion(container, hostname) {
-    super._updateOfflineMinion(container, hostname);
+  _updateOfflineMinion(pContainer, pMinionId) {
+    super._updateOfflineMinion(pContainer, pMinionId);
 
-    const element = container.querySelector("#" + Utils.getIdFromMinionId(hostname));
+    const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
     // force same columns on all rows
-    element.appendChild(Route._createTd("saltversion", ""));
-    element.appendChild(Route._createTd("os", ""));
-    element.appendChild(Route._createTd("graininfo", ""));
-    element.appendChild(Route._createTd("run-command-button", ""));
+    minionTr.appendChild(Route._createTd("saltversion", ""));
+    minionTr.appendChild(Route._createTd("os", ""));
+    minionTr.appendChild(Route._createTd("graininfo", ""));
+    minionTr.appendChild(Route._createTd("run-command-button", ""));
     for(let i = 0; i < this._previewGrains.length; i++) {
-      element.appendChild(Route._createTd("", ""));
+      minionTr.appendChild(Route._createTd("", ""));
     }
   }
 
-  _updateMinion(container, minion, hostname, allMinions) {
-    super._updateMinion(container, minion, hostname, allMinions);
+  _updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
+    super._updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains);
 
-    const element = container.querySelector("#" + Utils.getIdFromMinionId(hostname));
+    const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
-    if(typeof minion === "object") {
-      const cnt = Object.keys(minion).length;
+    if(typeof pMinionData === "object") {
+      const cnt = Object.keys(pMinionData).length;
       const grainInfoText = cnt + " grains";
       const grainInfoTd = Route._createTd("graininfo", grainInfoText);
       grainInfoTd.setAttribute("sorttable_customkey", cnt);
-      element.appendChild(grainInfoTd);
+      minionTr.appendChild(grainInfoTd);
     } else {
       const grainInfoTd = Route._createTd("", "");
-      Utils.addErrorToTableCell(grainInfoTd, minion);
-      element.appendChild(grainInfoTd);
+      Utils.addErrorToTableCell(grainInfoTd, pMinionData);
+      minionTr.appendChild(grainInfoTd);
     }
 
-    const menu = new DropDownMenu(element);
-    this._addMenuItemShowGrains(menu, hostname);
+    const menu = new DropDownMenu(minionTr);
+    this._addMenuItemShowGrains(menu, pMinionId);
 
     // add the preview columns
     for(let i = 0; i < this._previewGrains.length; i++) {
-      const td = document.createElement("td");
+      const td = Route._createTd("", "");
       const grainName = this._previewGrains[i];
-      if(typeof minion === "object") {
-        if(grainName in minion) {
-          td.innerText = Output.formatObject(minion[grainName]);
+      if(typeof pMinionData === "object") {
+        if(grainName in pMinionData) {
+          td.innerText = Output.formatObject(pMinionData[grainName]);
           td.classList.add("grain-value");
         }
       } else {
-        Utils.addErrorToTableCell(td, minion);
+        Utils.addErrorToTableCell(td, pMinionData);
       }
-      element.appendChild(td);
+      minionTr.appendChild(td);
     }
 
-    element.addEventListener("click", evt => window.location.assign("grainsminion?minion=" + encodeURIComponent(hostname)));
+    minionTr.addEventListener("click", evt => window.location.assign("grainsminion?minionid=" + encodeURIComponent(pMinionId)));
   }
 
-  _addMenuItemShowGrains(menu, hostname) {
-    menu.addMenuItem("Show&nbsp;grains", function(evt) {
-      window.location.assign("grainsminion?minion=" + encodeURIComponent(hostname));
+  _addMenuItemShowGrains(pMenu, pMinionId) {
+    pMenu.addMenuItem("Show&nbsp;grains", function(evt) {
+      window.location.assign("grainsminion?minionid=" + encodeURIComponent(pMinionId));
     }.bind(this));
   }
 }

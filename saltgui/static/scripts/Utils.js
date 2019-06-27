@@ -22,7 +22,7 @@ export class Utils {
     return Utils.getQueryParam2(w.location.href, name);
   }
 
-  static addToolTip(tooltipHost, tooltipText) {
+  static addToolTip(pTooltipHost, pTooltipText) {
 
     // Users may want to switch this on to improve browser performance
     const tooltip_mode = window.localStorage.getItem("tooltip_mode");
@@ -32,30 +32,30 @@ export class Utils {
     }
 
     if(tooltip_mode === "simple") {
-      tooltipHost.setAttribute("title", tooltipText);
+      pTooltipHost.setAttribute("title", pTooltipText);
       return;
     }
 
-    const tooltipSpan = Route._createSpan("", tooltipText);
+    const tooltipSpan = Route._createSpan("", pTooltipText);
     tooltipSpan.classList.add("tooltip-text");
-    tooltipHost.classList.add("tooltip");
+    pTooltipHost.classList.add("tooltip");
 
     // remove the old tooltip...
-    for(let i = tooltipHost.children.length - 1; i >= 0; i--) {
-      const child = tooltipHost.children[i];
+    for(let i = pTooltipHost.children.length - 1; i >= 0; i--) {
+      const child = pTooltipHost.children[i];
       if(child.classList.contains("tooltip-text")) {
-        tooltipHost.removeChild(child);
+        pTooltipHost.removeChild(child);
       }
     }
 
     // ...then add the new tooltip
-    tooltipHost.appendChild(tooltipSpan);
+    pTooltipHost.appendChild(tooltipSpan);
   }
 
-  static showTableSortable(startElement, reverseSort = false) {
+  static showTableSortable(startElement, isReverseSort = false) {
     const th = startElement.querySelector("table th");
     sorttable.innerSortFunction.apply(th, []);
-    if(reverseSort) sorttable.innerSortFunction.apply(th, []);
+    if(isReverseSort) sorttable.innerSortFunction.apply(th, []);
     const tr = startElement.querySelector("table tr");
     for(const th of tr.childNodes) {
       if(th.classList.contains("sorttable_nosort")) continue;
@@ -71,8 +71,7 @@ export class Utils {
   }
 
   static addErrorToTableCell(td, errorMessage) {
-    const span = document.createElement("span");
-    span.innerText = "(error)";
+    const span = Route._createSpan("", "(error)");
     Utils.addToolTip(span, errorMessage);
     td.appendChild(span);
   }
@@ -89,8 +88,7 @@ export class Utils {
   }
 
   static makeTableSearchable(startElement) {
-    const button_search = document.createElement("span");
-    button_search.classList.add("search");
+    const button_search = Route._createSpan("search", "");
     // 1F50D = LEFT-POINTING MAGNIFYING GLASS
     // FE0E = VARIATION SELECTOR-15 (render as text)
     button_search.innerHTML = "&#x1f50d;&#xFE0E;";
@@ -181,26 +179,26 @@ export class Utils {
     hilitor.apply(pattern);
   }
 
-  static txtZeroOneMany(cnt, zeroText, oneText, manyText) {
-    let txt = manyText;
-    if(cnt === 0) txt = zeroText;
-    if(cnt === 1) txt = oneText;
-    txt = txt.replace("{0}", cnt);
+  static txtZeroOneMany(pCnt, pZeroText, pOneText, pManyText) {
+    let txt = pManyText;
+    if(pCnt === 0) txt = pZeroText;
+    if(pCnt === 1) txt = pOneText;
+    txt = txt.replace("{0}", pCnt);
     return txt;
   }
 
   // MinionIds cannot directly be used as IDs for HTML elements
   // the id may contain characters that are not allowed in an ID
   // btoa is the base64 encoder
-  static getIdFromMinionId(minionId) {
+  static getIdFromMinionId(pMinionId) {
     const patEqualSigns = /==*/;
-    return "m" + btoa(minionId).replace(patEqualSigns, "");
+    return "m" + btoa(pMinionId).replace(patEqualSigns, "");
   }
 
   // JobIds are in the format 20190529175411210984
   // so just adding a prefix is sufficient
-  static getIdFromJobId(jobId) {
-    return "j" + jobId;
+  static getIdFromJobId(pJobId) {
+    return "j" + pJobId;
   }
 
   static isMultiLineString(pStr) {

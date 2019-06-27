@@ -14,13 +14,13 @@ export class LoginRoute extends Route {
   }
 
   onShow() {
-    const eauthSelector = this.page_element.querySelector("#login-form #eauth");
+    const eauthSelector = this.pageElement.querySelector("#login-form #eauth");
     const eauthValue = window.localStorage.getItem("eauth");
     eauthSelector.value = eauthValue ? eauthValue : "pam";
   }
 
   registerEventListeners() {
-    const submit = this.page_element.querySelector("#login-form");
+    const submit = this.pageElement.querySelector("#login-form");
     submit.addEventListener("submit", this.onLogin);
   }
 
@@ -28,9 +28,9 @@ export class LoginRoute extends Route {
     evt.preventDefault();
     if(this.loginPending) return; //Don't continue if waiting on a request
 
-    const username = this.page_element.querySelector("#username").value;
-    const password = this.page_element.querySelector("#password").value;
-    const eauth = this.page_element.querySelector("#eauth").value;
+    const username = this.pageElement.querySelector("#username").value;
+    const password = this.pageElement.querySelector("#password").value;
+    const eauth = this.pageElement.querySelector("#eauth").value;
 
     this.toggleForm(false);
     this.router.api.login(username, password, eauth)
@@ -40,15 +40,15 @@ export class LoginRoute extends Route {
   onLoginSuccess() {
     this.toggleForm(true);
 
-    const notice = this.page_element.querySelector(".notice-wrapper");
+    const notice = this.pageElement.querySelector(".notice-wrapper");
 
     const success = Route._createDiv("notice", "Please wait...");
     success.style.backgroundColor = "#4CAF50";
     notice.replaceChild(success, notice.firstChild);
 
-    this.page_element.querySelector("#username").disabled = true;
-    this.page_element.querySelector("#password").disabled = true;
-    this.page_element.querySelector("#eauth").disabled = true;
+    this.pageElement.querySelector("#username").disabled = true;
+    this.pageElement.querySelector("#password").disabled = true;
+    this.pageElement.querySelector("#eauth").disabled = true;
 
     notice.className = "notice-wrapper";
     notice.focus(); //Used to trigger a reflow (to restart animation)
@@ -61,7 +61,7 @@ export class LoginRoute extends Route {
   onLoginFailure() {
     this.toggleForm(true);
 
-    const notice = this.page_element.querySelector(".notice-wrapper");
+    const notice = this.pageElement.querySelector(".notice-wrapper");
 
     const authFailed = Route._createDiv("notice", "Authentication failed");
     authFailed.style.backgroundColor = "#F44336";
@@ -74,7 +74,7 @@ export class LoginRoute extends Route {
 
   toggleForm(allowSubmit) {
     this.loginPending = !allowSubmit;
-    this.page_element.querySelector("#login-form input[type='submit']")
+    this.pageElement.querySelector("#login-form input[type='submit']")
       .disabled = !allowSubmit;
   }
 

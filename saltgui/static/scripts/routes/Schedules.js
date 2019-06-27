@@ -20,53 +20,53 @@ export class SchedulesRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    wheelKeyListAllPromise.then(data1 => {
-      myThis._handleWheelKeyListAll(data1);
-      localScheduleListPromise.then(data => {
-        myThis._updateMinions(data);
-      }, data2 => {
-        const data = {"return":[{}]};
-        for(const k of data1.return[0].data.return.minions)
-          data.return[0][k] = JSON.stringify(data2);
-        myThis._updateMinions(data);
+    wheelKeyListAllPromise.then(pData1 => {
+      myThis._handleWheelKeyListAll(pData1);
+      localScheduleListPromise.then(pData => {
+        myThis._updateMinions(pData);
+      }, pData2 => {
+        const pData = {"return":[{}]};
+        for(const k of pData1.return[0].data.return.minions)
+          pData.return[0][k] = JSON.stringify(pData2);
+        myThis._updateMinions(pData);
       });
-    }, data => {
-      myThis._handleWheelKeyListAll(JSON.stringify(data));
+    }, pData => {
+      myThis._handleWheelKeyListAll(JSON.stringify(pData));
     });
 
-    runnerJobsListJobsPromise.then(data => {
-      myThis._handleRunnerJobsListJobs(data);
-      runnerJobsActivePromise.then(data => {
-        myThis._handleRunnerJobsActive(data);
-      }, data => {
-        myThis._handleRunnerJobsActive(JSON.stringify(data));
+    runnerJobsListJobsPromise.then(pData => {
+      myThis._handleRunnerJobsListJobs(pData);
+      runnerJobsActivePromise.then(pData => {
+        myThis._handleRunnerJobsActive(pData);
+      }, pData => {
+        myThis._handleRunnerJobsActive(JSON.stringify(pData));
       });
-    }, data => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
+    }, pData => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
     }); 
   }
 
   // This one has some historic ballast:
   // Meta-data is returned on the same level as
   // the list of scheduled items
-  static _fixMinion(data) {
-    if(typeof data !== "object") return data;
+  static _fixMinion(pData) {
+    if(typeof pData !== "object") return pData;
 
     const ret = { "schedules": {}, "enabled": true };
 
-    for(const k in data) {
+    for(const k in pData) {
       // "enabled" is always a boolean (when present)
       if(k === "enabled") {
-        ret.enabled = data.enabled;
+        ret.enabled = pData.enabled;
         continue;
       }
 
       // correct for empty list that returns this dummy value
-      if(k === "schedule" && JSON.stringify(data[k]) === "{}") {
+      if(k === "schedule" && JSON.stringify(pData[k]) === "{}") {
         continue;
       }
 
-      ret.schedules[k] = data[k];
+      ret.schedules[k] = pData[k];
 
       // Since 2019.02, splay is always added, even when not set
       // so remove it when it has an empty value
@@ -77,63 +77,63 @@ export class SchedulesRoute extends PageRoute {
     return ret;
   }
 
-  _handleWheelKeyListAll(data) {
+  _handleWheelKeyListAll(pData) {
     const list = this.getPageElement().querySelector('#minions');
 
-    if(PageRoute.showErrorRowInstead(list, data)) return;
+    if(PageRoute.showErrorRowInstead(list, pData)) return;
 
-    const keys = data.return[0].data.return;
+    const keys = pData.return[0].data.return;
 
-    const hostnames = keys.minions.sort();
-    for(const hostname of hostnames) {
-      this._addMinion(list, hostname, 1);
+    const minionIds = keys.minions.sort();
+    for(const minionId of minionIds) {
+      this._addMinion(list, minionId, 1);
 
       // preliminary dropdown menu
-      const element = list.querySelector("#" + Utils.getIdFromMinionId(hostname));
-      const menu = new DropDownMenu(element);
-      this._addMenuItemShowSchedules(menu, hostname);
+      const minionTr = list.querySelector("#" + Utils.getIdFromMinionId(minionId));
+      const menu = new DropDownMenu(minionTr);
+      this._addMenuItemShowSchedules(menu, minionId);
 
-      element.addEventListener("click", evt => window.location.assign("schedulesminion?minion=" + encodeURIComponent(hostname)));
+      minionTr.addEventListener("click", evt => window.location.assign("schedulesminion?minionid=" + encodeURIComponent(minionId)));
     }
 
     Utils.showTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement());
 
-    const msg = this.page_element.querySelector("div.minion-list .msg");
-    const txt = Utils.txtZeroOneMany(hostnames.length,
+    const msg = this.pageElement.querySelector("div.minion-list .msg");
+    const txt = Utils.txtZeroOneMany(minionIds.length,
       "No minions", "{0} minion", "{0} minions");
     msg.innerText = txt;
   }
 
-  _updateOfflineMinion(container, hostname) {
-    super._updateOfflineMinion(container, hostname);
+  _updateOfflineMinion(pContainer, pMinionId) {
+    super._updateOfflineMinion(pContainer, pMinionId);
 
-    const element = container.querySelector("#" + Utils.getIdFromMinionId(hostname));
+    const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
     // force same columns on all rows
-    element.appendChild(Route._createTd("scheduleinfo", ""));
-    element.appendChild(Route._createTd("run-command-button", ""));
+    minionTr.appendChild(Route._createTd("scheduleinfo", ""));
+    minionTr.appendChild(Route._createTd("run-command-button", ""));
   }
 
-  _updateMinion(container, minion, hostname, allMinions) {
+  _updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
 
-    minion = SchedulesRoute._fixMinion(minion);
+    pMinionData = SchedulesRoute._fixMinion(pMinionData);
 
-    const element = this._getElement(container, Utils.getIdFromMinionId(hostname));
+    const minionTr = this._getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    element.appendChild(Route._createTd("minion-id", hostname));
+    minionTr.appendChild(Route._createTd("minion-id", pMinionId));
 
     const statusDiv = Route._createTd("status", "accepted");
     statusDiv.classList.add("accepted");
-    element.appendChild(statusDiv);
+    minionTr.appendChild(statusDiv);
 
     let cnt;
     let scheduleinfo;
-    if(typeof minion === "object") {
-      cnt = Object.keys(minion.schedules).length;
+    if(typeof pMinionData === "object") {
+      cnt = Object.keys(pMinionData.schedules).length;
       scheduleinfo = Utils.txtZeroOneMany(cnt,
         "no schedules", "{0} schedule", "{0} schedules");
-      if(!minion.enabled)
+      if(!pMinionData.enabled)
         scheduleinfo += " (disabled)";
     } else {
       cnt = -1;
@@ -141,22 +141,22 @@ export class SchedulesRoute extends PageRoute {
     }
 
     const td = Route._createTd("scheduleinfo", scheduleinfo);
-    if(typeof minion !== "object") {
-      Utils.addErrorToTableCell(td, minion);
+    if(typeof pMinionData !== "object") {
+      Utils.addErrorToTableCell(td, pMinionData);
     }
     td.setAttribute("sorttable_customkey", cnt);
-    element.appendChild(td);
+    minionTr.appendChild(td);
 
     // final dropdownmenu
-    const menu = new DropDownMenu(element);
-    this._addMenuItemShowSchedules(menu, hostname);
+    const menu = new DropDownMenu(minionTr);
+    this._addMenuItemShowSchedules(menu, pMinionId);
 
-    element.addEventListener("click", evt => window.location.assign("schedulesminion?minion=" + encodeURIComponent(hostname)));
+    minionTr.addEventListener("click", evt => window.location.assign("schedulesminion?minionid=" + encodeURIComponent(pMinionId)));
   }
 
-  _addMenuItemShowSchedules(menu, hostname) {
-    menu.addMenuItem("Show&nbsp;schedules", function(evt) {
-      window.location.assign("schedulesminion?minion=" + encodeURIComponent(hostname));
+  _addMenuItemShowSchedules(pMenu, pMinionId) {
+    pMenu.addMenuItem("Show&nbsp;schedules", function(evt) {
+      window.location.assign("schedulesminion?minionid=" + encodeURIComponent(pMinionId));
     }.bind(this));
   }
 }

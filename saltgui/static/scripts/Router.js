@@ -224,7 +224,7 @@ export class Router {
   hideRoute(route) {
     route.getPageElement().className = "route";
     setTimeout(function() {
-      //Hide element after fade, so it does not expand the body
+      // Hide element after fade, so it does not expand the body
       route.getPageElement().style.display = "none";
     }, 500);
     if(route.onHide) route.onHide();

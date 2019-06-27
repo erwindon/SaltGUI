@@ -18,31 +18,31 @@ export class TemplatesRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    wheelConfigValuesPromise.then(data => {
-      myThis._handleWheelConfigValues(data);
-    }, data => {
-      myThis._handleWheelConfigValues(JSON.stringify(data));
+    wheelConfigValuesPromise.then(pData => {
+      myThis._handleWheelConfigValues(pData);
+    }, pData => {
+      myThis._handleWheelConfigValues(JSON.stringify(pData));
     });
 
-    runnerJobsListJobsPromise.then(data => {
-      myThis._handleRunnerJobsListJobs(data);
-      runnerJobsActivePromise.then(data => {
-        myThis._handleRunnerJobsActive(data);
-      }, data => {
-        myThis._handleRunnerJobsActive(JSON.stringify(data));
+    runnerJobsListJobsPromise.then(pData => {
+      myThis._handleRunnerJobsListJobs(pData);
+      runnerJobsActivePromise.then(pData => {
+        myThis._handleRunnerJobsActive(pData);
+      }, pData => {
+        myThis._handleRunnerJobsActive(JSON.stringify(pData));
       });
-    }, data => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(data));
+    }, pData => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
     });
   }
 
-  _handleWheelConfigValues(data) {
+  _handleWheelConfigValues(pData) {
     const container = this.getPageElement().querySelector(".templates");
 
-    if(PageRoute.showErrorRowInstead(container, data)) return;
+    if(PageRoute.showErrorRowInstead(container, pData)) return;
 
     // should we update it or just use from cache (see commandbox) ?
-    const templates = data.return[0].data.return.saltgui_templates;
+    const templates = pData.return[0].data.return.saltgui_templates;
     window.localStorage.setItem("templates", JSON.stringify(templates));
     const keys = Object.keys(templates).sort();
     for(const key of keys) {
@@ -53,13 +53,13 @@ export class TemplatesRoute extends PageRoute {
     Utils.showTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement());
 
-    const msg = this.page_element.querySelector("div.templates-list .msg");
+    const msg = this.pageElement.querySelector("div.templates-list .msg");
     const txt = Utils.txtZeroOneMany(keys.length,
       "No templates", "{0} template", "{0} templates");
     msg.innerText = txt;
   }
 
-  _addTemplate(container, name, template) {
+  _addTemplate(pContainer, name, template) {
     const tr = document.createElement("tr");
 
     tr.appendChild(Route._createTd("name", name));
@@ -97,13 +97,13 @@ export class TemplatesRoute extends PageRoute {
     const menu = new DropDownMenu(tr);
     this._addMenuItemApplyTemplate(menu, targettype, target, command);
 
-    container.tBodies[0].appendChild(tr);
+    pContainer.tBodies[0].appendChild(tr);
 
     tr.addEventListener("click", evt => this._runFullCommand(evt, targettype, target, command));
   }
 
-  _addMenuItemApplyTemplate(menu, targettype, target, command) {
-    menu.addMenuItem("Apply&nbsp;template...", function(evt) {
+  _addMenuItemApplyTemplate(pMenu, targettype, target, command) {
+    pMenu.addMenuItem("Apply&nbsp;template...", function(evt) {
       this._runFullCommand(evt, targettype, target, command);
     }.bind(this));
   }

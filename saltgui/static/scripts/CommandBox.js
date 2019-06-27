@@ -131,7 +131,7 @@ export class CommandBox {
     let minions = Object.keys(response);
     if(command.startsWith("runners.")) minions = ["RUNNER"];
     if(command.startsWith("wheel.")) minions = ["WHEEL"];
-    // do not suppress the jid (even when we can)
+    // do not suppress the jobId (even when we can)
     Output.addResponseOutput(outputContainer, null, minions, response, command, "done");
     const button = document.querySelector(".run-command input[type='submit']");
     button.disabled = false;
@@ -176,9 +176,9 @@ export class CommandBox {
     }
     const minions = JSON.parse(window.localStorage.getItem("minions"));
     if(minions) {
-      for(const minion of minions.sort()) {
+      for(const minionId of minions.sort()) {
         const option = document.createElement("option");
-        option.value = minion;
+        option.value = minionId;
         targetlist.appendChild(option);
       }
     }
@@ -244,8 +244,8 @@ export class CommandBox {
     evt.stopPropagation();
   }
 
-  _showError(message) {
-    this._onRunReturn("ERROR:\n\n" + message, "");
+  _showError(pMessage) {
+    this._onRunReturn("ERROR:\n\n" + pMessage, "");
   }
 
   _getRunParams(tgtType, target, toRun) {

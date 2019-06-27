@@ -33,9 +33,9 @@ export class OutputDocumentation {
     // reduce the search key to match the data in the response
     command = OutputDocumentation.reduceFilterKey(command);
 
-    for(const hostname of Object.keys(response)) {
+    for(const minionId of Object.keys(response)) {
 
-      const output = response[hostname];
+      const output = response[minionId];
 
       if(!output) {
         // some commands do not have help-text
@@ -122,44 +122,44 @@ export class OutputDocumentation {
     filterKey = OutputDocumentation.reduceFilterKey(filterKey);
 
     let selectedMinion = null;
-    for(const hostname of Object.keys(response)) {
+    for(const minionId of Object.keys(response)) {
 
       // When we already found the documentation ignore all others
       if(selectedMinion) {
-        delete response[hostname];
+        delete response[minionId];
         continue;
       }
 
       // make sure it is an object (instead of e.g. "false" for an offline minion)
       // when it is not, the whole entry is ignored
-      if(!response[hostname] || typeof response[hostname] !== "object") {
-        delete response[hostname];
+      if(!response[minionId] || typeof response[minionId] !== "object") {
+        delete response[minionId];
         continue;
       }
 
       // make sure that the entry matches with the requested command or prefix
       // that's always the case for SYS.DOC output, but not for RUNNERS.DOC.RUNNER
       // and/or RUNNERS.DOC.WHEEL.
-      const hostResponse = response[hostname];
-      for(const key of Object.keys(hostResponse)) {
+      const minionResponse = response[minionId];
+      for(const key of Object.keys(minionResponse)) {
 
         // is this what we were looking for?
         if(!OutputDocumentation.isDocuKeyMatch(key, filterKey)) {
           // no match, ignore the whole entry
-          delete hostResponse[key];
+          delete minionResponse[key];
         }
       }
 
       // no documentation present (or left) on this minion?
       // then discard the result of this minion
-      if(Object.keys(hostResponse).length === 0) {
-        delete response[hostname];
+      if(Object.keys(minionResponse).length === 0) {
+        delete response[minionId];
         continue;
       }
 
       // we have found documentation output
       // mark all other documentation for discarding
-      selectedMinion = hostname;
+      selectedMinion = minionId;
     }
 
     if(selectedMinion) {
@@ -178,15 +178,15 @@ export class OutputDocumentation {
   // add the output of a documentation command to the display
   static addDocumentationOutput(outputContainer, response) {
 
-    // we expect no hostnames present
+    // we expect no minionIds present
     // as it should have been reduced already
-    for(const hostname of Object.keys(response)) {
+    for(const minionId of Object.keys(response)) {
 
-      const hostResponse = response[hostname];
+      const minionResponse = response[minionId];
 
-      for(const key of Object.keys(hostResponse).sort()) {
+      for(const key of Object.keys(minionResponse).sort()) {
 
-        let out = hostResponse[key];
+        let out = minionResponse[key];
         if(out === null) continue;
         out = out.trimRight();
 

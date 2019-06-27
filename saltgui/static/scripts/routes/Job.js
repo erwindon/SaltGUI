@@ -20,15 +20,15 @@ export class JobRoute extends Route {
     const runnerJobsListJobPromise = this.router.api.getRunnerJobsListJob(id);
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    runnerJobsListJobPromise.then(data => {
-      myThis._handleRunnerJobsListJob(data, id);
-      runnerJobsActivePromise.then(data => {
-        myThis._handleRunnerJobsActive(id, data);
-      }, data => {
-        myThis._handleRunnerJobsActive(id, JSON.stringify(data));
+    runnerJobsListJobPromise.then(pData => {
+      myThis._handleRunnerJobsListJob(pData, id);
+      runnerJobsActivePromise.then(pData => {
+        myThis._handleRunnerJobsActive(id, pData);
+      }, pData => {
+        myThis._handleRunnerJobsActive(id, JSON.stringify(pData));
       });
-    }, data => {
-      myThis._handleRunnerJobsListJob(JSON.stringify(data), id);
+    }, pData => {
+      myThis._handleRunnerJobsListJob(JSON.stringify(pData), id);
     });
   }
 
@@ -104,7 +104,7 @@ export class JobRoute extends Route {
     input.focus();
   }
 
-  _handleRunnerJobsListJob(data, pJobId) {
+  _handleRunnerJobsListJob(pData, pJobId) {
     const myThis = this;
 
     const output = this.getPageElement().querySelector(".output");
@@ -118,14 +118,14 @@ export class JobRoute extends Route {
       JobRoute.hideShowOutputSearchBar(output);
     });
 
-    if(typeof data !== "object") {
+    if(typeof pData !== "object") {
       output.innerText = "";
-      Utils.addErrorToTableCell(output, data);
+      Utils.addErrorToTableCell(output, pData);
       this.getPageElement().querySelector(".function").innerText = "ERROR";
       return;
     }
 
-    const info = data.return[0];
+    const info = pData.return[0];
 
     if(info.Error) {
       output.innerText = info.Error + " (" + pJobId + ")";
@@ -216,14 +216,14 @@ export class JobRoute extends Route {
     }
   }
 
-  _addMenuItemRerunJob(menu, info, commandText) {
+  _addMenuItemRerunJob(pMenu, info, commandText) {
     // 2011 = NON-BREAKING HYPHEN
-    menu.addMenuItem("Re&#x2011;run&nbsp;job...", function(evt) {
+    pMenu.addMenuItem("Re&#x2011;run&nbsp;job...", function(evt) {
       this._runFullCommand(evt, info["Target-type"], info.Target, commandText);
     }.bind(this));
   }
 
-  _addMenuItemRerunJobOnAllMinionsWhenNeeded(menu, info, commandText) {
+  _addMenuItemRerunJobOnAllMinionsWhenNeeded(pMenu, info, commandText) {
     if(!info.Minions) return;
 
     let minionList = "";
@@ -239,12 +239,12 @@ export class JobRoute extends Route {
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
-    menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;all&nbsp;minions...", function(evt) {
+    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;all&nbsp;minions...", function(evt) {
       this._runFullCommand(evt, "list", lst, commandText);
     }.bind(this));
   }
 
-  _addMenuItemRerunJobOnUnsuccessfulMinionsWhenNeeded(menu, info, commandText) {
+  _addMenuItemRerunJobOnUnsuccessfulMinionsWhenNeeded(pMenu, info, commandText) {
     if(!info.Minions) return;
 
     let minionList = "";
@@ -266,12 +266,12 @@ export class JobRoute extends Route {
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
-    menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;unsuccessful&nbsp;minions...", function(evt) {
+    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;unsuccessful&nbsp;minions...", function(evt) {
       this._runFullCommand(evt, "list", lst, commandText);
     }.bind(this));
   }
 
-  _addMenuItemRerunJobOnFailedMinionsWhenNeeded(menu, info, commandText) {
+  _addMenuItemRerunJobOnFailedMinionsWhenNeeded(pMenu, info, commandText) {
     if(!info.Minions) return;
 
     let minionList = "";
@@ -286,12 +286,12 @@ export class JobRoute extends Route {
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
-    menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;failed&nbsp;minions...", function(evt) {
+    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;failed&nbsp;minions...", function(evt) {
       this._runFullCommand(evt, "list", lst, commandText);
     }.bind(this));
   }
 
-  _addMenuItemRerunJobOnNonRespondingMinionsWhenNeeded(menu, info, commandText) {
+  _addMenuItemRerunJobOnNonRespondingMinionsWhenNeeded(pMenu, info, commandText) {
     if(!info.Minions) return;
 
     let minionList = "";
@@ -306,40 +306,40 @@ export class JobRoute extends Route {
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
-    menu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;non&nbsp;responding&nbsp;minions...", function(evt) {
+    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;non&nbsp;responding&nbsp;minions...", function(evt) {
       this._runFullCommand(evt, "list", lst, commandText);
     }.bind(this));
   }
 
-  _addMenuItemTerminateJob(menu, info, pJobId) {
-    this.terminateJobMenuItem = menu.addMenuItem("Terminate&nbsp;job...", function(evt) {
+  _addMenuItemTerminateJob(pMenu, info, pJobId) {
+    this.terminateJobMenuItem = pMenu.addMenuItem("Terminate&nbsp;job...", function(evt) {
       this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.term_job " + pJobId);
     }.bind(this));
   }
 
-  _addMenuItemKillJob(menu, info, pJobId) {
-    this.killJobMenuItem = menu.addMenuItem("Kill&nbsp;job...", function(evt) {
+  _addMenuItemKillJob(pMenu, info, pJobId) {
+    this.killJobMenuItem = pMenu.addMenuItem("Kill&nbsp;job...", function(evt) {
       this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.kill_job " + pJobId);
     }.bind(this));
   }
 
-  _addMenuItemSignalJob(menu, info, pJobId) {
-    this.signalJobMenuItem = menu.addMenuItem("Signal&nbsp;job...", function(evt) {
+  _addMenuItemSignalJob(pMenu, info, pJobId) {
+    this.signalJobMenuItem = pMenu.addMenuItem("Signal&nbsp;job...", function(evt) {
       this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.signal_job " + pJobId + " signal=<signalnumber>");
     }.bind(this));
   }
 
-  _handleRunnerJobsActive(id, data) {
+  _handleRunnerJobsActive(id, pData) {
     const summaryJobsActiveSpan = this.getPageElement().querySelector("pre.output span#summary-jobs-active");
     if(!summaryJobsActiveSpan) return;
 
-    if(typeof data !== "object") {
+    if(typeof pData !== "object") {
       summaryJobsActiveSpan.innerText = "(error)";
-      Utils.addToolTip(summaryJobsActiveSpan, data);
+      Utils.addToolTip(summaryJobsActiveSpan, pData);
       return;
     }
 
-    const info = data.return[0][id];
+    const info = pData.return[0][id];
 
     // when the job is already completely done, nothing is returned
     if(!info) {
@@ -364,9 +364,9 @@ export class JobRoute extends Route {
     // update the minion details
     for(const minionInfo of info.Running) {
       // each minionInfo is like {'minion': pid}
-      for(const minion in minionInfo) {
-        const pid = minionInfo[minion];
-        const noResponseSpan = this.getPageElement().querySelector("pre.output div#" + Utils.getIdFromMinionId(minion) + " span.noresponse");
+      for(const minionId in minionInfo) {
+        const pid = minionInfo[minionId];
+        const noResponseSpan = this.getPageElement().querySelector("pre.output div#" + Utils.getIdFromMinionId(minionId) + " span.noresponse");
         if(!noResponseSpan) continue;
 
         // show that this minion is still active on the request
@@ -375,7 +375,7 @@ export class JobRoute extends Route {
         const linkPsProcInfo = document.createElement("a");
         linkPsProcInfo.innerText = "info";
         linkPsProcInfo.addEventListener("click", evt => {
-          this._runFullCommand(evt, "list", minion, "ps.proc_info " + pid);
+          this._runFullCommand(evt, "list", minionId, "ps.proc_info " + pid);
         });
         noResponseSpan.appendChild(linkPsProcInfo);
 
@@ -384,7 +384,7 @@ export class JobRoute extends Route {
         const linkPsTermPid = document.createElement("a");
         linkPsTermPid.innerText = "term";
         linkPsTermPid.addEventListener("click", evt => {
-          this._runFullCommand(evt, "list", minion, "ps.kill_pid " + pid + " signal=15");
+          this._runFullCommand(evt, "list", minionId, "ps.kill_pid " + pid + " signal=15");
         });
         noResponseSpan.appendChild(linkPsTermPid);
 
@@ -393,7 +393,7 @@ export class JobRoute extends Route {
         const linkPsKillPid = document.createElement("a");
         linkPsKillPid.innerText = "kill";
         linkPsKillPid.addEventListener("click", evt => {
-          this._runFullCommand(evt, "list", minion, "ps.kill_pid " + pid + " signal=9");
+          this._runFullCommand(evt, "list", minionId, "ps.kill_pid " + pid + " signal=9");
         });
         noResponseSpan.appendChild(linkPsKillPid);
 
@@ -402,7 +402,7 @@ export class JobRoute extends Route {
         const linkPsSignalPid = document.createElement("a");
         linkPsSignalPid.innerText = "signal";
         linkPsSignalPid.addEventListener("click", evt => {
-          this._runFullCommand(evt, "list", minion, "ps.kill_pid " + pid + " signal=<signalnumber>");
+          this._runFullCommand(evt, "list", minionId, "ps.kill_pid " + pid + " signal=<signalnumber>");
         });
         noResponseSpan.appendChild(linkPsSignalPid);
 
