@@ -51,6 +51,7 @@
 }
 
 .attribution {
+  display: block;
   opacity: 0.4;
   font-size: 15px;
   margin-top: 40px;
