@@ -75,11 +75,11 @@ export class OutputJson {
 
     // regular object
     // put each name+value on its own line
-    const keys = Object.keys(pValue);
     str = "{";
     let separator = "";
     // do not use Object.entries, that is not supported by the test framework
-    for(const key of Object.keys(pValue).sort()) {
+    const sortedKeys = Object.keys(pValue).sort();
+    for(const key of sortedKeys) {
       const item = pValue[key];
       str += separator + "\n" + " ".repeat(pIndentLevel + indentStep) + "\"" + key + "\": " +
         OutputJson.formatJSON(item, pIndentLevel + indentStep);

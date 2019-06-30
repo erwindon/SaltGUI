@@ -101,7 +101,9 @@ export class MinionsRoute extends PageRoute {
       const menu = new DropDownMenu(minionTr);
       this._addMenuItemStateApply(menu, minionId);
 
-      minionTr.addEventListener("click", evt => this._runCommand(evt, minionId, "state.apply"));
+      minionTr.addEventListener("click", evt =>
+        this._runCommand(evt, minionId, "state.apply")
+      );
     }
 
     Utils.showTableSortable(this.getPageElement());

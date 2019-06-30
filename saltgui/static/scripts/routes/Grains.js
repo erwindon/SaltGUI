@@ -93,7 +93,9 @@ export class GrainsRoute extends PageRoute {
         minionTr.appendChild(Route._createTd("", ""));
       }
 
-      minionTr.addEventListener("click", evt => window.location.assign("grainsminion?minionid=" + encodeURIComponent(minionId)));
+      minionTr.addEventListener("click", evt =>
+        window.location.assign("grainsminion?minionid=" + encodeURIComponent(minionId))
+      );
     }
 
     Utils.showTableSortable(this.getPageElement());

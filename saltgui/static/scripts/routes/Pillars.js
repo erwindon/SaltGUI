@@ -62,7 +62,9 @@ export class PillarsRoute extends PageRoute {
       const menu = new DropDownMenu(minionTr);
       this._addMenuItemShowPillars(menu, minionId);
 
-      minionTr.addEventListener("click", evt => window.location.assign("pillarsminion?minionid=" + encodeURIComponent(minionId)));
+      minionTr.addEventListener("click", evt =>
+        window.location.assign("pillarsminion?minionid=" + encodeURIComponent(minionId))
+      );
     }
 
     Utils.showTableSortable(this.getPageElement());

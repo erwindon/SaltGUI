@@ -105,8 +105,6 @@ export class JobRoute extends Route {
   }
 
   _handleRunnerJobsListJob(pData, pJobId) {
-    const myThis = this;
-
     const output = this.getPageElement().querySelector(".output");
 
     document.querySelector("#job-button-close").addEventListener("click", _ => {

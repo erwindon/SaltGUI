@@ -93,7 +93,9 @@ export class SchedulesRoute extends PageRoute {
       const menu = new DropDownMenu(minionTr);
       this._addMenuItemShowSchedules(menu, minionId);
 
-      minionTr.addEventListener("click", evt => window.location.assign("schedulesminion?minionid=" + encodeURIComponent(minionId)));
+      minionTr.addEventListener("click", evt =>
+        window.location.assign("schedulesminion?minionid=" + encodeURIComponent(minionId))
+      );
     }
 
     Utils.showTableSortable(this.getPageElement());

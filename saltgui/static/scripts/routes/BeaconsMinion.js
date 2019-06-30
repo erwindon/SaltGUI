@@ -120,7 +120,9 @@ export class BeaconsMinionRoute extends PageRoute {
       container.tBodies[0].appendChild(tr);
 
       // run the command with the original beacon definition
-      tr.addEventListener("click", evt => this._runCommand(evt, pMinionId, "beacons.modify " + k + " " + JSON.stringify(beacons0[k])));
+      tr.addEventListener("click", evt =>
+        this._runCommand(evt, pMinionId, "beacons.modify " + k + " " + JSON.stringify(beacons0[k]))
+      );
     }
 
     Utils.addTableHelp(this.getPageElement(), "The content of column 'Value'\nis automatically refreshed");

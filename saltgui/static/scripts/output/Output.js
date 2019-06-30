@@ -139,7 +139,7 @@ export class Output {
   static isAsyncOutput(response) {
     let keys = Object.keys(response);
     if(keys.length !== 2) return false;
-    keys = keys.sort();
+    keys.sort();
     if(keys[0] !== "jid") return false;
     if(keys[1] !== "minions") return false;
     return true;
@@ -431,6 +431,7 @@ export class Output {
         minionResponse = minionResponse.return;
       }
       else if(command.startsWith("runner.") && minionResponse && minionResponse.hasOwnProperty("return")) {
+        // TODO: add isSuccess and retCode
         minionResponse = minionResponse.return.return;
       }
 
@@ -439,14 +440,13 @@ export class Output {
       let fndRepresentation = false;
 
       // the standard label is the minionId,
-      // future: colored based on the successflag
-      // future: colored based on the retcode
+      // TODO: colored based on the retcode
       let minionClass = "host-success";
       if(!isSuccess) minionClass = "host-failure";
       if(!response.hasOwnProperty(minionId)) minionClass = "host-no-response";
       let minionLabel = Output.getMinionIdHtml(minionId, minionClass);
 
-      if(!fndRepresentation && !response.hasOwnProperty(minionId)) {
+      if(/*!fndRepresentation&&*/ !response.hasOwnProperty(minionId)) {
         minionOutput = Output.getTextOutput("(no response)");
         minionOutput.classList.add("noresponse");
         fndRepresentation = true;
@@ -460,14 +460,12 @@ export class Output {
 
       if(!fndRepresentation && typeof minionResponse !== "object") {
         minionOutput = Output.getNormalOutput(minionResponse);
-        minionMultiLine = false;
         fndRepresentation = true;
       }
 
       // null is an object, but treat it separatelly
       if(!fndRepresentation && minionResponse === null) {
         minionOutput = Output.getNormalOutput(minionResponse);
-        minionMultiLine = false;
         fndRepresentation = true;
       }
 
@@ -535,12 +533,6 @@ export class Output {
 
       div.appendChild(document.createTextNode(": "));
 
-      if(addHighStateSummaryFlag) {
-        // showing the summary is more important
-        // than hiding a useless open/close indicator
-        minionMultiLine = true;
-      }
-
       // multiple line, collapsible
       // 25B7 = WHITE RIGHT-POINTING TRIANGLE
       // 25BD = WHITE DOWN-POINTING TRIANGLE
@@ -574,9 +566,9 @@ export class Output {
       // it easier to select the next highstate part
       // or just collapse it and see the next minion
       if(isHighStateOutput) {
-        minionOutput.addEventListener("click", _ => {
-          div.scrollIntoView({behavior: "smooth", block: "start"});
-        });
+        minionOutput.addEventListener("click", _ =>
+          div.scrollIntoView({behavior: "smooth", block: "start"})
+        );
       }
 
       minionOutput.classList.add("minion-output");

@@ -1,5 +1,4 @@
 import {DropDownMenu} from '../DropDown.js';
-import {Output} from '../output/Output.js';
 import {PageRoute} from './Page.js';
 import {Route} from './Route.js';
 import {Utils} from '../Utils.js';
@@ -106,7 +105,9 @@ export class BeaconsRoute extends PageRoute {
       const menu = new DropDownMenu(minionTr);
       this._addMenuItemShowBeacons(menu, minionId);
 
-      minionTr.addEventListener("click", evt => window.location.assign("beaconsminion?minionid=" + encodeURIComponent(minionId)));
+      minionTr.addEventListener("click", evt =>
+        window.location.assign("beaconsminion?minionid=" + encodeURIComponent(minionId))
+      );
     }
 
     Utils.showTableSortable(this.getPageElement());

@@ -50,8 +50,6 @@ export class OutputHighstate {
 
   static getHighStateOutput(pMinionId, pTasks) {
 
-    const indent = "    ";
-
     const div = Route._createDiv("", "");
 
     let succeeded = 0;

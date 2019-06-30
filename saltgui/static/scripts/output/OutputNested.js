@@ -29,7 +29,7 @@ export class OutputNested {
         if(typeof ind === "object" /* including array */ ) {
           out.push(OutputNested.ustring(pIndent, '|_'));
           let prefix;
-          if(typeof ind === "object" && !Array.isArray(ind))
+          if(!Array.isArray(ind))
             prefix = '';
           else
             prefix ='-\u00A0';

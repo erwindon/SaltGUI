@@ -95,7 +95,9 @@ export class GrainsMinionRoute extends PageRoute {
 
       container.tBodies[0].appendChild(grainTr);
 
-      grainTr.addEventListener("click", evt => this._runCommand(evt, pMinionId, "grains.setval \"" + grainName + "\" " + JSON.stringify(grains[grainName])));
+      grainTr.addEventListener("click", evt =>
+        this._runCommand(evt, pMinionId, "grains.setval \"" + grainName + "\" " + JSON.stringify(grains[grainName]))
+      );
     }
 
     Utils.showTableSortable(this.getPageElement());
