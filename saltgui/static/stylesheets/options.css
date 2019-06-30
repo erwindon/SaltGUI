@@ -1,13 +1,13 @@
-#page_options {
+#page-options {
   width: 100%;
 }
 
-#page_options input {
+#page-options input {
   width: initial;
   min-width: initial;
 }
 
-#page_options label {
+#page-options label {
   margin-right: 20px;
 }
 

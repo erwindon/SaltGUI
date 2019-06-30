@@ -395,13 +395,38 @@
 
       <div class='route' id='page-options'>
         <div class='dashboard'>
-          <div id='options_page' class='panel'>
-            <h1 id="options_title">Options</h1>
+          <div id='options-panel' class='panel'>
+            <h1 id="options-title">Options</h1>
+            <span id="help" style="float: right; cursor: help">&#x2753;&#xFE0E;</span>
             <table id="options" class="options">
               <thead>
                 <tr><th>Name</th><th>Value</th></tr>
               </thead>
               <tbody>
+                <tr>
+                  <td id="option-token-name">session_token:</td>
+                  <td id="option-token-value"></td>
+                </tr>
+                <tr>
+                  <td id="option-start-name">session_start:</td>
+                  <td id="option-start-value"></td>
+                </tr>
+                <tr>
+                  <td id="option-expire-name">session_expire:</td>
+                  <td id="option-expire-value"></td>
+                </tr>
+                <tr>
+                  <td id="option-eauth-name">session_eauth:</td>
+                  <td id="option-eauth-value"></td>
+                </tr>
+                <tr>
+                  <td id="option-user-name">session_user:</td>
+                  <td id="option-user-value"></td>
+                </tr>
+                <tr>
+                  <td id="option-perms-name">session_perms:</td>
+                  <td id="option-perms-value"></td>
+                </tr>
                 <tr>
                   <td id="option-templates-name">saltgui_templates:</td>
                   <td id="option-templates-value"></td>
@@ -483,6 +508,12 @@
                 </td>
               </tbody>
             </table>
+            <div class='msg'>(loading)</div>
+          </div>
+          <div class='panel job-list'>
+            <h1>Recent Jobs</h1>
+            <input style="display: none" class="filter-text" list="list-jobs" placeholder="&#x1F50D;">
+            <table class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>

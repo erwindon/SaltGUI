@@ -1,16 +1,70 @@
 import {OutputYaml} from '../output/OutputYaml.js';
 import {PageRoute} from './Page.js';
+import {Utils} from '../Utils.js';
 
 export class OptionsRoute extends PageRoute {
 
   constructor(router) {
-    super("^[\/]options$", "Options", "#page_options", "#button_options", router);
+    super("^[\/]options$", "Options", "#page-options", "#button_options", router);
 
     this.newOutputFormats = this.newOutputFormats.bind(this);
+
+    Utils.addTableHelp(this.getPageElement(), "Names 'session_*' show the values from the login session\nNames 'saltgui_*' show the values from the master file '/etc/salt/master'\nChanges made in this screen are valid for this session ONLY");
   }
 
   onShow() {
     const myThis = this;
+
+    const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
+    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
+
+    runnerJobsListJobsPromise.then(pData => {
+      myThis._handleRunnerJobsListJobs(pData);
+      runnerJobsActivePromise.then(pData => {
+        myThis._handleRunnerJobsActive(pData);
+      }, pData => {
+        myThis._handleRunnerJobsActive(JSON.stringify(pData));
+      });
+    }, pData => {
+      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
+    });
+
+    const loginResponseStr = window.sessionStorage.getItem("login-response");
+    const loginResponse = JSON.parse(loginResponseStr);
+
+    const tokenValue = loginResponse.token;
+    const tokenTd = document.getElementById("option-token-value");
+    tokenTd.innerText = tokenValue;
+
+    const startValue = loginResponse.start;
+    const startTd = document.getElementById("option-start-value");
+    const startStr = new Date(startValue*1000);
+    startTd.innerText = startValue + "\n" + startStr;
+
+    const expireValue = loginResponse.expire;
+    const expireTd = document.getElementById("option-expire-value");
+    const expireStr = new Date(expireValue*1000);
+    const date = new Date(null);
+    date.setSeconds(loginResponse.expire - loginResponse.start);
+    let durationStr = "";
+    const str = date.toISOString();
+    if(str.startsWith("1970-01-01T")) {
+      // remove the date prefix and the millisecond suffix
+      durationStr = "\nduration is " + str.substr(11, 8);
+    }
+    expireTd.innerText = expireValue + "\n" + expireStr + durationStr;
+
+    const eauthValue = loginResponse.eauth;
+    const eauthTd = document.getElementById("option-eauth-value");
+    eauthTd.innerText = eauthValue;
+
+    const userValue = loginResponse.user;
+    const userTd = document.getElementById("option-user-value");
+    userTd.innerText = userValue;
+
+    const permsValue = OutputYaml.formatYAML(loginResponse.perms);
+    const permsTd = document.getElementById("option-perms-value");
+    permsTd.innerText = permsValue;
 
     const templatesValue = window.localStorage.getItem("templates");
     const templatesTd = document.getElementById("option-templates-value");
