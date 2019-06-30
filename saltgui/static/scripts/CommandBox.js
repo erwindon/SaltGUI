@@ -162,7 +162,7 @@ export class CommandBox {
     RunType.setRunTypeDefault();
 
     // (re-)populate the dropdown box
-    const targetlist = document.getElementById("target-list");
+    const targetlist = document.getElementById("data-list-target");
     while(targetlist.firstChild) {
       targetlist.removeChild(targetlist.firstChild);
     }
