@@ -67,6 +67,7 @@ export class KeysRoute extends PageRoute {
         const fingerprint = hosts[minionId];
         if(!fingerprintElement) continue;
         if(!fingerprint.match(this.fingerprintPattern)) {
+          fingerprintElement.innerText = "";
           Utils.addErrorToTableCell(fingerprintElement, fingerprint);
           continue;
         }
@@ -282,7 +283,12 @@ export class KeysRoute extends PageRoute {
       const fingerprintSpan = page.querySelector("table tr#" + Utils.getIdFromMinionId(pData.id) + " .fingerprint");
       if(fingerprintSpan) fingerprintSpan.innerText = "(refresh page for fingerprint)";
       const wheelKeyFingerPromise = this.router.api.getWheelKeyFinger(pData.id);
-      wheelKeyFingerPromise.then(this._handleWheelKeyFinger);
+      const myThis = this;
+      wheelKeyFingerPromise.then(this._handleWheelKeyFinger, pData2 => {
+        const pData3 = {"return":[{"data":{"return":{"minions":{}}}}]};
+        pData3.return[0]["data"]["return"]["minions"][pData.id] = JSON.stringify(pData2);
+        myThis._handleWheelKeyFinger(pData3);
+      });
     }
 
     this.updateTableSummary(list);
