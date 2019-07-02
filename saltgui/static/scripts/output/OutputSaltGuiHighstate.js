@@ -7,12 +7,12 @@ export class OutputSaltGuiHighstate {
   // no separate `isHighStateOutput` here
   // the implementation from OutputHighstate is (re)used
 
-  static getDurationClause(millis) {
-    if(millis < 1000) {
-      return Utils.txtZeroOneMany(millis,
+  static getDurationClause(pMilliSeconds) {
+    if(pMilliSeconds < 1000) {
+      return Utils.txtZeroOneMany(pMilliSeconds,
         "{0} milliseconds", "{0} millisecond", "{0} milliseconds");
     }
-    return Utils.txtZeroOneMany(millis / 1000, "", "{0} second", "{0} seconds");
+    return Utils.txtZeroOneMany(pMilliSeconds / 1000, "", "{0} second", "{0} seconds");
   }
 
   static getHighStateLabel(pMinionId, pMinionHighStateResponse) {
@@ -120,7 +120,7 @@ export class OutputSaltGuiHighstate {
     let succeeded = 0;
     let failed = 0;
     let skipped = 0;
-    let total_millis = 0;
+    let totalMilliSeconds = 0;
     let changes = 0;
     let nr = 0;
     for(const task of pTasks) {
@@ -192,15 +192,15 @@ export class OutputSaltGuiHighstate {
       }
 
       if(task.hasOwnProperty("duration")) {
-        const millis = Math.round(task.duration);
-        total_millis += millis;
-        if(millis >= 10) {
+        const milliSeconds = Math.round(task.duration);
+        totalMilliSeconds += milliSeconds;
+        if(milliSeconds >= 10) {
           // anything below 10ms is not worth reporting
           // report only the "slow" jobs
           // it still counts for the grand total thought
           taskDiv.append(document.createElement("br"));
           taskDiv.append(document.createTextNode(
-            indent + "Duration " + OutputSaltGuiHighstate.getDurationClause(millis)));
+            indent + "Duration " + OutputSaltGuiHighstate.getDurationClause(milliSeconds)));
         }
       }
 
@@ -250,8 +250,8 @@ export class OutputSaltGuiHighstate {
     line += Utils.txtZeroOneMany(changes, "", ", {0} change", ", {0} changes");
 
     // multiple durations and significant?
-    if(total > 1 && total_millis >= 10) {
-      line += ", " + OutputSaltGuiHighstate.getDurationClause(total_millis);
+    if(total > 1 && totalMilliSeconds >= 10) {
+      line += ", " + OutputSaltGuiHighstate.getDurationClause(totalMilliSeconds);
     }
 
     if(line) {

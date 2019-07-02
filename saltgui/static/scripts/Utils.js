@@ -76,15 +76,15 @@ export class Utils {
     pTd.appendChild(span);
   }
 
-  static hasTextContent(obj, pSearchText) {
-    if(obj.classList && obj.classList.contains("run-command-button"))
+  static hasTextContent(pElement, pSearchText) {
+    if(pElement.classList && pElement.classList.contains("run-command-button"))
       return false;
-    for(const childNode of obj.childNodes)
+    for(const childNode of pElement.childNodes)
       if(this.hasTextContent(childNode, pSearchText))
         return true;
-    if(obj.nodeType !== 3) // NODE_TEXT
+    if(pElement.nodeType !== 3) // NODE_TEXT
       return false;
-    return obj.textContent.toUpperCase().includes(pSearchText);
+    return pElement.textContent.toUpperCase().includes(pSearchText);
   }
 
   static makeTableSearchable(pStartElement) {

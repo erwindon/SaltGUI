@@ -24,8 +24,8 @@ export class LoginRoute extends Route {
     submit.addEventListener("submit", this.onLogin);
   }
 
-  onLogin(submitEvent) {
-    submitEvent.preventDefault();
+  onLogin(pSubmitEvent) {
+    pSubmitEvent.preventDefault();
     if(this.loginPending) return; //Don't continue if waiting on a request
 
     const userNameField = this.pageElement.querySelector("#username");
