@@ -2,24 +2,24 @@ import {Route} from './routes/Route.js';
 
 export class Utils {
 
-  static getQueryParam2(url, name) {
-    const questionmarkPos = url.indexOf("?");
+  static getQueryParam2(pUrl, pName) {
+    const questionmarkPos = pUrl.indexOf("?");
     if(questionmarkPos < 0) return undefined;
-    const parameters = url.slice(questionmarkPos + 1).split("&");
+    const parameters = pUrl.slice(questionmarkPos + 1).split("&");
     for(const parameter of parameters) {
       const namevalue = parameter.split("=");
       if(namevalue.length !== 2) continue;
-      if(namevalue[0] === name) return namevalue[1];
+      if(namevalue[0] === pName) return namevalue[1];
     }
     return undefined;
   }
 
   /* istanbul ignore next */
-  static getQueryParam(name) {
+  static getQueryParam(pName) {
     let w = null;
     try { w = window; } catch(error) { /* VOID */ }
     if(!w || !w.location) return undefined;
-    return Utils.getQueryParam2(w.location.href, name);
+    return Utils.getQueryParam2(w.location.href, pName);
   }
 
   static addToolTip(pTooltipHost, pTooltipText) {
@@ -52,11 +52,11 @@ export class Utils {
     pTooltipHost.appendChild(tooltipSpan);
   }
 
-  static showTableSortable(startElement, isReverseSort = false) {
-    const th = startElement.querySelector("table th");
+  static showTableSortable(pStartElement, pIsReverseSort = false) {
+    const th = pStartElement.querySelector("table th");
     sorttable.innerSortFunction.apply(th, []);
-    if(isReverseSort) sorttable.innerSortFunction.apply(th, []);
-    const tr = startElement.querySelector("table tr");
+    if(pIsReverseSort) sorttable.innerSortFunction.apply(th, []);
+    const tr = pStartElement.querySelector("table tr");
     for(const th of tr.childNodes) {
       if(th.classList.contains("sorttable_nosort")) continue;
       // the tooltip is too bulky to use, skip for now
@@ -64,65 +64,65 @@ export class Utils {
     }
   }
 
-  static tableReSort(startElement) {
-    const th = startElement.querySelector("table th");
+  static tableReSort(pStartElement) {
+    const th = pStartElement.querySelector("table th");
     sorttable.innerSortFunction.apply(th, []);
     sorttable.innerSortFunction.apply(th, []);
   }
 
-  static addErrorToTableCell(td, errorMessage) {
+  static addErrorToTableCell(pTd, pErrorMessage) {
     const span = Route._createSpan("", "(error)");
-    Utils.addToolTip(span, errorMessage);
-    td.appendChild(span);
+    Utils.addToolTip(span, pErrorMessage);
+    pTd.appendChild(span);
   }
 
-  static hasTextContent(obj, txt) {
+  static hasTextContent(obj, pSearchText) {
     if(obj.classList && obj.classList.contains("run-command-button"))
       return false;
     for(const childNode of obj.childNodes)
-      if(this.hasTextContent(childNode, txt))
+      if(this.hasTextContent(childNode, pSearchText))
         return true;
     if(obj.nodeType !== 3) // NODE_TEXT
       return false;
-    return obj.textContent.toUpperCase().includes(txt);
+    return obj.textContent.toUpperCase().includes(pSearchText);
   }
 
-  static makeTableSearchable(startElement) {
+  static makeTableSearchable(pStartElement) {
     const button_search = Route._createSpan("search", "");
     // 1F50D = LEFT-POINTING MAGNIFYING GLASS
     // FE0E = VARIATION SELECTOR-15 (render as text)
     button_search.innerHTML = "&#x1f50d;&#xFE0E;";
     button_search.onclick = ev => {
-      Utils.hideShowTableSearchBar(startElement);
+      Utils.hideShowTableSearchBar(pStartElement);
     };
-    const table = startElement.querySelector("table");
+    const table = pStartElement.querySelector("table");
     table.parentElement.insertBefore(button_search, table);
   }
 
-  static addTableHelp(startElement, txt) {
-    const button_help = startElement.querySelector("#help");
+  static addTableHelp(pStartElement, pHelpText) {
+    const button_help = pStartElement.querySelector("#help");
     button_help.classList.add("search");
-    Utils.addToolTip(button_help, txt);
+    Utils.addToolTip(button_help, pHelpText);
   }
 
-  static hideShowTableSearchBar(startElement) {
+  static hideShowTableSearchBar(pStartElement) {
     // remove all highlights
-    const hilitor = new Hilitor(startElement, "table tbody");
+    const hilitor = new Hilitor(pStartElement, "table tbody");
     hilitor.remove();
 
     // show rows in all tables
-    const allFM = startElement.querySelectorAll("table .no-filter-match");
+    const allFM = pStartElement.querySelectorAll("table .no-filter-match");
     for(const fm of allFM)
       fm.classList.remove("no-filter-match");
 
-    const table = startElement.querySelector("table");
+    const table = pStartElement.querySelector("table");
 
     // hide/show search box
-    const input = startElement.querySelector("input.filter-text");
+    const input = pStartElement.querySelector("input.filter-text");
     input.onkeyup = ev => {
       if(ev.key === "Escape") {
         Utils.updateTableFilter(table, "");
-        Utils.hideShowTableSearchBar(startElement);
+        Utils.hideShowTableSearchBar(pStartElement);
         return;
       }
     };
@@ -141,20 +141,20 @@ export class Utils {
     input.focus();
   }
 
-  static updateTableFilter(table, txt) {
+  static updateTableFilter(pTable, pSearchText) {
     // remove highlighting before re-comparing
     // as it affects the texts
-    const hilitor = new Hilitor(table, "tbody");
+    const hilitor = new Hilitor(pTable, "tbody");
     hilitor.remove();
 
     // find text
-    txt = txt.toUpperCase();
-    for(const row of table.tBodies[0].rows) {
+    pSearchText = pSearchText.toUpperCase();
+    for(const row of pTable.tBodies[0].rows) {
       let show = false;
       for(const cell of row.cells) {
         // do not use "innerText"
         // that one does not handle hidden text
-        if(Utils.hasTextContent(cell, txt)) show = true;
+        if(Utils.hasTextContent(cell, pSearchText)) show = true;
       }
       if(show)
         row.classList.remove("no-filter-match");
@@ -169,7 +169,7 @@ export class Utils {
 
     // turn the text into a regexp
     let pattern = "";
-    for(const chr of txt) {
+    for(const chr of pSearchText) {
       if((chr >= 'A' && chr <= 'Z') || (chr >= '0' && chr <= '9'))
         pattern += chr;
       else

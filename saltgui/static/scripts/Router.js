@@ -151,36 +151,37 @@ export class Router {
       });
   }
 
-  registerRoute(route) {
-    this.routes.push(route);
-    if(route.onRegister) route.onRegister();
+  registerRoute(pRoute) {
+    this.routes.push(pRoute);
+    if(pRoute.onRegister) pRoute.onRegister();
   }
 
-  goTo(path) {
+  goTo(pPath) {
     if(this.switchingRoute) return;
-    if(window.location.pathname === path && this.currentRoute) return;
+    if(window.location.pathname === pPath && this.currentRoute) return;
     for(const route of this.routes) {
-      if(!route.getPath().test(path.split("?")[0])) continue;
+      if(!route.getPath().test(pPath.split("?")[0])) continue;
       // push history state for login (including redirect to /)
-      if(path === "/login" || path === "/") window.history.pushState({}, undefined, path);
+      if(pPath === "/login" || pPath === "/") window.history.pushState({}, undefined, pPath);
       this.showRoute(route);
       return;
     }
   }
 
-  showRoute(route) {
+  showRoute(pRoute) {
     const myThis = this;
 
-    route.getPageElement().style.display = "";
+    pRoute.getPageElement().style.display = "";
 
     const minionMenuItem = document.getElementById("button-minions1");
     const jobsMenuItem = document.getElementById("button-jobs1");
 
-    Array.from(document.querySelectorAll(".menu-item-active")).forEach(
+    const activeMenuItems = Array.from(document.querySelectorAll(".menu-item-active"));
+    activeMenuItems.forEach(
       function (e){ e.classList.remove("menu-item-active"); }
     );
 
-    const elem1 = route.getMenuItemElement1();
+    const elem1 = pRoute.getMenuItemElement1();
     if(elem1) {
       elem1.classList.add("menu-item-active");
       // activate also parent menu item if child element is selected
@@ -196,38 +197,38 @@ export class Router {
       }
     }
 
-    const elem2 = route.getMenuItemElement2();
+    const elem2 = pRoute.getMenuItemElement2();
     if(elem2) {
       elem2.classList.add("menu-item-active");
     }
 
     this.switchingRoute = true;
 
-    const afterLoad = function(route) {
+    const afterLoad = function(pRoute) {
       if(myThis.currentRoute !== undefined) {
         myThis.hideRoute(myThis.currentRoute);
       }
 
-      myThis.currentRoute = route;
+      myThis.currentRoute = pRoute;
       document.title = "SaltGUI - " + myThis.currentRoute.getName();
       myThis.currentRoute.getPageElement().className = "route current";
       myThis.switchingRoute = false;
     };
 
-    let response;
-    if(route.onShow) response = route.onShow();
+    let response = null;
+    if(pRoute.onShow) response = pRoute.onShow();
 
-    if(response && response.then) response.then(afterLoad(route));
-    else afterLoad(route);
+    if(response && response.then) response.then(afterLoad(pRoute));
+    else afterLoad(pRoute);
   }
 
-  hideRoute(route) {
-    route.getPageElement().className = "route";
+  hideRoute(pRoute) {
+    pRoute.getPageElement().className = "route";
     setTimeout(function() {
       // Hide element after fade, so it does not expand the body
-      route.getPageElement().style.display = "none";
+      pRoute.getPageElement().style.display = "none";
     }, 500);
-    if(route.onHide) route.onHide();
+    if(pRoute.onHide) pRoute.onHide();
   }
 
 }

@@ -44,8 +44,8 @@ export class DropDownMenu {
     let visibleCount = 0;
     if(this.menuDropdownContent) {
       for(const chld of this.menuDropdownContent.children) {
-        const verifyCallback = chld.verifyCallback;
-        if(verifyCallback) verifyCallback(chld);
+        const verifyCallBack = chld.verifyCallBack;
+        if(verifyCallBack) verifyCallBack(chld);
         if(chld.style.display !== "none") visibleCount++;
       }
     }
@@ -61,30 +61,32 @@ export class DropDownMenu {
   // function is called each time the menu opens
   // This allows dynamic menuitem titles (use menuitem.innerText/innerHTML)
   // or visibility (use menuitem.style.display = "none"/"inline-block")
-  addMenuItem(title, callback, pValue) {
+  addMenuItem(pTitle, pCallBack, pValue) {
     const button = Route._createDiv("run-command-button", "...");
-    if(typeof title === "string")
-      button.innerHTML = title;
+    if(typeof pTitle === "string")
+      button.innerHTML = pTitle;
     else
-      button.verifyCallback = title;
-    button.addEventListener("click", evt => this.callback(evt, callback, pValue));
+      button.verifyCallBack = pTitle;
+    button.addEventListener("click", pClickEvent =>
+      this.callback(pClickEvent, pCallBack, pValue)
+    );
     this.menuDropdownContent.appendChild(button);
     this.verifyAll();
     return button;
   }
 
-  callback(evt, theCallback, pValue) {
+  callback(pClickEvent, pCallBack, pValue) {
     this._value = pValue;
-    theCallback(evt);
-    evt.stopPropagation();
+    pCallBack(pClickEvent);
+    pClickEvent.stopPropagation();
   }
 
-  setTitle(title) {
+  setTitle(pTitle) {
     // Setting the title implies that we are interested
     // in the menu values, rather than their actions.
     // Use a slightly different clue for that.
     // 25BC = BLACK DOWN-POINTING TRIANGLE
-    this.menuButton.innerHTML = title + "&nbsp;\u25BC";
+    this.menuButton.innerHTML = pTitle + "&nbsp;\u25BC";
   }
 
   showMenu() {

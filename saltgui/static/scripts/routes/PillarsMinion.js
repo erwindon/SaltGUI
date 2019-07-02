@@ -6,12 +6,13 @@ import {Utils} from '../Utils.js';
 
 export class PillarsMinionRoute extends PageRoute {
 
-  constructor(router) {
-    super("^[\/]pillarsminion$", "Pillars", "#page-pillars-minion", "#button-pillars", router);
+  constructor(pRouter) {
+    super("^[\/]pillarsminion$", "Pillars", "#page-pillars-minion", "#button-pillars", pRouter);
 
     this._handleLocalPillarItems = this._handleLocalPillarItems.bind(this);
 
-    this.pageElement.querySelector("#pillars-minion-button-close").addEventListener("click", _ => {
+    const closeButton = this.pageElement.querySelector("#pillars-minion-button-close");
+    closeButton.addEventListener("click", _ => {
       this.router.goTo("/pillars");
     });
   }
@@ -21,8 +22,8 @@ export class PillarsMinionRoute extends PageRoute {
 
     const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
 
-    const title = document.getElementById("pillars-minion-title");
-    title.innerText = "Pillars on " + minionId;
+    const titleElement = document.getElementById("pillars-minion-title");
+    titleElement.innerText = "Pillars on " + minionId;
 
     const localPillarItemsPromise = this.router.api.getLocalPillarItems(minionId);
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
@@ -55,21 +56,21 @@ export class PillarsMinionRoute extends PageRoute {
 
     // new menus are always added at the bottom of the div
     // fix that by re-adding it to its proper place
-    const title = document.getElementById("pillars-minion-title");
-    panel.insertBefore(menu.menuDropdown, title.nextSibling);
+    const titleElement = document.getElementById("pillars-minion-title");
+    panel.insertBefore(menu.menuDropdown, titleElement.nextSibling);
 
     if(PageRoute.showErrorRowInstead(container.tBodies[0], pData)) return;
 
     const pillars = pData.return[0][pMinionId];
 
     if(pillars === undefined) {
-      const msg = this.pageElement.querySelector("div.minion-list .msg");
-      msg.innerText = "Unknown minion '" + pMinionId + "'";
+      const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
+      msgDiv.innerText = "Unknown minion '" + pMinionId + "'";
       return;
     }
     if(pillars === false) {
-      const msg = this.pageElement.querySelector("div.minion-list .msg");
-      msg.innerText = "Minion '" + pMinionId + "' did not answer";
+      const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
+      msgDiv.innerText = "Minion '" + pMinionId + "' did not answer";
       return;
     }
 
@@ -92,8 +93,8 @@ export class PillarsMinionRoute extends PageRoute {
     for(const k of keys) {
       const pillar = document.createElement('tr');
 
-      const name = Route._createTd("pillar-name", k);
-      pillar.appendChild(name);
+      const nameTd = Route._createTd("pillar-name", k);
+      pillar.appendChild(nameTd);
 
       // menu comes before this data if there was any
 
@@ -127,12 +128,12 @@ export class PillarsMinionRoute extends PageRoute {
 
       pillar.appendChild(pillarValueTd);
 
-      pillar_hidden.addEventListener("click", function(evt) {
+      pillar_hidden.addEventListener("click", function(pClickEvent) {
         pillar_hidden.style.display = "none";
         pillar_shown.style.display = "inline-block";
       });
 
-      pillar_shown.addEventListener("click", function(evt) {
+      pillar_shown.addEventListener("click", function(pClickEvent) {
         pillar_shown.style.display = "none";
         pillar_hidden.style.display = "inline-block";
       });
@@ -143,15 +144,15 @@ export class PillarsMinionRoute extends PageRoute {
     Utils.showTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement());
 
-    const msg = this.pageElement.querySelector("div.minion-list .msg");
+    const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(keys.length,
       "No pillars", "{0} pillar", "{0} pillars");
-    msg.innerText = txt;
+    msgDiv.innerText = txt;
   }
 
   _addMenuItemRefreshPillar(pMenu, pMinionId) {
-    pMenu.addMenuItem("Refresh&nbsp;pillar...", function(evt) {
-      this._runCommand(evt, pMinionId, "saltutil.refresh_pillar");
+    pMenu.addMenuItem("Refresh&nbsp;pillar...", function(pClickEvent) {
+      this._runCommand(pClickEvent, pMinionId, "saltutil.refresh_pillar");
     }.bind(this));
   }
 }

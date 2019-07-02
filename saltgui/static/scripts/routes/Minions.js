@@ -5,8 +5,8 @@ import {Utils} from '../Utils.js';
 
 export class MinionsRoute extends PageRoute {
 
-  constructor(router) {
-    super("^[\/]$", "Minions", "#page-minions", "#button-minions", router);
+  constructor(pRouter) {
+    super("^[\/]$", "Minions", "#page-minions", "#button-minions", pRouter);
 
     this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
   }
@@ -71,9 +71,9 @@ export class MinionsRoute extends PageRoute {
     const show_jobs = pData.return[0].data.return.saltgui_show_jobs;
     window.localStorage.setItem("show_jobs", JSON.stringify(show_jobs));
 
-    let nodegroups = pData.return[0].data.return.nodegroups;
-    if(!nodegroups) nodegroups = {};
-    window.localStorage.setItem("nodegroups", JSON.stringify(nodegroups));
+    let nodeGroups = pData.return[0].data.return.nodeGroups;
+    if(!nodeGroups) nodeGroups = {};
+    window.localStorage.setItem("nodegroups", JSON.stringify(nodeGroups));
 
     const output_formats = pData.return[0].data.return.saltgui_output_formats;
     window.localStorage.setItem("output_formats", JSON.stringify(output_formats));
@@ -86,33 +86,33 @@ export class MinionsRoute extends PageRoute {
   }
 
   _handleWheelKeyListAll(pData) {
-    const list = this.getPageElement().querySelector("#minions");
+    const table = this.getPageElement().querySelector("#minions");
 
-    if(PageRoute.showErrorRowInstead(list, pData)) return;
+    if(PageRoute.showErrorRowInstead(table, pData)) return;
 
     const keys = pData.return[0].data.return;
 
     const minionIds = keys.minions.sort();
     for(const minionId of minionIds) {
-      this._addMinion(list, minionId, 1);
+      this._addMinion(table, minionId, 1);
 
       // preliminary dropdown menu
-      const minionTr = list.querySelector("#" + Utils.getIdFromMinionId(minionId));
+      const minionTr = table.querySelector("#" + Utils.getIdFromMinionId(minionId));
       const menu = new DropDownMenu(minionTr);
       this._addMenuItemStateApply(menu, minionId);
 
-      minionTr.addEventListener("click", evt =>
-        this._runCommand(evt, minionId, "state.apply")
+      minionTr.addEventListener("click", pClickEvent =>
+        this._runCommand(pClickEvent, minionId, "state.apply")
       );
     }
 
     Utils.showTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement());
 
-    const msg = this.pageElement.querySelector("div.minion-list .msg");
+    const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(minionIds.length,
       "No minions", "{0} minion", "{0} minions");
-    msg.innerText = txt;
+    msgDiv.innerText = txt;
   }
 
   _updateOfflineMinion(pContainer, pMinionId) {
@@ -133,12 +133,14 @@ export class MinionsRoute extends PageRoute {
     const menu = new DropDownMenu(minionTr);
     this._addMenuItemStateApply(menu, pMinionId);
 
-    minionTr.addEventListener("click", evt => this._runCommand(evt, pMinionId, "state.apply"));
+    minionTr.addEventListener("click", pClickEvent =>
+      this._runCommand(pClickEvent, pMinionId, "state.apply")
+    );
   }
 
   _addMenuItemStateApply(pMenu, pMinionId) {
-    pMenu.addMenuItem("Apply&nbsp;state...", function(evt) {
-      this._runCommand(evt, pMinionId, "state.apply");
+    pMenu.addMenuItem("Apply&nbsp;state...", function(pClickEvent) {
+      this._runCommand(pClickEvent, pMinionId, "state.apply");
     }.bind(this));
   }
 }

@@ -7,8 +7,8 @@ import {Utils} from '../Utils.js';
 
 export class JobsRoute extends PageRoute {
 
-  constructor(router) {
-    super("^[\/]jobs$", "Jobs", "#page-jobs", "#button-jobs", router);
+  constructor(pRouter) {
+    super("^[\/]jobs$", "Jobs", "#page-jobs", "#button-jobs", pRouter);
 
     this._getJobDetails = this._getJobDetails.bind(this);
   }
@@ -42,8 +42,8 @@ export class JobsRoute extends PageRoute {
 
     // new menus are always added at the bottom of the div
     // fix that by re-adding it to its proper place
-    const title = document.getElementById("jobs-title");
-    panel.insertBefore(menu.menuDropdown, title.nextSibling);
+    const titleElement = document.getElementById("jobs-title");
+    panel.insertBefore(menu.menuDropdown, titleElement.nextSibling);
 
     runnerJobsListJobsPromise.then(pData => {
       myThis._handleRunnerJobsListJobs(pData, true, cnt);
@@ -61,7 +61,7 @@ export class JobsRoute extends PageRoute {
     const maxJobs = 50;
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     if(cnt === ""+maxJobs) return;
-    pMenu.addMenuItem("Show&nbsp;first&nbsp;" + maxJobs + "&nbsp;jobs", function(evt) {
+    pMenu.addMenuItem("Show&nbsp;first&nbsp;" + maxJobs + "&nbsp;jobs", function(pClickEvent) {
       window.location.assign("jobs?cnt=" + maxJobs);
     }.bind(this));
   }
@@ -69,7 +69,7 @@ export class JobsRoute extends PageRoute {
   _addMenuItemShowEligibleWhenNeeded(pMenu) {
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     if(cnt === "eligible") return;
-    pMenu.addMenuItem("Show&nbsp;eligible&nbsp;jobs", function(evt) {
+    pMenu.addMenuItem("Show&nbsp;eligible&nbsp;jobs", function(pClickEvent) {
       window.location.assign("jobs?cnt=eligible");
     }.bind(this));
   }
@@ -77,7 +77,7 @@ export class JobsRoute extends PageRoute {
   _addMenuItemShowAllWhenNeeded(pMenu) {
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     if(cnt === "all") return;
-    pMenu.addMenuItem("Show&nbsp;all&nbsp;jobs", function(evt) {
+    pMenu.addMenuItem("Show&nbsp;all&nbsp;jobs", function(pClickEvent) {
       window.location.assign("jobs?cnt=all");
     }.bind(this));
   }
@@ -114,12 +114,12 @@ export class JobsRoute extends PageRoute {
     const statusTd = Route._createTd("status", "");
     const statusSpan = Route._createSpan("status2", "loading...");
     statusSpan.classList.add("no-status");
-    statusSpan.addEventListener("click", evt => {
+    statusSpan.addEventListener("click", pClickEvent => {
       // show "loading..." only once, but we are updating the whole column
       statusSpan.classList.add("no-status");
       statusSpan.innerText = "loading...";
       this._startRunningJobs();
-      evt.stopPropagation();
+      pClickEvent.stopPropagation();
     });
     statusTd.appendChild(statusSpan);
     tr.appendChild(statusTd);
@@ -129,11 +129,11 @@ export class JobsRoute extends PageRoute {
     const detailsTd = Route._createTd("details", "");
     const detailsSpan = Route._createSpan("details2", "(click)");
     detailsSpan.classList.add("no-status");
-    detailsSpan.addEventListener("click", evt => {
+    detailsSpan.addEventListener("click", pClickEvent => {
       detailsSpan.classList.add("no-status");
       detailsSpan.innerText = "loading...";
       this._getJobDetails(job.id);
-      evt.stopPropagation();
+      pClickEvent.stopPropagation();
     });
     Utils.addToolTip(detailsSpan, "Click to refresh");
     detailsTd.appendChild(detailsSpan);
@@ -148,24 +148,26 @@ export class JobsRoute extends PageRoute {
 
     pContainer.appendChild(tr);
 
-    tr.addEventListener("click", evt => window.location.assign("/job?id=" + encodeURIComponent(job.id)));
+    tr.addEventListener("click", pClickEvent =>
+      window.location.assign("/job?id=" + encodeURIComponent(job.id))
+    );
   }
 
   _addMenuItemShowDetails(pMenu, job) {
-    pMenu.addMenuItem("Show&nbsp;details", function(evt) {
+    pMenu.addMenuItem("Show&nbsp;details", function(pClickEvent) {
       window.location.assign("/job?id=" + encodeURIComponent(job.id));
     }.bind(this));
   }
 
   _addMenuItemRerunJob(pMenu, job, argumentsText) {
     // 2011 = NON-BREAKING HYPHEN
-    pMenu.addMenuItem("Re&#x2011;run&nbsp;job...", function(evt) {
-      this._runFullCommand(evt, job["Target-type"], job.Target, job.Function + argumentsText);
+    pMenu.addMenuItem("Re&#x2011;run&nbsp;job...", function(pClickEvent) {
+      this._runFullCommand(pClickEvent, job["Target-type"], job.Target, job.Function + argumentsText);
     }.bind(this));
   }
 
   _addMenuItemUpdateStatus(pMenu, pStatusSpan) {
-    pMenu.addMenuItem("Update&nbsp;status", function(evt) {
+    pMenu.addMenuItem("Update&nbsp;status", function(pClickEvent) {
       pStatusSpan.classList.add("no-status");
       pStatusSpan.innerText = "loading...";
       this._startRunningJobs();
@@ -173,7 +175,7 @@ export class JobsRoute extends PageRoute {
   }
 
   _addMenuItemUpdateDetails(pMenu, pDetailsSpan, job) {
-    pMenu.addMenuItem("Update&nbsp;details", function(evt) {
+    pMenu.addMenuItem("Update&nbsp;details", function(pClickEvent) {
       pDetailsSpan.classList.add("no-status");
       pDetailsSpan.innerText = "loading...";
       this._getJobDetails(job.id);
@@ -184,7 +186,8 @@ export class JobsRoute extends PageRoute {
 
     if(typeof pData !== "object") {
       // update all jobs (page) with the error message
-      for(const tr of this.pageElement.querySelector("table#jobs tbody").rows) {
+      const tbody = this.pageElement.querySelector("table#jobs tbody");
+      for(const tr of tbody.rows) {
         const statusField = tr.querySelector("td.status span.no-status");
         if(!statusField) continue;
         statusField.classList.remove("no-status");
@@ -224,7 +227,8 @@ export class JobsRoute extends PageRoute {
     }
 
     // update all finished jobs (page)
-    for(const tr of this.pageElement.querySelector("table#jobs tbody").rows) {
+    const tbody = this.pageElement.querySelector("table#jobs tbody");
+    for(const tr of tbody.rows) {
       const statusField = tr.querySelector("td.status span.no-status");
       if(!statusField) continue;
       statusField.classList.remove("no-status");
@@ -269,18 +273,18 @@ export class JobsRoute extends PageRoute {
       return;
     }
 
-    let str = Utils.txtZeroOneMany(pData.Minions.length,
+    let detailsTxt = Utils.txtZeroOneMany(pData.Minions.length,
       "no minions", "{0} minion", "{0} minions");
 
     const keyCount = Object.keys(pData.Result).length;
-    str += ", ";
+    detailsTxt += ", ";
     if(keyCount === pData.Minions.length)
-      str += "<span style='color: green'>";
+      detailsTxt += "<span style='color: green'>";
     else
-      str += "<span style='color: red'>";
-    str += Utils.txtZeroOneMany(keyCount,
+      detailsTxt += "<span style='color: red'>";
+    detailsTxt += Utils.txtZeroOneMany(keyCount,
       "no results", "{0} result", "{0} results");
-    str += "</span>";
+    detailsTxt += "</span>";
 
     const summary = { };
     for(const minionId in pData.Result) {
@@ -293,25 +297,25 @@ export class JobsRoute extends PageRoute {
 
     const keys = Object.keys(summary).sort();
     for(const key of keys) {
-      str += ", ";
+      detailsTxt += ", ";
       if(key === "0-0") {
-        str += "<span style='color: green'>";
-        str += Utils.txtZeroOneMany(summary[key], "", "{0} success", "{0} successes");
+        detailsTxt += "<span style='color: green'>";
+        detailsTxt += Utils.txtZeroOneMany(summary[key], "", "{0} success", "{0} successes");
       } else if(key.startsWith("0-")) {
-        str += "<span style='color: orange'>";
-        str += Utils.txtZeroOneMany(summary[key], "", "{0} success", "{0} successes");
+        detailsTxt += "<span style='color: orange'>";
+        detailsTxt += Utils.txtZeroOneMany(summary[key], "", "{0} success", "{0} successes");
       } else { // if(key.startsWith("1-"))
-        str += "<span style='color: red'>";
-        str += Utils.txtZeroOneMany(summary[key], "", "{0} failure", "{0} failures");
+        detailsTxt += "<span style='color: red'>";
+        detailsTxt += Utils.txtZeroOneMany(summary[key], "", "{0} failure", "{0} failures");
       }
       if(key !== "0-0") {
         // don't show the retcode for real success
-        str += "(" + key.substr(2) + ")";
+        detailsTxt += "(" + key.substr(2) + ")";
       }
-      str += "</span>";
+      detailsTxt += "</span>";
     }
 
-    detailsSpan.innerHTML = str;
+    detailsSpan.innerHTML = detailsTxt;
     detailsSpan.classList.remove("no-status");
     Utils.addToolTip(detailsSpan, "Click to refresh");
   }

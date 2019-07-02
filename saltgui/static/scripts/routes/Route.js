@@ -4,11 +4,11 @@ import {TargetType} from '../TargetType.js';
 
 export class Route {
 
-  constructor(path, name, pPageSelector, pMenuItemSelector, router) {
-    this.path = new RegExp(path);
-    this.name = name;
+  constructor(pPath, pPageName, pPageSelector, pMenuItemSelector, pRouter) {
+    this.path = new RegExp(pPath);
+    this.name = pPageName;
     this.pageElement = document.querySelector(pPageSelector);
-    this.router = router;
+    this.router = pRouter;
     if(pMenuItemSelector) {
       this.menuitem_element1 = document.querySelector(pMenuItemSelector + "1");
       this.menuitem_element2 = document.querySelector(pMenuItemSelector + "2");
@@ -56,12 +56,12 @@ export class Route {
     return span;
   }
 
-  _runCommand(evt, pTargetString, pCommandString) {
-    this._runFullCommand(evt, "", pTargetString, pCommandString);
+  _runCommand(pClickEvent, pTargetString, pCommandString) {
+    this._runFullCommand(pClickEvent, "", pTargetString, pCommandString);
   }
 
-  _runFullCommand(evt, targettype, pTargetString, pCommandString) {
-    this.router.commandbox._showManualRun(evt);
+  _runFullCommand(pClickEvent, pTargetType, pTargetString, pCommandString) {
+    this.router.commandbox._showManualRun(pClickEvent);
     const target = document.querySelector("#target");
     const command = document.querySelector("#command");
     const targetbox = document.querySelector("#target-box");
@@ -71,7 +71,7 @@ export class Route {
     if(pTargetString === "unknown-target") {
       // target was lost...
       pTargetString = "";
-      targettype = "";
+      pTargetType = "";
     }
 
     if(!pCommandString) pCommandString = "";
@@ -79,23 +79,23 @@ export class Route {
       // target was {minionId}_master...
       // too bad when the real minionId is actually like that :-(
       pTargetString = "";
-      targettype = "";
+      pTargetType = "";
     }
     if(pCommandString.startsWith("runners.")) {
       // runners do not have a target, so do not bother
       pTargetString = "";
-      targettype = "";
+      pTargetType = "";
     }
 
-    if(targettype) {
-      let tt = targettype;
+    if(pTargetType) {
+      let targetType = pTargetType;
       // show the extended selection controls when
       targetbox.style.display = "inherit";
-      if(tt !== "glob" && tt !== "list" && tt !== "compound" && tt !== "nodegroup") {
+      if(targetType !== "glob" && targetType !== "list" && targetType !== "compound" && targetType !== "nodegroup") {
         // we don't support that, revert to standard (not default)
-        tt = "glob";
+        targetType = "glob";
       }
-      TargetType.setTargetType(tt);
+      TargetType.setTargetType(targetType);
     }
 
     target.value = pTargetString;

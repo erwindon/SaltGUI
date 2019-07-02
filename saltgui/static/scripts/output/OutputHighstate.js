@@ -5,27 +5,27 @@ import {Utils} from '../Utils.js';
 
 export class OutputHighstate {
 
-  static isHighStateOutput(command, response) {
+  static isHighStateOutput(pCommand, pResponse) {
 
     if(!Output.isOutputFormatAllowed("highstate")) return false;
 
-    if(typeof response !== "object") return false;
-    if(Array.isArray(response)) return false;
-    if(command !== "state.apply" && command !== "state.highstate") return false;
-    for(const taskKey of Object.keys(response)) {
+    if(typeof pResponse !== "object") return false;
+    if(Array.isArray(pResponse)) return false;
+    if(pCommand !== "state.apply" && pCommand !== "state.highstate") return false;
+    for(const taskKey of Object.keys(pResponse)) {
       const components = taskKey.split("_|-");
       if(components.length !== 4) return false;
     }
     return true;
   }
 
-  static getDurationClauseMillis(millis) {
-    const ms = Math.round(millis * 1000) / 1000;
+  static getDurationClauseMillis(pMilliSeconds) {
+    const ms = Math.round(pMilliSeconds * 1000) / 1000;
     return `${ms} ms`;
   }
 
-  static getDurationClauseSecs(millis) {
-    const s = Math.round(millis) / 1000;
+  static getDurationClauseSecs(pMilliSeconds) {
+    const s = Math.round(pMilliSeconds) / 1000;
     return `${s} s`;
   }
 
@@ -55,7 +55,7 @@ export class OutputHighstate {
     let succeeded = 0;
     let failed = 0;
     let skipped = 0;
-    let total_millis = 0;
+    let totalMilliSeconds = 0;
     let changes = 0;
     let nr = 0;
     for(const task of pTasks) {
@@ -90,7 +90,7 @@ export class OutputHighstate {
 
       if(task.duration) {
         txt += "\n    Duration: " + OutputHighstate.getDurationClauseMillis(task.duration);
-        total_millis += task.duration;
+        totalMilliSeconds += task.duration;
       }
 
       txt += "\n     Changes:";
@@ -159,7 +159,7 @@ export class OutputHighstate {
 
     txt = "\n------------";
     txt += "\nTotal states run: " + (succeeded + skipped + failed);
-    txt += "\nTotal run time: " + OutputHighstate.getDurationClauseSecs(total_millis);
+    txt += "\nTotal run time: " + OutputHighstate.getDurationClauseSecs(totalMilliSeconds);
     const totalsSpan = Route._createSpan("", txt);
     totalsSpan.style.color = "aqua";
     div.append(totalsSpan);

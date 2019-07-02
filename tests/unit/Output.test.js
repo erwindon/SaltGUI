@@ -24,6 +24,10 @@ describe('Unittests for Output.js', function() {
     result = OutputJson.formatJSON(outputData);
     assert.equal(result, "123");
 
+    outputData = true;
+    result = OutputJson.formatJSON(outputData);
+    assert.equal(result, "true");
+
     outputData = "txt";
     result = OutputJson.formatJSON(outputData);
     assert.equal(result, "\"txt\"");

@@ -31,7 +31,7 @@ import {Utils} from '../Utils.js';
 
 export class Output {
 
-  static isOutputFormatAllowed(requestedOutputFormat) {
+  static isOutputFormatAllowed(pRequestedOutputFormat) {
     let supportedOutputFormats = null;
     // window.localStorage is not defined during unit testing
     let w = null;
@@ -39,26 +39,26 @@ export class Output {
     if(w && w.localStorage) supportedOutputFormats = w.localStorage.getItem("output_formats");
     if(supportedOutputFormats === "undefined") supportedOutputFormats = null;
     if(supportedOutputFormats === null) supportedOutputFormats = "doc,saltguihighstate,json";
-    return supportedOutputFormats.includes(requestedOutputFormat);
+    return supportedOutputFormats.includes(pRequestedOutputFormat);
   }
 
   // Re-organize the output to let it appear as if the output comes
   // from a single node called "RUNNER" or "MASTER".
   // This way all responses are organized by minion
-  static addVirtualMinion(response, command) {
+  static addVirtualMinion(pResponse, pCommand) {
 
-    if(command.startsWith("runners.")) {
+    if(pCommand.startsWith("runners.")) {
       // Add a new level in the object
-      return { "RUNNER": response };
+      return { "RUNNER": pResponse };
     }
 
-    if(command.startsWith("wheel.")) {
+    if(pCommand.startsWith("wheel.")) {
       // Add a new level in the object
-      return { "WHEEL": response };
+      return { "WHEEL": pResponse };
     }
 
     // otherwise return the original
-    return response;
+    return pResponse;
   }
 
   // compose the host/minion-name label that is shown with each response
@@ -74,21 +74,21 @@ export class Output {
 
   // the output is only text
   // note: do not return a text-node
-  static getTextOutput(minionResponse) {
+  static getTextOutput(pMinionResponse) {
     // strip trailing whitespace
-    minionResponse = minionResponse.replace(/[ \r\n]+$/g, "");
+    pMinionResponse = pMinionResponse.replace(/[ \r\n]+$/g, "");
 
     // replace all returned JIDs to links
     // typically found in the output of an async job
-    if(minionResponse.match(ParseCommandLine.getPatJid())) {
+    if(pMinionResponse.match(ParseCommandLine.getPatJid())) {
       const a = document.createElement("a");
-      a.href = "/job?id=" + encodeURIComponent(minionResponse);
-      a.innerText = minionResponse;
+      a.href = "/job?id=" + encodeURIComponent(pMinionResponse);
+      a.innerText = pMinionResponse;
       return a;
     }
 
     // all regular text
-    const span = Route._createSpan("", minionResponse);
+    const span = Route._createSpan("", pMinionResponse);
     return span;
   }
 
@@ -115,19 +115,19 @@ export class Output {
   // this is the default output form
   // just format the returned objects
   // note: do not return a text-node
-  static getNormalOutput(minionResponse) {
-    const content = Output.formatObject(minionResponse);
+  static getNormalOutput(pMinionResponse) {
+    const content = Output.formatObject(pMinionResponse);
     const element = document.createElement(Utils.isMultiLineString(content) ? "div" : "span");
     element.innerText = content;
     return element;
   }
 
 
-  static hasProperties(pObject, propArr) {
+  static hasProperties(pObject, pPropArr) {
     if(!pObject || typeof pObject !== "object") {
       return false;
     }
-    for(const prop of propArr) {
+    for(const prop of pPropArr) {
       if(!pObject.hasOwnProperty(prop)) {
         return false;
       }
@@ -136,8 +136,8 @@ export class Output {
   }
 
 
-  static isAsyncOutput(response) {
-    let keys = Object.keys(response);
+  static isAsyncOutput(pResponse) {
+    let keys = Object.keys(pResponse);
     if(keys.length !== 2) return false;
     keys.sort();
     if(keys[0] !== "jid") return false;
@@ -152,32 +152,32 @@ export class Output {
   // (datetime) 2019, Jan 26 19:05:22.808348
   // current action is (only):
   // - reduce the number of digits for the fractional seconds
-  static dateTimeStr(str) {
+  static dateTimeStr(pDtStr) {
 
     // no available setting, then return the original
     const datetime_fraction_digits_str = window.localStorage.getItem("datetime_fraction_digits");
-    if(datetime_fraction_digits_str === null) return str;
+    if(datetime_fraction_digits_str === null) return pDtStr;
 
     // setting is not a number, return the original
     let datetime_fraction_digits_nr = Number.parseInt(datetime_fraction_digits_str);
-    if(isNaN(datetime_fraction_digits_nr)) return str;
+    if(isNaN(datetime_fraction_digits_nr)) return pDtStr;
 
     // stick to the min/max values without complaining
     if(datetime_fraction_digits_nr < 0) datetime_fraction_digits_nr = 0;
     if(datetime_fraction_digits_nr > 6) datetime_fraction_digits_nr = 6;
 
     // find the fractional part (assume only one '.' in the string)
-    let dotPos = str.indexOf(".");
-    if(dotPos < 0) return str;
+    let dotPos = pDtStr.indexOf(".");
+    if(dotPos < 0) return pDtStr;
 
     // with no digits, also remove the dot
     if(datetime_fraction_digits_nr === 0) dotPos -= 1;
 
-    return str.substring(0, dotPos + datetime_fraction_digits_nr + 1);
+    return pDtStr.substring(0, dotPos + datetime_fraction_digits_nr + 1);
   }
 
   // add the status summary
-  static addHighStateSummary(div, pMinionId, pTasks) {
+  static addHighStateSummary(pMinionDiv, pMinionId, pTasks) {
 
     let nr = 0;
 
@@ -255,14 +255,14 @@ export class Output {
       span.addEventListener("click", _ => {
 
         // show the output, it might be hidden
-        const triangle = div.querySelector("span.triangle");
+        const triangle = pMinionDiv.querySelector("span.triangle");
         // 25BD = WHITE DOWN-POINTING TRIANGLE
         triangle.innerText = "\u25bd";
-        const outputDiv = div.querySelector("div");
+        const outputDiv = pMinionDiv.querySelector("div");
         outputDiv.style.display = "";
 
         const showId = Utils.getIdFromMinionId(pMinionId + "." + myNr);
-        const taskDiv = div.querySelector("#" + showId);
+        const taskDiv = pMinionDiv.querySelector("#" + showId);
 
         // show where the information is
         taskDiv.classList.add("highlight-task");
@@ -278,60 +278,60 @@ export class Output {
 
       Utils.addToolTip(span, txt);
 
-      div.append(span);
+      pMinionDiv.append(span);
     }
   }
 
 
   // the orchestrator for the output
   // determines what format should be used and uses that
-  static addResponseOutput(outputContainer, pJobId, minions, response, command, initialStatus) {
+  static addResponseOutput(pOutputContainer, pJobId, pMinionData, pResponse, pCommand, pInitialStatus) {
 
     // remove old content
-    outputContainer.innerText = "";
+    pOutputContainer.innerText = "";
 
     // reformat runner/wheel output into regular output
-    response = Output.addVirtualMinion(response, command);
+    pResponse = Output.addVirtualMinion(pResponse, pCommand);
 
-    if(typeof response === "string") {
+    if(typeof pResponse === "string") {
       // do not format a string as an object
-      outputContainer.innerText = response;
+      pOutputContainer.innerText = pResponse;
       return;
     }
 
-    if(typeof response !== "object" || Array.isArray(response)) {
-      outputContainer.innerText = Output.formatObject(response);
+    if(typeof pResponse !== "object" || Array.isArray(pResponse)) {
+      pOutputContainer.innerText = Output.formatObject(pResponse);
       return;
     }
 
     // it might be documentation
-    const commandArg = command.trim().replace(/^[a-z.]* */i, "");
-    const isDocumentationOutput = OutputDocumentation.isDocumentationOutput(response, commandArg);
+    const commandArg = pCommand.trim().replace(/^[a-z.]* */i, "");
+    const isDocumentationOutput = OutputDocumentation.isDocumentationOutput(pResponse, commandArg);
     if(isDocumentationOutput) {
-      OutputDocumentation.reduceDocumentationOutput(response, commandArg, commandArg);
-      OutputDocumentation.addDocumentationOutput(outputContainer, response);
+      OutputDocumentation.reduceDocumentationOutput(pResponse, commandArg, commandArg);
+      OutputDocumentation.addDocumentationOutput(pOutputContainer, pResponse);
       return;
     }
 
     const allDiv = Route._createDiv("nohide", "");
 
-    if(!command.startsWith("runners.") &&
-       !command.startsWith("wheel.") &&
-       !Output.isAsyncOutput(response)) {
+    if(!pCommand.startsWith("runners.") &&
+       !pCommand.startsWith("wheel.") &&
+       !Output.isAsyncOutput(pResponse)) {
       // runners/wheel responses are not per minion
       // Do not produce a #response line for async-start confirmation
 
       // for the result of jobs.active
       const summaryJobsActiveSpan = Route._createSpan("", "");
       summaryJobsActiveSpan.id = "summary-jobs-active";
-      summaryJobsActiveSpan.innerText = initialStatus;
+      summaryJobsActiveSpan.innerText = pInitialStatus;
 
       // for the result of jobs.list_job
       const summaryJobsListJobSpan = Route._createSpan("", "");
       summaryJobsListJobSpan.id = "summary-list-job";
 
-      const cntResponses = Object.keys(response).length;
-      const cntMinions = minions.length;
+      const cntResponses = Object.keys(pResponse).length;
+      const cntMinions = pMinionData.length;
 
       let txt = ", ";
 
@@ -339,8 +339,8 @@ export class Output {
         "no responses", "{0} response", "{0} responses");
 
       const summary = { };
-      for(const minionId in response) {
-        const result = response[minionId];
+      for(const minionId in pResponse) {
+        const result = pResponse[minionId];
         // when full_return is not used, the result is simpler
         if(result === null) continue;
         if(typeof result !== "object") continue;
@@ -389,7 +389,7 @@ export class Output {
     masterTriangle.style = "cursor: pointer";
     allDiv.appendChild(masterTriangle);
 
-    outputContainer.appendChild(allDiv);
+    pOutputContainer.appendChild(allDiv);
 
     masterTriangle.addEventListener("click", _ => {
       // 25B7 = WHITE RIGHT-POINTING TRIANGLE
@@ -400,7 +400,7 @@ export class Output {
         masterTriangle.innerText = "\u25b7";
       }
 
-      for(const div of outputContainer.childNodes) {
+      for(const div of pOutputContainer.childNodes) {
         // only click on items that are collapsible
         const childs = div.getElementsByClassName("triangle");
         if(childs.length !== 1) continue;
@@ -410,8 +410,8 @@ export class Output {
         // only click on items that are not already the same as "all"
         if(tr.innerText === masterTriangle.innerText) continue;
         // (un)collapse the minion
-        const evt = new MouseEvent("click", {});
-        tr.dispatchEvent(evt);
+        const clickEvent = new MouseEvent("click", {});
+        tr.dispatchEvent(clickEvent);
       }
     });
 
@@ -419,18 +419,18 @@ export class Output {
 
     // for all other types we consider the output per minion
     // this is more generic and it simplifies the handlers
-    for(const minionId of minions.sort()) {
+    for(const minionId of pMinionData.sort()) {
 
       let isSuccess = true;
       let retCode = 0;
 
-      let minionResponse = response[minionId];
+      let minionResponse = pResponse[minionId];
       if(Output.hasProperties(minionResponse, ["retcode", "return", "success"])) {
         isSuccess = minionResponse.success;
         retCode = minionResponse.retcode;
         minionResponse = minionResponse.return;
       }
-      else if(command.startsWith("runner.") && minionResponse && minionResponse.hasOwnProperty("return")) {
+      else if(pCommand.startsWith("runner.") && minionResponse && minionResponse.hasOwnProperty("return")) {
         // TODO: add isSuccess and retCode
         minionResponse = minionResponse.return.return;
       }
@@ -443,10 +443,10 @@ export class Output {
       // TODO: colored based on the retcode
       let minionClass = "host-success";
       if(!isSuccess) minionClass = "host-failure";
-      if(!response.hasOwnProperty(minionId)) minionClass = "host-no-response";
+      if(!pResponse.hasOwnProperty(minionId)) minionClass = "host-no-response";
       let minionLabel = Output.getMinionIdHtml(minionId, minionClass);
 
-      if(/*!fndRepresentation&&*/ !response.hasOwnProperty(minionId)) {
+      if(/*!fndRepresentation&&*/ !pResponse.hasOwnProperty(minionId)) {
         minionOutput = Output.getTextOutput("(no response)");
         minionOutput.classList.add("noresponse");
         fndRepresentation = true;
@@ -477,7 +477,7 @@ export class Output {
       }
 
       // it might be highstate output
-      const commandCmd = command.trim().replace(/ .*/, "");
+      const commandCmd = pCommand.trim().replace(/ .*/, "");
       const isHighStateOutput = OutputHighstate.isHighStateOutput(commandCmd, minionResponse);
 
       const tasks = [];
@@ -574,7 +574,7 @@ export class Output {
       minionOutput.classList.add("minion-output");
       div.append(minionOutput);
 
-      outputContainer.append(div);
+      pOutputContainer.append(div);
     }
 
     if(nrMultiLineBlocks <= 1) {

@@ -5,8 +5,8 @@ import {Utils} from '../Utils.js';
 
 export class BeaconsRoute extends PageRoute {
 
-  constructor(router) {
-    super("^[\/]beacons$", "Beacons", "#page-beacons", "#button-beacons", router);
+  constructor(pRouter) {
+    super("^[\/]beacons$", "Beacons", "#page-beacons", "#button-beacons", pRouter);
 
     this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
     this._updateMinion = this._updateMinion.bind(this);
@@ -90,22 +90,22 @@ export class BeaconsRoute extends PageRoute {
   }
 
   _handleWheelKeyListAll(pData) {
-    const list = this.getPageElement().querySelector('#minions');
+    const table = this.getPageElement().querySelector('#minions');
 
-    if(PageRoute.showErrorRowInstead(list, pData)) return;
+    if(PageRoute.showErrorRowInstead(table, pData)) return;
 
     const keys = pData.return[0].data.return;
 
     const minionIds = keys.minions.sort();
     for(const minionId of minionIds) {
-      this._addMinion(list, minionId, 1);
+      this._addMinion(table, minionId, 1);
 
       // preliminary dropdown menu
-      const minionTr = list.querySelector("#" + Utils.getIdFromMinionId(minionId));
+      const minionTr = table.querySelector("#" + Utils.getIdFromMinionId(minionId));
       const menu = new DropDownMenu(minionTr);
       this._addMenuItemShowBeacons(menu, minionId);
 
-      minionTr.addEventListener("click", evt =>
+      minionTr.addEventListener("click", pClickEvent =>
         window.location.assign("beaconsminion?minionid=" + encodeURIComponent(minionId))
       );
     }
@@ -113,10 +113,10 @@ export class BeaconsRoute extends PageRoute {
     Utils.showTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement());
 
-    const msg = this.pageElement.querySelector("div.minion-list .msg");
+    const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(minionIds.length,
       "No minions", "{0} minion", "{0} minions");
-    msg.innerText = txt;
+    msgDiv.innerText = txt;
   }
 
   _updateOfflineMinion(pContainer, pMinionId) {
@@ -155,11 +155,13 @@ export class BeaconsRoute extends PageRoute {
     const menu = new DropDownMenu(minionTr);
     this._addMenuItemShowBeacons(menu, pMinionId);
 
-    minionTr.addEventListener("click", evt => window.location.assign("beaconsminion?minionid=" + encodeURIComponent(pMinionId)));
+    minionTr.addEventListener("click", pClickEvent =>
+      window.location.assign("beaconsminion?minionid=" + encodeURIComponent(pMinionId))
+    );
   }
 
   _addMenuItemShowBeacons(pMenu, pMinionId) {
-    pMenu.addMenuItem("Show&nbsp;beacons", function(evt) {
+    pMenu.addMenuItem("Show&nbsp;beacons", function(pClickEvent) {
       window.location.assign("beaconsminion?minionid=" + encodeURIComponent(pMinionId));
     }.bind(this));
   }

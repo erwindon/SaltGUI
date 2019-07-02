@@ -6,12 +6,13 @@ import {Utils} from '../Utils.js';
 
 export class GrainsMinionRoute extends PageRoute {
 
-  constructor(router) {
-    super("^[\/]grainsminion$", "Grains", "#page-grains-minion", "#button-grains", router);
+  constructor(pRouter) {
+    super("^[\/]grainsminion$", "Grains", "#page-grains-minion", "#button-grains", pRouter);
 
     this._handleLocalGrainsItems = this._handleLocalGrainsItems.bind(this);
 
-    this.pageElement.querySelector("#grains-minion-button-close").addEventListener("click", _ => {
+    const closeButton = this.pageElement.querySelector("#grains-minion-button-close");
+    closeButton.addEventListener("click", _ => {
       this.router.goTo("/grains");
     });
   }
@@ -21,8 +22,8 @@ export class GrainsMinionRoute extends PageRoute {
 
     const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
 
-    const title = document.getElementById("grains-minion-title");
-    title.innerText = "Grains on " + minionId;
+    const titleElement = document.getElementById("grains-minion-title");
+    titleElement.innerText = "Grains on " + minionId;
 
     const localGrainsItemsPromise = this.router.api.getLocalGrainsItems(minionId);
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
@@ -56,21 +57,21 @@ export class GrainsMinionRoute extends PageRoute {
 
     // new menus are always added at the bottom of the div
     // fix that by re-adding it to its proper place
-    const title = document.getElementById("grains-minion-title");
-    panel.insertBefore(menu.menuDropdown, title.nextSibling);
+    const titleElement = document.getElementById("grains-minion-title");
+    panel.insertBefore(menu.menuDropdown, titleElement.nextSibling);
 
     if(PageRoute.showErrorRowInstead(container.tBodies[0], pData)) return;
 
     const grains = pData.return[0][pMinionId];
 
     if(grains === undefined) {
-      const msg = this.pageElement.querySelector("div.minion-list .msg");
-      msg.innerText = "Unknown minion '" + pMinionId + "'";
+      const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
+      msgDiv.innerText = "Unknown minion '" + pMinionId + "'";
       return;
     }
     if(grains === false) {
-      const msg = this.pageElement.querySelector("div.minion-list .msg");
-      msg.innerText = "Minion '" + pMinionId + "' did not answer";
+      const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
+      msgDiv.innerText = "Minion '" + pMinionId + "' did not answer";
       return;
     }
 
@@ -95,36 +96,36 @@ export class GrainsMinionRoute extends PageRoute {
 
       container.tBodies[0].appendChild(grainTr);
 
-      grainTr.addEventListener("click", evt =>
-        this._runCommand(evt, pMinionId, "grains.setval \"" + grainName + "\" " + JSON.stringify(grains[grainName]))
+      grainTr.addEventListener("click", pClickEvent =>
+        this._runCommand(pClickEvent, pMinionId, "grains.setval \"" + grainName + "\" " + JSON.stringify(grains[grainName]))
       );
     }
 
     Utils.showTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement());
 
-    const msg = this.pageElement.querySelector("div.minion-list .msg");
+    const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(grainNames.length,
       "No grains", "{0} grain", "{0} grains");
-    msg.innerText = txt;
+    msgDiv.innerText = txt;
   }
 
   _addMenuItemAddGrain(pMenu, pMinionId) {
-    pMenu.addMenuItem("Add&nbsp;grain...", function(evt) {
+    pMenu.addMenuItem("Add&nbsp;grain...", function(pClickEvent) {
       // use placeholders for name and value
-      this._runCommand(evt, pMinionId, "grains.setval <name> <value>");
+      this._runCommand(pClickEvent, pMinionId, "grains.setval <name> <value>");
     }.bind(this));
   }
 
   _addMenuItemRefreshGrains(pMenu, pMinionId) {
-    pMenu.addMenuItem("Refresh&nbsp;grains...", function(evt) {
-      this._runCommand(evt, pMinionId, "saltutil.refresh_grains");
+    pMenu.addMenuItem("Refresh&nbsp;grains...", function(pClickEvent) {
+      this._runCommand(pClickEvent, pMinionId, "saltutil.refresh_grains");
     }.bind(this));
   }
 
   _addMenuItemEditGrain(pMenu, pMinionId, key, grains) {
-    pMenu.addMenuItem("Edit&nbsp;grain...", function(evt) {
-      this._runCommand(evt, pMinionId,
+    pMenu.addMenuItem("Edit&nbsp;grain...", function(pClickEvent) {
+      this._runCommand(pClickEvent, pMinionId,
         "grains.setval \"" + key + "\" " + JSON.stringify(grains[key]));
     }.bind(this));
   }
@@ -133,20 +134,20 @@ export class GrainsMinionRoute extends PageRoute {
     if(!pGrainValue.startsWith("[")) {
       return;
     }
-    pMenu.addMenuItem("Add&nbsp;value...", function(evt) {
-      this._runCommand(evt, pMinionId, "grains.append \"" + key + "\" <value>");
+    pMenu.addMenuItem("Add&nbsp;value...", function(pClickEvent) {
+      this._runCommand(pClickEvent, pMinionId, "grains.append \"" + key + "\" <value>");
     }.bind(this));
   }
 
   _addMenuItemDeleteKey(pMenu, pMinionId, key) {
-    pMenu.addMenuItem("Delete&nbsp;key...", function(evt) {
-      this._runCommand(evt, pMinionId, "grains.delkey \"" + key + "\"");
+    pMenu.addMenuItem("Delete&nbsp;key...", function(pClickEvent) {
+      this._runCommand(pClickEvent, pMinionId, "grains.delkey \"" + key + "\"");
     }.bind(this));
   }
 
   _addMenuItemDeleteValue(pMenu, pMinionId, key) {
-    pMenu.addMenuItem("Delete&nbsp;value...", function(evt) {
-      this._runCommand(evt, pMinionId, "grains.delval \"" + key + "\"");
+    pMenu.addMenuItem("Delete&nbsp;value...", function(pClickEvent) {
+      this._runCommand(pClickEvent, pMinionId, "grains.delval \"" + key + "\"");
     }.bind(this));
   }
 }

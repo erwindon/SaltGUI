@@ -15,17 +15,17 @@ export class TargetType {
 
   // It takes a while before we known the list of nodegroups
   // so this conclusion must be re-evaluated each time
-  static _targetTypeNodeGroupPrepare(menuitem) {
-    const nodegroups = window.localStorage.getItem("nodegroups");
-    if(nodegroups && nodegroups !== "{}") {
-      menuitem.innerText = "Nodegroup";
-      menuitem.style.display = "block";
+  static _targetTypeNodeGroupPrepare(pMenuItem) {
+    const nodeGroups = window.localStorage.getItem("nodegroups");
+    if(nodeGroups && nodeGroups !== "{}") {
+      pMenuItem.innerText = "Nodegroup";
+      pMenuItem.style.display = "block";
     } else {
-      menuitem.style.display = "none";
+      pMenuItem.style.display = "none";
     }
   }
 
-  static autoSelectTargetType(target) {
+  static autoSelectTargetType(pTarget) {
 
     if(TargetType.menuTargetType._value !== undefined &&
       TargetType.menuTargetType._value !== "" &&
@@ -34,8 +34,8 @@ export class TargetType {
       return;
     }
 
-    if(target.includes("@") || target.includes(" ") ||
-       target.includes("(") || target.includes(")")) {
+    if(pTarget.includes("@") || pTarget.includes(" ") ||
+       pTarget.includes("(") || pTarget.includes(")")) {
       // "@" is a strong indicator for compound target
       // but "space", "(" and ")" are also typical for compound target
       TargetType.menuTargetType._value = "compound";
@@ -43,14 +43,14 @@ export class TargetType {
       return;
     }
 
-    if(target.includes(",")) {
+    if(pTarget.includes(",")) {
       // "," is a strong indicator for list target (when it is also not compound)
       TargetType.menuTargetType._value = "list";
       TargetType._updateTargetTypeText();
       return;
     }
 
-    if(target.startsWith("#")) {
+    if(pTarget.startsWith("#")) {
       // "#" at the start of a line is a strong indicator for nodegroup target
       // this is not a SALTSTACK standard, but our own invention
       TargetType.menuTargetType._value = "nodegroup";
@@ -95,8 +95,8 @@ export class TargetType {
     TargetType.menuTargetType._system = true;
   }
 
-  static setTargetType(tt) {
-    TargetType.menuTargetType._value = tt;
+  static setTargetType(pTargetType) {
+    TargetType.menuTargetType._value = pTargetType;
     TargetType.menuTargetType._system = true;
     TargetType._updateTargetTypeText();
   }
@@ -107,7 +107,7 @@ export class TargetType {
     return targetType;
   }
 
-  static makeTargetText(targetType, targetPattern) {
+  static makeTargetText(pTargetType, pTargetPattern) {
     // note that "glob" is the most common case
     // when used from the command-line, that target-type
     // is not even specified.
@@ -118,10 +118,10 @@ export class TargetType {
     // therefore we suppress that one
 
     let returnText = "";
-    if(targetType !== "glob" && targetType !== "list") {
-      returnText = targetType + " ";
+    if(pTargetType !== "glob" && pTargetType !== "list") {
+      returnText = pTargetType + " ";
     }
-    returnText += targetPattern;
+    returnText += pTargetPattern;
     return returnText;
   }
 

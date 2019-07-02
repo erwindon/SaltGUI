@@ -15,12 +15,12 @@ export class OutputSaltGuiHighstate {
     return Utils.txtZeroOneMany(millis / 1000, "", "{0} second", "{0} seconds");
   }
 
-  static getHighStateLabel(pMinionId, minionResponse) {
+  static getHighStateLabel(pMinionId, pMinionHighStateResponse) {
     let anyFailures = false;
     let anySkips = false;
     // do not use Object.entries, that is not supported by the test framework
-    for(const key of Object.keys(minionResponse)) {
-      const task = minionResponse[key];
+    for(const key of Object.keys(pMinionHighStateResponse)) {
+      const task = pMinionHighStateResponse[key];
       if(task.result === null) anySkips = true;
       else if(!task.result) anyFailures = true;
     }
@@ -34,32 +34,32 @@ export class OutputSaltGuiHighstate {
     return Output.getMinionIdHtml(pMinionId, "host-success");
   }
 
-  static addChangesInfo(taskDiv, task, pIndent) {
-    if(!task.hasOwnProperty("changes")) {
+  static addChangesInfo(pTaskDiv, pTask, pIndent) {
+    if(!pTask.hasOwnProperty("changes")) {
       return 0;
     }
 
-    if(typeof task.changes !== "object" || Array.isArray(task.changes)) {
-      taskDiv.append(document.createElement("br"));
-      taskDiv.append(document.createTextNode(pIndent + JSON.stringify(task.changes)));
+    if(typeof pTask.changes !== "object" || Array.isArray(pTask.changes)) {
+      pTaskDiv.append(document.createElement("br"));
+      pTaskDiv.append(document.createTextNode(pIndent + JSON.stringify(pTask.changes)));
       return 0;
     }
 
     let changes = 0;
-    for(const key of Object.keys(task.changes).sort()) {
+    for(const key of Object.keys(pTask.changes).sort()) {
 
       changes = changes + 1;
 
-      const change = task.changes[key];
+      const change = pTask.changes[key];
 
       if(typeof change === "string" && Utils.isMultiLineString(change)) {
-        taskDiv.append(document.createElement("br"));
+        pTaskDiv.append(document.createElement("br"));
         // show multi-line text as a separate block
-        taskDiv.append(document.createTextNode(pIndent + key + ":"));
+        pTaskDiv.append(document.createTextNode(pIndent + key + ":"));
         const lines = change.trim().split("\n");
         for(const line of lines) {
-          taskDiv.append(document.createElement("br"));
-          taskDiv.append(document.createTextNode("      " + line));
+          pTaskDiv.append(document.createElement("br"));
+          pTaskDiv.append(document.createTextNode("      " + line));
         }
         continue;
       }
@@ -67,8 +67,8 @@ export class OutputSaltGuiHighstate {
       if(Array.isArray(change)) {
         for(const idx in change) {
           const task = change[idx];
-          taskDiv.append(document.createElement("br"));
-          taskDiv.append(document.createTextNode(
+          pTaskDiv.append(document.createElement("br"));
+          pTaskDiv.append(document.createTextNode(
             pIndent + key + "[" + idx + "]: " + JSON.stringify(task)));
         }
         continue;
@@ -76,8 +76,8 @@ export class OutputSaltGuiHighstate {
 
       if(typeof change !== "object") {
         // show all other non-objects in a simple way
-        taskDiv.append(document.createElement("br"));
-        taskDiv.append(document.createTextNode(
+        pTaskDiv.append(document.createElement("br"));
+        pTaskDiv.append(document.createTextNode(
           pIndent + key + ": " +
           JSON.stringify(change)));
         continue;
@@ -85,12 +85,12 @@ export class OutputSaltGuiHighstate {
 
       // treat old->new first
       if(change.hasOwnProperty("old") && change.hasOwnProperty("new")) {
-        taskDiv.append(document.createElement("br"));
+        pTaskDiv.append(document.createElement("br"));
         // place changes on one line
         // 25BA = BLACK RIGHT-POINTING POINTER
         // don't use arrows here, these are higher than a regular
         // text-line and disturb the text-flow
-        taskDiv.append(document.createTextNode(
+        pTaskDiv.append(document.createTextNode(
           pIndent + key + ": " +
           JSON.stringify(change.old) + " \u25BA " +
           JSON.stringify(change.new)));
@@ -102,8 +102,8 @@ export class OutputSaltGuiHighstate {
         if(taskkey === "old" && change.hasOwnProperty("new")) continue;
         if(taskkey === "new" && change.hasOwnProperty("old")) continue;
 
-        taskDiv.append(document.createElement("br"));
-        taskDiv.append(document.createTextNode(
+        pTaskDiv.append(document.createElement("br"));
+        pTaskDiv.append(document.createTextNode(
           pIndent + key + ": " + taskkey + ": " +
           JSON.stringify(change[taskkey])));
       }

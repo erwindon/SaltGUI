@@ -6,8 +6,8 @@ import {Utils} from '../Utils.js';
 
 export class PageRoute extends Route {
 
-  constructor(path, name, pPageSelector, pMenuItemSelector, router) {
-    super(path, name, pPageSelector, pMenuItemSelector, router);
+  constructor(pPath, pPageName, pPageSelector, pMenuItemSelector, pRouter) {
+    super(pPath, pPageName, pPageSelector, pMenuItemSelector, pRouter);
 
     this._runCommand = this._runCommand.bind(this);
     this._handleRunnerJobsActive = this._handleRunnerJobsActive.bind(this);
@@ -19,7 +19,7 @@ export class PageRoute extends Route {
   _updateMinions(pData) {
     const minions = pData.return[0];
 
-    const list = this.getPageElement().querySelector("#minions");
+    const table = this.getPageElement().querySelector("#minions");
     const minionIds = Object.keys(minions).sort();
 
     // save for the autocompletion
@@ -34,15 +34,15 @@ export class PageRoute extends Route {
 
       // minions can be offline, then the info will be false
       if(minion_info === false) {
-        this._updateOfflineMinion(list, minionId);
+        this._updateOfflineMinion(table, minionId);
         cntOffline++;
       } else {
-        this._updateMinion(list, minion_info, minionId, minions);
+        this._updateMinion(table, minion_info, minionId, minions);
         cntOnline++;
       }
     }
 
-    const msg = this.pageElement.querySelector("div.minion-list .msg");
+    const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
     let txt = Utils.txtZeroOneMany(minionIds.length,
       "No minions", "{0} minion", "{0} minions");
     if(cntOnline !== minionIds.length)
@@ -51,7 +51,7 @@ export class PageRoute extends Route {
     if(cntOffline > 0)
       txt += ", " + Utils.txtZeroOneMany(cntOffline,
         "none offline", "{0} offline", "{0} offline");
-    msg.innerText = txt;
+    msgDiv.innerText = txt;
   }
 
   _getElement(pContainer, id) {
@@ -125,29 +125,29 @@ export class PageRoute extends Route {
     // Then we look whether each minion uses the prefix
     // When at least one minion does not use the subnet,
     //    then it is not a suitable subnet
-    for(const p in prefixes) {
+    for(const prefix in prefixes) {
       for(const minionId in pAllMinionsGrains) {
         let cnt = 0;
         const grains = pAllMinionsGrains[minionId];
         if(!grains.fqdn_ip4) continue;
         if(!Array.isArray(grains.fqdn_ip4)) continue;
         for(const ip of grains.fqdn_ip4) {
-          if(!ip.startsWith(p)) continue;
+          if(!ip.startsWith(prefix)) continue;
           cnt++;
         }
         // multiple or unused?
         //    then it is not a suitable subnet
         if(cnt !== 1) {
-          prefixes[p] = false;
+          prefixes[prefix] = false;
           break;
         }
       }
     }
 
     // actually remove the unused prefixes
-    for(const p in prefixes) {
-      if(!prefixes[p]) {
-        delete prefixes[p];
+    for(const prefix in prefixes) {
+      if(!prefixes[prefix]) {
+        delete prefixes[prefix];
       }
     }
 
@@ -197,9 +197,9 @@ export class PageRoute extends Route {
     // Use a common prefix in all available IP numbers
     // get the private IP number (if any)
     // when it matches one of the common prefixes
-    for(const p in prefixes) {
+    for(const prefix in prefixes) {
       for(const s of ipv4) {
-        if(s.startsWith(p)) return s;
+        if(s.startsWith(prefix)) return s;
       }
     }
 
@@ -416,20 +416,21 @@ export class PageRoute extends Route {
     }
     Utils.makeTableSearchable(page);
 
-    const msg = this.pageElement.querySelector("div.job-list .msg");
+    const msgDiv = this.pageElement.querySelector("div.job-list .msg");
     let txt = Utils.txtZeroOneMany(numberOfJobsShown,
       "No jobs shown", "{0} job shown", "{0} jobs shown");
     txt += Utils.txtZeroOneMany(numberOfJobsEligible,
       "", ", {0} job eligible", ", {0} jobs eligible");
     txt += Utils.txtZeroOneMany(numberOfJobsPresent,
       "", ", {0} job present", ", {0} jobs present");
-    msg.innerText = txt;
+    msgDiv.innerText = txt;
   }
 
   _handleRunnerJobsActive(pData) {
 
     if(typeof pData !== "object") {
-      for(const tr of this.pageElement.querySelector("table.jobs tbody").rows) {
+      const tbody = this.pageElement.querySelector("table.jobs tbody");
+      for(const tr of tbody.rows) {
         const statusSpan = tr.querySelector("span.status");
         if(!statusSpan) continue;
         statusSpan.classList.remove("no-status");
@@ -442,7 +443,8 @@ export class PageRoute extends Route {
     }
 
     // mark all jobs as done, then re-update the running jobs
-    for(const tr of this.pageElement.querySelector("table.jobs tbody").rows) {
+    const tbody = this.pageElement.querySelector("table.jobs tbody");
+    for(const tr of tbody.rows) {
       const statusSpan = tr.querySelector("span.status");
       if(!statusSpan) continue;
       statusSpan.classList.remove("no-status");
@@ -497,12 +499,12 @@ export class PageRoute extends Route {
     const statusSpan = Route._createSpan("status", "loading...");
     statusSpan.classList.add("no-status");
     /* effectively also the whole column, but it does not look like a column on screen */
-    statusSpan.addEventListener("click", evt => {
+    statusSpan.addEventListener("click", pClickEvent => {
       // show "loading..." only once, but we are updating the whole column
       statusSpan.classList.add("no-status");
       statusSpan.innerText = "loading...";
       this._startRunningJobs();
-      evt.stopPropagation();
+      pClickEvent.stopPropagation();
     });
     td.appendChild(statusSpan);
 
@@ -518,17 +520,19 @@ export class PageRoute extends Route {
 
     pContainer.appendChild(tr);
 
-    tr.addEventListener("click", evt => window.location.assign("/job?id=" + encodeURIComponent(job.id)));
+    tr.addEventListener("click", pClickEvent =>
+      window.location.assign("/job?id=" + encodeURIComponent(job.id))
+    );
   }
 
   _addMenuItemShowDetails(pMenu, job) {
-    pMenu.addMenuItem("Show&nbsp;details", function(evt) {
+    pMenu.addMenuItem("Show&nbsp;details", function(pClickEvent) {
       window.location.assign("/job?id=" + encodeURIComponent(job.id));
     }.bind(this));
   }
 
   _addMenuItemUpdateStatus(pMenu, statusSpan) {
-    pMenu.addMenuItem("Update&nbsp;status", function(evt) {
+    pMenu.addMenuItem("Update&nbsp;status", function(pClickEvent) {
       statusSpan.classList.add("no-status");
       statusSpan.innerText = "loading...";
       this._startRunningJobs();
@@ -568,8 +572,8 @@ export class PageRoute extends Route {
     });
   }
 
-  _copyAddress(evt) {
-    const target = evt.target;
+  _copyAddress(pClickEvent) {
+    const target = pClickEvent.target;
     const selection = window.getSelection();
     const range = document.createRange();
 
@@ -581,15 +585,15 @@ export class PageRoute extends Route {
 
     Utils.addToolTip(target, "Copied!");
 
-    evt.stopPropagation();
+    pClickEvent.stopPropagation();
   }
 
-  _restoreClickToCopy(evt) {
-    const target = evt.target;
+  _restoreClickToCopy(pMouseEvent) {
+    const target = pMouseEvent.target;
     Utils.addToolTip(target, "Click to copy");
   }
 
-  static showErrorRowInstead(table, pData) {
+  static showErrorRowInstead(pTable, pData) {
     if(typeof pData === "object") {
       // not an error
       return false;
@@ -604,11 +608,11 @@ export class PageRoute extends Route {
     const tr = document.createElement("tr");
     tr.appendChild(td);
 
-    table.appendChild(tr);
+    pTable.appendChild(tr);
 
     // hide the "(loading)" message
-    const msgSpan = table.parentElement.parentElement.querySelector(".msg");
-    if(msgSpan !== null) msgSpan.style.display = "none";
+    const msgDiv = pTable.parentElement.parentElement.querySelector(".msg");
+    if(msgDiv !== null) msgDiv.style.display = "none";
 
     return true;
   }

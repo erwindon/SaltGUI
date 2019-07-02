@@ -2,8 +2,8 @@ import {Route} from './Route.js';
 
 export class LoginRoute extends Route {
 
-  constructor(router) {
-    super("^[\/]login$", "Login", "#page-login", "", router);
+  constructor(pRouter) {
+    super("^[\/]login$", "Login", "#page-login", "", pRouter);
 
     this.loginPending = false;
 
@@ -24,16 +24,19 @@ export class LoginRoute extends Route {
     submit.addEventListener("submit", this.onLogin);
   }
 
-  onLogin(evt) {
-    evt.preventDefault();
+  onLogin(submitEvent) {
+    submitEvent.preventDefault();
     if(this.loginPending) return; //Don't continue if waiting on a request
 
-    const username = this.pageElement.querySelector("#username").value;
-    const password = this.pageElement.querySelector("#password").value;
-    const eauth = this.pageElement.querySelector("#eauth").value;
+    const userNameField = this.pageElement.querySelector("#username");
+    const userName = userNameField.value;
+    const passWordField = this.pageElement.querySelector("#password");
+    const passWord = passWordField.value;
+    const eauthField = this.pageElement.querySelector("#eauth");
+    const eauth = eauthField.value;
 
     this.toggleForm(false);
-    this.router.api.login(username, password, eauth)
+    this.router.api.login(userName, passWord, eauth)
       .then(this.onLoginSuccess, this.onLoginFailure);
   }
 
@@ -46,13 +49,27 @@ export class LoginRoute extends Route {
     success.style.backgroundColor = "#4CAF50";
     notice.replaceChild(success, notice.firstChild);
 
-    this.pageElement.querySelector("#username").disabled = true;
-    this.pageElement.querySelector("#password").disabled = true;
-    this.pageElement.querySelector("#eauth").disabled = true;
+    const userNameField = this.pageElement.querySelector("#username");
+    userNameField.disabled = true;
+    const passWordField = this.pageElement.querySelector("#password");
+    passWordField.disabled = true;
+    const eauthField = this.pageElement.querySelector("#eauth");
+    eauthField.disabled = true;
 
     notice.className = "notice-wrapper";
     notice.focus(); //Used to trigger a reflow (to restart animation)
     notice.className = "notice-wrapper show";
+
+    //we need these functions to populate the dropdown boxes
+    const wheelConfigValuesPromise = this.router.api.getWheelConfigValues();
+
+    //we need these functions to populate the dropdown boxes
+    const myThis = this;
+    wheelConfigValuesPromise.then(data => {
+      myThis._handleWheelConfigValues(data);
+    }, data => {
+      // never mind
+    });
 
     // allow the success message to be seen
     setTimeout(_ => this.router.goTo("/"), 1000);
@@ -72,10 +89,10 @@ export class LoginRoute extends Route {
     notice.className = "notice-wrapper show";
   }
 
-  toggleForm(allowSubmit) {
-    this.loginPending = !allowSubmit;
-    this.pageElement.querySelector("#login-form input[type='submit']")
-      .disabled = !allowSubmit;
+  toggleForm(pAllowSubmit) {
+    this.loginPending = !pAllowSubmit;
+    const loginButton = this.pageElement.querySelector("#login-form input[type='submit']");
+    loginButton.disabled = !pAllowSubmit;
   }
 
 }

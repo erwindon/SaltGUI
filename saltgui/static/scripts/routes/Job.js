@@ -6,8 +6,8 @@ import {Utils} from '../Utils.js';
 
 export class JobRoute extends Route {
 
-  constructor(router) {
-    super("^[\/]job$", "Job", "#page-job", "", router);
+  constructor(pRouter) {
+    super("^[\/]job$", "Job", "#page-job", "", pRouter);
     this._handleRunnerJobsListJob = this._handleRunnerJobsListJob.bind(this);
     this._handleRunnerJobsActive = this._handleRunnerJobsActive.bind(this);
   }
@@ -38,17 +38,17 @@ export class JobRoute extends Route {
     return true;
   }
 
-  static updateOutputFilter(output, txt) {
+  static updateOutputFilter(pStartElement, pSearchText) {
     // remove highlighting before re-comparing
     // as it affects the texts
-    const hilitor = new Hilitor(output);
+    const hilitor = new Hilitor(pStartElement);
     hilitor.remove();
 
     // find text
-    txt = txt.toUpperCase();
-    for(const div of output.querySelectorAll("div")) {
+    pSearchText = pSearchText.toUpperCase();
+    for(const div of pStartElement.querySelectorAll("div")) {
       if(div.classList.contains("nohide")) continue;
-      if(Utils.hasTextContent(div, txt))
+      if(Utils.hasTextContent(div, pSearchText))
         div.classList.remove("no-filter-match");
       else
         div.classList.add("no-filter-match");
@@ -61,7 +61,7 @@ export class JobRoute extends Route {
 
     // turn the text into a regexp
     let pattern = "";
-    for(const chr of txt) {
+    for(const chr of pSearchText) {
       if((chr >= 'A' && chr <= 'Z') || (chr >= '0' && chr <= '9'))
         pattern += chr;
       else
@@ -71,34 +71,34 @@ export class JobRoute extends Route {
     hilitor.apply(pattern);
   }
 
-  static hideShowOutputSearchBar(startElement) {
+  static hideShowOutputSearchBar(pStartElement) {
     // remove all highlights
-    const hilitor = new Hilitor(startElement);
+    const hilitor = new Hilitor(pStartElement);
     hilitor.remove();
 
     // show all output
-    const allFM = startElement.querySelectorAll(".no-filter-match");
+    const allFM = pStartElement.querySelectorAll(".no-filter-match");
     for(const fm of allFM)
       fm.classList.remove("no-filter-match");
 
     // hide/show search box
-    const input = startElement.parentElement.querySelector("input.filter-text");
+    const input = pStartElement.parentElement.querySelector("input.filter-text");
     input.onkeyup = ev => {
       if(ev.key === "Escape") {
-        JobRoute.updateOutputFilter(startElement, "");
-        JobRoute.hideShowOutputSearchBar(startElement);
+        JobRoute.updateOutputFilter(pStartElement, "");
+        JobRoute.hideShowOutputSearchBar(pStartElement);
         return;
       }
     };
     input.oninput = ev => {
-      JobRoute.updateOutputFilter(startElement, input.value);
+      JobRoute.updateOutputFilter(pStartElement, input.value);
     };
 
     if(input.style.display === "none") {
-      JobRoute.updateOutputFilter(startElement, input.value);
+      JobRoute.updateOutputFilter(pStartElement, input.value);
       input.style.display = "";
     } else {
-      JobRoute.updateOutputFilter(startElement, "");
+      JobRoute.updateOutputFilter(pStartElement, "");
       input.style.display = "none";
     }
     input.focus();
@@ -107,19 +107,21 @@ export class JobRoute extends Route {
   _handleRunnerJobsListJob(pData, pJobId) {
     const output = this.getPageElement().querySelector(".output");
 
-    document.querySelector("#job-button-close").addEventListener("click", _ => {
+    const closeButton = document.querySelector("#job-button-close");
+    closeButton.addEventListener("click", _ => {
       window.history.back();
     });
 
     const searchButton = this.getPageElement().querySelector("span.search");
-    searchButton.addEventListener("click", evt => {
+    searchButton.addEventListener("click", pClickEvent => {
       JobRoute.hideShowOutputSearchBar(output);
     });
 
     if(typeof pData !== "object") {
       output.innerText = "";
       Utils.addErrorToTableCell(output, pData);
-      this.getPageElement().querySelector(".function").innerText = "ERROR";
+      const functionField = this.getPageElement().querySelector(".function");
+      functionField.innerText = "ERROR";
       return;
     }
 
@@ -127,8 +129,10 @@ export class JobRoute extends Route {
 
     if(info.Error) {
       output.innerText = info.Error + " (" + pJobId + ")";
-      this.getPageElement().querySelector(".function").innerText = "ERROR";
-      this.getPageElement().querySelector(".time").innerText = Output.dateTimeStr(info.StartTime);
+      const functionField = this.getPageElement().querySelector(".function");
+      functionField.innerText = "ERROR";
+      const timeField = this.getPageElement().querySelector(".time");
+      timeField.innerText = Output.dateTimeStr(info.StartTime);
       return;
     }
 
@@ -162,9 +166,11 @@ export class JobRoute extends Route {
 
     const functionText = commandText + " on " +
       TargetType.makeTargetText(info["Target-type"], info.Target);
-    this.getPageElement().querySelector(".function").innerText = functionText;
+    const functionField = this.getPageElement().querySelector(".function");
+    functionField.innerText = functionText;
 
-    this.getPageElement().querySelector(".time").innerText = Output.dateTimeStr(info.StartTime);
+    const timeField = this.getPageElement().querySelector(".time");
+    timeField.innerText = Output.dateTimeStr(info.StartTime);
 
     let minions = ["WHEEL"];
     if(info.Minions) minions = info.Minions;
@@ -202,7 +208,7 @@ export class JobRoute extends Route {
       }
       else
       {
-        link.addEventListener("click", evt => {
+        link.addEventListener("click", pClickEvent => {
           window.location.assign("job?id=" + linkToJid);
         });
       }
@@ -216,8 +222,8 @@ export class JobRoute extends Route {
 
   _addMenuItemRerunJob(pMenu, info, commandText) {
     // 2011 = NON-BREAKING HYPHEN
-    pMenu.addMenuItem("Re&#x2011;run&nbsp;job...", function(evt) {
-      this._runFullCommand(evt, info["Target-type"], info.Target, commandText);
+    pMenu.addMenuItem("Re&#x2011;run&nbsp;job...", function(pClickEvent) {
+      this._runFullCommand(pClickEvent, info["Target-type"], info.Target, commandText);
     }.bind(this));
   }
 
@@ -237,8 +243,8 @@ export class JobRoute extends Route {
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
-    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;all&nbsp;minions...", function(evt) {
-      this._runFullCommand(evt, "list", lst, commandText);
+    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;all&nbsp;minions...", function(pClickEvent) {
+      this._runFullCommand(pClickEvent, "list", lst, commandText);
     }.bind(this));
   }
 
@@ -264,8 +270,8 @@ export class JobRoute extends Route {
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
-    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;unsuccessful&nbsp;minions...", function(evt) {
-      this._runFullCommand(evt, "list", lst, commandText);
+    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;unsuccessful&nbsp;minions...", function(pClickEvent) {
+      this._runFullCommand(pClickEvent, "list", lst, commandText);
     }.bind(this));
   }
 
@@ -284,8 +290,8 @@ export class JobRoute extends Route {
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
-    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;failed&nbsp;minions...", function(evt) {
-      this._runFullCommand(evt, "list", lst, commandText);
+    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;failed&nbsp;minions...", function(pClickEvent) {
+      this._runFullCommand(pClickEvent, "list", lst, commandText);
     }.bind(this));
   }
 
@@ -304,26 +310,26 @@ export class JobRoute extends Route {
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
-    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;non&nbsp;responding&nbsp;minions...", function(evt) {
-      this._runFullCommand(evt, "list", lst, commandText);
+    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;non&nbsp;responding&nbsp;minions...", function(pClickEvent) {
+      this._runFullCommand(pClickEvent, "list", lst, commandText);
     }.bind(this));
   }
 
   _addMenuItemTerminateJob(pMenu, info, pJobId) {
-    this.terminateJobMenuItem = pMenu.addMenuItem("Terminate&nbsp;job...", function(evt) {
-      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.term_job " + pJobId);
+    this.terminateJobMenuItem = pMenu.addMenuItem("Terminate&nbsp;job...", function(pClickEvent) {
+      this._runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.term_job " + pJobId);
     }.bind(this));
   }
 
   _addMenuItemKillJob(pMenu, info, pJobId) {
-    this.killJobMenuItem = pMenu.addMenuItem("Kill&nbsp;job...", function(evt) {
-      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.kill_job " + pJobId);
+    this.killJobMenuItem = pMenu.addMenuItem("Kill&nbsp;job...", function(pClickEvent) {
+      this._runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.kill_job " + pJobId);
     }.bind(this));
   }
 
   _addMenuItemSignalJob(pMenu, info, pJobId) {
-    this.signalJobMenuItem = pMenu.addMenuItem("Signal&nbsp;job...", function(evt) {
-      this._runFullCommand(evt, info["Target-type"], info.Target, "saltutil.signal_job " + pJobId + " signal=<signalnumber>");
+    this.signalJobMenuItem = pMenu.addMenuItem("Signal&nbsp;job...", function(pClickEvent) {
+      this._runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.signal_job " + pJobId + " signal=<signalnumber>");
     }.bind(this));
   }
 
@@ -372,8 +378,8 @@ export class JobRoute extends Route {
 
         const linkPsProcInfo = document.createElement("a");
         linkPsProcInfo.innerText = "info";
-        linkPsProcInfo.addEventListener("click", evt => {
-          this._runFullCommand(evt, "list", minionId, "ps.proc_info " + pid);
+        linkPsProcInfo.addEventListener("click", pClickEvent => {
+          this._runFullCommand(pClickEvent, "list", minionId, "ps.proc_info " + pid);
         });
         noResponseSpan.appendChild(linkPsProcInfo);
 
@@ -381,8 +387,8 @@ export class JobRoute extends Route {
 
         const linkPsTermPid = document.createElement("a");
         linkPsTermPid.innerText = "term";
-        linkPsTermPid.addEventListener("click", evt => {
-          this._runFullCommand(evt, "list", minionId, "ps.kill_pid " + pid + " signal=15");
+        linkPsTermPid.addEventListener("click", pClickEvent => {
+          this._runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=15");
         });
         noResponseSpan.appendChild(linkPsTermPid);
 
@@ -390,8 +396,8 @@ export class JobRoute extends Route {
 
         const linkPsKillPid = document.createElement("a");
         linkPsKillPid.innerText = "kill";
-        linkPsKillPid.addEventListener("click", evt => {
-          this._runFullCommand(evt, "list", minionId, "ps.kill_pid " + pid + " signal=9");
+        linkPsKillPid.addEventListener("click", pClickEvent => {
+          this._runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=9");
         });
         noResponseSpan.appendChild(linkPsKillPid);
 
@@ -399,8 +405,8 @@ export class JobRoute extends Route {
 
         const linkPsSignalPid = document.createElement("a");
         linkPsSignalPid.innerText = "signal";
-        linkPsSignalPid.addEventListener("click", evt => {
-          this._runFullCommand(evt, "list", minionId, "ps.kill_pid " + pid + " signal=<signalnumber>");
+        linkPsSignalPid.addEventListener("click", pClickEvent => {
+          this._runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=<signalnumber>");
         });
         noResponseSpan.appendChild(linkPsSignalPid);
 

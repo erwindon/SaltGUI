@@ -3,16 +3,16 @@ import {Output} from './Output.js';
 export class OutputDocumentation {
 
   // test whether the returned data matches the requested data
-  static isDocuKeyMatch(key, filterKey) {
+  static isDocuKeyMatch(pKey, pFilterKey) {
 
     // no filter is always OK
-    if(!filterKey) return true;
+    if(!pFilterKey) return true;
 
     // an exact match is great
-    if(key === filterKey) return true;
+    if(pKey === pFilterKey) return true;
 
     // a true prefix is also ok
-    if(key.startsWith(filterKey + ".")) return true;
+    if(pKey.startsWith(pFilterKey + ".")) return true;
 
     // no match
     return false;
@@ -24,18 +24,18 @@ export class OutputDocumentation {
   // and when its key matches the requested documentation
   // empty values are allowed due to errors in the documentation
   // 'output' is needed like this to prevent an error during testing
-  static isDocumentationOutput(response, command) {
+  static isDocumentationOutput(pResponse, pCommand) {
 
     if(!Output.isOutputFormatAllowed("doc")) return false;
 
     let result = false;
 
     // reduce the search key to match the data in the response
-    command = OutputDocumentation.reduceFilterKey(command);
+    pCommand = OutputDocumentation.reduceFilterKey(pCommand);
 
-    for(const minionId of Object.keys(response)) {
+    for(const minionId of Object.keys(pResponse)) {
 
-      const output = response[minionId];
+      const output = pResponse[minionId];
 
       if(!output) {
         // some commands do not have help-text
@@ -66,7 +66,7 @@ export class OutputDocumentation {
         }
 
         // is this what we were looking for?
-        if(OutputDocumentation.isDocuKeyMatch(key, command)) {
+        if(OutputDocumentation.isDocuKeyMatch(key, pCommand)) {
           result = true;
         }
       }
@@ -77,24 +77,24 @@ export class OutputDocumentation {
 
 
   // reduce the search key to match the data in the response
-  static reduceFilterKey(filterKey) {
-    if(filterKey === "wheel") {
+  static reduceFilterKey(pFilterKey) {
+    if(pFilterKey === "wheel") {
       return "";
     }
-    if(filterKey.startsWith("wheel.")) {
+    if(pFilterKey.startsWith("wheel.")) {
       // strip the prefix "wheel."
-      return filterKey.substring(6);
+      return pFilterKey.substring(6);
     }
 
-    if(filterKey === "runners") {
+    if(pFilterKey === "runners") {
       return "";
     }
-    if(filterKey.startsWith("runners.")) {
+    if(pFilterKey.startsWith("runners.")) {
       // strip the prefix "runners."
-      return filterKey.substring(8);
+      return pFilterKey.substring(8);
     }
 
-    return filterKey;
+    return pFilterKey;
   }
 
 
@@ -111,40 +111,40 @@ export class OutputDocumentation {
   //              was requested for. The internal functions for WHEEL and
   //              RUNNERS always return all documentation in that category
   //              thus that response must be reduced.
-  static reduceDocumentationOutput(response, visualKey, filterKey) {
-    if(!response || typeof response !== "object") {
+  static reduceDocumentationOutput(pResponse, pVisualKey, pFilterKey) {
+    if(!pResponse || typeof pResponse !== "object") {
       // strange --> don't try to fix anything
       return;
     }
 
     // reduce the search key to match the data in the response
     // i.e. remove the prefixes for "wheel" and "runners"
-    filterKey = OutputDocumentation.reduceFilterKey(filterKey);
+    pFilterKey = OutputDocumentation.reduceFilterKey(pFilterKey);
 
     let selectedMinion = null;
-    for(const minionId of Object.keys(response)) {
+    for(const minionId of Object.keys(pResponse)) {
 
       // When we already found the documentation ignore all others
       if(selectedMinion) {
-        delete response[minionId];
+        delete pResponse[minionId];
         continue;
       }
 
       // make sure it is an object (instead of e.g. "false" for an offline minion)
       // when it is not, the whole entry is ignored
-      if(!response[minionId] || typeof response[minionId] !== "object") {
-        delete response[minionId];
+      if(!pResponse[minionId] || typeof pResponse[minionId] !== "object") {
+        delete pResponse[minionId];
         continue;
       }
 
       // make sure that the entry matches with the requested command or prefix
       // that's always the case for SYS.DOC output, but not for RUNNERS.DOC.RUNNER
       // and/or RUNNERS.DOC.WHEEL.
-      const minionResponse = response[minionId];
+      const minionResponse = pResponse[minionId];
       for(const key of Object.keys(minionResponse)) {
 
         // is this what we were looking for?
-        if(!OutputDocumentation.isDocuKeyMatch(key, filterKey)) {
+        if(!OutputDocumentation.isDocuKeyMatch(key, pFilterKey)) {
           // no match, ignore the whole entry
           delete minionResponse[key];
         }
@@ -153,7 +153,7 @@ export class OutputDocumentation {
       // no documentation present (or left) on this minion?
       // then discard the result of this minion
       if(Object.keys(minionResponse).length === 0) {
-        delete response[minionId];
+        delete pResponse[minionId];
         continue;
       }
 
@@ -164,25 +164,25 @@ export class OutputDocumentation {
 
     if(selectedMinion) {
       // basically rename the key
-      const savedDocumentation = response[selectedMinion];
-      delete response[selectedMinion];
-      response[visualKey] = savedDocumentation;
+      const savedDocumentation = pResponse[selectedMinion];
+      delete pResponse[selectedMinion];
+      pResponse[pVisualKey] = savedDocumentation;
     } else {
       // prepare a dummy response when no documentation could be found
       // otherwise leave all documentation responses organized by minion
-      response["dummy"] = { };
-      response["dummy"][visualKey] = "no documentation found";
+      pResponse["dummy"] = { };
+      pResponse["dummy"][pVisualKey] = "no documentation found";
     }
   }
 
   // add the output of a documentation command to the display
-  static addDocumentationOutput(outputContainer, response) {
+  static addDocumentationOutput(pOutputContainer, pResponse) {
 
     // we expect no minionIds present
     // as it should have been reduced already
-    for(const minionId of Object.keys(response)) {
+    for(const minionId of Object.keys(pResponse)) {
 
-      const minionResponse = response[minionId];
+      const minionResponse = pResponse[minionId];
 
       for(const key of Object.keys(minionResponse).sort()) {
 
@@ -249,7 +249,7 @@ export class OutputDocumentation {
         // remove duplicate empty lines (usually due to previous rule)
         out = out.replace(/\n\n\n*/gm, "\n\n");
 
-        outputContainer.innerHTML +=
+        pOutputContainer.innerHTML +=
           "<div><span class='minion-id'>" + key + "</span>:</br><pre style='height: initial; overflow-y: initial;'>" + out + "</pre></div>";
       }
     }
