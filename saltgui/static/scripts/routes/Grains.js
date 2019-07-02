@@ -6,8 +6,8 @@ import {Utils} from '../Utils.js';
 
 export class GrainsRoute extends PageRoute {
 
-  constructor(router) {
-    super("^[\/]grains$", "Grains", "#page-grains", "#button-grains", router);
+  constructor(pRouter) {
+    super("^[\/]grains$", "Grains", "#page-grains", "#button-grains", pRouter);
 
     this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
     this._updateMinion = this._updateMinion.bind(this);
@@ -74,18 +74,18 @@ export class GrainsRoute extends PageRoute {
   }
 
   _handleWheelKeyListAll(pData) {
-    const list = this.getPageElement().querySelector('#minions');
+    const table = this.getPageElement().querySelector('#minions');
 
-    if(PageRoute.showErrorRowInstead(list, pData)) return;
+    if(PageRoute.showErrorRowInstead(table, pData)) return;
 
     const keys = pData.return[0].data.return;
 
     const minionIds = keys.minions.sort();
     for(const minionId of minionIds) {
-      this._addMinion(list, minionId, 1 + this._previewGrains.length);
+      this._addMinion(table, minionId, 1 + this._previewGrains.length);
 
       // preliminary dropdown menu
-      const minionTr = list.querySelector("#" + Utils.getIdFromMinionId(minionId));
+      const minionTr = table.querySelector("#" + Utils.getIdFromMinionId(minionId));
       const menu = new DropDownMenu(minionTr);
       this._addMenuItemShowGrains(menu, minionId);
 
@@ -93,7 +93,7 @@ export class GrainsRoute extends PageRoute {
         minionTr.appendChild(Route._createTd("", ""));
       }
 
-      minionTr.addEventListener("click", evt =>
+      minionTr.addEventListener("click", pClickEvent =>
         window.location.assign("grainsminion?minionid=" + encodeURIComponent(minionId))
       );
     }
@@ -101,10 +101,10 @@ export class GrainsRoute extends PageRoute {
     Utils.showTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement());
 
-    const msg = this.pageElement.querySelector("div.minion-list .msg");
+    const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(minionIds.length,
       "No minions", "{0} minion", "{0} minions");
-    msg.innerText = txt;
+    msgDiv.innerText = txt;
   }
 
   _updateOfflineMinion(pContainer, pMinionId) {
@@ -157,11 +157,13 @@ export class GrainsRoute extends PageRoute {
       minionTr.appendChild(td);
     }
 
-    minionTr.addEventListener("click", evt => window.location.assign("grainsminion?minionid=" + encodeURIComponent(pMinionId)));
+    minionTr.addEventListener("click", pClickEvent =>
+      window.location.assign("grainsminion?minionid=" + encodeURIComponent(pMinionId))
+    );
   }
 
   _addMenuItemShowGrains(pMenu, pMinionId) {
-    pMenu.addMenuItem("Show&nbsp;grains", function(evt) {
+    pMenu.addMenuItem("Show&nbsp;grains", function(pClickEvent) {
       window.location.assign("grainsminion?minionid=" + encodeURIComponent(pMinionId));
     }.bind(this));
   }

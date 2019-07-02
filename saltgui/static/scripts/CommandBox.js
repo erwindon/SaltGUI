@@ -7,10 +7,10 @@ import {TargetType} from './TargetType.js';
 
 export class CommandBox {
 
-  constructor(api) {
+  constructor(pApi) {
     const myThis = this;
 
-    this.api = api;
+    this.api = pApi;
     this._getRunParams = this._getRunParams.bind(this);
     this._onRun = this._onRun.bind(this);
     this._onRunReturn = this._onRunReturn.bind(this);
@@ -26,8 +26,8 @@ export class CommandBox {
     RunType.createMenu();
     TargetType.createMenu();
 
-    const title = document.querySelector(".run-command #template-menu-here");
-    const menu = new DropDownMenu(title);
+    const titleElement = document.querySelector(".run-command #template-menu-here");
+    const menu = new DropDownMenu(titleElement);
     let templatesText = window.localStorage.getItem("templates");
     if(!templatesText || templatesText === "undefined") templatesText = "{}";
     const templates = JSON.parse(templatesText);
@@ -57,8 +57,9 @@ export class CommandBox {
       .addEventListener("click", this._onRun);
 
     this._addKeyEventListener("#target", _ => {
-      const target = document.querySelector(".run-command #target").value;
-      TargetType.autoSelectTargetType(target);
+      const targetField = document.querySelector(".run-command #target");
+      const targetType = targetField.value;
+      TargetType.autoSelectTargetType(targetType);
     });
 
     this._addKeyEventListener("#command", this.cmdmenu.verifyAll);
@@ -67,40 +68,41 @@ export class CommandBox {
   _applyTemplate(template) {
 
     if(template.targettype) {
-      let tt = template.targettype;
+      let targetType = template.targettype;
       const targetbox = document.querySelector("#target-box");
       // show the extended selection controls when
       targetbox.style.display = "inherit";
-      if(tt !== "glob" && tt !== "list" && tt !== "compound" && tt !== "nodegroup") {
+      if(targetType !== "glob" && targetType !== "list" && targetType !== "compound" && targetType !== "nodegroup") {
         // we don't support that, revert to standard (not default)
-        tt = "glob";
+        targetType = "glob";
       }
-      TargetType.setTargetType(tt);
+      TargetType.setTargetType(targetType);
     } else {
       // not in the template, revert to default
       TargetType.setTargetTypeDefault();
     }
 
     if(template.target) {
-      const target = document.querySelector(".run-command #target");
-      target.value = template.target;
+      const targetField = document.querySelector(".run-command #target");
+      targetField.value = template.target;
     }
 
     if(template.command) {
-      const command = document.querySelector(".run-command #command");
-      command.value = template.command;
+      const commandField = document.querySelector(".run-command #command");
+      commandField.value = template.command;
     }
   }
 
   _addKeyEventListener(selector, func) {
     // keydown is too early, keypress also does not work
-    document.querySelector(selector).addEventListener("keyup", func);
+    const field = document.querySelector(selector);
+    field.addEventListener("keyup", func);
     // cut/paste do not work everywhere
-    document.querySelector(selector).addEventListener("cut", func);
-    document.querySelector(selector).addEventListener("paste", func);
+    field.addEventListener("cut", func);
+    field.addEventListener("paste", func);
     // blur/focus should not be needed but are a valuable fallback
-    document.querySelector(selector).addEventListener("blur", func);
-    document.querySelector(selector).addEventListener("focus", func);
+    field.addEventListener("blur", func);
+    field.addEventListener("focus", func);
   }
 
   _onRun() {
@@ -108,70 +110,73 @@ export class CommandBox {
     if(button.disabled) return;
     const output = document.querySelector(".run-command pre");
 
-    const target = document.querySelector(".run-command #target").value;
-    const command = document.querySelector(".run-command #command").value;
+    const targetField = document.querySelector(".run-command #target");
+    const targetValue = targetField.value;
+    const commandField = document.querySelector(".run-command #command");
+    const commandValue = commandField.value;
 
-    const tgtType = TargetType.menuTargetType._value;
+    const targetType = TargetType.menuTargetType._value;
 
-    const func = this._getRunParams(tgtType, target, command);
+    const func = this._getRunParams(targetType, targetValue, commandValue);
     if(func === null) return;
 
     button.disabled = true;
     output.innerText = "Loading...";
 
-    func.then(response => {
-      this._onRunReturn(response.return[0], command);
-    }, response => {
-      this._showError(JSON.stringify(response));
+    func.then(pResponse => {
+      this._onRunReturn(pResponse.return[0], commandValue);
+    }, pResponse => {
+      this._showError(JSON.stringify(pResponse));
     });
   }
 
-  _onRunReturn(response, command) {
+  _onRunReturn(pResponse, pCommand) {
     const outputContainer = document.querySelector(".run-command pre");
-    let minions = Object.keys(response);
-    if(command.startsWith("runners.")) minions = ["RUNNER"];
-    if(command.startsWith("wheel.")) minions = ["WHEEL"];
+    let minions = Object.keys(pResponse);
+    if(pCommand.startsWith("runners.")) minions = ["RUNNER"];
+    if(pCommand.startsWith("wheel.")) minions = ["WHEEL"];
     // do not suppress the jobId (even when we can)
-    Output.addResponseOutput(outputContainer, null, minions, response, command, "done");
+    Output.addResponseOutput(outputContainer, null, minions, pResponse, pCommand, "done");
     const button = document.querySelector(".run-command input[type='submit']");
     button.disabled = false;
   }
 
-  _showManualRun(evt) {
+  _showManualRun(pClickEvent) {
     const manualRun = document.querySelector("#popup-run-command");
     manualRun.style.display = "block";
 
     document.body.style["overflow-y"] = "hidden";
-    document.querySelector(".run-command pre").innerText = "Waiting for command...";
+    const outputField = document.querySelector(".run-command pre");
+    outputField.innerText = "Waiting for command...";
 
-    const target = document.querySelector(".run-command #target");
-    TargetType.autoSelectTargetType(target.value);
-    target.onkeyup = ev => {
-      if(ev.key === "Escape") {
-        this._hideManualRun(ev);
+    const targetField = document.querySelector(".run-command #target");
+    TargetType.autoSelectTargetType(targetField.value);
+    targetField.onkeyup = keyUpEvent => {
+      if(keyUpEvent.key === "Escape") {
+        this._hideManualRun(keyUpEvent);
       }
     };
 
-    const command = document.querySelector(".run-command #command");
-    command.onkeyup = ev => {
-      if(ev.key === "Escape") {
-        this._hideManualRun(ev);
+    const commandField = document.querySelector(".run-command #command");
+    commandField.onkeyup = keyUpEvent => {
+      if(keyUpEvent.key === "Escape") {
+        this._hideManualRun(keyUpEvent);
       }
     };
 
     RunType.setRunTypeDefault();
 
     // (re-)populate the dropdown box
-    const targetlist = document.getElementById("data-list-target");
-    while(targetlist.firstChild) {
-      targetlist.removeChild(targetlist.firstChild);
+    const targetList = document.getElementById("data-list-target");
+    while(targetList.firstChild) {
+      targetList.removeChild(targetList.firstChild);
     }
-    const nodegroups = JSON.parse(window.localStorage.getItem("nodegroups"));
-    if(nodegroups) {
-      for(const nodegroup of Object.keys(nodegroups).sort()) {
+    const nodeGroups = JSON.parse(window.localStorage.getItem("nodegroups"));
+    if(nodeGroups) {
+      for(const nodeGroup of Object.keys(nodeGroups).sort()) {
         const option = document.createElement("option");
-        option.value = "#" + nodegroup;
-        targetlist.appendChild(option);
+        option.value = "#" + nodeGroup;
+        targetList.appendChild(option);
       }
     }
     const minions = JSON.parse(window.localStorage.getItem("minions"));
@@ -179,22 +184,25 @@ export class CommandBox {
       for(const minionId of minions.sort()) {
         const option = document.createElement("option");
         option.value = minionId;
-        targetlist.appendChild(option);
+        targetList.appendChild(option);
       }
     }
 
     // give another field (which does not have a list) focus first
     // because when a field gets focus 2 times in a row,
     // the dropdown box opens, and we don't want that...
-    document.querySelector(".run-command #command").focus();
-    document.querySelector(".run-command #target").focus();
+    commandField.focus();
+    targetField.focus();
 
-    evt.stopPropagation();
+    pClickEvent.stopPropagation();
   }
 
-  _hideManualRun(evt) {
+  // pEvent is:
+  // a MouseEvent(type="click") or
+  // a KeyEvent(type="keyup")
+  _hideManualRun(pEvent) {
     //Don't close if they click inside the window
-    if(evt.type === "click" && evt.target.className !== "popup" && evt.target.className !== "nearly-visible-button") return;
+    if(pEvent.type === "click" && pEvent.target.className !== "popup" && pEvent.target.className !== "nearly-visible-button") return;
 
     const manualRun = document.querySelector("#popup-run-command");
     manualRun.style.display = "none";
@@ -207,8 +215,10 @@ export class CommandBox {
 
     // test whether the command may have caused an update to the list
     // the user may have altered the text after running the command, just ignore that
-    const command = document.querySelector(".run-command #command").value.split(" ")[0];
-    const output = document.querySelector(".run-command pre").innerText;
+    const commandField = document.querySelector(".run-command #command");
+    const command = commandField.value.split(" ")[0];
+    const outputField = document.querySelector(".run-command pre");
+    const output = outputField.innerText;
     const screenModifyingCommands = [
       "beacons.add",
       "beacons.delete",
@@ -241,44 +251,44 @@ export class CommandBox {
       location.reload();
     }
 
-    evt.stopPropagation();
+    pEvent.stopPropagation();
   }
 
   _showError(pMessage) {
     this._onRunReturn("ERROR:\n\n" + pMessage, "");
   }
 
-  _getRunParams(tgtType, target, toRun) {
+  _getRunParams(pTargetType, pTarget, pToRun) {
 
     // The leading # was used to indicate a nodegroup
-    if(tgtType === "nodegroup" && target.startsWith("#")) {
-      target = target.substring(1);
+    if(pTargetType === "nodegroup" && pTarget.startsWith("#")) {
+      pTarget = pTarget.substring(1);
     }
 
-    if(toRun === "") {
+    if(pToRun === "") {
       this._showError("'Command' field cannot be empty");
       return null;
     }
 
     // collection for unnamed parameters
-    const args = [ ];
+    const argsArray = [ ];
 
     // collection for named parameters
-    const kwargs = { };
+    const argsObject = { };
 
-    const ret = ParseCommandLine.parseCommandLine(toRun, args, kwargs);
+    const ret = ParseCommandLine.parseCommandLine(pToRun, argsArray, argsObject);
     if(ret !== null) {
       // that is an error message being returned
       this._showError(ret);
       return null;
     }
 
-    if(args.length === 0) {
+    if(argsArray.length === 0) {
       this._showError("First (unnamed) parameter is the function name, it is mandatory");
       return null;
     }
 
-    const functionToRun = args.shift();
+    const functionToRun = argsArray.shift();
 
     if(typeof functionToRun !== "string") {
       this._showError("First (unnamed) parameter is the function name, it must be a string, not a " + typeof functionToRun);
@@ -289,44 +299,44 @@ export class CommandBox {
     // WHEEL commands also do not have a target
     // but we use the TARGET value to form the usually required MATCH parameter
     // therefore for WHEEL commands it is still required
-    if(target === "" && functionToRun !== "runners" && !functionToRun.startsWith("runners.")) {
+    if(pTarget === "" && functionToRun !== "runners" && !functionToRun.startsWith("runners.")) {
       this._showError("'Target' field cannot be empty");
       return null;
     }
 
     // SALT API returns a 500-InternalServerError when it hits an unknown group
     // Let's improve on that
-    if(tgtType === "nodegroup") {
-      const nodegroups = JSON.parse(window.localStorage.getItem("nodegroups"));
-      if(!nodegroups || !(target in nodegroups)) {
-        this._showError("Unknown nodegroup '" + target + "'");
+    if(pTargetType === "nodegroup") {
+      const nodeGroups = JSON.parse(window.localStorage.getItem("nodegroups"));
+      if(!nodeGroups || !(pTarget in nodeGroups)) {
+        this._showError("Unknown nodegroup '" + pTarget + "'");
         return null;
       }
     }
 
     let params = { };
     if(functionToRun.startsWith("runners.")) {
-      params = kwargs;
+      params = argsObject;
       params.client = "runner";
       // use only the part after "runners." (8 chars)
       params.fun = functionToRun.substring(8);
-      if(args.length > 0) params.arg = args;
+      if(argsArray.length > 0) params.arg = argsArray;
     } else if(functionToRun.startsWith("wheel.")) {
       // wheel.key functions are treated slightly different
       // we re-use the "target" field to fill the parameter "match"
       // as used by the salt.wheel.key functions
-      params = kwargs;
+      params = argsObject;
       params.client = "wheel";
       // use only the part after "wheel." (6 chars)
       params.fun = functionToRun.substring(6);
-      params.match = target;
+      params.match = pTarget;
     } else {
       params.client = "local";
       params.fun = functionToRun;
-      params.tgt = target;
-      if(tgtType) params.tgt_type = tgtType;
-      if(args.length !== 0) params.arg = args;
-      if(Object.keys(kwargs).length > 0) params.kwarg = kwargs;
+      params.tgt = pTarget;
+      if(pTargetType) params.tgt_type = pTargetType;
+      if(argsArray.length !== 0) params.arg = argsArray;
+      if(Object.keys(argsObject).length > 0) params.kwarg = argsObject;
     }
 
     const runType = RunType.getRunType();

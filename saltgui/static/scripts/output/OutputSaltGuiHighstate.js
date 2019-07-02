@@ -7,20 +7,20 @@ export class OutputSaltGuiHighstate {
   // no separate `isHighStateOutput` here
   // the implementation from OutputHighstate is (re)used
 
-  static getDurationClause(millis) {
-    if(millis < 1000) {
-      return Utils.txtZeroOneMany(millis,
+  static getDurationClause(pMilliSeconds) {
+    if(pMilliSeconds < 1000) {
+      return Utils.txtZeroOneMany(pMilliSeconds,
         "{0} milliseconds", "{0} millisecond", "{0} milliseconds");
     }
-    return Utils.txtZeroOneMany(millis / 1000, "", "{0} second", "{0} seconds");
+    return Utils.txtZeroOneMany(pMilliSeconds / 1000, "", "{0} second", "{0} seconds");
   }
 
-  static getHighStateLabel(pMinionId, minionResponse) {
+  static getHighStateLabel(pMinionId, pMinionHighStateResponse) {
     let anyFailures = false;
     let anySkips = false;
     // do not use Object.entries, that is not supported by the test framework
-    for(const key of Object.keys(minionResponse)) {
-      const task = minionResponse[key];
+    for(const key of Object.keys(pMinionHighStateResponse)) {
+      const task = pMinionHighStateResponse[key];
       if(task.result === null) anySkips = true;
       else if(!task.result) anyFailures = true;
     }
@@ -34,32 +34,32 @@ export class OutputSaltGuiHighstate {
     return Output.getMinionIdHtml(pMinionId, "host-success");
   }
 
-  static addChangesInfo(taskDiv, task, pIndent) {
-    if(!task.hasOwnProperty("changes")) {
+  static addChangesInfo(pTaskDiv, pTask, pIndent) {
+    if(!pTask.hasOwnProperty("changes")) {
       return 0;
     }
 
-    if(typeof task.changes !== "object" || Array.isArray(task.changes)) {
-      taskDiv.append(document.createElement("br"));
-      taskDiv.append(document.createTextNode(pIndent + JSON.stringify(task.changes)));
+    if(typeof pTask.changes !== "object" || Array.isArray(pTask.changes)) {
+      pTaskDiv.append(document.createElement("br"));
+      pTaskDiv.append(document.createTextNode(pIndent + JSON.stringify(pTask.changes)));
       return 0;
     }
 
     let changes = 0;
-    for(const key of Object.keys(task.changes).sort()) {
+    for(const key of Object.keys(pTask.changes).sort()) {
 
       changes = changes + 1;
 
-      const change = task.changes[key];
+      const change = pTask.changes[key];
 
       if(typeof change === "string" && Utils.isMultiLineString(change)) {
-        taskDiv.append(document.createElement("br"));
+        pTaskDiv.append(document.createElement("br"));
         // show multi-line text as a separate block
-        taskDiv.append(document.createTextNode(pIndent + key + ":"));
+        pTaskDiv.append(document.createTextNode(pIndent + key + ":"));
         const lines = change.trim().split("\n");
         for(const line of lines) {
-          taskDiv.append(document.createElement("br"));
-          taskDiv.append(document.createTextNode("      " + line));
+          pTaskDiv.append(document.createElement("br"));
+          pTaskDiv.append(document.createTextNode("      " + line));
         }
         continue;
       }
@@ -67,8 +67,8 @@ export class OutputSaltGuiHighstate {
       if(Array.isArray(change)) {
         for(const idx in change) {
           const task = change[idx];
-          taskDiv.append(document.createElement("br"));
-          taskDiv.append(document.createTextNode(
+          pTaskDiv.append(document.createElement("br"));
+          pTaskDiv.append(document.createTextNode(
             pIndent + key + "[" + idx + "]: " + JSON.stringify(task)));
         }
         continue;
@@ -76,8 +76,8 @@ export class OutputSaltGuiHighstate {
 
       if(typeof change !== "object") {
         // show all other non-objects in a simple way
-        taskDiv.append(document.createElement("br"));
-        taskDiv.append(document.createTextNode(
+        pTaskDiv.append(document.createElement("br"));
+        pTaskDiv.append(document.createTextNode(
           pIndent + key + ": " +
           JSON.stringify(change)));
         continue;
@@ -85,12 +85,12 @@ export class OutputSaltGuiHighstate {
 
       // treat old->new first
       if(change.hasOwnProperty("old") && change.hasOwnProperty("new")) {
-        taskDiv.append(document.createElement("br"));
+        pTaskDiv.append(document.createElement("br"));
         // place changes on one line
         // 25BA = BLACK RIGHT-POINTING POINTER
         // don't use arrows here, these are higher than a regular
         // text-line and disturb the text-flow
-        taskDiv.append(document.createTextNode(
+        pTaskDiv.append(document.createTextNode(
           pIndent + key + ": " +
           JSON.stringify(change.old) + " \u25BA " +
           JSON.stringify(change.new)));
@@ -102,8 +102,8 @@ export class OutputSaltGuiHighstate {
         if(taskkey === "old" && change.hasOwnProperty("new")) continue;
         if(taskkey === "new" && change.hasOwnProperty("old")) continue;
 
-        taskDiv.append(document.createElement("br"));
-        taskDiv.append(document.createTextNode(
+        pTaskDiv.append(document.createElement("br"));
+        pTaskDiv.append(document.createTextNode(
           pIndent + key + ": " + taskkey + ": " +
           JSON.stringify(change[taskkey])));
       }
@@ -120,7 +120,7 @@ export class OutputSaltGuiHighstate {
     let succeeded = 0;
     let failed = 0;
     let skipped = 0;
-    let total_millis = 0;
+    let totalMilliSeconds = 0;
     let changes = 0;
     let nr = 0;
     for(const task of pTasks) {
@@ -192,15 +192,15 @@ export class OutputSaltGuiHighstate {
       }
 
       if(task.hasOwnProperty("duration")) {
-        const millis = Math.round(task.duration);
-        total_millis += millis;
-        if(millis >= 10) {
+        const milliSeconds = Math.round(task.duration);
+        totalMilliSeconds += milliSeconds;
+        if(milliSeconds >= 10) {
           // anything below 10ms is not worth reporting
           // report only the "slow" jobs
           // it still counts for the grand total thought
           taskDiv.append(document.createElement("br"));
           taskDiv.append(document.createTextNode(
-            indent + "Duration " + OutputSaltGuiHighstate.getDurationClause(millis)));
+            indent + "Duration " + OutputSaltGuiHighstate.getDurationClause(milliSeconds)));
         }
       }
 
@@ -250,8 +250,8 @@ export class OutputSaltGuiHighstate {
     line += Utils.txtZeroOneMany(changes, "", ", {0} change", ", {0} changes");
 
     // multiple durations and significant?
-    if(total > 1 && total_millis >= 10) {
-      line += ", " + OutputSaltGuiHighstate.getDurationClause(total_millis);
+    if(total > 1 && totalMilliSeconds >= 10) {
+      line += ", " + OutputSaltGuiHighstate.getDurationClause(totalMilliSeconds);
     }
 
     if(line) {

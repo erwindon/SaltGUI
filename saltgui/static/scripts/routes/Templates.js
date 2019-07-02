@@ -5,8 +5,8 @@ import {Utils} from '../Utils.js';
 
 export class TemplatesRoute extends PageRoute {
 
-  constructor(router) {
-    super("^[\/]templates$", "Templates", "#page-templates", "#button-templates", router);
+  constructor(pRouter) {
+    super("^[\/]templates$", "Templates", "#page-templates", "#button-templates", pRouter);
 
     this._handleWheelConfigValues = this._handleWheelConfigValues.bind(this);
   }
@@ -53,16 +53,16 @@ export class TemplatesRoute extends PageRoute {
     Utils.showTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement());
 
-    const msg = this.pageElement.querySelector("div.templates-list .msg");
+    const msgDiv = this.pageElement.querySelector("div.templates-list .msg");
     const txt = Utils.txtZeroOneMany(keys.length,
       "No templates", "{0} template", "{0} templates");
-    msg.innerText = txt;
+    msgDiv.innerText = txt;
   }
 
-  _addTemplate(pContainer, name, template) {
+  _addTemplate(pContainer, pTemplateName, template) {
     const tr = document.createElement("tr");
 
-    tr.appendChild(Route._createTd("name", name));
+    tr.appendChild(Route._createTd("name", pTemplateName));
 
     // calculate description
     const description = template["description"];
@@ -73,17 +73,17 @@ export class TemplatesRoute extends PageRoute {
     }
 
     // calculate targettype
-    const targettype = template["targettype"];
+    const targetType = template["targettype"];
     // calculate target
     const target = template["target"];
-    if(!targettype && !target) {
+    if(!targetType && !target) {
       tr.appendChild(Route._createTd("target value-none", "(none)"));
-    } else if(/* targettype && */ !target) {
-      tr.appendChild(Route._createTd("target", targettype));
-    } else if(!targettype /* && target */) {
+    } else if(/* targetType && */ !target) {
+      tr.appendChild(Route._createTd("target", targetType));
+    } else if(!targetType /* && target */) {
       tr.appendChild(Route._createTd("target", target));
     } else {
-      tr.appendChild(Route._createTd("target", targettype + " " + target));
+      tr.appendChild(Route._createTd("target", targetType + " " + target));
     }
 
     // calculate command
@@ -95,16 +95,18 @@ export class TemplatesRoute extends PageRoute {
     }
 
     const menu = new DropDownMenu(tr);
-    this._addMenuItemApplyTemplate(menu, targettype, target, command);
+    this._addMenuItemApplyTemplate(menu, targetType, target, command);
 
     pContainer.tBodies[0].appendChild(tr);
 
-    tr.addEventListener("click", evt => this._runFullCommand(evt, targettype, target, command));
+    tr.addEventListener("click", pClickEvent =>
+      this._runFullCommand(pClickEvent, targetType, target, command)
+    );
   }
 
-  _addMenuItemApplyTemplate(pMenu, targettype, target, command) {
-    pMenu.addMenuItem("Apply&nbsp;template...", function(evt) {
-      this._runFullCommand(evt, targettype, target, command);
+  _addMenuItemApplyTemplate(pMenu, pTargetType, target, pCommand) {
+    pMenu.addMenuItem("Apply&nbsp;template...", function(pClickEvent) {
+      this._runFullCommand(pClickEvent, pTargetType, target, pCommand);
     }.bind(this));
   }
 }

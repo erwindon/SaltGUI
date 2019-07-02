@@ -5,13 +5,17 @@ import {Utils} from '../Utils.js';
 
 export class KeysRoute extends PageRoute {
 
-  constructor(router) {
-    super("^[\/]keys$", "Keys", "#page-keys", "#button-keys", router);
+  constructor(pRouter) {
+    super("^[\/]keys$", "Keys", "#page-keys", "#button-keys", pRouter);
 
     this.fingerprintPattern = /^[0-9a-f:]+$/i;
 
     this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
     this._handleWheelKeyFinger = this._handleWheelKeyFinger.bind(this);
+
+    Utils.addTableHelp(this.getPageElement(), "The content of this page is\nautomatically refreshed");
+    Utils.showTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
   }
 
   onShow() {
@@ -77,49 +81,46 @@ export class KeysRoute extends PageRoute {
   }
 
   _handleWheelKeyListAll(pData) {
-    const list = this.getPageElement().querySelector("#minions");
+    const table = this.getPageElement().querySelector("#minions");
 
-    if(PageRoute.showErrorRowInstead(list, pData)) return;
+    if(PageRoute.showErrorRowInstead(table, pData)) return;
 
     const allKeys = pData.return[0].data.return;
 
     // Unaccepted goes first because that is where the user must decide
     const minionIds_pre = allKeys.minions_pre.sort();
     for(const minionId of minionIds_pre) {
-      this._addPreMinion(list, minionId);
+      this._addPreMinion(table, minionId);
     }
 
     const minionIds_accepted = allKeys.minions.sort();
     for(const minionId of minionIds_accepted) {
-      this._addAcceptedMinion(list, minionId);
+      this._addAcceptedMinion(table, minionId);
     }
 
     const minionIds_denied = allKeys.minions_denied.sort();
     for(const minionId of minionIds_denied) {
-      this._addDeniedMinion(list, minionId);
+      this._addDeniedMinion(table, minionId);
     }
 
     const minionIds_rejected = allKeys.minions_rejected.sort();
     for(const minionId of minionIds_rejected) {
-      this._addRejectedMinion(list, minionId);
+      this._addRejectedMinion(table, minionId);
     }
 
-    this.updateTableSummary(list);
-
-    Utils.addTableHelp(this.getPageElement(), "The content of this page is\nautomatically refreshed");
-    Utils.showTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement());
+    this.updateTableSummary(table);
   }
 
-  updateTableSummary(list) {
+  updateTableSummary(pTable) {
     const cnt = { };
     cnt["unaccepted"] = 0;
     cnt["accepted"] = 0;
     cnt["denied"] = 0;
     cnt["rejected"] = 0;
-    const tbody = list.querySelector("table tbody");
+    const tbody = pTable.querySelector("table tbody");
     for(const tr of tbody.children) {
-      const statusText = tr.querySelector("td.status").innerText;  
+      const statusField = tr.querySelector("td.status");
+      const statusText = statusField.innerText;  
       if(cnt[statusText] === undefined) cnt[statusText] = 0;
       cnt[statusText]++;
     }
@@ -137,8 +138,8 @@ export class KeysRoute extends PageRoute {
     // capitalize the first word (can only be "no")
     summary = summary.replace(/^no/, "No");
 
-    const msg = this.getPageElement().querySelector(".minion-list .msg");
-    msg.innerText = summary;
+    const msgDiv = this.getPageElement().querySelector(".minion-list .msg");
+    msgDiv.innerText = summary;
   }
 
   _addAcceptedMinion(pContainer, pMinionId) {
@@ -217,43 +218,43 @@ export class KeysRoute extends PageRoute {
   }
 
   _addMenuItemAcceptKey(pMenu, pMinionId, extra) {
-    pMenu.addMenuItem("Accept&nbsp;key...", function(evt) {
-      this._runCommand(evt, pMinionId, "wheel.key.accept" + extra);
+    pMenu.addMenuItem("Accept&nbsp;key...", function(pClickEvent) {
+      this._runCommand(pClickEvent, pMinionId, "wheel.key.accept" + extra);
     }.bind(this));
   }
 
   _addMenuItemRejectKey(pMenu, pMinionId, extra) {
-    pMenu.addMenuItem("Reject&nbsp;key...", function(evt) {
-      this._runCommand(evt, pMinionId, "wheel.key.reject" + extra);
+    pMenu.addMenuItem("Reject&nbsp;key...", function(pClickEvent) {
+      this._runCommand(pClickEvent, pMinionId, "wheel.key.reject" + extra);
     }.bind(this));
   }
 
   _addMenuItemDeleteKey(pMenu, pMinionId, extra) {
-    pMenu.addMenuItem("Delete&nbsp;key...", function(evt) {
-      this._runCommand(evt, pMinionId, "wheel.key.delete" + extra);
+    pMenu.addMenuItem("Delete&nbsp;key...", function(pClickEvent) {
+      this._runCommand(pClickEvent, pMinionId, "wheel.key.delete" + extra);
     }.bind(this));
   }
 
   handleSaltAuthEvent(pTag, pData) {
     const page = document.getElementById("page-keys");
-    const list = page.querySelector("#minions");
+    const table = page.querySelector("#minions");
     const tr = page.querySelector("table tr#" + Utils.getIdFromMinionId(pData.id));
     if(tr) {
-      const status = tr.querySelector(".status");
+      const statusTd = tr.querySelector(".status");
       // drop all other classes (accepted, rejected, etc)
       // do not update screen when nothing changed; that keeps any search highlight
       if(pData.act === "accept") {
-        status.className = "status";
-        status.classList.add("accepted");
-        if(status.innerText !== "accepted") status.innerText = "accepted";
+        statusTd.className = "status";
+        statusTd.classList.add("accepted");
+        if(statusTd.innerText !== "accepted") statusTd.innerText = "accepted";
       } else if(pData.act === "reject") {
-        status.className = "status";
-        status.classList.add("rejected");
-        if(status.innerText !== "rejected") status.innerText = "rejected";
+        statusTd.className = "status";
+        statusTd.classList.add("rejected");
+        if(statusTd.innerText !== "rejected") statusTd.innerText = "rejected";
       } else if(pData.act === "pend") {
-        status.className = "status";
-        status.classList.add("unaccepted");
-        if(status.innerText !== "unaccepted") status.innerText = "unaccepted";
+        statusTd.className = "status";
+        statusTd.classList.add("unaccepted");
+        if(statusTd.innerText !== "unaccepted") statusTd.innerText = "unaccepted";
       } else if(pData.act === "delete") {
         // "-1" due to the <tr> for the header that is inside <thead>
         tr.parentNode.deleteRow(tr.rowIndex - 1);
@@ -264,13 +265,13 @@ export class KeysRoute extends PageRoute {
       // keep the fingerprint
     } else {
       if(pData.act === "pend") {
-        this._addPreMinion(list, pData.id);
+        this._addPreMinion(table, pData.id);
         Utils.tableReSort(this.getPageElement());
       } else if(pData.act === "accept") {
-        this._addAcceptedMinion(list, pData.id);
+        this._addAcceptedMinion(table, pData.id);
         Utils.tableReSort(this.getPageElement());
       } else if(pData.act === "reject") {
-        this._addRejectedMinion(list, pData.id);
+        this._addRejectedMinion(table, pData.id);
         Utils.tableReSort(this.getPageElement());
       } else if(pData.act === "delete") {
         // delete of an unknown minion, never mind
@@ -291,7 +292,7 @@ export class KeysRoute extends PageRoute {
       });
     }
 
-    this.updateTableSummary(list);
+    this.updateTableSummary(table);
   }
 
   handleSaltKeyEvent(pTag, pData) {

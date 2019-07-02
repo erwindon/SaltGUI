@@ -1,41 +1,46 @@
 export class HTTPError extends Error {
-  constructor(status, pMessage) {
+  constructor(pStatus, pMessage) {
     super();
-    this.status = status;
+    this.status = pStatus;
     this.message = pMessage;
   }
 }
 
 export class API {
-  constructor(router) {
+  constructor(pRouter) {
     //this.getEvents = this.getEvents.bind(this);
-    this.getEvents(router);
+    this.getEvents(pRouter);
   }
 
   isAuthenticated() {
     // use the /stats api call to see if we are allowed to access SaltGUI
     // (if the session cookie is still valid)
     return this.apiRequest("GET", "/stats", {})
-      .then(response => {
+      .then(pResponse => {
         return window.sessionStorage.getItem("token") !== null;
-      }, response => { return false; } );
+      }, pResponse => {
+        return false;
+      } );
   }
 
-  login(username, password, eauth="pam") {
+  login(pUserName, pPassWord, pEauth="pam") {
     const params = {
-      username: username,
-      password: password,
-      eauth: eauth
+      username: pUserName,
+      password: pPassWord,
+      eauth: pEauth
     };
 
     // store it as the default login method
-    window.localStorage.setItem("eauth", eauth);
+    window.localStorage.setItem("eauth", pEauth);
 
     return this.apiRequest("POST", "/login", params)
       .then(pData => {
         const response = pData.return[0];
         if(Object.keys(response.perms).length === 0) {
-          // we are allowed to login but there are no permissions available
+          // We are allowed to login but there are no permissions available
+          // This may happen e.g. for accounts that are in PAM,
+          // but not in the 'master' file.
+          // Don't give the user an empty screen full of errors
           throw new HTTPError(403, "Unauthorized");
         }
         window.sessionStorage.setItem("token", response.token);
@@ -46,7 +51,7 @@ export class API {
     // only delete the session here as the router should take care of
     // redirecting to the login screen
     return this.apiRequest("POST", "/logout", {})
-      .then(response => {
+      .then(pResponse => {
         window.sessionStorage.removeItem("token");
       });
   }
@@ -182,8 +187,8 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  apiRequest(method, route, params) {
-    const location = config.API_URL + route;
+  apiRequest(pMethod, pRoute, pParams) {
+    const location = config.API_URL + pRoute;
     const token = window.sessionStorage.getItem("token");
     const headers = {
       "Accept": "application/json",
@@ -191,23 +196,23 @@ export class API {
       "Cache-Control": "no-cache"
     };
     const options = {
-      method: method,
+      method: pMethod,
       url: location,
       headers: headers
     };
 
-    if(method === "POST") options.body = JSON.stringify(params);
+    if(pMethod === "POST") options.body = JSON.stringify(pParams);
 
     return fetch(location, options)
-      .then(response => {
-        if(response.ok) return response.json();
-        // fetch does not reject on > 300 http status codes, so let's
-        // do it ourselves
-        throw new HTTPError(response.status, response.statusText);
+      .then(pResponse => {
+        if(pResponse.ok) return pResponse.json();
+        // fetch does not reject on > 300 http status codes,
+        // so let's do it ourselves
+        throw new HTTPError(pResponse.status, pResponse.statusText);
       });
   }
 
-  getEvents(router) {
+  getEvents(pRouter) {
     const token = window.sessionStorage.getItem("token");
     if(!token) return;
 
@@ -233,16 +238,16 @@ export class API {
       if(tag.startsWith("salt/beacon/"))
       {
         // new beacon-value is received
-        router.beaconsMinionRoute.handleSaltBeaconEvent(tag, data);
+        pRouter.beaconsMinionRoute.handleSaltBeaconEvent(tag, data);
       }
       else if(tag === "salt/auth")
       {
         // new key has been received
-        router.keysRoute.handleSaltAuthEvent(tag, data);
+        pRouter.keysRoute.handleSaltAuthEvent(tag, data);
       }
       else if(tag === "salt/key")
       {
-        router.keysRoute.handleSaltKeyEvent(tag, data);
+        pRouter.keysRoute.handleSaltKeyEvent(tag, data);
       }
     }.bind(this);
   }
