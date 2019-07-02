@@ -137,7 +137,7 @@ export class Output {
 
 
   static isAsyncOutput(pResponse) {
-    let keys = Object.keys(pResponse);
+    const keys = Object.keys(pResponse);
     if(keys.length !== 2) return false;
     keys.sort();
     if(keys[0] !== "jid") return false;

@@ -20,7 +20,7 @@ export class Documentation {
     const targetField = document.querySelector(".run-command #target");
     let target = targetField.value;
     target = target ? "target" : "all minions";
-    let commandField = document.querySelector(".run-command #command");
+    const commandField = document.querySelector(".run-command #command");
     let command = commandField.value;
     // remove the command arguments
     command = command.trim().replace(/ .*/, "");
