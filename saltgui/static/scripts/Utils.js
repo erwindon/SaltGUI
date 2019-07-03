@@ -92,9 +92,8 @@ export class Utils {
     // 1F50D = LEFT-POINTING MAGNIFYING GLASS
     // FE0E = VARIATION SELECTOR-15 (render as text)
     button_search.innerHTML = "&#x1f50d;&#xFE0E;";
-    button_search.onclick = ev => {
+    button_search.onclick = ev =>
       Utils.hideShowTableSearchBar(pStartElement);
-    };
     const table = pStartElement.querySelector("table");
     table.parentElement.insertBefore(button_search, table);
   }
@@ -126,9 +125,8 @@ export class Utils {
         return;
       }
     };
-    input.oninput = ev => {
+    input.oninput = ev =>
       Utils.updateTableFilter(table, input.value);
-    };
 
     table.parentElement.insertBefore(input, table);
     if(input.style.display === "none") {

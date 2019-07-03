@@ -90,9 +90,8 @@ export class JobRoute extends Route {
         return;
       }
     };
-    input.oninput = ev => {
+    input.oninput = ev =>
       JobRoute.updateOutputFilter(pStartElement, input.value);
-    };
 
     if(input.style.display === "none") {
       JobRoute.updateOutputFilter(pStartElement, input.value);
@@ -108,14 +107,14 @@ export class JobRoute extends Route {
     const output = this.getPageElement().querySelector(".output");
 
     const closeButton = document.querySelector("#job-button-close");
-    closeButton.addEventListener("click", _ => {
-      window.history.back();
-    });
+    closeButton.addEventListener("click", _ =>
+      window.history.back()
+    );
 
     const searchButton = this.getPageElement().querySelector("span.search");
-    searchButton.addEventListener("click", pClickEvent => {
-      JobRoute.hideShowOutputSearchBar(output);
-    });
+    searchButton.addEventListener("click", pClickEvent =>
+      JobRoute.hideShowOutputSearchBar(output)
+    );
 
     if(typeof pData !== "object") {
       output.innerText = "";
@@ -208,9 +207,9 @@ export class JobRoute extends Route {
       }
       else
       {
-        link.addEventListener("click", pClickEvent => {
-          window.location.assign("job?id=" + linkToJid);
-        });
+        link.addEventListener("click", pClickEvent =>
+          window.location.assign("job?id=" + linkToJid)
+        );
       }
 
       // no longer needed
@@ -378,36 +377,36 @@ export class JobRoute extends Route {
 
         const linkPsProcInfo = document.createElement("a");
         linkPsProcInfo.innerText = "info";
-        linkPsProcInfo.addEventListener("click", pClickEvent => {
-          this._runFullCommand(pClickEvent, "list", minionId, "ps.proc_info " + pid);
-        });
+        linkPsProcInfo.addEventListener("click", pClickEvent =>
+          this._runFullCommand(pClickEvent, "list", minionId, "ps.proc_info " + pid)
+        );
         noResponseSpan.appendChild(linkPsProcInfo);
 
         noResponseSpan.appendChild(document.createTextNode(" "));
 
         const linkPsTermPid = document.createElement("a");
         linkPsTermPid.innerText = "term";
-        linkPsTermPid.addEventListener("click", pClickEvent => {
-          this._runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=15");
-        });
+        linkPsTermPid.addEventListener("click", pClickEvent =>
+          this._runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=15")
+        );
         noResponseSpan.appendChild(linkPsTermPid);
 
         noResponseSpan.appendChild(document.createTextNode(" "));
 
         const linkPsKillPid = document.createElement("a");
         linkPsKillPid.innerText = "kill";
-        linkPsKillPid.addEventListener("click", pClickEvent => {
-          this._runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=9");
-        });
+        linkPsKillPid.addEventListener("click", pClickEvent =>
+          this._runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=9")
+        );
         noResponseSpan.appendChild(linkPsKillPid);
 
         noResponseSpan.appendChild(document.createTextNode(" "));
 
         const linkPsSignalPid = document.createElement("a");
         linkPsSignalPid.innerText = "signal";
-        linkPsSignalPid.addEventListener("click", pClickEvent => {
-          this._runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=<signalnumber>");
-        });
+        linkPsSignalPid.addEventListener("click", pClickEvent =>
+          this._runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=<signalnumber>")
+        );
         noResponseSpan.appendChild(linkPsSignalPid);
 
         noResponseSpan.classList.remove("noresponse");

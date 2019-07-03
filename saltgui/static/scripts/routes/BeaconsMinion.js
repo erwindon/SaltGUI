@@ -13,9 +13,9 @@ export class BeaconsMinionRoute extends PageRoute {
     this._handleLocalBeaconsList = this._handleLocalBeaconsList.bind(this);
 
     const closeButton = this.pageElement.querySelector("#beacons-minion-button-close");
-    closeButton.addEventListener("click", _ => {
-      this.router.goTo("/beacons");
-    });
+    closeButton.addEventListener("click", _ =>
+      this.router.goTo("/beacons")
+    );
 
     Utils.addTableHelp(this.getPageElement(), "The content of column 'Value'\nis automatically refreshed");
     Utils.showTableSortable(this.getPageElement());

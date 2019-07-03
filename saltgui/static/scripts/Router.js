@@ -66,88 +66,88 @@ export class Router {
       });
 
     document.querySelector("#button-minions1")
-      .addEventListener("click", _ => {
-        window.location.replace("/");
-      });
+      .addEventListener("click", _ =>
+        window.location.replace("/")
+      );
     document.querySelector("#button-minions2")
-      .addEventListener("click", _ => {
-        window.location.replace("/");
-      });
+      .addEventListener("click", _ =>
+        window.location.replace("/")
+      );
 
     document.querySelector("#button-grains1")
-      .addEventListener('click', _ => {
-        window.location.replace("/grains");
-      });
+      .addEventListener('click', _ =>
+        window.location.replace("/grains")
+      );
     document.querySelector("#button-grains2")
-      .addEventListener('click', _ => {
-        window.location.replace("/grains");
-      });
+      .addEventListener('click', _ =>
+        window.location.replace("/grains")
+      );
 
     document.querySelector("#button-schedules1")
-      .addEventListener('click', _ => {
-        window.location.replace("/schedules");
-      });
+      .addEventListener('click', _ =>
+        window.location.replace("/schedules")
+      );
     document.querySelector("#button-schedules2")
-      .addEventListener('click', _ => {
-        window.location.replace("/schedules");
-      });
+      .addEventListener('click', _ =>
+        window.location.replace("/schedules")
+      );
 
     document.querySelector("#button-pillars1")
-      .addEventListener('click', _ => {
-        window.location.replace("/pillars");
-      });
+      .addEventListener('click', _ =>
+        window.location.replace("/pillars")
+      );
     document.querySelector("#button-pillars2")
-      .addEventListener('click', _ => {
-        window.location.replace("/pillars");
-      });
+      .addEventListener('click', _ =>
+        window.location.replace("/pillars")
+      );
 
     document.querySelector("#button-beacons1")
-      .addEventListener('click', _ => {
-        window.location.replace("/beacons");
-      });
+      .addEventListener('click', _ =>
+        window.location.replace("/beacons")
+      );
     document.querySelector("#button-beacons2")
-      .addEventListener('click', _ => {
-        window.location.replace("/beacons");
-      });
+      .addEventListener('click', _ =>
+        window.location.replace("/beacons")
+      );
 
     document.querySelector("#button-keys1")
-      .addEventListener("click", _ => {
-        window.location.replace("/keys");
-      });
+      .addEventListener("click", _ =>
+        window.location.replace("/keys")
+      );
     document.querySelector("#button-keys2")
-      .addEventListener("click", _ => {
-        window.location.replace("/keys");
-      });
+      .addEventListener("click", _ =>
+        window.location.replace("/keys")
+      );
 
     document.querySelector("#button-jobs1")
-      .addEventListener('click', _ => {
-        window.location.replace("/jobs");
-      });
+      .addEventListener('click', _ =>
+        window.location.replace("/jobs")
+      );
     document.querySelector("#button-jobs2")
-      .addEventListener('click', _ => {
-        window.location.replace("/jobs");
-      });
+      .addEventListener('click', _ =>
+        window.location.replace("/jobs")
+      );
 
     document.querySelector("#button-templates1")
-      .addEventListener('click', _ => {
-        window.location.replace("/templates");
-      });
+      .addEventListener('click', _ =>
+        window.location.replace("/templates")
+      );
     document.querySelector("#button-templates2")
-      .addEventListener('click', _ => {
-        window.location.replace("/templates");
-      });
+      .addEventListener('click', _ =>
+        window.location.replace("/templates")
+      );
 
     document.querySelector("#button-logout1")
       .addEventListener("click", _ => {
-        this.api.logout().then(() => {
-          window.location.replace("/");
-        });
+        this.api.logout().then(() =>
+          window.location.replace("/")
+        );
       });
     document.querySelector("#button-logout2")
       .addEventListener("click", _ => {
-        this.api.logout().then(() => {
-          window.location.replace("/");
-        });
+        this.api.logout().then(() =>
+          window.location.replace("/")
+        );
       });
   }
 
