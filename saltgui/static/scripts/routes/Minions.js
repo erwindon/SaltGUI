@@ -45,44 +45,6 @@ export class MinionsRoute extends PageRoute {
     }, pData => {
       myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
     }); 
-
-    //we need these functions to populate the dropdown boxes
-    wheelConfigValuesPromise.then(pData => {
-      myThis._handleWheelConfigValues(pData);
-    }, pData => {
-      // never mind
-    });
-  }
-
-  _handleWheelConfigValues(pData) {
-    // store for later use
-
-    const templates = pData.return[0].data.return.saltgui_templates;
-    window.localStorage.setItem("templates", JSON.stringify(templates));
-
-    const public_pillars = pData.return[0].data.return.saltgui_public_pillars;
-    window.localStorage.setItem("public_pillars", JSON.stringify(public_pillars));
-
-    const preview_grains = pData.return[0].data.return.saltgui_preview_grains;
-    window.localStorage.setItem("preview_grains", JSON.stringify(preview_grains));
-
-    const hide_jobs = pData.return[0].data.return.saltgui_hide_jobs;
-    window.localStorage.setItem("hide_jobs", JSON.stringify(hide_jobs));
-    const show_jobs = pData.return[0].data.return.saltgui_show_jobs;
-    window.localStorage.setItem("show_jobs", JSON.stringify(show_jobs));
-
-    let nodeGroups = pData.return[0].data.return.nodeGroups;
-    if(!nodeGroups) nodeGroups = {};
-    window.localStorage.setItem("nodegroups", JSON.stringify(nodeGroups));
-
-    const output_formats = pData.return[0].data.return.saltgui_output_formats;
-    window.localStorage.setItem("output_formats", JSON.stringify(output_formats));
-
-    const datetime_fraction_digits = pData.return[0].data.return.saltgui_datetime_fraction_digits;
-    window.localStorage.setItem("datetime_fraction_digits", JSON.stringify(datetime_fraction_digits));
-
-    const tooltip_mode = pData.return[0].data.return.saltgui_tooltip_mode;
-    window.localStorage.setItem("tooltip_mode", tooltip_mode);
   }
 
   _handleWheelKeyListAll(pData) {
