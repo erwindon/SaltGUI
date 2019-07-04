@@ -214,9 +214,9 @@ export class JobsRoute extends PageRoute {
         targetText = targetText.substring(0, maxTextLength) + "...";
       }
       // then add the operational statistics
-      if(job.Running.length > 0)
+      if(job.Running && job.Running.length > 0)
         targetText = targetText + job.Running.length + " running";
-      if(job.Returned.length > 0)
+      if(job.Returned && job.Returned.length > 0)
         targetText = targetText + ", " + job.Returned.length + " returned";
 
       // the field may not (yet) be on the screen
