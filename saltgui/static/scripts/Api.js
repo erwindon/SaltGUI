@@ -249,6 +249,10 @@ export class API {
       {
         pRouter.keysRoute.handleSaltKeyEvent(tag, data);
       }
+      else if(tag.startsWith("salt/job/") && tag.includes("/ret/"))
+      {
+        pRouter.jobRoute.handleSaltJobRetEvent(tag, data);
+      }
     }.bind(this);
   }
 }

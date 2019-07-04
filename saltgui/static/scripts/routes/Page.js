@@ -472,7 +472,10 @@ export class PageRoute extends Route {
       // the field may not (yet) be on the screen
       if(!statusSpan) continue;
 
-      statusSpan.innerText = statusText.substring(2);
+      statusSpan.innerText = "";
+      statusSpan.appendChild(Utils.createJobStatusSpan(k));
+      statusSpan.appendChild(document.createTextNode(statusText.substring(2)));
+
       Utils.addToolTip(statusSpan, "Click to refresh");
     }
   }

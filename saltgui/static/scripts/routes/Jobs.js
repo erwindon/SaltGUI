@@ -223,6 +223,7 @@ export class JobsRoute extends PageRoute {
       if(!targetField) continue;
       targetField.classList.remove("no-status");
       targetField.innerText = targetText;
+      targetField.insertBefore(Utils.createJobStatusSpan(k), targetField.firstChild);
       Utils.addToolTip(targetField, "Click to refresh column");
     }
 
@@ -315,7 +316,11 @@ export class JobsRoute extends PageRoute {
       detailsTxt += "</span>";
     }
 
-    detailsSpan.innerHTML = detailsTxt;
+    detailsSpan.innerText = "";
+    detailsSpan.appendChild(Utils.createJobStatusSpan(pJobId));
+    const statusSpan = Route._createSpan("", "");
+    statusSpan.innerHTML = detailsTxt;
+    detailsSpan.appendChild(statusSpan);
     detailsSpan.classList.remove("no-status");
     Utils.addToolTip(detailsSpan, "Click to refresh");
   }

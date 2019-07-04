@@ -34,7 +34,7 @@ export class Router {
     this.registerRoute(new PillarsMinionRoute(this));
     this.registerRoute(new BeaconsRoute(this));
     this.registerRoute(this.beaconsMinionRoute = new BeaconsMinionRoute(this));
-    this.registerRoute(new JobRoute(this));
+    this.registerRoute(this.jobRoute = new JobRoute(this));
     this.registerRoute(new JobsRoute(this));
     this.registerRoute(new TemplatesRoute(this));
 

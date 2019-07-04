@@ -204,4 +204,14 @@ export class Utils {
     if(pStr.includes("\n")) return true;
     return false;
   }
+
+  static createJobStatusSpan(pJobId) {
+    const span = Route._createSpan("", "");
+    // 21BB = CLOCKWISE OPEN CIRCLE ARROW
+    span.innerHTML = "&#x21BB;&nbsp;";
+    span.id = "status" + pJobId;
+    span.style.display = "none";
+    span.style.fontWeight = "bold";
+    return span;
+  }
 }
