@@ -145,4 +145,7 @@ export class Route {
     return ret;
   }
 
+  onShow() {
+    // VOID
+  }
 }

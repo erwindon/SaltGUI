@@ -65,9 +65,9 @@ export class Router {
       .addEventListener("click", pClickEvent => {
         if(window.location.pathname === "/login") return;
         if(window.event.ctrlKey) {
-          window.location.assign("/options")
+          window.location.assign("/options");
         } else {
-          window.location.assign("/")
+          window.location.assign("/");
         }
       });
 
@@ -210,22 +210,15 @@ export class Router {
 
     this.switchingRoute = true;
 
-    const afterLoad = function(pRoute) {
-      if(myThis.currentRoute !== undefined) {
-        myThis.hideRoute(myThis.currentRoute);
-      }
+    pRoute.onShow();
 
-      myThis.currentRoute = pRoute;
-      document.title = "SaltGUI - " + myThis.currentRoute.getName();
-      myThis.currentRoute.getPageElement().className = "route current";
-      myThis.switchingRoute = false;
-    };
+    if(myThis.currentRoute) {
+      myThis.hideRoute(myThis.currentRoute);
+    }
 
-    let response = null;
-    if(pRoute.onShow) response = pRoute.onShow();
-
-    if(response && response.then) response.then(afterLoad(pRoute));
-    else afterLoad(pRoute);
+    myThis.currentRoute = pRoute;
+    myThis.currentRoute.getPageElement().className = "route current";
+    myThis.switchingRoute = false;
   }
 
   hideRoute(pRoute) {
