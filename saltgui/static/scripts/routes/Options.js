@@ -30,7 +30,9 @@ export class OptionsRoute extends PageRoute {
     });
 
     const loginResponseStr = window.sessionStorage.getItem("login-response");
-    const loginResponse = JSON.parse(loginResponseStr);
+    let loginResponse = JSON.parse(loginResponseStr);
+    // just in case...
+    if(!loginResponse) loginResponse = { };
 
     const tokenValue = loginResponse.token;
     const tokenTd = document.getElementById("option-token-value");
@@ -45,7 +47,9 @@ export class OptionsRoute extends PageRoute {
     const expireTd = document.getElementById("option-expire-value");
     const expireStr = new Date(expireValue*1000);
     const date = new Date(null);
-    date.setSeconds(loginResponse.expire - loginResponse.start);
+    if(loginResponse.expire && loginResponse.start) {
+      date.setSeconds(loginResponse.expire - loginResponse.start);
+    }
     let durationStr = "";
     const str = date.toISOString();
     if(str.startsWith("1970-01-01T")) {
