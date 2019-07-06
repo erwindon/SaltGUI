@@ -8,7 +8,10 @@ export class HTTPError extends Error {
 
 export class API {
   constructor(pRouter) {
-    //this.getEvents = this.getEvents.bind(this);
+    this.apiRequest = this.apiRequest.bind(this);
+    this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
+
     this.getEvents(pRouter);
   }
 
@@ -201,6 +204,7 @@ export class API {
 
     if(pMethod === "POST") options.body = JSON.stringify(pParams);
 
+    const myThis = this;
     return fetch(location, options)
       .then(pResponse => {
         if(pResponse.ok) return pResponse.json();
@@ -209,7 +213,9 @@ export class API {
         if(pResponse.status === 401) {
           const loginResponseStr = window.sessionStorage.getItem("login-response");
           if(!loginResponseStr) {
-            this.logout().then(() =>
+            myThis.logout().then(() =>
+              window.location.replace("/login?reason=no-session")
+            , () =>
               window.location.replace("/login?reason=no-session")
             );
             return null;
@@ -221,7 +227,9 @@ export class API {
             const now = Date.now() / 1000;
             const expireValue = loginResponse.expire;
             if(now > expireValue) {
-              this.logout().then(() =>
+              myThis.logout().then(() =>
+                window.location.replace("/login?reason=expired-session")
+              , () =>
                 window.location.replace("/login?reason=expired-session")
               );
               return null;

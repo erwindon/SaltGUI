@@ -22,7 +22,8 @@ export class LoginRoute extends Route {
     let reason = decodeURIComponent(Utils.getQueryParam("reason"));
     if(!reason || reason === "undefined") return;
     if(reason === "no-session") reason = "Not logged in!";
-    if(reason === "expired-session") reason = "Automatic logout!";
+    if(reason === "expired-session") reason = "Session expired!";
+    if(reason === "logout") reason = "Logout!";
     const noticeDiv = this.pageElement.querySelector(".notice-wrapper");
 
     const reasonDiv = Route._createDiv("notice", reason);
