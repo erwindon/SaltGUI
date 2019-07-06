@@ -17,6 +17,8 @@ export class PageRoute extends Route {
   }
 
   _updateMinions(pData) {
+    if(!pData) return;
+
     const minions = pData.return[0];
 
     const table = this.getPageElement().querySelector("#minions");
@@ -428,6 +430,8 @@ export class PageRoute extends Route {
 
   _handleRunnerJobsActive(pData) {
 
+    if(!pData) return;
+
     if(typeof pData !== "object") {
       const tbody = this.pageElement.querySelector("table.jobs tbody");
       for(const tr of tbody.rows) {
@@ -597,6 +601,12 @@ export class PageRoute extends Route {
   }
 
   static showErrorRowInstead(pTable, pData) {
+
+    if(pData === null) {
+      // not an error, but also nothing to show
+      return true;
+    }
+
     if(typeof pData === "object") {
       // not an error
       return false;

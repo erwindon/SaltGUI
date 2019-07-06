@@ -116,6 +116,8 @@ export class JobRoute extends Route {
       JobRoute.hideShowOutputSearchBar(output)
     );
 
+    if(!pData) return;
+
     if(typeof pData !== "object") {
       output.innerText = "";
       Utils.addErrorToTableCell(output, pData);

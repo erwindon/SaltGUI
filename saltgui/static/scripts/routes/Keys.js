@@ -32,8 +32,9 @@ export class KeysRoute extends PageRoute {
         myThis._handleWheelKeyFinger(pData);
       }, pData2 => {
         const pData = {"return":[{"data":{"return":{"minions":{}}}}]};
-        for(const k of pData1.return[0].data.return.minions)
-          pData.return[0]["data"]["return"]["minions"][k] = JSON.stringify(pData2);
+        if(pData1)
+          for(const k of pData1.return[0].data.return.minions)
+            pData.return[0]["data"]["return"]["minions"][k] = JSON.stringify(pData2);
         myThis._handleWheelKeyFinger(pData);
       });
     }, pData => {
@@ -53,6 +54,8 @@ export class KeysRoute extends PageRoute {
   }
 
   _handleWheelKeyFinger(pData) {
+    if(!pData) return;
+
     const allKeys = pData.return[0].data.return;
 
     for(const property of Object.keys(allKeys)) {
@@ -81,6 +84,8 @@ export class KeysRoute extends PageRoute {
   }
 
   _handleWheelKeyListAll(pData) {
+    if(!pData) return;
+
     const table = this.getPageElement().querySelector("#minions");
 
     if(PageRoute.showErrorRowInstead(table, pData)) return;

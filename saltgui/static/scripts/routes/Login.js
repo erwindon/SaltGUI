@@ -1,4 +1,5 @@
 import {Route} from './Route.js';
+import {Utils} from '../Utils.js';
 
 export class LoginRoute extends Route {
 
@@ -17,6 +18,19 @@ export class LoginRoute extends Route {
     const eauthSelector = this.pageElement.querySelector("#login-form #eauth");
     const eauthValue = window.localStorage.getItem("eauth");
     eauthSelector.value = eauthValue ? eauthValue : "pam";
+
+    let reason = decodeURIComponent(Utils.getQueryParam("reason"));
+    if(!reason || reason === "undefined") return;
+    if(reason === "no-session") reason = "Not logged in!";
+    if(reason === "expired-session") reason = "Automatic logout!";
+    const noticeDiv = this.pageElement.querySelector(".notice-wrapper");
+
+    const reasonDiv = Route._createDiv("notice", reason);
+    reasonDiv.style.backgroundColor = "black";
+    noticeDiv.replaceChild(reasonDiv, noticeDiv.firstChild);
+    noticeDiv.className = "notice-wrapper";
+    noticeDiv.focus(); //Used to trigger a reflow (to restart animation)
+    noticeDiv.className = "notice-wrapper show";
   }
 
   registerEventListeners() {
@@ -43,11 +57,11 @@ export class LoginRoute extends Route {
   onLoginSuccess() {
     this.toggleForm(true);
 
-    const notice = this.pageElement.querySelector(".notice-wrapper");
+    const noticeDiv = this.pageElement.querySelector(".notice-wrapper");
 
     const success = Route._createDiv("notice", "Please wait...");
     success.style.backgroundColor = "#4CAF50";
-    notice.replaceChild(success, notice.firstChild);
+    noticeDiv.replaceChild(success, noticeDiv.firstChild);
 
     const userNameField = this.pageElement.querySelector("#username");
     userNameField.disabled = true;
@@ -56,9 +70,9 @@ export class LoginRoute extends Route {
     const eauthField = this.pageElement.querySelector("#eauth");
     eauthField.disabled = true;
 
-    notice.className = "notice-wrapper";
-    notice.focus(); //Used to trigger a reflow (to restart animation)
-    notice.className = "notice-wrapper show";
+    noticeDiv.className = "notice-wrapper";
+    noticeDiv.focus(); //Used to trigger a reflow (to restart animation)
+    noticeDiv.className = "notice-wrapper show";
 
     //we need these functions to populate the dropdown boxes
     const wheelConfigValuesPromise = this.router.api.getWheelConfigValues();
@@ -109,15 +123,15 @@ export class LoginRoute extends Route {
   onLoginFailure() {
     this.toggleForm(true);
 
-    const notice = this.pageElement.querySelector(".notice-wrapper");
+    const noticeDiv = this.pageElement.querySelector(".notice-wrapper");
 
     const authFailed = Route._createDiv("notice", "Authentication failed");
     authFailed.style.backgroundColor = "#F44336";
 
-    notice.replaceChild(authFailed, notice.firstChild);
-    notice.className = "notice-wrapper";
-    notice.focus(); //Used to trigger a reflow (to restart animation)
-    notice.className = "notice-wrapper show";
+    noticeDiv.replaceChild(authFailed, noticeDiv.firstChild);
+    noticeDiv.className = "notice-wrapper";
+    noticeDiv.focus(); //Used to trigger a reflow (to restart animation)
+    noticeDiv.className = "notice-wrapper show";
   }
 
   toggleForm(pAllowSubmit) {

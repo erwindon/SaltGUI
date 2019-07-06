@@ -12,17 +12,6 @@ export class API {
     this.getEvents(pRouter);
   }
 
-  isAuthenticated() {
-    // use the /stats api call to see if we are allowed to access SaltGUI
-    // (if the session cookie is still valid)
-    return this.apiRequest("GET", "/stats", {})
-      .then(pResponse => {
-        return window.sessionStorage.getItem("token") !== null;
-      }, pResponse => {
-        return false;
-      } );
-  }
-
   login(pUserName, pPassWord, pEauth="pam") {
     const params = {
       username: pUserName,
@@ -53,7 +42,15 @@ export class API {
     // redirecting to the login screen
     return this.apiRequest("POST", "/logout", {})
       .then(pResponse => {
+        // we could logout
+        // assume the session is terminated
         window.sessionStorage.removeItem("token");
+        window.sessionStorage.removeItem("login-response");
+      }, pResponse => {
+        // we could not logout
+        // assume the session is broken
+        window.sessionStorage.removeItem("token");
+        window.sessionStorage.removeItem("login-response");
       });
   }
 
@@ -209,6 +206,28 @@ export class API {
         if(pResponse.ok) return pResponse.json();
         // fetch does not reject on > 300 http status codes,
         // so let's do it ourselves
+        if(pResponse.status === 401) {
+          const loginResponseStr = window.sessionStorage.getItem("login-response");
+          if(!loginResponseStr) {
+            this.logout().then(() =>
+              window.location.replace("/login?reason=no-session")
+            );
+            return null;
+          }
+
+          const loginResponse = JSON.parse(loginResponseStr);
+          // just in case...
+          if(loginResponse) {
+            const now = Date.now() / 1000;
+            const expireValue = loginResponse.expire;
+            if(now > expireValue) {
+              this.logout().then(() =>
+                window.location.replace("/login?reason=expired-session")
+              );
+              return null;
+            }
+          }
+        }
         throw new HTTPError(pResponse.status, pResponse.statusText);
       });
   }
