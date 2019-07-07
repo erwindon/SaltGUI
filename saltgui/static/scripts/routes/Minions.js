@@ -25,8 +25,9 @@ export class MinionsRoute extends PageRoute {
         myThis._updateMinions(pData);
       }, pData2 => {
         const pData = {"return":[{}]};
-        for(const k of pData1.return[0].data.return.minions)
-          pData.return[0][k] = JSON.stringify(pData2);
+        if(pData1)
+          for(const k of pData1.return[0].data.return.minions)
+            pData.return[0][k] = JSON.stringify(pData2);
         myThis._updateMinions(pData);
       });
     }, pData => {

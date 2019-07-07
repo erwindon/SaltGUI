@@ -14,40 +14,55 @@ export class LoginRoute extends Route {
     this.registerEventListeners();
   }
 
+  registerEventListeners() {
+    const submit = document.getElementById("login-form");
+    submit.addEventListener("submit", this.onLogin);
+  }
+
+  showNoticeText(pBackgroundColour, pText) {
+    // create a new child every time to restart the animation
+    const noticeDiv = Route._createDiv("", pText);
+    noticeDiv.id = "notice";
+    noticeDiv.style.backgroundColor = pBackgroundColour;
+    const noticeWrapperDiv = document.getElementById("notice-wrapper");
+    noticeWrapperDiv.replaceChild(noticeDiv, noticeWrapperDiv.firstChild);
+  }
+
   onShow() {
-    const eauthSelector = this.pageElement.querySelector("#login-form #eauth");
+    const eauthSelector = document.getElementById("eauth");
     const eauthValue = window.localStorage.getItem("eauth");
     eauthSelector.value = eauthValue ? eauthValue : "pam";
 
-    let reason = decodeURIComponent(Utils.getQueryParam("reason"));
-    if(!reason || reason === "undefined") return;
-    if(reason === "no-session") reason = "Not logged in!";
-    if(reason === "expired-session") reason = "Session expired!";
-    if(reason === "logout") reason = "Logout!";
-    const noticeDiv = this.pageElement.querySelector(".notice-wrapper");
-
-    const reasonDiv = Route._createDiv("notice", reason);
-    reasonDiv.style.backgroundColor = "black";
-    noticeDiv.replaceChild(reasonDiv, noticeDiv.firstChild);
-    noticeDiv.className = "notice-wrapper";
-    noticeDiv.focus(); //Used to trigger a reflow (to restart animation)
-    noticeDiv.className = "notice-wrapper show";
-  }
-
-  registerEventListeners() {
-    const submit = this.pageElement.querySelector("#login-form");
-    submit.addEventListener("submit", this.onLogin);
+    const reason = decodeURIComponent(Utils.getQueryParam("reason"));
+    switch(reason){
+    case null:
+    case "":
+    case "undefined":
+      break;
+    case "no-session":
+      this.showNoticeText("#F44336", "Not logged in");
+      break;
+    case "expired-session":
+      this.showNoticeText("#F44336", "Session expired");
+      break;
+    case "logout":
+      this.showNoticeText("gray", "Logout");
+      break;
+    default:
+      // should not occur
+      this.showNoticeText("#F44336", reason);
+    }
   }
 
   onLogin(pSubmitEvent) {
     pSubmitEvent.preventDefault();
     if(this.loginPending) return; //Don't continue if waiting on a request
 
-    const userNameField = this.pageElement.querySelector("#username");
+    const userNameField = document.getElementById("username");
     const userName = userNameField.value;
-    const passWordField = this.pageElement.querySelector("#password");
+    const passWordField = document.getElementById("password");
     const passWord = passWordField.value;
-    const eauthField = this.pageElement.querySelector("#eauth");
+    const eauthField = document.getElementById("eauth");
     const eauth = eauthField.value;
 
     this.toggleForm(false);
@@ -58,22 +73,14 @@ export class LoginRoute extends Route {
   onLoginSuccess() {
     this.toggleForm(true);
 
-    const noticeDiv = this.pageElement.querySelector(".notice-wrapper");
-
-    const success = Route._createDiv("notice", "Please wait...");
-    success.style.backgroundColor = "#4CAF50";
-    noticeDiv.replaceChild(success, noticeDiv.firstChild);
-
-    const userNameField = this.pageElement.querySelector("#username");
+    const userNameField = document.getElementById("username");
     userNameField.disabled = true;
-    const passWordField = this.pageElement.querySelector("#password");
+    const passWordField = document.getElementById("password");
     passWordField.disabled = true;
-    const eauthField = this.pageElement.querySelector("#eauth");
+    const eauthField = document.getElementById("eauth");
     eauthField.disabled = true;
 
-    noticeDiv.className = "notice-wrapper";
-    noticeDiv.focus(); //Used to trigger a reflow (to restart animation)
-    noticeDiv.className = "notice-wrapper show";
+    this.showNoticeText("#4CAF50", "Please wait...");
 
     //we need these functions to populate the dropdown boxes
     const wheelConfigValuesPromise = this.router.api.getWheelConfigValues();
@@ -124,15 +131,7 @@ export class LoginRoute extends Route {
   onLoginFailure() {
     this.toggleForm(true);
 
-    const noticeDiv = this.pageElement.querySelector(".notice-wrapper");
-
-    const authFailed = Route._createDiv("notice", "Authentication failed");
-    authFailed.style.backgroundColor = "#F44336";
-
-    noticeDiv.replaceChild(authFailed, noticeDiv.firstChild);
-    noticeDiv.className = "notice-wrapper";
-    noticeDiv.focus(); //Used to trigger a reflow (to restart animation)
-    noticeDiv.className = "notice-wrapper show";
+    this.showNoticeText("#F44336", "Authentication failed");
   }
 
   toggleForm(pAllowSubmit) {

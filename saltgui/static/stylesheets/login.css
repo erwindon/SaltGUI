@@ -63,29 +63,41 @@
   width: 25px;
 }
 
-.notice-wrapper {
-  height: 0;
-  overflow-y: hidden;
+#notice-wrapper {
   margin-bottom: 15px;
 }
 
-.notice-wrapper.show {
+#notice {
+  height: 0;
+  overflow-y: hidden;
+  color: white;
+  padding: 0;
+  border-radius: 2px;
+  text-align: center;
+  font-size: 15px;
   animation-name: show-notice;
   animation-iteration-count: 1;
   animation-duration: 5s;
 }
 
 @keyframes show-notice {
-  0% { height: 0; }
-  20% { height: 38px; }
-  80% { height: 38px; }
-  100% { height: 0; }
-}
+  0% {
+    height: 0;
+    padding: 0;
+  }
 
-.notice {
-  color: white;
-  padding: 9px 0;
-  border-radius: 2px;
-  text-align: center;
-  font-size: 15px;
+  20% {
+    height: 38px;
+    padding: 9px 0;
+  }
+
+  80% {
+    height: 38px;
+    padding: 9px 0;
+  }
+
+  100% {
+    height: 0;
+    padding: 0;
+  }
 }
