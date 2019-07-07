@@ -155,25 +155,25 @@ export class Output {
   static dateTimeStr(pDtStr) {
 
     // no available setting, then return the original
-    const datetime_fraction_digits_str = window.localStorage.getItem("datetime_fraction_digits");
-    if(datetime_fraction_digits_str === null) return pDtStr;
+    const dateTimeFractionDigitsText = window.localStorage.getItem("datetime_fraction_digits");
+    if(dateTimeFractionDigitsText === null) return pDtStr;
 
     // setting is not a number, return the original
-    let datetime_fraction_digits_nr = Number.parseInt(datetime_fraction_digits_str);
-    if(isNaN(datetime_fraction_digits_nr)) return pDtStr;
+    let dateTimeFractionDigits = Number.parseInt(dateTimeFractionDigitsText);
+    if(isNaN(dateTimeFractionDigits)) return pDtStr;
 
     // stick to the min/max values without complaining
-    if(datetime_fraction_digits_nr < 0) datetime_fraction_digits_nr = 0;
-    if(datetime_fraction_digits_nr > 6) datetime_fraction_digits_nr = 6;
+    if(dateTimeFractionDigits < 0) dateTimeFractionDigits = 0;
+    if(dateTimeFractionDigits > 6) dateTimeFractionDigits = 6;
 
     // find the fractional part (assume only one '.' in the string)
     let dotPos = pDtStr.indexOf(".");
     if(dotPos < 0) return pDtStr;
 
     // with no digits, also remove the dot
-    if(datetime_fraction_digits_nr === 0) dotPos -= 1;
+    if(dateTimeFractionDigits === 0) dotPos -= 1;
 
-    return pDtStr.substring(0, dotPos + datetime_fraction_digits_nr + 1);
+    return pDtStr.substring(0, dotPos + dateTimeFractionDigits + 1);
   }
 
   // add the status summary

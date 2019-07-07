@@ -81,29 +81,29 @@ export class LoginRoute extends Route {
     const templates = pData.return[0].data.return.saltgui_templates;
     window.localStorage.setItem("templates", JSON.stringify(templates));
 
-    const public_pillars = pData.return[0].data.return.saltgui_public_pillars;
-    window.localStorage.setItem("public_pillars", JSON.stringify(public_pillars));
+    const publicPillars = pData.return[0].data.return.saltgui_public_pillars;
+    window.localStorage.setItem("public_pillars", JSON.stringify(publicPillars));
 
-    const preview_grains = pData.return[0].data.return.saltgui_preview_grains;
-    window.localStorage.setItem("preview_grains", JSON.stringify(preview_grains));
+    const previewGrains = pData.return[0].data.return.saltgui_preview_grains;
+    window.localStorage.setItem("preview_grains", JSON.stringify(previewGrains));
 
-    const hide_jobs = pData.return[0].data.return.saltgui_hide_jobs;
-    window.localStorage.setItem("hide_jobs", JSON.stringify(hide_jobs));
-    const show_jobs = pData.return[0].data.return.saltgui_show_jobs;
-    window.localStorage.setItem("show_jobs", JSON.stringify(show_jobs));
+    const hideJobs = pData.return[0].data.return.saltgui_hide_jobs;
+    window.localStorage.setItem("hide_jobs", JSON.stringify(hideJobs));
+    const showJobs = pData.return[0].data.return.saltgui_show_jobs;
+    window.localStorage.setItem("show_jobs", JSON.stringify(showJobs));
 
-    let nodeGroups = pData.return[0].data.return.nodeGroups;
+    let nodeGroups = pData.return[0].data.return.nodegroups;
     if(!nodeGroups) nodeGroups = {};
     window.localStorage.setItem("nodegroups", JSON.stringify(nodeGroups));
 
-    const output_formats = pData.return[0].data.return.saltgui_output_formats;
-    window.localStorage.setItem("output_formats", JSON.stringify(output_formats));
+    const outputFormats = pData.return[0].data.return.saltgui_output_formats;
+    window.localStorage.setItem("output_formats", JSON.stringify(outputFormats));
 
-    const datetime_fraction_digits = pData.return[0].data.return.saltgui_datetime_fraction_digits;
-    window.localStorage.setItem("datetime_fraction_digits", JSON.stringify(datetime_fraction_digits));
+    const dateTimeFractionDigits = pData.return[0].data.return.saltgui_datetime_fraction_digits;
+    window.localStorage.setItem("datetime_fraction_digits", JSON.stringify(dateTimeFractionDigits));
 
-    const tooltip_mode = pData.return[0].data.return.saltgui_tooltip_mode;
-    window.localStorage.setItem("tooltip_mode", tooltip_mode);
+    const toolTipMode = pData.return[0].data.return.saltgui_tooltip_mode;
+    window.localStorage.setItem("tooltip_mode", toolTipMode);
   }
 
   onLoginFailure() {

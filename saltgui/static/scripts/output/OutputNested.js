@@ -15,14 +15,14 @@ export class OutputNested {
     } else if(typeof pValue === "boolean" || typeof pValue === "number") {
       pOutArray.push(OutputNested.ustring(pIndent, pValue, pPrefix));
     } else if(typeof pValue === "string") {
-      let first_line = true;
+      let isFirstLine = true;
       pValue = pValue.replace(/\n$/, "");
       for(const line of pValue.split("\n")) {
-        let line_prefix = pPrefix;
-        if(!first_line)
-          line_prefix = " ".repeat(pPrefix.length);
-        pOutArray.push(OutputNested.ustring(pIndent, line, line_prefix));
-        first_line = false;
+        let linePrefix = pPrefix;
+        if(!isFirstLine)
+          linePrefix = " ".repeat(pPrefix.length);
+        pOutArray.push(OutputNested.ustring(pIndent, line, linePrefix));
+        isFirstLine = false;
       }
     } else if(typeof pValue === "object" && Array.isArray(pValue)) {
       for(const ind of pValue) {

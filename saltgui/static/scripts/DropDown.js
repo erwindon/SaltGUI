@@ -50,9 +50,9 @@ export class DropDownMenu {
       }
     }
     // hide the menu when it has no visible menu-items
-    const display_visible = (this.menuDropdown.tagName === "TD") ? "table-cell" : "inline-block";
-    const display_invisible = "none";
-    this.menuDropdown.style.display = (visibleCount > 0) ? display_visible : display_invisible;
+    const displayVisible = (this.menuDropdown.tagName === "TD") ? "table-cell" : "inline-block";
+    const displayInvisible = "none";
+    this.menuDropdown.style.display = (visibleCount > 0) ? displayVisible : displayInvisible;
   }
 
   // Add a menu item at the end of this dropdown menu

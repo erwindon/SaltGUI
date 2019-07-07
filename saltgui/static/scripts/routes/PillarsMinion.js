@@ -77,15 +77,15 @@ export class PillarsMinionRoute extends PageRoute {
     // collect the public pillars and compile their regexps
     let publicPillarsText = window.localStorage.getItem("public_pillars");
     if(!publicPillarsText || publicPillarsText === "undefined") publicPillarsText = "[]";
-    let public_pillars = JSON.parse(publicPillarsText);
-    if(!Array.isArray(public_pillars)) public_pillars = [ ];
-    for(let i = 0; i < public_pillars.length; i++) {
+    let publicPillars = JSON.parse(publicPillarsText);
+    if(!Array.isArray(publicPillars)) publicPillars = [ ];
+    for(let i = 0; i < publicPillars.length; i++) {
       try {
-        public_pillars[i] = new RegExp(public_pillars[i]);
+        publicPillars[i] = new RegExp(publicPillars[i]);
       }
       catch(err) {
         // most likely a syntax error in the RE
-        public_pillars[i] = null;
+        publicPillars[i] = null;
       }
     }
 
@@ -101,41 +101,41 @@ export class PillarsMinionRoute extends PageRoute {
       const pillarValueTd = Route._createTd("", "");
 
       // 25CF = BLACK CIRCLE, 8 of these
-      const value_hidden = "\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF";
-      const pillar_hidden = Route._createDiv("pillar-hidden", value_hidden);
-      pillar_hidden.style.display = "inline-block";
-      Utils.addToolTip(pillar_hidden, "Click to show");
+      const pillarValueHidden = "\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF";
+      const pillarHiddenDiv = Route._createDiv("pillar-hidden", pillarValueHidden);
+      pillarHiddenDiv.style.display = "inline-block";
+      Utils.addToolTip(pillarHiddenDiv, "Click to show");
       // initially use the hidden view
-      pillarValueTd.appendChild(pillar_hidden);
+      pillarValueTd.appendChild(pillarHiddenDiv);
 
-      const value_shown = Output.formatObject(pillars[k]);
-      const pillar_shown = Route._createDiv("pillar-shown", value_shown);
+      const pillarValueShown = Output.formatObject(pillars[k]);
+      const pillarShownDiv = Route._createDiv("pillar-shown", pillarValueShown);
       // initially hide the normal view
-      pillar_shown.style.display = "none";
-      Utils.addToolTip(pillar_shown, "Click to hide");
+      pillarShownDiv.style.display = "none";
+      Utils.addToolTip(pillarShownDiv, "Click to hide");
       // add the non-masked representation, not shown yet
-      pillarValueTd.appendChild(pillar_shown);
+      pillarValueTd.appendChild(pillarShownDiv);
 
       // show public pillars immediatelly
-      for(let i = 0; i < public_pillars.length; i++) {
-        if(public_pillars[i] && public_pillars[i].test(k)) {
+      for(let i = 0; i < publicPillars.length; i++) {
+        if(publicPillars[i] && publicPillars[i].test(k)) {
           // same code as when clicking the hidden value
-          pillar_hidden.style.display = "none";
-          pillar_shown.style.display = "inline-block";
+          pillarHiddenDiv.style.display = "none";
+          pillarShownDiv.style.display = "inline-block";
           break;
         }
       }
 
       pillar.appendChild(pillarValueTd);
 
-      pillar_hidden.addEventListener("click", function(pClickEvent) {
-        pillar_hidden.style.display = "none";
-        pillar_shown.style.display = "inline-block";
+      pillarHiddenDiv.addEventListener("click", function(pClickEvent) {
+        pillarHiddenDiv.style.display = "none";
+        pillarShownDiv.style.display = "inline-block";
       });
 
-      pillar_shown.addEventListener("click", function(pClickEvent) {
-        pillar_shown.style.display = "none";
-        pillar_hidden.style.display = "inline-block";
+      pillarShownDiv.addEventListener("click", function(pClickEvent) {
+        pillarShownDiv.style.display = "none";
+        pillarHiddenDiv.style.display = "inline-block";
       });
 
       container.tBodies[0].appendChild(pillar);

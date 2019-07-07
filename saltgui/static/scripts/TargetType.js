@@ -16,8 +16,8 @@ export class TargetType {
   // It takes a while before we known the list of nodegroups
   // so this conclusion must be re-evaluated each time
   static _targetTypeNodeGroupPrepare(pMenuItem) {
-    const nodeGroups = window.localStorage.getItem("nodegroups");
-    if(nodeGroups && nodeGroups !== "{}") {
+    const nodeGroupsText = window.localStorage.getItem("nodegroups");
+    if(nodeGroupsText && nodeGroupsText !== "{}") {
       pMenuItem.innerText = "Nodegroup";
       pMenuItem.style.display = "block";
     } else {

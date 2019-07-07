@@ -30,14 +30,14 @@ export class PageRoute extends Route {
     let cntOnline = 0;
     let cntOffline = 0;
     for(const minionId of minionIds) {
-      const minion_info = minions[minionId];
+      const minionInfo = minions[minionId];
 
       // minions can be offline, then the info will be false
-      if(minion_info === false) {
+      if(minionInfo === false) {
         this._updateOfflineMinion(table, minionId);
         cntOffline++;
       } else {
-        this._updateMinion(table, minion_info, minionId, minions);
+        this._updateMinion(table, minionInfo, minionId, minions);
         cntOnline++;
       }
     }

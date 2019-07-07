@@ -25,13 +25,13 @@ export class Utils {
   static addToolTip(pTooltipHost, pTooltipText) {
 
     // Users may want to switch this on to improve browser performance
-    const tooltip_mode = window.localStorage.getItem("tooltip_mode");
+    const toolTipMode = window.localStorage.getItem("tooltip_mode");
 
-    if(tooltip_mode === "none") {
+    if(toolTipMode === "none") {
       return;
     }
 
-    if(tooltip_mode === "simple") {
+    if(toolTipMode === "simple") {
       pTooltipHost.setAttribute("title", pTooltipText);
       return;
     }
@@ -88,20 +88,20 @@ export class Utils {
   }
 
   static makeTableSearchable(pStartElement) {
-    const button_search = Route._createSpan("search", "");
+    const searchButton = Route._createSpan("search", "");
     // 1F50D = LEFT-POINTING MAGNIFYING GLASS
     // FE0E = VARIATION SELECTOR-15 (render as text)
-    button_search.innerHTML = "&#x1f50d;&#xFE0E;";
-    button_search.onclick = ev =>
+    searchButton.innerHTML = "&#x1f50d;&#xFE0E;";
+    searchButton.onclick = ev =>
       Utils.hideShowTableSearchBar(pStartElement);
     const table = pStartElement.querySelector("table");
-    table.parentElement.insertBefore(button_search, table);
+    table.parentElement.insertBefore(searchButton, table);
   }
 
   static addTableHelp(pStartElement, pHelpText) {
-    const button_help = pStartElement.querySelector("#help");
-    button_help.classList.add("search");
-    Utils.addToolTip(button_help, pHelpText);
+    const helpButton = pStartElement.querySelector("#help");
+    helpButton.classList.add("search");
+    Utils.addToolTip(helpButton, pHelpText);
   }
 
   static hideShowTableSearchBar(pStartElement) {

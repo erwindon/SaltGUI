@@ -112,15 +112,15 @@ export class BeaconsMinionRoute extends PageRoute {
       this._addMenuItemBeaconsDelete(menu, pMinionId, k);
 
       // menu comes before this data on purpose
-      const beacon_config = Output.formatObject(beacon);
-      const beaconValueTd = Route._createTd("beacon-config", beacon_config);
-      if(beacons.enabled === false) beaconValueTd.classList.add("beacon-disabled");
-      if(beacon.enabled === false) beaconValueTd.classList.add("beacon-disabled");
-      tr.appendChild(beaconValueTd);
+      const beaconConfig = Output.formatObject(beacon);
+      const beaconConfigTd = Route._createTd("beacon-config", beaconConfig);
+      if(beacons.enabled === false) beaconConfigTd.classList.add("beacon-disabled");
+      if(beacon.enabled === false) beaconConfigTd.classList.add("beacon-disabled");
+      tr.appendChild(beaconConfigTd);
 
-      const beacon_value = Route._createTd("beacon-value", "(waiting)");
-      beacon_value.classList.add("beacon-waiting");
-      tr.appendChild(beacon_value);
+      const beaconValueTd = Route._createTd("beacon-value", "(waiting)");
+      beaconValueTd.classList.add("beacon-waiting");
+      tr.appendChild(beaconValueTd);
 
       container.tBodies[0].appendChild(tr);
 

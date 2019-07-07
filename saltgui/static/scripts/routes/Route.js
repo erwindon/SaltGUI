@@ -10,8 +10,8 @@ export class Route {
     this.pageElement = document.querySelector(pPageSelector);
     this.router = pRouter;
     if(pMenuItemSelector) {
-      this.menuitem_element1 = document.querySelector(pMenuItemSelector + "1");
-      this.menuitem_element2 = document.querySelector(pMenuItemSelector + "2");
+      this.menuItemElement1 = document.querySelector(pMenuItemSelector + "1");
+      this.menuItemElement2 = document.querySelector(pMenuItemSelector + "2");
     }
   }
 
@@ -28,11 +28,11 @@ export class Route {
   }
 
   getMenuItemElement1() {
-    return this.menuitem_element1;
+    return this.menuItemElement1;
   }
 
   getMenuItemElement2() {
-    return this.menuitem_element2;
+    return this.menuItemElement2;
   }
 
   static _createTd(pClassName, pInnerText) {
