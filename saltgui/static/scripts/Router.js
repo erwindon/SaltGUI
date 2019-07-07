@@ -9,6 +9,7 @@ import {JobsRoute} from './routes/Jobs.js';
 import {KeysRoute} from './routes/Keys.js';
 import {LoginRoute} from './routes/Login.js';
 import {MinionsRoute} from './routes/Minions.js';
+import {OptionsRoute} from './routes/Options.js';
 import {PillarsMinionRoute} from './routes/PillarsMinion.js';
 import {PillarsRoute} from './routes/Pillars.js';
 import {SchedulesMinionRoute} from './routes/SchedulesMinion.js';
@@ -37,6 +38,7 @@ export class Router {
     this.registerRoute(this.jobRoute = new JobRoute(this));
     this.registerRoute(new JobsRoute(this));
     this.registerRoute(new TemplatesRoute(this));
+    this.registerRoute(new OptionsRoute(this));
 
     // show template menu item if templates defined
     const templatesText = window.localStorage.getItem("templates");
@@ -62,7 +64,11 @@ export class Router {
     document.querySelector(".logo")
       .addEventListener("click", pClickEvent => {
         if(window.location.pathname === "/login") return;
-        this.goTo("/");
+        if(window.event.ctrlKey) {
+          window.location.assign("/options");
+        } else {
+          window.location.assign("/");
+        }
       });
 
     document.querySelector("#button-minions1")
@@ -204,22 +210,15 @@ export class Router {
 
     this.switchingRoute = true;
 
-    const afterLoad = function(pRoute) {
-      if(myThis.currentRoute !== undefined) {
-        myThis.hideRoute(myThis.currentRoute);
-      }
+    pRoute.onShow();
 
-      myThis.currentRoute = pRoute;
-      document.title = "SaltGUI - " + myThis.currentRoute.getName();
-      myThis.currentRoute.getPageElement().className = "route current";
-      myThis.switchingRoute = false;
-    };
+    if(myThis.currentRoute) {
+      myThis.hideRoute(myThis.currentRoute);
+    }
 
-    let response = null;
-    if(pRoute.onShow) response = pRoute.onShow();
-
-    if(response && response.then) response.then(afterLoad(pRoute));
-    else afterLoad(pRoute);
+    myThis.currentRoute = pRoute;
+    myThis.currentRoute.getPageElement().className = "route current";
+    myThis.switchingRoute = false;
   }
 
   hideRoute(pRoute) {

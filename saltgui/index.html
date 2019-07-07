@@ -13,6 +13,7 @@
     <link rel='stylesheet' type='text/css' href='static/stylesheets/beacons.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/dropdown.css' />
     <link rel='stylesheet' type='text/css' href='static/stylesheets/tooltip.css' />
+    <link rel='stylesheet' type='text/css' href='static/stylesheets/options.css' />
     <link rel='shortcut icon' href='static/images/icon.png' />
   </head>
 
@@ -392,6 +393,131 @@
         </div>
       </div>
 
+      <div class='route' id='page-options'>
+        <div class='dashboard'>
+          <div id='options-panel' class='panel'>
+            <h1 id="options-title">Options</h1>
+            <span id="help" style="float: right; cursor: help">&#x2753;&#xFE0E;</span>
+            <table id="options" class="options">
+              <thead>
+                <tr><th>Name</th><th>Value</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td id="option-token-name">session_token:</td>
+                  <td id="option-token-value"></td>
+                </tr>
+                <tr>
+                  <td id="option-start-name">session_start:</td>
+                  <td id="option-start-value"></td>
+                </tr>
+                <tr>
+                  <td id="option-expire-name">session_expire:</td>
+                  <td id="option-expire-value"></td>
+                </tr>
+                <tr>
+                  <td id="option-eauth-name">session_eauth:</td>
+                  <td id="option-eauth-value"></td>
+                </tr>
+                <tr>
+                  <td id="option-user-name">session_user:</td>
+                  <td id="option-user-value"></td>
+                </tr>
+                <tr>
+                  <td id="option-perms-name">session_perms:</td>
+                  <td id="option-perms-value"></td>
+                </tr>
+                <tr>
+                  <td id="option-templates-name">saltgui_templates:</td>
+                  <td id="option-templates-value"></td>
+                </tr>
+                <tr>
+                  <td id="option-public-pillars-name">saltgui_public_pillars:</td>
+                  <td id="option-public-pillars-value"></td>
+                </tr>
+                <tr>
+                  <td id="option-preview-grains-name">saltgui_preview_grains:</td>
+                  <td id="option-preview-grains-value"></td>
+                </tr>
+                <tr>
+                  <td id="option-hide-jobs-name">saltgui_hide_jobs:</td>
+                  <td id="option-hide-jobs-value"></td>
+                </tr>
+                <tr>
+                  <td id="option-show-jobs-name">saltgui_show_jobs:</td>
+                  <td id="option-show-jobs-value"></td>
+                </tr>
+                <tr>
+                  <td id="option-nodegroups-name">saltgui_nodegroups:</td>
+                  <td id="option-nodegroups-value"></td>
+                </tr>
+                <tr>
+                  <td id="option-output-formats-name">saltgui_output_formats:</td>
+                  <td style="white-space: normal">
+                    <span id="option-output-formats-value"></span></br></br>
+                    <input type="radio" id="output-formats-doc-doc" name="output-formats-doc" value="doc">
+                    <label for="output-formats-doc-doc">doc</label>
+                    <input type="radio" id="output-formats-doc-none" name="output-formats-doc" value="">
+                    <label for="output-formats-doc-none">no doc</label>
+</br>
+                    <input type="radio" id="output-formats-highstate-saltgui" name="output-formats-highstate" value="saltgui">
+                    <label for="output-formats-highstate-saltgui">SaltGUI highstate</label>
+                    <input type="radio" id="output-formats-highstate-normal" name="output-formats-highstate" value="normal">
+                    <label for="output-formats-highstate-normal">Normal highstate</label>
+                    <input type="radio" id="output-formats-highstate-none" name="output-formats-highstate" value="none">
+                    <label for="output-formats-highstate-none">No highstate</label>
+</br>
+                    <input type="radio" id="output-formats-output-json" name="output-formats-output" value="json">
+                    <label for="output-formats-output-json">json</label>
+                    <input type="radio" id="output-formats-output-nested" name="output-formats-output" value="nested">
+                    <label for="output-formats-output-nested">nested</label>
+                    <input type="radio" id="output-formats-output-yaml" name="output-formats-output" value="yaml">
+                    <label for="output-formats-output-yaml">yaml</label>
+                  </td>
+                </tr>
+                <tr>
+                  <td id="option-datetime-fraction-digits-name">saltgui_datetime_fraction_digits:</td>
+                  <td style="white-space: normal">
+                    <span id="option-datetime-fraction-digits-value"></span></br></br>
+                    <input type="radio" id="datetime-fraction-digits0" name="datetime-fraction-digits" value="0">
+                    <label for="datetime-fraction-digits0">0</label>
+                    <input type="radio" id="datetime-fraction-digits1" name="datetime-fraction-digits" value="1">
+                    <label for="datetime-fraction-digits1">1</label>
+                    <input type="radio" id="datetime-fraction-digits2" name="datetime-fraction-digits" value="2">
+                    <label for="datetime-fraction-digits2">2</label>
+                    <input type="radio" id="datetime-fraction-digits3" name="datetime-fraction-digits" value="3">
+                    <label for="datetime-fraction-digits3">3</label>
+                    <input type="radio" id="datetime-fraction-digits4" name="datetime-fraction-digits" value="4">
+                    <label for="datetime-fraction-digits4">4</label>
+                    <input type="radio" id="datetime-fraction-digits5" name="datetime-fraction-digits" value="5">
+                    <label for="datetime-fraction-digits5">5</label>
+                    <input type="radio" id="datetime-fraction-digits6" name="datetime-fraction-digits" value="6">
+                    <label for="datetime-fraction-digits6">6</label>
+</td>
+                </tr>
+                <tr>
+                  <td id="option-tooltip-mode-name">saltgui_tooltip_mode:</td>
+                  <td style="white-space: normal">
+                    <span id="option-tooltip-mode-value"></span></br></br>
+                    <input type="radio" id="tooltip-mode-full" name="tooltip-mode" value="full">
+                    <label for="tooltip-mode-full">full</label>
+                    <input type="radio" id="tooltip-mode-simple" name="tooltip-mode" value="simple">
+                    <label for="tooltip-mode-simple">simple</label>
+                    <input type="radio" id="tooltip-mode-none" name="tooltip-mode" value="none">
+                    <label for="tooltip-mode-none">none</label>
+                </td>
+              </tbody>
+            </table>
+            <div class='msg'>(loading)</div>
+          </div>
+          <div class='panel job-list'>
+            <h1>Recent Jobs</h1>
+            <input style="display: none" class="filter-text" list="list-jobs" placeholder="&#x1F50D;">
+            <table class='jobs highlight-rows'><tbody></tbody></table>
+            <div class='msg'>(loading)</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class='popup' id='popup-run-command'>

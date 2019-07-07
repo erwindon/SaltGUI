@@ -43,6 +43,7 @@ export class API {
           // Don't give the user an empty screen full of errors
           throw new HTTPError(403, "Unauthorized");
         }
+        window.sessionStorage.setItem("login-response", JSON.stringify(response));
         window.sessionStorage.setItem("token", response.token);
       });
   }

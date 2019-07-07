@@ -1,0 +1,17 @@
+#page-options {
+  width: 100%;
+}
+
+#page-options input {
+  width: initial;
+  min-width: initial;
+}
+
+#page-options label {
+  margin-right: 20px;
+}
+
+table#options tr td {
+  white-space: pre-wrap;
+  vertical-align: top;
+}
