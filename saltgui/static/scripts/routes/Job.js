@@ -368,6 +368,7 @@ export class JobRoute extends Route {
       window.location.reload()
     );
     summaryJobsActiveSpan.style.cursor = "pointer";
+    Utils.addToolTip(summaryJobsActiveSpan, "Click to refresh");
 
     // update the minion details
     for(const minionInfo of info.Running) {
