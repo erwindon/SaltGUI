@@ -13,7 +13,7 @@ export class SchedulesMinionRoute extends PageRoute {
     this._handleLocalScheduleList = this._handleLocalScheduleList.bind(this);
 
     const closeButton = this.pageElement.querySelector("#schedules-minion-button-close");
-    closeButton.addEventListener("click", _ =>
+    closeButton.addEventListener("click", pClickEvent =>
       this.router.goTo("/schedules")
     );
   }

@@ -107,7 +107,7 @@ export class JobRoute extends Route {
     const output = this.getPageElement().querySelector(".output");
 
     const closeButton = document.querySelector("#job-button-close");
-    closeButton.addEventListener("click", _ =>
+    closeButton.addEventListener("click", pClickEvent =>
       window.history.back()
     );
 

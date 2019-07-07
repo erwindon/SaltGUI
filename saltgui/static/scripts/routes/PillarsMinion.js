@@ -12,7 +12,7 @@ export class PillarsMinionRoute extends PageRoute {
     this._handleLocalPillarItems = this._handleLocalPillarItems.bind(this);
 
     const closeButton = this.pageElement.querySelector("#pillars-minion-button-close");
-    closeButton.addEventListener("click", _ =>
+    closeButton.addEventListener("click", pClickEvent =>
       this.router.goTo("/pillars")
     );
   }

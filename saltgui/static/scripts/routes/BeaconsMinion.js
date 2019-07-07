@@ -13,7 +13,7 @@ export class BeaconsMinionRoute extends PageRoute {
     this._handleLocalBeaconsList = this._handleLocalBeaconsList.bind(this);
 
     const closeButton = this.pageElement.querySelector("#beacons-minion-button-close");
-    closeButton.addEventListener("click", _ =>
+    closeButton.addEventListener("click", pClickEvent =>
       this.router.goTo("/beacons")
     );
 

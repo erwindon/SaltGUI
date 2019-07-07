@@ -56,7 +56,7 @@ export class CommandBox {
     document.querySelector(".run-command input[type='submit']")
       .addEventListener("click", this._onRun);
 
-    this._addKeyEventListener("#target", _ => {
+    this._addKeyEventListener("#target", pKeyboardEvent => {
       const targetField = document.querySelector(".run-command #target");
       const targetType = targetField.value;
       TargetType.autoSelectTargetType(targetType);
