@@ -1,6 +1,5 @@
 const assert = require('chai').assert;
 
-import {Output} from '../../saltgui/static/scripts/output/Output.js';
 import {OutputDocumentation} from '../../saltgui/static/scripts/output/OutputDocumentation.js';
 import {OutputJson} from '../../saltgui/static/scripts/output/OutputJson.js';
 import {OutputNested} from '../../saltgui/static/scripts/output/OutputNested.js';
