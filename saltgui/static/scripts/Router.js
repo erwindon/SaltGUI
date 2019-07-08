@@ -139,13 +139,13 @@ export class Router {
 
     document.querySelector("#button-logout1")
       .addEventListener("click", pClickEvent => {
-        this.api.logout();
-        window.location.replace("/login?reason=logout");
+        this.api.logout().then(
+          _ => window.location.replace("/login?reason=logout"));
       });
     document.querySelector("#button-logout2")
       .addEventListener("click", pClickEvent => {
-        this.api.logout();
-        window.location.replace("/login?reason=logout");
+        this.api.logout().then(
+          _ => window.location.replace("/login?reason=logout"));
       });
   }
 
