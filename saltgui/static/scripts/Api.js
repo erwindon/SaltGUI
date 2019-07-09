@@ -210,7 +210,7 @@ export class API {
         if(pResponse.ok) return pResponse.json();
         // fetch does not reject on > 300 http status codes,
         // so let's do it ourselves
-        if(pResponse.status === 401) {
+        if(pResponse.status === 401 && pRoute !== "/login") {
           const loginResponseStr = window.sessionStorage.getItem("login-response");
           if(!loginResponseStr) {
             myThis.logout().then(() =>
