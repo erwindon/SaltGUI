@@ -128,10 +128,20 @@ export class LoginRoute extends Route {
     window.localStorage.setItem("tooltip_mode", toolTipMode);
   }
 
-  onLoginFailure() {
+  onLoginFailure(error) {
     this.toggleForm(true);
 
-    this.showNoticeText("#F44336", "Authentication failed");
+    if(error && error.status === 503) {
+      // Service Unavailable
+      // e.g. salt-api running but salt-master not running
+      this.showNoticeText("#F44336", error.message);
+    } else if(error && error.status === -1) {
+      // No permissions: login valid, but no api functions executable
+      // e.g. PAM says OK and /etc/salt/master says NO
+      this.showNoticeText("#F44336", error.message);
+    } else {
+      this.showNoticeText("#F44336", "Authentication failed");
+    }
   }
 
   toggleForm(pAllowSubmit) {

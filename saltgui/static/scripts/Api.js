@@ -33,7 +33,8 @@ export class API {
           // This may happen e.g. for accounts that are in PAM,
           // but not in the 'master' file.
           // Don't give the user an empty screen full of errors
-          throw new HTTPError(403, "Unauthorized");
+          // just like 403 Unauthorized
+          throw new HTTPError(-1, "No permissions");
         }
         window.sessionStorage.setItem("login-response", JSON.stringify(response));
         window.sessionStorage.setItem("token", response.token);
