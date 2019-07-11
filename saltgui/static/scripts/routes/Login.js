@@ -40,12 +40,14 @@ export class LoginRoute extends Route {
     case "undefined":
       break;
     case "no-session":
-      this.showNoticeText("#F44336", "Not logged in");
+      // gray because we cannot prove that the user was/wasnt logged in
+      this.showNoticeText("gray", "Not logged in");
       break;
     case "expired-session":
       this.showNoticeText("#F44336", "Session expired");
       break;
     case "logout":
+      // gray because this is the result of a user action
       this.showNoticeText("gray", "Logout");
       break;
     default:
