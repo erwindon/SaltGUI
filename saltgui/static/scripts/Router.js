@@ -21,7 +21,7 @@ export class Router {
   constructor() {
     this.logoutTimer = this.logoutTimer.bind(this);
 
-    this.api = new API(this);
+    this.api = new API();
     this.commandbox = new CommandBox(this.api);
     this.currentRoute = undefined;
     this.routes = [];
@@ -223,6 +223,10 @@ export class Router {
     this.switchingRoute = true;
 
     pRoute.onShow();
+
+    // start the event-pipe (again)
+    // it is either not started, or needs restarting
+    this.api.getEvents(this);
 
     if(myThis.currentRoute) {
       myThis.hideRoute(myThis.currentRoute);

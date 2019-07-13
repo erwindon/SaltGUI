@@ -7,12 +7,10 @@ export class HTTPError extends Error {
 }
 
 export class API {
-  constructor(pRouter) {
+  constructor() {
     this.apiRequest = this.apiRequest.bind(this);
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
-
-    this.getEvents(pRouter);
   }
 
   login(pUserName, pPassWord, pEauth="pam") {
@@ -252,9 +250,31 @@ export class API {
     source.onerror = function(err) {
       // Don't show the error
       // It appears with every page-load
-      //console.error(err);
+      source.close();
     };
     source.onmessage = function(pMessage) {
+      const token = window.sessionStorage.getItem("token");
+      if(!token) {
+        // no token, stop the stream
+        source.close();
+        return;
+      }
+
+      const loginResponseStr = window.sessionStorage.getItem("login-response");
+      if(!loginResponseStr) {
+        // no login details, stop the stream
+        source.close();
+        return;
+      }
+      const loginResponse = JSON.parse(loginResponseStr);
+      const expireValue = loginResponse.expire;
+      const now = Date.now() / 1000;
+      if(now > expireValue) {
+        // the regular session has expired, also stop the stream
+        source.close();
+        return;
+      }
+
       const saltEvent = JSON.parse(pMessage.data);
       const tag = saltEvent.tag;
       const data = saltEvent.data;
