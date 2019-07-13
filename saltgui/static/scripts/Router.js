@@ -19,6 +19,8 @@ import {TemplatesRoute} from './routes/Templates.js';
 export class Router {
 
   constructor() {
+    this.logoutTimer = this.logoutTimer.bind(this);
+
     this.api = new API(this);
     this.commandbox = new CommandBox(this.api);
     this.currentRoute = undefined;
@@ -147,6 +149,21 @@ export class Router {
         this.api.logout().then(
           _ => window.location.replace("/login?reason=logout"));
       });
+
+    // don't verify the session too often
+    setInterval(this.logoutTimer, 60000);
+  }
+
+  logoutTimer() {
+    // are we logged in?
+    const token = window.sessionStorage.getItem("token");
+    if(!token) return;
+
+    // just a random lightweight api call
+    const wheelConfigValuesPromise = this.api.getWheelConfigValues();
+    // don't act in the callbacks
+    // Api.apiRequest will do all the work
+    wheelConfigValuesPromise.then(data => { }, data => { });
   }
 
   registerRoute(pRoute) {
