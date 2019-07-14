@@ -18,21 +18,21 @@ export class DropDownMenu {
 
     this.menuDropdown = Route.createDiv("run-command-button", "");
 
-    switch (pParentElement.id) {
-    case "cmd-box":
+    if(pParentElement.id === "cmd-box") {
       // 1F4D6 (D83D+DCD6) = A BOOK
       this.menuButton = Route.createDiv("menu-dropdown", "\uD83D\uDCD6");
-      // hide the menu until it receives menu-items
-      this.verifyAll();
-      break;
-
-    default:
+    } else if(pParentElement.classList && pParentElement.classList.contains("minion-output")) {
+      // 1F4D6 (D83D+DCD6) = A BOOK
+      this.menuButton = Route._createSpan("menu-dropdown", "\u2261");
+    } else {
       // 2261 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
       // assume it will be a command menu
-      this.menuButton = Route.createDiv("menu-dropdown", "\u2261");
-      // hide the menu until it receives menu-items
-      this.verifyAll();
+      this.menuButton = Route._createDiv("menu-dropdown", "\u2261");
     }
+
+    // hide the menu until it receives menu-items
+    this.verifyAll();
+
     this.menuDropdown.appendChild(this.menuButton);
     this.menuDropdownContent = Route.createDiv("menu-dropdown-content", "");
     this.menuDropdown.appendChild(this.menuDropdownContent);

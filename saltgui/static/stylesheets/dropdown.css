@@ -26,6 +26,7 @@
   clear: both;
   width: 100%;
   padding: 15px 30px 15px 30px;
+  margin: 0;
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
@@ -46,6 +47,25 @@
 .run-command-button:hover .menu-dropdown {
   background: rgba(0, 0, 0, 0.15);
   color: #4caf50;
+}
+
+pre.output span.menu-dropdown {
+  color: white;
+  font-weight: normal;
+}
+
+pre.output div.menu-dropdown-content {
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-weight: normal;
+}
+
+pre.output .run-command-button {
+  margin-bottom: 0;
+}
+
+pre.output .run-command-button:hover .menu-dropdown {
+  background-color: #f9f9f9;
+  color: black;
 }
 
 .dropdown {

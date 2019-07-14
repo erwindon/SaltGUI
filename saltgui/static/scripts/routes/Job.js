@@ -383,39 +383,19 @@ export class JobRoute extends Route {
         // show that this minion is still active on the request
         noResponseSpan.innerText = "(active) ";
 
-        const linkPsProcInfo = document.createElement("a");
-        linkPsProcInfo.innerText = "info";
-        linkPsProcInfo.addEventListener("click", pClickEvent =>
-          this.runFullCommand(pClickEvent, "list", minionId, "ps.proc_info " + pid)
-        );
-        noResponseSpan.appendChild(linkPsProcInfo);
-
-        noResponseSpan.appendChild(document.createTextNode(" "));
-
-        const linkPsTermPid = document.createElement("a");
-        linkPsTermPid.innerText = "term";
-        linkPsTermPid.addEventListener("click", pClickEvent =>
-          this.runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=15")
-        );
-        noResponseSpan.appendChild(linkPsTermPid);
-
-        noResponseSpan.appendChild(document.createTextNode(" "));
-
-        const linkPsKillPid = document.createElement("a");
-        linkPsKillPid.innerText = "kill";
-        linkPsKillPid.addEventListener("click", pClickEvent =>
-          this.runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=9")
-        );
-        noResponseSpan.appendChild(linkPsKillPid);
-
-        noResponseSpan.appendChild(document.createTextNode(" "));
-
-        const linkPsSignalPid = document.createElement("a");
-        linkPsSignalPid.innerText = "signal";
-        linkPsSignalPid.addEventListener("click", pClickEvent =>
-          this.runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=<signalnumber>")
-        );
-        noResponseSpan.appendChild(linkPsSignalPid);
+        const menu = new DropDownMenu(noResponseSpan);
+        menu.addMenuItem("Show&nbsp;process&nbsp;info...", function(pClickEvent) {
+          this.runFullCommand(pClickEvent, "list", minionId, "ps.proc_info " + pid);
+        }.bind(this));
+        menu.addMenuItem("Terminate&nbsp;process...", function(pClickEvent) {
+          this.runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=15");
+        }.bind(this));
+        menu.addMenuItem("Kill&nbsp;process...", function(pClickEvent) {
+          this.runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=9");
+        }.bind(this));
+        menu.addMenuItem("Signal&nbsp;process...", function(pClickEvent) {
+          this.runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=<signalnumber>");
+        }.bind(this));
 
         noResponseSpan.classList.remove("noresponse");
         noResponseSpan.classList.add("active");
