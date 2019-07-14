@@ -246,6 +246,13 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.17.0 (2019-07-14)
+- Added code and instructions to set up standalone SaltGUI (dawidmalina)
+- Return to login on session timeout (erwindon)
+- Improve showing where info is automatically updated (erwindon)
+- Added an overview screen for options, ctrl-click logo to show (erwindon)
+- Lots of code cleanups (erwindon)
+
 ## 1.16.0 (2019-06-23)
 - Added visual task summaries for hightstate output, suggested by elipsion (erwindon)
 - Added search facility also on job output screen (erwindon)
