@@ -124,7 +124,8 @@ export class CommandBox {
     output.innerText = "Loading...";
 
     func.then(pResponse => {
-      this._onRunReturn(pResponse.return[0], commandValue);
+      if(pResponse) this._onRunReturn(pResponse.return[0], commandValue);
+      else this._showError("null response");
     }, pResponse => {
       this._showError(JSON.stringify(pResponse));
     });

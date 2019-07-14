@@ -184,6 +184,8 @@ export class JobsRoute extends PageRoute {
 
   _handleRunnerJobsActive(pData) {
 
+    if(!pData) return;
+
     if(typeof pData !== "object") {
       // update all jobs (page) with the error message
       const tbody = this.pageElement.querySelector("table#jobs tbody");

@@ -19,7 +19,9 @@ import {TemplatesRoute} from './routes/Templates.js';
 export class Router {
 
   constructor() {
-    this.api = new API(this);
+    this.logoutTimer = this.logoutTimer.bind(this);
+
+    this.api = new API();
     this.commandbox = new CommandBox(this.api);
     this.currentRoute = undefined;
     this.routes = [];
@@ -51,13 +53,7 @@ export class Router {
 
     this._registerEventListeners();
 
-    this.api.isAuthenticated()
-      .then(valid_session => this.goTo(
-        valid_session ? window.location.pathname + window.location.search : "/login"))
-      .catch(error => {
-        console.error(error);
-        this.goTo("/login");
-      });
+    this.goTo(window.location.pathname + window.location.search);
   }
 
   _registerEventListeners() {
@@ -145,16 +141,29 @@ export class Router {
 
     document.querySelector("#button-logout1")
       .addEventListener("click", pClickEvent => {
-        this.api.logout().then(_ =>
-          window.location.replace("/")
-        );
+        this.api.logout().then(
+          _ => window.location.replace("/login?reason=logout"));
       });
     document.querySelector("#button-logout2")
       .addEventListener("click", pClickEvent => {
-        this.api.logout().then(_ =>
-          window.location.replace("/")
-        );
+        this.api.logout().then(
+          _ => window.location.replace("/login?reason=logout"));
       });
+
+    // don't verify the session too often
+    setInterval(this.logoutTimer, 60000);
+  }
+
+  logoutTimer() {
+    // are we logged in?
+    const token = window.sessionStorage.getItem("token");
+    if(!token) return;
+
+    // just a random lightweight api call
+    const wheelConfigValuesPromise = this.api.getWheelConfigValues();
+    // don't act in the callbacks
+    // Api.apiRequest will do all the work
+    wheelConfigValuesPromise.then(data => { }, data => { });
   }
 
   registerRoute(pRoute) {
@@ -172,6 +181,9 @@ export class Router {
       this.showRoute(route);
       return;
     }
+    // route could not be found
+    // just go to the main page
+    this.goTo("/");
   }
 
   showRoute(pRoute) {
@@ -211,6 +223,10 @@ export class Router {
     this.switchingRoute = true;
 
     pRoute.onShow();
+
+    // start the event-pipe (again)
+    // it is either not started, or needs restarting
+    this.api.getEvents(this);
 
     if(myThis.currentRoute) {
       myThis.hideRoute(myThis.currentRoute);

@@ -7,20 +7,10 @@ export class HTTPError extends Error {
 }
 
 export class API {
-  constructor(pRouter) {
-    //this.getEvents = this.getEvents.bind(this);
-    this.getEvents(pRouter);
-  }
-
-  isAuthenticated() {
-    // use the /stats api call to see if we are allowed to access SaltGUI
-    // (if the session cookie is still valid)
-    return this.apiRequest("GET", "/stats", {})
-      .then(pResponse => {
-        return window.sessionStorage.getItem("token") !== null;
-      }, pResponse => {
-        return false;
-      } );
+  constructor() {
+    this.apiRequest = this.apiRequest.bind(this);
+    this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   login(pUserName, pPassWord, pEauth="pam") {
@@ -41,7 +31,8 @@ export class API {
           // This may happen e.g. for accounts that are in PAM,
           // but not in the 'master' file.
           // Don't give the user an empty screen full of errors
-          throw new HTTPError(403, "Unauthorized");
+          // just like 403 Unauthorized
+          throw new HTTPError(-1, "No permissions");
         }
         window.sessionStorage.setItem("login-response", JSON.stringify(response));
         window.sessionStorage.setItem("token", response.token);
@@ -53,7 +44,15 @@ export class API {
     // redirecting to the login screen
     return this.apiRequest("POST", "/logout", {})
       .then(pResponse => {
+        // we could logout
+        // assume the session is terminated
         window.sessionStorage.removeItem("token");
+        window.sessionStorage.removeItem("login-response");
+      }, pResponse => {
+        // we could not logout
+        // assume the session is broken
+        window.sessionStorage.removeItem("token");
+        window.sessionStorage.removeItem("login-response");
       });
   }
 
@@ -204,11 +203,38 @@ export class API {
 
     if(pMethod === "POST") options.body = JSON.stringify(pParams);
 
+    const myThis = this;
     return fetch(location, options)
       .then(pResponse => {
         if(pResponse.ok) return pResponse.json();
         // fetch does not reject on > 300 http status codes,
         // so let's do it ourselves
+        if(pResponse.status === 401 && pRoute !== "/login") {
+          const loginResponseStr = window.sessionStorage.getItem("login-response");
+          if(!loginResponseStr) {
+            myThis.logout().then(() =>
+              window.location.replace("/login?reason=no-session")
+            , () =>
+              window.location.replace("/login?reason=no-session")
+            );
+            return null;
+          }
+
+          const loginResponse = JSON.parse(loginResponseStr);
+          // just in case...
+          if(loginResponse) {
+            const now = Date.now() / 1000;
+            const expireValue = loginResponse.expire;
+            if(now > expireValue) {
+              myThis.logout().then(() =>
+                window.location.replace("/login?reason=expired-session")
+              , () =>
+                window.location.replace("/login?reason=expired-session")
+              );
+              return null;
+            }
+          }
+        }
         throw new HTTPError(pResponse.status, pResponse.statusText);
       });
   }
@@ -224,9 +250,31 @@ export class API {
     source.onerror = function(err) {
       // Don't show the error
       // It appears with every page-load
-      //console.error(err);
+      source.close();
     };
     source.onmessage = function(pMessage) {
+      const token = window.sessionStorage.getItem("token");
+      if(!token) {
+        // no token, stop the stream
+        source.close();
+        return;
+      }
+
+      const loginResponseStr = window.sessionStorage.getItem("login-response");
+      if(!loginResponseStr) {
+        // no login details, stop the stream
+        source.close();
+        return;
+      }
+      const loginResponse = JSON.parse(loginResponseStr);
+      const expireValue = loginResponse.expire;
+      const now = Date.now() / 1000;
+      if(now > expireValue) {
+        // the regular session has expired, also stop the stream
+        source.close();
+        return;
+      }
+
       const saltEvent = JSON.parse(pMessage.data);
       const tag = saltEvent.tag;
       const data = saltEvent.data;
