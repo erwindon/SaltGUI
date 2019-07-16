@@ -25,7 +25,7 @@ export class Utils {
   static addToolTip(pTooltipHost, pTooltipText) {
 
     // Users may want to switch this on to improve browser performance
-    const toolTipMode = window.localStorage.getItem("tooltip_mode");
+    const toolTipMode = window.sessionStorage.getItem("tooltip_mode");
 
     if(toolTipMode === "none") {
       return;
