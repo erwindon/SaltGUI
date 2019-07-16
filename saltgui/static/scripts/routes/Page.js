@@ -24,7 +24,11 @@ export class PageRoute extends Route {
     const minionIds = Object.keys(minions).sort();
 
     // save for the autocompletion
-    window.sessionStorage.setItem("minions", JSON.stringify(minionIds));
+    // This callback will also be called after LOGOUT due to the regular error handling
+    // Do not store the information in that case
+    if(window.sessionStorage.getItem("token")) {
+      window.sessionStorage.setItem("minions", JSON.stringify(minionIds));
+    }
 
     const ipNumberPrefixes = this._getIpNumberPrefixes(minions);
 
