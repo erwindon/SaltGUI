@@ -6,10 +6,10 @@ export class TargetType {
     const targetbox = document.getElementById("target-box");
     TargetType.menuTargetType = new DropDownMenu(targetbox);
     // do not show the menu title at first
-    TargetType.menuTargetType.addMenuItem("Normal", this.manualUpdateTargetTypeText, "glob");
-    TargetType.menuTargetType.addMenuItem("List", this.manualUpdateTargetTypeText, "list");
-    TargetType.menuTargetType.addMenuItem(TargetType._targetTypeNodeGroupPrepare, this.manualUpdateTargetTypeText, "nodegroup");
-    TargetType.menuTargetType.addMenuItem("Compound", this.manualUpdateTargetTypeText, "compound");
+    TargetType.menuTargetType.addMenuItem("Normal", this._manualUpdateTargetTypeText, "glob");
+    TargetType.menuTargetType.addMenuItem("List", this._manualUpdateTargetTypeText, "list");
+    TargetType.menuTargetType.addMenuItem(TargetType._targetTypeNodeGroupPrepare, this._manualUpdateTargetTypeText, "nodegroup");
+    TargetType.menuTargetType.addMenuItem("Compound", this._manualUpdateTargetTypeText, "compound");
     TargetType.setTargetTypeDefault();
   }
 
@@ -62,13 +62,13 @@ export class TargetType {
     TargetType.setTargetTypeDefault();
   }
 
-  static manualUpdateTargetTypeText() {
+  static _manualUpdateTargetTypeText() {
     TargetType.menuTargetType._system = false;
     TargetType._updateTargetTypeText();
   }
 
   static _updateTargetTypeText() {
-    const targetType = TargetType.getTargetType();
+    const targetType = TargetType._getTargetType();
 
     switch(targetType) {
     case "compound":
@@ -101,7 +101,7 @@ export class TargetType {
     TargetType._updateTargetTypeText();
   }
 
-  static getTargetType() {
+  static _getTargetType() {
     const targetType = TargetType.menuTargetType._value;
     if(targetType === undefined || targetType === "") return "glob";
     return targetType;

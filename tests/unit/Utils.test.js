@@ -8,39 +8,39 @@ describe('Unittests for Utils.js', function() {
     let result;
 
     // no parameters
-    result = Utils.getQueryParam2("http://host/url", "aap");
+    result = Utils._getQueryParam2("http://host/url", "aap");
     assert.equal(result, undefined);
 
     // no parameters
-    result = Utils.getQueryParam2("http://host/url?", "aap");
+    result = Utils._getQueryParam2("http://host/url?", "aap");
     assert.equal(result, undefined);
 
     // one parameter, match
-    result = Utils.getQueryParam2("http://host/url?aap=1", "aap");
+    result = Utils._getQueryParam2("http://host/url?aap=1", "aap");
     assert.equal(result, "1");
 
     // one parameter, no match
-    result = Utils.getQueryParam2("http://host/url?aap=1", "noot");
+    result = Utils._getQueryParam2("http://host/url?aap=1", "noot");
     assert.equal(result, undefined);
 
     // one parameter, illegal format
-    result = Utils.getQueryParam2("http://host/url?aap", "aap");
+    result = Utils._getQueryParam2("http://host/url?aap", "aap");
     assert.equal(result, undefined);
 
     // one parameter, illegal format
-    result = Utils.getQueryParam2("http://host/url?aap=1=2", "aap");
+    result = Utils._getQueryParam2("http://host/url?aap=1=2", "aap");
     assert.equal(result, undefined);
 
     // more parameters, match
-    result = Utils.getQueryParam2("http://host/url?aap=1&noot=2", "aap");
+    result = Utils._getQueryParam2("http://host/url?aap=1&noot=2", "aap");
     assert.equal(result, "1");
 
     // more parameters, match
-    result = Utils.getQueryParam2("http://host/url?aap=1&noot=2", "noot");
+    result = Utils._getQueryParam2("http://host/url?aap=1&noot=2", "noot");
     assert.equal(result, "2");
 
     // more parameters, no match
-    result = Utils.getQueryParam2("http://host/url?aap=1&noot=2", "mies");
+    result = Utils._getQueryParam2("http://host/url?aap=1&noot=2", "mies");
     assert.equal(result, undefined);
 
     // mark function as used

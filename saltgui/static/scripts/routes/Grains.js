@@ -9,8 +9,8 @@ export class GrainsRoute extends PageRoute {
   constructor(pRouter) {
     super("^[\/]grains$", "Grains", "#page-grains", "#button-grains", pRouter);
 
-    this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
-    this._updateMinion = this._updateMinion.bind(this);
+    this._handleGrainsWheelKeyListAll = this._handleGrainsWheelKeyListAll.bind(this);
+    this.updateMinion = this.updateMinion.bind(this);
 
     // collect the list of displayed minions
     let previewGrainsText = window.localStorage.getItem("preview_grains");
@@ -48,32 +48,32 @@ export class GrainsRoute extends PageRoute {
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     wheelKeyListAllPromise.then(pData1 => {
-      myThis._handleWheelKeyListAll(pData1);
+      myThis._handleGrainsWheelKeyListAll(pData1);
       localGrainsItemsPromise.then(pData => {
-        myThis._updateMinions(pData);
+        myThis.updateMinions(pData);
       }, pData2 => {
         const pData = {"return":[{}]};
         for(const k of pData1.return[0].data.return.minions)
           pData.return[0][k] = JSON.stringify(pData2);
-        myThis._updateMinions(pData);
+        myThis.updateMinions(pData);
       });
     }, pData => {
-      myThis._handleWheelKeyListAll(JSON.stringify(pData));
+      myThis._handleGrainsWheelKeyListAll(JSON.stringify(pData));
     });
 
     runnerJobsListJobsPromise.then(pData => {
-      myThis._handleRunnerJobsListJobs(pData);
+      myThis.handleRunnerJobsListJobs(pData);
       runnerJobsActivePromise.then(pData => {
-        myThis._handleRunnerJobsActive(pData);
+        myThis.handleRunnerJobsActive(pData);
       }, pData => {
-        myThis._handleRunnerJobsActive(JSON.stringify(pData));
+        myThis.handleRunnerJobsActive(JSON.stringify(pData));
       });
     }, pData => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
+      myThis.handleRunnerJobsListJobs(JSON.stringify(pData));
     }); 
   }
 
-  _handleWheelKeyListAll(pData) {
+  _handleGrainsWheelKeyListAll(pData) {
     const table = this.getPageElement().querySelector('#minions');
 
     if(PageRoute.showErrorRowInstead(table, pData)) return;
@@ -82,7 +82,7 @@ export class GrainsRoute extends PageRoute {
 
     const minionIds = keys.minions.sort();
     for(const minionId of minionIds) {
-      this._addMinion(table, minionId, 1 + this._previewGrains.length);
+      this.addMinion(table, minionId, 1 + this._previewGrains.length);
 
       // preliminary dropdown menu
       const minionTr = table.querySelector("#" + Utils.getIdFromMinionId(minionId));
@@ -90,7 +90,7 @@ export class GrainsRoute extends PageRoute {
       this._addMenuItemShowGrains(menu, minionId);
 
       for(let i = 0; i < this._previewGrains.length; i++) {
-        minionTr.appendChild(Route._createTd("", ""));
+        minionTr.appendChild(Route.createTd("", ""));
       }
 
       minionTr.addEventListener("click", pClickEvent =>
@@ -107,34 +107,34 @@ export class GrainsRoute extends PageRoute {
     msgDiv.innerText = txt;
   }
 
-  _updateOfflineMinion(pContainer, pMinionId) {
-    super._updateOfflineMinion(pContainer, pMinionId);
+  updateOfflineMinion(pContainer, pMinionId) {
+    super.updateOfflineMinion(pContainer, pMinionId);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
     // force same columns on all rows
-    minionTr.appendChild(Route._createTd("saltversion", ""));
-    minionTr.appendChild(Route._createTd("os", ""));
-    minionTr.appendChild(Route._createTd("graininfo", ""));
-    minionTr.appendChild(Route._createTd("run-command-button", ""));
+    minionTr.appendChild(Route.createTd("saltversion", ""));
+    minionTr.appendChild(Route.createTd("os", ""));
+    minionTr.appendChild(Route.createTd("graininfo", ""));
+    minionTr.appendChild(Route.createTd("run-command-button", ""));
     for(let i = 0; i < this._previewGrains.length; i++) {
-      minionTr.appendChild(Route._createTd("", ""));
+      minionTr.appendChild(Route.createTd("", ""));
     }
   }
 
-  _updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
-    super._updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains);
+  updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
+    super.updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
     if(typeof pMinionData === "object") {
       const cnt = Object.keys(pMinionData).length;
       const grainInfoText = cnt + " grains";
-      const grainInfoTd = Route._createTd("graininfo", grainInfoText);
+      const grainInfoTd = Route.createTd("graininfo", grainInfoText);
       grainInfoTd.setAttribute("sorttable_customkey", cnt);
       minionTr.appendChild(grainInfoTd);
     } else {
-      const grainInfoTd = Route._createTd("", "");
+      const grainInfoTd = Route.createTd("", "");
       Utils.addErrorToTableCell(grainInfoTd, pMinionData);
       minionTr.appendChild(grainInfoTd);
     }
@@ -144,7 +144,7 @@ export class GrainsRoute extends PageRoute {
 
     // add the preview columns
     for(let i = 0; i < this._previewGrains.length; i++) {
-      const td = Route._createTd("", "");
+      const td = Route.createTd("", "");
       const grainName = this._previewGrains[i];
       if(typeof pMinionData === "object") {
         if(grainName in pMinionData) {

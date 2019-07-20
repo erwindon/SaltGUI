@@ -2,7 +2,7 @@ import {Route} from './routes/Route.js';
 
 export class Utils {
 
-  static getQueryParam2(pUrl, pName) {
+  static _getQueryParam2(pUrl, pName) {
     const questionmarkPos = pUrl.indexOf("?");
     if(questionmarkPos < 0) return undefined;
     const parameters = pUrl.slice(questionmarkPos + 1).split("&");
@@ -19,7 +19,7 @@ export class Utils {
     let w = null;
     try { w = window; } catch(error) { /* VOID */ }
     if(!w || !w.location) return undefined;
-    return Utils.getQueryParam2(w.location.href, pName);
+    return Utils._getQueryParam2(w.location.href, pName);
   }
 
   static addToolTip(pTooltipHost, pTooltipText) {
@@ -36,7 +36,7 @@ export class Utils {
       return;
     }
 
-    const tooltipSpan = Route._createSpan("", pTooltipText);
+    const tooltipSpan = Route.createSpan("", pTooltipText);
     tooltipSpan.classList.add("tooltip-text");
     pTooltipHost.classList.add("tooltip");
 
@@ -71,7 +71,7 @@ export class Utils {
   }
 
   static addErrorToTableCell(pTd, pErrorMessage) {
-    const span = Route._createSpan("", "(error)");
+    const span = Route.createSpan("", "(error)");
     Utils.addToolTip(span, pErrorMessage);
     pTd.appendChild(span);
   }
@@ -88,12 +88,12 @@ export class Utils {
   }
 
   static makeTableSearchable(pStartElement) {
-    const searchButton = Route._createSpan("search", "");
+    const searchButton = Route.createSpan("search", "");
     // 1F50D = LEFT-POINTING MAGNIFYING GLASS
     // FE0E = VARIATION SELECTOR-15 (render as text)
     searchButton.innerHTML = "&#x1f50d;&#xFE0E;";
     searchButton.onclick = ev =>
-      Utils.hideShowTableSearchBar(pStartElement);
+      Utils._hideShowTableSearchBar(pStartElement);
     const table = pStartElement.querySelector("table");
     table.parentElement.insertBefore(searchButton, table);
   }
@@ -104,7 +104,7 @@ export class Utils {
     Utils.addToolTip(helpButton, pHelpText);
   }
 
-  static hideShowTableSearchBar(pStartElement) {
+  static _hideShowTableSearchBar(pStartElement) {
     // remove all highlights
     const hilitor = new Hilitor(pStartElement, "table tbody");
     hilitor.remove();
@@ -120,26 +120,26 @@ export class Utils {
     const input = pStartElement.querySelector("input.filter-text");
     input.onkeyup = ev => {
       if(ev.key === "Escape") {
-        Utils.updateTableFilter(table, "");
-        Utils.hideShowTableSearchBar(pStartElement);
+        Utils._updateTableFilter(table, "");
+        Utils._hideShowTableSearchBar(pStartElement);
         return;
       }
     };
     input.oninput = ev =>
-      Utils.updateTableFilter(table, input.value);
+      Utils._updateTableFilter(table, input.value);
 
     table.parentElement.insertBefore(input, table);
     if(input.style.display === "none") {
-      Utils.updateTableFilter(table, input.value);
+      Utils._updateTableFilter(table, input.value);
       input.style.display = "";
     } else {
-      Utils.updateTableFilter(table, "");
+      Utils._updateTableFilter(table, "");
       input.style.display = "none";
     }
     input.focus();
   }
 
-  static updateTableFilter(pTable, pSearchText) {
+  static _updateTableFilter(pTable, pSearchText) {
     // remove highlighting before re-comparing
     // as it affects the texts
     const hilitor = new Hilitor(pTable, "tbody");
@@ -206,7 +206,7 @@ export class Utils {
   }
 
   static createJobStatusSpan(pJobId) {
-    const span = Route._createSpan("", "");
+    const span = Route.createSpan("", "");
     // 21BB = CLOCKWISE OPEN CIRCLE ARROW
     span.innerHTML = "&#x21BB;&nbsp;";
     span.id = "status" + pJobId;

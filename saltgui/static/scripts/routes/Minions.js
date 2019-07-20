@@ -8,7 +8,7 @@ export class MinionsRoute extends PageRoute {
   constructor(pRouter) {
     super("^[\/]$", "Minions", "#page-minions", "#button-minions", pRouter);
 
-    this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
+    this._handleMinionsWheelKeyListAll = this._handleMinionsWheelKeyListAll.bind(this);
   }
 
   onShow() {
@@ -20,33 +20,33 @@ export class MinionsRoute extends PageRoute {
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     wheelKeyListAllPromise.then(pData1 => {
-      myThis._handleWheelKeyListAll(pData1);
+      myThis._handleMinionsWheelKeyListAll(pData1);
       localGrainsItemsPromise.then(pData => {
-        myThis._updateMinions(pData);
+        myThis.updateMinions(pData);
       }, pData2 => {
         const pData = {"return":[{}]};
         if(pData1)
           for(const k of pData1.return[0].data.return.minions)
             pData.return[0][k] = JSON.stringify(pData2);
-        myThis._updateMinions(pData);
+        myThis.updateMinions(pData);
       });
     }, pData => {
-      myThis._handleWheelKeyListAll(JSON.stringify(pData));
+      myThis._handleMinionsWheelKeyListAll(JSON.stringify(pData));
     });
 
     runnerJobsListJobsPromise.then(pData => {
-      myThis._handleRunnerJobsListJobs(pData);
+      myThis.handleRunnerJobsListJobs(pData);
       runnerJobsActivePromise.then(pData => {
-        myThis._handleRunnerJobsActive(pData);
+        myThis.handleRunnerJobsActive(pData);
       }, pData => {
-        myThis._handleRunnerJobsActive(JSON.stringify(pData));
+        myThis.handleRunnerJobsActive(JSON.stringify(pData));
       });
     }, pData => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
+      myThis.handleRunnerJobsListJobs(JSON.stringify(pData));
     }); 
   }
 
-  _handleWheelKeyListAll(pData) {
+  _handleMinionsWheelKeyListAll(pData) {
     const table = this.getPageElement().querySelector("#minions");
 
     if(PageRoute.showErrorRowInstead(table, pData)) return;
@@ -55,7 +55,7 @@ export class MinionsRoute extends PageRoute {
 
     const minionIds = keys.minions.sort();
     for(const minionId of minionIds) {
-      this._addMinion(table, minionId, 1);
+      this.addMinion(table, minionId, 1);
 
       // preliminary dropdown menu
       const minionTr = table.querySelector("#" + Utils.getIdFromMinionId(minionId));
@@ -63,7 +63,7 @@ export class MinionsRoute extends PageRoute {
       this._addMenuItemStateApply(menu, minionId);
 
       minionTr.addEventListener("click", pClickEvent =>
-        this._runCommand(pClickEvent, minionId, "state.apply")
+        this.runCommand(pClickEvent, minionId, "state.apply")
       );
     }
 
@@ -76,32 +76,32 @@ export class MinionsRoute extends PageRoute {
     msgDiv.innerText = txt;
   }
 
-  _updateOfflineMinion(pContainer, pMinionId) {
-    super._updateOfflineMinion(pContainer, pMinionId);
+  updateOfflineMinion(pContainer, pMinionId) {
+    super.updateOfflineMinion(pContainer, pMinionId);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
     // force same columns on all rows
-    minionTr.appendChild(Route._createTd("saltversion", ""));
-    minionTr.appendChild(Route._createTd("os", ""));
-    minionTr.appendChild(Route._createTd("run-command-button", ""));
+    minionTr.appendChild(Route.createTd("saltversion", ""));
+    minionTr.appendChild(Route.createTd("os", ""));
+    minionTr.appendChild(Route.createTd("run-command-button", ""));
   }
 
-  _updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
-    super._updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains);
+  updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
+    super.updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
     const menu = new DropDownMenu(minionTr);
     this._addMenuItemStateApply(menu, pMinionId);
 
     minionTr.addEventListener("click", pClickEvent =>
-      this._runCommand(pClickEvent, pMinionId, "state.apply")
+      this.runCommand(pClickEvent, pMinionId, "state.apply")
     );
   }
 
   _addMenuItemStateApply(pMenu, pMinionId) {
     pMenu.addMenuItem("Apply&nbsp;state...", function(pClickEvent) {
-      this._runCommand(pClickEvent, pMinionId, "state.apply");
+      this.runCommand(pClickEvent, pMinionId, "state.apply");
     }.bind(this));
   }
 }

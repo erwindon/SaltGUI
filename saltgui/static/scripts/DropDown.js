@@ -6,22 +6,22 @@ export class DropDownMenu {
   // The visual clue for the menu is added to the given element
   constructor(pParentElement) {
 
-    this.callback = this.callback.bind(this);
+    this._callback = this._callback.bind(this);
     this.verifyAll = this.verifyAll.bind(this);
 
     // allow reduced code on the caller side
     if(pParentElement.tagName === "TR") {
-      const td = Route._createTd("", "");
+      const td = Route.createTd("", "");
       pParentElement.appendChild(td);
       pParentElement = td;
     }
 
-    this.menuDropdown = Route._createDiv("run-command-button", "");
+    this.menuDropdown = Route.createDiv("run-command-button", "");
 
     switch (pParentElement.id) {
     case "cmd-box":
       // 1F4D6 (D83D+DCD6) = A BOOK
-      this.menuButton = Route._createDiv("menu-dropdown", "\uD83D\uDCD6");
+      this.menuButton = Route.createDiv("menu-dropdown", "\uD83D\uDCD6");
       // hide the menu until it receives menu-items
       this.verifyAll();
       break;
@@ -29,12 +29,12 @@ export class DropDownMenu {
     default:
       // 2261 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
       // assume it will be a command menu
-      this.menuButton = Route._createDiv("menu-dropdown", "\u2261");
+      this.menuButton = Route.createDiv("menu-dropdown", "\u2261");
       // hide the menu until it receives menu-items
       this.verifyAll();
     }
     this.menuDropdown.appendChild(this.menuButton);
-    this.menuDropdownContent = Route._createDiv("menu-dropdown-content", "");
+    this.menuDropdownContent = Route.createDiv("menu-dropdown-content", "");
     this.menuDropdown.appendChild(this.menuDropdownContent);
     this.menuDropdown.addEventListener("mouseenter", this.verifyAll);
     pParentElement.appendChild(this.menuDropdown);
@@ -62,20 +62,20 @@ export class DropDownMenu {
   // This allows dynamic menuitem titles (use menuitem.innerText/innerHTML)
   // or visibility (use menuitem.style.display = "none"/"inline-block")
   addMenuItem(pTitle, pCallBack, pValue) {
-    const button = Route._createDiv("run-command-button", "...");
+    const button = Route.createDiv("run-command-button", "...");
     if(typeof pTitle === "string")
       button.innerHTML = pTitle;
     else
       button.verifyCallBack = pTitle;
     button.addEventListener("click", pClickEvent =>
-      this.callback(pClickEvent, pCallBack, pValue)
+      this._callback(pClickEvent, pCallBack, pValue)
     );
     this.menuDropdownContent.appendChild(button);
     this.verifyAll();
     return button;
   }
 
-  callback(pClickEvent, pCallBack, pValue) {
+  _callback(pClickEvent, pCallBack, pValue) {
     this._value = pValue;
     pCallBack(pClickEvent);
     pClickEvent.stopPropagation();
@@ -89,11 +89,11 @@ export class DropDownMenu {
     this.menuButton.innerHTML = pTitle + "&nbsp;\u25BC";
   }
 
-  showMenu() {
+  __showMenu() {
     this.menuDropdown.style.display = "inline-block";
   }
 
-  hideMenu() {
+  __hideMenu() {
     this.menuDropdown.style.display = "none";
   }
 

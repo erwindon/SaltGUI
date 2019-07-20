@@ -38,14 +38,14 @@ export class SchedulesMinionRoute extends PageRoute {
     });
 
     runnerJobsListJobsPromise.then(pData => {
-      myThis._handleRunnerJobsListJobs(pData);
+      myThis.handleRunnerJobsListJobs(pData);
       runnerJobsActivePromise.then(pData => {
-        myThis._handleRunnerJobsActive(pData);
+        myThis.handleRunnerJobsActive(pData);
       }, pData => {
-        myThis._handleRunnerJobsActive(JSON.stringify(pData));
+        myThis.handleRunnerJobsActive(JSON.stringify(pData));
       });
     }, pData => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
+      myThis.handleRunnerJobsListJobs(JSON.stringify(pData));
     }); 
   }
 
@@ -57,7 +57,7 @@ export class SchedulesMinionRoute extends PageRoute {
     if(PageRoute.showErrorRowInstead(container.tBodies[0], pData)) return;
 
     let schedules = pData.return[0][pMinionId];
-    schedules = SchedulesRoute._fixMinion(schedules);
+    schedules = SchedulesRoute.fixSchedulesMinion(schedules);
 
     const titleElement = document.getElementById("schedules-minion-title");
     let txt = "Schedules on " + pMinionId;
@@ -76,8 +76,8 @@ export class SchedulesMinionRoute extends PageRoute {
     }
 
     const menu = new DropDownMenu(panel);
-    this._addMenuItemEnableSchedulerWhenNeeded(menu, pMinionId, schedules);
-    this._addMenuItemDisableSchedulerWhenNeeded(menu, pMinionId, schedules);
+    this._addMenuItemScheduleEnableWhenNeeded(menu, pMinionId, schedules);
+    this._addMenuItemScheduleDisableWhenNeeded(menu, pMinionId, schedules);
 
     // new menus are always added at the bottom of the div
     // fix that by re-adding it to its proper place
@@ -100,7 +100,7 @@ export class SchedulesMinionRoute extends PageRoute {
 
       const tr = document.createElement('tr');
 
-      const nameTd = Route._createTd("schedule-name", k);
+      const nameTd = Route.createTd("schedule-name", k);
       tr.appendChild(nameTd);
 
       const menu = new DropDownMenu(tr);
@@ -115,14 +115,14 @@ export class SchedulesMinionRoute extends PageRoute {
         scheduleModifyCmd += "=" + JSON.stringify(schedule[key]);
       }
       this._addMenuItemModifyJob(menu, pMinionId, scheduleModifyCmd);
-      this._addMenuItemEnableJobWhenNeeded(menu, pMinionId, k, schedule);
-      this._addMenuItemDisableJobWhenNeeded(menu, pMinionId, k, schedule);
-      this._addMenuItemDeleteJob(menu, pMinionId, k);
-      this._addMenuItemRunJob(menu, pMinionId, k, schedule);
+      this._addMenuItemScheduleEnableJobWhenNeeded(menu, pMinionId, k, schedule);
+      this._addMenuItemScheduleDisableJobWhenNeeded(menu, pMinionId, k, schedule);
+      this._addMenuItemScheduleDeleteJob(menu, pMinionId, k);
+      this._addMenuItemScheduleRunJob(menu, pMinionId, k, schedule);
 
       // menu comes before this data on purpose
       const scheduleValue = Output.formatObject(schedule);
-      const scheduleValueTd = Route._createTd("schedule-value", scheduleValue);
+      const scheduleValueTd = Route.createTd("schedule-value", scheduleValue);
       if(schedule.enabled === false) scheduleValueTd.classList.add("schedule-disabled");
       if(schedules.enabled === false) scheduleValueTd.classList.add("schedule-disabled");
       tr.appendChild(scheduleValueTd);
@@ -130,7 +130,7 @@ export class SchedulesMinionRoute extends PageRoute {
       container.tBodies[0].appendChild(tr);
 
       tr.addEventListener("click", pClickEvent =>
-        this._runCommand(pClickEvent, pMinionId, scheduleModifyCmd)
+        this.runCommand(pClickEvent, pMinionId, scheduleModifyCmd)
       );
     }
 
@@ -143,52 +143,52 @@ export class SchedulesMinionRoute extends PageRoute {
     msgDiv.innerText = txt;
   }
 
-  _addMenuItemEnableSchedulerWhenNeeded(pMenu, pMinionId, schedules) {
+  _addMenuItemScheduleEnableWhenNeeded(pMenu, pMinionId, schedules) {
     if(schedules.enabled !== false) return;
     pMenu.addMenuItem("Enable&nbsp;scheduler...", function(pClickEvent) {
-      this._runCommand(pClickEvent, pMinionId, "schedule.enable");
+      this.runCommand(pClickEvent, pMinionId, "schedule.enable");
     }.bind(this));
   }
 
-  _addMenuItemDisableSchedulerWhenNeeded(pMenu, pMinionId, schedules) {
+  _addMenuItemScheduleDisableWhenNeeded(pMenu, pMinionId, schedules) {
     if(schedules.enabled === false) return;
     pMenu.addMenuItem("Disable&nbsp;scheduler...", function(pClickEvent) {
-      this._runCommand(pClickEvent, pMinionId, "schedule.disable");
+      this.runCommand(pClickEvent, pMinionId, "schedule.disable");
     }.bind(this));
   }
 
   _addMenuItemModifyJob(pMenu, pMinionId, scheduleModifyCmd) {
     pMenu.addMenuItem("Modify&nbsp;job...", function(pClickEvent) {
-      this._runCommand(pClickEvent, pMinionId, scheduleModifyCmd);
+      this.runCommand(pClickEvent, pMinionId, scheduleModifyCmd);
     }.bind(this));
   }
 
-  _addMenuItemEnableJobWhenNeeded(pMenu, pMinionId, pJobName, schedule) {
+  _addMenuItemScheduleEnableJobWhenNeeded(pMenu, pMinionId, pJobName, schedule) {
     if(schedule.enabled !== false) return;
     pMenu.addMenuItem("Enable&nbsp;job...", function(pClickEvent) {
-      this._runCommand(pClickEvent, pMinionId, "schedule.enable_job " + pJobName);
+      this.runCommand(pClickEvent, pMinionId, "schedule.enable_job " + pJobName);
     }.bind(this));
   }
 
-  _addMenuItemDisableJobWhenNeeded(pMenu, pMinionId, pJobName, schedule) {
+  _addMenuItemScheduleDisableJobWhenNeeded(pMenu, pMinionId, pJobName, schedule) {
     if(schedule.enabled === false) return;
     pMenu.addMenuItem("Disable&nbsp;job...", function(pClickEvent) {
-      this._runCommand(pClickEvent, pMinionId, "schedule.disable_job " + pJobName);
+      this.runCommand(pClickEvent, pMinionId, "schedule.disable_job " + pJobName);
     }.bind(this));
   }
 
-  _addMenuItemDeleteJob(pMenu, pMinionId, pJobName) {
+  _addMenuItemScheduleDeleteJob(pMenu, pMinionId, pJobName) {
     pMenu.addMenuItem("Delete&nbsp;job...", function(pClickEvent) {
-      this._runCommand(pClickEvent, pMinionId, "schedule.delete " + pJobName);
+      this.runCommand(pClickEvent, pMinionId, "schedule.delete " + pJobName);
     }.bind(this));
   }
 
-  _addMenuItemRunJob(pMenu, pMinionId, pJobName, schedule) {
+  _addMenuItemScheduleRunJob(pMenu, pMinionId, pJobName, schedule) {
     pMenu.addMenuItem("Run&nbsp;job...", function(pClickEvent) {
       let scheduleRunJobCmd = "schedule.run_job";
       if(schedule.enabled === false) scheduleRunJobCmd += " force=true";
       scheduleRunJobCmd += " " + pJobName;
-      this._runCommand(pClickEvent, pMinionId, scheduleRunJobCmd);
+      this.runCommand(pClickEvent, pMinionId, scheduleRunJobCmd);
     }.bind(this));
   }
 }

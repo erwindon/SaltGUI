@@ -19,12 +19,12 @@ export class OutputHighstate {
     return true;
   }
 
-  static getDurationClauseMillis(pMilliSeconds) {
+  static _getDurationClauseMillis(pMilliSeconds) {
     const ms = Math.round(pMilliSeconds * 1000) / 1000;
     return `${ms} ms`;
   }
 
-  static getDurationClauseSecs(pMilliSeconds) {
+  static _getDurationClauseSecs(pMilliSeconds) {
     const s = Math.round(pMilliSeconds) / 1000;
     return `${s} s`;
   }
@@ -50,7 +50,7 @@ export class OutputHighstate {
 
   static getHighStateOutput(pMinionId, pTasks) {
 
-    const div = Route._createDiv("", "");
+    const div = Route.createDiv("", "");
 
     let succeeded = 0;
     let failed = 0;
@@ -89,7 +89,7 @@ export class OutputHighstate {
         txt += "\n     Started: " + task.start_time;
 
       if(task.duration) {
-        txt += "\n    Duration: " + OutputHighstate.getDurationClauseMillis(task.duration);
+        txt += "\n    Duration: " + OutputHighstate._getDurationClauseMillis(task.duration);
         totalMilliSeconds += task.duration;
       }
 
@@ -105,7 +105,7 @@ export class OutputHighstate {
         }
       }
 
-      const taskSpan = Route._createSpan("", txt);
+      const taskSpan = Route.createSpan("", txt);
       if(!task.result) {
         taskSpan.style.color = "red";
       } else if(hasChanges) {
@@ -113,7 +113,7 @@ export class OutputHighstate {
       } else {
         taskSpan.style.color = "lime";
       }
-      const taskDiv = Route._createDiv("", "");
+      const taskDiv = Route.createDiv("", "");
       taskDiv.id = Utils.getIdFromMinionId(pMinionId + "." + nr);
       taskDiv.append(taskSpan);
 
@@ -122,34 +122,34 @@ export class OutputHighstate {
 
     let txt = "\nSummary for " + pMinionId;
     txt += "\n------------";
-    const summarySpan = Route._createSpan("", txt);
+    const summarySpan = Route.createSpan("", txt);
     summarySpan.style.color = "aqua";
     div.append(summarySpan);
 
     txt = "\nSucceeded: " + succeeded;
-    const succeededSpan = Route._createSpan("", txt);
+    const succeededSpan = Route.createSpan("", txt);
     succeededSpan.style.color = "lime";
     div.append(succeededSpan);
 
     if(changes > 0) {
       txt = " (";
-      const oSpan = Route._createSpan("", txt);
+      const oSpan = Route.createSpan("", txt);
       oSpan.style.color = "white";
       div.append(oSpan);
 
       txt = "changed=" + changes;
-      const changedSpan = Route._createSpan("", txt);
+      const changedSpan = Route.createSpan("", txt);
       changedSpan.style.color = "lime";
       div.append(changedSpan);
 
       txt = ")";
-      const cSpan = Route._createSpan("", txt);
+      const cSpan = Route.createSpan("", txt);
       cSpan.style.color = "white";
       div.append(cSpan);
     }
 
     txt = "\nFailed:    " + failed;
-    const failedSpan = Route._createSpan("", txt);
+    const failedSpan = Route.createSpan("", txt);
     if(failed > 0) {
       failedSpan.style.color = "red";
     } else {
@@ -159,8 +159,8 @@ export class OutputHighstate {
 
     txt = "\n------------";
     txt += "\nTotal states run: " + (succeeded + skipped + failed);
-    txt += "\nTotal run time: " + OutputHighstate.getDurationClauseSecs(totalMilliSeconds);
-    const totalsSpan = Route._createSpan("", txt);
+    txt += "\nTotal run time: " + OutputHighstate._getDurationClauseSecs(totalMilliSeconds);
+    const totalsSpan = Route.createSpan("", txt);
     totalsSpan.style.color = "aqua";
     div.append(totalsSpan);
 

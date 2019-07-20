@@ -7,7 +7,7 @@ export class OptionsRoute extends PageRoute {
   constructor(router) {
     super("^[\/]options$", "Options", "#page-options", "", router);
 
-    this.newOutputFormats = this.newOutputFormats.bind(this);
+    this._newOutputFormats = this._newOutputFormats.bind(this);
 
     Utils.addTableHelp(this.getPageElement(), "Names 'session_*' show the values from the login session\nNames 'saltgui_*' show the values from the master file '/etc/salt/master'\nChanges made in this screen are valid for this session ONLY");
   }
@@ -19,14 +19,14 @@ export class OptionsRoute extends PageRoute {
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     runnerJobsListJobsPromise.then(pData => {
-      myThis._handleRunnerJobsListJobs(pData);
+      myThis.handleRunnerJobsListJobs(pData);
       runnerJobsActivePromise.then(pData => {
-        myThis._handleRunnerJobsActive(pData);
+        myThis.handleRunnerJobsActive(pData);
       }, pData => {
-        myThis._handleRunnerJobsActive(JSON.stringify(pData));
+        myThis.handleRunnerJobsActive(JSON.stringify(pData));
       });
     }, pData => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
+      myThis.handleRunnerJobsListJobs(JSON.stringify(pData));
     });
 
     const loginResponseStr = window.sessionStorage.getItem("login-response");
@@ -72,103 +72,103 @@ export class OptionsRoute extends PageRoute {
 
     const templatesValue = window.localStorage.getItem("templates");
     const templatesTd = document.getElementById("option-templates-value");
-    templatesTd.innerText = this.makeTemplatesValue(templatesValue);
+    templatesTd.innerText = this._makeTemplatesValue(templatesValue);
 
     const publicPillarsValue = window.localStorage.getItem("public_pillars");
     const publicPillarsTd = document.getElementById("option-public-pillars-value");
-    publicPillarsTd.innerText = this.makePublicPillarsValue(publicPillarsValue);
+    publicPillarsTd.innerText = this._makePublicPillarsValue(publicPillarsValue);
 
     const previewGrainsValue = window.localStorage.getItem("preview_grains");
     const previewGrainsTd = document.getElementById("option-preview-grains-value");
-    previewGrainsTd.innerText = this.makePreviewGrainsValue(previewGrainsValue);
+    previewGrainsTd.innerText = this._makePreviewGrainsValue(previewGrainsValue);
 
     const hideJobsValue = window.localStorage.getItem("hide_jobs");
     const hideJobsTd = document.getElementById("option-hide-jobs-value");
-    hideJobsTd.innerText = this.makeHideJobsValue(hideJobsValue);
+    hideJobsTd.innerText = this._makeHideJobsValue(hideJobsValue);
 
     const showJobsValue = window.localStorage.getItem("show_jobs");
     const showJobsTd = document.getElementById("option-show-jobs-value");
-    showJobsTd.innerText = this.makeShowJobsValue(showJobsValue);
+    showJobsTd.innerText = this._makeShowJobsValue(showJobsValue);
 
     const nodegroupsValue = window.localStorage.getItem("nodegroups");
     const nodegroupsTd = document.getElementById("option-nodegroups-value");
-    nodegroupsTd.innerText = this.makeNodegroupsValue(nodegroupsValue);
+    nodegroupsTd.innerText = this._makeNodegroupsValue(nodegroupsValue);
 
     const outputFormatsValue = window.localStorage.getItem("output_formats");
     const outputFormatsTd = document.getElementById("option-output-formats-value");
-    outputFormatsTd.innerText = this.makeOutputFormatsValue(outputFormatsValue);
+    outputFormatsTd.innerText = this._makeOutputFormatsValue(outputFormatsValue);
 
     // ordering:
     // defaults (no-doc and no-highstate) before actual choices
     // highstate before saltguihighstate because of string inclusion
     const of1 = document.getElementById("output-formats-doc-none");
-    of1.addEventListener("change", this.newOutputFormats);
+    of1.addEventListener("change", this._newOutputFormats);
     of1.checked = true;
     const of0 = document.getElementById("output-formats-doc-doc");
-    of0.addEventListener("change", this.newOutputFormats);
+    of0.addEventListener("change", this._newOutputFormats);
     of0.checked = outputFormatsValue.includes("doc");
     const of4 = document.getElementById("output-formats-highstate-none");
-    of4.addEventListener("change", this.newOutputFormats);
+    of4.addEventListener("change", this._newOutputFormats);
     of4.checked = true;
     const of3 = document.getElementById("output-formats-highstate-normal");
-    of3.addEventListener("change", this.newOutputFormats);
+    of3.addEventListener("change", this._newOutputFormats);
     of3.checked = outputFormatsValue.includes("highstate");
     const of2 = document.getElementById("output-formats-highstate-saltgui");
-    of2.addEventListener("change", this.newOutputFormats);
+    of2.addEventListener("change", this._newOutputFormats);
     of2.checked = outputFormatsValue.includes("saltguihighstate");
     const of5 = document.getElementById("output-formats-output-json");
-    of5.addEventListener("change", this.newOutputFormats);
+    of5.addEventListener("change", this._newOutputFormats);
     of5.checked = outputFormatsValue.includes("json");
     const of6 = document.getElementById("output-formats-output-nested");
-    of6.addEventListener("change", this.newOutputFormats);
+    of6.addEventListener("change", this._newOutputFormats);
     of6.checked = outputFormatsValue.includes("nested");
     const of7 = document.getElementById("output-formats-output-yaml");
-    of7.addEventListener("change", this.newOutputFormats);
+    of7.addEventListener("change", this._newOutputFormats);
     of7.checked = outputFormatsValue.includes("yaml");
 
     const datetimeFractionDigitsValue = window.localStorage.getItem("datetime_fraction_digits");
     const datetimeFractionDigitsTd = document.getElementById("option-datetime-fraction-digits-value");
-    datetimeFractionDigitsTd.innerText = this.makeDatetimeFractionDigitsValue(datetimeFractionDigitsValue);
+    datetimeFractionDigitsTd.innerText = this._makeDatetimeFractionDigitsValue(datetimeFractionDigitsValue);
     const dfd0 = document.getElementById("datetime-fraction-digits0");
-    dfd0.addEventListener("change", this.newDatetimeFractionDigits);
+    dfd0.addEventListener("change", this._newDatetimeFractionDigits);
     if(datetimeFractionDigitsValue === "0") dfd0.checked = true;
     const dfd1 = document.getElementById("datetime-fraction-digits1");
-    dfd1.addEventListener("change", this.newDatetimeFractionDigits);
+    dfd1.addEventListener("change", this._newDatetimeFractionDigits);
     if(datetimeFractionDigitsValue === "1") dfd1.checked = true;
     const dfd2 = document.getElementById("datetime-fraction-digits2");
-    dfd2.addEventListener("change", this.newDatetimeFractionDigits);
+    dfd2.addEventListener("change", this._newDatetimeFractionDigits);
     if(datetimeFractionDigitsValue === "2") dfd2.checked = true;
     const dfd3 = document.getElementById("datetime-fraction-digits3");
-    dfd3.addEventListener("change", this.newDatetimeFractionDigits);
+    dfd3.addEventListener("change", this._newDatetimeFractionDigits);
     if(datetimeFractionDigitsValue === "3") dfd3.checked = true;
     const dfd4 = document.getElementById("datetime-fraction-digits4");
-    dfd4.addEventListener("change", this.newDatetimeFractionDigits);
+    dfd4.addEventListener("change", this._newDatetimeFractionDigits);
     if(datetimeFractionDigitsValue === "4") dfd4.checked = true;
     const dfd5 = document.getElementById("datetime-fraction-digits5");
-    dfd5.addEventListener("change", this.newDatetimeFractionDigits);
+    dfd5.addEventListener("change", this._newDatetimeFractionDigits);
     if(datetimeFractionDigitsValue === "5") dfd5.checked = true;
     const dfd6 = document.getElementById("datetime-fraction-digits6");
-    dfd6.addEventListener("change", this.newDatetimeFractionDigits);
+    dfd6.addEventListener("change", this._newDatetimeFractionDigits);
     if(datetimeFractionDigitsValue === "6") dfd6.checked = true;
 
     const tooltipModeValue = window.localStorage.getItem("tooltip_mode");
     const tooltipModeTd = document.getElementById("option-tooltip-mode-value");
-    tooltipModeTd.innerText = this.makeTooltipModeValue(tooltipModeValue);
+    tooltipModeTd.innerText = this._makeTooltipModeValue(tooltipModeValue);
     const tm0 = document.getElementById("tooltip-mode-full");
-    tm0.addEventListener("change", this.newTooltipMode);
+    tm0.addEventListener("change", this._newTooltipMode);
     if(tooltipModeValue === "full") tm0.checked = true;
     const tm1 = document.getElementById("tooltip-mode-simple");
-    tm1.addEventListener("change", this.newTooltipMode);
+    tm1.addEventListener("change", this._newTooltipMode);
     if(tooltipModeValue === "simple") tm1.checked = true;
     const tm2 = document.getElementById("tooltip-mode-none");
-    tm2.addEventListener("change", this.newTooltipMode);
+    tm2.addEventListener("change", this._newTooltipMode);
     if(tooltipModeValue === "none") tm2.checked = true;
 
     const msgSpan = this.getPageElement().querySelector(".msg");
     msgSpan.style.display = "none";
   }
 
-  parseAndFormat(valueStr) {
+  _parseAndFormat(valueStr) {
     if(valueStr === undefined) return "(undefined)";
     if(valueStr === null) return "(undefined)";
     if(valueStr === "undefined") return "(undefined)";
@@ -176,35 +176,35 @@ export class OptionsRoute extends PageRoute {
     return OutputYaml.formatYAML(value);
   }
 
-  makeTemplatesValue(value) {
-    return this.parseAndFormat(value);
+  _makeTemplatesValue(value) {
+    return this._parseAndFormat(value);
   }
 
-  makePublicPillarsValue(value) {
-    return this.parseAndFormat(value);
+  _makePublicPillarsValue(value) {
+    return this._parseAndFormat(value);
   }
 
-  makePreviewGrainsValue(value) {
-    return this.parseAndFormat(value);
+  _makePreviewGrainsValue(value) {
+    return this._parseAndFormat(value);
   }
 
-  makeHideJobsValue(value) {
-    return this.parseAndFormat(value);
+  _makeHideJobsValue(value) {
+    return this._parseAndFormat(value);
   }
 
-  makeShowJobsValue(value) {
-    return this.parseAndFormat(value);
+  _makeShowJobsValue(value) {
+    return this._parseAndFormat(value);
   }
 
-  makeNodegroupsValue(value) {
-    return this.parseAndFormat(value);
+  _makeNodegroupsValue(value) {
+    return this._parseAndFormat(value);
   }
 
-  makeOutputFormatsValue(value) {
-    return this.parseAndFormat(value);
+  _makeOutputFormatsValue(value) {
+    return this._parseAndFormat(value);
   }
 
-  newOutputFormats(evt) {
+  _newOutputFormats(evt) {
     let v = "";
     const of0 = document.getElementById("output-formats-doc-doc");
     if(of0.checked) v += ",doc";
@@ -220,25 +220,25 @@ export class OptionsRoute extends PageRoute {
     if(of7.checked) v += ",yaml";
     v = "\"" + v.substring(1) + "\"";
     const outputFormatsTd = document.getElementById("option-output-formats-value");
-    outputFormatsTd.innerText = this.makeOutputFormatsValue(v);
+    outputFormatsTd.innerText = this._makeOutputFormatsValue(v);
     window.localStorage.setItem("output_formats", v);
   }
 
-  makeDatetimeFractionDigitsValue(value) {
-    return this.parseAndFormat(value);
+  _makeDatetimeFractionDigitsValue(value) {
+    return this._parseAndFormat(value);
   }
 
-  newDatetimeFractionDigits(evt) {
+  _newDatetimeFractionDigits(evt) {
     window.localStorage.setItem("datetime_fraction_digits", parseInt(evt.target.value));
     const datetimeFractionDigitsTd = document.getElementById("option-datetime-fraction-digits-value");
     datetimeFractionDigitsTd.innerText = evt.target.value;
   }
 
-  makeTooltipModeValue(value) {
+  _makeTooltipModeValue(value) {
     return value;
   }
 
-  newTooltipMode(evt) {
+  _newTooltipMode(evt) {
     window.localStorage.setItem("tooltip_mode", evt.target.value);
     const tooltipModeTd = document.getElementById("option-tooltip-mode-value");
     tooltipModeTd.innerText = evt.target.value;

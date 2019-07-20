@@ -8,7 +8,7 @@ export class TemplatesRoute extends PageRoute {
   constructor(pRouter) {
     super("^[\/]templates$", "Templates", "#page-templates", "#button-templates", pRouter);
 
-    this._handleWheelConfigValues = this._handleWheelConfigValues.bind(this);
+    this._handleTemplatesWheelConfigValues = this._handleTemplatesWheelConfigValues.bind(this);
   }
 
   onShow() {
@@ -19,24 +19,24 @@ export class TemplatesRoute extends PageRoute {
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     wheelConfigValuesPromise.then(pData => {
-      myThis._handleWheelConfigValues(pData);
+      myThis._handleTemplatesWheelConfigValues(pData);
     }, pData => {
-      myThis._handleWheelConfigValues(JSON.stringify(pData));
+      myThis._handleTemplatesWheelConfigValues(JSON.stringify(pData));
     });
 
     runnerJobsListJobsPromise.then(pData => {
-      myThis._handleRunnerJobsListJobs(pData);
+      myThis.handleRunnerJobsListJobs(pData);
       runnerJobsActivePromise.then(pData => {
-        myThis._handleRunnerJobsActive(pData);
+        myThis.handleRunnerJobsActive(pData);
       }, pData => {
-        myThis._handleRunnerJobsActive(JSON.stringify(pData));
+        myThis.handleRunnerJobsActive(JSON.stringify(pData));
       });
     }, pData => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
+      myThis.handleRunnerJobsListJobs(JSON.stringify(pData));
     });
   }
 
-  _handleWheelConfigValues(pData) {
+  _handleTemplatesWheelConfigValues(pData) {
     const container = this.getPageElement().querySelector(".templates");
 
     if(PageRoute.showErrorRowInstead(container, pData)) return;
@@ -62,14 +62,14 @@ export class TemplatesRoute extends PageRoute {
   _addTemplate(pContainer, pTemplateName, template) {
     const tr = document.createElement("tr");
 
-    tr.appendChild(Route._createTd("name", pTemplateName));
+    tr.appendChild(Route.createTd("name", pTemplateName));
 
     // calculate description
     const description = template["description"];
     if(!description) {
-      tr.appendChild(Route._createTd("description value-none", "(none)"));
+      tr.appendChild(Route.createTd("description value-none", "(none)"));
     } else {
-      tr.appendChild(Route._createTd("description", description));
+      tr.appendChild(Route.createTd("description", description));
     }
 
     // calculate targettype
@@ -77,21 +77,21 @@ export class TemplatesRoute extends PageRoute {
     // calculate target
     const target = template["target"];
     if(!targetType && !target) {
-      tr.appendChild(Route._createTd("target value-none", "(none)"));
+      tr.appendChild(Route.createTd("target value-none", "(none)"));
     } else if(/* targetType && */ !target) {
-      tr.appendChild(Route._createTd("target", targetType));
+      tr.appendChild(Route.createTd("target", targetType));
     } else if(!targetType /* && target */) {
-      tr.appendChild(Route._createTd("target", target));
+      tr.appendChild(Route.createTd("target", target));
     } else {
-      tr.appendChild(Route._createTd("target", targetType + " " + target));
+      tr.appendChild(Route.createTd("target", targetType + " " + target));
     }
 
     // calculate command
     const command = template["command"];
     if(!command) {
-      tr.appendChild(Route._createTd("command value-none", "(none)"));
+      tr.appendChild(Route.createTd("command value-none", "(none)"));
     } else {
-      tr.appendChild(Route._createTd("command", command));
+      tr.appendChild(Route.createTd("command", command));
     }
 
     const menu = new DropDownMenu(tr);
@@ -100,13 +100,13 @@ export class TemplatesRoute extends PageRoute {
     pContainer.tBodies[0].appendChild(tr);
 
     tr.addEventListener("click", pClickEvent =>
-      this._runFullCommand(pClickEvent, targetType, target, command)
+      this.runFullCommand(pClickEvent, targetType, target, command)
     );
   }
 
   _addMenuItemApplyTemplate(pMenu, pTargetType, target, pCommand) {
     pMenu.addMenuItem("Apply&nbsp;template...", function(pClickEvent) {
-      this._runFullCommand(pClickEvent, pTargetType, target, pCommand);
+      this.runFullCommand(pClickEvent, pTargetType, target, pCommand);
     }.bind(this));
   }
 }

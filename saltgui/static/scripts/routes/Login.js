@@ -8,20 +8,20 @@ export class LoginRoute extends Route {
 
     this.loginPending = false;
 
-    this.onLogin = this.onLogin.bind(this);
-    this.onLoginSuccess = this.onLoginSuccess.bind(this);
-    this.onLoginFailure = this.onLoginFailure.bind(this);
-    this.registerEventListeners();
+    this._onLogin = this._onLogin.bind(this);
+    this._onLoginSuccess = this._onLoginSuccess.bind(this);
+    this._onLoginFailure = this._onLoginFailure.bind(this);
+    this._registerLoginRouteEventListeners();
   }
 
-  registerEventListeners() {
+  _registerLoginRouteEventListeners() {
     const submit = document.getElementById("login-form");
-    submit.addEventListener("submit", this.onLogin);
+    submit.addEventListener("submit", this._onLogin);
   }
 
-  showNoticeText(pBackgroundColour, pText) {
+  _showNoticeText(pBackgroundColour, pText) {
     // create a new child every time to restart the animation
-    const noticeDiv = Route._createDiv("", pText);
+    const noticeDiv = Route.createDiv("", pText);
     noticeDiv.id = "notice";
     noticeDiv.style.backgroundColor = pBackgroundColour;
     const noticeWrapperDiv = document.getElementById("notice-wrapper");
@@ -41,22 +41,22 @@ export class LoginRoute extends Route {
       break;
     case "no-session":
       // gray because we cannot prove that the user was/wasnt logged in
-      this.showNoticeText("gray", "Not logged in");
+      this._showNoticeText("gray", "Not logged in");
       break;
     case "expired-session":
-      this.showNoticeText("#F44336", "Session expired");
+      this._showNoticeText("#F44336", "Session expired");
       break;
     case "logout":
       // gray because this is the result of a user action
-      this.showNoticeText("gray", "Logout");
+      this._showNoticeText("gray", "Logout");
       break;
     default:
       // should not occur
-      this.showNoticeText("#F44336", reason);
+      this._showNoticeText("#F44336", reason);
     }
   }
 
-  onLogin(pSubmitEvent) {
+  _onLogin(pSubmitEvent) {
     pSubmitEvent.preventDefault();
     if(this.loginPending) return; //Don't continue if waiting on a request
 
@@ -67,13 +67,13 @@ export class LoginRoute extends Route {
     const eauthField = document.getElementById("eauth");
     const eauth = eauthField.value;
 
-    this.toggleForm(false);
+    this._toggleForm(false);
     this.router.api.login(userName, passWord, eauth)
-      .then(this.onLoginSuccess, this.onLoginFailure);
+      .then(this._onLoginSuccess, this._onLoginFailure);
   }
 
-  onLoginSuccess() {
-    this.toggleForm(true);
+  _onLoginSuccess() {
+    this._toggleForm(true);
 
     const userNameField = document.getElementById("username");
     userNameField.disabled = true;
@@ -82,7 +82,7 @@ export class LoginRoute extends Route {
     const eauthField = document.getElementById("eauth");
     eauthField.disabled = true;
 
-    this.showNoticeText("#4CAF50", "Please wait...");
+    this._showNoticeText("#4CAF50", "Please wait...");
 
     //we need these functions to populate the dropdown boxes
     const wheelConfigValuesPromise = this.router.api.getWheelConfigValues();
@@ -90,7 +90,7 @@ export class LoginRoute extends Route {
     //we need these functions to populate the dropdown boxes
     const myThis = this;
     wheelConfigValuesPromise.then(data => {
-      myThis._handleWheelConfigValues(data);
+      myThis._handleLoginWheelConfigValues(data);
     }, data => {
       // never mind
     });
@@ -99,7 +99,7 @@ export class LoginRoute extends Route {
     setTimeout(_ => this.router.goTo("/"), 1000);
   }
 
-  _handleWheelConfigValues(pData) {
+  _handleLoginWheelConfigValues(pData) {
     // store for later use
 
     const templates = pData.return[0].data.return.saltgui_templates;
@@ -130,23 +130,23 @@ export class LoginRoute extends Route {
     window.localStorage.setItem("tooltip_mode", toolTipMode);
   }
 
-  onLoginFailure(error) {
-    this.toggleForm(true);
+  _onLoginFailure(error) {
+    this._toggleForm(true);
 
     if(error && error.status === 503) {
       // Service Unavailable
       // e.g. salt-api running but salt-master not running
-      this.showNoticeText("#F44336", error.message);
+      this._showNoticeText("#F44336", error.message);
     } else if(error && error.status === -1) {
       // No permissions: login valid, but no api functions executable
       // e.g. PAM says OK and /etc/salt/master says NO
-      this.showNoticeText("#F44336", error.message);
+      this._showNoticeText("#F44336", error.message);
     } else {
-      this.showNoticeText("#F44336", "Authentication failed");
+      this._showNoticeText("#F44336", "Authentication failed");
     }
   }
 
-  toggleForm(pAllowSubmit) {
+  _toggleForm(pAllowSubmit) {
     this.loginPending = !pAllowSubmit;
     const loginButton = this.pageElement.querySelector("#login-form input[type='submit']");
     loginButton.disabled = !pAllowSubmit;

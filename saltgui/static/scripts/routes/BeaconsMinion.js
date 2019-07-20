@@ -38,14 +38,14 @@ export class BeaconsMinionRoute extends PageRoute {
     });
 
     runnerJobsListJobsPromise.then(pData => {
-      myThis._handleRunnerJobsListJobs(pData);
+      myThis.handleRunnerJobsListJobs(pData);
       runnerJobsActivePromise.then(pData => {
-        myThis._handleRunnerJobsActive(pData);
+        myThis.handleRunnerJobsActive(pData);
       }, pData => {
-        myThis._handleRunnerJobsActive(JSON.stringify(pData));
+        myThis.handleRunnerJobsActive(JSON.stringify(pData));
       });
     }, pData => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
+      myThis.handleRunnerJobsListJobs(JSON.stringify(pData));
     }); 
   }
 
@@ -58,7 +58,7 @@ export class BeaconsMinionRoute extends PageRoute {
 
     const beacons0 = pData.return[0][pMinionId];
 
-    const beacons = BeaconsRoute._fixMinion(beacons0);
+    const beacons = BeaconsRoute.fixBeaconsMinion(beacons0);
 
     const titleElement = document.getElementById("beacons-minion-title");
     let txt = "Beacons on " + pMinionId;
@@ -91,7 +91,7 @@ export class BeaconsMinionRoute extends PageRoute {
     for(const k of keys) {
       const tr = document.createElement('tr');
 
-      const nameTd = Route._createTd("beacon-name", k);
+      const nameTd = Route.createTd("beacon-name", k);
       tr.appendChild(nameTd);
 
       const beacon = beacons.beacons[k];
@@ -113,12 +113,12 @@ export class BeaconsMinionRoute extends PageRoute {
 
       // menu comes before this data on purpose
       const beaconConfig = Output.formatObject(beacon);
-      const beaconConfigTd = Route._createTd("beacon-config", beaconConfig);
+      const beaconConfigTd = Route.createTd("beacon-config", beaconConfig);
       if(beacons.enabled === false) beaconConfigTd.classList.add("beacon-disabled");
       if(beacon.enabled === false) beaconConfigTd.classList.add("beacon-disabled");
       tr.appendChild(beaconConfigTd);
 
-      const beaconValueTd = Route._createTd("beacon-value", "(waiting)");
+      const beaconValueTd = Route.createTd("beacon-value", "(waiting)");
       beaconValueTd.classList.add("beacon-waiting");
       tr.appendChild(beaconValueTd);
 
@@ -126,7 +126,7 @@ export class BeaconsMinionRoute extends PageRoute {
 
       // run the command with the original beacon definition
       tr.addEventListener("click", pClickEvent =>
-        this._runCommand(pClickEvent, pMinionId, "beacons.modify " + k + " " + JSON.stringify(beacons0[k]))
+        this.runCommand(pClickEvent, pMinionId, "beacons.modify " + k + " " + JSON.stringify(beacons0[k]))
       );
     }
 
@@ -139,52 +139,52 @@ export class BeaconsMinionRoute extends PageRoute {
   _addMenuItemBeaconsDisableWhenNeeded(pMenu, pMinionId, beacons) {
     if(beacons.enabled === false) return;
     pMenu.addMenuItem("Disable&nbsp;beacons...", function(pClickEvent) {
-      this._runCommand(pClickEvent, pMinionId, "beacons.disable");
+      this.runCommand(pClickEvent, pMinionId, "beacons.disable");
     }.bind(this));
   }
 
   _addMenuItemBeaconsEnableWhenNeeded(pMenu, pMinionId, beacons) {
     if(beacons.enabled !== false) return;
     pMenu.addMenuItem("Enable&nbsp;beacons...", function(pClickEvent) {
-      this._runCommand(pClickEvent, pMinionId, "beacons.enable");
+      this.runCommand(pClickEvent, pMinionId, "beacons.enable");
     }.bind(this));
   }
 
   _addMenuItemBeaconsAdd(pMenu, pMinionId) {
     pMenu.addMenuItem("Add&nbsp;beacon...", function(pClickEvent) {
-      this._runCommand(pClickEvent, pMinionId, "beacons.add <name> <data>");
+      this.runCommand(pClickEvent, pMinionId, "beacons.add <name> <data>");
     }.bind(this));
   }
 
   _addMenuItemBeaconsReset(pMenu, pMinionId) {
     pMenu.addMenuItem("Reset&nbsp;beacons...", function(pClickEvent) {
-      this._runCommand(pClickEvent, pMinionId, "beacons.reset");
+      this.runCommand(pClickEvent, pMinionId, "beacons.reset");
     }.bind(this));
   }
 
   _addMenuItemBeaconsSave(pMenu, pMinionId) {
     pMenu.addMenuItem("Save&nbsp;beacons...", function(pClickEvent) {
-      this._runCommand(pClickEvent, pMinionId, "beacons.save");
+      this.runCommand(pClickEvent, pMinionId, "beacons.save");
     }.bind(this));
   }
 
   _addMenuItemBeaconsDisableBeaconWhenNeeded(pMenu, pMinionId, key, beacon) {
     if(beacon.enabled === false) return;
     pMenu.addMenuItem("Disable&nbsp;beacon...", function(pClickEvent) {
-      this._runCommand(pClickEvent, pMinionId, "beacons.disable_beacon " + key);
+      this.runCommand(pClickEvent, pMinionId, "beacons.disable_beacon " + key);
     }.bind(this));
   }
 
   _addMenuItemBeaconsEnableBeaconWhenNeeded(pMenu, pMinionId, key, beacon) {
     if(beacon.enabled !== false) return;
     pMenu.addMenuItem("Enable&nbsp;beacon...", function(pClickEvent) {
-      this._runCommand(pClickEvent, pMinionId, "beacons.enable_beacon " + key);
+      this.runCommand(pClickEvent, pMinionId, "beacons.enable_beacon " + key);
     }.bind(this));
   }
 
   _addMenuItemBeaconsDelete(pMenu, pMinionId, key) {
     pMenu.addMenuItem("Delete&nbsp;beacon...", function(pClickEvent) {
-      this._runCommand(pClickEvent, pMinionId, "beacons.delete " + key);
+      this.runCommand(pClickEvent, pMinionId, "beacons.delete " + key);
     }.bind(this));
   }
 

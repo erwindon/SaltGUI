@@ -36,21 +36,21 @@ export class PillarsMinionRoute extends PageRoute {
     });
 
     runnerJobsListJobsPromise.then(pData => {
-      myThis._handleRunnerJobsListJobs(pData);
+      myThis.handleRunnerJobsListJobs(pData);
       runnerJobsActivePromise.then(pData => {
-        myThis._handleRunnerJobsActive(pData);
+        myThis.handleRunnerJobsActive(pData);
       }, pData => {
-        myThis._handleRunnerJobsActive(JSON.stringify(pData));
+        myThis.handleRunnerJobsActive(JSON.stringify(pData));
       });
     }, pData => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
+      myThis.handleRunnerJobsListJobs(JSON.stringify(pData));
     }); 
   }
 
   _handleLocalPillarItems(pData, pMinionId) {
     const panel = document.getElementById("pillars-minion-panel");
     const menu = new DropDownMenu(panel);
-    this._addMenuItemRefreshPillar(menu, pMinionId);
+    this._addMenuItemSaltUtilRefreshPillar(menu, pMinionId);
 
     const container = document.getElementById("pillars-minion-list");
 
@@ -93,23 +93,23 @@ export class PillarsMinionRoute extends PageRoute {
     for(const k of keys) {
       const pillar = document.createElement('tr');
 
-      const nameTd = Route._createTd("pillar-name", k);
+      const nameTd = Route.createTd("pillar-name", k);
       pillar.appendChild(nameTd);
 
       // menu comes before this data if there was any
 
-      const pillarValueTd = Route._createTd("", "");
+      const pillarValueTd = Route.createTd("", "");
 
       // 25CF = BLACK CIRCLE, 8 of these
       const pillarValueHidden = "\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF";
-      const pillarHiddenDiv = Route._createDiv("pillar-hidden", pillarValueHidden);
+      const pillarHiddenDiv = Route.createDiv("pillar-hidden", pillarValueHidden);
       pillarHiddenDiv.style.display = "inline-block";
       Utils.addToolTip(pillarHiddenDiv, "Click to show");
       // initially use the hidden view
       pillarValueTd.appendChild(pillarHiddenDiv);
 
       const pillarValueShown = Output.formatObject(pillars[k]);
-      const pillarShownDiv = Route._createDiv("pillar-shown", pillarValueShown);
+      const pillarShownDiv = Route.createDiv("pillar-shown", pillarValueShown);
       // initially hide the normal view
       pillarShownDiv.style.display = "none";
       Utils.addToolTip(pillarShownDiv, "Click to hide");
@@ -150,9 +150,9 @@ export class PillarsMinionRoute extends PageRoute {
     msgDiv.innerText = txt;
   }
 
-  _addMenuItemRefreshPillar(pMenu, pMinionId) {
+  _addMenuItemSaltUtilRefreshPillar(pMenu, pMinionId) {
     pMenu.addMenuItem("Refresh&nbsp;pillar...", function(pClickEvent) {
-      this._runCommand(pClickEvent, pMinionId, "saltutil.refresh_pillar");
+      this.runCommand(pClickEvent, pMinionId, "saltutil.refresh_pillar");
     }.bind(this));
   }
 }

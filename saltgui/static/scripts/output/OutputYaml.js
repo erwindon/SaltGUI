@@ -3,7 +3,7 @@ export class OutputYaml {
   // format an object as YAML
   // returns NULL when it is not a simple object
   // i.e. no multi-line objects, no indentation here
-  static formatSimpleYAML(pValue) {
+  static _formatSimpleYAML(pValue) {
 
     if(pValue === null) {
       return "null";
@@ -66,7 +66,7 @@ export class OutputYaml {
     // independently of this setting to match the prefix "- "
     const indentStep = 2;
 
-    const str = OutputYaml.formatSimpleYAML(pValue);
+    const str = OutputYaml._formatSimpleYAML(pValue);
     if(str !== null) {
       return str;
     }
@@ -87,7 +87,7 @@ export class OutputYaml {
     for(const key of Object.keys(pValue).sort()) {
       const item = pValue[key];
       out += separator + key + ":";
-      const str = OutputYaml.formatSimpleYAML(item);
+      const str = OutputYaml._formatSimpleYAML(item);
       if(str !== null) {
         out += " " + str;
       } else if(Array.isArray(item)) {

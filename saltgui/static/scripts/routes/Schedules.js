@@ -8,8 +8,8 @@ export class SchedulesRoute extends PageRoute {
   constructor(pRouter) {
     super("^[\/]schedules$", "Schedules", "#page-schedules", "#button-schedules", pRouter);
 
-    this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
-    this._updateMinion = this._updateMinion.bind(this);
+    this._handleSchedulesWheelKeyListAll = this._handleSchedulesWheelKeyListAll.bind(this);
+    this.updateMinion = this.updateMinion.bind(this);
   }
 
   onShow() {
@@ -21,35 +21,35 @@ export class SchedulesRoute extends PageRoute {
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     wheelKeyListAllPromise.then(pData1 => {
-      myThis._handleWheelKeyListAll(pData1);
+      myThis._handleSchedulesWheelKeyListAll(pData1);
       localScheduleListPromise.then(pData => {
-        myThis._updateMinions(pData);
+        myThis.updateMinions(pData);
       }, pData2 => {
         const pData = {"return":[{}]};
         for(const k of pData1.return[0].data.return.minions)
           pData.return[0][k] = JSON.stringify(pData2);
-        myThis._updateMinions(pData);
+        myThis.updateMinions(pData);
       });
     }, pData => {
-      myThis._handleWheelKeyListAll(JSON.stringify(pData));
+      myThis._handleSchedulesWheelKeyListAll(JSON.stringify(pData));
     });
 
     runnerJobsListJobsPromise.then(pData => {
-      myThis._handleRunnerJobsListJobs(pData);
+      myThis.handleRunnerJobsListJobs(pData);
       runnerJobsActivePromise.then(pData => {
-        myThis._handleRunnerJobsActive(pData);
+        myThis.handleRunnerJobsActive(pData);
       }, pData => {
-        myThis._handleRunnerJobsActive(JSON.stringify(pData));
+        myThis.handleRunnerJobsActive(JSON.stringify(pData));
       });
     }, pData => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
+      myThis.handleRunnerJobsListJobs(JSON.stringify(pData));
     }); 
   }
 
   // This one has some historic ballast:
   // Meta-data is returned on the same level as
   // the list of scheduled items
-  static _fixMinion(pData) {
+  static fixSchedulesMinion(pData) {
     if(typeof pData !== "object") return pData;
 
     const ret = { "schedules": {}, "enabled": true };
@@ -77,7 +77,7 @@ export class SchedulesRoute extends PageRoute {
     return ret;
   }
 
-  _handleWheelKeyListAll(pData) {
+  _handleSchedulesWheelKeyListAll(pData) {
     const table = this.getPageElement().querySelector('#minions');
 
     if(PageRoute.showErrorRowInstead(table, pData)) return;
@@ -86,7 +86,7 @@ export class SchedulesRoute extends PageRoute {
 
     const minionIds = keys.minions.sort();
     for(const minionId of minionIds) {
-      this._addMinion(table, minionId, 1);
+      this.addMinion(table, minionId, 1);
 
       // preliminary dropdown menu
       const minionTr = table.querySelector("#" + Utils.getIdFromMinionId(minionId));
@@ -107,25 +107,25 @@ export class SchedulesRoute extends PageRoute {
     msgDiv.innerText = txt;
   }
 
-  _updateOfflineMinion(pContainer, pMinionId) {
-    super._updateOfflineMinion(pContainer, pMinionId);
+  updateOfflineMinion(pContainer, pMinionId) {
+    super.updateOfflineMinion(pContainer, pMinionId);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
     // force same columns on all rows
-    minionTr.appendChild(Route._createTd("scheduleinfo", ""));
-    minionTr.appendChild(Route._createTd("run-command-button", ""));
+    minionTr.appendChild(Route.createTd("scheduleinfo", ""));
+    minionTr.appendChild(Route.createTd("run-command-button", ""));
   }
 
-  _updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
+  updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
 
-    pMinionData = SchedulesRoute._fixMinion(pMinionData);
+    pMinionData = SchedulesRoute.fixSchedulesMinion(pMinionData);
 
-    const minionTr = this._getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
+    const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    minionTr.appendChild(Route._createTd("minion-id", pMinionId));
+    minionTr.appendChild(Route.createTd("minion-id", pMinionId));
 
-    const statusDiv = Route._createTd("status", "accepted");
+    const statusDiv = Route.createTd("status", "accepted");
     statusDiv.classList.add("accepted");
     minionTr.appendChild(statusDiv);
 
@@ -142,7 +142,7 @@ export class SchedulesRoute extends PageRoute {
       scheduleinfo = "";
     }
 
-    const td = Route._createTd("scheduleinfo", scheduleinfo);
+    const td = Route.createTd("scheduleinfo", scheduleinfo);
     if(typeof pMinionData !== "object") {
       Utils.addErrorToTableCell(td, pMinionData);
     }

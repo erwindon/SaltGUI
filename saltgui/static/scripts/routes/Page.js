@@ -9,14 +9,13 @@ export class PageRoute extends Route {
   constructor(pPath, pPageName, pPageSelector, pMenuItemSelector, pRouter) {
     super(pPath, pPageName, pPageSelector, pMenuItemSelector, pRouter);
 
-    this._runCommand = this._runCommand.bind(this);
-    this._handleRunnerJobsActive = this._handleRunnerJobsActive.bind(this);
-    this._startRunningJobs = this._startRunningJobs.bind(this);
-    this._handleRunnerJobsListJobs = this._handleRunnerJobsListJobs.bind(this);
-    this._updateMinions = this._updateMinions.bind(this);
+    this.handleRunnerJobsActive = this.handleRunnerJobsActive.bind(this);
+    this.startRunningJobs = this.startRunningJobs.bind(this);
+    this.handleRunnerJobsListJobs = this.handleRunnerJobsListJobs.bind(this);
+    this.updateMinions = this.updateMinions.bind(this);
   }
 
-  _updateMinions(pData) {
+  updateMinions(pData) {
     if(!pData) return;
 
     const minions = pData.return[0];
@@ -36,10 +35,10 @@ export class PageRoute extends Route {
 
       // minions can be offline, then the info will be false
       if(minionInfo === false) {
-        this._updateOfflineMinion(table, minionId);
+        this.updateOfflineMinion(table, minionId);
         cntOffline++;
       } else {
-        this._updateMinion(table, minionInfo, minionId, minions);
+        this.updateMinion(table, minionInfo, minionId, minions);
         cntOnline++;
       }
     }
@@ -56,7 +55,7 @@ export class PageRoute extends Route {
     msgDiv.innerText = txt;
   }
 
-  _getElement(pContainer, id) {
+  getElement(pContainer, id) {
     let minionTr = pContainer.querySelector("#" + id);
 
     if(minionTr === null) {
@@ -76,12 +75,12 @@ export class PageRoute extends Route {
     return minionTr;
   }
 
-  _updateOfflineMinion(pContainer, pMinionId) {
-    const minionTr = this._getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
+  updateOfflineMinion(pContainer, pMinionId) {
+    const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    minionTr.appendChild(Route._createTd("minion-id", pMinionId));
+    minionTr.appendChild(Route.createTd("minion-id", pMinionId));
 
-    const offline = Route._createTd("status", "offline");
+    const offline = Route.createTd("status", "offline");
     offline.classList.add("offline");
     minionTr.appendChild(offline);
   }
@@ -225,16 +224,16 @@ export class PageRoute extends Route {
     return ipv4[0];
   }
 
-  _updateMinion(pContainer, pMinionData, pMinionId, prefixes) {
+  updateMinion(pContainer, pMinionData, pMinionId, prefixes) {
 
-    const minionTr = this._getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
+    const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    minionTr.appendChild(Route._createTd("minion-id", pMinionId));
+    minionTr.appendChild(Route.createTd("minion-id", pMinionId));
 
     const ipv4 = this._getBestIpNumber(pMinionData, prefixes);
     if(ipv4) {
-      const addressTd = Route._createTd("status", "");
-      const addressSpan = Route._createSpan("status2", ipv4);
+      const addressTd = Route.createTd("status", "");
+      const addressSpan = Route.createSpan("status2", ipv4);
       addressTd.appendChild(addressSpan);
       // ipnumbers do not sort well, reformat into something sortable
       const ipv4parts = ipv4.split(".");
@@ -251,7 +250,7 @@ export class PageRoute extends Route {
       Utils.addToolTip(addressSpan, "Click to copy");
       minionTr.appendChild(addressTd);
     } else {
-      const accepted = Route._createTd("status", "accepted");
+      const accepted = Route.createTd("status", "accepted");
       accepted.classList.add("accepted");
       minionTr.appendChild(accepted);
     }
@@ -260,7 +259,7 @@ export class PageRoute extends Route {
     if(typeof pMinionData === "string") saltversion = "";
     else if(pMinionData && pMinionData.saltversion) saltversion = pMinionData.saltversion;
     if(pMinionData) {
-      const td = Route._createTd("saltversion", saltversion);
+      const td = Route.createTd("saltversion", saltversion);
       if(typeof pMinionData === "string") Utils.addErrorToTableCell(td, pMinionData);
       minionTr.appendChild(td);
     }
@@ -270,7 +269,7 @@ export class PageRoute extends Route {
     else if(pMinionData && pMinionData.os && pMinionData.osrelease) os = pMinionData.os + " " + pMinionData.osrelease;
     else if(pMinionData && pMinionData.os) os = pMinionData.os;
     if(pMinionData) {
-      const td = Route._createTd("os", os);
+      const td = Route.createTd("os", os);
       if(typeof pMinionData === "string") Utils.addErrorToTableCell(td, pMinionData);
       if(pMinionData.os && typeof pMinionData !== "string") {
         const img = document.createElement("img");
@@ -282,7 +281,7 @@ export class PageRoute extends Route {
     }
   }
 
-  _addMinion(pContainer, pMinionId, freeColumns = 0) {
+  addMinion(pContainer, pMinionId, freeColumns = 0) {
 
     let minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
     if(minionTr !== null) {
@@ -293,17 +292,17 @@ export class PageRoute extends Route {
     minionTr = document.createElement("tr");
     minionTr.id = Utils.getIdFromMinionId(pMinionId);
 
-    minionTr.appendChild(Route._createTd("minion-id", pMinionId));
+    minionTr.appendChild(Route.createTd("minion-id", pMinionId));
 
-    const minionTd = Route._createTd("status", "accepted");
+    const minionTd = Route.createTd("status", "accepted");
     minionTd.classList.add("accepted");
     minionTr.appendChild(minionTd);
 
-    minionTr.appendChild(Route._createTd("os", "loading..."));
+    minionTr.appendChild(Route.createTd("os", "loading..."));
 
     // fill out the number of columns to that of the header
     while(minionTr.cells.length < pContainer.tHead.rows[0].cells.length - freeColumns) {
-      minionTr.appendChild(Route._createTd("", ""));
+      minionTr.appendChild(Route.createTd("", ""));
     }
 
     pContainer.tBodies[0].appendChild(minionTr);
@@ -311,13 +310,13 @@ export class PageRoute extends Route {
 
   _addNone(pContainer) {
     const tr = document.createElement("tr");
-    const td = Route._createTd("minion-id", "none");
+    const td = Route.createTd("minion-id", "none");
     td.setAttribute("colspan", pContainer.rows[0].cells.length);
     tr.appendChild(td);
     pContainer.appendChild(tr);
   }
 
-  _handleRunnerJobsListJobs(pData, hasHeader = false, pMaxNumberOfJobs = 7) {
+  handleRunnerJobsListJobs(pData, hasHeader = false, pMaxNumberOfJobs = 7) {
     const jobContainer = this.getPageElement().querySelector(".jobs tbody");
 
     if(PageRoute.showErrorRowInstead(jobContainer, pData)) return;
@@ -407,7 +406,7 @@ export class PageRoute extends Route {
       if(numberOfJobsShown >= pMaxNumberOfJobs) continue;
 
       // Note that "Jobs" has a specialized version
-      this._addJob(jobContainer, job);
+      this.addJob(jobContainer, job);
 
       numberOfJobsShown++;
     }
@@ -428,7 +427,7 @@ export class PageRoute extends Route {
     msgDiv.innerText = txt;
   }
 
-  _handleRunnerJobsActive(pData) {
+  handleRunnerJobsActive(pData) {
 
     if(!pData) return;
 
@@ -484,10 +483,10 @@ export class PageRoute extends Route {
     }
   }
 
-  _addJob(pContainer, job) {
+  addJob(pContainer, job) {
     const tr = document.createElement("tr");
 
-    const td = Route._createTd("", "");
+    const td = Route.createTd("", "");
     td.id = Utils.getIdFromJobId(job.id);
 
     let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
@@ -496,34 +495,34 @@ export class PageRoute extends Route {
       // prevent column becoming too wide
       targetText = targetText.substring(0, maxTextLength) + "...";
     }
-    const targetDiv = Route._createDiv("target", targetText);
+    const targetDiv = Route.createDiv("target", targetText);
     td.appendChild(targetDiv);
 
     const functionText = job.Function;
-    const functionDiv = Route._createDiv("function", functionText);
+    const functionDiv = Route.createDiv("function", functionText);
     td.appendChild(functionDiv);
 
-    const statusSpan = Route._createSpan("status", "loading...");
+    const statusSpan = Route.createSpan("status", "loading...");
     statusSpan.classList.add("no-status");
     /* effectively also the whole column, but it does not look like a column on screen */
     statusSpan.addEventListener("click", pClickEvent => {
       // show "loading..." only once, but we are updating the whole column
       statusSpan.classList.add("no-status");
       statusSpan.innerText = "loading...";
-      this._startRunningJobs();
+      this.startRunningJobs();
       pClickEvent.stopPropagation();
     });
     td.appendChild(statusSpan);
 
     const startTimeText = Output.dateTimeStr(job.StartTime);
-    const startTimeDiv = Route._createDiv("time", startTimeText);
+    const startTimeDiv = Route.createDiv("time", startTimeText);
     td.appendChild(startTimeDiv);
 
     tr.appendChild(td);
 
     const menu = new DropDownMenu(tr);
-    this._addMenuItemShowDetails(menu, job);
-    this._addMenuItemUpdateStatus(menu, statusSpan);
+    this._addPageMenuItemShowDetails(menu, job);
+    this._addPageMenuItemUpdateStatus(menu, statusSpan);
 
     pContainer.appendChild(tr);
 
@@ -532,27 +531,27 @@ export class PageRoute extends Route {
     );
   }
 
-  _addMenuItemShowDetails(pMenu, job) {
+  _addPageMenuItemShowDetails(pMenu, job) {
     pMenu.addMenuItem("Show&nbsp;details", function(pClickEvent) {
       window.location.assign("/job?id=" + encodeURIComponent(job.id));
     }.bind(this));
   }
 
-  _addMenuItemUpdateStatus(pMenu, statusSpan) {
+  _addPageMenuItemUpdateStatus(pMenu, statusSpan) {
     pMenu.addMenuItem("Update&nbsp;status", function(pClickEvent) {
       statusSpan.classList.add("no-status");
       statusSpan.innerText = "loading...";
-      this._startRunningJobs();
+      this.startRunningJobs();
     }.bind(this));
   }
 
-  _startRunningJobs() {
+  startRunningJobs() {
     const myThis = this;
 
     this.router.api.getRunnerJobsActive().then(pData => {
-      myThis._handleRunnerJobsActive(pData);
+      myThis.handleRunnerJobsActive(pData);
     }, pData => {
-      myThis._handleRunnerJobsActive(JSON.stringify(pData));
+      myThis.handleRunnerJobsActive(JSON.stringify(pData));
     });
   }
 
@@ -612,9 +611,9 @@ export class PageRoute extends Route {
       return false;
     }
 
-    const td = Route._createTd("", "");
+    const td = Route.createTd("", "");
     td.colSpan = 99;
-    const span = Route._createSpan("", "(error)");
+    const span = Route.createSpan("", "(error)");
     Utils.addToolTip(span, pData);
     td.appendChild(span);
 

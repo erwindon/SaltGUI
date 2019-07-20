@@ -324,27 +324,27 @@ describe('Unittests for Output.js', function() {
     let result;
 
     // all documentation
-    result = OutputDocumentation.isDocuKeyMatch("anything", null);
+    result = OutputDocumentation._isDocuKeyMatch("anything", null);
     assert.isTrue(result);
 
     // all documentation
-    result = OutputDocumentation.isDocuKeyMatch("anything", "");
+    result = OutputDocumentation._isDocuKeyMatch("anything", "");
     assert.isTrue(result);
 
     // match one word
-    result = OutputDocumentation.isDocuKeyMatch("foo.bar", "foo");
+    result = OutputDocumentation._isDocuKeyMatch("foo.bar", "foo");
     assert.isTrue(result);
 
     // match two words
-    result = OutputDocumentation.isDocuKeyMatch("foo.bar", "foo.bar");
+    result = OutputDocumentation._isDocuKeyMatch("foo.bar", "foo.bar");
     assert.isTrue(result);
 
     // wrong match
-    result = OutputDocumentation.isDocuKeyMatch("foo", "bar");
+    result = OutputDocumentation._isDocuKeyMatch("foo", "bar");
     assert.isFalse(result);
 
     // wrong match (even though text prefix)
-    result = OutputDocumentation.isDocuKeyMatch("food", "foo");
+    result = OutputDocumentation._isDocuKeyMatch("food", "foo");
     assert.isFalse(result);
 
     done();

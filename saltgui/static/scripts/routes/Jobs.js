@@ -46,14 +46,14 @@ export class JobsRoute extends PageRoute {
     panel.insertBefore(menu.menuDropdown, titleElement.nextSibling);
 
     runnerJobsListJobsPromise.then(pData => {
-      myThis._handleRunnerJobsListJobs(pData, true, cnt);
+      myThis.handleRunnerJobsListJobs(pData, true, cnt);
       runnerJobsActivePromise.then(pData => {
-        myThis._handleRunnerJobsActive(pData);
+        myThis.handleRunnerJobsActive(pData);
       }, pData => {
-        myThis._handleRunnerJobsActive(JSON.stringify(pData));
+        myThis.handleRunnerJobsActive(JSON.stringify(pData));
       });
     }, pData => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
+      myThis.handleRunnerJobsListJobs(JSON.stringify(pData));
     }); 
   }
 
@@ -82,11 +82,11 @@ export class JobsRoute extends PageRoute {
     }.bind(this));
   }
 
-  _addJob(pContainer, job) {
+  addJob(pContainer, job) {
     const tr = document.createElement("tr");
     tr.id = Utils.getIdFromJobId(job.id);
     const jobIdText = job.id;
-    tr.appendChild(Route._createTd(Utils.getIdFromJobId(job.id), jobIdText));
+    tr.appendChild(Route.createTd(Utils.getIdFromJobId(job.id), jobIdText));
 
     let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
     const maxTextLength = 50;
@@ -94,40 +94,40 @@ export class JobsRoute extends PageRoute {
       // prevent column becoming too wide
       targetText = targetText.substring(0, maxTextLength) + "...";
     }
-    tr.appendChild(Route._createTd("target", targetText));
+    tr.appendChild(Route.createTd("target", targetText));
 
-    const argumentsText = this._decodeArgumentsText(job.Arguments);
+    const argumentsText = this.decodeArgumentsText(job.Arguments);
     let functionText = job.Function + argumentsText;
     if(functionText.length > maxTextLength) {
       // prevent column becoming too wide
       functionText = functionText.substring(0, maxTextLength) + "...";
     }
-    tr.appendChild(Route._createTd("function", functionText));
+    tr.appendChild(Route.createTd("function", functionText));
 
     const startTimeText = Output.dateTimeStr(job.StartTime);
-    tr.appendChild(Route._createTd("starttime", startTimeText));
+    tr.appendChild(Route.createTd("starttime", startTimeText));
 
     const menu = new DropDownMenu(tr);
-    this._addMenuItemShowDetails(menu, job);
-    this._addMenuItemRerunJob(menu, job, argumentsText);
+    this._addJobsMenuItemShowDetails(menu, job);
+    this._addMenuItemJobsRerunJob(menu, job, argumentsText);
 
-    const statusTd = Route._createTd("status", "");
-    const statusSpan = Route._createSpan("status2", "loading...");
+    const statusTd = Route.createTd("status", "");
+    const statusSpan = Route.createSpan("status2", "loading...");
     statusSpan.classList.add("no-status");
     statusSpan.addEventListener("click", pClickEvent => {
       // show "loading..." only once, but we are updating the whole column
       statusSpan.classList.add("no-status");
       statusSpan.innerText = "loading...";
-      this._startRunningJobs();
+      this.startRunningJobs();
       pClickEvent.stopPropagation();
     });
     statusTd.appendChild(statusSpan);
     tr.appendChild(statusTd);
 
-    this._addMenuItemUpdateStatus(menu, statusSpan);
+    this._addJobsMenuItemUpdateStatus(menu, statusSpan);
 
-    const detailsTd = Route._createTd("details", "");
-    const detailsSpan = Route._createSpan("details2", "(click)");
+    const detailsTd = Route.createTd("details", "");
+    const detailsSpan = Route.createSpan("details2", "(click)");
     detailsSpan.classList.add("no-status");
     detailsSpan.addEventListener("click", pClickEvent => {
       detailsSpan.classList.add("no-status");
@@ -143,7 +143,7 @@ export class JobsRoute extends PageRoute {
 
     // fill out the number of columns to that of the header
     while(tr.cells.length < pContainer.parentElement.tHead.rows[0].cells.length) {
-      tr.appendChild(Route._createTd("", ""));
+      tr.appendChild(Route.createTd("", ""));
     }
 
     pContainer.appendChild(tr);
@@ -153,24 +153,24 @@ export class JobsRoute extends PageRoute {
     );
   }
 
-  _addMenuItemShowDetails(pMenu, job) {
+  _addJobsMenuItemShowDetails(pMenu, job) {
     pMenu.addMenuItem("Show&nbsp;details", function(pClickEvent) {
       window.location.assign("/job?id=" + encodeURIComponent(job.id));
     }.bind(this));
   }
 
-  _addMenuItemRerunJob(pMenu, job, argumentsText) {
+  _addMenuItemJobsRerunJob(pMenu, job, argumentsText) {
     // 2011 = NON-BREAKING HYPHEN
     pMenu.addMenuItem("Re&#x2011;run&nbsp;job...", function(pClickEvent) {
-      this._runFullCommand(pClickEvent, job["Target-type"], job.Target, job.Function + argumentsText);
+      this.runFullCommand(pClickEvent, job["Target-type"], job.Target, job.Function + argumentsText);
     }.bind(this));
   }
 
-  _addMenuItemUpdateStatus(pMenu, pStatusSpan) {
+  _addJobsMenuItemUpdateStatus(pMenu, pStatusSpan) {
     pMenu.addMenuItem("Update&nbsp;status", function(pClickEvent) {
       pStatusSpan.classList.add("no-status");
       pStatusSpan.innerText = "loading...";
-      this._startRunningJobs();
+      this.startRunningJobs();
     }.bind(this));
   }
 
@@ -182,7 +182,7 @@ export class JobsRoute extends PageRoute {
     }.bind(this));
   }
 
-  _handleRunnerJobsActive(pData) {
+  handleRunnerJobsActive(pData) {
 
     if(!pData) return;
 
@@ -248,13 +248,13 @@ export class JobsRoute extends PageRoute {
     const runnerJobsListJobPromise = this.router.api.getRunnerJobsListJob(pJobId);
 
     runnerJobsListJobPromise.then(pData => {
-      myThis._handleRunnerJobsListJob(pJobId, pData);
+      myThis._handleJobsRunnerJobsListJob(pJobId, pData);
     }, pData => {
-      myThis._handleRunnerJobsListJob(pJobId, JSON.stringify(pData));
+      myThis._handleJobsRunnerJobsListJob(pJobId, JSON.stringify(pData));
     });
   }
 
-  _handleRunnerJobsListJob(pJobId, pData) {
+  _handleJobsRunnerJobsListJob(pJobId, pData) {
 
     const detailsSpan = this.pageElement.querySelector(".jobs #" + Utils.getIdFromJobId(pJobId) + " td.details span");
     if(!detailsSpan) return;
@@ -320,7 +320,7 @@ export class JobsRoute extends PageRoute {
 
     detailsSpan.innerText = "";
     detailsSpan.appendChild(Utils.createJobStatusSpan(pJobId));
-    const statusSpan = Route._createSpan("", "");
+    const statusSpan = Route.createSpan("", "");
     statusSpan.innerHTML = detailsTxt;
     detailsSpan.appendChild(statusSpan);
     detailsSpan.classList.remove("no-status");

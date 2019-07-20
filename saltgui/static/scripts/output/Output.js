@@ -45,7 +45,7 @@ export class Output {
   // Re-organize the output to let it appear as if the output comes
   // from a single node called "RUNNER" or "MASTER".
   // This way all responses are organized by minion
-  static addVirtualMinion(pResponse, pCommand) {
+  static _addVirtualMinion(pResponse, pCommand) {
 
     if(pCommand.startsWith("runners.")) {
       // Add a new level in the object
@@ -63,7 +63,7 @@ export class Output {
 
   // compose the host/minion-name label that is shown with each response
   static getMinionIdHtml(pMinionId, pClassName="") {
-    const span = Route._createSpan("minion-id", pMinionId);
+    const span = Route.createSpan("minion-id", pMinionId);
     if(pClassName) span.classList.add(pClassName);
     return span;
   }
@@ -74,7 +74,7 @@ export class Output {
 
   // the output is only text
   // note: do not return a text-node
-  static getTextOutput(pMinionResponse) {
+  static _getTextOutput(pMinionResponse) {
     // strip trailing whitespace
     pMinionResponse = pMinionResponse.replace(/[ \r\n]+$/g, "");
 
@@ -88,7 +88,7 @@ export class Output {
     }
 
     // all regular text
-    const span = Route._createSpan("", pMinionResponse);
+    const span = Route.createSpan("", pMinionResponse);
     return span;
   }
 
@@ -115,7 +115,7 @@ export class Output {
   // this is the default output form
   // just format the returned objects
   // note: do not return a text-node
-  static getNormalOutput(pMinionResponse) {
+  static _getNormalOutput(pMinionResponse) {
     const content = Output.formatObject(pMinionResponse);
     const element = document.createElement(Utils.isMultiLineString(content) ? "div" : "span");
     element.innerText = content;
@@ -123,7 +123,7 @@ export class Output {
   }
 
 
-  static hasProperties(pObject, pPropArr) {
+  static _hasProperties(pObject, pPropArr) {
     if(!pObject || typeof pObject !== "object") {
       return false;
     }
@@ -136,7 +136,7 @@ export class Output {
   }
 
 
-  static isAsyncOutput(pResponse) {
+  static _isAsyncOutput(pResponse) {
     const keys = Object.keys(pResponse);
     if(keys.length !== 2) return false;
     keys.sort();
@@ -177,7 +177,7 @@ export class Output {
   }
 
   // add the status summary
-  static addHighStateSummary(pMinionDiv, pMinionId, pTasks) {
+  static _addHighStateSummary(pMinionDiv, pMinionId, pTasks) {
 
     let nr = 0;
 
@@ -186,7 +186,7 @@ export class Output {
       nr += 1;
 
       // 25CF = BLACK CIRCLE
-      const span = Route._createSpan("", "\u25CF");
+      const span = Route.createSpan("", "\u25CF");
 
       let txt = task.name;
       if(task.__id__ && task.__id__ !== task.name) {
@@ -291,7 +291,7 @@ export class Output {
     pOutputContainer.innerText = "";
 
     // reformat runner/wheel output into regular output
-    pResponse = Output.addVirtualMinion(pResponse, pCommand);
+    pResponse = Output._addVirtualMinion(pResponse, pCommand);
 
     if(typeof pResponse === "string") {
       // do not format a string as an object
@@ -313,21 +313,21 @@ export class Output {
       return;
     }
 
-    const allDiv = Route._createDiv("nohide", "");
+    const allDiv = Route.createDiv("nohide", "");
 
     if(!pCommand.startsWith("runners.") &&
        !pCommand.startsWith("wheel.") &&
-       !Output.isAsyncOutput(pResponse)) {
+       !Output._isAsyncOutput(pResponse)) {
       // runners/wheel responses are not per minion
       // Do not produce a #response line for async-start confirmation
 
       // for the result of jobs.active
-      const summaryJobsActiveSpan = Route._createSpan("", "");
+      const summaryJobsActiveSpan = Route.createSpan("", "");
       summaryJobsActiveSpan.id = "summary-jobs-active";
       summaryJobsActiveSpan.innerText = pInitialStatus;
 
       // for the result of jobs.list_job
-      const summaryJobsListJobSpan = Route._createSpan("", "");
+      const summaryJobsListJobSpan = Route.createSpan("", "");
       summaryJobsListJobSpan.id = "summary-list-job";
 
       const cntResponses = Object.keys(pResponse).length;
@@ -383,7 +383,7 @@ export class Output {
       allDiv.appendChild(summaryJobsListJobSpan);
     }
 
-    const masterTriangle = Route._createSpan("", "");
+    const masterTriangle = Route.createSpan("", "");
     // 25BD = WHITE DOWN-POINTING TRIANGLE
     masterTriangle.innerText = "\u25bd";
     masterTriangle.style = "cursor: pointer";
@@ -425,7 +425,7 @@ export class Output {
       let retCode = 0;
 
       let minionResponse = pResponse[minionId];
-      if(Output.hasProperties(minionResponse, ["retcode", "return", "success"])) {
+      if(Output._hasProperties(minionResponse, ["retcode", "return", "success"])) {
         isSuccess = minionResponse.success;
         retCode = minionResponse.retcode;
         minionResponse = minionResponse.return;
@@ -447,31 +447,31 @@ export class Output {
       let minionLabel = Output.getMinionIdHtml(minionId, minionClass);
 
       if(/*!fndRepresentation&&*/ !pResponse.hasOwnProperty(minionId)) {
-        minionOutput = Output.getTextOutput("(no response)");
+        minionOutput = Output._getTextOutput("(no response)");
         minionOutput.classList.add("noresponse");
         fndRepresentation = true;
       }
 
       if(!fndRepresentation && typeof minionResponse === "string") {
-        minionOutput = Output.getTextOutput(minionResponse);
+        minionOutput = Output._getTextOutput(minionResponse);
         minionMultiLine = Utils.isMultiLineString(minionResponse);
         fndRepresentation = true;
       }
 
       if(!fndRepresentation && typeof minionResponse !== "object") {
-        minionOutput = Output.getNormalOutput(minionResponse);
+        minionOutput = Output._getNormalOutput(minionResponse);
         fndRepresentation = true;
       }
 
       // null is an object, but treat it separatelly
       if(!fndRepresentation && minionResponse === null) {
-        minionOutput = Output.getNormalOutput(minionResponse);
+        minionOutput = Output._getNormalOutput(minionResponse);
         fndRepresentation = true;
       }
 
       // an array is an object, but treat it separatelly
       if(!fndRepresentation && Array.isArray(minionResponse)) {
-        minionOutput = Output.getNormalOutput(minionResponse);
+        minionOutput = Output._getNormalOutput(minionResponse);
         minionMultiLine = minionOutput.tagName === "DIV";
         fndRepresentation = true;
       }
@@ -515,7 +515,7 @@ export class Output {
 
       // nothing special? then it is normal output
       if(!fndRepresentation) {
-        minionOutput = Output.getNormalOutput(minionResponse);
+        minionOutput = Output._getNormalOutput(minionResponse);
         if(minionOutput.tagName === "DIV") {
           minionMultiLine = true;
         } else if(typeof minionOutput === "string" && Utils.isMultiLineString(minionOutput)) {
@@ -526,7 +526,7 @@ export class Output {
       if(minionMultiLine) nrMultiLineBlocks += 1;
 
       // compose the actual output
-      const div = Route._createDiv("", "");
+      const div = Route.createDiv("", "");
       div.id = Utils.getIdFromMinionId(minionId);
 
       div.append(minionLabel);
@@ -538,7 +538,7 @@ export class Output {
       // 25BD = WHITE DOWN-POINTING TRIANGLE
       let triangle = null;
       if(minionMultiLine) {
-        triangle = Route._createSpan("triangle", "");
+        triangle = Route.createSpan("triangle", "");
         triangle.innerText = "\u25bd";
         triangle.style = "cursor: pointer";
         triangle.addEventListener("click", pClickEvent => {
@@ -556,7 +556,7 @@ export class Output {
 
         if(addHighStateSummaryFlag) {
           div.appendChild(document.createTextNode(" "));
-          Output.addHighStateSummary(div, minionId, tasks);
+          Output._addHighStateSummary(div, minionId, tasks);
         }
 
         div.appendChild(document.createElement("br"));

@@ -10,7 +10,7 @@ export class KeysRoute extends PageRoute {
 
     this.fingerprintPattern = /^[0-9a-f:]+$/i;
 
-    this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
+    this._handleKeysWheelKeyListAll = this._handleKeysWheelKeyListAll.bind(this);
     this._handleWheelKeyFinger = this._handleWheelKeyFinger.bind(this);
 
     Utils.addTableHelp(this.getPageElement(), "The content of this page is\nautomatically refreshed");
@@ -27,7 +27,7 @@ export class KeysRoute extends PageRoute {
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     wheelKeyListAllPromise.then(pData1 => {
-      myThis._handleWheelKeyListAll(pData1);
+      myThis._handleKeysWheelKeyListAll(pData1);
       wheelKeyFingerPromise.then(pData => {
         myThis._handleWheelKeyFinger(pData);
       }, pData2 => {
@@ -38,18 +38,18 @@ export class KeysRoute extends PageRoute {
         myThis._handleWheelKeyFinger(pData);
       });
     }, pData => {
-      myThis._handleWheelKeyListAll(JSON.stringify(pData));
+      myThis._handleKeysWheelKeyListAll(JSON.stringify(pData));
     });
 
     runnerJobsListJobsPromise.then(pData => {
-      myThis._handleRunnerJobsListJobs(pData);
+      myThis.handleRunnerJobsListJobs(pData);
       runnerJobsActivePromise.then(pData => {
-        myThis._handleRunnerJobsActive(pData);
+        myThis.handleRunnerJobsActive(pData);
       }, pData => {
-        myThis._handleRunnerJobsActive(JSON.stringify(pData));
+        myThis.handleRunnerJobsActive(JSON.stringify(pData));
       });
     }, pData => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
+      myThis.handleRunnerJobsListJobs(JSON.stringify(pData));
     }); 
   }
 
@@ -83,7 +83,7 @@ export class KeysRoute extends PageRoute {
     }
   }
 
-  _handleWheelKeyListAll(pData) {
+  _handleKeysWheelKeyListAll(pData) {
     if(!pData) return;
 
     const table = this.getPageElement().querySelector("#minions");
@@ -113,10 +113,10 @@ export class KeysRoute extends PageRoute {
       this._addRejectedMinion(table, minionId);
     }
 
-    this.updateTableSummary(table);
+    this._updateTableSummary(table);
   }
 
-  updateTableSummary(pTable) {
+  _updateTableSummary(pTable) {
     const cnt = { };
     cnt["unaccepted"] = 0;
     cnt["accepted"] = 0;
@@ -148,95 +148,95 @@ export class KeysRoute extends PageRoute {
   }
 
   _addAcceptedMinion(pContainer, pMinionId) {
-    this._addMinion(pContainer, pMinionId, 1);
+    this.addMinion(pContainer, pMinionId, 1);
 
     // preliminary dropdown menu
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
     const menu = new DropDownMenu(minionTr);
-    this._addMenuItemRejectKey(menu, pMinionId, " include_accepted=true");
-    this._addMenuItemDeleteKey(menu, pMinionId, "");
+    this._addMenuItemWheelKeyReject(menu, pMinionId, " include_accepted=true");
+    this._addMenuItemWheelKeyDelete(menu, pMinionId, "");
   }
 
   _addRejectedMinion(pContainer, pMinionId) {
-    const minionTr = this._getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
+    const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    minionTr.appendChild(Route._createTd("minion-id", pMinionId));
+    minionTr.appendChild(Route.createTd("minion-id", pMinionId));
 
-    const rejected = Route._createTd("status", "rejected");
+    const rejected = Route.createTd("status", "rejected");
     rejected.classList.add("rejected");
     minionTr.appendChild(rejected);
 
     // force same columns on all rows
     // do not use class "fingerprint" yet
-    minionTr.appendChild(Route._createTd("os", "loading..."));
+    minionTr.appendChild(Route.createTd("os", "loading..."));
 
     // final dropdownmenu
     const menu = new DropDownMenu(minionTr);
-    this._addMenuItemDeleteKey(menu, pMinionId, "");
-    this._addMenuItemAcceptKey(menu, pMinionId, " include_rejected=true");
+    this._addMenuItemWheelKeyDelete(menu, pMinionId, "");
+    this._addMenuItemWheelKeyAccept(menu, pMinionId, " include_rejected=true");
 
     pContainer.tBodies[0].appendChild(minionTr);
   }
 
   _addDeniedMinion(pContainer, pMinionId) {
-    const minionTr = this._getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
+    const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    minionTr.appendChild(Route._createTd("minion-id", pMinionId));
+    minionTr.appendChild(Route.createTd("minion-id", pMinionId));
 
-    const denied = Route._createTd("status", "denied");
+    const denied = Route.createTd("status", "denied");
     denied.classList.add("denied");
     minionTr.appendChild(denied);
 
     // force same columns on all rows
     // do not use class "fingerprint" yet
-    minionTr.appendChild(Route._createTd("os", "loading..."));
+    minionTr.appendChild(Route.createTd("os", "loading..."));
 
     // final dropdownmenu
     const menu = new DropDownMenu(minionTr);
-    this._addMenuItemAcceptKey(menu, pMinionId, " include_denied=true");
-    this._addMenuItemRejectKey(menu, pMinionId, " include_denied=true");
-    this._addMenuItemDeleteKey(menu, pMinionId, "");
+    this._addMenuItemWheelKeyAccept(menu, pMinionId, " include_denied=true");
+    this._addMenuItemWheelKeyReject(menu, pMinionId, " include_denied=true");
+    this._addMenuItemWheelKeyDelete(menu, pMinionId, "");
 
     pContainer.tBodies[0].appendChild(minionTr);
   }
 
   _addPreMinion(pContainer, pMinionId) {
-    const minionTr = this._getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
+    const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    minionTr.appendChild(Route._createTd("minion-id", pMinionId));
+    minionTr.appendChild(Route.createTd("minion-id", pMinionId));
 
-    const pre = Route._createTd("status", "unaccepted");
+    const pre = Route.createTd("status", "unaccepted");
     pre.classList.add("unaccepted");
     minionTr.appendChild(pre);
 
     // force same columns on all rows
     // do not use class "fingerprint" yet
-    minionTr.appendChild(Route._createTd("os", "loading..."));
+    minionTr.appendChild(Route.createTd("os", "loading..."));
 
     // final dropdownmenu
     const menu = new DropDownMenu(minionTr);
-    this._addMenuItemAcceptKey(menu, pMinionId, "");
-    this._addMenuItemRejectKey(menu, pMinionId, "");
-    this._addMenuItemDeleteKey(menu, pMinionId, "");
+    this._addMenuItemWheelKeyAccept(menu, pMinionId, "");
+    this._addMenuItemWheelKeyReject(menu, pMinionId, "");
+    this._addMenuItemWheelKeyDelete(menu, pMinionId, "");
 
     pContainer.tBodies[0].appendChild(minionTr);
   }
 
-  _addMenuItemAcceptKey(pMenu, pMinionId, extra) {
+  _addMenuItemWheelKeyAccept(pMenu, pMinionId, extra) {
     pMenu.addMenuItem("Accept&nbsp;key...", function(pClickEvent) {
-      this._runCommand(pClickEvent, pMinionId, "wheel.key.accept" + extra);
+      this.runCommand(pClickEvent, pMinionId, "wheel.key.accept" + extra);
     }.bind(this));
   }
 
-  _addMenuItemRejectKey(pMenu, pMinionId, extra) {
+  _addMenuItemWheelKeyReject(pMenu, pMinionId, extra) {
     pMenu.addMenuItem("Reject&nbsp;key...", function(pClickEvent) {
-      this._runCommand(pClickEvent, pMinionId, "wheel.key.reject" + extra);
+      this.runCommand(pClickEvent, pMinionId, "wheel.key.reject" + extra);
     }.bind(this));
   }
 
-  _addMenuItemDeleteKey(pMenu, pMinionId, extra) {
+  _addMenuItemWheelKeyDelete(pMenu, pMinionId, extra) {
     pMenu.addMenuItem("Delete&nbsp;key...", function(pClickEvent) {
-      this._runCommand(pClickEvent, pMinionId, "wheel.key.delete" + extra);
+      this.runCommand(pClickEvent, pMinionId, "wheel.key.delete" + extra);
     }.bind(this));
   }
 
@@ -297,7 +297,7 @@ export class KeysRoute extends PageRoute {
       });
     }
 
-    this.updateTableSummary(table);
+    this._updateTableSummary(table);
   }
 
   handleSaltKeyEvent(pTag, pData) {

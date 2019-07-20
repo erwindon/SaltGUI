@@ -7,7 +7,7 @@ export class OutputSaltGuiHighstate {
   // no separate `isHighStateOutput` here
   // the implementation from OutputHighstate is (re)used
 
-  static getDurationClause(pMilliSeconds) {
+  static _getDurationClauseSaltGui(pMilliSeconds) {
     if(pMilliSeconds < 1000) {
       return Utils.txtZeroOneMany(pMilliSeconds,
         "{0} milliseconds", "{0} millisecond", "{0} milliseconds");
@@ -34,7 +34,7 @@ export class OutputSaltGuiHighstate {
     return Output.getMinionIdHtml(pMinionId, "host-success");
   }
 
-  static addChangesInfo(pTaskDiv, pTask, pIndent) {
+  static _addChangesInfo(pTaskDiv, pTask, pIndent) {
     if(!pTask.hasOwnProperty("changes")) {
       return 0;
     }
@@ -115,7 +115,7 @@ export class OutputSaltGuiHighstate {
 
     const indent = "    ";
 
-    const div = Route._createDiv("", "");
+    const div = Route.createDiv("", "");
 
     let succeeded = 0;
     let failed = 0;
@@ -127,10 +127,10 @@ export class OutputSaltGuiHighstate {
 
       nr += 1;
 
-      const taskDiv = Route._createDiv("", "");
+      const taskDiv = Route.createDiv("", "");
       taskDiv.id = Utils.getIdFromMinionId(pMinionId + "." + nr);
 
-      const span = Route._createSpan("", "");
+      const span = Route.createSpan("", "");
       if(task.result === null) {
         // 2714 = HEAVY CHECK MARK
         span.style.color = "yellow";
@@ -183,7 +183,7 @@ export class OutputSaltGuiHighstate {
         taskDiv.append(document.createTextNode(indent + txt));
       }
 
-      changes += OutputSaltGuiHighstate.addChangesInfo(taskDiv, task, indent);
+      changes += OutputSaltGuiHighstate._addChangesInfo(taskDiv, task, indent);
 
       if(task.hasOwnProperty("start_time")) {
         taskDiv.append(document.createElement("br"));
@@ -200,7 +200,7 @@ export class OutputSaltGuiHighstate {
           // it still counts for the grand total thought
           taskDiv.append(document.createElement("br"));
           taskDiv.append(document.createTextNode(
-            indent + "Duration " + OutputSaltGuiHighstate.getDurationClause(milliSeconds)));
+            indent + "Duration " + OutputSaltGuiHighstate._getDurationClauseSaltGui(milliSeconds)));
         }
       }
 
@@ -251,7 +251,7 @@ export class OutputSaltGuiHighstate {
 
     // multiple durations and significant?
     if(total > 1 && totalMilliSeconds >= 10) {
-      line += ", " + OutputSaltGuiHighstate.getDurationClause(totalMilliSeconds);
+      line += ", " + OutputSaltGuiHighstate._getDurationClauseSaltGui(totalMilliSeconds);
     }
 
     if(line) {

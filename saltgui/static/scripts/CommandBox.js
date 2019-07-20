@@ -11,17 +11,17 @@ export class CommandBox {
     const myThis = this;
 
     this.api = pApi;
-    this._getRunParams = this._getRunParams.bind(this);
+    this.getRunParams = this.getRunParams.bind(this);
     this._onRun = this._onRun.bind(this);
-    this._onRunReturn = this._onRunReturn.bind(this);
-    this._showManualRun = this._showManualRun.bind(this);
+    this.onRunReturn = this.onRunReturn.bind(this);
+    this.showManualRun = this.showManualRun.bind(this);
     this._hideManualRun = this._hideManualRun.bind(this);
 
     const cmdbox = document.querySelector(".run-command #cmd-box");
     this.cmdmenu = new DropDownMenu(cmdbox);
 
     this.documentation = new Documentation(this);
-    this._registerEventListeners();
+    this._registerCommandBoxEventListeners();
 
     RunType.createMenu();
     TargetType.createMenu();
@@ -45,11 +45,11 @@ export class CommandBox {
     }
   }
 
-  _registerEventListeners() {
+  _registerCommandBoxEventListeners() {
     document.querySelector("#popup-run-command")
       .addEventListener("click", this._hideManualRun);
     document.querySelector("#button-manual-run")
-      .addEventListener("click", this._showManualRun);
+      .addEventListener("click", this.showManualRun);
     document.querySelector("#button-close-cmd")
       .addEventListener("click", this._hideManualRun);
 
@@ -117,21 +117,21 @@ export class CommandBox {
 
     const targetType = TargetType.menuTargetType._value;
 
-    const func = this._getRunParams(targetType, targetValue, commandValue);
+    const func = this.getRunParams(targetType, targetValue, commandValue);
     if(func === null) return;
 
     button.disabled = true;
     output.innerText = "Loading...";
 
     func.then(pResponse => {
-      if(pResponse) this._onRunReturn(pResponse.return[0], commandValue);
+      if(pResponse) this.onRunReturn(pResponse.return[0], commandValue);
       else this._showError("null response");
     }, pResponse => {
       this._showError(JSON.stringify(pResponse));
     });
   }
 
-  _onRunReturn(pResponse, pCommand) {
+  onRunReturn(pResponse, pCommand) {
     const outputContainer = document.querySelector(".run-command pre");
     let minions = Object.keys(pResponse);
     if(pCommand.startsWith("runners.")) minions = ["RUNNER"];
@@ -142,7 +142,7 @@ export class CommandBox {
     button.disabled = false;
   }
 
-  _showManualRun(pClickEvent) {
+  showManualRun(pClickEvent) {
     const manualRun = document.querySelector("#popup-run-command");
     manualRun.style.display = "block";
 
@@ -256,10 +256,10 @@ export class CommandBox {
   }
 
   _showError(pMessage) {
-    this._onRunReturn("ERROR:\n\n" + pMessage, "");
+    this.onRunReturn("ERROR:\n\n" + pMessage, "");
   }
 
-  _getRunParams(pTargetType, pTarget, pToRun) {
+  getRunParams(pTargetType, pTarget, pToRun) {
 
     // The leading # was used to indicate a nodegroup
     if(pTargetType === "nodegroup" && pTarget.startsWith("#")) {

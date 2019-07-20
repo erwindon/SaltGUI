@@ -19,28 +19,28 @@ import {TemplatesRoute} from './routes/Templates.js';
 export class Router {
 
   constructor() {
-    this.logoutTimer = this.logoutTimer.bind(this);
+    this._logoutTimer = this._logoutTimer.bind(this);
 
     this.api = new API();
     this.commandbox = new CommandBox(this.api);
     this.currentRoute = undefined;
     this.routes = [];
 
-    this.registerRoute(new LoginRoute(this));
-    this.registerRoute(new MinionsRoute(this));
-    this.registerRoute(this.keysRoute = new KeysRoute(this));
-    this.registerRoute(new GrainsRoute(this));
-    this.registerRoute(new GrainsMinionRoute(this));
-    this.registerRoute(new SchedulesRoute(this));
-    this.registerRoute(new SchedulesMinionRoute(this));
-    this.registerRoute(new PillarsRoute(this));
-    this.registerRoute(new PillarsMinionRoute(this));
-    this.registerRoute(new BeaconsRoute(this));
-    this.registerRoute(this.beaconsMinionRoute = new BeaconsMinionRoute(this));
-    this.registerRoute(this.jobRoute = new JobRoute(this));
-    this.registerRoute(new JobsRoute(this));
-    this.registerRoute(new TemplatesRoute(this));
-    this.registerRoute(new OptionsRoute(this));
+    this._registerRoute(new LoginRoute(this));
+    this._registerRoute(new MinionsRoute(this));
+    this._registerRoute(this.keysRoute = new KeysRoute(this));
+    this._registerRoute(new GrainsRoute(this));
+    this._registerRoute(new GrainsMinionRoute(this));
+    this._registerRoute(new SchedulesRoute(this));
+    this._registerRoute(new SchedulesMinionRoute(this));
+    this._registerRoute(new PillarsRoute(this));
+    this._registerRoute(new PillarsMinionRoute(this));
+    this._registerRoute(new BeaconsRoute(this));
+    this._registerRoute(this.beaconsMinionRoute = new BeaconsMinionRoute(this));
+    this._registerRoute(this.jobRoute = new JobRoute(this));
+    this._registerRoute(new JobsRoute(this));
+    this._registerRoute(new TemplatesRoute(this));
+    this._registerRoute(new OptionsRoute(this));
 
     // show template menu item if templates defined
     const templatesText = window.localStorage.getItem("templates");
@@ -51,12 +51,12 @@ export class Router {
       item2.style.display = "inline-block";
     }
 
-    this._registerEventListeners();
+    this._registerRouterEventListeners();
 
     this.goTo(window.location.pathname + window.location.search);
   }
 
-  _registerEventListeners() {
+  _registerRouterEventListeners() {
     document.querySelector(".logo")
       .addEventListener("click", pClickEvent => {
         if(window.location.pathname === "/login") return;
@@ -151,10 +151,10 @@ export class Router {
       });
 
     // don't verify the session too often
-    setInterval(this.logoutTimer, 60000);
+    setInterval(this._logoutTimer, 60000);
   }
 
-  logoutTimer() {
+  _logoutTimer() {
     // are we logged in?
     const token = window.sessionStorage.getItem("token");
     if(!token) return;
@@ -166,7 +166,7 @@ export class Router {
     wheelConfigValuesPromise.then(data => { }, data => { });
   }
 
-  registerRoute(pRoute) {
+  _registerRoute(pRoute) {
     this.routes.push(pRoute);
     if(pRoute.onRegister) pRoute.onRegister();
   }
@@ -178,7 +178,7 @@ export class Router {
       if(!route.getPath().test(pPath.split("?")[0])) continue;
       // push history state for login (including redirect to /)
       if(pPath === "/login" || pPath === "/") window.history.pushState({}, undefined, pPath);
-      this.showRoute(route);
+      this._showRoute(route);
       return;
     }
     // route could not be found
@@ -186,7 +186,7 @@ export class Router {
     this.goTo("/");
   }
 
-  showRoute(pRoute) {
+  _showRoute(pRoute) {
     const myThis = this;
 
     pRoute.getPageElement().style.display = "";
@@ -229,7 +229,7 @@ export class Router {
     this.api.getEvents(this);
 
     if(myThis.currentRoute) {
-      myThis.hideRoute(myThis.currentRoute);
+      myThis._hideRoute(myThis.currentRoute);
     }
 
     myThis.currentRoute = pRoute;
@@ -237,7 +237,7 @@ export class Router {
     myThis.switchingRoute = false;
   }
 
-  hideRoute(pRoute) {
+  _hideRoute(pRoute) {
     pRoute.getPageElement().className = "route";
     setTimeout(function() {
       // Hide element after fade, so it does not expand the body

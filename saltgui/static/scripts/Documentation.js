@@ -95,10 +95,10 @@ export class Documentation {
 
     const targetType = TargetType.menuTargetType._value;
 
-    this.commandbox._getRunParams(targetType, target, docCommand).then(pResponse => {
-      this.commandbox._onRunReturn(pResponse.return[0], dummyCommand);
+    this.commandbox.getRunParams(targetType, target, docCommand).then(pResponse => {
+      this.commandbox.onRunReturn(pResponse.return[0], dummyCommand);
     }, pResponse => {
-      this.commandbox._onRunReturn("DOCUMENTATION ERROR:\n\n" + JSON.stringify(pResponse), dummyCommand);
+      this.commandbox.onRunReturn("DOCUMENTATION ERROR:\n\n" + JSON.stringify(pResponse), dummyCommand);
     });
   }
 

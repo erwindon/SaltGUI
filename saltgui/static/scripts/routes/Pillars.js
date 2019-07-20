@@ -8,8 +8,8 @@ export class PillarsRoute extends PageRoute {
   constructor(pRouter) {
     super("^[\/]pillars$", "Pillars", "#page-pillars", "#button-pillars", pRouter);
 
-    this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
-    this._updateMinion = this._updateMinion.bind(this);
+    this._handlePillarsWheelKeyListAll = this._handlePillarsWheelKeyListAll.bind(this);
+    this.updateMinion = this.updateMinion.bind(this);
   }
 
   onShow() {
@@ -21,32 +21,32 @@ export class PillarsRoute extends PageRoute {
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     wheelKeyListAllPromise.then(pData1 => {
-      myThis._handleWheelKeyListAll(pData1);
+      myThis._handlePillarsWheelKeyListAll(pData1);
       localPillarObfuscatePromise.then(pData => {
-        myThis._updateMinions(pData);
+        myThis.updateMinions(pData);
       }, pData2 => {
         const pData = {"return":[{}]};
         for(const k of pData1.return[0].data.return.minions)
           pData.return[0][k] = JSON.stringify(pData2);
-        myThis._updateMinions(pData);
+        myThis.updateMinions(pData);
       });
     }, pData => {
-      myThis._handleWheelKeyListAll(JSON.stringify(pData));
+      myThis._handlePillarsWheelKeyListAll(JSON.stringify(pData));
     });
 
     runnerJobsListJobsPromise.then(pData => {
-      myThis._handleRunnerJobsListJobs(pData);
+      myThis.handleRunnerJobsListJobs(pData);
       runnerJobsActivePromise.then(pData => {
-        myThis._handleRunnerJobsActive(pData);
+        myThis.handleRunnerJobsActive(pData);
       }, pData => {
-        myThis._handleRunnerJobsActive(JSON.stringify(pData));
+        myThis.handleRunnerJobsActive(JSON.stringify(pData));
       });
     }, pData => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
+      myThis.handleRunnerJobsListJobs(JSON.stringify(pData));
     }); 
   }
 
-  _handleWheelKeyListAll(pData) {
+  _handlePillarsWheelKeyListAll(pData) {
     const table = this.getPageElement().querySelector('#minions');
 
     if(PageRoute.showErrorRowInstead(table, pData)) return;
@@ -55,7 +55,7 @@ export class PillarsRoute extends PageRoute {
 
     const minionIds = keys.minions.sort();
     for(const minionId of minionIds) {
-      this._addMinion(table, minionId, 1);
+      this.addMinion(table, minionId, 1);
 
       // preliminary dropdown menu
       const minionTr = table.querySelector("#" + Utils.getIdFromMinionId(minionId));
@@ -76,18 +76,18 @@ export class PillarsRoute extends PageRoute {
     msgDiv.innerText = txt;
   }
 
-  _updateOfflineMinion(pContainer, pMinionId) {
-    super._updateOfflineMinion(pContainer, pMinionId);
+  updateOfflineMinion(pContainer, pMinionId) {
+    super.updateOfflineMinion(pContainer, pMinionId);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
     // force same columns on all rows
-    minionTr.appendChild(Route._createTd("pillarinfo", ""));
-    minionTr.appendChild(Route._createTd("run-command-button", ""));
+    minionTr.appendChild(Route.createTd("pillarinfo", ""));
+    minionTr.appendChild(Route.createTd("run-command-button", ""));
   }
 
-  _updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
-    super._updateMinion(pContainer, null, pMinionId, pAllMinionsGrains);
+  updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
+    super.updateMinion(pContainer, null, pMinionId, pAllMinionsGrains);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
@@ -101,7 +101,7 @@ export class PillarsRoute extends PageRoute {
       cnt = -1;
       pillarInfoText = "";
     }
-    const pillarInfoTd = Route._createTd("pillarinfo", pillarInfoText);
+    const pillarInfoTd = Route.createTd("pillarinfo", pillarInfoText);
     pillarInfoTd.setAttribute("sorttable_customkey", cnt);
     if(typeof pMinionData !== "object") {
       Utils.addErrorToTableCell(pillarInfoTd, pMinionData);

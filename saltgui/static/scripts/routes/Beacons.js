@@ -8,8 +8,8 @@ export class BeaconsRoute extends PageRoute {
   constructor(pRouter) {
     super("^[\/]beacons$", "Beacons", "#page-beacons", "#button-beacons", pRouter);
 
-    this._handleWheelKeyListAll = this._handleWheelKeyListAll.bind(this);
-    this._updateMinion = this._updateMinion.bind(this);
+    this._handleBeaconsWheelKeyListAll = this._handleBeaconsWheelKeyListAll.bind(this);
+    this.updateMinion = this.updateMinion.bind(this);
 
     // The new columns are not yet sortable, make sure they are.
     // First detroy all the default sorting handlers.
@@ -30,32 +30,32 @@ export class BeaconsRoute extends PageRoute {
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     wheelKeyListAllPromise.then(pData1 => {
-      myThis._handleWheelKeyListAll(pData1);
+      myThis._handleBeaconsWheelKeyListAll(pData1);
       localBeaconsListPromise.then(pData => {
-        myThis._updateMinions(pData);
+        myThis.updateMinions(pData);
       }, pData2 => {
         const pData = {"return":[{}]};
         for(const k of pData1.return[0].data.return.minions)
           pData.return[0][k] = JSON.stringify(pData2);
-        myThis._updateMinions(pData);
+        myThis.updateMinions(pData);
       });
     }, pData => {
-      myThis._handleWheelKeyListAll(JSON.stringify(pData));
+      myThis._handleBeaconsWheelKeyListAll(JSON.stringify(pData));
     });
 
     runnerJobsListJobsPromise.then(pData => {
-      myThis._handleRunnerJobsListJobs(pData);
+      myThis.handleRunnerJobsListJobs(pData);
       runnerJobsActivePromise.then(pData => {
-        myThis._handleRunnerJobsActive(pData);
+        myThis.handleRunnerJobsActive(pData);
       }, pData => {
-        myThis._handleRunnerJobsActive(JSON.stringify(pData));
+        myThis.handleRunnerJobsActive(JSON.stringify(pData));
       });
     }, pData => {
-      myThis._handleRunnerJobsListJobs(JSON.stringify(pData));
+      myThis.handleRunnerJobsListJobs(JSON.stringify(pData));
     }); 
   }
 
-  static _fixMinion(pData) {
+  static fixBeaconsMinion(pData) {
     if(typeof pData !== "object") return pData;
 
     // the data is an array of objects
@@ -89,7 +89,7 @@ export class BeaconsRoute extends PageRoute {
     return ret;
   }
 
-  _handleWheelKeyListAll(pData) {
+  _handleBeaconsWheelKeyListAll(pData) {
     const table = this.getPageElement().querySelector('#minions');
 
     if(PageRoute.showErrorRowInstead(table, pData)) return;
@@ -98,7 +98,7 @@ export class BeaconsRoute extends PageRoute {
 
     const minionIds = keys.minions.sort();
     for(const minionId of minionIds) {
-      this._addMinion(table, minionId, 1);
+      this.addMinion(table, minionId, 1);
 
       // preliminary dropdown menu
       const minionTr = table.querySelector("#" + Utils.getIdFromMinionId(minionId));
@@ -119,21 +119,21 @@ export class BeaconsRoute extends PageRoute {
     msgDiv.innerText = txt;
   }
 
-  _updateOfflineMinion(pContainer, pMinionId) {
-    super._updateOfflineMinion(pContainer, pMinionId);
+  updateOfflineMinion(pContainer, pMinionId) {
+    super.updateOfflineMinion(pContainer, pMinionId);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
     // force same columns on all rows
-    minionTr.appendChild(Route._createTd("beaconinfo", ""));
-    minionTr.appendChild(Route._createTd("run-command-button", ""));
+    minionTr.appendChild(Route.createTd("beaconinfo", ""));
+    minionTr.appendChild(Route.createTd("run-command-button", ""));
   }
 
-  _updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
+  updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
 
-    pMinionData = BeaconsRoute._fixMinion(pMinionData);
+    pMinionData = BeaconsRoute.fixBeaconsMinion(pMinionData);
 
-    super._updateMinion(pContainer, null, pMinionId, pAllMinionsGrains);
+    super.updateMinion(pContainer, null, pMinionId, pAllMinionsGrains);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
@@ -143,11 +143,11 @@ export class BeaconsRoute extends PageRoute {
         "no beacons", "{0} beacon", "{0} beacons");
       if(!pMinionData.enabled)
         beaconInfoText += " (disabled)";
-      const beaconInfoTd = Route._createTd("beaconinfo", beaconInfoText);
+      const beaconInfoTd = Route.createTd("beaconinfo", beaconInfoText);
       beaconInfoTd.setAttribute("sorttable_customkey", cnt);
       minionTr.appendChild(beaconInfoTd);
     } else {
-      const beaconInfoTd = Route._createTd("", "");
+      const beaconInfoTd = Route.createTd("", "");
       Utils.addErrorToTableCell(beaconInfoTd, pMinionData);
       minionTr.appendChild(beaconInfoTd);
     }

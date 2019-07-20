@@ -3,7 +3,7 @@ import {Output} from './Output.js';
 export class OutputDocumentation {
 
   // test whether the returned data matches the requested data
-  static isDocuKeyMatch(pKey, pFilterKey) {
+  static _isDocuKeyMatch(pKey, pFilterKey) {
 
     // no filter is always OK
     if(!pFilterKey) return true;
@@ -31,7 +31,7 @@ export class OutputDocumentation {
     let result = false;
 
     // reduce the search key to match the data in the response
-    pCommand = OutputDocumentation.reduceFilterKey(pCommand);
+    pCommand = OutputDocumentation._reduceFilterKey(pCommand);
 
     for(const minionId of Object.keys(pResponse)) {
 
@@ -66,7 +66,7 @@ export class OutputDocumentation {
         }
 
         // is this what we were looking for?
-        if(OutputDocumentation.isDocuKeyMatch(key, pCommand)) {
+        if(OutputDocumentation._isDocuKeyMatch(key, pCommand)) {
           result = true;
         }
       }
@@ -77,7 +77,7 @@ export class OutputDocumentation {
 
 
   // reduce the search key to match the data in the response
-  static reduceFilterKey(pFilterKey) {
+  static _reduceFilterKey(pFilterKey) {
     if(pFilterKey === "wheel") {
       return "";
     }
@@ -119,7 +119,7 @@ export class OutputDocumentation {
 
     // reduce the search key to match the data in the response
     // i.e. remove the prefixes for "wheel" and "runners"
-    pFilterKey = OutputDocumentation.reduceFilterKey(pFilterKey);
+    pFilterKey = OutputDocumentation._reduceFilterKey(pFilterKey);
 
     let selectedMinion = null;
     for(const minionId of Object.keys(pResponse)) {
@@ -144,7 +144,7 @@ export class OutputDocumentation {
       for(const key of Object.keys(minionResponse)) {
 
         // is this what we were looking for?
-        if(!OutputDocumentation.isDocuKeyMatch(key, pFilterKey)) {
+        if(!OutputDocumentation._isDocuKeyMatch(key, pFilterKey)) {
           // no match, ignore the whole entry
           delete minionResponse[key];
         }

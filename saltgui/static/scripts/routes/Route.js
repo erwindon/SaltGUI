@@ -13,9 +13,11 @@ export class Route {
       this.menuItemElement1 = document.querySelector(pMenuItemSelector + "1");
       this.menuItemElement2 = document.querySelector(pMenuItemSelector + "2");
     }
+
+    this.runCommand = this.runCommand.bind(this);
   }
 
-  getName() {
+  __getName() {
     return this.name;
   }
 
@@ -35,33 +37,33 @@ export class Route {
     return this.menuItemElement2;
   }
 
-  static _createTd(pClassName, pInnerText) {
+  static createTd(pClassName, pInnerText) {
     const td = document.createElement("td");
     if(pClassName) td.className = pClassName;
     if(pInnerText) td.innerText = pInnerText;
     return td;
   }
 
-  static _createDiv(pClassName, pInnerText) {
+  static createDiv(pClassName, pInnerText) {
     const div = document.createElement("div");
     if(pClassName) div.className = pClassName;
     if(pInnerText) div.innerText = pInnerText;
     return div;
   }
 
-  static _createSpan(pClassName, pInnerText) {
+  static createSpan(pClassName, pInnerText) {
     const span = document.createElement("span");
     if(pClassName) span.className = pClassName;
     if(pInnerText) span.innerText = pInnerText;
     return span;
   }
 
-  _runCommand(pClickEvent, pTargetString, pCommandString) {
-    this._runFullCommand(pClickEvent, "", pTargetString, pCommandString);
+  runCommand(pClickEvent, pTargetString, pCommandString) {
+    this.runFullCommand(pClickEvent, "", pTargetString, pCommandString);
   }
 
-  _runFullCommand(pClickEvent, pTargetType, pTargetString, pCommandString) {
-    this.router.commandbox._showManualRun(pClickEvent);
+  runFullCommand(pClickEvent, pTargetType, pTargetString, pCommandString) {
+    this.router.commandbox.showManualRun(pClickEvent);
     const target = document.querySelector("#target");
     const command = document.querySelector("#command");
     const targetbox = document.querySelector("#target-box");
@@ -104,7 +106,7 @@ export class Route {
     this.router.commandbox.cmdmenu.verifyAll();
   }
 
-  _decodeArgumentsText(rawArguments) {
+  decodeArgumentsText(rawArguments) {
 
     if(rawArguments === undefined) {
       // no arguments
