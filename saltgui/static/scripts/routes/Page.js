@@ -245,8 +245,13 @@ export class PageRoute extends Route {
       }
       addressTd.classList.add("address");
       addressTd.setAttribute("tabindex", -1);
-      addressSpan.addEventListener("click", this._copyAddress);
-      addressSpan.addEventListener("mouseout", this._restoreClickToCopy);
+      addressSpan.addEventListener("click", pClickEvent => {
+        this._copyAddress(addressSpan);
+        pClickEvent.stopPropagation();
+      });
+      addressSpan.addEventListener("mouseout", pClickEvent => {
+        this._restoreClickToCopy(addressSpan);
+      });
       Utils.addToolTip(addressSpan, "Click to copy");
       minionTr.appendChild(addressTd);
     } else {
@@ -578,25 +583,21 @@ export class PageRoute extends Route {
     });
   }
 
-  _copyAddress(pClickEvent) {
-    const target = pClickEvent.target;
+  _copyAddress(pTarget) {
     const selection = window.getSelection();
     const range = document.createRange();
 
-    range.selectNodeContents(target.firstChild);
+    range.selectNodeContents(pTarget.firstChild);
     selection.removeAllRanges();
     selection.addRange(range);
     document.execCommand("copy");
     selection.removeAllRanges();
 
-    Utils.addToolTip(target, "Copied!");
-
-    pClickEvent.stopPropagation();
+    Utils.addToolTip(pTarget, "Copied!");
   }
 
-  _restoreClickToCopy(pMouseEvent) {
-    const target = pMouseEvent.target;
-    Utils.addToolTip(target, "Click to copy");
+  _restoreClickToCopy(pTarget) {
+    Utils.addToolTip(pTarget, "Click to copy");
   }
 
   static showErrorRowInstead(pTable, pData) {
