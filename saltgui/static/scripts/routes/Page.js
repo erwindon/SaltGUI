@@ -24,7 +24,11 @@ export class PageRoute extends Route {
     const minionIds = Object.keys(minions).sort();
 
     // save for the autocompletion
-    window.localStorage.setItem("minions", JSON.stringify(minionIds));
+    // This callback will also be called after LOGOUT due to the regular error handling
+    // Do not store the information in that case
+    if(window.sessionStorage.getItem("token")) {
+      window.sessionStorage.setItem("minions", JSON.stringify(minionIds));
+    }
 
     const ipNumberPrefixes = this._getIpNumberPrefixes(minions);
 
@@ -330,7 +334,7 @@ export class PageRoute extends Route {
     this._sortJobs(jobs);
 
     // collect the list of hidden minions
-    let hideJobsText = window.localStorage.getItem("hide_jobs");
+    let hideJobsText = window.sessionStorage.getItem("hide_jobs");
     if(!hideJobsText || hideJobsText === "undefined") {
       hideJobsText = "[]";
     }
@@ -339,7 +343,7 @@ export class PageRoute extends Route {
       this._hideJobs = [ ];
     }
     // collect the list of hidden minions
-    let showJobsText = window.localStorage.getItem("show_jobs");
+    let showJobsText = window.sessionStorage.getItem("show_jobs");
     if(!showJobsText || showJobsText === "undefined") {
       showJobsText = "[]";
     }

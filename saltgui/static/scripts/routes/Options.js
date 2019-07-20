@@ -70,31 +70,31 @@ export class OptionsRoute extends PageRoute {
     const permsTd = document.getElementById("option-perms-value");
     permsTd.innerText = permsValue;
 
-    const templatesValue = window.localStorage.getItem("templates");
+    const templatesValue = window.sessionStorage.getItem("templates");
     const templatesTd = document.getElementById("option-templates-value");
     templatesTd.innerText = this._makeTemplatesValue(templatesValue);
 
-    const publicPillarsValue = window.localStorage.getItem("public_pillars");
+    const publicPillarsValue = window.sessionStorage.getItem("public_pillars");
     const publicPillarsTd = document.getElementById("option-public-pillars-value");
     publicPillarsTd.innerText = this._makePublicPillarsValue(publicPillarsValue);
 
-    const previewGrainsValue = window.localStorage.getItem("preview_grains");
+    const previewGrainsValue = window.sessionStorage.getItem("preview_grains");
     const previewGrainsTd = document.getElementById("option-preview-grains-value");
     previewGrainsTd.innerText = this._makePreviewGrainsValue(previewGrainsValue);
 
-    const hideJobsValue = window.localStorage.getItem("hide_jobs");
+    const hideJobsValue = window.sessionStorage.getItem("hide_jobs");
     const hideJobsTd = document.getElementById("option-hide-jobs-value");
     hideJobsTd.innerText = this._makeHideJobsValue(hideJobsValue);
 
-    const showJobsValue = window.localStorage.getItem("show_jobs");
+    const showJobsValue = window.sessionStorage.getItem("show_jobs");
     const showJobsTd = document.getElementById("option-show-jobs-value");
     showJobsTd.innerText = this._makeShowJobsValue(showJobsValue);
 
-    const nodegroupsValue = window.localStorage.getItem("nodegroups");
+    const nodegroupsValue = window.sessionStorage.getItem("nodegroups");
     const nodegroupsTd = document.getElementById("option-nodegroups-value");
     nodegroupsTd.innerText = this._makeNodegroupsValue(nodegroupsValue);
 
-    const outputFormatsValue = window.localStorage.getItem("output_formats");
+    const outputFormatsValue = window.sessionStorage.getItem("output_formats");
     const outputFormatsTd = document.getElementById("option-output-formats-value");
     outputFormatsTd.innerText = this._makeOutputFormatsValue(outputFormatsValue);
 
@@ -126,7 +126,7 @@ export class OptionsRoute extends PageRoute {
     of7.addEventListener("change", this._newOutputFormats);
     of7.checked = outputFormatsValue.includes("yaml");
 
-    const datetimeFractionDigitsValue = window.localStorage.getItem("datetime_fraction_digits");
+    const datetimeFractionDigitsValue = window.sessionStorage.getItem("datetime_fraction_digits");
     const datetimeFractionDigitsTd = document.getElementById("option-datetime-fraction-digits-value");
     datetimeFractionDigitsTd.innerText = this._makeDatetimeFractionDigitsValue(datetimeFractionDigitsValue);
     const dfd0 = document.getElementById("datetime-fraction-digits0");
@@ -151,7 +151,7 @@ export class OptionsRoute extends PageRoute {
     dfd6.addEventListener("change", this._newDatetimeFractionDigits);
     if(datetimeFractionDigitsValue === "6") dfd6.checked = true;
 
-    const tooltipModeValue = window.localStorage.getItem("tooltip_mode");
+    const tooltipModeValue = window.sessionStorage.getItem("tooltip_mode");
     const tooltipModeTd = document.getElementById("option-tooltip-mode-value");
     tooltipModeTd.innerText = this._makeTooltipModeValue(tooltipModeValue);
     const tm0 = document.getElementById("tooltip-mode-full");
@@ -221,7 +221,7 @@ export class OptionsRoute extends PageRoute {
     v = "\"" + v.substring(1) + "\"";
     const outputFormatsTd = document.getElementById("option-output-formats-value");
     outputFormatsTd.innerText = this._makeOutputFormatsValue(v);
-    window.localStorage.setItem("output_formats", v);
+    window.sessionStorage.setItem("output_formats", v);
   }
 
   _makeDatetimeFractionDigitsValue(value) {
@@ -229,7 +229,7 @@ export class OptionsRoute extends PageRoute {
   }
 
   _newDatetimeFractionDigits(evt) {
-    window.localStorage.setItem("datetime_fraction_digits", parseInt(evt.target.value));
+    window.sessionStorage.setItem("datetime_fraction_digits", parseInt(evt.target.value));
     const datetimeFractionDigitsTd = document.getElementById("option-datetime-fraction-digits-value");
     datetimeFractionDigitsTd.innerText = evt.target.value;
   }
@@ -239,7 +239,7 @@ export class OptionsRoute extends PageRoute {
   }
 
   _newTooltipMode(evt) {
-    window.localStorage.setItem("tooltip_mode", evt.target.value);
+    window.sessionStorage.setItem("tooltip_mode", evt.target.value);
     const tooltipModeTd = document.getElementById("option-tooltip-mode-value");
     tooltipModeTd.innerText = evt.target.value;
   }

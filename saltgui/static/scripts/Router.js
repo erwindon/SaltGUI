@@ -43,7 +43,7 @@ export class Router {
     this._registerRoute(new OptionsRoute(this));
 
     // show template menu item if templates defined
-    const templatesText = window.localStorage.getItem("templates");
+    const templatesText = window.sessionStorage.getItem("templates");
     if(templatesText && templatesText !== "undefined") {
       const item1 = document.querySelector("#button-templates1");
       item1.style.display = "inline-block";

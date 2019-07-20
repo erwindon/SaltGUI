@@ -39,20 +39,27 @@ export class API {
       });
   }
 
+  _cleanStorage() {
+    // clear local storage except key 'eauth'
+    const eauth = window.localStorage.getItem("eauth");
+    window.localStorage.clear();
+    window.localStorage.setItem("eauth", eauth);
+
+    // clear all of session storage
+    window.sessionStorage.clear();
+  }
+
   logout() {
     // only delete the session here as the router should take care of
     // redirecting to the login screen
+    const myThis = this;
     return this.apiRequest("POST", "/logout", {})
       .then(pResponse => {
-        // we could logout
-        // assume the session is terminated
-        window.sessionStorage.removeItem("token");
-        window.sessionStorage.removeItem("login-response");
+        // we could logout, assume the session is terminated
+        myThis._cleanStorage();
       }, pResponse => {
-        // we could not logout
-        // assume the session is broken
-        window.sessionStorage.removeItem("token");
-        window.sessionStorage.removeItem("login-response");
+        // we could not logout, assume the session is broken
+        myThis._cleanStorage();
       });
   }
 

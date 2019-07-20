@@ -103,31 +103,31 @@ export class LoginRoute extends Route {
     // store for later use
 
     const templates = pData.return[0].data.return.saltgui_templates;
-    window.localStorage.setItem("templates", JSON.stringify(templates));
+    window.sessionStorage.setItem("templates", JSON.stringify(templates));
 
     const publicPillars = pData.return[0].data.return.saltgui_public_pillars;
-    window.localStorage.setItem("public_pillars", JSON.stringify(publicPillars));
+    window.sessionStorage.setItem("public_pillars", JSON.stringify(publicPillars));
 
     const previewGrains = pData.return[0].data.return.saltgui_preview_grains;
-    window.localStorage.setItem("preview_grains", JSON.stringify(previewGrains));
+    window.sessionStorage.setItem("preview_grains", JSON.stringify(previewGrains));
 
     const hideJobs = pData.return[0].data.return.saltgui_hide_jobs;
-    window.localStorage.setItem("hide_jobs", JSON.stringify(hideJobs));
+    window.sessionStorage.setItem("hide_jobs", JSON.stringify(hideJobs));
     const showJobs = pData.return[0].data.return.saltgui_show_jobs;
-    window.localStorage.setItem("show_jobs", JSON.stringify(showJobs));
+    window.sessionStorage.setItem("show_jobs", JSON.stringify(showJobs));
 
     let nodeGroups = pData.return[0].data.return.nodegroups;
     if(!nodeGroups) nodeGroups = {};
-    window.localStorage.setItem("nodegroups", JSON.stringify(nodeGroups));
+    window.sessionStorage.setItem("nodegroups", JSON.stringify(nodeGroups));
 
     const outputFormats = pData.return[0].data.return.saltgui_output_formats;
-    window.localStorage.setItem("output_formats", JSON.stringify(outputFormats));
+    window.sessionStorage.setItem("output_formats", JSON.stringify(outputFormats));
 
     const dateTimeFractionDigits = pData.return[0].data.return.saltgui_datetime_fraction_digits;
-    window.localStorage.setItem("datetime_fraction_digits", JSON.stringify(dateTimeFractionDigits));
+    window.sessionStorage.setItem("datetime_fraction_digits", JSON.stringify(dateTimeFractionDigits));
 
     const toolTipMode = pData.return[0].data.return.saltgui_tooltip_mode;
-    window.localStorage.setItem("tooltip_mode", toolTipMode);
+    window.sessionStorage.setItem("tooltip_mode", toolTipMode);
   }
 
   _onLoginFailure(error) {

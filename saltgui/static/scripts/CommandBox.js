@@ -28,7 +28,7 @@ export class CommandBox {
 
     const titleElement = document.querySelector(".run-command #template-menu-here");
     const menu = new DropDownMenu(titleElement);
-    let templatesText = window.localStorage.getItem("templates");
+    let templatesText = window.sessionStorage.getItem("templates");
     if(!templatesText || templatesText === "undefined") templatesText = "{}";
     const templates = JSON.parse(templatesText);
     const keys = Object.keys(templates).sort();
@@ -172,7 +172,7 @@ export class CommandBox {
     while(targetList.firstChild) {
       targetList.removeChild(targetList.firstChild);
     }
-    const nodeGroups = JSON.parse(window.localStorage.getItem("nodegroups"));
+    const nodeGroups = JSON.parse(window.sessionStorage.getItem("nodegroups"));
     if(nodeGroups) {
       for(const nodeGroup of Object.keys(nodeGroups).sort()) {
         const option = document.createElement("option");
@@ -180,7 +180,7 @@ export class CommandBox {
         targetList.appendChild(option);
       }
     }
-    const minions = JSON.parse(window.localStorage.getItem("minions"));
+    const minions = JSON.parse(window.sessionStorage.getItem("minions"));
     if(minions) {
       for(const minionId of minions.sort()) {
         const option = document.createElement("option");
@@ -308,7 +308,7 @@ export class CommandBox {
     // SALT API returns a 500-InternalServerError when it hits an unknown group
     // Let's improve on that
     if(pTargetType === "nodegroup") {
-      const nodeGroups = JSON.parse(window.localStorage.getItem("nodegroups"));
+      const nodeGroups = JSON.parse(window.sessionStorage.getItem("nodegroups"));
       if(!nodeGroups || !(pTarget in nodeGroups)) {
         this._showError("Unknown nodegroup '" + pTarget + "'");
         return null;

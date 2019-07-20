@@ -43,7 +43,7 @@ export class TemplatesRoute extends PageRoute {
 
     // should we update it or just use from cache (see commandbox) ?
     const templates = pData.return[0].data.return.saltgui_templates;
-    window.localStorage.setItem("templates", JSON.stringify(templates));
+    window.sessionStorage.setItem("templates", JSON.stringify(templates));
     const keys = Object.keys(templates).sort();
     for(const key of keys) {
       const template = templates[key];
