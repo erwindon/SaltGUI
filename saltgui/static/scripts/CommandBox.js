@@ -146,7 +146,6 @@ export class CommandBox {
     const manualRun = document.querySelector("#popup-run-command");
     manualRun.style.display = "block";
 
-    document.body.style["overflow-y"] = "hidden";
     const outputField = document.querySelector(".run-command pre");
     outputField.innerText = "Waiting for command...";
 
@@ -207,8 +206,6 @@ export class CommandBox {
 
     const manualRun = document.querySelector("#popup-run-command");
     manualRun.style.display = "none";
-
-    document.body.style["overflow-y"] = "scroll";
 
     // reset to default, so that its value is initially hidden
     RunType.setRunTypeDefault();
