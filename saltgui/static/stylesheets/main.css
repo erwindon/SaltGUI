@@ -56,9 +56,13 @@ h1 {
   padding-top: 5px;
 }
 
-.panel:first-of-type {
+.panel {
   /* separate main-panel and jobs-panel */
-  margin-right: 10px;
+  margin-left: 5px;
+  margin-bottom: 5px;
+}
+.panel:last-child {
+  margin-right: 5px;
 }
 
 .panel h1 {

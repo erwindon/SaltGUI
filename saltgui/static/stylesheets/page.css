@@ -5,7 +5,7 @@
 .dashboard {
   display: flex;
   align-items: flex-start;
-  margin: 10px;
+  margin: 5px 0 0 0;
 }
 
 .dashboard .panel {
@@ -233,10 +233,6 @@ table tr td:last-of-type {
 #page-jobs .job-list {
   /* no right panel here */
   flex-basis: 100%;
-}
-
-#jobs-panel {
-  margin-right: 0;
 }
 
 .highlight-rows tbody tr:hover {
