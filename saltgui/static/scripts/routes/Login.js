@@ -30,7 +30,8 @@ export class LoginRoute extends Route {
 
   onShow() {
     const eauthSelector = document.getElementById("eauth");
-    const eauthValue = window.localStorage.getItem("eauth");
+    let eauthValue = window.localStorage.getItem("eauth");
+    if(eauthValue === "null") eauthValue = null;
     eauthSelector.value = eauthValue ? eauthValue : "pam";
 
     const reason = decodeURIComponent(Utils.getQueryParam("reason"));
