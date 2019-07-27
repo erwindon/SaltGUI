@@ -61,6 +61,7 @@ export class MinionsRoute extends PageRoute {
       const minionTr = table.querySelector("#" + Utils.getIdFromMinionId(minionId));
       const menu = new DropDownMenu(minionTr);
       this._addMenuItemStateApply(menu, minionId);
+      this._addMenuItemStateApplyTest(menu, minionId);
 
       minionTr.addEventListener("click", pClickEvent =>
         this.runCommand(pClickEvent, minionId, "state.apply")
@@ -93,6 +94,7 @@ export class MinionsRoute extends PageRoute {
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
     const menu = new DropDownMenu(minionTr);
     this._addMenuItemStateApply(menu, pMinionId);
+    this._addMenuItemStateApplyTest(menu, pMinionId);
 
     minionTr.addEventListener("click", pClickEvent =>
       this.runCommand(pClickEvent, pMinionId, "state.apply")
@@ -102,6 +104,12 @@ export class MinionsRoute extends PageRoute {
   _addMenuItemStateApply(pMenu, pMinionId) {
     pMenu.addMenuItem("Apply&nbsp;state...", function(pClickEvent) {
       this.runCommand(pClickEvent, pMinionId, "state.apply");
+    }.bind(this));
+  }
+
+  _addMenuItemStateApplyTest(pMenu, pMinionId) {
+    pMenu.addMenuItem("Test&nbsp;state...", function(pClickEvent) {
+      this.runCommand(pClickEvent, pMinionId, "state.apply test=True");
     }.bind(this));
   }
 }
