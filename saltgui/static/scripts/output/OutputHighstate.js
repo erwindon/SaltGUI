@@ -11,7 +11,20 @@ export class OutputHighstate {
 
     if(typeof pResponse !== "object") return false;
     if(Array.isArray(pResponse)) return false;
-    if(pCommand !== "state.apply" && pCommand !== "state.highstate") return false;
+    switch(pCommand) {
+    case "state.apply":
+    case "state.high":
+    case "state.highstate":
+    case "state.sls":
+    case "state.sls_id":
+      break;
+    case "state.low":
+      // almost, but it is only one task
+      // and we can handle only an object with tasks
+      return false;
+    default:
+      return false;
+    }
     for(const taskKey of Object.keys(pResponse)) {
       const components = taskKey.split("_|-");
       if(components.length !== 4) return false;
