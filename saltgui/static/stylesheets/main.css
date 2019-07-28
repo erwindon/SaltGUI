@@ -44,23 +44,22 @@ h1 {
   display: inline-block;
 }
 
-.panel {
-  background-color: white;
-  padding: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  border-radius: 1px;
-}
-
 .msg {
   color: #505050;
   padding-top: 5px;
 }
 
 .panel {
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  border-radius: 1px;
+
   /* separate main-panel and jobs-panel */
   margin-left: 5px;
   margin-bottom: 5px;
 }
+
 .panel:last-child {
   margin-right: 5px;
 }
@@ -167,18 +166,19 @@ h1 {
 }
 
 .popup {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   top: 0;
-  position: fixed;
   z-index: 2;
   display: block;
 }
 
 .popup::before {
-  position: absolute;
+  position: fixed;
   display: block;
   content: '';
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   z-index: 2;
@@ -209,13 +209,11 @@ input[type='submit'] {
   padding: 30px;
   z-index: 3;
   background-color: white;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 1px;
-  width: calc(90% - 90px);
-  max-width: calc(100% - 90px);
+  position: relative;
+  top: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  width: calc(100% - 10px); /* padding+margin */
 }
 
 .run-command input[type='submit'] {
@@ -232,8 +230,7 @@ pre.output {
 }
 
 .run-command pre.output {
-  height: 250px;
-  overflow-y: scroll;
+  min-height: 250px;
 }
 
 input,
