@@ -20,15 +20,15 @@ export class JobRoute extends Route {
     const runnerJobsListJobPromise = this.router.api.getRunnerJobsListJob(id);
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    runnerJobsListJobPromise.then(pData => {
-      myThis._handleJobRunnerJobsListJob(pData, id);
-      runnerJobsActivePromise.then(pData => {
-        myThis.handleRunnerJobsActive(id, pData);
-      }, pData => {
-        myThis.handleRunnerJobsActive(id, JSON.stringify(pData));
+    runnerJobsListJobPromise.then(pRunnerJobsListJobData => {
+      myThis._handleJobRunnerJobsListJob(pRunnerJobsListJobData, id);
+      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+        myThis.handleRunnerJobsActive(id, pRunnerJobsActiveData);
+      }, pRunnerJobsActiveMsg => {
+        myThis.handleRunnerJobsActive(id, JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pData => {
-      myThis._handleJobRunnerJobsListJob(JSON.stringify(pData), id);
+    }, pRunnerJobsListJobsMsg => {
+      myThis._handleJobRunnerJobsListJob(JSON.stringify(pRunnerJobsListJobsMsg), id);
     });
   }
 
@@ -103,7 +103,7 @@ export class JobRoute extends Route {
     input.focus();
   }
 
-  _handleJobRunnerJobsListJob(pData, pJobId) {
+  _handleJobRunnerJobsListJob(pRunnerJobsListJobData, pJobId) {
     const output = this.getPageElement().querySelector(".output");
 
     const closeButton = document.querySelector("#job-button-close");
@@ -116,17 +116,17 @@ export class JobRoute extends Route {
       JobRoute._hideShowOutputSearchBar(output)
     );
 
-    if(!pData) return;
+    if(!pRunnerJobsListJobData) return;
 
-    if(typeof pData !== "object") {
+    if(typeof pRunnerJobsListJobData !== "object") {
       output.innerText = "";
-      Utils.addErrorToTableCell(output, pData);
+      Utils.addErrorToTableCell(output, pRunnerJobsListJobData);
       const functionField = this.getPageElement().querySelector(".function");
       functionField.innerText = "ERROR";
       return;
     }
 
-    const info = pData.return[0];
+    const info = pRunnerJobsListJobData.return[0];
 
     if(info.Error) {
       output.innerText = info.Error + " (" + pJobId + ")";

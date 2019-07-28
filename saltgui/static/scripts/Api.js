@@ -24,8 +24,8 @@ export class API {
     window.localStorage.setItem("eauth", pEauth);
 
     return this.apiRequest("POST", "/login", params)
-      .then(pData => {
-        const response = pData.return[0];
+      .then(pLoginData => {
+        const response = pLoginData.return[0];
         if(Object.keys(response.perms).length === 0) {
           // We are allowed to login but there are no permissions available
           // This may happen e.g. for accounts that are in PAM,

@@ -557,10 +557,10 @@ export class PageRoute extends Route {
   startRunningJobs() {
     const myThis = this;
 
-    this.router.api.getRunnerJobsActive().then(pData => {
-      myThis.handleRunnerJobsActive(pData);
-    }, pData => {
-      myThis.handleRunnerJobsActive(JSON.stringify(pData));
+    this.router.api.getRunnerJobsActive().then(pRunnerJobsActiveData => {
+      myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
+    }, pRunnerJobsActiveMsg => {
+      myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
     });
   }
 

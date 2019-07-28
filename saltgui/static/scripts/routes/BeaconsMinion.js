@@ -31,32 +31,32 @@ export class BeaconsMinionRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    localBeaconsListPromise.then(pData => {
-      myThis._handleLocalBeaconsList(pData, minionId);
-    }, pData => {
-      myThis._handleLocalBeaconsList(JSON.stringify(pData), minionId);
+    localBeaconsListPromise.then(pLocalBeaconsListData => {
+      myThis._handleLocalBeaconsList(pLocalBeaconsListData, minionId);
+    }, pLocalBeaconsListMsg => {
+      myThis._handleLocalBeaconsList(JSON.stringify(pLocalBeaconsListMsg), minionId);
     });
 
-    runnerJobsListJobsPromise.then(pData => {
-      myThis.handleRunnerJobsListJobs(pData);
-      runnerJobsActivePromise.then(pData => {
-        myThis.handleRunnerJobsActive(pData);
-      }, pData => {
-        myThis.handleRunnerJobsActive(JSON.stringify(pData));
+    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+      myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
+      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+        myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
+      }, pRunnerJobsActiveMsg => {
+        myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pData => {
-      myThis.handleRunnerJobsListJobs(JSON.stringify(pData));
+    }, pRunnerJobsListJobsMsg => {
+      myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     }); 
   }
 
-  _handleLocalBeaconsList(pData, pMinionId) {
+  _handleLocalBeaconsList(pLocalBeaconsListData, pMinionId) {
     const panel = document.getElementById("beacons-minion-panel");
 
     const container = document.getElementById("beacons-minion-list");
 
-    if(PageRoute.showErrorRowInstead(container.tBodies[0], pData)) return;
+    if(PageRoute.showErrorRowInstead(container.tBodies[0], pLocalBeaconsListData)) return;
 
-    const beacons0 = pData.return[0][pMinionId];
+    const beacons0 = pLocalBeaconsListData.return[0][pMinionId];
 
     const beacons = BeaconsRoute.fixBeaconsMinion(beacons0);
 

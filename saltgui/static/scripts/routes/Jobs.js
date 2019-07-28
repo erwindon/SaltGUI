@@ -45,15 +45,15 @@ export class JobsRoute extends PageRoute {
     const titleElement = document.getElementById("jobs-title");
     panel.insertBefore(menu.menuDropdown, titleElement.nextSibling);
 
-    runnerJobsListJobsPromise.then(pData => {
-      myThis.handleRunnerJobsListJobs(pData, true, cnt);
-      runnerJobsActivePromise.then(pData => {
-        myThis.handleRunnerJobsActive(pData);
-      }, pData => {
-        myThis.handleRunnerJobsActive(JSON.stringify(pData));
+    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+      myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData, true, cnt);
+      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+        myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
+      }, pRunnerJobsActiveMsg => {
+        myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pData => {
-      myThis.handleRunnerJobsListJobs(JSON.stringify(pData));
+    }, pRunnerJobsListJobsMsg => {
+      myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     }); 
   }
 
@@ -247,10 +247,10 @@ export class JobsRoute extends PageRoute {
 
     const runnerJobsListJobPromise = this.router.api.getRunnerJobsListJob(pJobId);
 
-    runnerJobsListJobPromise.then(pData => {
-      myThis._handleJobsRunnerJobsListJob(pJobId, pData);
-    }, pData => {
-      myThis._handleJobsRunnerJobsListJob(pJobId, JSON.stringify(pData));
+    runnerJobsListJobPromise.then(pRunnerJobsListJobData => {
+      myThis._handleJobsRunnerJobsListJob(pJobId, pRunnerJobsListJobData);
+    }, pRunnerJobsListJobMsg => {
+      myThis._handleJobsRunnerJobsListJob(pJobId, JSON.stringify(pRunnerJobsListJobMsg));
     });
   }
 

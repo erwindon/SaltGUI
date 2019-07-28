@@ -18,15 +18,15 @@ export class OptionsRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    runnerJobsListJobsPromise.then(pData => {
-      myThis.handleRunnerJobsListJobs(pData);
-      runnerJobsActivePromise.then(pData => {
-        myThis.handleRunnerJobsActive(pData);
-      }, pData => {
-        myThis.handleRunnerJobsActive(JSON.stringify(pData));
+    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+      myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
+      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+        myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
+      }, pRunnerJobsActiveMsg => {
+        myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pData => {
-      myThis.handleRunnerJobsListJobs(JSON.stringify(pData));
+    }, pRunnerJobsListJobsMsg => {
+      myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
 
     const loginResponseStr = window.sessionStorage.getItem("login-response");

@@ -142,12 +142,12 @@ export class Router {
     document.querySelector("#button-logout1")
       .addEventListener("click", pClickEvent => {
         this.api.logout().then(
-          _ => window.location.replace("/login?reason=logout"));
+          pLogoutData => window.location.replace("/login?reason=logout"));
       });
     document.querySelector("#button-logout2")
       .addEventListener("click", pClickEvent => {
         this.api.logout().then(
-          _ => window.location.replace("/login?reason=logout"));
+          pLogoutData => window.location.replace("/login?reason=logout"));
       });
 
     // don't verify the session too often
@@ -163,7 +163,9 @@ export class Router {
     const wheelConfigValuesPromise = this.api.getWheelConfigValues();
     // don't act in the callbacks
     // Api.apiRequest will do all the work
-    wheelConfigValuesPromise.then(data => { }, data => { });
+    wheelConfigValuesPromise.then(pWheelConfigValuesData =>
+      { }, pWheelConfigValuesMsg =>
+      { });
   }
 
   _registerRoute(pRoute) {

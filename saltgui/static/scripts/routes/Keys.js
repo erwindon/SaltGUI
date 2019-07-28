@@ -26,37 +26,37 @@ export class KeysRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    wheelKeyListAllPromise.then(pData1 => {
-      myThis._handleKeysWheelKeyListAll(pData1);
-      wheelKeyFingerPromise.then(pData => {
-        myThis._handleWheelKeyFinger(pData);
-      }, pData2 => {
-        const pData = {"return":[{"data":{"return":{"minions":{}}}}]};
-        if(pData1)
-          for(const k of pData1.return[0].data.return.minions)
-            pData.return[0]["data"]["return"]["minions"][k] = JSON.stringify(pData2);
-        myThis._handleWheelKeyFinger(pData);
+    wheelKeyListAllPromise.then(pWheelKeyListAllData => {
+      myThis._handleKeysWheelKeyListAll(pWheelKeyListAllData);
+      wheelKeyFingerPromise.then(pWheelKeyFingerData => {
+        myThis._handleWheelKeyFinger(pWheelKeyFingerData);
+      }, pWheelKeyFingerMsg => {
+        const wheelKeyFingerData = {"return":[{"data":{"return":{"minions":{}}}}]};
+        if(pWheelKeyListAllData)
+          for(const k of pWheelKeyListAllData.return[0].data.return.minions)
+            wheelKeyFingerData.return[0]["data"]["return"]["minions"][k] = JSON.stringify(pWheelKeyFingerMsg);
+        myThis._handleWheelKeyFinger(wheelKeyFingerData);
       });
-    }, pData => {
-      myThis._handleKeysWheelKeyListAll(JSON.stringify(pData));
+    }, pWheelKeyListAllMsg => {
+      myThis._handleKeysWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
     });
 
-    runnerJobsListJobsPromise.then(pData => {
-      myThis.handleRunnerJobsListJobs(pData);
-      runnerJobsActivePromise.then(pData => {
-        myThis.handleRunnerJobsActive(pData);
-      }, pData => {
-        myThis.handleRunnerJobsActive(JSON.stringify(pData));
+    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+      myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
+      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+        myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
+      }, pRunnerJobsActiveMsg => {
+        myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pData => {
-      myThis.handleRunnerJobsListJobs(JSON.stringify(pData));
+    }, pRunnerJobsListJobsMsg => {
+      myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     }); 
   }
 
-  _handleWheelKeyFinger(pData) {
-    if(!pData) return;
+  _handleWheelKeyFinger(pWheelKeyFingerData) {
+    if(!pWheelKeyFingerData) return;
 
-    const allKeys = pData.return[0].data.return;
+    const allKeys = pWheelKeyFingerData.return[0].data.return;
 
     for(const property of Object.keys(allKeys)) {
       if(property === "local") continue;
@@ -83,14 +83,14 @@ export class KeysRoute extends PageRoute {
     }
   }
 
-  _handleKeysWheelKeyListAll(pData) {
-    if(!pData) return;
+  _handleKeysWheelKeyListAll(pWheelKeyListAllData) {
+    if(!pWheelKeyListAllData) return;
 
     const table = this.getPageElement().querySelector("#minions");
 
-    if(PageRoute.showErrorRowInstead(table, pData)) return;
+    if(PageRoute.showErrorRowInstead(table, pWheelKeyListAllData)) return;
 
-    const allKeys = pData.return[0].data.return;
+    const allKeys = pWheelKeyListAllData.return[0].data.return;
 
     // Unaccepted goes first because that is where the user must decide
     const minionIds_pre = allKeys.minions_pre.sort();
@@ -290,10 +290,10 @@ export class KeysRoute extends PageRoute {
       if(fingerprintSpan) fingerprintSpan.innerText = "(refresh page for fingerprint)";
       const wheelKeyFingerPromise = this.router.api.getWheelKeyFinger(pData.id);
       const myThis = this;
-      wheelKeyFingerPromise.then(this._handleWheelKeyFinger, pData2 => {
-        const pData3 = {"return":[{"data":{"return":{"minions":{}}}}]};
-        pData3.return[0]["data"]["return"]["minions"][pData.id] = JSON.stringify(pData2);
-        myThis._handleWheelKeyFinger(pData3);
+      wheelKeyFingerPromise.then(this._handleWheelKeyFinger, pWheelKeyFingerMsg => {
+        const wheelKeyFingerData = {"return":[{"data":{"return":{"minions":{}}}}]};
+        wheelKeyFingerData.return[0]["data"]["return"]["minions"][pData.id] = JSON.stringify(pWheelKeyFingerMsg);
+        myThis._handleWheelKeyFinger(wheelKeyFingerData);
       });
     }
 

@@ -18,31 +18,31 @@ export class TemplatesRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    wheelConfigValuesPromise.then(pData => {
-      myThis._handleTemplatesWheelConfigValues(pData);
-    }, pData => {
-      myThis._handleTemplatesWheelConfigValues(JSON.stringify(pData));
+    wheelConfigValuesPromise.then(pWheelConfigValuesData => {
+      myThis._handleTemplatesWheelConfigValues(pWheelConfigValuesData);
+    }, pWheelConfigValuesMsg => {
+      myThis._handleTemplatesWheelConfigValues(JSON.stringify(pWheelConfigValuesMsg));
     });
 
-    runnerJobsListJobsPromise.then(pData => {
-      myThis.handleRunnerJobsListJobs(pData);
-      runnerJobsActivePromise.then(pData => {
-        myThis.handleRunnerJobsActive(pData);
-      }, pData => {
-        myThis.handleRunnerJobsActive(JSON.stringify(pData));
+    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+      myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
+      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+        myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
+      }, pRunnerJobsActiveMsg => {
+        myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pData => {
-      myThis.handleRunnerJobsListJobs(JSON.stringify(pData));
+    }, pRunnerJobsListJobsMsg => {
+      myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }
 
-  _handleTemplatesWheelConfigValues(pData) {
+  _handleTemplatesWheelConfigValues(pWheelConfigValuesData) {
     const container = this.getPageElement().querySelector(".templates");
 
-    if(PageRoute.showErrorRowInstead(container, pData)) return;
+    if(PageRoute.showErrorRowInstead(container, pWheelConfigValuesData)) return;
 
     // should we update it or just use from cache (see commandbox) ?
-    const templates = pData.return[0].data.return.saltgui_templates;
+    const templates = pWheelConfigValuesData.return[0].data.return.saltgui_templates;
     window.sessionStorage.setItem("templates", JSON.stringify(templates));
     const keys = Object.keys(templates).sort();
     for(const key of keys) {

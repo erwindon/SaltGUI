@@ -90,9 +90,9 @@ export class LoginRoute extends Route {
 
     //we need these functions to populate the dropdown boxes
     const myThis = this;
-    wheelConfigValuesPromise.then(data => {
-      myThis._handleLoginWheelConfigValues(data);
-    }, data => {
+    wheelConfigValuesPromise.then(pWheelConfigValuesData => {
+      myThis._handleLoginWheelConfigValues(pWheelConfigValuesData);
+    }, pWheelConfigValuesMsg => {
       // never mind
     });
 
@@ -100,34 +100,36 @@ export class LoginRoute extends Route {
     setTimeout(_ => this.router.goTo("/"), 1000);
   }
 
-  _handleLoginWheelConfigValues(pData) {
+  _handleLoginWheelConfigValues(pWheelConfigValuesData) {
     // store for later use
 
-    const templates = pData.return[0].data.return.saltgui_templates;
+    const wheelConfigValuesData = pWheelConfigValuesData.return[0].data.return;
+
+    const templates = wheelConfigValuesData.saltgui_templates;
     window.sessionStorage.setItem("templates", JSON.stringify(templates));
 
-    const publicPillars = pData.return[0].data.return.saltgui_public_pillars;
+    const publicPillars = wheelConfigValuesData.saltgui_public_pillars;
     window.sessionStorage.setItem("public_pillars", JSON.stringify(publicPillars));
 
-    const previewGrains = pData.return[0].data.return.saltgui_preview_grains;
+    const previewGrains = wheelConfigValuesData.saltgui_preview_grains;
     window.sessionStorage.setItem("preview_grains", JSON.stringify(previewGrains));
 
-    const hideJobs = pData.return[0].data.return.saltgui_hide_jobs;
+    const hideJobs = wheelConfigValuesData.saltgui_hide_jobs;
     window.sessionStorage.setItem("hide_jobs", JSON.stringify(hideJobs));
-    const showJobs = pData.return[0].data.return.saltgui_show_jobs;
+    const showJobs = wheelConfigValuesData.saltgui_show_jobs;
     window.sessionStorage.setItem("show_jobs", JSON.stringify(showJobs));
 
-    let nodeGroups = pData.return[0].data.return.nodegroups;
+    let nodeGroups = wheelConfigValuesData.nodegroups;
     if(!nodeGroups) nodeGroups = {};
     window.sessionStorage.setItem("nodegroups", JSON.stringify(nodeGroups));
 
-    const outputFormats = pData.return[0].data.return.saltgui_output_formats;
+    const outputFormats = wheelConfigValuesData.saltgui_output_formats;
     window.sessionStorage.setItem("output_formats", JSON.stringify(outputFormats));
 
-    const dateTimeFractionDigits = pData.return[0].data.return.saltgui_datetime_fraction_digits;
+    const dateTimeFractionDigits = wheelConfigValuesData.saltgui_datetime_fraction_digits;
     window.sessionStorage.setItem("datetime_fraction_digits", JSON.stringify(dateTimeFractionDigits));
 
-    const toolTipMode = pData.return[0].data.return.saltgui_tooltip_mode;
+    const toolTipMode = wheelConfigValuesData.saltgui_tooltip_mode;
     window.sessionStorage.setItem("tooltip_mode", toolTipMode);
   }
 

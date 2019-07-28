@@ -29,25 +29,25 @@ export class GrainsMinionRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    localGrainsItemsPromise.then(pData => {
-      myThis._handleLocalGrainsItems(pData, minionId);
-    }, pData => {
-      myThis._handleLocalGrainsItems(JSON.stringify(pData), minionId);
+    localGrainsItemsPromise.then(pLocalGrainsItemsData => {
+      myThis._handleLocalGrainsItems(pLocalGrainsItemsData, minionId);
+    }, pLocalGrainsItemsMsg => {
+      myThis._handleLocalGrainsItems(JSON.stringify(pLocalGrainsItemsMsg), minionId);
     });
 
-    runnerJobsListJobsPromise.then(pData => {
-      myThis.handleRunnerJobsListJobs(pData);
-      runnerJobsActivePromise.then(pData => {
-        myThis.handleRunnerJobsActive(pData);
-      }, pData => {
-        myThis.handleRunnerJobsActive(JSON.stringify(pData));
+    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+      myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
+      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+        myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
+      }, pRunnerJobsActiveMsg => {
+        myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pData => {
-      myThis.handleRunnerJobsListJobs(JSON.stringify(pData));
+    }, pRunnerJobsListJobsMsg => {
+      myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     }); 
   }
 
-  _handleLocalGrainsItems(pData, pMinionId) {
+  _handleLocalGrainsItems(pLocalGrainsItemsData, pMinionId) {
     const panel = document.getElementById("grains-minion-panel");
     const menu = new DropDownMenu(panel);
     this._addMenuItemGrainsSetValAdd(menu, pMinionId);
@@ -60,9 +60,9 @@ export class GrainsMinionRoute extends PageRoute {
     const titleElement = document.getElementById("grains-minion-title");
     panel.insertBefore(menu.menuDropdown, titleElement.nextSibling);
 
-    if(PageRoute.showErrorRowInstead(container.tBodies[0], pData)) return;
+    if(PageRoute.showErrorRowInstead(container.tBodies[0], pLocalGrainsItemsData)) return;
 
-    const grains = pData.return[0][pMinionId];
+    const grains = pLocalGrainsItemsData.return[0][pMinionId];
 
     if(grains === undefined) {
       const msgDiv = this.pageElement.querySelector("div.minion-list .msg");

@@ -29,29 +29,29 @@ export class BeaconsRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    wheelKeyListAllPromise.then(pData1 => {
-      myThis._handleBeaconsWheelKeyListAll(pData1);
-      localBeaconsListPromise.then(pData => {
-        myThis.updateMinions(pData);
-      }, pData2 => {
-        const pData = {"return":[{}]};
-        for(const k of pData1.return[0].data.return.minions)
-          pData.return[0][k] = JSON.stringify(pData2);
-        myThis.updateMinions(pData);
+    wheelKeyListAllPromise.then(pWheelKeyListAllData => {
+      myThis._handleBeaconsWheelKeyListAll(pWheelKeyListAllData);
+      localBeaconsListPromise.then(pLocalBeaconsListData => {
+        myThis.updateMinions(pLocalBeaconsListData);
+      }, pLocalBeaconsListMsg => {
+        const localBeaconsListData = {"return":[{}]};
+        for(const k of pWheelKeyListAllData.return[0].data.return.minions)
+          localBeaconsListData.return[0][k] = JSON.stringify(pLocalBeaconsListMsg);
+        myThis.updateMinions(localBeaconsListData);
       });
-    }, pData => {
-      myThis._handleBeaconsWheelKeyListAll(JSON.stringify(pData));
+    }, pWheelKeyListAllMsg => {
+      myThis._handleBeaconsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
     });
 
-    runnerJobsListJobsPromise.then(pData => {
-      myThis.handleRunnerJobsListJobs(pData);
-      runnerJobsActivePromise.then(pData => {
-        myThis.handleRunnerJobsActive(pData);
-      }, pData => {
-        myThis.handleRunnerJobsActive(JSON.stringify(pData));
+    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+      myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
+      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+        myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
+      }, pRunnerJobsActiveMsg => {
+        myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pData => {
-      myThis.handleRunnerJobsListJobs(JSON.stringify(pData));
+    }, pRunnerJobsListJobsMsg => {
+      myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     }); 
   }
 
@@ -89,12 +89,12 @@ export class BeaconsRoute extends PageRoute {
     return ret;
   }
 
-  _handleBeaconsWheelKeyListAll(pData) {
+  _handleBeaconsWheelKeyListAll(pWheelKeyListAllData) {
     const table = this.getPageElement().querySelector('#minions');
 
-    if(PageRoute.showErrorRowInstead(table, pData)) return;
+    if(PageRoute.showErrorRowInstead(table, pWheelKeyListAllData)) return;
 
-    const keys = pData.return[0].data.return;
+    const keys = pWheelKeyListAllData.return[0].data.return;
 
     const minionIds = keys.minions.sort();
     for(const minionId of minionIds) {
