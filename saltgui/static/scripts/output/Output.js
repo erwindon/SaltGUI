@@ -322,9 +322,8 @@ export class Output {
       // Do not produce a #response line for async-start confirmation
 
       // for the result of jobs.active
-      const summaryJobsActiveSpan = Route.createSpan("", "");
+      const summaryJobsActiveSpan = Route.createSpan("", pInitialStatus);
       summaryJobsActiveSpan.id = "summary-jobs-active";
-      summaryJobsActiveSpan.innerText = pInitialStatus;
 
       // for the result of jobs.list_job
       const summaryJobsListJobSpan = Route.createSpan("", "");
