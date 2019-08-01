@@ -314,6 +314,7 @@ export class Output {
     }
 
     const allDiv = Route.createDiv("nohide", "");
+    const cntMinions = pMinionData.length;
 
     if(!pCommand.startsWith("runners.") &&
        !pCommand.startsWith("wheel.") &&
@@ -330,7 +331,6 @@ export class Output {
       summaryJobsListJobSpan.id = "summary-list-job";
 
       const cntResponses = Object.keys(pResponse).length;
-      const cntMinions = pMinionData.length;
 
       let txt = ", ";
 
@@ -383,8 +383,14 @@ export class Output {
     }
 
     const masterTriangle = Route.createSpan("", "");
+    // 25B7 = WHITE RIGHT-POINTING TRIANGLE
     // 25BD = WHITE DOWN-POINTING TRIANGLE
-    masterTriangle.innerText = "\u25bd";
+    // use cntMinions instead of cntResponses to be predictable
+    // hide details when there are many minions to show
+    if(cntMinions > 50)
+      masterTriangle.innerText = "\u25b7";
+    else
+      masterTriangle.innerText = "\u25bd";
     masterTriangle.style = "cursor: pointer";
     allDiv.appendChild(masterTriangle);
 
@@ -537,8 +543,7 @@ export class Output {
       // 25BD = WHITE DOWN-POINTING TRIANGLE
       let triangle = null;
       if(minionMultiLine) {
-        triangle = Route.createSpan("triangle", "");
-        triangle.innerText = "\u25bd";
+        triangle = Route.createSpan("triangle", masterTriangle.innerText);
         triangle.style = "cursor: pointer";
         triangle.addEventListener("click", pClickEvent => {
           // 25B7 = WHITE RIGHT-POINTING TRIANGLE
@@ -571,6 +576,9 @@ export class Output {
       }
 
       minionOutput.classList.add("minion-output");
+      // hide the per-minion details when we have so many minions
+      if(triangle && triangle.innerText === "\u25b7")
+        minionOutput.style.display = "none";
       div.append(minionOutput);
 
       pOutputContainer.append(div);
