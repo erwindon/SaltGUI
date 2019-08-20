@@ -7,19 +7,52 @@
   font-size: 14px;
   background-color: rgba(76, 175, 80, 0.8); /* #4caf50 */
   color: white;
-  text-align: center;
   padding: 7px;
   border-radius: 3px;
   position: absolute;
   white-space: pre;
 
-  /* float the tooltip above its target */
-  z-index: 10;
-  bottom: calc(100% + 8px);
-
   /* center the tooltip above its target */
   left: 50%;
+
+  /* float the tooltip above its target */
+  z-index: 10;
+}
+
+.tooltip > .tooltip-text-TL {
+  text-align: left;
+  transform: translate(-10%, 130%);
+  bottom: calc(8px);
+}
+
+.tooltip > .tooltip-text-TC {
+  text-align: center;
+  transform: translate(-50%, 130%);
+  bottom: calc(8px);
+}
+
+.tooltip > .tooltip-text-TR {
+  text-align: right;
+  transform: translate(-95%, 130%);
+  bottom: calc(8px);
+}
+
+.tooltip > .tooltip-text-BL {
+  text-align: left;
+  transform: translate(-10%, 0);
+  bottom: calc(100% + 8px);
+}
+
+.tooltip > .tooltip-text-BC {
+  text-align: center;
   transform: translate(-50%, 0);
+  bottom: calc(100% + 8px);
+}
+
+.tooltip > .tooltip-text-BR {
+  text-align: right;
+  transform: translate(-95%, 0);
+  bottom: calc(100% + 8px);
 }
 
 .tooltip:hover {
@@ -40,15 +73,50 @@ pre.output .tooltip:hover {
   background-color: #484848;
 }
 
+/* The arrow/triangle of the tooltip */
+
 .tooltip > .tooltip-text::after {
   font-size: 8px;
   content: " ";
   position: absolute;
-  top: 100%;
-  left: calc(50% - 2.5px);
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
+}
+
+.tooltip > .tooltip-text-TL::after {
+  left: calc(10% - 2.5px);
+  top: -20px;
+  border-color: transparent transparent rgba(76, 175, 80, 0.8) transparent;
+}
+
+.tooltip > .tooltip-text-TC::after {
+  left: calc(50% - 2.5px);
+  top: -20px;
+  border-color: transparent transparent rgba(76, 175, 80, 0.8) transparent;
+}
+
+.tooltip > .tooltip-text-TR::after {
+  left: calc(95% - 2.5px);
+  top: -20px;
+  border-color: transparent transparent rgba(76, 175, 80, 0.8) transparent;
+}
+
+.tooltip > .tooltip-text-BL::after {
+  left: calc(10% - 2.5px);
+  top: 100%;
+  border-color: rgba(76, 175, 80, 0.8) transparent transparent transparent;
+}
+
+.tooltip > .tooltip-text-BC::after {
+  left: calc(50% - 2.5px);
+  top: 100%;
+  border-color: rgba(76, 175, 80, 0.8) transparent transparent transparent;
+}
+
+.tooltip > .tooltip-text-BR::after {
+  left: calc(95% - 2.5px);
+  top: 100%;
   border-color: rgba(76, 175, 80, 0.8) transparent transparent transparent;
 }
 

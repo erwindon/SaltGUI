@@ -22,7 +22,7 @@ export class Utils {
     return Utils._getQueryParam2(w.location.href, pName);
   }
 
-  static addToolTip(pTooltipHost, pTooltipText) {
+  static addToolTip(pTooltipHost, pTooltipText, pStyle="BC") {
 
     // Users may want to switch this on to improve browser performance
     const toolTipMode = window.sessionStorage.getItem("tooltip_mode");
@@ -38,6 +38,7 @@ export class Utils {
 
     const tooltipSpan = Route.createSpan("", pTooltipText);
     tooltipSpan.classList.add("tooltip-text");
+    tooltipSpan.classList.add("tooltip-text-" + pStyle);
     pTooltipHost.classList.add("tooltip");
 
     // remove the old tooltip...
@@ -98,10 +99,10 @@ export class Utils {
     table.parentElement.insertBefore(searchButton, table);
   }
 
-  static addTableHelp(pStartElement, pHelpText) {
+  static addTableHelp(pStartElement, pHelpText, pStyle="BR") {
     const helpButton = pStartElement.querySelector("#help");
     helpButton.classList.add("search");
-    Utils.addToolTip(helpButton, pHelpText);
+    Utils.addToolTip(helpButton, pHelpText, pStyle);
   }
 
   static _hideShowTableSearchBar(pStartElement) {
