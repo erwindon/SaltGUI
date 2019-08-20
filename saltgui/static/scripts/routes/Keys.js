@@ -148,10 +148,19 @@ export class KeysRoute extends PageRoute {
   }
 
   _addAcceptedMinion(pContainer, pMinionId) {
-    this.addMinion(pContainer, pMinionId, 1);
+    const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
+
+    minionTr.appendChild(Route.createTd("minion-id", pMinionId));
+
+    const accepted = Route.createTd("status", "accepted");
+    accepted.classList.add("accepted");
+    minionTr.appendChild(accepted);
+
+    // force same columns on all rows
+    // do not use class "fingerprint" yet
+    minionTr.appendChild(Route.createTd("os", "loading..."));
 
     // preliminary dropdown menu
-    const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
     const menu = new DropDownMenu(minionTr);
     this._addMenuItemWheelKeyReject(menu, pMinionId, " include_accepted=true");
     this._addMenuItemWheelKeyDelete(menu, pMinionId, "");

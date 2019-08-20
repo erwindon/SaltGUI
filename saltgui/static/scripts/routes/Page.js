@@ -67,8 +67,7 @@ export class PageRoute extends Route {
       // construct a basic element that can be updated
       minionTr = document.createElement("tr");
       minionTr.id = id;
-      pContainer.appendChild(minionTr);
-      return minionTr;
+      pContainer.querySelector("tbody").appendChild(minionTr);
     }
 
     // remove existing content
