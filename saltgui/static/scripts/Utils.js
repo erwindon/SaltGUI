@@ -73,7 +73,7 @@ export class Utils {
 
   static addErrorToTableCell(pTd, pErrorMessage) {
     const span = Route.createSpan("", "(error)");
-    Utils.addToolTip(span, pErrorMessage);
+    Utils.addToolTip(span, pErrorMessage, "BL");
     pTd.appendChild(span);
   }
 
