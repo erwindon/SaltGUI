@@ -163,9 +163,11 @@ export class Router {
     const wheelConfigValuesPromise = this.api.getWheelConfigValues();
     // don't act in the callbacks
     // Api.apiRequest will do all the work
-    wheelConfigValuesPromise.then(pWheelConfigValuesData =>
-      { }, pWheelConfigValuesMsg =>
-      { });
+    wheelConfigValuesPromise.then(pWheelConfigValuesData => {
+      // VOID
+    }, pWheelConfigValuesMsg => {
+      // VOID
+    });
   }
 
   _registerRoute(pRoute) {
