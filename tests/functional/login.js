@@ -109,7 +109,7 @@ describe('Funtional tests', function() {
         .evaluate( () => { return document.location.href; })
         .then(function (href) {
           // and we a redirected to the login page
-          assert.equal(href,'http://localhost:3333/login');
+          assert.equal(href,'http://localhost:3333/login?reason=no-session');
           done();
         })
         .catch(done);
