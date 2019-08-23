@@ -12,7 +12,7 @@ export class BeaconsRoute extends PageRoute {
     this.updateMinion = this.updateMinion.bind(this);
 
     // The new columns are not yet sortable, make sure they are.
-    // First detroy all the default sorting handlers.
+    // First destroy all the default sorting handlers.
     // A (deep)copy of an element does not copy its handlers.
     const oldHead = this.pageElement.querySelector("#page-beacons table thead");
     const newHead = oldHead.cloneNode(true);

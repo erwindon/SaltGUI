@@ -30,7 +30,7 @@ export class GrainsRoute extends PageRoute {
     }
 
     // The new columns are not yet sortable, make sure they are.
-    // First detroy all the default sorting handlers.
+    // First destroy all the default sorting handlers.
     // A (deep)copy of a minionTr does not copy its handlers.
     const oldHead = this.pageElement.querySelector("#page-grains table thead");
     const newHead = oldHead.cloneNode(true);
