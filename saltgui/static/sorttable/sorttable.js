@@ -97,7 +97,7 @@ sorttable = {
             sorttable.reverse(this.sorttable_tbody);
             this.className = this.className.replace('sorttable_sorted',
                                                     'sorttable_sorted_reverse');
-            this.removeChild(document.getElementById('sorttable_sortfwdind'));
+            this.removeChild(this.parentElement.querySelector('#sorttable_sortfwdind'));
             sortrevind = document.createElement('span');
             sortrevind.id = "sorttable_sortrevind";
             // u2191 = UPWARDS ARROW
@@ -111,7 +111,7 @@ sorttable = {
             sorttable.reverse(this.sorttable_tbody);
             this.className = this.className.replace('sorttable_sorted_reverse',
                                                     'sorttable_sorted');
-            this.removeChild(document.getElementById('sorttable_sortrevind'));
+            this.removeChild(this.parentElement.querySelector('#sorttable_sortrevind'));
             sortfwdind = document.createElement('span');
             sortfwdind.id = "sorttable_sortfwdind";
             // u2193 = DOWNWARDS ARROW
@@ -128,9 +128,9 @@ sorttable = {
               cell.className = cell.className.replace('sorttable_sorted','');
             }
           });
-          sortfwdind = document.getElementById('sorttable_sortfwdind');
+          sortfwdind = this.parentElement.querySelector('#sorttable_sortfwdind');
           if (sortfwdind) { sortfwdind.parentNode.removeChild(sortfwdind); }
-          sortrevind = document.getElementById('sorttable_sortrevind');
+          sortrevind = this.parentElement.querySelector('#sorttable_sortrevind');
           if (sortrevind) { sortrevind.parentNode.removeChild(sortrevind); }
 
           const reverse = sortfwdind !== null;
