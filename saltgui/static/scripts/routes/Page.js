@@ -448,7 +448,7 @@ export class PageRoute extends Route {
         statusSpan.innerText = "(error)";
         // we show the tooltip here so that the user is invited to click on this
         // the user then sees other rows being updated without becoming invisible
-        Utils.addToolTip(statusSpan, pData, "BL");
+        Utils.addToolTip(statusSpan, pData, "bottom-left");
       }
       return;
     }
@@ -462,7 +462,7 @@ export class PageRoute extends Route {
       statusSpan.innerText = "done";
       // we show the tooltip here so that the user is invited to click on this
       // the user then sees other rows being updated without becoming invisible
-      Utils.addToolTip(statusSpan, "Click to refresh", "BL");
+      Utils.addToolTip(statusSpan, "Click to refresh", "bottom-left");
     }
 
     const jobs = pData.return[0];
@@ -487,7 +487,7 @@ export class PageRoute extends Route {
       statusSpan.appendChild(Utils.createJobStatusSpan(k));
       statusSpan.appendChild(document.createTextNode(statusText.substring(2)));
 
-      Utils.addToolTip(statusSpan, "Click to refresh", "BL");
+      Utils.addToolTip(statusSpan, "Click to refresh", "bottom-left");
     }
   }
 
@@ -618,7 +618,7 @@ export class PageRoute extends Route {
     const td = Route.createTd("", "");
     td.colSpan = 99;
     const span = Route.createSpan("", "(error)");
-    Utils.addToolTip(span, pData, "BL");
+    Utils.addToolTip(span, pData, "bottom-left");
     td.appendChild(span);
 
     const tr = document.createElement("tr");

@@ -22,7 +22,7 @@ export class Utils {
     return Utils._getQueryParam2(w.location.href, pName);
   }
 
-  static addToolTip(pTooltipHost, pTooltipText, pStyle="BC") {
+  static addToolTip(pTooltipHost, pTooltipText, pStyle="bottom-center") {
 
     // Users may want to switch this on to improve browser performance
     const toolTipMode = window.sessionStorage.getItem("tooltip_mode");
@@ -73,7 +73,7 @@ export class Utils {
 
   static addErrorToTableCell(pTd, pErrorMessage) {
     const span = Route.createSpan("", "(error)");
-    Utils.addToolTip(span, pErrorMessage, "BL");
+    Utils.addToolTip(span, pErrorMessage, "bottom-left");
     pTd.appendChild(span);
   }
 
@@ -99,7 +99,7 @@ export class Utils {
     table.parentElement.insertBefore(searchButton, table);
   }
 
-  static addTableHelp(pStartElement, pHelpText, pStyle="BR") {
+  static addTableHelp(pStartElement, pHelpText, pStyle="bottom-right") {
     const helpButton = pStartElement.querySelector("#help");
     helpButton.classList.add("search");
     Utils.addToolTip(helpButton, pHelpText, pStyle);

@@ -340,7 +340,7 @@ export class JobRoute extends Route {
 
     if(typeof pData !== "object") {
       summaryJobsActiveSpan.innerText = "(error)";
-      Utils.addToolTip(summaryJobsActiveSpan, pData, "BR");
+      Utils.addToolTip(summaryJobsActiveSpan, pData, "bottom-right");
       return;
     }
 
@@ -370,7 +370,7 @@ export class JobRoute extends Route {
       window.location.reload()
     );
     summaryJobsActiveSpan.style.cursor = "pointer";
-    Utils.addToolTip(summaryJobsActiveSpan, "Click to refresh", "BL");
+    Utils.addToolTip(summaryJobsActiveSpan, "Click to refresh", "bottom-left");
 
     // update the minion details
     for(const minionInfo of info.Running) {

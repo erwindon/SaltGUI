@@ -20,17 +20,17 @@
   bottom: calc(100% + 8px);
 }
 
-.tooltip > .tooltip-text-BL {
+.tooltip > .tooltip-text-bottom-left {
   text-align: left;
   transform: translate(-10%, 0);
 }
 
-.tooltip > .tooltip-text-BC {
+.tooltip > .tooltip-text-bottom-center {
   text-align: center;
   transform: translate(-50%, 0);
 }
 
-.tooltip > .tooltip-text-BR {
+.tooltip > .tooltip-text-bottom-right {
   text-align: right;
   transform: translate(-95%, 0);
 }
@@ -66,15 +66,15 @@ pre.output .tooltip:hover {
   border-color: rgba(76, 175, 80, 0.8) transparent transparent transparent;
 }
 
-.tooltip > .tooltip-text-BL::after {
+.tooltip > .tooltip-text-bottom-left::after {
   left: calc(10% - 2.5px);
 }
 
-.tooltip > .tooltip-text-BC::after {
+.tooltip > .tooltip-text-bottom-center::after {
   left: calc(50% - 2.5px);
 }
 
-.tooltip > .tooltip-text-BR::after {
+.tooltip > .tooltip-text-bottom-right::after {
   left: calc(95% - 2.5px);
 }
 
