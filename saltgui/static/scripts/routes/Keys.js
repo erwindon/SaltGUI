@@ -153,6 +153,7 @@ export class KeysRoute extends PageRoute {
     minionTr.appendChild(Route.createTd("minion-id", pMinionId));
 
     const accepted = Route.createTd("status", "accepted");
+    accepted.setAttribute("sorttable_customkey", 2);
     accepted.classList.add("accepted");
     minionTr.appendChild(accepted);
 
@@ -172,6 +173,7 @@ export class KeysRoute extends PageRoute {
     minionTr.appendChild(Route.createTd("minion-id", pMinionId));
 
     const rejected = Route.createTd("status", "rejected");
+    rejected.setAttribute("sorttable_customkey", 4);
     rejected.classList.add("rejected");
     minionTr.appendChild(rejected);
 
@@ -193,6 +195,7 @@ export class KeysRoute extends PageRoute {
     minionTr.appendChild(Route.createTd("minion-id", pMinionId));
 
     const denied = Route.createTd("status", "denied");
+    denied.setAttribute("sorttable_customkey", 3);
     denied.classList.add("denied");
     minionTr.appendChild(denied);
 
@@ -209,12 +212,15 @@ export class KeysRoute extends PageRoute {
     pContainer.tBodies[0].appendChild(minionTr);
   }
 
-  _addPreMinion(pContainer, pMinionId) {
+  _addPreMinion(pContainer, pMinionId, pInsertAtTop=false) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
     minionTr.appendChild(Route.createTd("minion-id", pMinionId));
 
     const pre = Route.createTd("status", "unaccepted");
+    // unaccepted comes first because user action is needed
+    // all others have the same order as in 'salt-key'
+    pre.setAttribute("sorttable_customkey", 1);
     pre.classList.add("unaccepted");
     minionTr.appendChild(pre);
 
