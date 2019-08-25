@@ -32,7 +32,7 @@ sorttable = {
     sorttable.DATE_RE = /^(\d\d?)[\/\.-](\d\d?)[\/\.-]((\d\d)?\d\d)$/;
 
     forEach(document.getElementsByTagName('table'), function(table) {
-      if (table.className.search(/\bsortable\b/) != -1) {
+      if (table.classList.contains("sortable")) {
         sorttable.makeSortable(table);
       }
     });
@@ -58,7 +58,7 @@ sorttable = {
     // for backwards compatibility, move them to tfoot (creating it if needed).
     sortbottomrows = [];
     for (var i=0; i<table.rows.length; i++) {
-      if (table.rows[i].className.search(/\bsortbottom\b/) != -1) {
+      if (table.rows[i].classList.contains("sortbottom")) {
         sortbottomrows[sortbottomrows.length] = table.rows[i];
       }
     }
@@ -78,7 +78,7 @@ sorttable = {
     headrow = table.tHead.rows[0].cells;
     for (var i=0; i<headrow.length; i++) {
       // manually override the type with a sorttable_type attribute
-      if (!headrow[i].className.match(/\bsorttable_nosort\b/)) { // skip this col
+      if (!headrow[i].classList.contains("sorttable_nosort")) { // skip this col
         mtch = headrow[i].className.match(/\bsorttable_([a-z0-9]+)\b/);
         if (mtch) { override = mtch[1]; }
 	      if (mtch && typeof sorttable["sort_"+override] == 'function') {
@@ -91,12 +91,12 @@ sorttable = {
 	      headrow[i].sorttable_tbody = table.tBodies[0];
 	      dean_addEvent(headrow[i],"click", sorttable.innerSortFunction = function(e) {
 
-          if (false && this.className.search(/\bsorttable_sorted\b/) != -1) {
+          if (false && this.classList.contains("sorttable_sorted")) {
             // if we're already sorted by this column, just
             // reverse the table, which is quicker
             sorttable.reverse(this.sorttable_tbody);
-            this.className = this.className.replace('sorttable_sorted',
-                                                    'sorttable_sorted_reverse');
+            this.classList.remove("sorttable_sorted");
+            this.classList.add("sorttable_sorted_reverse");
             this.removeChild(this.parentElement.querySelector('#sorttable_sortfwdind'));
             sortrevind = document.createElement('span');
             sortrevind.id = "sorttable_sortrevind";
@@ -105,12 +105,12 @@ sorttable = {
             this.appendChild(sortrevind);
             return;
           }
-          if (false && this.className.search(/\bsorttable_sorted_reverse\b/) != -1) {
+          if (false && this.classList.contains("sorttable_sorted_reverse")) {
             // if we're already sorted by this column in reverse, just
             // re-reverse the table, which is quicker
             sorttable.reverse(this.sorttable_tbody);
-            this.className = this.className.replace('sorttable_sorted_reverse',
-                                                    'sorttable_sorted');
+            this.classList.remove("sorttable_sorted_reverse");
+            this.classList.add("sorttable_sorted");
             this.removeChild(this.parentElement.querySelector('#sorttable_sortrevind'));
             sortfwdind = document.createElement('span');
             sortfwdind.id = "sorttable_sortfwdind";
@@ -124,8 +124,8 @@ sorttable = {
           theadrow = this.parentNode;
           forEach(theadrow.childNodes, function(cell) {
             if (cell.nodeType == 1) { // an element
-              cell.className = cell.className.replace('sorttable_sorted_reverse','');
-              cell.className = cell.className.replace('sorttable_sorted','');
+              cell.classList.remove("sorttable_sorted_reverse");
+              cell.classList.remove("sorttable_sorted");
             }
           });
           sortfwdind = this.parentElement.querySelector('#sorttable_sortfwdind');
@@ -135,14 +135,14 @@ sorttable = {
 
           const reverse = sortfwdind !== null;
           if(sortfwdind) {
-            this.className += ' sorttable_sorted_reverse';
+            this.classList.add("sorttable_sorted_reverse");
             sortrevind = document.createElement('span');
             sortrevind.id = "sorttable_sortrevind";
             // u2191 = UPWARDS ARROW
             sortrevind.innerHTML = stIsIE ? '&nbsp;<font face="webdings">5</font>' : '&nbsp;\u2191';
             this.appendChild(sortrevind);
           } else {
-            this.className += ' sorttable_sorted';
+            this.classList.add("sorttable_sorted");
             sortfwdind = document.createElement('span');
             sortfwdind.id = "sorttable_sortfwdind";
             // u2193 = DOWNWARDS ARROW
