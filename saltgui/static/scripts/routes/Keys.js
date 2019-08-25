@@ -234,7 +234,13 @@ export class KeysRoute extends PageRoute {
     this._addMenuItemWheelKeyReject(menu, pMinionId, "");
     this._addMenuItemWheelKeyDelete(menu, pMinionId, "");
 
-    pContainer.tBodies[0].appendChild(minionTr);
+    if(pInsertAtTop) {
+      // used for event based additions
+      pContainer.tBodies[0].insertBefore(minionTr, pContainer.tBodies[0].firstChild);
+    } else {
+      // used for query based additions (when building page)
+      pContainer.tBodies[0].appendChild(minionTr);
+    }
   }
 
   _addMenuItemWheelKeyAccept(pMenu, pMinionId, extra) {
@@ -290,8 +296,11 @@ export class KeysRoute extends PageRoute {
       // before the full list was received
       return;
     } else {
+      // new items will be added at the bottom of the table
+      // except new pending keys, which come at the top.
+      // so that it gets the proper attention.
       if(pData.act === "pend") {
-        this._addPreMinion(table, pData.id);
+        this._addPreMinion(table, pData.id, true);
         Utils.tableReSort(this.getPageElement());
       } else if(pData.act === "accept") {
         this._addAcceptedMinion(table, pData.id);
