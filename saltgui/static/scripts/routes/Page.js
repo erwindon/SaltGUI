@@ -419,12 +419,6 @@ export class PageRoute extends Route {
       numberOfJobsShown++;
     }
 
-    const page = this.getPageElement().querySelector(".job-list");
-    if(hasHeader) {
-      Utils.showTableSortable(page, true);
-    }
-    Utils.makeTableSearchable(page);
-
     const msgDiv = this.pageElement.querySelector("div.job-list .msg");
     let txt = Utils.txtZeroOneMany(numberOfJobsShown,
       "No jobs shown", "{0} job shown", "{0} jobs shown");

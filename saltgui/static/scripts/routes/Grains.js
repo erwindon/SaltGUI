@@ -29,14 +29,8 @@ export class GrainsRoute extends PageRoute {
       tr.appendChild(th);
     }
 
-    // The new columns are not yet sortable, make sure they are.
-    // First destroy all the default sorting handlers.
-    // A (deep)copy of a minionTr does not copy its handlers.
-    const oldHead = this.pageElement.querySelector("#page-grains table thead");
-    const newHead = oldHead.cloneNode(true);
-    oldHead.parentNode.replaceChild(newHead, oldHead);
-    // Now re-start sorting logic.
-    sorttable.makeSortable(this.pageElement.querySelector("#page-grains table"));
+    Utils.makeTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
   }
 
   onShow() {
@@ -97,9 +91,6 @@ export class GrainsRoute extends PageRoute {
         window.location.assign("grainsminion?minionid=" + encodeURIComponent(minionId))
       );
     }
-
-    Utils.showTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement());
 
     const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(minionIds.length,

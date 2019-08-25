@@ -11,6 +11,9 @@ export class JobsRoute extends PageRoute {
     super("^[\/]jobs$", "Jobs", "#page-jobs", "#button-jobs", pRouter);
 
     this._getJobDetails = this._getJobDetails.bind(this);
+
+    Utils.makeTableSortable(this.getPageElement(), true);
+    Utils.makeTableSearchable(this.getPageElement());
   }
 
   onShow() {

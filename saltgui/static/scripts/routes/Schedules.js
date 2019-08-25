@@ -10,6 +10,9 @@ export class SchedulesRoute extends PageRoute {
 
     this._handleSchedulesWheelKeyListAll = this._handleSchedulesWheelKeyListAll.bind(this);
     this.updateMinion = this.updateMinion.bind(this);
+
+    Utils.makeTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
   }
 
   onShow() {
@@ -97,9 +100,6 @@ export class SchedulesRoute extends PageRoute {
         window.location.assign("schedulesminion?minionid=" + encodeURIComponent(minionId))
       );
     }
-
-    Utils.showTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement());
 
     const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(minionIds.length,

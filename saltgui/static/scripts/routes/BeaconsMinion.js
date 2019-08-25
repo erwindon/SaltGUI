@@ -18,7 +18,7 @@ export class BeaconsMinionRoute extends PageRoute {
     );
 
     Utils.addTableHelp(this.getPageElement(), "The content of column 'Value'\nis automatically refreshed");
-    Utils.showTableSortable(this.getPageElement());
+    Utils.makeTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement());
   }
 

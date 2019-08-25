@@ -9,6 +9,9 @@ export class MinionsRoute extends PageRoute {
     super("^[\/]$", "Minions", "#page-minions", "#button-minions", pRouter);
 
     this._handleMinionsWheelKeyListAll = this._handleMinionsWheelKeyListAll.bind(this);
+
+    Utils.makeTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
   }
 
   onShow() {
@@ -67,9 +70,6 @@ export class MinionsRoute extends PageRoute {
         this.runCommand(pClickEvent, minionId, "state.apply")
       );
     }
-
-    Utils.showTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement());
 
     const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(minionIds.length,

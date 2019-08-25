@@ -9,6 +9,9 @@ export class TemplatesRoute extends PageRoute {
     super("^[\/]templates$", "Templates", "#page-templates", "#button-templates", pRouter);
 
     this._handleTemplatesWheelConfigValues = this._handleTemplatesWheelConfigValues.bind(this);
+
+    Utils.makeTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
   }
 
   onShow() {
@@ -49,9 +52,6 @@ export class TemplatesRoute extends PageRoute {
       const template = templates[key];
       this._addTemplate(container, key, template);
     }
-
-    Utils.showTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement());
 
     const msgDiv = this.pageElement.querySelector("div.templates-list .msg");
     const txt = Utils.txtZeroOneMany(keys.length,

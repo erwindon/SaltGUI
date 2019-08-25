@@ -10,6 +10,9 @@ export class PillarsRoute extends PageRoute {
 
     this._handlePillarsWheelKeyListAll = this._handlePillarsWheelKeyListAll.bind(this);
     this.updateMinion = this.updateMinion.bind(this);
+
+    Utils.makeTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
   }
 
   onShow() {
@@ -66,9 +69,6 @@ export class PillarsRoute extends PageRoute {
         window.location.assign("pillarsminion?minionid=" + encodeURIComponent(minionId))
       );
     }
-
-    Utils.showTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement());
 
     const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(minionIds.length,

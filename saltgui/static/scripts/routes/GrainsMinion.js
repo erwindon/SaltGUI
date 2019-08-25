@@ -15,6 +15,9 @@ export class GrainsMinionRoute extends PageRoute {
     closeButton.addEventListener("click", pClickEvent =>
       this.router.goTo("/grains")
     );
+
+    Utils.makeTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
   }
 
   onShow() {
@@ -100,9 +103,6 @@ export class GrainsMinionRoute extends PageRoute {
         this.runCommand(pClickEvent, pMinionId, "grains.setval \"" + grainName + "\" " + JSON.stringify(grains[grainName]))
       );
     }
-
-    Utils.showTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement());
 
     const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(grainNames.length,

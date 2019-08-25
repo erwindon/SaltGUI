@@ -15,6 +15,9 @@ export class PillarsMinionRoute extends PageRoute {
     closeButton.addEventListener("click", pClickEvent =>
       this.router.goTo("/pillars")
     );
+
+    Utils.makeTableSortable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement());
   }
 
   onShow() {
@@ -140,9 +143,6 @@ export class PillarsMinionRoute extends PageRoute {
 
       container.tBodies[0].appendChild(pillar);
     }
-
-    Utils.showTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement());
 
     const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(keys.length,
