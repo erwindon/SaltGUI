@@ -121,9 +121,11 @@ sorttable = {
           }
 
           // remove sorttable_sorted classes
+          let prev_sorttable_columnindex = -1;
           theadrow = this.parentNode;
           forEach(theadrow.childNodes, function(cell) {
             if (cell.nodeType == 1) { // an element
+              if(cell.className.includes("sorttable_sorted")) prev_sorttable_columnindex = cell.sorttable_columnindex;
               cell.classList.remove("sorttable_sorted_reverse");
               cell.classList.remove("sorttable_sorted");
             }
@@ -132,6 +134,12 @@ sorttable = {
           if (sortfwdind) { sortfwdind.parentNode.removeChild(sortfwdind); }
           sortrevind = this.parentElement.querySelector('#sorttable_sortrevind');
           if (sortrevind) { sortrevind.parentNode.removeChild(sortrevind); }
+
+          if(prev_sorttable_columnindex !== this.sorttable_columnindex) {
+            // pretend reverse sorting when sorting on another column,
+            // so that new sort order is normal
+            sortfwdind = null;
+          }
 
           const reverse = sortfwdind !== null;
           if(sortfwdind) {
