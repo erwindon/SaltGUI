@@ -8,6 +8,7 @@ export class JobRoute extends Route {
 
   constructor(pRouter) {
     super("^[\/]job$", "Job", "#page-job", "", pRouter);
+
     this._handleJobRunnerJobsListJob = this._handleJobRunnerJobsListJob.bind(this);
     this.handleRunnerJobsActive = this.handleRunnerJobsActive.bind(this);
   }

@@ -53,12 +53,13 @@ export class Utils {
     pTooltipHost.appendChild(tooltipSpan);
   }
 
-  static showTableSortable(pStartElement, pIsReverseSort = false) {
-    const th = pStartElement.querySelector("table th");
-    sorttable.innerSortFunction.apply(th, []);
-    if(pIsReverseSort) sorttable.innerSortFunction.apply(th, []);
-    const tr = pStartElement.querySelector("table tr");
-    for(const th of tr.childNodes) {
+  static makeTableSortable(pStartElement, pIsReverseSort=false, pColumnNr=0) {
+    const thArr = Array.prototype.slice.call(pStartElement.querySelectorAll("table th"));
+    // we do not expect any rows in the table at this moment
+    // but sorting is applied to show the sorting indicator
+    sorttable.innerSortFunction.apply(thArr[pColumnNr], []);
+    if(pIsReverseSort) sorttable.innerSortFunction.apply(thArr[pColumnNr], []);
+    for(const th of thArr) {
       if(th.classList.contains("sorttable_nosort")) continue;
       // the tooltip is too bulky to use, skip for now
       //Utils.addToolTip(th, "Click to sort");
