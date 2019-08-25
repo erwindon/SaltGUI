@@ -283,6 +283,12 @@ export class KeysRoute extends PageRoute {
         // do not update screen
       }
       // keep the fingerprint
+    } else if(page.querySelector("table tr") === null) {
+      // only when the full list is already available
+      // this prevents a random set of records from appearing
+      // at the top of the table that happen to be received
+      // before the full list was received
+      return;
     } else {
       if(pData.act === "pend") {
         this._addPreMinion(table, pData.id);
