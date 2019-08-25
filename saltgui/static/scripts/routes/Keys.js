@@ -301,13 +301,10 @@ export class KeysRoute extends PageRoute {
       // so that it gets the proper attention.
       if(pData.act === "pend") {
         this._addPreMinion(table, pData.id, true);
-        Utils.tableReSort(this.getPageElement());
       } else if(pData.act === "accept") {
         this._addAcceptedMinion(table, pData.id);
-        Utils.tableReSort(this.getPageElement());
       } else if(pData.act === "reject") {
         this._addRejectedMinion(table, pData.id);
-        Utils.tableReSort(this.getPageElement());
       } else if(pData.act === "delete") {
         // delete of an unknown minion, never mind
       } else {

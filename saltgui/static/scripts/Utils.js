@@ -65,12 +65,6 @@ export class Utils {
     }
   }
 
-  static tableReSort(pStartElement) {
-    const th = pStartElement.querySelector("table th");
-    sorttable.innerSortFunction.apply(th, []);
-    sorttable.innerSortFunction.apply(th, []);
-  }
-
   static addErrorToTableCell(pTd, pErrorMessage) {
     const span = Route.createSpan("", "(error)");
     Utils.addToolTip(span, pErrorMessage, "bottom-left");
