@@ -28,8 +28,7 @@ describe('Funtional tests', function() {
     }
 
     browser = new Nightmare(options);
-    browser
-      .goto(url);
+    browser.goto(url);
   });
 
   describe('Login and logout', () => {
@@ -42,23 +41,28 @@ describe('Funtional tests', function() {
         })
         .evaluate( () => { return document.location.href; } )
         .then(function (href) {
-          assert.equal(href, url + 'login');
+          assert.equal(href, url + 'login?reason=no-session');
           done();
         })
         .catch(done);
     });
 
     it('we cannot login with false credentials', done => {
-      const selector = '.notice-wrapper';
       browser
-        .type('#username', 'sald')
+        // TODO username is empty in single type - why?
+        .type('#username', 'sald').type('#username', 'sald')
         .type('#password', 'sald')
         .click('#login-submit')
-        .wait('.notice')
+        .wait('#notice')
+        .wait( () => {
+          // need to wait until "no-session" notice disappeared
+          const message = document.querySelector('#notice-wrapper div').textContent;
+          return message !== 'Not logged in';
+        })
         .end()
-        .evaluate(selector => {
-          return document.querySelector('.notice-wrapper div').textContent;
-        }, selector)
+        .evaluate( () => {
+          return document.querySelector('#notice-wrapper div').textContent;
+        } )
         .then(function (message) {
           assert.equal(message, 'Authentication failed');
           done();
@@ -68,16 +72,21 @@ describe('Funtional tests', function() {
 
     it('valid credentials will redirect us to the homepage and hide the loginform', done => {
       browser
-        .type('#username', 'salt')
+        // TODO username is empty in single type - why?
+        .type('#username', 'salt').type('#username', 'salt')
         .type('#password', 'salt')
         .click('#login-submit')
-        .wait( () => {
-          // we wait here for the loginpage to be hidden
-          const loginpage = document.querySelector('#page-login');
-          return loginpage.style.display === 'none';
-        })
+        .wait('.dashboard')
         .end()
-        .evaluate( () => { return document.location.href; })
+        .wait( () => {
+          // wait for the redirection to the homepage
+          console.log(document.location.href);
+          return document.location.href === 'http://localhost:3333/';
+        })
+        .evaluate( () => {
+          console.log(document.location.href);
+          return document.location.href;
+        } )
         .then(function (href) {
           assert.equal(href, url);
           done();
@@ -87,7 +96,8 @@ describe('Funtional tests', function() {
 
     it('check that we can logout', done => {
       browser
-        .type('#username', 'salt')
+        // TODO username is empty in single type - why?
+        .type('#username', 'salt').type('#username', 'salt')
         .type('#password', 'salt')
         .click('#login-submit')
         .wait( () => {
@@ -109,7 +119,7 @@ describe('Funtional tests', function() {
         .evaluate( () => { return document.location.href; })
         .then(function (href) {
           // and we a redirected to the login page
-          assert.equal(href,'http://localhost:3333/login?reason=no-session');
+          assert.equal(href,'http://localhost:3333/login?reason=logout');
           done();
         })
         .catch(done);
