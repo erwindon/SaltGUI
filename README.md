@@ -64,6 +64,17 @@ SaltGUI supports the following authentication methods supported by salt:
 
 See the [EAUTH documentation](https://docs.saltstack.com/en/latest/topics/eauth/index.html) and the [Salt auth source code](https://github.com/saltstack/salt/tree/2018.3/salt/auth) for more information.
 
+## Command Box
+SaltGUI supports entry of commands using the "command-box". Click on `>_` in the top right corner to open it.
+
+Enter `salt-run` commands with the prefix `runners.`. e.g. `runners.jobs.last_run`. The target field can remain empty in that case as it is not used.
+
+Enter `salt-call` commands with the prefix `wheel.`. e.g. `wheel.key.finger`. The target field will be added as named parameter `target`. But note that that parameter may not actually be used depending on the command.
+
+Enter regular commands without special prefix. e.g. `test.ping`. The command is sent to the minions specified in the target field.
+
+Commands can be run normally, in which case the command runs to completion and shows the results. Alternatively, it can be started asynchronously, in which case only a small conformation is shown. Batch commands are not supported.
+
 ## Output
 SaltGUI shows the data that is returned by the Salt API.
 Some variation can be achieved by modifying salt master configuration file `/etc/salt/master`.
