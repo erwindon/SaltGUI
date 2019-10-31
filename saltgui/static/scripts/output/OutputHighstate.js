@@ -17,6 +17,7 @@ export class OutputHighstate {
     case "state.highstate":
     case "state.sls":
     case "state.sls_id":
+    case "runners.state.orchestrate":
       break;
     case "state.low":
       // almost, but it is only one task

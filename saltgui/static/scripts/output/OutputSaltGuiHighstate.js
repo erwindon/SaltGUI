@@ -52,6 +52,11 @@ export class OutputSaltGuiHighstate {
 
       const change = pTask.changes[key];
 
+      if(key === "out" && change === "highstate") {
+        // skip trivial case for orchestration
+        continue
+      }
+
       if(typeof change === "string" && Utils.isMultiLineString(change)) {
         pTaskDiv.append(document.createElement("br"));
         // show multi-line text as a separate block
