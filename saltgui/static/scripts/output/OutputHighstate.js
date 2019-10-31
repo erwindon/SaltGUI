@@ -111,10 +111,14 @@ export class OutputHighstate {
 
       let hasChanges = false;
       if(task.hasOwnProperty("changes")) {
-        const str = JSON.stringify(task.changes);
+        let changes = task.changes;
+        const keys = Object.keys(changes);
+        if(keys.length == 2 && keys[0] === "out" && keys[1] === "ret")
+          changes = changes["ret"];
+        const str = JSON.stringify(changes);
         if(str !== "{}") {
           hasChanges = true;
-          txt += "\n" + OutputNested.formatNESTED(task.changes, 14);
+          txt += "\n" + OutputNested.formatNESTED(changes, 14);
           changes += 1;
         }
       }
