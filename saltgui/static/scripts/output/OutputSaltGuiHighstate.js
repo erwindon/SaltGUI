@@ -48,14 +48,14 @@ export class OutputSaltGuiHighstate {
     let changes = 0;
     for(const key of Object.keys(pTask.changes).sort()) {
 
-      changes = changes + 1;
-
       const change = pTask.changes[key];
 
       if(key === "out" && change === "highstate") {
         // skip trivial case for orchestration
         continue
       }
+
+      changes = changes + 1;
 
       if(typeof change === "string" && Utils.isMultiLineString(change)) {
         pTaskDiv.append(document.createElement("br"));
