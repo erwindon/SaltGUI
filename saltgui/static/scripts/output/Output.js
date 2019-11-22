@@ -422,6 +422,12 @@ export class Output {
 
     let nrMultiLineBlocks = 0;
 
+    // convert state.orchestrate output back to regular highstate
+    if(pResponse.RUNNER && pResponse.RUNNER.outputter === "highstate") {
+      pResponse = pResponse.RUNNER.data;
+      pMinionData = Object.keys(pResponse);
+    }
+
     // for all other types we consider the output per minion
     // this is more generic and it simplifies the handlers
     for(const minionId of pMinionData.sort()) {
