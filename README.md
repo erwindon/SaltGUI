@@ -257,6 +257,16 @@ This excellent frontend is originally written by [Oliver Dunk](https://github.co
 
 ## Changelog
 
+## 1.18.0 (2019-11-22)
+- added missing openbsd icon (erwindon, thx hbonath)
+- added support for orchestration output (erwindon, thx gnouts)
+- clarified some documentation issues (erwindon)
+- smarter placement of tooltips (erwindon)
+- no inner-scrollbar for cmd box (erwindon)
+- hide job details with data from many minions (erwindon)
+- added menu option for state testing (erwindon)
+- more code cleanups (erwindon)
+
 ## 1.17.0 (2019-07-14)
 - Added code and instructions to set up standalone SaltGUI (dawidmalina)
 - Return to login on session timeout (erwindon)
