@@ -111,7 +111,7 @@ export class OutputHighstate {
 
       let hasChanges = false;
       if(task.hasOwnProperty("changes")) {
-        let changes = task.changes;
+        changes = task.changes;
         const keys = Object.keys(changes);
         if(keys.length == 2 && keys[0] === "out" && keys[1] === "ret")
           changes = changes["ret"];

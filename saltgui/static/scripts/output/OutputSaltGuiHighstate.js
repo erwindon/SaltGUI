@@ -52,7 +52,7 @@ export class OutputSaltGuiHighstate {
 
       if(key === "out" && change === "highstate") {
         // skip trivial case for orchestration
-        continue
+        continue;
       }
 
       changes = changes + 1;
