@@ -25,6 +25,18 @@ export class KeysRoute extends PageRoute {
     const wheelKeyFingerPromise = this.router.api.getWheelKeyFinger();
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
+    const staticMinionsTxtPromise = this.router.api.getStaticMinionsTxt();
+
+    staticMinionsTxtPromise.then(pStaticMinionsTxt => {
+      if(!pStaticMinionsTxt)
+        window.sessionStorage.setItem("minions-txt", "[]");
+      else {
+        const lines = pStaticMinionsTxt.trim().split(/\r?\n/).filter(item => !item.startsWith("#"));
+        window.sessionStorage.setItem("minions-txt", JSON.stringify(lines));
+      }
+    }, pStaticMinionsTxt => {
+      window.sessionStorage.setItem("minions-txt", "[]");
+    });
 
     wheelKeyListAllPromise.then(pWheelKeyListAllData => {
       myThis._handleKeysWheelKeyListAll(pWheelKeyListAllData);
@@ -92,25 +104,48 @@ export class KeysRoute extends PageRoute {
 
     const allKeys = pWheelKeyListAllData.return[0].data.return;
 
+    const minionsTxt = JSON.parse(window.sessionStorage.getItem("minions-txt"));
+
     // Unaccepted goes first because that is where the user must decide
     const minionIds_pre = allKeys.minions_pre.sort();
     for(const minionId of minionIds_pre) {
-      this._addPreMinion(table, minionId);
+      this._addPreMinion(table, minionId, minionsTxt);
     }
 
     const minionIds_accepted = allKeys.minions.sort();
     for(const minionId of minionIds_accepted) {
-      this._addAcceptedMinion(table, minionId);
+      this._addAcceptedMinion(table, minionId, minionsTxt);
     }
 
     const minionIds_denied = allKeys.minions_denied.sort();
     for(const minionId of minionIds_denied) {
-      this._addDeniedMinion(table, minionId);
+      this._addDeniedMinion(table, minionId, minionsTxt);
     }
 
     const minionIds_rejected = allKeys.minions_rejected.sort();
     for(const minionId of minionIds_rejected) {
-      this._addRejectedMinion(table, minionId);
+      this._addRejectedMinion(table, minionId, minionsTxt);
+    }
+
+    for(const minionId of minionsTxt) {
+      if(table.querySelector("#" + Utils.getIdFromMinionId(minionId))) continue;
+      const minionTr = this.getElement(table, Utils.getIdFromMinionId(minionId), "UNKNOWN");
+
+      const minionIdTd = Route.createTd("", "");
+      const minionIdSpan = Route.createSpan("minion-id", minionId);
+      minionIdTd.appendChild(minionIdSpan);
+      Utils.addToolTip(minionIdSpan, "Entry is missing\nIs the host running and is the salt-minion installed and started?\nUpdate file 'minions.txt' when needed", "bottom-left");
+      minionIdTd.style.color = "red";
+      minionTr.appendChild(minionIdTd);
+
+      const unknown = Route.createTd("status", "unknown");
+      unknown.setAttribute("sorttable_customkey", 5);
+      unknown.classList.add("unknown");
+      minionTr.appendChild(unknown);
+
+      minionTr.appendChild(Route.createTd("os", ""));
+
+      minionTr.appendChild(Route.createTd("", ""));
     }
 
     this._updateTableSummary(table);
@@ -147,10 +182,18 @@ export class KeysRoute extends PageRoute {
     msgDiv.innerText = summary;
   }
 
-  _addAcceptedMinion(pContainer, pMinionId) {
+  _addAcceptedMinion(pContainer, pMinionId, pMinionsTxt) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    minionTr.appendChild(Route.createTd("minion-id", pMinionId));
+    const minionIdTd = Route.createTd("", "");
+    const minionIdSpan = Route.createSpan("minion-id", pMinionId);
+    minionIdTd.appendChild(minionIdSpan);
+    if(pMinionsTxt.length && !pMinionsTxt.includes(pMinionId)) {
+      Utils.addToolTip(minionIdSpan, "Unexpected entry\nThis entry may need to be rejected!\nUpdate file 'minions.txt' when needed", "bottom-left");
+      minionIdTd.style.color = "red";
+      minionIdTd.style.fontWeight = "bold";
+    }
+    minionTr.appendChild(minionIdTd);
 
     const accepted = Route.createTd("status", "accepted");
     accepted.setAttribute("sorttable_customkey", 2);
@@ -167,10 +210,17 @@ export class KeysRoute extends PageRoute {
     this._addMenuItemWheelKeyDelete(menu, pMinionId, "");
   }
 
-  _addRejectedMinion(pContainer, pMinionId) {
+  _addRejectedMinion(pContainer, pMinionId, pMinionsTxt) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    minionTr.appendChild(Route.createTd("minion-id", pMinionId));
+    const minionIdTd = Route.createTd("", "");
+    const minionIdSpan = Route.createSpan("minion-id", pMinionId);
+    minionIdTd.appendChild(minionIdSpan);
+    if(pMinionsTxt.length && !pMinionsTxt.includes(pMinionId)) {
+      Utils.addToolTip(minionIdSpan, "Unexpected entry\nBut it is already rejected\nUpdate file 'minions.txt' when needed", "bottom-left");
+      minionIdTd.style.color = "red";
+    }
+    minionTr.appendChild(minionIdTd);
 
     const rejected = Route.createTd("status", "rejected");
     rejected.setAttribute("sorttable_customkey", 4);
@@ -189,10 +239,17 @@ export class KeysRoute extends PageRoute {
     pContainer.tBodies[0].appendChild(minionTr);
   }
 
-  _addDeniedMinion(pContainer, pMinionId) {
+  _addDeniedMinion(pContainer, pMinionId, pMinionsTxt) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    minionTr.appendChild(Route.createTd("minion-id", pMinionId));
+    const minionIdTd = Route.createTd("", "");
+    const minionIdSpan = Route.createSpan("minion-id", pMinionId);
+    minionIdTd.appendChild(minionIdSpan);
+    if(pMinionsTxt.length && !pMinionsTxt.includes(pMinionId)) {
+      Utils.addToolTip(minionIdSpan, "Unexpected entry\nBut it is already denied\nUpdate file 'minions.txt' when needed", "bottom-left");
+      minionIdTd.style.color = "red";
+    }
+    minionTr.appendChild(minionIdTd);
 
     const denied = Route.createTd("status", "denied");
     denied.setAttribute("sorttable_customkey", 3);
@@ -212,10 +269,18 @@ export class KeysRoute extends PageRoute {
     pContainer.tBodies[0].appendChild(minionTr);
   }
 
-  _addPreMinion(pContainer, pMinionId, pInsertAtTop=false) {
+  _addPreMinion(pContainer, pMinionId, pMinionsTxt, pInsertAtTop=false) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    minionTr.appendChild(Route.createTd("minion-id", pMinionId));
+    const minionIdTd = Route.createTd("", "");
+    const minionIdSpan = Route.createSpan("minion-id", pMinionId);
+    minionIdTd.appendChild(minionIdSpan);
+    if(pMinionsTxt.length && !pMinionsTxt.includes(pMinionId)) {
+      Utils.addToolTip(minionIdSpan, "Unexpected entry\nDo not accept this entry without proper verification!\nUpdate file 'minions.txt' when needed", "bottom-left");
+      minionIdTd.style.color = "red";
+      minionIdTd.style.fontWeight = "bold";
+    }
+    minionTr.appendChild(minionIdTd);
 
     const pre = Route.createTd("status", "unaccepted");
     // unaccepted comes first because user action is needed
@@ -265,6 +330,7 @@ export class KeysRoute extends PageRoute {
     const page = document.getElementById("page-keys");
     const table = page.querySelector("#minions");
     const tr = page.querySelector("table tr#" + Utils.getIdFromMinionId(pData.id));
+    const minionsTxt = JSON.parse(window.sessionStorage.getItem("minions-txt"));
     if(tr) {
       const statusTd = tr.querySelector(".status");
       // drop all other classes (accepted, rejected, etc)
@@ -300,11 +366,11 @@ export class KeysRoute extends PageRoute {
       // except new pending keys, which come at the top.
       // so that it gets the proper attention.
       if(pData.act === "pend") {
-        this._addPreMinion(table, pData.id, true);
+        this._addPreMinion(table, pData.id, minionsTxt, true);
       } else if(pData.act === "accept") {
-        this._addAcceptedMinion(table, pData.id);
+        this._addAcceptedMinion(table, pData.id, minionsTxt);
       } else if(pData.act === "reject") {
-        this._addRejectedMinion(table, pData.id);
+        this._addRejectedMinion(table, pData.id, minionsTxt);
       } else if(pData.act === "delete") {
         // delete of an unknown minion, never mind
       } else {
