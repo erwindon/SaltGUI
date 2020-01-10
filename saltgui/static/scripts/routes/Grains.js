@@ -146,9 +146,26 @@ export class GrainsRoute extends PageRoute {
       const td = Route.createTd("", "");
       const grainName = this._previewGrains[i];
       if(typeof pMinionData === "object") {
-        if(grainName in pMinionData) {
-          td.innerText = Output.formatObject(pMinionData[grainName]);
-          td.classList.add("grain-value");
+        if(grainName.startsWith("$")) {
+          // it is a json path
+          const obj = jsonPath(pMinionData, grainName);
+          if(Array.isArray(obj)) {
+            td.innerText = Output.formatObject(obj[0]);
+            td.classList.add("grain-value");
+          }
+        } else {
+          // a plain grain-name or a path in the grains.get style
+          const grainNames = grainName.split(":");
+          let obj = pMinionData;
+          for(const gn of grainNames) {
+            if(obj) {
+              obj = obj[gn];
+            }
+          }
+          if(obj) {
+            td.innerText = Output.formatObject(obj);
+            td.classList.add("grain-value");
+          }
         }
       } else {
         Utils.addErrorToTableCell(td, pMinionData);
