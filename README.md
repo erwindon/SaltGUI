@@ -265,6 +265,11 @@ SaltGUI includes these libraries (with possible modifications):
 
 ## Changelog
 
+## 1.19.0 (2020-03-08)
+- Allow jsonpath for grain preview (erwindon, thx alexlllll)
+- Details on Jobs page now initially shown using timer loop (erwindon)
+- Celebrating 200 stars on GitHub
+
 ## 1.18.0 (2019-11-22)
 - added missing openbsd icon (erwindon, thx hbonath)
 - added support for orchestration output (erwindon, thx gnouts)
