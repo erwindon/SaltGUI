@@ -11,6 +11,7 @@ export class JobsRoute extends PageRoute {
     super("^[\/]jobs$", "Jobs", "#page-jobs", "#button-jobs", pRouter);
 
     this._getJobDetails = this._getJobDetails.bind(this);
+    this._updateNextJob = this._updateNextJob.bind(this);
 
     Utils.makeTableSortable(this.getPageElement(), true);
     Utils.makeTableSearchable(this.getPageElement());
@@ -58,6 +59,26 @@ export class JobsRoute extends PageRoute {
     }, pRunnerJobsListJobsMsg => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     }); 
+
+    // to update details
+    // interval should be larger than the retrieval time
+    // to prevent many of such jobs to appear
+    setInterval(this._updateNextJob, 1000);
+  }
+
+  _updateNextJob() {
+    const tbody = this.pageElement.querySelector("table#jobs tbody");
+    // find an item still marked as "(click)"
+    for(const tr of tbody.rows) {
+      const detailsField = tr.querySelector("td.details span");
+      if(detailsField.innerText !== "(click)") continue;
+      const jobId = tr.querySelector("td").innerText;
+      detailsField.classList.add("no-status");
+      detailsField.innerText = "loading...";
+      this._getJobDetails(jobId);
+      // only update one item at a time
+      return;
+    }
   }
 
   _addMenuItemShowSomeWhenNeeded(pMenu) {
