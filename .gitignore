@@ -7,3 +7,4 @@ npm-debug.log
 yarn.lock
 .nyc_output/
 package-lock.json
+saltgui/static/minions.txt

@@ -18,6 +18,7 @@ A new open source web interface for managing a SaltStack server. Built using van
 - View the schedules for a particular minion
 - View the values for pillars for a particular minion
 - View the beacons for a particular minion
+- Match list of minions against reference list
 
 
 ## Quick start using PAM as authentication method
@@ -177,6 +178,18 @@ This parameter forces SaltGUI to use a very simple tooltip representation.
 This is then the built-in version from the brower.
 Typical effect is that it is shown slightly delayed and that is looks a bit primitive.
 The only other allowed value is "none", with the effect that no tooltips are shown at all.
+
+## Key administration
+In situations like cloud hosting, hosts may be deleted or shutdown frequently.
+But Salt remembers the key status from both.
+SaltGUI can compare the list of keys agains a reference list.
+The reference list is maintained as a text file, one minion name per line.
+Lines starting with '#' are comment lines.
+The filename is `saltgui/static/minions.txt`.
+All differences with this file are highlighted on the Keys page.
+When the file is absent or empty, no such validation is done.
+It is suggested that the file is generated from a central source,
+e.g. the Azure, AWS or similar cloud portals; or from a company asset management list.
 
 ## Separate SaltGUI host
 In some specific environments you might not be able to serve SaltGUI directly from salt-api.

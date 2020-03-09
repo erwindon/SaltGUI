@@ -63,6 +63,10 @@ export class API {
       });
   }
 
+  getStaticMinionsTxt() {
+    return this.apiRequest("GET", "/static/minions.txt");
+  }
+
   getLocalBeaconsList(pMinionId) {
     const params = {
       client: "local",
@@ -202,6 +206,7 @@ export class API {
       "X-Auth-Token": token !== null ? token : "",
       "Cache-Control": "no-cache"
     };
+    if(pRoute.endsWith(".txt")) headers["Accept"] = "text/plain";
     const options = {
       method: pMethod,
       url: location,
@@ -213,6 +218,7 @@ export class API {
     const myThis = this;
     return fetch(location, options)
       .then(pResponse => {
+        if(pResponse.ok && pRoute.endsWith(".txt")) return pResponse.text();
         if(pResponse.ok) return pResponse.json();
         // fetch does not reject on > 300 http status codes,
         // so let's do it ourselves
@@ -241,6 +247,10 @@ export class API {
               return null;
             }
           }
+        }
+        if(pResponse.status === 404 && pRoute.endsWith(".txt")) {
+          // ok
+          return "";
         }
         throw new HTTPError(pResponse.status, pResponse.statusText);
       });
