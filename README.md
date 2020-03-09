@@ -182,8 +182,8 @@ The only other allowed value is "none", with the effect that no tooltips are sho
 ## Key administration
 In situations like cloud hosting, hosts may be deleted or shutdown frequently.
 But Salt remembers the key status from both.
-SaltGUI can compare the list of keys agains a reference list.
-The reference list is maintained as a text file, one minion name per line.
+SaltGUI can compare the list of keys against a reference list.
+The reference list is maintained as a text file, one minion-name per line.
 Lines starting with '#' are comment lines.
 The filename is `saltgui/static/minions.txt`.
 All differences with this file are highlighted on the Keys page.
@@ -277,6 +277,9 @@ SaltGUI includes these libraries (with possible modifications):
 
 
 ## Changelog
+
+## 1.19.1 (2020-03-09)
+- Match minions against external reference list (erwindon)
 
 ## 1.19.0 (2020-03-08)
 - Allow jsonpath for grain preview (erwindon, thx alexlllll)
