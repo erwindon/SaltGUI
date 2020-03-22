@@ -22,6 +22,8 @@ export class MinionsRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
+    this.loadMinionsTxt();
+
     wheelKeyListAllPromise.then(pWheelKeyListAllData => {
       myThis._handleMinionsWheelKeyListAll(pWheelKeyListAllData);
       localGrainsItemsPromise.then(pLocalGrainsItemsData => {
@@ -77,8 +79,8 @@ export class MinionsRoute extends PageRoute {
     msgDiv.innerText = txt;
   }
 
-  updateOfflineMinion(pContainer, pMinionId) {
-    super.updateOfflineMinion(pContainer, pMinionId);
+  updateOfflineMinion(pContainer, pMinionId, pMinionTxt) {
+    super.updateOfflineMinion(pContainer, pMinionId, pMinionTxt);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 

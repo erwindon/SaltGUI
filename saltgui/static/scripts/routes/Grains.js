@@ -106,8 +106,8 @@ export class GrainsRoute extends PageRoute {
     msgDiv.innerText = txt;
   }
 
-  updateOfflineMinion(pContainer, pMinionId) {
-    super.updateOfflineMinion(pContainer, pMinionId);
+  updateOfflineMinion(pContainer, pMinionId, pMinionTxt) {
+    super.updateOfflineMinion(pContainer, pMinionId, pMinionTxt);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 

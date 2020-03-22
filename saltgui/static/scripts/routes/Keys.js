@@ -25,18 +25,8 @@ export class KeysRoute extends PageRoute {
     const wheelKeyFingerPromise = this.router.api.getWheelKeyFinger();
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
-    const staticMinionsTxtPromise = this.router.api.getStaticMinionsTxt();
 
-    staticMinionsTxtPromise.then(pStaticMinionsTxt => {
-      if(!pStaticMinionsTxt)
-        window.sessionStorage.setItem("minions-txt", "[]");
-      else {
-        const lines = pStaticMinionsTxt.trim().split(/\r?\n/).filter(item => !item.startsWith("#"));
-        window.sessionStorage.setItem("minions-txt", JSON.stringify(lines));
-      }
-    }, pStaticMinionsTxt => {
-      window.sessionStorage.setItem("minions-txt", "[]");
-    });
+    this.loadMinionsTxt();
 
     wheelKeyListAllPromise.then(pWheelKeyListAllData => {
       myThis._handleKeysWheelKeyListAll(pWheelKeyListAllData);
@@ -127,7 +117,7 @@ export class KeysRoute extends PageRoute {
       this._addRejectedMinion(table, minionId, minionsTxt);
     }
 
-    for(const minionId of minionsTxt) {
+    for(const minionId of Object.keys(minionsTxt)) {
       if(table.querySelector("#" + Utils.getIdFromMinionId(minionId))) continue;
       const minionTr = this.getElement(table, Utils.getIdFromMinionId(minionId), "UNKNOWN");
 
@@ -188,7 +178,7 @@ export class KeysRoute extends PageRoute {
     const minionIdTd = Route.createTd("", "");
     const minionIdSpan = Route.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
-    if(pMinionsTxt && pMinionsTxt.length && !pMinionsTxt.includes(pMinionId)) {
+    if(Object.keys(pMinionsTxt).length && !Object.keys(pMinionsTxt).includes(pMinionId)) {
       Utils.addToolTip(minionIdSpan, "Unexpected entry\nThis entry may need to be rejected!\nUpdate file 'minions.txt' when needed", "bottom-left");
       minionIdTd.style.color = "red";
       minionIdTd.style.fontWeight = "bold";
@@ -216,7 +206,7 @@ export class KeysRoute extends PageRoute {
     const minionIdTd = Route.createTd("", "");
     const minionIdSpan = Route.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
-    if(pMinionsTxt.length && !pMinionsTxt.includes(pMinionId)) {
+    if(Object.keys(pMinionsTxt).length && !Object.keys(pMinionsTxt).includes(pMinionId)) {
       Utils.addToolTip(minionIdSpan, "Unexpected entry\nBut it is already rejected\nUpdate file 'minions.txt' when needed", "bottom-left");
       minionIdTd.style.color = "red";
     }
@@ -245,7 +235,7 @@ export class KeysRoute extends PageRoute {
     const minionIdTd = Route.createTd("", "");
     const minionIdSpan = Route.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
-    if(pMinionsTxt.length && !pMinionsTxt.includes(pMinionId)) {
+    if(Object.keys(pMinionsTxt).length && !Object.keys(pMinionsTxt).includes(pMinionId)) {
       Utils.addToolTip(minionIdSpan, "Unexpected entry\nBut it is already denied\nUpdate file 'minions.txt' when needed", "bottom-left");
       minionIdTd.style.color = "red";
     }
@@ -275,7 +265,7 @@ export class KeysRoute extends PageRoute {
     const minionIdTd = Route.createTd("", "");
     const minionIdSpan = Route.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
-    if(pMinionsTxt.length && !pMinionsTxt.includes(pMinionId)) {
+    if(Object.keys(pMinionsTxt).length && !Object.keys(pMinionsTxt).includes(pMinionId)) {
       Utils.addToolTip(minionIdSpan, "Unexpected entry\nDo not accept this entry without proper verification!\nUpdate file 'minions.txt' when needed", "bottom-left");
       minionIdTd.style.color = "red";
       minionIdTd.style.fontWeight = "bold";
