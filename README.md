@@ -199,7 +199,7 @@ e.g. the Azure, AWS or similar cloud portals; or from a company asset management
 
 ## Separate SaltGUI host
 In some specific environments you might not be able to serve SaltGUI directly from salt-api.
-In that case you might want to configure a web server (for example NGINX) to serve SaltGui 
+In that case you might want to configure a web server (for example NGINX) to serve SaltGui
 and use it as proxy to salt-api so that requests are answered from the same origin from the browser point of view.
 
 Sample NGINX configuration might look like this:
@@ -229,12 +229,15 @@ server {
 }
 ```
 
-The value of the `API_URL` in the `config.js` file shall point to path where salt-api is exposed. 
+The value of the `API_URL` in the `config.js` file must point to path where salt-api is exposed.
+The value of the `NAV_URL` in the `config.js` file must point to path where the SaltGUI application is exposed.
 ```
 const config = {
-  API_URL: '/api'
+  API_URL: '/api',
+  NAV_URL: '/app'
 };
 ```
+Note that the main page of SaltGUI is then located at '/app/'. When you want '/app' to work as well, you should instruct an intermediate proxy server to translate '/app' into '/app/'.
 
 > Currently you can't use totally independent salt-api without proxy as support for CORS preflight request is not properly support.
 
