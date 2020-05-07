@@ -45,7 +45,8 @@ export class TemplatesRoute extends PageRoute {
     if(PageRoute.showErrorRowInstead(container, pWheelConfigValuesData)) return;
 
     // should we update it or just use from cache (see commandbox) ?
-    const templates = pWheelConfigValuesData.return[0].data.return.saltgui_templates;
+    let templates = pWheelConfigValuesData.return[0].data.return.saltgui_templates;
+    if(!templates) templates = {};
     window.sessionStorage.setItem("templates", JSON.stringify(templates));
     const keys = Object.keys(templates).sort();
     for(const key of keys) {
