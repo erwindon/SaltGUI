@@ -294,7 +294,7 @@ export class PageRoute extends Route {
       if(typeof pMinionData === "string") Utils.addErrorToTableCell(td, pMinionData);
       if(pMinionData.os && typeof pMinionData !== "string") {
         const img = document.createElement("img");
-        img.setAttribute("src", "static/images/os-" + pMinionData.os.replace(" ", "-").toLowerCase() + ".png");
+        img.setAttribute("src", config.NAV_URL + "/static/images/os-" + pMinionData.os.replace(" ", "-").toLowerCase() + ".png");
         img.classList.add("osimage");
         td.prepend(img);
       }
