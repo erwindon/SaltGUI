@@ -53,7 +53,9 @@ export class Router {
 
     this._registerRouterEventListeners();
 
-    this.goTo(window.location.pathname + window.location.search);
+    // This URL already has its prefix added
+    // therefore is must not be added again
+    this.goTo(window.location.pathname + window.location.search, true);
   }
 
   _registerRouterEventListeners() {
@@ -175,13 +177,16 @@ export class Router {
     if(pRoute.onRegister) pRoute.onRegister();
   }
 
-  goTo(pPath) {
+  goTo(pPath, hasPathPrefix=false) {
     if(this.switchingRoute) return;
-    if(window.location.pathname === pPath && this.currentRoute) return;
+    if(window.location.pathname === config.NAV_URL + pPath && this.currentRoute) return;
+    const pathUrl = (hasPathPrefix ? "" : config.NAV_URL) + pPath.split("?")[0];
     for(const route of this.routes) {
-      if(!route.getPath().test(pPath.split("?")[0])) continue;
+      if(!route.getPath().test(pathUrl)) continue;
       // push history state for login (including redirect to /)
-      if(pPath === "/login" || pPath === "/") window.history.pushState({}, undefined, pPath);
+      if(pathUrl === config.NAV_URL + "/login" || pathUrl === config.NAV_URL + "/") {
+        window.history.pushState({}, undefined, pathUrl);
+      }
       this._showRoute(route);
       return;
     }
