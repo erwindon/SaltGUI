@@ -106,25 +106,25 @@ export class OptionsRoute extends PageRoute {
     of1.checked = true;
     const of0 = document.getElementById("output-formats-doc-doc");
     of0.addEventListener("change", this._newOutputFormats);
-    of0.checked = outputFormatsValue.includes("doc");
+    of0.checked = outputFormatsValue && outputFormatsValue.includes("doc");
     const of4 = document.getElementById("output-formats-highstate-none");
     of4.addEventListener("change", this._newOutputFormats);
     of4.checked = true;
     const of3 = document.getElementById("output-formats-highstate-normal");
     of3.addEventListener("change", this._newOutputFormats);
-    of3.checked = outputFormatsValue.includes("highstate");
+    of3.checked = outputFormatsValue && outputFormatsValue.includes("highstate");
     const of2 = document.getElementById("output-formats-highstate-saltgui");
     of2.addEventListener("change", this._newOutputFormats);
-    of2.checked = outputFormatsValue.includes("saltguihighstate");
+    of2.checked = outputFormatsValue && outputFormatsValue.includes("saltguihighstate");
     const of5 = document.getElementById("output-formats-output-json");
     of5.addEventListener("change", this._newOutputFormats);
-    of5.checked = outputFormatsValue.includes("json");
+    of5.checked = outputFormatsValue && outputFormatsValue.includes("json");
     const of6 = document.getElementById("output-formats-output-nested");
     of6.addEventListener("change", this._newOutputFormats);
-    of6.checked = outputFormatsValue.includes("nested");
+    of6.checked = outputFormatsValue && outputFormatsValue.includes("nested");
     const of7 = document.getElementById("output-formats-output-yaml");
     of7.addEventListener("change", this._newOutputFormats);
-    of7.checked = outputFormatsValue.includes("yaml");
+    of7.checked = outputFormatsValue && outputFormatsValue.includes("yaml");
 
     const datetimeFractionDigitsValue = window.sessionStorage.getItem("datetime_fraction_digits");
     const datetimeFractionDigitsTd = document.getElementById("option-datetime-fraction-digits-value");
@@ -235,6 +235,9 @@ export class OptionsRoute extends PageRoute {
   }
 
   _makeTooltipModeValue(value) {
+    if(value === undefined) return "(undefined)";
+    if(value === null) return "(undefined)";
+    if(value === "undefined") return "(undefined)";
     return value;
   }
 
