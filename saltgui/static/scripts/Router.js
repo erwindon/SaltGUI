@@ -59,95 +59,95 @@ export class Router {
   _registerRouterEventListeners() {
     document.querySelector(".logo")
       .addEventListener("click", pClickEvent => {
-        if(window.location.pathname === "/login") return;
+        if(window.location.pathname === config.NAV_URL + "/login") return;
         if(window.event.ctrlKey) {
-          window.location.assign("/options");
+          window.location.assign(config.NAV_URL + "/options");
         } else {
-          window.location.assign("/");
+          window.location.assign(config.NAV_URL + "/");
         }
       });
 
     document.querySelector("#button-minions1")
       .addEventListener("click", pClickEvent =>
-        window.location.replace("/")
+        window.location.replace(config.NAV_URL + "/")
       );
     document.querySelector("#button-minions2")
       .addEventListener("click", pClickEvent =>
-        window.location.replace("/")
+        window.location.replace(config.NAV_URL + "/")
       );
 
     document.querySelector("#button-grains1")
       .addEventListener('click', pClickEvent =>
-        window.location.replace("/grains")
+        window.location.replace(config.NAV_URL + "/grains")
       );
     document.querySelector("#button-grains2")
       .addEventListener('click', pClickEvent =>
-        window.location.replace("/grains")
+        window.location.replace(config.NAV_URL + "/grains")
       );
 
     document.querySelector("#button-schedules1")
       .addEventListener('click', pClickEvent =>
-        window.location.replace("/schedules")
+        window.location.replace(config.NAV_URL + "/schedules")
       );
     document.querySelector("#button-schedules2")
       .addEventListener('click', pClickEvent =>
-        window.location.replace("/schedules")
+        window.location.replace(config.NAV_URL + "/schedules")
       );
 
     document.querySelector("#button-pillars1")
       .addEventListener('click', pClickEvent =>
-        window.location.replace("/pillars")
+        window.location.replace(config.NAV_URL + "/pillars")
       );
     document.querySelector("#button-pillars2")
       .addEventListener('click', pClickEvent =>
-        window.location.replace("/pillars")
+        window.location.replace(config.NAV_URL + "/pillars")
       );
 
     document.querySelector("#button-beacons1")
       .addEventListener('click', pClickEvent =>
-        window.location.replace("/beacons")
+        window.location.replace(config.NAV_URL + "/beacons")
       );
     document.querySelector("#button-beacons2")
       .addEventListener('click', pClickEvent =>
-        window.location.replace("/beacons")
+        window.location.replace(config.NAV_URL + "/beacons")
       );
 
     document.querySelector("#button-keys1")
       .addEventListener("click", pClickEvent =>
-        window.location.replace("/keys")
+        window.location.replace(config.NAV_URL + "/keys")
       );
     document.querySelector("#button-keys2")
       .addEventListener("click", pClickEvent =>
-        window.location.replace("/keys")
+        window.location.replace(config.NAV_URL + "/keys")
       );
 
     document.querySelector("#button-jobs1")
       .addEventListener('click', pClickEvent =>
-        window.location.replace("/jobs")
+        window.location.replace(config.NAV_URL + "/jobs")
       );
     document.querySelector("#button-jobs2")
       .addEventListener('click', pClickEvent =>
-        window.location.replace("/jobs")
+        window.location.replace(config.NAV_URL + "/jobs")
       );
 
     document.querySelector("#button-templates1")
       .addEventListener('click', pClickEvent =>
-        window.location.replace("/templates")
+        window.location.replace(config.NAV_URL + "/templates")
       );
     document.querySelector("#button-templates2")
       .addEventListener('click', pClickEvent =>
-        window.location.replace("/templates")
+        window.location.replace(config.NAV_URL + "/templates")
       );
 
     document.querySelector("#button-logout1")
       .addEventListener("click", pClickEvent => {
         this.api.logout().then(
-          pLogoutData => window.location.replace("/login?reason=logout"));
+          pLogoutData => window.location.replace(config.NAV_URL + "/login?reason=logout"));
       });
     document.querySelector("#button-logout2")
       .addEventListener("click", pClickEvent => {
         this.api.logout().then(
-          pLogoutData => window.location.replace("/login?reason=logout"));
+          pLogoutData => window.location.replace(config.NAV_URL + "/login?reason=logout"));
       });
 
     // don't verify the session too often

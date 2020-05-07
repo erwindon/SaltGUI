@@ -5,7 +5,7 @@ import {TargetType} from '../TargetType.js';
 export class Route {
 
   constructor(pPath, pPageName, pPageSelector, pMenuItemSelector, pRouter) {
-    this.path = new RegExp("^[/]" + pPath + "$");
+    this.path = new RegExp("^" + config.NAV_URL.replace(/\//, "[/]") + "[/]" + pPath + "$");
     this.name = pPageName;
     this.pageElement = document.querySelector(pPageSelector);
     this.router = pRouter;

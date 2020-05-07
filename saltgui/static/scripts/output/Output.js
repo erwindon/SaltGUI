@@ -82,7 +82,7 @@ export class Output {
     // typically found in the output of an async job
     if(pMinionResponse.match(ParseCommandLine.getPatJid())) {
       const a = document.createElement("a");
-      a.href = "/job?id=" + encodeURIComponent(pMinionResponse);
+      a.href = config.NAV_URL + "/job?id=" + encodeURIComponent(pMinionResponse);
       a.innerText = pMinionResponse;
       return a;
     }

@@ -542,13 +542,13 @@ export class PageRoute extends Route {
     pContainer.appendChild(tr);
 
     tr.addEventListener("click", pClickEvent =>
-      window.location.assign("/job?id=" + encodeURIComponent(job.id))
+      window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id))
     );
   }
 
   _addPageMenuItemShowDetails(pMenu, job) {
     pMenu.addMenuItem("Show&nbsp;details", function(pClickEvent) {
-      window.location.assign("/job?id=" + encodeURIComponent(job.id));
+      window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
     }.bind(this));
   }
 

@@ -112,13 +112,13 @@ export class PillarsRoute extends PageRoute {
     this._addMenuItemShowPillars(menu, pMinionId);
 
     minionTr.addEventListener("click", pClickEvent =>
-      window.location.assign("pillarsminion?minionid=" + encodeURIComponent(pMinionId))
+      window.location.assign(config.NAV_URL + "/pillarsminion?minionid=" + encodeURIComponent(pMinionId))
     );
   }
 
   _addMenuItemShowPillars(pMenu, pMinionId) {
     pMenu.addMenuItem("Show&nbsp;pillars", function(pClickEvent) {
-      window.location.assign("pillarsminion?minionid=" + encodeURIComponent(pMinionId));
+      window.location.assign(config.NAV_URL + "/pillarsminion?minionid=" + encodeURIComponent(pMinionId));
     }.bind(this));
   }
 }

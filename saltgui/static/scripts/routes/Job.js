@@ -211,7 +211,7 @@ export class JobRoute extends Route {
       else
       {
         link.addEventListener("click", pClickEvent =>
-          window.location.assign("job?id=" + linkToJid)
+          window.location.assign(config.NAV_URL + "/job?id=" + linkToJid)
         );
       }
 
