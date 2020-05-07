@@ -36,6 +36,7 @@ export class Utils {
       return;
     }
 
+    // null or "full" (or anything else)
     const tooltipSpan = Route.createSpan("", pTooltipText);
     tooltipSpan.classList.add("tooltip-text");
     tooltipSpan.classList.add("tooltip-text-" + pStyle);
