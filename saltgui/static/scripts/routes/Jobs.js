@@ -8,7 +8,7 @@ import {Utils} from '../Utils.js';
 export class JobsRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("^[\/]jobs$", "Jobs", "#page-jobs", "#button-jobs", pRouter);
+    super("jobs", "Jobs", "#page-jobs", "#button-jobs", pRouter);
 
     this._getJobDetails = this._getJobDetails.bind(this);
     this._updateNextJob = this._updateNextJob.bind(this);

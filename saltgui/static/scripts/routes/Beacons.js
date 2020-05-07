@@ -6,7 +6,7 @@ import {Utils} from '../Utils.js';
 export class BeaconsRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("^[\/]beacons$", "Beacons", "#page-beacons", "#button-beacons", pRouter);
+    super("beacons", "Beacons", "#page-beacons", "#button-beacons", pRouter);
 
     this._handleBeaconsWheelKeyListAll = this._handleBeaconsWheelKeyListAll.bind(this);
     this.updateMinion = this.updateMinion.bind(this);

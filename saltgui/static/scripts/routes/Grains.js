@@ -7,7 +7,7 @@ import {Utils} from '../Utils.js';
 export class GrainsRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("^[\/]grains$", "Grains", "#page-grains", "#button-grains", pRouter);
+    super("grains", "Grains", "#page-grains", "#button-grains", pRouter);
 
     this._handleGrainsWheelKeyListAll = this._handleGrainsWheelKeyListAll.bind(this);
     this.updateMinion = this.updateMinion.bind(this);

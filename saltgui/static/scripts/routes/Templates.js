@@ -6,7 +6,7 @@ import {Utils} from '../Utils.js';
 export class TemplatesRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("^[\/]templates$", "Templates", "#page-templates", "#button-templates", pRouter);
+    super("templates", "Templates", "#page-templates", "#button-templates", pRouter);
 
     this._handleTemplatesWheelConfigValues = this._handleTemplatesWheelConfigValues.bind(this);
 

@@ -7,7 +7,7 @@ import {Utils} from '../Utils.js';
 export class PillarsMinionRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("^[\/]pillarsminion$", "Pillars", "#page-pillars-minion", "#button-pillars", pRouter);
+    super("pillarsminion", "Pillars", "#page-pillars-minion", "#button-pillars", pRouter);
 
     this._handleLocalPillarItems = this._handleLocalPillarItems.bind(this);
 
