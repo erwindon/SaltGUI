@@ -17,7 +17,7 @@ export class BeaconsMinionRoute extends PageRoute {
       this.router.goTo("/beacons")
     );
 
-    Utils.addTableHelp(this.getPageElement(), "The content of column 'Value'\nis automatically refreshed");
+    Utils.addTableHelp(this.getPageElement(), "The content of column 'Value' is automatically refreshed\nNote that some beacons produce multiple values, e.g. one per disk.\nIn that case, effectively only one of the values is visible here.");
     Utils.makeTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement());
   }
