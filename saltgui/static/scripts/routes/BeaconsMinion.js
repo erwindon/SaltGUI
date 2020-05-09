@@ -202,6 +202,10 @@ export class BeaconsMinionRoute extends PageRoute {
         txt += Output.dateTimeStr(pData["_stamp"]) + "\n";
         delete pData["_stamp"];
       }
+      if(pTag !== prefix + beaconName + "/") {
+        // Show the tag when it has extra information
+        txt += pTag + "\n";
+      }
       if(pData["id"] === minionId) {
         delete pData["id"];
       }
