@@ -188,7 +188,7 @@ export class KeysRoute extends PageRoute {
     const minionIdTd = Route.createTd("", "");
     const minionIdSpan = Route.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
-    if(pMinionsTxt.length && !pMinionsTxt.includes(pMinionId)) {
+    if(pMinionsTxt && pMinionsTxt.length && !pMinionsTxt.includes(pMinionId)) {
       Utils.addToolTip(minionIdSpan, "Unexpected entry\nThis entry may need to be rejected!\nUpdate file 'minions.txt' when needed", "bottom-left");
       minionIdTd.style.color = "red";
       minionIdTd.style.fontWeight = "bold";
