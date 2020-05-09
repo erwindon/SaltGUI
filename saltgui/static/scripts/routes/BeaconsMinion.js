@@ -194,7 +194,7 @@ export class BeaconsMinionRoute extends PageRoute {
     if(!pTag.startsWith(prefix)) return;
     const table = document.getElementById("beacons-minion-list");
     let beaconName = pTag.substring(prefix.length);
-    if(beaconName.endsWith("/")) beaconName = beaconName.substring(0, beaconName.length-1);
+    beaconName = beaconName.replace(/[/].*/, "");
     for(const row of table.tBodies[0].rows) {
       if(row.getElementsByTagName("td")[0].innerText !== beaconName) continue;
       let txt = "";
