@@ -405,6 +405,8 @@ export class KeysRoute extends PageRoute {
         // do not update screen
       }
       // keep the fingerprint
+      // update the menu because it may be in a hidden state
+      tr.getAttribute("dropdownmenu").verifyAll();
     } else if(page.querySelector("table tr") === null) {
       // only when the full list is already available
       // this prevents a random set of records from appearing
