@@ -429,10 +429,15 @@ export class KeysRoute extends PageRoute {
         // unknown status
         // do not update screen
       }
-      // we do not have the fingerprint yet
-      // pre-fill with a dummy value and then retrieve the actual value
-      const fingerprintSpan = page.querySelector("table tr#" + Utils.getIdFromMinionId(pData.id) + " .fingerprint");
-      if(fingerprintSpan) fingerprintSpan.innerText = "(refresh page for fingerprint)";
+    }
+
+    // we do not have the fingerprint yet
+    // pre-fill with a dummy value and then retrieve the actual value
+    const tr2 = page.querySelector("table tr#" + Utils.getIdFromMinionId(pData.id));
+    if(!tr2) return;
+    const fingerprintSpan = tr2.querySelector("td.fingerprint");
+    if(fingerprintSpan && (fingerprintSpan.innerText === "" || fingerprintSpan.innerText === "loading...")) {
+      fingerprintSpan.innerText = "(refresh page for fingerprint)";
       const wheelKeyFingerPromise = this.router.api.getWheelKeyFinger(pData.id);
       const myThis = this;
       wheelKeyFingerPromise.then(this._handleWheelKeyFinger, pWheelKeyFingerMsg => {
