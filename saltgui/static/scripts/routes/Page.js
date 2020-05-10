@@ -85,9 +85,20 @@ export class PageRoute extends Route {
 
     minionTr.appendChild(Route.createTd("minion-id", pMinionId));
 
-    const offline = Route.createTd("status", "offline");
-    offline.classList.add("offline");
-    minionTr.appendChild(offline);
+    const offlineSpan = Route.createSpan("status", "offline");
+    // add an opinion when we have one
+    if(pMinionId in pMinionsDict) {
+      if (pMinionsDict[pMinionId] === "true") {
+        Utils.addToolTip(offlineSpan, "Minion is offline\nIs the host running and is the salt-minion installed and started?\nUpdate file 'minions.txt' when needed", "bottom-left");
+        offlineSpan.style.color = "red";
+      } else {
+        Utils.addToolTip(offlineSpan, "Minion is offline\nSince it is reported as inactive in file 'minions.txt', that should be OK", "bottom-left");
+      }
+    }
+    offlineSpan.classList.add("offline");
+    const offlineTd = Route.createTd("", "");
+    offlineTd.appendChild(offlineSpan);
+    minionTr.appendChild(offlineTd);
   }
 
   _getIpNumberPrefixes(pAllMinionsGrains) {
