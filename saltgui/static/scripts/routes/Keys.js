@@ -119,23 +119,7 @@ export class KeysRoute extends PageRoute {
 
     for(const minionId of Object.keys(minionsDict)) {
       if(table.querySelector("#" + Utils.getIdFromMinionId(minionId))) continue;
-      const minionTr = this.getElement(table, Utils.getIdFromMinionId(minionId), "UNKNOWN");
-
-      const minionIdTd = Route.createTd("", "");
-      const minionIdSpan = Route.createSpan("minion-id", minionId);
-      minionIdTd.appendChild(minionIdSpan);
-      Utils.addToolTip(minionIdSpan, "Entry is missing\nIs the host running and is the salt-minion installed and started?\nUpdate file 'minions.txt' when needed", "bottom-left");
-      minionIdTd.style.color = "red";
-      minionTr.appendChild(minionIdTd);
-
-      const unknown = Route.createTd("status", "unknown");
-      unknown.setAttribute("sorttable_customkey", 5);
-      unknown.classList.add("unknown");
-      minionTr.appendChild(unknown);
-
-      minionTr.appendChild(Route.createTd("os", ""));
-
-      minionTr.appendChild(Route.createTd("", ""));
+      this._addMissingMinion(table, minionId, minionsDict);
     }
 
     this._updateTableSummary(table);
@@ -147,6 +131,7 @@ export class KeysRoute extends PageRoute {
     cnt["accepted"] = 0;
     cnt["denied"] = 0;
     cnt["rejected"] = 0;
+    //cnt["missing"] = 0;
     const tbody = pTable.querySelector("table tbody");
     for(const tr of tbody.children) {
       const statusField = tr.querySelector("td.status");
@@ -286,6 +271,27 @@ export class KeysRoute extends PageRoute {
       // used for query based additions (when building page)
       pContainer.tBodies[0].appendChild(minionTr);
     }
+  }
+
+  _addMissingMinion(pContainer, pMinionId, pMinionsDict) {
+    const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId), "UNKNOWN");
+
+    const minionIdTd = Route.createTd("", "");
+    const minionIdSpan = Route.createSpan("minion-id", pMinionId);
+    minionIdTd.appendChild(minionIdSpan);
+    Utils.addToolTip(minionIdSpan, "Entry is missing\nIs the host running and is the salt-minion installed and started?\nUpdate file 'minions.txt' when needed", "bottom-left");
+    minionIdTd.style.color = "red";
+    minionTr.appendChild(minionIdTd);
+
+    const missing = Route.createTd("status", "missing");
+    missing.setAttribute("sorttable_customkey", 5);
+    missing.classList.add("missing");
+    minionTr.appendChild(missing);
+
+    minionTr.appendChild(Route.createTd("fingerprint", ""));
+
+    // drop down menu
+    this._addDropDownMenu(minionTr, pMinionId);
   }
 
   _addDropDownMenu(pMinionTr, pMinionId) {
