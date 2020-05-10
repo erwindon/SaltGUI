@@ -204,10 +204,8 @@ export class KeysRoute extends PageRoute {
     // do not use class "fingerprint" yet
     minionTr.appendChild(Route.createTd("os", "loading..."));
 
-    // preliminary dropdown menu
-    const menu = new DropDownMenu(minionTr);
-    this._addMenuItemWheelKeyReject(menu, pMinionId, " include_accepted=true");
-    this._addMenuItemWheelKeyDelete(menu, pMinionId, "");
+    // drop down menu
+    this._addDropDownMenu(minionTr, pMinionId);
   }
 
   _addRejectedMinion(pContainer, pMinionId, pMinionsTxt) {
@@ -231,10 +229,8 @@ export class KeysRoute extends PageRoute {
     // do not use class "fingerprint" yet
     minionTr.appendChild(Route.createTd("os", "loading..."));
 
-    // final dropdownmenu
-    const menu = new DropDownMenu(minionTr);
-    this._addMenuItemWheelKeyDelete(menu, pMinionId, "");
-    this._addMenuItemWheelKeyAccept(menu, pMinionId, " include_rejected=true");
+    // drop down menu
+    this._addDropDownMenu(minionTr, pMinionId);
 
     pContainer.tBodies[0].appendChild(minionTr);
   }
@@ -260,11 +256,8 @@ export class KeysRoute extends PageRoute {
     // do not use class "fingerprint" yet
     minionTr.appendChild(Route.createTd("os", "loading..."));
 
-    // final dropdownmenu
-    const menu = new DropDownMenu(minionTr);
-    this._addMenuItemWheelKeyAccept(menu, pMinionId, " include_denied=true");
-    this._addMenuItemWheelKeyReject(menu, pMinionId, " include_denied=true");
-    this._addMenuItemWheelKeyDelete(menu, pMinionId, "");
+    // drop down menu
+    this._addDropDownMenu(minionTr, pMinionId);
 
     pContainer.tBodies[0].appendChild(minionTr);
   }
@@ -293,11 +286,8 @@ export class KeysRoute extends PageRoute {
     // do not use class "fingerprint" yet
     minionTr.appendChild(Route.createTd("os", "loading..."));
 
-    // final dropdownmenu
-    const menu = new DropDownMenu(minionTr);
-    this._addMenuItemWheelKeyAccept(menu, pMinionId, "");
-    this._addMenuItemWheelKeyReject(menu, pMinionId, "");
-    this._addMenuItemWheelKeyDelete(menu, pMinionId, "");
+    // drop down menu
+    this._addDropDownMenu(minionTr, pMinionId);
 
     if(pInsertAtTop) {
       // used for event based additions
@@ -308,21 +298,83 @@ export class KeysRoute extends PageRoute {
     }
   }
 
-  _addMenuItemWheelKeyAccept(pMenu, pMinionId, extra) {
-    pMenu.addMenuItem("Accept&nbsp;key...", function(pClickEvent) {
-      this.runCommand(pClickEvent, pMinionId, "wheel.key.accept" + extra);
+  _addDropDownMenu(pMinionTr, pMinionId) {
+    // final dropdownmenu
+    const menu = new DropDownMenu(pMinionTr);
+    this._addMenuItemWheelKeyAccept1(menu, pMinionId);
+    this._addMenuItemWheelKeyReject(menu, pMinionId);
+    this._addMenuItemWheelKeyDelete(menu, pMinionId);
+    this._addMenuItemWheelKeyAccept2(menu, pMinionId);
+    pMinionTr.setAttribute("dropdownmenu", menu);
+  }
+
+  _addMenuItemWheelKeyAccept1(pMenu, pMinionId) {
+    pMenu.addMenuItem(function(pMenuItem) {
+      const minionTr = pMenu.menuDropdown.parentElement.parentElement;
+      const status = minionTr.querySelector(".status").innerText;
+      const shown = status === "denied" || status === "unaccepted";
+      pMenuItem.innerHTML = "Accept&nbsp;key...";
+      pMenuItem.style.display = shown ? "inline-block" : "none";
+    }.bind(this), function(pClickEvent) {
+      let cmd = "wheel.key.accept";
+      const minionTr = pMenu.menuDropdown.parentElement.parentElement;
+      const status = minionTr.querySelector(".status").innerText;
+      if(status === "denied")
+        cmd += " include_denied=true";
+      else if(status === "rejected")
+        cmd += " include_rejected=true"
+      this.runCommand(pClickEvent, pMinionId, cmd);
     }.bind(this));
   }
 
-  _addMenuItemWheelKeyReject(pMenu, pMinionId, extra) {
-    pMenu.addMenuItem("Reject&nbsp;key...", function(pClickEvent) {
-      this.runCommand(pClickEvent, pMinionId, "wheel.key.reject" + extra);
+  _addMenuItemWheelKeyAccept2(pMenu, pMinionId) {
+    pMenu.addMenuItem(function(pMenuItem) {
+      const minionTr = pMenu.menuDropdown.parentElement.parentElement;
+      const status = minionTr.querySelector(".status").innerText;
+      const shown = status === "rejected";
+      pMenuItem.innerHTML = "Accept&nbsp;key...";
+      pMenuItem.style.display = shown ? "inline-block" : "none";
+    }.bind(this), function(pClickEvent) {
+      let cmd = "wheel.key.accept";
+      const minionTr = pMenu.menuDropdown.parentElement.parentElement;
+      const status = minionTr.querySelector(".status").innerText;
+      if(status === "denied")
+        cmd += " include_denied=true";
+      else if(status === "rejected")
+        cmd += " include_rejected=true";
+      this.runCommand(pClickEvent, pMinionId, cmd);
     }.bind(this));
   }
 
-  _addMenuItemWheelKeyDelete(pMenu, pMinionId, extra) {
-    pMenu.addMenuItem("Delete&nbsp;key...", function(pClickEvent) {
-      this.runCommand(pClickEvent, pMinionId, "wheel.key.delete" + extra);
+  _addMenuItemWheelKeyReject(pMenu, pMinionId) {
+    pMenu.addMenuItem(function(pMenuItem) {
+      const minionTr = pMenu.menuDropdown.parentElement.parentElement;
+      const status = minionTr.querySelector(".status").innerText;
+      const shown = status === "accepted" || status === "denied" || status === "unaccepted";
+      pMenuItem.innerHTML = "Reject&nbsp;key...";
+      pMenuItem.style.display = shown ? "inline-block" : "none";
+    }.bind(this), function(pClickEvent) {
+      let cmd = "wheel.key.reject";
+      const minionTr = pMenu.menuDropdown.parentElement.parentElement;
+      const status = minionTr.querySelector(".status").innerText;
+      if(status === "accepted")
+        cmd += " include_accepted=true";
+      else if(status === "denied")
+        cmd += " include_denied=true";
+      this.runCommand(pClickEvent, pMinionId, cmd);
+    }.bind(this));
+  }
+
+  _addMenuItemWheelKeyDelete(pMenu, pMinionId) {
+    pMenu.addMenuItem(function(pMenuItem) {
+      const minionTr = pMenu.menuDropdown.parentElement.parentElement;
+      const status = minionTr.querySelector(".status").innerText;
+      const shown = status === "accepted" || status === "rejected" || status === "unaccepted" || status === "denied";
+      pMenuItem.innerHTML = "Delete&nbsp;key...";
+      pMenuItem.style.display = shown ? "inline-block" : "none";
+    }.bind(this), function(pClickEvent) {
+      let cmd = "wheel.key.delete";
+      this.runCommand(pClickEvent, pMinionId, cmd);
     }.bind(this));
   }
 
