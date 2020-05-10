@@ -398,6 +398,8 @@ export class KeysRoute extends PageRoute {
       } else if(pData.act === "delete") {
         // "-1" due to the <tr> for the header that is inside <thead>
         tr.parentNode.deleteRow(tr.rowIndex - 1);
+        if(pData.id in minionsDict)
+          this._addMissingMinion(table, pData.id, minionsDict);
       } else {
         // unknown status
         // do not update screen
