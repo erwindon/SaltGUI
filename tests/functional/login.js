@@ -42,22 +42,22 @@ describe('Funtional tests', function() {
         })
         .evaluate( () => { return document.location.href; } )
         .then(function (href) {
-          assert.equal(href, url + 'login');
+          assert.equal(href, url + 'login?reason=no-session');
           done();
         })
         .catch(done);
     });
 
     it('we cannot login with false credentials', done => {
-      const selector = '.notice-wrapper';
+      const selector = '#notice-wrapper';
       browser
         .type('#username', 'sald')
         .type('#password', 'sald')
         .click('#login-submit')
-        .wait('.notice')
+        .wait('#notice')
         .end()
         .evaluate(selector => {
-          return document.querySelector('.notice-wrapper div').textContent;
+          return document.querySelector('#notice-wrapper div').textContent;
         }, selector)
         .then(function (message) {
           assert.equal(message, 'Authentication failed');
@@ -109,7 +109,7 @@ describe('Funtional tests', function() {
         .evaluate( () => { return document.location.href; })
         .then(function (href) {
           // and we a redirected to the login page
-          assert.equal(href,'http://localhost:3333/login?reason=no-session');
+          assert.equal(href,'http://localhost:3333/login?reason=logout');
           done();
         })
         .catch(done);
