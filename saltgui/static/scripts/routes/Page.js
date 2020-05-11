@@ -23,6 +23,8 @@ export class PageRoute extends Route {
     const table = this.getPageElement().querySelector("#minions");
     const minionIds = Object.keys(minions).sort();
 
+    const minionsDict = JSON.parse(window.sessionStorage.getItem("minions-txt"));
+
     // save for the autocompletion
     // This callback will also be called after LOGOUT due to the regular error handling
     // Do not store the information in that case
@@ -39,7 +41,7 @@ export class PageRoute extends Route {
 
       // minions can be offline, then the info will be false
       if(minionInfo === false) {
-        this.updateOfflineMinion(table, minionId);
+        this.updateOfflineMinion(table, minionId, minionsDict);
         cntOffline++;
       } else {
         this.updateMinion(table, minionInfo, minionId, minions);
@@ -78,14 +80,25 @@ export class PageRoute extends Route {
     return minionTr;
   }
 
-  updateOfflineMinion(pContainer, pMinionId) {
+  updateOfflineMinion(pContainer, pMinionId, pMinionsDict) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
     minionTr.appendChild(Route.createTd("minion-id", pMinionId));
 
-    const offline = Route.createTd("status", "offline");
-    offline.classList.add("offline");
-    minionTr.appendChild(offline);
+    const offlineSpan = Route.createSpan("status", "offline");
+    // add an opinion when we have one
+    if(pMinionId in pMinionsDict) {
+      if (pMinionsDict[pMinionId] === "true") {
+        Utils.addToolTip(offlineSpan, "Minion is offline\nIs the host running and is the salt-minion installed and started?\nUpdate file 'minions.txt' when needed", "bottom-left");
+        offlineSpan.style.color = "red";
+      } else {
+        Utils.addToolTip(offlineSpan, "Minion is offline\nSince it is reported as inactive in file 'minions.txt', that should be OK", "bottom-left");
+      }
+    }
+    offlineSpan.classList.add("offline");
+    const offlineTd = Route.createTd("", "");
+    offlineTd.appendChild(offlineSpan);
+    minionTr.appendChild(offlineTd);
   }
 
   _getIpNumberPrefixes(pAllMinionsGrains) {
@@ -625,5 +638,28 @@ export class PageRoute extends Route {
     if(msgDiv !== null) msgDiv.style.display = "none";
 
     return true;
+  }
+
+  loadMinionsTxt() {
+    const staticMinionsTxtPromise = this.router.api.getStaticMinionsTxt();
+
+    staticMinionsTxtPromise.then(pStaticMinionsTxt => {
+      if(!pStaticMinionsTxt)
+        window.sessionStorage.setItem("minions-txt", "{}");
+      else {
+        const lines = pStaticMinionsTxt.trim().split(/\r?\n/).filter(item => !item.startsWith("#"));
+        const minions = { };
+        for(const line of lines) {
+          const fields = line.split("\t");
+          if(fields.length === 1)
+            minions[fields[0]] = "true";
+          else
+            minions[fields[0]] = fields[1];
+        }
+        window.sessionStorage.setItem("minions-txt", JSON.stringify(minions));
+      }
+    }, pStaticMinionsTxt => {
+      window.sessionStorage.setItem("minions-txt", "{}");
+    });
   }
 }

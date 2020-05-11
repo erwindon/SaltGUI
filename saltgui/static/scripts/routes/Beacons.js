@@ -110,8 +110,8 @@ export class BeaconsRoute extends PageRoute {
     msgDiv.innerText = txt;
   }
 
-  updateOfflineMinion(pContainer, pMinionId) {
-    super.updateOfflineMinion(pContainer, pMinionId);
+  updateOfflineMinion(pContainer, pMinionId, pMinionsDict) {
+    super.updateOfflineMinion(pContainer, pMinionId, pMinionsDict);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
