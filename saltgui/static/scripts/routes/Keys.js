@@ -318,7 +318,7 @@ export class KeysRoute extends PageRoute {
       if(status === "denied")
         cmd += " include_denied=true";
       else if(status === "rejected")
-        cmd += " include_rejected=true"
+        cmd += " include_rejected=true";
       this.runCommand(pClickEvent, pMinionId, cmd);
     }.bind(this));
   }
@@ -369,7 +369,7 @@ export class KeysRoute extends PageRoute {
       pMenuItem.innerHTML = "Delete&nbsp;key...";
       pMenuItem.style.display = shown ? "inline-block" : "none";
     }.bind(this), function(pClickEvent) {
-      let cmd = "wheel.key.delete";
+      const cmd = "wheel.key.delete";
       this.runCommand(pClickEvent, pMinionId, cmd);
     }.bind(this));
   }
