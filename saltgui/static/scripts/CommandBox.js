@@ -171,8 +171,9 @@ export class CommandBox {
     while(targetList.firstChild) {
       targetList.removeChild(targetList.firstChild);
     }
-    const nodeGroups = JSON.parse(window.sessionStorage.getItem("nodegroups"));
-    if(nodeGroups) {
+    const nodeGroupsText = window.sessionStorage.getItem("nodegroups");
+    if(nodeGroupsText && nodeGroupsText !== "undefined") {
+      const nodeGroups = JSON.parse(nodeGroupsText);
       for(const nodeGroup of Object.keys(nodeGroups).sort()) {
         const option = document.createElement("option");
         option.value = "#" + nodeGroup;
