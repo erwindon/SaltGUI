@@ -301,7 +301,7 @@ export class KeysRoute extends PageRoute {
     this._addMenuItemWheelKeyReject(menu, pMinionId);
     this._addMenuItemWheelKeyDelete(menu, pMinionId);
     this._addMenuItemWheelKeyAccept2(menu, pMinionId);
-    pMinionTr.setAttribute("dropdownmenu", menu);
+    pMinionTr.saltguidropdownmenu = menu;
   }
 
   _addMenuItemWheelKeyAccept1(pMenu, pMinionId) {
@@ -406,7 +406,7 @@ export class KeysRoute extends PageRoute {
       }
       // keep the fingerprint
       // update the menu because it may be in a hidden state
-      tr.getAttribute("dropdownmenu").verifyAll();
+      tr.saltguidropdownmenu.verifyAll();
     } else if(page.querySelector("table tr") === null) {
       // only when the full list is already available
       // this prevents a random set of records from appearing
@@ -435,7 +435,8 @@ export class KeysRoute extends PageRoute {
     // pre-fill with a dummy value and then retrieve the actual value
     const tr2 = page.querySelector("table tr#" + Utils.getIdFromMinionId(pData.id));
     if(!tr2) return;
-    const fingerprintSpan = tr2.querySelector("td.fingerprint");
+    // at this stage, the field is still classed "os" instead of "fingerprint"
+    const fingerprintSpan = tr2.querySelector("td.os");
     if(fingerprintSpan && (fingerprintSpan.innerText === "" || fingerprintSpan.innerText === "loading...")) {
       fingerprintSpan.innerText = "(refresh page for fingerprint)";
       const wheelKeyFingerPromise = this.router.api.getWheelKeyFinger(pData.id);
