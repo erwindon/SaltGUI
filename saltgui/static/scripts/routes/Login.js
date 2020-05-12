@@ -120,7 +120,10 @@ export class LoginRoute extends Route {
     window.sessionStorage.setItem("show_jobs", JSON.stringify(showJobs));
 
     let nodeGroups = wheelConfigValuesData.nodegroups;
-    if(!nodeGroups) nodeGroups = {};
+    // Even when not set, the api server gives this an actual value "{}" here.
+    // Let's assume the user never sets that value. Sounds reasonable because
+    // when it is set, it is normally set to an actual value/list.
+    if(!nodeGroups || !Object.keys(nodeGroups).length) nodeGroups = undefined;
     window.sessionStorage.setItem("nodegroups", JSON.stringify(nodeGroups));
 
     const outputFormats = wheelConfigValuesData.saltgui_output_formats;
