@@ -236,7 +236,7 @@ const config = {
 };
 ```
 
-> Currenlty you can't use totally independent salt-api without proxy as support for CORS preflight request is not properly support.
+> Currently you can't use totally independent salt-api without proxy as support for CORS preflight request is not properly support.
 
 ## Development environment with Docker
 To make life a bit easier for testing SaltGUI or setting up a local development environment you can use the provided docker-compose setup in this repository to run a saltmaster with three minions, including SaltGUI:
