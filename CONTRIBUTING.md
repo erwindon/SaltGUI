@@ -18,4 +18,4 @@ When you create a PR, make sure that:
 * there are no errors from `eslint`
 * there are no errors from `stylelint`
 * there are coverage tests to cover all new non-gui code
-* (the functional/gui tests are currently broken, so we won't ask that)
+* there are functional/gui tests to cover all new gui code
