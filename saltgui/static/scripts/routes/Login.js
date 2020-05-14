@@ -19,10 +19,11 @@ export class LoginRoute extends Route {
     submit.addEventListener("submit", this._onLogin);
   }
 
-  _showNoticeText(pBackgroundColour, pText) {
+  _showNoticeText(pBackgroundColour, pText, pInfoClass) {
     // create a new child every time to restart the animation
     const noticeDiv = Route.createDiv("", pText);
     noticeDiv.id = "notice";
+    noticeDiv.classList.add(pInfoClass);
     noticeDiv.style.backgroundColor = pBackgroundColour;
     const noticeWrapperDiv = document.getElementById("notice-wrapper");
     noticeWrapperDiv.replaceChild(noticeDiv, noticeWrapperDiv.firstChild);
@@ -42,18 +43,18 @@ export class LoginRoute extends Route {
       break;
     case "no-session":
       // gray because we cannot prove that the user was/wasnt logged in
-      this._showNoticeText("gray", "Not logged in");
+      this._showNoticeText("gray", "Not logged in", "notice_not_logged_in");
       break;
     case "expired-session":
-      this._showNoticeText("#F44336", "Session expired");
+      this._showNoticeText("#F44336", "Session expired", "notice_session_expired");
       break;
     case "logout":
       // gray because this is the result of a user action
-      this._showNoticeText("gray", "Logout");
+      this._showNoticeText("gray", "Logout", "notice_logout");
       break;
     default:
       // should not occur
-      this._showNoticeText("#F44336", reason);
+      this._showNoticeText("#F44336", reason, "notice_other:" + reason);
     }
   }
 
@@ -83,7 +84,7 @@ export class LoginRoute extends Route {
     const eauthField = document.getElementById("eauth");
     eauthField.disabled = true;
 
-    this._showNoticeText("#4CAF50", "Please wait...");
+    this._showNoticeText("#4CAF50", "Please wait...", "notice_please_wait");
 
     //we need these functions to populate the dropdown boxes
     const wheelConfigValuesPromise = this.router.api.getWheelConfigValues();
@@ -142,13 +143,13 @@ export class LoginRoute extends Route {
     if(error && error.status === 503) {
       // Service Unavailable
       // e.g. salt-api running but salt-master not running
-      this._showNoticeText("#F44336", error.message);
+      this._showNoticeText("#F44336", error.message, "notice_login_service_unavailable");
     } else if(error && error.status === -1) {
       // No permissions: login valid, but no api functions executable
       // e.g. PAM says OK and /etc/salt/master says NO
-      this._showNoticeText("#F44336", error.message);
+      this._showNoticeText("#F44336", error.message, "notice_login_other_error");
     } else {
-      this._showNoticeText("#F44336", "Authentication failed");
+      this._showNoticeText("#F44336", "Authentication failed", "notice_auth_failed");
     }
   }
 
