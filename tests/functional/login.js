@@ -40,6 +40,7 @@ describe('Funtional tests', function() {
         .wait( () => {
           return document.location.href.includes('login');
         })
+        .wait(500)
         .evaluate( () => { return document.location.href; } )
         .end()
         .then( href => {
@@ -53,9 +54,13 @@ describe('Funtional tests', function() {
     it('we cannot login with false credentials', done => {
       browser
         .insert('#username', 'sald')
+        .wait(500)
         .insert('#password', 'sald')
+        .wait(500)
         .click('#login-submit')
+        .wait(500)
         .wait('#notice-wrapper div.notice_auth_failed')
+        .wait(1000)
         .evaluate( () => {
           return document.querySelector('#notice-wrapper div').textContent;
         })
@@ -70,13 +75,17 @@ describe('Funtional tests', function() {
     it('valid credentials will redirect us to the homepage and hide the loginform', done => {
       browser
         .insert('#username', 'salt')
+        .wait(500)
         .insert('#password', 'salt')
+        .wait(500)
         .click('#login-submit')
+        .wait(500)
         .wait( () => {
           // we wait here for the loginpage to be hidden
           const loginpage = document.querySelector('#page-login');
           return loginpage.style.display === 'none';
         })
+        .wait(1000)
         .evaluate( () => { return document.location.href; })
         .end()
         .then( href => {
@@ -89,8 +98,11 @@ describe('Funtional tests', function() {
     it('check that we can logout', done => {
       browser
         .insert('#username', 'salt')
+        .wait(500)
         .insert('#password', 'salt')
+        .wait(500)
         .click('#login-submit')
+        .wait(500)
         .wait('#notice-wrapper div.notice_please_wait')
         .wait(5000)
         .wait( () => {
@@ -99,6 +111,7 @@ describe('Funtional tests', function() {
           return loginpage.style.display === 'none';
         })
         .click('#button-logout1')
+        .wait(500)
         .wait( () => {
           // we wait here for the loginpage to be shown
           const loginpage = document.querySelector('#page-login');
@@ -107,6 +120,7 @@ describe('Funtional tests', function() {
         .wait( () => {
           return document.location.href.includes('login');
         })
+        .wait(1000)
         .evaluate( () => { return document.location.href; })
         .end()
         .then( href => {
