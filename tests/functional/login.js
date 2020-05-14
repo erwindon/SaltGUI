@@ -43,7 +43,8 @@ describe('Funtional tests', function() {
         .evaluate( () => { return document.location.href; } )
         .end()
         .then( href => {
-          assert.equal(href, url + 'login?reason=no-session');
+          href = href.replace(/[?]reason=.*/, "");
+          assert.equal(href, url + 'login');
         })
         .then(done)
         .catch(done);
