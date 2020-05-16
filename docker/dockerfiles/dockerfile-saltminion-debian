@@ -1,18 +1,18 @@
-FROM debian:9
+FROM debian:10
 
 LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
 LABEL name=salt-minion
 LABEL project="SaltGUI testing"
-LABEL version=2019.2.0
+LABEL version=3000.3
 
-ENV SALT_VERSION=2019.2.0
+ENV SALT_VERSION=3000.3
 ENV DEBIAN_FRONTEND=noninteractive
 
 # add saltstack key and install dependencies
 RUN apt-get update \
   && apt-get install curl dirmngr gnupg net-tools --yes --no-install-recommends \
-  && apt-key adv --fetch-keys http://repo.saltstack.com/py3/debian/9/amd64/archive/${SALT_VERSION}/SALTSTACK-GPG-KEY.pub \
-  && echo "deb http://repo.saltstack.com/py3/debian/9/amd64/archive/${SALT_VERSION} stretch main" > /etc/apt/sources.list.d/saltstack.list \
+  && apt-key adv --fetch-keys http://repo.saltstack.com/py3/debian/10/amd64/archive/${SALT_VERSION}/SALTSTACK-GPG-KEY.pub \
+  && echo "deb http://repo.saltstack.com/py3/debian/10/amd64/archive/${SALT_VERSION} buster main" > /etc/apt/sources.list.d/saltstack.list \
   # install salt-minion
   && apt-get update \
   && apt-get install salt-minion=${SALT_VERSION}* --yes --no-install-recommends \

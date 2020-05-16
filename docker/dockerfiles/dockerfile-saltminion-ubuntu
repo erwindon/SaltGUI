@@ -3,9 +3,9 @@ FROM ubuntu:18.04
 LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
 LABEL name=salt-minion
 LABEL project="SaltGUI testing"
-LABEL version=2019.2.0
+LABEL version=3000.3
 
-ENV SALT_VERSION=2019.2.0
+ENV SALT_VERSION=3000.3
 ENV DEBIAN_FRONTEND=noninteractive
 
 # add saltstack key and install dependencies

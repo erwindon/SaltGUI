@@ -1,17 +1,17 @@
-FROM centos:7.6.1810
+FROM centos:8.1.1911
 
 LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
 LABEL name=salt-minion
 LABEL project="SaltGUI testing"
-LABEL version=2019.2.0
+LABEL version=3000.3
 
-ENV SALT_VERSION=2019.2.0
+ENV SALT_VERSION=3000.3
 ENV DEBIAN_FRONTEND=noninteractive
 
 # add saltstack key and install dependencies
 RUN yum install epel-release curl gnupg2 net-tools --assumeyes \
-  && rpm --import https://repo.saltstack.com/py3/redhat/7/x86_64/archive/${SALT_VERSION}/SALTSTACK-GPG-KEY.pub \
-  && echo -e "[salt-py3-latest]\nname=SaltStack Latest Release Channel Python 3 for RHEL/Centos \$releasever\nbaseurl=https://repo.saltstack.com/py3/redhat/7/\$basearch/archive/${SALT_VERSION}\nenabled=1\ngpgcheck=1\ngpgkey=https://repo.saltstack.com/py3/redhat/7/\$basearch/latest/SALTSTACK-GPG-KEY.pub\n" > /etc/yum.repos.d/salt-py3-latest.repo \
+  && rpm --import https://repo.saltstack.com/py3/redhat/8.1/x86_64/archive/${SALT_VERSION}/SALTSTACK-GPG-KEY.pub \
+  && echo -e "[salt-py3-latest]\nname=SaltStack Latest Release Channel Python 3 for RHEL/Centos \$releasever\nbaseurl=https://repo.saltstack.com/py3/redhat/8.1/\$basearch/archive/${SALT_VERSION}\nenabled=1\ngpgcheck=1\ngpgkey=https://repo.saltstack.com/py3/redhat/8.1/\$basearch/latest/SALTSTACK-GPG-KEY.pub\n" > /etc/yum.repos.d/salt-py3-latest.repo \
   # install salt-minion
   && yum update --assumeyes \
   && yum install salt-minion-${SALT_VERSION}* --assumeyes \
