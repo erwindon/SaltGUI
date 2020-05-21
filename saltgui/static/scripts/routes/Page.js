@@ -280,7 +280,9 @@ export class PageRoute extends Route {
     if(typeof pMinionData === "string") saltversion = "";
     else if(pMinionData && pMinionData.saltversion) saltversion = pMinionData.saltversion;
     if(pMinionData) {
-      const td = Route.createTd("saltversion", saltversion);
+      const td = Route.createTd("", "");
+      const span = Route.createSpan("saltversion", saltversion);
+      td.appendChild(span);
       if(typeof pMinionData === "string") Utils.addErrorToTableCell(td, pMinionData);
       minionTr.appendChild(td);
     }

@@ -169,6 +169,14 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
+  getRunnerManageVersions() {
+    const params = {
+      client: "runner",
+      fun: "manage.versions"
+    };
+    return this.apiRequest("POST", "/", params);
+  }
+
   getWheelConfigValues() {
     const params = {
       client: "wheel",
