@@ -180,14 +180,14 @@ export class MinionsRoute extends PageRoute {
 
         let txt = "";
         if(isMasterAffected === "yes")
-          txt += "\nThe master is OLD, it is vulnarable for exploits CVE-2020-11651 and CVE-2020-11652";
+          txt += "\nThe salt-master is OLD (" + masterVersion + "),\nit is vulnerable for exploits CVE-2020-11651 and CVE-2020-11652";
         else if(isMasterAffected === "unknown")
-          txt += "\nThe master version is unknown, it may be vulnarable for exploits CVE-2020-11651 and CVE-2020-11652";
+          txt += "\nThe salt-master version is unknown (" + masterVersion + "),\nit may be vulnerable for exploits CVE-2020-11651 and CVE-2020-11652";
 
         if(outcome === "Minion requires update")
-          txt += "\nThis salt-minion is older than the salt-master";
-        else if(outcome === "Minion newer than master")
-          txt += "\nThis salt-minion is newer than the salt-master";
+          txt += "\nThis salt-minion is older than the salt-master (" + masterVersion + ")";
+        else if(outcome === "Minion newer than salt-master")
+          txt += "\nThis salt-minion is newer than the salt-master (" + masterVersion + ")";
 
         if(txt) Utils.addToolTip(versionTd, txt.trim(), "bottom-left");
       }
