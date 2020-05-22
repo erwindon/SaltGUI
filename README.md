@@ -287,6 +287,18 @@ SaltGUI includes these libraries (with possible modifications):
 
 ## Changelog
 
+## 1.20.0 (2020-05-22)
+- Cleanup handling of urls; allow alternative prefixes (erwindon, thx ggiesen)
+- Compare the list of minions against a provided list (erwindon)
+- Verify master/minion versions and highlight problems and differences (erwindon)
+- Bumped docker images to latest version (erwindon)
+- Small consistency updates for Options screen (erwindon)
+- Fix Templates screen in case there are no templates (erwindon)
+- Explain that some beacons send multiple values, but we view only the latest (erwindon)
+- Support beacons that provide an extended tag name (erwindon)
+- Fixed menus for rows in Keys screen when key status changes (erwindon)
+- Improved unit tests (erwindon)
+
 ## 1.19.1 (2020-03-09)
 - Match minions against external reference list (erwindon)
 
