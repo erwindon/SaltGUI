@@ -289,7 +289,7 @@ SaltGUI includes these libraries (with possible modifications):
 
 ## 1.20.0 (2020-05-22)
 - Cleanup handling of urls; allow alternative prefixes (erwindon, thx ggiesen)
-- Compare the list of minions against a provided list (erwindon)
+- Now supporting list of minion that are known to be down (erwindon)
 - Verify master/minion versions and highlight problems and differences (erwindon)
 - Bumped docker images to latest version (erwindon)
 - Small consistency updates for Options screen (erwindon)
