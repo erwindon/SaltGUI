@@ -28,6 +28,7 @@ export class MinionsRoute extends PageRoute {
 
     wheelKeyListAllPromise.then(pWheelKeyListAllData => {
       myThis._handleMinionsWheelKeyListAll(pWheelKeyListAllData);
+
       localGrainsItemsPromise.then(pLocalGrainsItemsData => {
         myThis.updateMinions(pLocalGrainsItemsData);
       }, pLocalGrainsItemsMsg => {
@@ -37,12 +38,19 @@ export class MinionsRoute extends PageRoute {
             localGrainsItemsData.return[0][k] = JSON.stringify(pLocalGrainsItemsMsg);
         myThis.updateMinions(localGrainsItemsData);
       });
+
+      runnerManageVersionsPromise.then(pRunnerManageVersionsData => {
+        myThis._handleRunnerManageVersions(pRunnerManageVersionsData);
+      }, pRunnerManageVersionsMsg => {
+        myThis._handleRunnerManageVersions(JSON.stringify(pRunnerManageVersionsMsg));
+      });
     }, pWheelKeyListAllMsg => {
       myThis._handleMinionsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
     });
 
     runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
+
       runnerJobsActivePromise.then(pRunnerJobsActiveData => {
         myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
       }, pRunnerJobsActiveMsg => {
@@ -50,12 +58,6 @@ export class MinionsRoute extends PageRoute {
       });
     }, pRunnerJobsListJobsMsg => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
-    });
-
-    runnerManageVersionsPromise.then(pRunnerManageVersionsData => {
-      myThis._handleRunnerManageVersions(pRunnerManageVersionsData);
-    }, pRunnerManageVersionsMsg => {
-      myThis._handleRunnerManageVersions(JSON.stringify(pRunnerManageVersionsMsg));
     });
   }
 
