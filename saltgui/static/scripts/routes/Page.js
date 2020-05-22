@@ -390,6 +390,7 @@ export class PageRoute extends Route {
     this._hideJobs.push("runner.jobs.active");
     this._hideJobs.push("runner.jobs.list_job");
     this._hideJobs.push("runner.jobs.list_jobs");
+    this._hideJobs.push("test.version");
     this._hideJobs.push("saltutil.find_job");
     this._hideJobs.push("saltutil.kill_job");
     this._hideJobs.push("saltutil.refresh_grains");
