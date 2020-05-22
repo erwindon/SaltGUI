@@ -7,7 +7,7 @@ import {Utils} from '../Utils.js';
 export class JobRoute extends Route {
 
   constructor(pRouter) {
-    super("^[\/]job$", "Job", "#page-job", "", pRouter);
+    super("job", "Job", "#page-job", "", pRouter);
 
     this._handleJobRunnerJobsListJob = this._handleJobRunnerJobsListJob.bind(this);
     this.handleRunnerJobsActive = this.handleRunnerJobsActive.bind(this);
@@ -211,7 +211,7 @@ export class JobRoute extends Route {
       else
       {
         link.addEventListener("click", pClickEvent =>
-          window.location.assign("job?id=" + linkToJid)
+          window.location.assign(config.NAV_URL + "/job?id=" + linkToJid)
         );
       }
 

@@ -5,7 +5,7 @@ import {Utils} from '../Utils.js';
 export class OptionsRoute extends PageRoute {
 
   constructor(router) {
-    super("^[\/]options$", "Options", "#page-options", "", router);
+    super("options", "Options", "#page-options", "", router);
 
     this._newOutputFormats = this._newOutputFormats.bind(this);
 

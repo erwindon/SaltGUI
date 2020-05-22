@@ -4,7 +4,7 @@ import {Utils} from '../Utils.js';
 export class LoginRoute extends Route {
 
   constructor(pRouter) {
-    super("^[\/]login$", "Login", "#page-login", "", pRouter);
+    super("login", "Login", "#page-login", "", pRouter);
 
     this.loginPending = false;
 

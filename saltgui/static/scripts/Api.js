@@ -231,9 +231,9 @@ export class API {
           const loginResponseStr = window.sessionStorage.getItem("login-response");
           if(!loginResponseStr) {
             myThis.logout().then(() =>
-              window.location.replace("/login?reason=no-session")
+              window.location.replace(config.NAV_URL + "/login?reason=no-session")
             , () =>
-              window.location.replace("/login?reason=no-session")
+              window.location.replace(config.NAV_URL + "/login?reason=no-session")
             );
             return null;
           }
@@ -245,9 +245,9 @@ export class API {
             const expireValue = loginResponse.expire;
             if(now > expireValue) {
               myThis.logout().then(() =>
-                window.location.replace("/login?reason=expired-session")
+                window.location.replace(config.NAV_URL + "/login?reason=expired-session")
               , () =>
-                window.location.replace("/login?reason=expired-session")
+                window.location.replace(config.NAV_URL + "/login?reason=expired-session")
               );
               return null;
             }
@@ -265,7 +265,7 @@ export class API {
     const token = window.sessionStorage.getItem("token");
     if(!token) return;
 
-    const source = new EventSource('/events?token=' + token);
+    const source = new EventSource(config.API_URL + '/events?token=' + token);
     source.onopen = function() {
       //console.info('Listening for events...');
     };

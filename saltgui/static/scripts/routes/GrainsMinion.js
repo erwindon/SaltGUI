@@ -7,7 +7,7 @@ import {Utils} from '../Utils.js';
 export class GrainsMinionRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("^[\/]grainsminion$", "Grains", "#page-grains-minion", "#button-grains", pRouter);
+    super("grainsminion", "Grains", "#page-grains-minion", "#button-grains", pRouter);
 
     this._handleLocalGrainsItems = this._handleLocalGrainsItems.bind(this);
 

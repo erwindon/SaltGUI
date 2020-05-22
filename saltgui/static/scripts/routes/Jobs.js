@@ -8,7 +8,7 @@ import {Utils} from '../Utils.js';
 export class JobsRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("^[\/]jobs$", "Jobs", "#page-jobs", "#button-jobs", pRouter);
+    super("jobs", "Jobs", "#page-jobs", "#button-jobs", pRouter);
 
     this._getJobDetails = this._getJobDetails.bind(this);
     this._updateNextJob = this._updateNextJob.bind(this);
@@ -86,7 +86,7 @@ export class JobsRoute extends PageRoute {
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     if(cnt === ""+maxJobs) return;
     pMenu.addMenuItem("Show&nbsp;first&nbsp;" + maxJobs + "&nbsp;jobs", function(pClickEvent) {
-      window.location.assign("jobs?cnt=" + maxJobs);
+      window.location.assign(config.NAV_URL + "/jobs?cnt=" + maxJobs);
     }.bind(this));
   }
 
@@ -94,7 +94,7 @@ export class JobsRoute extends PageRoute {
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     if(cnt === "eligible") return;
     pMenu.addMenuItem("Show&nbsp;eligible&nbsp;jobs", function(pClickEvent) {
-      window.location.assign("jobs?cnt=eligible");
+      window.location.assign(config.NAV_URL + "/jobs?cnt=eligible");
     }.bind(this));
   }
 
@@ -102,7 +102,7 @@ export class JobsRoute extends PageRoute {
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     if(cnt === "all") return;
     pMenu.addMenuItem("Show&nbsp;all&nbsp;jobs", function(pClickEvent) {
-      window.location.assign("jobs?cnt=all");
+      window.location.assign(config.NAV_URL + "/jobs?cnt=all");
     }.bind(this));
   }
 
@@ -173,13 +173,13 @@ export class JobsRoute extends PageRoute {
     pContainer.appendChild(tr);
 
     tr.addEventListener("click", pClickEvent =>
-      window.location.assign("/job?id=" + encodeURIComponent(job.id))
+      window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id))
     );
   }
 
   _addJobsMenuItemShowDetails(pMenu, job) {
     pMenu.addMenuItem("Show&nbsp;details", function(pClickEvent) {
-      window.location.assign("/job?id=" + encodeURIComponent(job.id));
+      window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
     }.bind(this));
   }
 

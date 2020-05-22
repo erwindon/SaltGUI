@@ -6,7 +6,7 @@ import {Utils} from '../Utils.js';
 export class SchedulesRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("^[\/]schedules$", "Schedules", "#page-schedules", "#button-schedules", pRouter);
+    super("schedules", "Schedules", "#page-schedules", "#button-schedules", pRouter);
 
     this._handleSchedulesWheelKeyListAll = this._handleSchedulesWheelKeyListAll.bind(this);
     this.updateMinion = this.updateMinion.bind(this);
@@ -97,7 +97,7 @@ export class SchedulesRoute extends PageRoute {
       this._addMenuItemShowSchedules(menu, minionId);
 
       minionTr.addEventListener("click", pClickEvent =>
-        window.location.assign("schedulesminion?minionid=" + encodeURIComponent(minionId))
+        window.location.assign(config.NAV_URL + "/schedulesminion?minionid=" + encodeURIComponent(minionId))
       );
     }
 
@@ -154,13 +154,13 @@ export class SchedulesRoute extends PageRoute {
     this._addMenuItemShowSchedules(menu, pMinionId);
 
     minionTr.addEventListener("click", pClickEvent =>
-      window.location.assign("schedulesminion?minionid=" + encodeURIComponent(pMinionId))
+      window.location.assign(config.NAV_URL + "/schedulesminion?minionid=" + encodeURIComponent(pMinionId))
     );
   }
 
   _addMenuItemShowSchedules(pMenu, pMinionId) {
     pMenu.addMenuItem("Show&nbsp;schedules", function(pClickEvent) {
-      window.location.assign("schedulesminion?minionid=" + encodeURIComponent(pMinionId));
+      window.location.assign(config.NAV_URL + "/schedulesminion?minionid=" + encodeURIComponent(pMinionId));
     }.bind(this));
   }
 }

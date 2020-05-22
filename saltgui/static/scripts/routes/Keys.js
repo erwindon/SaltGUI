@@ -6,7 +6,7 @@ import {Utils} from '../Utils.js';
 export class KeysRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("^[\/]keys$", "Keys", "#page-keys", "#button-keys", pRouter);
+    super("keys", "Keys", "#page-keys", "#button-keys", pRouter);
 
     this.fingerprintPattern = /^[0-9a-f:]+$/i;
 

@@ -294,7 +294,7 @@ export class PageRoute extends Route {
       if(typeof pMinionData === "string") Utils.addErrorToTableCell(td, pMinionData);
       if(pMinionData.os && typeof pMinionData !== "string") {
         const img = document.createElement("img");
-        img.setAttribute("src", "static/images/os-" + pMinionData.os.replace(" ", "-").toLowerCase() + ".png");
+        img.setAttribute("src", config.NAV_URL + "/static/images/os-" + pMinionData.os.replace(" ", "-").toLowerCase() + ".png");
         img.classList.add("osimage");
         td.prepend(img);
       }
@@ -542,13 +542,13 @@ export class PageRoute extends Route {
     pContainer.appendChild(tr);
 
     tr.addEventListener("click", pClickEvent =>
-      window.location.assign("/job?id=" + encodeURIComponent(job.id))
+      window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id))
     );
   }
 
   _addPageMenuItemShowDetails(pMenu, job) {
     pMenu.addMenuItem("Show&nbsp;details", function(pClickEvent) {
-      window.location.assign("/job?id=" + encodeURIComponent(job.id));
+      window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
     }.bind(this));
   }
 

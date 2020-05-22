@@ -7,7 +7,7 @@ import {Utils} from '../Utils.js';
 export class GrainsRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("^[\/]grains$", "Grains", "#page-grains", "#button-grains", pRouter);
+    super("grains", "Grains", "#page-grains", "#button-grains", pRouter);
 
     this._handleGrainsWheelKeyListAll = this._handleGrainsWheelKeyListAll.bind(this);
     this.updateMinion = this.updateMinion.bind(this);
@@ -96,7 +96,7 @@ export class GrainsRoute extends PageRoute {
       }
 
       minionTr.addEventListener("click", pClickEvent =>
-        window.location.assign("grainsminion?minionid=" + encodeURIComponent(minionId))
+        window.location.assign(config.NAV_URL + "/grainsminion?minionid=" + encodeURIComponent(minionId))
       );
     }
 
@@ -174,13 +174,13 @@ export class GrainsRoute extends PageRoute {
     }
 
     minionTr.addEventListener("click", pClickEvent =>
-      window.location.assign("grainsminion?minionid=" + encodeURIComponent(pMinionId))
+      window.location.assign(config.NAV_URL + "/grainsminion?minionid=" + encodeURIComponent(pMinionId))
     );
   }
 
   _addMenuItemShowGrains(pMenu, pMinionId) {
     pMenu.addMenuItem("Show&nbsp;grains", function(pClickEvent) {
-      window.location.assign("grainsminion?minionid=" + encodeURIComponent(pMinionId));
+      window.location.assign(config.NAV_URL + "/grainsminion?minionid=" + encodeURIComponent(pMinionId));
     }.bind(this));
   }
 }

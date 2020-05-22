@@ -8,7 +8,7 @@ import {Utils} from '../Utils.js';
 export class SchedulesMinionRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("^[\/]schedulesminion$", "Schedules", "#page-schedules-minion", "#button-schedules", pRouter);
+    super("schedulesminion", "Schedules", "#page-schedules-minion", "#button-schedules", pRouter);
 
     this._handleLocalScheduleList = this._handleLocalScheduleList.bind(this);
 
