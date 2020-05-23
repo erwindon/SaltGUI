@@ -109,6 +109,7 @@ export class MinionsPanel extends Panel {
       this._addMenuItemShowPillars(minionTr.dropdownmenu, minionId);
       this._addMenuItemShowSchedules(minionTr.dropdownmenu, minionId);
       this._addMenuItemShowBeacons(minionTr.dropdownmenu, minionId);
+      this._addMenuItemShowMine(minionTr.dropdownmenu, minionId);
     }
 
     this.updateFooter();
@@ -203,6 +204,7 @@ export class MinionsPanel extends Panel {
     this._addMenuItemShowPillars(minionTr.dropdownmenu, pMinionId);
     this._addMenuItemShowSchedules(minionTr.dropdownmenu, pMinionId);
     this._addMenuItemShowBeacons(minionTr.dropdownmenu, pMinionId);
+    this._addMenuItemShowMine(minionTr.dropdownmenu, pMinionId);
 
     minionTr.addEventListener("click", (pClickEvent) => {
       const cmdArr = ["state.apply"];
@@ -246,6 +248,12 @@ export class MinionsPanel extends Panel {
   _addMenuItemShowBeacons (pMenu, pMinionId) {
     pMenu.addMenuItem("Show beacons", (pClickEvent) => {
       this.router.goTo("beacons-minion", {"minionid": pMinionId}, undefined, pClickEvent);
+    });
+  }
+
+  _addMenuItemShowMine (pMenu, pMinionId) {
+    pMenu.addMenuItem("Show mine", (pClickEvent) => {
+      this.router.goTo("mine-minion", {"minionid": pMinionId}, undefined, pClickEvent);
     });
   }
 
