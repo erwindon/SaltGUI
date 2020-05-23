@@ -11,7 +11,8 @@ div.search-box .menu-dropdown {
 .run-command-button .menu-dropdown-content {
   display: none;
   position: absolute;
-  max-height: 300px;
+  /* 7 rows of 48px plus 2px */
+  max-height: 338px;
   overflow-y: auto;
   background: #fff;
   box-shadow: 0 3px 10px -2px rgba(0, 0, 0, 30%);

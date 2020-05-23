@@ -207,6 +207,19 @@ h1 {
   text-decoration-skip-ink: none;
 }
 
+.menu-item-shortcut-container {
+  display: none;
+}
+
+.menu-item:hover .menu-item-shortcut-container {
+  display: inline;
+}
+
+.menu-item:hover .menu-item-shortcut-key {
+  text-decoration: underline #4caf50 double;
+  text-decoration-skip-ink: none;
+}
+
 @media (width >= 950px) {
   .fullmenu { display: inline-block; }
   .minimenu { display: none; }

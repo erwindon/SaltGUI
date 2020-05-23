@@ -15,6 +15,8 @@ import {JobsPage} from "./pages/Jobs.js";
 import {KeysPage} from "./pages/Keys.js";
 import {LoginPage} from "./pages/Login.js";
 import {LogoutPage} from "./pages/Logout.js";
+import {MineMinionPage} from "./pages/MineMinion.js";
+import {MinePage} from "./pages/Mine.js";
 import {MinionsPage} from "./pages/Minions.js";
 import {NodegroupsPage} from "./pages/Nodegroups.js";
 import {OptionsPage} from "./pages/Options.js";
@@ -47,6 +49,8 @@ export class Router {
     this._registerPage(Router.grainsMinionPage = new GrainsMinionPage(this));
     this._registerPage(Router.pillarsPage = new PillarsPage(this));
     this._registerPage(Router.pillarsMinionPage = new PillarsMinionPage(this));
+    this._registerPage(Router.minePage = new MinePage(this));
+    this._registerPage(Router.mineMinionPage = new MineMinionPage(this));
     this._registerPage(Router.beaconsPage = new BeaconsPage(this));
     this._registerPage(Router.beaconsMinionPage = new BeaconsMinionPage(this));
     this._registerPage(Router.schedulesPage = new SchedulesPage(this));
@@ -108,18 +112,12 @@ export class Router {
         dropDownDiv.append(dropdownContent);
       }
       const itemDiv = Utils.createDiv("run-command-button menu-item", pButtonId, "button-" + pButtonId + "1");
-      if (pKey) {
-        itemDiv.classList.add("menu-item-first-letter");
-        itemDiv.dataset.hasShortcut = "true";
-      }
+      Router._applyMenuKeyStyle(itemDiv, pButtonId, pKey);
       dropdownContent.append(itemDiv);
     } else {
       const topItemDiv = Utils.createDiv("menu-item", pButtonId, "button-" + pButtonId + "1");
       dropDownDiv.append(topItemDiv);
-      if (pKey) {
-        topItemDiv.classList.add("menu-item-first-letter");
-        topItemDiv.dataset.hasShortcut = "true";
-      }
+      Router._applyMenuKeyStyle(topItemDiv, pButtonId, pKey);
     }
 
     // mini menu
@@ -130,10 +128,7 @@ export class Router {
     if (pParentId) {
       menuItemDiv.style.paddingLeft = "50px";
     }
-    if (pKey) {
-      menuItemDiv.classList.add("menu-item-first-letter");
-      menuItemDiv.dataset.hasShortcut = "true";
-    }
+    Router._applyMenuKeyStyle(menuItemDiv, pButtonId, pKey);
     dropdownContent2.append(menuItemDiv);
 
     // activate the menu items as needed
@@ -165,6 +160,22 @@ export class Router {
           // prevent further actions
           pClickEvent.stopPropagation();
         });
+    }
+  }
+
+  static _applyMenuKeyStyle (pElement, pButtonId, pKey) {
+    if (!pKey) {
+      return;
+    }
+    if (pButtonId[0] === pKey) {
+      pElement.classList.add("menu-item-first-letter");
+    } else {
+      const shortcutContainer = Utils.createSpan("menu-item-shortcut-container");
+      shortcutContainer.append(document.createTextNode(" ("));
+      const keySpan = Utils.createSpan("menu-item-shortcut-key", pKey);
+      shortcutContainer.append(keySpan);
+      shortcutContainer.append(document.createTextNode(")"));
+      pElement.append(shortcutContainer);
     }
   }
 
@@ -205,6 +216,7 @@ export class Router {
     this._registerMenuItem(null, "minions", "minions", "m");
     this._registerMenuItem("minions", "grains", "grains", "g");
     this._registerMenuItem("minions", "pillars", "pillars", "p");
+    this._registerMenuItem("minions", "mine", "mine", "M");
     this._registerMenuItem("minions", "beacons", "beacons", "b");
     this._registerMenuItem("minions", "schedules", "schedules", "s");
     this._registerMenuItem("minions", "nodegroups", "nodegroups", "n");
@@ -303,9 +315,10 @@ export class Router {
   static updateMainMenu () {
     const pages = Router._getPagesList();
 
-    Router._showMenuItem(pages, Router.minionsPage, ["grains", "pillars", "beacons", "schedules", "nodegroups"]);
+    Router._showMenuItem(pages, Router.minionsPage, ["grains", "pillars", "mine", "beacons", "schedules", "nodegroups"]);
     Router._showMenuItem(pages, Router.grainsPage);
     Router._showMenuItem(pages, Router.pillarsPage);
+    Router._showMenuItem(pages, Router.minePage);
     Router._showMenuItem(pages, Router.beaconsPage);
     Router._showMenuItem(pages, Router.schedulesPage);
     Router._showMenuItem(pages, Router.nodegroupsPage);
