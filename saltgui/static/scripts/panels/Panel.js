@@ -1301,7 +1301,9 @@ export class Panel {
 
   onShow () {
     const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
-    this.showSelectColumn(selectVisible);
+    if (this.selectionSessionKeys.includes("select_minions")) {
+      this.showSelectColumn(selectVisible);
+    }
   }
 
   onHide () {

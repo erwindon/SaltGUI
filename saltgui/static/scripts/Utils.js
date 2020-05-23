@@ -658,7 +658,7 @@ export class Utils {
     if (pKeyUpEvent.metaKey) {
       return false;
     }
-    if (pKeyUpEvent.shiftKey) {
+    if (pKeyUpEvent.shiftKey && (pKeyUpEvent.altKey || pKeyUpEvent.ctrlKey || pKeyUpEvent.metaKey)) {
       return false;
     }
     if (pKeyUpEvent.isComposing) {
