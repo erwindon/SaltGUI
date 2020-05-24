@@ -18,6 +18,7 @@ import {LogoutPage} from "./pages/Logout.js";
 import {MinionsPage} from "./pages/Minions.js";
 import {NodegroupsPage} from "./pages/Nodegroups.js";
 import {OptionsPage} from "./pages/Options.js";
+import {OrchestrationsPage} from "./pages/Orchestrations.js";
 import {Output} from "./output/Output.js";
 import {PillarsMinionPage} from "./pages/PillarsMinion.js";
 import {PillarsPage} from "./pages/Pillars.js";
@@ -57,6 +58,7 @@ export class Router {
     this._registerPage(Router.templatesPage = new TemplatesPage(this));
     this._registerPage(Router.eventsPage = new EventsPage(this));
     this._registerPage(Router.reactorsPage = new ReactorsPage(this));
+    this._registerPage(Router.orchestrationsPage = new OrchestrationsPage(this));
     this._registerPage(Router.optionsPage = new OptionsPage(this));
     this._registerPage(Router.issuesPage = new IssuesPage(this));
     this._registerPage(Router.logoutPage = new LogoutPage(this));
@@ -209,6 +211,7 @@ export class Router {
     this._registerMenuItem(null, "jobs", "jobs", "j");
     this._registerMenuItem("jobs", "highstate", "highstate", "h");
     this._registerMenuItem("jobs", "templates", "templates", "t");
+    this._registerMenuItem("jobs", "orchestrations", "orchestrations", "o");
     this._registerMenuItem(null, "events", "events", "e");
     this._registerMenuItem("events", "reactors", "reactors", "r");
     this._registerMenuItem(null, "issues", "issues", "i");
@@ -275,6 +278,15 @@ export class Router {
       } else {
         item.classList.add("menu-item-hidden");
       }
+    }
+
+    // show orchestrations menu item if orchestrations defined
+    const orchestrationsText = Utils.getStorageItem("session", "orchestrations", "");
+    if (orchestrationsText) {
+      const item1 = document.getElementById("button-orchestrations1");
+      item1.classList.remove("menu-item-hidden");
+      const item2 = document.getElementById("button-orchestrations2");
+      item2.classList.remove("menu-item-hidden");
     }
   }
 
