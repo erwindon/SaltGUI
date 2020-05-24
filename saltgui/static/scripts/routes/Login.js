@@ -69,6 +69,11 @@ export class LoginRoute extends Route {
     const eauthField = document.getElementById("eauth");
     const eauth = eauthField.value;
 
+    if(eauth === "default") {
+      this._onLoginFailure("Invalid login-type");
+      return;
+    }
+
     this._toggleForm(false);
     this.router.api.login(userName, passWord, eauth)
       .then(this._onLoginSuccess, this._onLoginFailure);
@@ -140,7 +145,10 @@ export class LoginRoute extends Route {
   _onLoginFailure(error) {
     this._toggleForm(true);
 
-    if(error && error.status === 503) {
+    if(typeof error === "string") {
+      // something detected before trying to login
+      this._showNoticeText("#F44336", error, "notice_login_string_error");
+    } else if(error && error.status === 503) {
       // Service Unavailable
       // e.g. salt-api running but salt-master not running
       this._showNoticeText("#F44336", error.message, "notice_login_service_unavailable");
