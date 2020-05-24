@@ -247,10 +247,12 @@ export class Router {
   }
 
   _hideRoute(pRoute) {
-    pRoute.getPageElement().classList.remove("current");
+    const page = pRoute.getPageElement();
+    page.classList.remove("current");
+    // 500ms matches the timeout in main.css (.route)
     setTimeout(function() {
       // Hide element after fade, so it does not expand the body
-      pRoute.getPageElement().style.display = "none";
+      page.style.display = "none";
     }, 500);
     if(pRoute.onHide) pRoute.onHide();
   }
