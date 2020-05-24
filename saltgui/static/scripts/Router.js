@@ -242,12 +242,12 @@ export class Router {
     }
 
     myThis.currentRoute = pRoute;
-    myThis.currentRoute.getPageElement().className = "route current";
+    myThis.currentRoute.getPageElement().classList.add("current");
     myThis.switchingRoute = false;
   }
 
   _hideRoute(pRoute) {
-    pRoute.getPageElement().className = "route";
+    pRoute.getPageElement().classList.remove("current");
     setTimeout(function() {
       // Hide element after fade, so it does not expand the body
       pRoute.getPageElement().style.display = "none";
