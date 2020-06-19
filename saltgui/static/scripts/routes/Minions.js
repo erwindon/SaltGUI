@@ -149,6 +149,10 @@ export class MinionsRoute extends PageRoute {
       return "no";
     }
 
+    if(items[0] >= "3001") {
+      return "no";
+    }
+
     // should be something newer than we know of
     return "unknown";
   }
