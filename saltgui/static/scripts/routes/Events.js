@@ -3,7 +3,7 @@ import {PageRoute} from './Page.js';
 import {Route} from './Route.js';
 import {Utils} from '../Utils.js';
 
-const MAX_EVENTS_IN_VIEW = 5;
+const MAX_EVENTS_IN_VIEW = 100;
 
 export class EventsRoute extends PageRoute {
 
