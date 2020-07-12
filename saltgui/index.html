@@ -400,6 +400,12 @@
         <div class='dashboard'>
           <div id='events-panel' class='panel events-list'>
             <h1 id="events-title">Recent Events</h1>
+            <!-- 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play) -->
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <span id="events-play-button" style="cursor: pointer; font-size: x-large">&#x23F5;&#xFE0E;</span>
+            <!-- 23F8 = DOUBLE VERTICAL BAR (pause) -->
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <span id="events-pause-button" style="display: none; cursor: pointer; font-size: x-large">&#x23F8;&#xFE0E;</span>
             <!-- 2753 = BLACK QUESTION MARK ORNAMENT -->
             <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
             <span id="help" style="float: right; cursor: help">&#x2753;&#xFE0E;</span>
@@ -412,7 +418,7 @@
               <tbody>
               </tbody>
             </table>
-            <div class='msg'>No events</div>
+            <div class='msg'>...</div>
           </div>
         </div>
       </div>
