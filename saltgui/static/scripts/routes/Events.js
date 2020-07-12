@@ -9,6 +9,7 @@ export class EventsRoute extends PageRoute {
     // don't use /events for the page, that url is reserved
     super("eventsview", "Events", "#page-events", "#button-events", pRouter);
 
+    Utils.addTableHelp(this.getPageElement(), "The content of this page is\nautomatically refreshed\nDisplay is limited to 100 events");
     Utils.makeTableSearchable(this.getPageElement());
   }
 
