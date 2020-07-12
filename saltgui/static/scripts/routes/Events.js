@@ -19,7 +19,7 @@ export class EventsRoute extends PageRoute {
     // add timestamp value
     const stampTd = Route.createTd("", "");
     let stampTxt = pData["_stamp"];
-    //if(!stampTxt) stampTxt = new Date().toISOString();
+    if(!stampTxt) stampTxt = new Date().toISOString();
     // The toISOString applies the same offset, so we do it twice
     const localTimeOffset = new Date().getTimezoneOffset() * 60 * 1000;
     const stampDateTime2 = Date.parse(stampTxt) - 2 * localTimeOffset;
@@ -32,12 +32,11 @@ export class EventsRoute extends PageRoute {
     tr.append(stampTd);
 
     // add tag value
-    const tagTd = Route.createTd("", "");
-    tagTd.innerText = pTag;
+    const tagTd = Route.createTd("", pTag);
     tr.append(tagTd);
 
     // add data value
-    const dataTd = Route.createTd("", "");
+    const dataTd = Route.createTd("event-data", "");
     const pDataObj = {};
     Object.assign(pDataObj, pData);
     delete pDataObj._stamp;
