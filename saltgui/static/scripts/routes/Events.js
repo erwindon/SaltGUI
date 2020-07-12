@@ -19,6 +19,11 @@ export class EventsRoute extends PageRoute {
     // add timestamp value
     const stampTd = Route.createTd("", "");
     let stampTxt = pData["_stamp"];
+    //if(!stampTxt) stampTxt = new Date().toISOString();
+    // The toISOString applies the same offset, so we do it twice
+    const localTimeOffset = new Date().getTimezoneOffset() * 60 * 1000;
+    const stampDateTime2 = Date.parse(stampTxt) - 2 * localTimeOffset;
+    stampTxt = new Date(stampDateTime2).toISOString();
     // fix milliseconds/nanoseconds
     stampTxt = Output.dateTimeStr(stampTxt);
     // remove date
