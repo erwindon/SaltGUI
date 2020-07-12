@@ -3,13 +3,15 @@ import {PageRoute} from './Page.js';
 import {Route} from './Route.js';
 import {Utils} from '../Utils.js';
 
+const MAX_EVENTS_IN_VIEW = 5;
+
 export class EventsRoute extends PageRoute {
 
   constructor(pRouter) {
     // don't use /events for the page, that url is reserved
     super("eventsview", "Events", "#page-events", "#button-events", pRouter);
 
-    Utils.addTableHelp(this.getPageElement(), "The content of this page is\nautomatically refreshed\nDisplay is limited to 100 events");
+    Utils.addTableHelp(this.getPageElement(), "The content of this page is\nautomatically refreshed\nDisplay is limited to " + MAX_EVENTS_IN_VIEW + " events");
     Utils.makeTableSearchable(this.getPageElement());
   }
 
@@ -48,8 +50,8 @@ export class EventsRoute extends PageRoute {
 
     Utils.hideShowTableSearchBar(this.pageElement, "refresh");
 
-    // limit to 100 rows only
-    while(tbody.rows.length > 5) {
+    // limit to MAX_EVENTS_IN_VIEW rows only
+    while(tbody.rows.length > MAX_EVENTS_IN_VIEW) {
       tbody.deleteRow(tbody.rows.length - 1);
     }
 
