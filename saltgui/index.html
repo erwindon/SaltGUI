@@ -38,6 +38,7 @@
             <div class='run-command-button menu-item menu-item-hidden' id='button-templates1'>templates</div>
           </div>
         </div>
+        <div class='menu-item' id='button-events1'>events</div>
         <div class='menu-item' id='button-logout1'>logout</div>
       </div>
 <!-- mini menu -->
@@ -55,6 +56,7 @@
             <div class='run-command-button menu-item' id='button-keys2'>keys</div>
             <div class="run-command-button menu-item" id="button-jobs2">jobs</div>
             <div class='run-command-button menu-item menu-item-hidden' id='button-templates2'>-&nbsp;templates</div>
+            <div class="run-command-button menu-item" id="button-events2">events</div>
             <div class='run-command-button menu-item' id='button-logout2'>logout</div>
           </div>
         </div>
@@ -389,6 +391,23 @@
             <input style="display: none" class="filter-text" list="data-list-jobs" placeholder="&#x1F50D;">
             <table class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class='route' id='page-events'>
+        <div class='dashboard'>
+          <div id='events-panel' class='panel events-list'>
+            <h1 id="events-title">Recent Events</h1>
+            <input style="display: none" class="filter-text" list="data-list-events" placeholder="&#x1F50D;">
+            <table id="events" class='events highlight-rows'>
+              <thead>
+                <tr><th>Timestamp</th><th>Tag</th><th>Data</th></tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+            <div class='msg'>No events</div>
           </div>
         </div>
       </div>
