@@ -46,6 +46,8 @@ export class EventsRoute extends PageRoute {
 
     tbody.prepend(tr);
 
+    Utils.hideShowTableSearchBar(this.pageElement, "refresh");
+
     // limit to 100 rows only
     while(tbody.rows.length > 5) {
       tbody.deleteRow(tbody.rows.length - 1);
