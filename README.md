@@ -18,6 +18,7 @@ A new open source web interface for managing a SaltStack server. Built using van
 - View the schedules for a particular minion
 - View the values for pillars for a particular minion
 - View the beacons for a particular minion
+- View the events on the salt-event bus
 - Match list of minions against reference list
 - Match status of minions against reference list
 
