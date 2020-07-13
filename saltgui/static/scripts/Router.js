@@ -2,6 +2,7 @@ import {API} from './Api.js';
 import {BeaconsMinionRoute} from './routes/BeaconsMinion.js';
 import {BeaconsRoute} from './routes/Beacons.js';
 import {CommandBox} from './CommandBox.js';
+import {EventsRoute} from './routes/Events.js';
 import {GrainsMinionRoute} from './routes/GrainsMinion.js';
 import {GrainsRoute} from './routes/Grains.js';
 import {JobRoute} from './routes/Job.js';
@@ -40,6 +41,7 @@ export class Router {
     this._registerRoute(this.jobRoute = new JobRoute(this));
     this._registerRoute(new JobsRoute(this));
     this._registerRoute(new TemplatesRoute(this));
+    this._registerRoute(this.eventsRoute = new EventsRoute(this));
     this._registerRoute(new OptionsRoute(this));
 
     // show template menu item if templates defined
@@ -139,6 +141,15 @@ export class Router {
     document.querySelector("#button-templates2")
       .addEventListener('click', pClickEvent =>
         window.location.replace(config.NAV_URL + "/templates")
+      );
+
+    document.querySelector("#button-events1")
+      .addEventListener('click', pClickEvent =>
+        window.location.replace(config.NAV_URL + "/eventsview")
+      );
+    document.querySelector("#button-events2")
+      .addEventListener('click', pClickEvent =>
+        window.location.replace(config.NAV_URL + "/eventsview")
       );
 
     document.querySelector("#button-logout1")

@@ -332,6 +332,9 @@ export class API {
       {
         pRouter.jobRoute.handleSaltJobRetEvent(tag, data);
       }
+
+      pRouter.eventsRoute.handleAnyEvent(tag, data);
+
     }.bind(this);
   }
 }

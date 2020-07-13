@@ -90,7 +90,7 @@ export class Utils {
     // FE0E = VARIATION SELECTOR-15 (render as text)
     searchButton.innerHTML = "&#x1f50d;&#xFE0E;";
     searchButton.onclick = ev =>
-      Utils._hideShowTableSearchBar(pStartElement);
+      Utils.hideShowTableSearchBar(pStartElement);
     const table = pStartElement.querySelector("table");
     table.parentElement.insertBefore(searchButton, table);
   }
@@ -101,7 +101,7 @@ export class Utils {
     Utils.addToolTip(helpButton, pHelpText, pStyle);
   }
 
-  static _hideShowTableSearchBar(pStartElement) {
+  static hideShowTableSearchBar(pStartElement, pAction="toggle") {
     // remove all highlights
     const hilitor = new Hilitor(pStartElement, "table tbody");
     hilitor.remove();
@@ -118,7 +118,7 @@ export class Utils {
     input.onkeyup = ev => {
       if(ev.key === "Escape") {
         Utils._updateTableFilter(table, "");
-        Utils._hideShowTableSearchBar(pStartElement);
+        Utils.hideShowTableSearchBar(pStartElement);
         return;
       }
     };
@@ -126,7 +126,11 @@ export class Utils {
       Utils._updateTableFilter(table, input.value);
 
     table.parentElement.insertBefore(input, table);
-    if(input.style.display === "none") {
+    if(pAction === "refresh" && input.style.display === "none") {
+      Utils._updateTableFilter(table, "");
+    } else if(pAction === "refresh") {
+      Utils._updateTableFilter(table, input.value);
+    } else if(input.style.display === "none") {
       Utils._updateTableFilter(table, input.value);
       input.style.display = "";
     } else {

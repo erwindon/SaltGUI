@@ -126,7 +126,9 @@ table tr td {
 .grains th,
 .grains td,
 .minions th,
-.minions td {
+.minions td,
+.events th,
+.events td {
   padding: 8px;
   text-align: left;
   border-bottom: 1px solid #ddd;
