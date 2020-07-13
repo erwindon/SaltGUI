@@ -44,7 +44,7 @@ export class EventsRoute extends PageRoute {
       "No events", "{0} event", "{0} events") +
       (window.sessionStorage.getItem("events-button") === "play" ?
         "" :
-	", press '&#x23F5;&#xFE0E;' to begin");
+        ", press '&#x23F5;&#xFE0E;' to begin");
   }
 
   handleAnyEvent(pTag, pData) {
