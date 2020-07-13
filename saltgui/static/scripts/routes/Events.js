@@ -38,11 +38,13 @@ export class EventsRoute extends PageRoute {
     // when there are more than a screen-ful of events, the user
     // will not see the "press play" message. but ths user already
     // knows that because that cause the events to be shown...
-    msgDiv.innerText = Utils.txtZeroOneMany(tbody.rows.length,
+    // 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play)
+    // FE0E = VARIATION SELECTOR-15 (render as text)
+    msgDiv.innerHTML = Utils.txtZeroOneMany(tbody.rows.length,
       "No events", "{0} event", "{0} events") +
       (window.sessionStorage.getItem("events-button") === "play" ?
         "" :
-	", press 'play' button to begin");
+	", press '&#x23F5;&#xFE0E;' to begin");
   }
 
   handleAnyEvent(pTag, pData) {
