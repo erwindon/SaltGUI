@@ -135,7 +135,7 @@ export class OutputSaltGuiHighstate {
       const taskDiv = Route.createDiv("", "");
       taskDiv.id = Utils.getIdFromMinionId(pMinionId + "." + nr);
 
-      const span = Route.createSpan("", "");
+      const span = Route.createSpan("task-icon", "");
       if(task.result === null) {
         // 2714 = HEAVY CHECK MARK
         span.style.color = "yellow";
@@ -153,8 +153,6 @@ export class OutputSaltGuiHighstate {
         failed += 1;
       }
       taskDiv.append(span);
-
-      taskDiv.append(document.createTextNode(" "));
 
       if(task.name) {
         taskDiv.append(document.createTextNode(task.name));

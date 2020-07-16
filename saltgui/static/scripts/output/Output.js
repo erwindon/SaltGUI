@@ -373,9 +373,6 @@ export class Output {
         txt = txt + ", " + cntMinions + " total";
       }
 
-      // some room for the triangle
-      txt = txt + " ";
-
       allDiv.appendChild(summaryJobsActiveSpan);
 
       summaryJobsListJobSpan.innerText = txt;
@@ -542,7 +539,7 @@ export class Output {
 
       div.append(minionLabel);
 
-      div.appendChild(document.createTextNode(": "));
+      div.appendChild(document.createTextNode(":"));
 
       // multiple line, collapsible
       // 25B7 = WHITE RIGHT-POINTING TRIANGLE
@@ -565,7 +562,6 @@ export class Output {
         div.appendChild(triangle);
 
         if(addHighStateSummaryFlag) {
-          div.appendChild(document.createTextNode(" "));
           Output._addHighStateSummary(div, minionId, tasks);
         }
 

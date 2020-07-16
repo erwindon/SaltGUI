@@ -15,3 +15,19 @@
 #page-job .highlight-task {
   background-color: gray;
 }
+
+#summary-list-job {
+  /* some room for the triangle (when shown) */
+  margin-right: 0.7em;
+}
+
+.triangle {
+  /* some room for the triangle */
+  margin-left: 0.7em;
+  margin-right: 0.7em;
+}
+
+.task-icon {
+  /* some room for the marker */
+  margin-right: 0.7em;
+}
