@@ -257,7 +257,7 @@ export class CommandBox {
     this.onRunReturn("ERROR:\n\n" + pMessage, "");
   }
 
-  getRunParams(pTargetType, pTarget, pToRun) {
+  getRunParams(pTargetType, pTarget, pToRun, pisRunTypeNormalOnly=false) {
 
     // The leading # was used to indicate a nodegroup
     if(pTargetType === "nodegroup" && pTarget.startsWith("#")) {
@@ -339,7 +339,7 @@ export class CommandBox {
     }
 
     const runType = RunType.getRunType();
-    if(params.client === "local" && runType === "async") {
+    if(!pisRunTypeNormalOnly && params.client === "local" && runType === "async") {
       params.client = "local_async";
       // return looks like:
       // { "jid": "20180718173942195461", "minions": [ ... ] }
