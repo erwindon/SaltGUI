@@ -32,9 +32,11 @@ export class OutputNested {
           if(!Array.isArray(ind))
             prefix = '';
           else
+            // 00A0 = NO-BREAK SPACE
             prefix ='-\u00A0';
           OutputNested.display(ind, pIndent + 2, prefix, pOutArray);
         } else {
+          // 00A0 = NO-BREAK SPACE
           OutputNested.display(ind, pIndent, '-\u00A0', pOutArray);
         }
       }

@@ -257,7 +257,7 @@ export class Output {
         // show the output, it might be hidden
         const triangle = pMinionDiv.querySelector("span.triangle");
         // 25BD = WHITE DOWN-POINTING TRIANGLE
-        triangle.innerText = "\u25bd";
+        triangle.innerText = "\u25BD";
         const outputDiv = pMinionDiv.querySelector("div");
         outputDiv.style.display = "";
 
@@ -380,26 +380,26 @@ export class Output {
     }
 
     const masterTriangle = Route.createSpan("", "");
-    // 25B7 = WHITE RIGHT-POINTING TRIANGLE
-    // 25BD = WHITE DOWN-POINTING TRIANGLE
     // use cntMinions instead of cntResponses to be predictable
     // hide details when there are many minions to show
     if(cntMinions > 50)
-      masterTriangle.innerText = "\u25b7";
+      // 25B7 = WHITE RIGHT-POINTING TRIANGLE
+      masterTriangle.innerText = "\u25B7";
     else
-      masterTriangle.innerText = "\u25bd";
+      // 25BD = WHITE DOWN-POINTING TRIANGLE
+      masterTriangle.innerText = "\u25BD";
     masterTriangle.style = "cursor: pointer";
     allDiv.appendChild(masterTriangle);
 
     pOutputContainer.appendChild(allDiv);
 
     masterTriangle.addEventListener("click", pClickEvent => {
-      // 25B7 = WHITE RIGHT-POINTING TRIANGLE
       // 25BD = WHITE DOWN-POINTING TRIANGLE
-      if(masterTriangle.innerText !== "\u25bd") {
-        masterTriangle.innerText = "\u25bd";
+      if(masterTriangle.innerText !== "\u25BD") {
+        masterTriangle.innerText = "\u25BD";
       } else {
-        masterTriangle.innerText = "\u25b7";
+        // 25B7 = WHITE RIGHT-POINTING TRIANGLE
+        masterTriangle.innerText = "\u25B7";
       }
 
       for(const div of pOutputContainer.childNodes) {
@@ -542,20 +542,18 @@ export class Output {
       div.appendChild(document.createTextNode(":"));
 
       // multiple line, collapsible
-      // 25B7 = WHITE RIGHT-POINTING TRIANGLE
-      // 25BD = WHITE DOWN-POINTING TRIANGLE
       let triangle = null;
       if(minionMultiLine) {
         triangle = Route.createSpan("triangle", masterTriangle.innerText);
         triangle.style = "cursor: pointer";
         triangle.addEventListener("click", pClickEvent => {
-          // 25B7 = WHITE RIGHT-POINTING TRIANGLE
           // 25BD = WHITE DOWN-POINTING TRIANGLE
-          if(triangle.innerText !== "\u25bd") {
-            triangle.innerText = "\u25bd";
+          if(triangle.innerText !== "\u25BD") {
+            triangle.innerText = "\u25BD";
             minionOutput.style.display = "";
           } else {
-            triangle.innerText = "\u25b7";
+            // 25B7 = WHITE RIGHT-POINTING TRIANGLE
+            triangle.innerText = "\u25B7";
             minionOutput.style.display = "none";
           }
         });
@@ -579,7 +577,8 @@ export class Output {
 
       minionOutput.classList.add("minion-output");
       // hide the per-minion details when we have so many minions
-      if(triangle && triangle.innerText === "\u25b7")
+      // 25B7 = WHITE RIGHT-POINTING TRIANGLE
+      if(triangle && triangle.innerText === "\u25B7")
         minionOutput.style.display = "none";
       div.append(minionOutput);
 

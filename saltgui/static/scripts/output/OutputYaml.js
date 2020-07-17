@@ -75,6 +75,7 @@ export class OutputYaml {
       let out = "";
       let separator = "";
       for(const item of pValue) {
+        // 00A0 = NO-BREAK SPACE
         out += separator + "-\u00A0" + OutputYaml.formatYAML(item, pIndentLevel + 2);
         separator = "\n" + " ".repeat(pIndentLevel);
       }

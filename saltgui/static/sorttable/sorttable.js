@@ -100,7 +100,7 @@ sorttable = {
             this.removeChild(this.parentElement.querySelector('#sorttable_sortfwdind'));
             sortrevind = document.createElement('span');
             sortrevind.id = "sorttable_sortrevind";
-            // u2191 = UPWARDS ARROW
+            // 2191 = UPWARDS ARROW
             sortrevind.innerHTML = stIsIE ? '&nbsp<font face="webdings">5</font>' : '&nbsp;\u2191';
             this.appendChild(sortrevind);
             return;
@@ -114,7 +114,7 @@ sorttable = {
             this.removeChild(this.parentElement.querySelector('#sorttable_sortrevind'));
             sortfwdind = document.createElement('span');
             sortfwdind.id = "sorttable_sortfwdind";
-            // u2193 = DOWNWARDS ARROW
+            // 2193 = DOWNWARDS ARROW
             sortfwdind.innerHTML = stIsIE ? '&nbsp<font face="webdings">6</font>' : '&nbsp;\u2193';
             this.appendChild(sortfwdind);
             return;
@@ -146,14 +146,14 @@ sorttable = {
             this.classList.add("sorttable_sorted_reverse");
             sortrevind = document.createElement('span');
             sortrevind.id = "sorttable_sortrevind";
-            // u2191 = UPWARDS ARROW
+            // 2191 = UPWARDS ARROW
             sortrevind.innerHTML = stIsIE ? '&nbsp;<font face="webdings">5</font>' : '&nbsp;\u2191';
             this.appendChild(sortrevind);
           } else {
             this.classList.add("sorttable_sorted");
             sortfwdind = document.createElement('span');
             sortfwdind.id = "sorttable_sortfwdind";
-            // u2193 = DOWNWARDS ARROW
+            // 2193 = DOWNWARDS ARROW
             sortfwdind.innerHTML = stIsIE ? '&nbsp;<font face="webdings">6</font>' : '&nbsp;\u2193';
             this.appendChild(sortfwdind);
           }

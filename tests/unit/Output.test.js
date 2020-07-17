@@ -140,10 +140,12 @@ describe('Unittests for Output.js', function() {
 
     outputData = [1];
     result = OutputYaml.formatYAML(outputData);
+    // 00A0 = NO-BREAK SPACE
     assert.equal(result, "-\u00A01");
 
     outputData = [1,2,3,4,5];
     result = OutputYaml.formatYAML(outputData);
+    // 00A0 = NO-BREAK SPACE
     assert.equal(result,
       "-\u00A01\n" +
       "-\u00A02\n" +
@@ -168,6 +170,7 @@ describe('Unittests for Output.js', function() {
     outputData = {"ip6_interfaces":{"lo":["::1"],"eth0":["fe80::20d:3aff:fe38:576b"]}};
     result = OutputYaml.formatYAML(outputData);
     // ordered output
+    // 00A0 = NO-BREAK SPACE
     assert.equal(result, 
       "ip6_interfaces:\n" +
       "  eth0:\n" +
@@ -200,6 +203,7 @@ describe('Unittests for Output.js', function() {
 
     outputData = ["txt1\ntxt2\ntxt3"];
     result = OutputNested.formatNESTED(outputData);
+    // 00A0 = NO-BREAK SPACE
     assert.equal(result, "-\u00A0txt1\n  txt2\n  txt3");
 
     outputData = [];
@@ -208,10 +212,12 @@ describe('Unittests for Output.js', function() {
 
     outputData = [1];
     result = OutputNested.formatNESTED(outputData);
+    // 00A0 = NO-BREAK SPACE
     assert.equal(result, "-\u00A01");
 
     outputData = [1,2,3,4,5];
     result = OutputNested.formatNESTED(outputData);
+    // 00A0 = NO-BREAK SPACE
     assert.equal(result,
       "-\u00A01\n" +
       "-\u00A02\n" +
@@ -221,6 +227,7 @@ describe('Unittests for Output.js', function() {
 
     outputData = [{"a":1},{"a":1},[1,2],7,{"a":""},{"a":null}];
     result = OutputNested.formatNESTED(outputData);
+    // 00A0 = NO-BREAK SPACE
     assert.equal(result,
       "|_\n" +
       "  ----------\n" +
@@ -261,6 +268,7 @@ describe('Unittests for Output.js', function() {
     outputData = {"ip6_interfaces":{"lo":["::1"],"eth0":["fe80::20d:3aff:fe38:576b"]}};
     result = OutputNested.formatNESTED(outputData);
     // ordered output
+    // 00A0 = NO-BREAK SPACE
     assert.equal(result, 
       "ip6_interfaces:\n" +
       "    ----------\n" +

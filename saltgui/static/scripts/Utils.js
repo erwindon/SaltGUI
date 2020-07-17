@@ -88,7 +88,7 @@ export class Utils {
     const searchButton = Route.createSpan("search", "");
     // 1F50D = LEFT-POINTING MAGNIFYING GLASS
     // FE0E = VARIATION SELECTOR-15 (render as text)
-    searchButton.innerHTML = "&#x1f50d;&#xFE0E;";
+    searchButton.innerHTML = "&#x1F50D;&#xFE0E;";
     searchButton.onclick = ev =>
       Utils.hideShowTableSearchBar(pStartElement);
     const table = pStartElement.querySelector("table");

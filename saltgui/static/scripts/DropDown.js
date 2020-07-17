@@ -19,14 +19,14 @@ export class DropDownMenu {
     this.menuDropdown = Route.createDiv("run-command-button", "");
 
     if(pParentElement.id === "cmd-box") {
-      // 1F4D6 (D83D+DCD6) = A BOOK
+      // D83D+DCD6 = 1F4D6 = A BOOK
       this.menuButton = Route.createDiv("menu-dropdown", "\uD83D\uDCD6");
     } else if(pParentElement.classList && pParentElement.classList.contains("minion-output")) {
-      // 1F4D6 (D83D+DCD6) = A BOOK
+      // 2261 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
       this.menuButton = Route.createSpan("menu-dropdown", "\u2261");
     } else {
-      // 2261 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
       // assume it will be a command menu
+      // 2261 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
       this.menuButton = Route.createDiv("menu-dropdown", "\u2261");
     }
 

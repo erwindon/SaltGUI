@@ -92,9 +92,9 @@ export class OutputSaltGuiHighstate {
       if(change.hasOwnProperty("old") && change.hasOwnProperty("new")) {
         pTaskDiv.append(document.createElement("br"));
         // place changes on one line
-        // 25BA = BLACK RIGHT-POINTING POINTER
         // don't use arrows here, these are higher than a regular
         // text-line and disturb the text-flow
+        // 25BA = BLACK RIGHT-POINTING POINTER
         pTaskDiv.append(document.createTextNode(
           pIndent + key + ": " +
           JSON.stringify(change.old) + " \u25BA " +
@@ -138,18 +138,18 @@ export class OutputSaltGuiHighstate {
       const span = Route.createSpan("task-icon", "");
       if(task.result === null) {
         // 2714 = HEAVY CHECK MARK
-        span.style.color = "yellow";
         span.innerText = "\u2714";
+        span.style.color = "yellow";
         skipped += 1;
       } else if(task.result) {
         // 2714 = HEAVY CHECK MARK
-        span.style.color = "green";
         span.innerText = "\u2714";
+        span.style.color = "green";
         succeeded += 1;
       } else {
         // 2718 = HEAVY BALLOT X
-        span.style.color = "red";
         span.innerText = "\u2718";
+        span.style.color = "red";
         failed += 1;
       }
       taskDiv.append(span);
