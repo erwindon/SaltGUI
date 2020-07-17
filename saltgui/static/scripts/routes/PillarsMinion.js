@@ -1,5 +1,6 @@
 import {DropDownMenu} from '../DropDown.js';
 import {Output} from '../output/Output.js';
+import {OutputYaml} from '../output/OutputYaml.js';
 import {PageRoute} from './Page.js';
 import {Route} from './Route.js';
 import {Utils} from '../Utils.js';
@@ -88,6 +89,7 @@ export class PillarsMinionRoute extends PageRoute {
       }
       catch(err) {
         // most likely a syntax error in the RE
+        console.error("error in regexp saltgui_public_pillars[" + i + "]=" + OutputYaml.formatYAML(publicPillars[i]) + " --> " + err.name + ": " + err.message);
         publicPillars[i] = null;
       }
     }
