@@ -40,14 +40,14 @@ export class JobsRoute extends PageRoute {
 
     const panel = document.getElementById("jobs-panel");
     const menu = new DropDownMenu(panel);
-    this._addMenuItemShowSomeWhenNeeded(menu);
-    this._addMenuItemShowEligibleWhenNeeded(menu);
-    this._addMenuItemShowAllWhenNeeded(menu);
 
     // new menus are always added at the bottom of the div
     // fix that by re-adding it to its proper place
     const titleElement = document.getElementById("jobs-title");
     panel.insertBefore(menu.menuDropdown, titleElement.nextSibling);
+    this._addMenuItemShowSome(menu);
+    this._addMenuItemShowEligible(menu);
+    this._addMenuItemShowAll(menu);
 
     runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData, true, cnt);
@@ -81,27 +81,33 @@ export class JobsRoute extends PageRoute {
     }
   }
 
-  _addMenuItemShowSomeWhenNeeded(pMenu) {
+  _addMenuItemShowSome(pMenu) {
     const maxJobs = 50;
+    let title = "Show&nbsp;first&nbsp;" + maxJobs + "&nbsp;jobs";
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
-    if(cnt === ""+maxJobs) return;
-    pMenu.addMenuItem("Show&nbsp;first&nbsp;" + maxJobs + "&nbsp;jobs", function(pClickEvent) {
+    // 25CF = BLACK CIRCLE
+    if(cnt === "undefined" || cnt === ""+maxJobs) title = "\u25CF " + title;
+    pMenu.addMenuItem(title, function(pClickEvent) {
       window.location.assign(config.NAV_URL + "/jobs?cnt=" + maxJobs);
     }.bind(this));
   }
 
-  _addMenuItemShowEligibleWhenNeeded(pMenu) {
+  _addMenuItemShowEligible(pMenu) {
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
-    if(cnt === "eligible") return;
-    pMenu.addMenuItem("Show&nbsp;eligible&nbsp;jobs", function(pClickEvent) {
+    let title = "Show&nbsp;eligible&nbsp;jobs";
+    // 25CF = BLACK CIRCLE
+    if(cnt === "eligible") title = "\u25CF " + title;
+    pMenu.addMenuItem(title, function(pClickEvent) {
       window.location.assign(config.NAV_URL + "/jobs?cnt=eligible");
     }.bind(this));
   }
 
-  _addMenuItemShowAllWhenNeeded(pMenu) {
+  _addMenuItemShowAll(pMenu) {
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
-    if(cnt === "all") return;
-    pMenu.addMenuItem("Show&nbsp;all&nbsp;jobs", function(pClickEvent) {
+    let title = "Show&nbsp;all&nbsp;jobs";
+    // 25CF = BLACK CIRCLE
+    if(cnt === "all") title = "\u25CF " + title;
+    pMenu.addMenuItem(title, function(pClickEvent) {
       window.location.assign(config.NAV_URL + "/jobs?cnt=all");
     }.bind(this));
   }
