@@ -66,7 +66,7 @@ function Hilitor(start, id, tag)
     input = input.replace(breakRegExp, "|");
     input = input.replace(/^\||\|$/g, "");
     if(input) {
-      var re = "(" + input + ")";
+      var re = "(?:" + input + ")";
       if(!this.openLeft) re = "\\b" + re;
       if(!this.openRight) re = re + "\\b";
       matchRegExp = new RegExp(re, "i");
@@ -90,7 +90,7 @@ function Hilitor(start, id, tag)
     if(!matchRegExp) return;
     if(skipTags.test(node.nodeName)) return;
 
-    // dont highlight inside dropdown menus
+    // don't highlight inside dropdown menus
     if(node.classList && node.classList.contains("run-command-button")) return;
 
     if(node.hasChildNodes()) {
@@ -116,7 +116,7 @@ function Hilitor(start, id, tag)
 
         this.nrHilites++;
       }
-    };
+    }
   };
 
   // remove highlighting
