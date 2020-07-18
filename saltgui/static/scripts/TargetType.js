@@ -11,6 +11,7 @@ export class TargetType {
     TargetType.menuTargetType.addMenuItem(TargetType._targetTypeNodeGroupPrepare, this._manualUpdateTargetTypeText, "nodegroup");
     TargetType.menuTargetType.addMenuItem("Compound", this._manualUpdateTargetTypeText, "compound");
     TargetType.setTargetTypeDefault();
+    TargetType._updateTargetTypeText();
   }
 
   // It takes a while before we known the list of nodegroups
@@ -20,6 +21,9 @@ export class TargetType {
     if(nodeGroupsText && nodeGroupsText !== "{}") {
       pMenuItem.innerText = "Nodegroup";
       pMenuItem.style.display = "block";
+      // optimization as the list of nodegroups will not change until the next login
+      // but mainly to preserve the highlight marker
+      pMenuItem.verifyCallBack = null;
     } else {
       pMenuItem.style.display = "none";
     }
@@ -35,7 +39,7 @@ export class TargetType {
     }
 
     if(pTarget.includes("@") || pTarget.includes(" ") ||
-       pTarget.includes("(") || pTarget.includes(")")) {
+      pTarget.includes("(") || pTarget.includes(")")) {
       // "@" is a strong indicator for compound target
       // but "space", "(" and ")" are also typical for compound target
       TargetType.menuTargetType._value = "compound";
@@ -64,6 +68,7 @@ export class TargetType {
 
   static _manualUpdateTargetTypeText() {
     TargetType.menuTargetType._system = false;
+    TargetType.menuTargetType._value = undefined;
     TargetType._updateTargetTypeText();
   }
 
@@ -84,6 +89,15 @@ export class TargetType {
     case "nodegroup":
       TargetType.menuTargetType.setTitle("Nodegroup");
       break;
+    }
+
+    const m = TargetType.menuTargetType.menuDropdownContent.children;
+    for(let i = 0; i < m.length; i++) {
+      let t = m[i].innerText;
+      t = t.replace(/^. /, "");
+      // 25CF = BLACK CIRCLE
+      if(m[i]._value === targetType) t = "\u25CF " + t;
+      m[i].innerText = t;
     }
   }
 
