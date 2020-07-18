@@ -9,6 +9,7 @@ export class RunType {
     RunType.menuRunType.setTitle("");
     RunType.menuRunType.addMenuItem("Normal", this._updateRunTypeText, "normal");
     RunType.menuRunType.addMenuItem("Async", this._updateRunTypeText, "async");
+    RunType._updateRunTypeText();
   }
 
   static _updateRunTypeText() {
@@ -22,6 +23,15 @@ export class RunType {
     case "async":
       RunType.menuRunType.setTitle("Async");
       break;
+    }
+
+    const m = RunType.menuRunType.menuDropdownContent.children;
+    for(let i = 0; i < m.length; i++) {
+      let t = m[i].innerText;
+      t = t.replace(/^. /, "");
+      // 25CF = BLACK CIRCLE
+      if(m[i]._value === runType) t = "\u25CF " + t;
+      m[i].innerText = t;
     }
   }
 

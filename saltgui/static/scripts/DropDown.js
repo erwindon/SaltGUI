@@ -63,6 +63,7 @@ export class DropDownMenu {
   // or visibility (use menuitem.style.display = "none"/"inline-block")
   addMenuItem(pTitle, pCallBack, pValue) {
     const button = Route.createDiv("run-command-button", "...");
+    if(pValue) button._value = pValue;
     if(typeof pTitle === "string")
       button.innerHTML = pTitle;
     else
