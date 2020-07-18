@@ -58,7 +58,7 @@ export class JobsRoute extends PageRoute {
       });
     }, pRunnerJobsListJobsMsg => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
-    }); 
+    });
 
     // to update details
     // interval should be larger than the retrieval time
@@ -71,7 +71,7 @@ export class JobsRoute extends PageRoute {
     // find an item still marked as "(click)"
     for(const tr of tbody.rows) {
       const detailsField = tr.querySelector("td.details span");
-      if(detailsField.innerText !== "(click)") continue;
+      if(!detailsField || detailsField.innerText !== "(click)") continue;
       const jobId = tr.querySelector("td").innerText;
       detailsField.classList.add("no-status");
       detailsField.innerText = "loading...";
