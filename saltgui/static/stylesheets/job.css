@@ -31,3 +31,7 @@
   /* some room for the marker */
   margin-right: 0.7em;
 }
+
+.minion-output {
+  margin-left: 0.7em;
+}
