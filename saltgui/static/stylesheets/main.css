@@ -26,7 +26,7 @@ header {
   font-weight: normal;
   display: block;
   float: left;
-  padding: 10px 24px 10px 24px;
+  padding: 10px 20px 10px 20px;
 
   /* prevent text selection */
   -webkit-user-select: none;
@@ -56,20 +56,22 @@ h1 {
   border-radius: 1px;
 
   /* separate main-panel and jobs-panel */
-  margin-left: 5px;
-  margin-bottom: 5px;
+  margin: 5px 0 0 5px;
 }
 
-.panel:last-child {
-  margin-right: 5px;
+.panel:first-of-type {
+  margin-left: 0;
+}
+
+@media (max-width: 800px) {
+  .panel {
+    margin-left: 0;
+  }
 }
 
 .panel h1 {
   font-size: 20px;
   font-weight: normal;
-
-  /* separate title from table */
-  margin-bottom: 10px;
 }
 
 .fab {
@@ -116,12 +118,6 @@ h1 {
   color: black;
   opacity: 1;
   cursor: pointer;
-}
-
-@media (max-width: 800px) {
-  .panel:first-of-type {
-    margin-right: 0;
-  }
 }
 
 .menu-item {
@@ -197,10 +193,10 @@ input[type='submit'] {
   color: white;
   border: 0;
   margin-top: 5px;
+  margin-bottom: 0;
   cursor: pointer;
   box-shadow: 0 4px 2px rgba(33, 33, 33, 0.2);
   transition: box-shadow 0.2s;
-  margin-bottom: 0;
   width: 20%;
   min-width: 200px;
 }

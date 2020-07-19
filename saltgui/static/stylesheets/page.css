@@ -5,7 +5,6 @@
 .dashboard {
   display: flex;
   align-items: flex-start;
-  margin: 5px 0 0 0;
 }
 
 .dashboard .panel {
@@ -261,6 +260,5 @@ table tr td:last-of-type {
 
   .dashboard .panel {
     width: auto;
-    margin-bottom: 10px;
   }
 }
