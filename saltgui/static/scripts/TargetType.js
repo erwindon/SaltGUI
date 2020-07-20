@@ -1,4 +1,5 @@
 import {DropDownMenu} from './DropDown.js';
+import {Utils} from './Utils.js';
 
 export class TargetType {
 
@@ -17,7 +18,7 @@ export class TargetType {
   // It takes a while before we known the list of nodegroups
   // so this conclusion must be re-evaluated each time
   static _targetTypeNodeGroupPrepare(pMenuItem) {
-    const nodeGroupsText = window.sessionStorage.getItem("nodegroups");
+    const nodeGroupsText = Utils.getStorageItem("session", "nodegroups");
     if(nodeGroupsText && nodeGroupsText !== "{}") {
       pMenuItem.innerText = "Nodegroup";
       pMenuItem.style.display = "block";

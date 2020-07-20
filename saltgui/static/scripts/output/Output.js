@@ -32,13 +32,7 @@ import {Utils} from '../Utils.js';
 export class Output {
 
   static isOutputFormatAllowed(pRequestedOutputFormat) {
-    let supportedOutputFormats = null;
-    // window.sessionStorage is not defined during unit testing
-    let w = null;
-    try { w = window; } catch(error) { /* void */ }
-    if(w && w.sessionStorage) supportedOutputFormats = w.sessionStorage.getItem("output_formats");
-    if(supportedOutputFormats === "undefined") supportedOutputFormats = null;
-    if(supportedOutputFormats === null) supportedOutputFormats = "doc,saltguihighstate,json";
+    const supportedOutputFormats = Utils.getStorageItem("session", "output_formats", "doc,saltguihighstate,json");
     return supportedOutputFormats.includes(pRequestedOutputFormat);
   }
 
@@ -155,7 +149,7 @@ export class Output {
   static dateTimeStr(pDtStr) {
 
     // no available setting, then return the original
-    const dateTimeFractionDigitsText = window.sessionStorage.getItem("datetime_fraction_digits");
+    const dateTimeFractionDigitsText = Utils.getStorageItem("session", "datetime_fraction_digits");
     if(dateTimeFractionDigitsText === null) return pDtStr;
 
     // setting is not a number, return the original

@@ -2,6 +2,8 @@ import {Route} from './routes/Route.js';
 
 export class Utils {
 
+  // functions for URL parameters
+
   static _getQueryParam2(pUrl, pName) {
     const questionmarkPos = pUrl.indexOf("?");
     if(questionmarkPos < 0) return undefined;
@@ -22,10 +24,47 @@ export class Utils {
     return Utils._getQueryParam2(w.location.href, pName);
   }
 
+  // functions for storage handling
+
+  static _getStorage(pStorage) {
+    // "window" is not defined during unit testing
+    try { const w = window; } catch(error) { return null; }
+    if(pStorage === "local") return window.localStorage;
+    if(pStorage === "session") return window.sessionStorage;
+    console.error("UNKNOWN STORAGE TYPE", pStorage);
+    return null;
+  }
+
+  static getStorageItem(pStorage, pKeyName, pDefaultValue=null) {
+    const storage = Utils._getStorage(pStorage);
+    if(!storage) { console.log("getStorageItem", pStorage, pKeyName); return pDefaultValue; }
+    const v = storage.getItem(pKeyName);
+    //console.log("getStorageItem", pStorage, pKeyName, pDefaultValue, "-->", typeof v, v);
+    if(v === null) return pDefaultValue;
+    if(v === "undefined") return pDefaultValue;
+    return v;
+  }
+
+  static setStorageItem(pStorage, pKeyName, pValue) {
+    const storage = Utils._getStorage(pStorage);
+    if(!storage) { console.log("setStorageItem", pStorage, pKeyName, pValue); return; }
+    //console.log("setStorageItem", pStorage, pKeyName, pValue);
+    storage.setItem(pKeyName, pValue);
+  }
+
+  static clearStorage(pStorage) {
+    const storage = Utils._getStorage(pStorage);
+    if(!storage) { console.log("clearStorage", pStorage); return; }
+    //console.log("cleaStorage", pStorage);
+    storage.clear();
+  }
+
+  // other functions
+
   static addToolTip(pTooltipHost, pTooltipText, pStyle="bottom-center") {
 
     // Users may want to switch this on to improve browser performance
-    const toolTipMode = window.sessionStorage.getItem("tooltip_mode");
+    const toolTipMode = Utils.getStorageItem("session", "tooltip_mode");
 
     if(toolTipMode === "none") {
       return;

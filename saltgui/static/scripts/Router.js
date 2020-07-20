@@ -16,6 +16,7 @@ import {PillarsRoute} from './routes/Pillars.js';
 import {SchedulesMinionRoute} from './routes/SchedulesMinion.js';
 import {SchedulesRoute} from './routes/Schedules.js';
 import {TemplatesRoute} from './routes/Templates.js';
+import {Utils} from './Utils.js';
 
 export class Router {
 
@@ -45,8 +46,8 @@ export class Router {
     this._registerRoute(new OptionsRoute(this));
 
     // show template menu item if templates defined
-    const templatesText = window.sessionStorage.getItem("templates");
-    if(templatesText && templatesText !== "undefined") {
+    const templatesText = Utils.getStorageItem("session", "templates", "");
+    if(templatesText) {
       const item1 = document.querySelector("#button-templates1");
       item1.style.display = "inline-block";
       const item2 = document.querySelector("#button-templates2");
@@ -169,7 +170,7 @@ export class Router {
 
   _logoutTimer() {
     // are we logged in?
-    const token = window.sessionStorage.getItem("token");
+    const token = Utils.getStorageItem("session", "token");
     if(!token) return;
 
     // just a random lightweight api call

@@ -29,10 +29,8 @@ export class OptionsRoute extends PageRoute {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
 
-    const loginResponseStr = window.sessionStorage.getItem("login-response");
-    let loginResponse = JSON.parse(loginResponseStr);
-    // just in case...
-    if(!loginResponse) loginResponse = { };
+    const loginResponseStr = Utils.getStorageItem("session", "login-response", "{}");
+    const loginResponse = JSON.parse(loginResponseStr);
 
     const tokenValue = loginResponse.token;
     const tokenTd = document.getElementById("option-token-value");
@@ -70,31 +68,31 @@ export class OptionsRoute extends PageRoute {
     const permsTd = document.getElementById("option-perms-value");
     permsTd.innerText = permsValue;
 
-    const templatesValue = window.sessionStorage.getItem("templates");
+    const templatesValue = Utils.getStorageItem("session", "templates");
     const templatesTd = document.getElementById("option-templates-value");
     templatesTd.innerText = this._makeTemplatesValue(templatesValue);
 
-    const publicPillarsValue = window.sessionStorage.getItem("public_pillars");
+    const publicPillarsValue = Utils.getStorageItem("session", "public_pillars");
     const publicPillarsTd = document.getElementById("option-public-pillars-value");
     publicPillarsTd.innerText = this._makePublicPillarsValue(publicPillarsValue);
 
-    const previewGrainsValue = window.sessionStorage.getItem("preview_grains");
+    const previewGrainsValue = Utils.getStorageItem("session", "preview_grains");
     const previewGrainsTd = document.getElementById("option-preview-grains-value");
     previewGrainsTd.innerText = this._makePreviewGrainsValue(previewGrainsValue);
 
-    const hideJobsValue = window.sessionStorage.getItem("hide_jobs");
+    const hideJobsValue = Utils.getStorageItem("session", "hide_jobs");
     const hideJobsTd = document.getElementById("option-hide-jobs-value");
     hideJobsTd.innerText = this._makeHideJobsValue(hideJobsValue);
 
-    const showJobsValue = window.sessionStorage.getItem("show_jobs");
+    const showJobsValue = Utils.getStorageItem("session", "show_jobs");
     const showJobsTd = document.getElementById("option-show-jobs-value");
     showJobsTd.innerText = this._makeShowJobsValue(showJobsValue);
 
-    const nodegroupsValue = window.sessionStorage.getItem("nodegroups");
+    const nodegroupsValue = Utils.getStorageItem("session", "nodegroups");
     const nodegroupsTd = document.getElementById("option-nodegroups-value");
     nodegroupsTd.innerText = this._makeNodegroupsValue(nodegroupsValue);
 
-    const outputFormatsValue = window.sessionStorage.getItem("output_formats");
+    const outputFormatsValue = Utils.getStorageItem("session", "output_formats");
     const outputFormatsTd = document.getElementById("option-output-formats-value");
     outputFormatsTd.innerText = this._makeOutputFormatsValue(outputFormatsValue);
 
@@ -126,7 +124,7 @@ export class OptionsRoute extends PageRoute {
     of7.addEventListener("change", this._newOutputFormats);
     of7.checked = outputFormatsValue && outputFormatsValue.includes("yaml");
 
-    const datetimeFractionDigitsValue = window.sessionStorage.getItem("datetime_fraction_digits");
+    const datetimeFractionDigitsValue = Utils.getStorageItem("session", "datetime_fraction_digits");
     const datetimeFractionDigitsTd = document.getElementById("option-datetime-fraction-digits-value");
     datetimeFractionDigitsTd.innerText = this._makeDatetimeFractionDigitsValue(datetimeFractionDigitsValue);
     const dfd0 = document.getElementById("datetime-fraction-digits0");
@@ -151,7 +149,7 @@ export class OptionsRoute extends PageRoute {
     dfd6.addEventListener("change", this._newDatetimeFractionDigits);
     if(datetimeFractionDigitsValue === "6") dfd6.checked = true;
 
-    const tooltipModeValue = window.sessionStorage.getItem("tooltip_mode");
+    const tooltipModeValue = Utils.getStorageItem("session", "tooltip_mode");
     const tooltipModeTd = document.getElementById("option-tooltip-mode-value");
     tooltipModeTd.innerText = this._makeTooltipModeValue(tooltipModeValue);
     const tm0 = document.getElementById("tooltip-mode-full");
@@ -221,7 +219,7 @@ export class OptionsRoute extends PageRoute {
     v = "\"" + v.substring(1) + "\"";
     const outputFormatsTd = document.getElementById("option-output-formats-value");
     outputFormatsTd.innerText = this._makeOutputFormatsValue(v);
-    window.sessionStorage.setItem("output_formats", v);
+    Utils.setStorageItem("session", "output_formats", v);
   }
 
   _makeDatetimeFractionDigitsValue(value) {
@@ -229,7 +227,7 @@ export class OptionsRoute extends PageRoute {
   }
 
   _newDatetimeFractionDigits(evt) {
-    window.sessionStorage.setItem("datetime_fraction_digits", parseInt(evt.target.value));
+    Utils.setStorageItem("session", "datetime_fraction_digits", parseInt(evt.target.value));
     const datetimeFractionDigitsTd = document.getElementById("option-datetime-fraction-digits-value");
     datetimeFractionDigitsTd.innerText = evt.target.value;
   }
@@ -242,7 +240,7 @@ export class OptionsRoute extends PageRoute {
   }
 
   _newTooltipMode(evt) {
-    window.sessionStorage.setItem("tooltip_mode", evt.target.value);
+    Utils.setStorageItem("session", "tooltip_mode", evt.target.value);
     const tooltipModeTd = document.getElementById("option-tooltip-mode-value");
     tooltipModeTd.innerText = evt.target.value;
   }

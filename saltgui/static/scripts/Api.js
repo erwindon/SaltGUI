@@ -1,3 +1,5 @@
+import {Utils} from './Utils.js';
+
 export class HTTPError extends Error {
   constructor(pStatus, pMessage) {
     super();
@@ -21,7 +23,7 @@ export class API {
     };
 
     // store it as the default login method
-    window.localStorage.setItem("eauth", pEauth);
+    Utils.setStorageItem("local", "eauth", pEauth);
 
     return this.apiRequest("POST", "/login", params)
       .then(pLoginData => {
@@ -34,19 +36,19 @@ export class API {
           // just like 403 Unauthorized
           throw new HTTPError(-1, "No permissions");
         }
-        window.sessionStorage.setItem("login-response", JSON.stringify(response));
-        window.sessionStorage.setItem("token", response.token);
+        Utils.setStorageItem("session", "login-response", JSON.stringify(response));
+        Utils.setStorageItem("session", "token", response.token);
       });
   }
 
   _cleanStorage() {
     // clear local storage except key 'eauth'
-    const eauth = window.localStorage.getItem("eauth");
-    window.localStorage.clear();
-    window.localStorage.setItem("eauth", eauth);
+    const eauth = Utils.getStorageItem("local", "eauth");
+    Utils.clearStorage("local");
+    Utils.setStorageItem("local", "eauth", eauth);
 
     // clear all of session storage
-    window.sessionStorage.clear();
+    Utils.clearStorage("session");
   }
 
   logout() {
@@ -208,10 +210,10 @@ export class API {
 
   apiRequest(pMethod, pRoute, pParams) {
     const location = config.API_URL + pRoute;
-    const token = window.sessionStorage.getItem("token");
+    const token = Utils.getStorageItem("session", "token", "");
     const headers = {
       "Accept": "application/json",
-      "X-Auth-Token": token !== null ? token : "",
+      "X-Auth-Token": token,
       "Cache-Control": "no-cache"
     };
     if(pRoute.endsWith(".txt")) headers["Accept"] = "text/plain";
@@ -236,7 +238,7 @@ export class API {
           return null;
         }
         if(pResponse.status === 401 && pRoute !== "/login") {
-          const loginResponseStr = window.sessionStorage.getItem("login-response");
+          const loginResponseStr = Utils.getStorageItem("session", "login-response");
           if(!loginResponseStr) {
             myThis.logout().then(() =>
               window.location.replace(config.NAV_URL + "/login?reason=no-session")
@@ -270,7 +272,7 @@ export class API {
   }
 
   getEvents(pRouter) {
-    const token = window.sessionStorage.getItem("token");
+    const token = Utils.getStorageItem("session", "token");
     if(!token) return;
 
     const source = new EventSource(config.API_URL + '/events?token=' + token);
@@ -283,14 +285,14 @@ export class API {
       source.close();
     };
     source.onmessage = function(pMessage) {
-      const token = window.sessionStorage.getItem("token");
+      const token = Utils.getStorageItem("session", "token");
       if(!token) {
         // no token, stop the stream
         source.close();
         return;
       }
 
-      const loginResponseStr = window.sessionStorage.getItem("login-response");
+      const loginResponseStr = Utils.getStorageItem("session", "login-response");
       if(!loginResponseStr) {
         // no login details, stop the stream
         source.close();

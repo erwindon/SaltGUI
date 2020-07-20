@@ -4,6 +4,7 @@ import {Output} from './output/Output.js';
 import {ParseCommandLine} from './ParseCommandLine.js';
 import {RunType} from './RunType.js';
 import {TargetType} from './TargetType.js';
+import {Utils} from './Utils.js';
 
 export class CommandBox {
 
@@ -28,8 +29,7 @@ export class CommandBox {
 
     const titleElement = document.querySelector(".run-command #template-menu-here");
     const menu = new DropDownMenu(titleElement);
-    let templatesText = window.sessionStorage.getItem("templates");
-    if(!templatesText || templatesText === "undefined") templatesText = "{}";
+    const templatesText = Utils.getStorageItem("session", "templates", "{}");
     const templates = JSON.parse(templatesText);
     const keys = Object.keys(templates).sort();
     for(const key of keys) {
@@ -171,22 +171,18 @@ export class CommandBox {
     while(targetList.firstChild) {
       targetList.removeChild(targetList.firstChild);
     }
-    const nodeGroupsText = window.sessionStorage.getItem("nodegroups");
-    if(nodeGroupsText && nodeGroupsText !== "undefined") {
-      const nodeGroups = JSON.parse(nodeGroupsText);
-      for(const nodeGroup of Object.keys(nodeGroups).sort()) {
-        const option = document.createElement("option");
-        option.value = "#" + nodeGroup;
-        targetList.appendChild(option);
-      }
+    const nodeGroupsText = Utils.getStorageItem("session", "nodegroups", "[]");
+    const nodeGroups = JSON.parse(nodeGroupsText);
+    for(const nodeGroup of Object.keys(nodeGroups).sort()) {
+      const option = document.createElement("option");
+      option.value = "#" + nodeGroup;
+      targetList.appendChild(option);
     }
-    const minions = JSON.parse(window.sessionStorage.getItem("minions"));
-    if(minions) {
-      for(const minionId of minions.sort()) {
-        const option = document.createElement("option");
-        option.value = minionId;
-        targetList.appendChild(option);
-      }
+    const minions = JSON.parse(Utils.getStorageItem("session", "minions", "[]"));
+    for(const minionId of minions.sort()) {
+      const option = document.createElement("option");
+      option.value = minionId;
+      targetList.appendChild(option);
     }
 
     // give another field (which does not have a list) focus first
@@ -306,8 +302,9 @@ export class CommandBox {
     // SALT API returns a 500-InternalServerError when it hits an unknown group
     // Let's improve on that
     if(pTargetType === "nodegroup") {
-      const nodeGroups = JSON.parse(window.sessionStorage.getItem("nodegroups"));
-      if(!nodeGroups || !(pTarget in nodeGroups)) {
+      const nodeGroupsTxt = Utils.getStorageItem("session", "nodegroups", "{}");
+      const nodeGroups = JSON.parse(nodeGroupsTxt);
+      if(!(pTarget in nodeGroups)) {
         this._showError("Unknown nodegroup '" + pTarget + "'");
         return null;
       }

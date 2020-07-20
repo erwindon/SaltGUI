@@ -79,8 +79,7 @@ export class PillarsMinionRoute extends PageRoute {
     }
 
     // collect the public pillars and compile their regexps
-    let publicPillarsText = window.sessionStorage.getItem("public_pillars");
-    if(!publicPillarsText || publicPillarsText === "undefined") publicPillarsText = "[]";
+    const publicPillarsText = Utils.getStorageItem("session", "public_pillars", "[]");
     let publicPillars = JSON.parse(publicPillarsText);
     if(!Array.isArray(publicPillars)) publicPillars = [ ];
     for(let i = 0; i < publicPillars.length; i++) {

@@ -94,7 +94,7 @@ export class KeysRoute extends PageRoute {
 
     const allKeys = pWheelKeyListAllData.return[0].data.return;
 
-    const minionsDict = JSON.parse(window.sessionStorage.getItem("minions-txt"));
+    const minionsDict = JSON.parse(Utils.getStorageItem("session", "minions-txt"));
 
     // Unaccepted goes first because that is where the user must decide
     const minionIds_pre = allKeys.minions_pre.sort();
@@ -378,7 +378,7 @@ export class KeysRoute extends PageRoute {
     const page = document.getElementById("page-keys");
     const table = page.querySelector("#minions");
     const tr = page.querySelector("table tr#" + Utils.getIdFromMinionId(pData.id));
-    const minionsDict = JSON.parse(window.sessionStorage.getItem("minions-txt"));
+    const minionsDict = JSON.parse(Utils.getStorageItem("session", "minions-txt"));
     if(tr) {
       const statusTd = tr.querySelector(".status");
       // drop all other classes (accepted, rejected, etc)

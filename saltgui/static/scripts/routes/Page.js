@@ -23,13 +23,13 @@ export class PageRoute extends Route {
     const table = this.getPageElement().querySelector("#minions");
     const minionIds = Object.keys(minions).sort();
 
-    const minionsDict = JSON.parse(window.sessionStorage.getItem("minions-txt"));
+    const minionsDict = JSON.parse(Utils.getStorageItem("session", "minions-txt"));
 
     // save for the autocompletion
     // This callback will also be called after LOGOUT due to the regular error handling
     // Do not store the information in that case
-    if(window.sessionStorage.getItem("token")) {
-      window.sessionStorage.setItem("minions", JSON.stringify(minionIds));
+    if(Utils.getStorageItem("session", "token")) {
+      Utils.setStorageItem("session", "minions", JSON.stringify(minionIds));
     }
 
     const ipNumberPrefixes = this._getIpNumberPrefixes(minions);
@@ -348,19 +348,13 @@ export class PageRoute extends Route {
     this._sortJobs(jobs);
 
     // collect the list of hidden minions
-    let hideJobsText = window.sessionStorage.getItem("hide_jobs");
-    if(!hideJobsText || hideJobsText === "undefined") {
-      hideJobsText = "[]";
-    }
+    const hideJobsText = Utils.getStorageItem("session", "hide_jobs", "[]");
     this._hideJobs = JSON.parse(hideJobsText);
     if(!Array.isArray(this._hideJobs)) {
       this._hideJobs = [ ];
     }
     // collect the list of hidden minions
-    let showJobsText = window.sessionStorage.getItem("show_jobs");
-    if(!showJobsText || showJobsText === "undefined") {
-      showJobsText = "[]";
-    }
+    const showJobsText = Utils.getStorageItem("session", "show_jobs", "[]");
     this._showJobs = JSON.parse(showJobsText);
     if(!Array.isArray(this._showJobs)) {
       this._showJobs = [ ];
@@ -648,7 +642,7 @@ export class PageRoute extends Route {
 
     staticMinionsTxtPromise.then(pStaticMinionsTxt => {
       if(!pStaticMinionsTxt)
-        window.sessionStorage.setItem("minions-txt", "{}");
+        Utils.setStorageItem("session", "minions-txt", "{}");
       else {
         const lines = pStaticMinionsTxt.trim().split(/\r?\n/).filter(item => !item.startsWith("#"));
         const minions = { };
@@ -659,10 +653,10 @@ export class PageRoute extends Route {
           else
             minions[fields[0]] = fields[1];
         }
-        window.sessionStorage.setItem("minions-txt", JSON.stringify(minions));
+        Utils.setStorageItem("session", "minions-txt", JSON.stringify(minions));
       }
     }, pStaticMinionsTxt => {
-      window.sessionStorage.setItem("minions-txt", "{}");
+      Utils.setStorageItem("session", "minions-txt", "{}");
     });
   }
 }

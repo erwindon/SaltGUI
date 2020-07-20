@@ -13,10 +13,7 @@ export class GrainsRoute extends PageRoute {
     this.updateMinion = this.updateMinion.bind(this);
 
     // collect the list of displayed minions
-    let previewGrainsText = window.sessionStorage.getItem("preview_grains");
-    if(!previewGrainsText || previewGrainsText === "undefined") {
-      previewGrainsText = "[]";
-    }
+    const previewGrainsText = Utils.getStorageItem("session", "preview_grains", "[]");
     this._previewGrains = JSON.parse(previewGrainsText);
     if(!Array.isArray(this._previewGrains)) {
       this._previewGrains = [ ];

@@ -31,9 +31,7 @@ export class LoginRoute extends Route {
 
   onShow() {
     const eauthSelector = document.getElementById("eauth");
-    let eauthValue = window.localStorage.getItem("eauth");
-    if(eauthValue === "null") eauthValue = null;
-    eauthSelector.value = eauthValue ? eauthValue : "pam";
+    eauthSelector.value = Utils.getStorageItem("local", "eauth", "pam");
 
     const reason = decodeURIComponent(Utils.getQueryParam("reason"));
     switch(reason){
@@ -112,34 +110,34 @@ export class LoginRoute extends Route {
     const wheelConfigValuesData = pWheelConfigValuesData.return[0].data.return;
 
     const templates = wheelConfigValuesData.saltgui_templates;
-    window.sessionStorage.setItem("templates", JSON.stringify(templates));
+    Utils.setStorageItem("session", "templates", JSON.stringify(templates));
 
     const publicPillars = wheelConfigValuesData.saltgui_public_pillars;
-    window.sessionStorage.setItem("public_pillars", JSON.stringify(publicPillars));
+    Utils.setStorageItem("session", "public_pillars", JSON.stringify(publicPillars));
 
     const previewGrains = wheelConfigValuesData.saltgui_preview_grains;
-    window.sessionStorage.setItem("preview_grains", JSON.stringify(previewGrains));
+    Utils.setStorageItem("session", "preview_grains", JSON.stringify(previewGrains));
 
     const hideJobs = wheelConfigValuesData.saltgui_hide_jobs;
-    window.sessionStorage.setItem("hide_jobs", JSON.stringify(hideJobs));
+    Utils.setStorageItem("session", "hide_jobs", JSON.stringify(hideJobs));
     const showJobs = wheelConfigValuesData.saltgui_show_jobs;
-    window.sessionStorage.setItem("show_jobs", JSON.stringify(showJobs));
+    Utils.setStorageItem("session", "show_jobs", JSON.stringify(showJobs));
 
     let nodeGroups = wheelConfigValuesData.nodegroups;
     // Even when not set, the api server gives this an actual value "{}" here.
     // Let's assume the user never sets that value. Sounds reasonable because
     // when it is set, it is normally set to an actual value/list.
     if(!nodeGroups || !Object.keys(nodeGroups).length) nodeGroups = undefined;
-    window.sessionStorage.setItem("nodegroups", JSON.stringify(nodeGroups));
+    Utils.setStorageItem("session", "nodegroups", JSON.stringify(nodeGroups));
 
     const outputFormats = wheelConfigValuesData.saltgui_output_formats;
-    window.sessionStorage.setItem("output_formats", JSON.stringify(outputFormats));
+    Utils.setStorageItem("session", "output_formats", JSON.stringify(outputFormats));
 
     const dateTimeFractionDigits = wheelConfigValuesData.saltgui_datetime_fraction_digits;
-    window.sessionStorage.setItem("datetime_fraction_digits", JSON.stringify(dateTimeFractionDigits));
+    Utils.setStorageItem("session", "datetime_fraction_digits", JSON.stringify(dateTimeFractionDigits));
 
     const toolTipMode = wheelConfigValuesData.saltgui_tooltip_mode;
-    window.sessionStorage.setItem("tooltip_mode", toolTipMode);
+    Utils.setStorageItem("session", "tooltip_mode", toolTipMode);
   }
 
   _onLoginFailure(error) {
