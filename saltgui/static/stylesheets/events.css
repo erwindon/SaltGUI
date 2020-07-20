@@ -4,7 +4,7 @@ td.event-data {
 
 #events-play-button:hover,
 #events-pause-button:hover {
-  opacity: 0.5;
+  color: #4caf50;
 }
 
 #page-events {

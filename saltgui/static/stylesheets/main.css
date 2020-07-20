@@ -103,7 +103,7 @@ h1 {
 }
 
 .search:hover {
-  color: black;
+  color: #4caf50;
 }
 
 .nearly-visible-button {
@@ -115,7 +115,7 @@ h1 {
 }
 
 .nearly-visible-button:hover {
-  color: black;
+  color: #4caf50;
   opacity: 1;
   cursor: pointer;
 }
