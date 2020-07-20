@@ -341,7 +341,7 @@ export class JobRoute extends Route {
 
     if(typeof pData !== "object") {
       summaryJobsActiveSpan.innerText = "(error)";
-      Utils.addToolTip(summaryJobsActiveSpan, pData, "bottom-right");
+      Utils.addToolTip(summaryJobsActiveSpan, pData, "bottom-left");
       return;
     }
 
