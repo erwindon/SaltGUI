@@ -12,7 +12,8 @@ export class PillarsRoute extends PageRoute {
     this.updateMinion = this.updateMinion.bind(this);
 
     Utils.makeTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement(), "pillars-search-button", "pillars-table");
+    Utils.makeTableSearchable(this.getPageElement(), "pillars-search-button-jobs", "pillars-jobs-table");
   }
 
   onShow() {
@@ -26,12 +27,12 @@ export class PillarsRoute extends PageRoute {
     wheelKeyListAllPromise.then(pWheelKeyListAllData => {
       myThis._handlePillarsWheelKeyListAll(pWheelKeyListAllData);
       localPillarObfuscatePromise.then(pLocalPillarObfuscateData => {
-        myThis.updateMinions(pLocalPillarObfuscateData);
+        myThis.updateMinions("pillars-table", pLocalPillarObfuscateData);
       }, pLocalPillarObfuscateMsg => {
         const localPillarObfuscateData = {"return":[{}]};
         for(const k of pWheelKeyListAllData.return[0].data.return.minions)
           localPillarObfuscateData.return[0][k] = JSON.stringify(pLocalPillarObfuscateMsg);
-        myThis.updateMinions(localPillarObfuscateData);
+        myThis.updateMinions("pillars-table", localPillarObfuscateData);
       });
     }, pWheelKeyListAllMsg => {
       myThis._handlePillarsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
@@ -50,7 +51,7 @@ export class PillarsRoute extends PageRoute {
   }
 
   _handlePillarsWheelKeyListAll(pWheelKeyListAllData) {
-    const table = this.getPageElement().querySelector('#minions');
+    const table = document.getElementById("pillars-table");
 
     if(PageRoute.showErrorRowInstead(table, pWheelKeyListAllData)) return;
 
@@ -66,7 +67,7 @@ export class PillarsRoute extends PageRoute {
       this._addMenuItemShowPillars(menu, minionId);
 
       minionTr.addEventListener("click", pClickEvent =>
-        window.location.assign("pillarsminion?minionid=" + encodeURIComponent(minionId))
+        window.location.assign("pillars-minion?minionid=" + encodeURIComponent(minionId))
       );
     }
 
@@ -112,13 +113,13 @@ export class PillarsRoute extends PageRoute {
     this._addMenuItemShowPillars(menu, pMinionId);
 
     minionTr.addEventListener("click", pClickEvent =>
-      window.location.assign(config.NAV_URL + "/pillarsminion?minionid=" + encodeURIComponent(pMinionId))
+      window.location.assign(config.NAV_URL + "/pillars-minion?minionid=" + encodeURIComponent(pMinionId))
     );
   }
 
   _addMenuItemShowPillars(pMenu, pMinionId) {
     pMenu.addMenuItem("Show&nbsp;pillars", function(pClickEvent) {
-      window.location.assign(config.NAV_URL + "/pillarsminion?minionid=" + encodeURIComponent(pMinionId));
+      window.location.assign(config.NAV_URL + "/pillars-minion?minionid=" + encodeURIComponent(pMinionId));
     }.bind(this));
   }
 }

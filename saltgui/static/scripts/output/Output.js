@@ -307,7 +307,7 @@ export class Output {
       return;
     }
 
-    const allDiv = Route.createDiv("nohide", "");
+    const allDiv = Route.createDiv("no-search", "");
     const cntMinions = pMinionData.length;
 
     if(!pCommand.startsWith("runners.") &&

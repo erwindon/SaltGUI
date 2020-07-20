@@ -19,7 +19,7 @@ export class EventsRoute extends PageRoute {
     this._clickEventsPlayButton(false);
 
     Utils.addTableHelp(this.getPageElement(), "The content of this page is\nautomatically refreshed\nDisplay is limited to " + MAX_EVENTS_IN_VIEW + " events");
-    Utils.makeTableSearchable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement(), "events-search-button", "events-table");
   }
 
   _clickEventsPlayButton(isPlay) {
@@ -86,7 +86,8 @@ export class EventsRoute extends PageRoute {
 
     tbody.prepend(tr);
 
-    Utils.hideShowTableSearchBar(this.pageElement, "refresh");
+    const inputField = this.pageElement.querySelector("input.filter-text");
+    Utils.hideShowTableSearchBar(inputField, tbody.parentElement, "refresh");
 
     // limit to MAX_EVENTS_IN_VIEW rows only
     while(tbody.rows.length > MAX_EVENTS_IN_VIEW) {

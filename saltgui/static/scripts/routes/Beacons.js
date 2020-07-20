@@ -12,7 +12,8 @@ export class BeaconsRoute extends PageRoute {
     this.updateMinion = this.updateMinion.bind(this);
 
     Utils.makeTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement(), "beacons-search-button", "beacons-table");
+    Utils.makeTableSearchable(this.getPageElement(), "beacons-search-button-jobs", "beacons-jobs-table");
   }
 
   onShow() {
@@ -26,12 +27,12 @@ export class BeaconsRoute extends PageRoute {
     wheelKeyListAllPromise.then(pWheelKeyListAllData => {
       myThis._handleBeaconsWheelKeyListAll(pWheelKeyListAllData);
       localBeaconsListPromise.then(pLocalBeaconsListData => {
-        myThis.updateMinions(pLocalBeaconsListData);
+        myThis.updateMinions("beacons-table", pLocalBeaconsListData);
       }, pLocalBeaconsListMsg => {
         const localBeaconsListData = {"return":[{}]};
         for(const k of pWheelKeyListAllData.return[0].data.return.minions)
           localBeaconsListData.return[0][k] = JSON.stringify(pLocalBeaconsListMsg);
-        myThis.updateMinions(localBeaconsListData);
+        myThis.updateMinions("beacons-table", localBeaconsListData);
       });
     }, pWheelKeyListAllMsg => {
       myThis._handleBeaconsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
@@ -84,7 +85,7 @@ export class BeaconsRoute extends PageRoute {
   }
 
   _handleBeaconsWheelKeyListAll(pWheelKeyListAllData) {
-    const table = this.getPageElement().querySelector('#minions');
+    const table = document.getElementById("beacons-table");
 
     if(PageRoute.showErrorRowInstead(table, pWheelKeyListAllData)) return;
 
@@ -100,7 +101,7 @@ export class BeaconsRoute extends PageRoute {
       this._addMenuItemShowBeacons(menu, minionId);
 
       minionTr.addEventListener("click", pClickEvent =>
-        window.location.assign(config.NAV_URL + "/beaconsminion?minionid=" + encodeURIComponent(minionId))
+        window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(minionId))
       );
     }
 
@@ -147,13 +148,13 @@ export class BeaconsRoute extends PageRoute {
     this._addMenuItemShowBeacons(menu, pMinionId);
 
     minionTr.addEventListener("click", pClickEvent =>
-      window.location.assign(config.NAV_URL + "/beaconsminion?minionid=" + encodeURIComponent(pMinionId))
+      window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(pMinionId))
     );
   }
 
   _addMenuItemShowBeacons(pMenu, pMinionId) {
     pMenu.addMenuItem("Show&nbsp;beacons", function(pClickEvent) {
-      window.location.assign(config.NAV_URL + "/beaconsminion?minionid=" + encodeURIComponent(pMinionId));
+      window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(pMinionId));
     }.bind(this));
   }
 }

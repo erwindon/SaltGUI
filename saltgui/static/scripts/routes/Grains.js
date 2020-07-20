@@ -35,7 +35,8 @@ export class GrainsRoute extends PageRoute {
     sorttable.makeSortable(newHead.parentNode);
 
     Utils.makeTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement(), "grains-search-button", "grains-table");
+    Utils.makeTableSearchable(this.getPageElement(), "grains-search-button-jobs", "grains-jobs-table");
   }
 
   onShow() {
@@ -49,12 +50,12 @@ export class GrainsRoute extends PageRoute {
     wheelKeyListAllPromise.then(pWheelKeyListAllData => {
       myThis._handleGrainsWheelKeyListAll(pWheelKeyListAllData);
       localGrainsItemsPromise.then(pLocalGrainsItemsData => {
-        myThis.updateMinions(pLocalGrainsItemsData);
+        myThis.updateMinions("grains-table", pLocalGrainsItemsData);
       }, pLocalGrainsItemsMsg => {
         const localGrainsItemsData = {"return":[{}]};
         for(const k of pWheelKeyListAllData.return[0].data.return.minions)
           localGrainsItemsData.return[0][k] = JSON.stringify(pLocalGrainsItemsMsg);
-        myThis.updateMinions(localGrainsItemsData);
+        myThis.updateMinions("grains-table", localGrainsItemsData);
       });
     }, pWheelKeyListAllMsg => {
       myThis._handleGrainsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
@@ -73,7 +74,7 @@ export class GrainsRoute extends PageRoute {
   }
 
   _handleGrainsWheelKeyListAll(pWheelKeyListAllData) {
-    const table = this.getPageElement().querySelector('#minions');
+    const table = document.getElementById('grains-table');
 
     if(PageRoute.showErrorRowInstead(table, pWheelKeyListAllData)) return;
 
@@ -93,7 +94,7 @@ export class GrainsRoute extends PageRoute {
       }
 
       minionTr.addEventListener("click", pClickEvent =>
-        window.location.assign(config.NAV_URL + "/grainsminion?minionid=" + encodeURIComponent(minionId))
+        window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(minionId))
       );
     }
 
@@ -171,13 +172,13 @@ export class GrainsRoute extends PageRoute {
     }
 
     minionTr.addEventListener("click", pClickEvent =>
-      window.location.assign(config.NAV_URL + "/grainsminion?minionid=" + encodeURIComponent(pMinionId))
+      window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(pMinionId))
     );
   }
 
   _addMenuItemShowGrains(pMenu, pMinionId) {
     pMenu.addMenuItem("Show&nbsp;grains", function(pClickEvent) {
-      window.location.assign(config.NAV_URL + "/grainsminion?minionid=" + encodeURIComponent(pMinionId));
+      window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(pMinionId));
     }.bind(this));
   }
 }

@@ -8,7 +8,7 @@ import {Utils} from '../Utils.js';
 export class SchedulesMinionRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("schedulesminion", "Schedules", "#page-schedules-minion", "#button-schedules", pRouter);
+    super("schedules-minion", "Schedules", "#page-schedules-minion", "#button-schedules", pRouter);
 
     this._handleLocalScheduleList = this._handleLocalScheduleList.bind(this);
 
@@ -18,7 +18,8 @@ export class SchedulesMinionRoute extends PageRoute {
     );
 
     Utils.makeTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement(), "schedules-minion-search-button", "schedules-minion-table");
+    Utils.makeTableSearchable(this.getPageElement(), "schedules-minion-search-button-jobs", "schedules-minion-jobs-table");
   }
 
   onShow() {
@@ -55,7 +56,7 @@ export class SchedulesMinionRoute extends PageRoute {
   _handleLocalScheduleList(pLocalScheduleList, pMinionId) {
     const panel = document.getElementById("schedules-minion-panel");
 
-    const container = document.getElementById("schedules-minion-list");
+    const container = document.getElementById("schedules-minion-table");
 
     if(PageRoute.showErrorRowInstead(container.tBodies[0], pLocalScheduleList)) return;
 

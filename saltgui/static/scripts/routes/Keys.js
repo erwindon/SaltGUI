@@ -15,7 +15,8 @@ export class KeysRoute extends PageRoute {
 
     Utils.addTableHelp(this.getPageElement(), "The content of this page is\nautomatically refreshed");
     Utils.makeTableSortable(this.getPageElement(), false, 1);
-    Utils.makeTableSearchable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement(), "keys-search-button", "keys-table");
+    Utils.makeTableSearchable(this.getPageElement(), "keys-search-button-jobs", "keys-jobs-table");
   }
 
   onShow() {
@@ -88,7 +89,7 @@ export class KeysRoute extends PageRoute {
   _handleKeysWheelKeyListAll(pWheelKeyListAllData) {
     if(!pWheelKeyListAllData) return;
 
-    const table = this.getPageElement().querySelector("#minions");
+    const table = document.getElementById("keys-table");
 
     if(PageRoute.showErrorRowInstead(table, pWheelKeyListAllData)) return;
 
@@ -375,10 +376,9 @@ export class KeysRoute extends PageRoute {
   }
 
   handleSaltAuthEvent(pTag, pData) {
-    const page = document.getElementById("page-keys");
-    const table = page.querySelector("#minions");
-    const tr = page.querySelector("table tr#" + Utils.getIdFromMinionId(pData.id));
-    const minionsDict = JSON.parse(Utils.getStorageItem("session", "minions-txt"));
+    const table = document.getElementById("keys-table");
+    const tr = table.querySelector("tr#" + Utils.getIdFromMinionId(pData.id));
+    const minionsDict = JSON.parse(window.sessionStorage.getItem("minions-txt"));
     if(tr) {
       const statusTd = tr.querySelector(".status");
       // drop all other classes (accepted, rejected, etc)
@@ -407,7 +407,7 @@ export class KeysRoute extends PageRoute {
       // keep the fingerprint
       // update the menu because it may be in a hidden state
       tr.saltguidropdownmenu.verifyAll();
-    } else if(page.querySelector("table tr") === null) {
+    } else if(table.querySelector("tr") === null) {
       // only when the full list is already available
       // this prevents a random set of records from appearing
       // at the top of the table that happen to be received
@@ -433,7 +433,7 @@ export class KeysRoute extends PageRoute {
 
     // we do not have the fingerprint yet
     // pre-fill with a dummy value and then retrieve the actual value
-    const tr2 = page.querySelector("table tr#" + Utils.getIdFromMinionId(pData.id));
+    const tr2 = table.querySelector("tr#" + Utils.getIdFromMinionId(pData.id));
     if(!tr2) return;
     // at this stage, the field is still classed "os" instead of "fingerprint"
     const fingerprintSpan = tr2.querySelector("td.os");

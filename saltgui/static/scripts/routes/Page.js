@@ -15,12 +15,12 @@ export class PageRoute extends Route {
     this.updateMinions = this.updateMinions.bind(this);
   }
 
-  updateMinions(pData) {
+  updateMinions(pTableId, pData) {
     if(!pData) return;
 
     const minions = pData.return[0];
 
-    const table = this.getPageElement().querySelector("#minions");
+    const table = document.getElementById(pTableId);
     const minionIds = Object.keys(minions).sort();
 
     const minionsDict = JSON.parse(Utils.getStorageItem("session", "minions-txt"));

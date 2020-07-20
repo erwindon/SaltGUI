@@ -14,7 +14,7 @@ export class JobsRoute extends PageRoute {
     this._updateNextJob = this._updateNextJob.bind(this);
 
     Utils.makeTableSortable(this.getPageElement(), true);
-    Utils.makeTableSearchable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement(), "jobs-search-button", "jobs-table");
   }
 
   onShow() {
@@ -67,7 +67,7 @@ export class JobsRoute extends PageRoute {
   }
 
   _updateNextJob() {
-    const tbody = this.pageElement.querySelector("table#jobs tbody");
+    const tbody = this.pageElement.querySelector("#jobs-table tbody");
     // find an item still marked as "(click)"
     for(const tr of tbody.rows) {
       const detailsField = tr.querySelector("td.details span");
@@ -218,7 +218,7 @@ export class JobsRoute extends PageRoute {
 
     if(typeof pData !== "object") {
       // update all jobs (page) with the error message
-      const tbody = this.pageElement.querySelector("table#jobs tbody");
+      const tbody = this.pageElement.querySelector("#jobs-table tbody");
       for(const tr of tbody.rows) {
         const statusField = tr.querySelector("td.status span.no-status");
         if(!statusField) continue;
@@ -260,7 +260,7 @@ export class JobsRoute extends PageRoute {
     }
 
     // update all finished jobs (page)
-    const tbody = this.pageElement.querySelector("table#jobs tbody");
+    const tbody = this.pageElement.querySelector("#jobs-table tbody");
     for(const tr of tbody.rows) {
       const statusField = tr.querySelector("td.status span.no-status");
       if(!statusField) continue;

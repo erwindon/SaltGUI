@@ -123,57 +123,61 @@ export class Utils {
     return pElement.textContent.toUpperCase().includes(pSearchText);
   }
 
-  static makeTableSearchable(pStartElement) {
-    const searchButton = Route.createSpan("search", "");
-    // 1F50D = LEFT-POINTING MAGNIFYING GLASS
-    // FE0E = VARIATION SELECTOR-15 (render as text)
-    searchButton.innerHTML = "&#x1F50D;&#xFE0E;";
+  static makeTableSearchable(pStartElement, pSearchButtonId, pTableId) {
+
+    const inputField = document.createElement("input");
+    inputField.style.display = "none";
+    inputField.classList.add("filter-text");
+    // 1F50D = D83D DD0D = LEFT-POINTING MAGNIFYING GLASS
+    inputField.placeholder = "\uD83D\uDD0D";
+
+    const table = document.getElementById(pTableId);
+    table.parentElement.insertBefore(inputField, table);
+
+    const searchButton = document.getElementById(pSearchButtonId);
     searchButton.onclick = ev =>
-      Utils.hideShowTableSearchBar(pStartElement);
-    const table = pStartElement.querySelector("table");
-    table.parentElement.insertBefore(searchButton, table);
+      Utils.hideShowTableSearchBar(inputField, table);
   }
 
   static addTableHelp(pStartElement, pHelpText, pStyle="bottom-right") {
     const helpButton = pStartElement.querySelector("#help");
-    helpButton.classList.add("search");
+    helpButton.classList.add("search-button");
     Utils.addToolTip(helpButton, pHelpText, pStyle);
   }
 
-  static hideShowTableSearchBar(pStartElement, pAction="toggle") {
+  static hideShowTableSearchBar(pSearchBlock, pTable, pAction="toggle") {
     // remove all highlights
-    const hilitor = new Hilitor(pStartElement, "table tbody");
+    const searchInSelector = pTable.tagName === "TABLE" ? "tbody" : "";
+    const hilitor = new Hilitor(pTable, searchInSelector);
     hilitor.remove();
 
     // show rows in all tables
-    const allFM = pStartElement.querySelectorAll("table .no-filter-match");
+    const allFM = pTable.querySelectorAll(".no-filter-match");
     for(const fm of allFM)
       fm.classList.remove("no-filter-match");
 
-    const table = pStartElement.querySelector("table");
-
-    // hide/show search box
-    const input = pStartElement.querySelector("input.filter-text");
+    // hide/show search box (the block may become more complicated later)
+    const input = pSearchBlock;
     input.onkeyup = ev => {
       if(ev.key === "Escape") {
-        Utils._updateTableFilter(table, "");
-        Utils.hideShowTableSearchBar(pStartElement);
+        Utils._updateTableFilter(pTable, "");
+        Utils.hideShowTableSearchBar(pSearchBlock, pTable);
         return;
       }
     };
     input.oninput = ev =>
-      Utils._updateTableFilter(table, input.value);
+      Utils._updateTableFilter(pTable, input.value);
 
-    table.parentElement.insertBefore(input, table);
+    pTable.parentElement.insertBefore(input, pTable);
     if(pAction === "refresh" && input.style.display === "none") {
-      Utils._updateTableFilter(table, "");
+      Utils._updateTableFilter(pTable, "");
     } else if(pAction === "refresh") {
-      Utils._updateTableFilter(table, input.value);
+      Utils._updateTableFilter(pTable, input.value);
     } else if(input.style.display === "none") {
-      Utils._updateTableFilter(table, input.value);
+      Utils._updateTableFilter(pTable, input.value);
       input.style.display = "";
     } else {
-      Utils._updateTableFilter(table, "");
+      Utils._updateTableFilter(pTable, "");
       input.style.display = "none";
     }
     input.focus();
@@ -182,17 +186,24 @@ export class Utils {
   static _updateTableFilter(pTable, pSearchText) {
     // remove highlighting before re-comparing
     // as it affects the texts
-    const hilitor = new Hilitor(pTable, "tbody");
+    const searchInSelector = pTable.tagName === "TABLE" ? "tbody" : "";
+    const hilitor = new Hilitor(pTable, searchInSelector);
     hilitor.remove();
 
     // find text
     pSearchText = pSearchText.toUpperCase();
-    for(const row of pTable.tBodies[0].rows) {
+    const blocks = pTable.tagName === "TABLE" ? pTable.tBodies[0].rows : pTable.children;
+    for(const row of blocks) {
+      if(row.classList.contains("no-search")) continue;
       let show = false;
-      for(const cell of row.cells) {
+      const items = row.tagName === "TR" ? row.cells : [row];
+      for(const cell of items) {
         // do not use "innerText"
         // that one does not handle hidden text
-        if(Utils.hasTextContent(cell, pSearchText)) show = true;
+        if(Utils.hasTextContent(cell, pSearchText)) {
+          show = true;
+          break;
+        }
       }
       if(show)
         row.classList.remove("no-filter-match");

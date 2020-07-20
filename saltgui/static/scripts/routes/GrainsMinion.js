@@ -7,7 +7,7 @@ import {Utils} from '../Utils.js';
 export class GrainsMinionRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("grainsminion", "Grains", "#page-grains-minion", "#button-grains", pRouter);
+    super("grains-minion", "Grains", "#page-grains-minion", "#button-grains", pRouter);
 
     this._handleLocalGrainsItems = this._handleLocalGrainsItems.bind(this);
 
@@ -17,7 +17,8 @@ export class GrainsMinionRoute extends PageRoute {
     );
 
     Utils.makeTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement(), "grains-minion-search-button", "grains-minion-table");
+    Utils.makeTableSearchable(this.getPageElement(), "grains-minion-search-button-jobs", "grains-minion-jobs-table");
   }
 
   onShow() {
@@ -56,7 +57,7 @@ export class GrainsMinionRoute extends PageRoute {
     this._addMenuItemGrainsSetValAdd(menu, pMinionId);
     this._addMenuItemSaltUtilRefreshGrains(menu, pMinionId);
 
-    const container = document.getElementById("grains-minion-list");
+    const container = document.getElementById("grains-minion-table");
 
     // new menus are always added at the bottom of the div
     // fix that by re-adding it to its proper place

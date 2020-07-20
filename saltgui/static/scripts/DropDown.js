@@ -17,6 +17,7 @@ export class DropDownMenu {
     }
 
     this.menuDropdown = Route.createDiv("run-command-button", "");
+    this.menuDropdown.classList.add("no-search");
 
     if(pParentElement.id === "cmd-box") {
       // D83D+DCD6 = 1F4D6 = A BOOK

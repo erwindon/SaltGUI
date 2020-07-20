@@ -12,7 +12,8 @@ export class MinionsRoute extends PageRoute {
     this._handleRunnerManageVersions = this._handleRunnerManageVersions.bind(this);
 
     Utils.makeTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement(), "minions-search-button", "minions-table");
+    Utils.makeTableSearchable(this.getPageElement(), "minions-search-button-jobs", "minions-jobs-table");
   }
 
   onShow() {
@@ -30,13 +31,13 @@ export class MinionsRoute extends PageRoute {
       myThis._handleMinionsWheelKeyListAll(pWheelKeyListAllData);
 
       localGrainsItemsPromise.then(pLocalGrainsItemsData => {
-        myThis.updateMinions(pLocalGrainsItemsData);
+        myThis.updateMinions("minions-table", pLocalGrainsItemsData);
       }, pLocalGrainsItemsMsg => {
         const localGrainsItemsData = {"return":[{}]};
         if(pWheelKeyListAllData)
           for(const k of pWheelKeyListAllData.return[0].data.return.minions)
             localGrainsItemsData.return[0][k] = JSON.stringify(pLocalGrainsItemsMsg);
-        myThis.updateMinions(localGrainsItemsData);
+        myThis.updateMinions("minions-table", localGrainsItemsData);
       });
 
       runnerManageVersionsPromise.then(pRunnerManageVersionsData => {
@@ -62,7 +63,7 @@ export class MinionsRoute extends PageRoute {
   }
 
   _handleMinionsWheelKeyListAll(pWheelKeyListAll) {
-    const table = this.getPageElement().querySelector("#minions");
+    const table = document.getElementById("minions-table");
 
     if(PageRoute.showErrorRowInstead(table, pWheelKeyListAll)) return;
 
@@ -161,7 +162,7 @@ export class MinionsRoute extends PageRoute {
     const versionList = pRunnerManageVersionsData.return[0];
     const masterVersion = versionList["Master"];
     const isMasterAffected = this._isCveAffected(masterVersion);
-    const table = this.getPageElement().querySelector("#minions");
+    const table = document.getElementById("minions-table");
 
     for(const outcome in versionList) {
 

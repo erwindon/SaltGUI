@@ -8,7 +8,7 @@ import {Utils} from '../Utils.js';
 export class BeaconsMinionRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("beaconsminion", "Beacons", "#page-beacons-minion", "#button-beacons", pRouter);
+    super("beacons-minion", "Beacons", "#page-beacons-minion", "#button-beacons", pRouter);
 
     this._handleLocalBeaconsList = this._handleLocalBeaconsList.bind(this);
 
@@ -19,7 +19,8 @@ export class BeaconsMinionRoute extends PageRoute {
 
     Utils.addTableHelp(this.getPageElement(), "The content of column 'Value' is automatically refreshed\nNote that some beacons produce multiple values, e.g. one per disk.\nIn that case, effectively only one of the values is visible here.");
     Utils.makeTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement(), "beacons-minion-search-button", "beacons-minion-table");
+    Utils.makeTableSearchable(this.getPageElement(), "beacons-minion-search-button-jobs", "beacons-minion-jobs-table");
   }
 
   onShow() {
@@ -52,7 +53,7 @@ export class BeaconsMinionRoute extends PageRoute {
   _handleLocalBeaconsList(pLocalBeaconsListData, pMinionId) {
     const panel = document.getElementById("beacons-minion-panel");
 
-    const container = document.getElementById("beacons-minion-list");
+    const container = document.getElementById("beacons-minion-table");
 
     if(PageRoute.showErrorRowInstead(container.tBodies[0], pLocalBeaconsListData)) return;
 
@@ -192,7 +193,7 @@ export class BeaconsMinionRoute extends PageRoute {
     const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
     const prefix = "salt/beacon/" + minionId + "/";
     if(!pTag.startsWith(prefix)) return;
-    const table = document.getElementById("beacons-minion-list");
+    const table = document.getElementById("beacons-minion-table");
     let beaconName = pTag.substring(prefix.length);
     beaconName = beaconName.replace(/[/].*/, "");
     for(const row of table.tBodies[0].rows) {

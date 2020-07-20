@@ -11,7 +11,8 @@ export class TemplatesRoute extends PageRoute {
     this._handleTemplatesWheelConfigValues = this._handleTemplatesWheelConfigValues.bind(this);
 
     Utils.makeTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement(), "templates-search-button", "templates-table");
+    Utils.makeTableSearchable(this.getPageElement(), "templates-search-button-jobs", "templates-jobs-table");
   }
 
   onShow() {

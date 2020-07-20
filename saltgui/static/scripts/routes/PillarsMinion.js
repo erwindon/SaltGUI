@@ -8,7 +8,7 @@ import {Utils} from '../Utils.js';
 export class PillarsMinionRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("pillarsminion", "Pillars", "#page-pillars-minion", "#button-pillars", pRouter);
+    super("pillars-minion", "Pillars", "#page-pillars-minion", "#button-pillars", pRouter);
 
     this._handleLocalPillarItems = this._handleLocalPillarItems.bind(this);
 
@@ -18,7 +18,8 @@ export class PillarsMinionRoute extends PageRoute {
     );
 
     Utils.makeTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement());
+    Utils.makeTableSearchable(this.getPageElement(), "pillars-minion-search-button", "pillars-minion-table");
+    Utils.makeTableSearchable(this.getPageElement(), "pillars-minion-search-button-jobs", "pillars-minion-jobs-table");
   }
 
   onShow() {
@@ -56,7 +57,7 @@ export class PillarsMinionRoute extends PageRoute {
     const menu = new DropDownMenu(panel);
     this._addMenuItemSaltUtilRefreshPillar(menu, pMinionId);
 
-    const container = document.getElementById("pillars-minion-list");
+    const container = document.getElementById("pillars-minion-table");
 
     // new menus are always added at the bottom of the div
     // fix that by re-adding it to its proper place

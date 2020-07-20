@@ -11,6 +11,8 @@ export class JobRoute extends Route {
 
     this._handleJobRunnerJobsListJob = this._handleJobRunnerJobsListJob.bind(this);
     this.handleRunnerJobsActive = this.handleRunnerJobsActive.bind(this);
+
+    Utils.makeTableSearchable(this.getPageElement(), "job-search-button", "job-table");
   }
 
   onShow() {
@@ -39,82 +41,12 @@ export class JobRoute extends Route {
     return true;
   }
 
-  static _updateOutputFilter(pStartElement, pSearchText) {
-    // remove highlighting before re-comparing
-    // as it affects the texts
-    const hilitor = new Hilitor(pStartElement);
-    hilitor.remove();
-
-    // find text
-    pSearchText = pSearchText.toUpperCase();
-    for(const div of pStartElement.querySelectorAll("div")) {
-      if(div.classList.contains("nohide")) continue;
-      if(Utils.hasTextContent(div, pSearchText))
-        div.classList.remove("no-filter-match");
-      else
-        div.classList.add("no-filter-match");
-    }
-
-    // show the result
-    hilitor.setMatchType("open");
-    hilitor.setEndRegExp(/^$/);
-    hilitor.setBreakRegExp(/^$/);
-
-    // turn the text into a regexp
-    let pattern = "";
-    for(const chr of pSearchText) {
-      if((chr >= 'A' && chr <= 'Z') || (chr >= '0' && chr <= '9'))
-        pattern += chr;
-      else
-        pattern += "\\" + chr;
-    }
-
-    hilitor.apply(pattern);
-  }
-
-  static _hideShowOutputSearchBar(pStartElement) {
-    // remove all highlights
-    const hilitor = new Hilitor(pStartElement);
-    hilitor.remove();
-
-    // show all output
-    const allFM = pStartElement.querySelectorAll(".no-filter-match");
-    for(const fm of allFM)
-      fm.classList.remove("no-filter-match");
-
-    // hide/show search box
-    const input = pStartElement.parentElement.querySelector("input.filter-text");
-    input.onkeyup = ev => {
-      if(ev.key === "Escape") {
-        JobRoute._updateOutputFilter(pStartElement, "");
-        JobRoute._hideShowOutputSearchBar(pStartElement);
-        return;
-      }
-    };
-    input.oninput = ev =>
-      JobRoute._updateOutputFilter(pStartElement, input.value);
-
-    if(input.style.display === "none") {
-      JobRoute._updateOutputFilter(pStartElement, input.value);
-      input.style.display = "";
-    } else {
-      JobRoute._updateOutputFilter(pStartElement, "");
-      input.style.display = "none";
-    }
-    input.focus();
-  }
-
   _handleJobRunnerJobsListJob(pRunnerJobsListJobData, pJobId) {
     const output = this.getPageElement().querySelector(".output");
 
     const closeButton = document.querySelector("#job-button-close");
     closeButton.addEventListener("click", pClickEvent =>
       window.history.back()
-    );
-
-    const searchButton = this.getPageElement().querySelector("span.search");
-    searchButton.addEventListener("click", pClickEvent =>
-      JobRoute._hideShowOutputSearchBar(output)
     );
 
     if(!pRunnerJobsListJobData) return;

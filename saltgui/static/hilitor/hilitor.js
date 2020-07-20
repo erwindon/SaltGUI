@@ -90,8 +90,8 @@ function Hilitor(start, id, tag)
     if(!matchRegExp) return;
     if(skipTags.test(node.nodeName)) return;
 
-    // don't highlight inside dropdown menus
-    if(node.classList && node.classList.contains("run-command-button")) return;
+    // don't highlight where we don't want it
+    if(node.classList && node.classList.contains("no-search")) return;
 
     if(node.hasChildNodes()) {
       for(var i=0; i < node.childNodes.length; i++)

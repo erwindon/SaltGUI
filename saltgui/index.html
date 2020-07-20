@@ -104,10 +104,10 @@
       <div class='route' id='page-minions'>
         <div class='dashboard'>
           <div class='panel minion-list'>
-            <h1>Minions</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
-            <table id="minions" class='minions highlight-rows sortable'>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1>Minions</h1><span id="minions-search-button" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="minions-table" class='minions highlight-rows sortable'>
               <thead>
                 <tr><th>Minion</th><th>Status</th><th>Salt&nbsp;version</th><th>OS&nbsp;version</th><th class="sorttable_nosort"></th></tr>
               </thead>
@@ -117,10 +117,10 @@
             <div class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
-            <h1>Recent Jobs</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" list="data-list-jobs" placeholder="&#x1F50D;">
-            <table class='jobs highlight-rows'><tbody></tbody></table>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1>Recent Jobs</h1><span id="minions-search-button-jobs" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="minions-jobs-table", class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
@@ -129,13 +129,13 @@
       <div class='route' id='page-keys'>
         <div class='dashboard'>
           <div class='panel minion-list'>
-            <h1>Keys</h1>
+            <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1>Keys</h1><span id="keys-search-button" class="search-button">&#x1F50D;&#xFE0E;</span>
             <!-- 2753 = BLACK QUESTION MARK ORNAMENT -->
             <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
             <span id="help" style="float: right; cursor: help">&#x2753;&#xFE0E;</span>
-            <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" list="data-list-keys" placeholder="&#x1F50D;">
-            <table id="minions" class='minions sortable'>
+            <table id="keys-table" class='minions sortable'>
               <thead>
                 <tr><th>Minion</th><th>Status</th><th>Fingerprint</th><th class="sorttable_nosort"></th></tr>
               </thead>
@@ -145,10 +145,10 @@
             <div class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
-            <h1>Recent Jobs</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" list="data-list-jobs" placeholder="&#x1F50D;">
-            <table class='jobs highlight-rows'><tbody></tbody></table>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1>Recent Jobs</h1><span id="keys-search-button-jobs" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="keys-jobs-table", class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
@@ -157,10 +157,10 @@
       <div class='route' id='page-grains'>
         <div class='dashboard'>
           <div class='panel minion-list'>
-            <h1>Grains</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
-            <table id="minions" class='minions highlight-rows sortable'>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1>Grains</h1><span id="grains-search-button" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="grains-table" class='minions highlight-rows sortable'>
               <thead>
                 <tr><th>Minion</th><th>Status</th><th>Salt&nbsp;version</th><th>OS&nbsp;version</th><th>Grains</th><th class="sorttable_nosort"></th></tr>
               </thead>
@@ -170,10 +170,10 @@
             <div class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
-            <h1>Recent Jobs</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" list="data-list-jobs" placeholder="&#x1F50D;">
-            <table class='jobs highlight-rows'><tbody></tbody></table>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1>Recent Jobs</h1><span id="grains-search-button-jobs" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="grains-jobs-table", class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
@@ -184,10 +184,10 @@
           <div id="grains-minion-panel" class='panel minion-list'>
             <!-- 2715 = MULTIPLICATION X -->
             <div class='nearly-visible-button' id='grains-minion-button-close'>&#x2715;</div>
-            <h1 id="grains-minion-title">Grains on ...</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
-            <table id="grains-minion-list" class='grains highlight-rows sortable'>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1 id="grains-minion-title">Grains on ...</h1><span id="grains-minion-search-button" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="grains-minion-table" class='grains highlight-rows sortable'>
               <thead>
                 <tr><th>Name</th><th class="sorttable_nosort"></th><th>Value</th></tr>
               </thead>
@@ -197,10 +197,10 @@
             <div class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
-            <h1>Recent Jobs</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" list="data-list-jobs" placeholder="&#x1F50D;">
-            <table class='jobs highlight-rows'><tbody></tbody></table>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1>Recent Jobs</h1><span id="grains-minion-search-button-jobs" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="grains-minion-jobs-table", class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
@@ -209,10 +209,10 @@
       <div class='route' id='page-schedules'>
         <div class='dashboard'>
           <div class='panel minion-list'>
-            <h1>Schedules</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
-            <table id="minions" class='minions highlight-rows sortable'>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1>Schedules</h1><span id="schedules-search-button" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="schedules-table" class='minions highlight-rows sortable'>
               <thead>
                 <tr><th>Minion</th><th>Status</th><th>Schedules</th><th class="sorttable_nosort"></th></tr>
               </thead>
@@ -222,10 +222,10 @@
             <div class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
-            <h1>Recent Jobs</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" list="data-list-jobs" placeholder="&#x1F50D;">
-            <table class='jobs highlight-rows'><tbody></tbody></table>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1>Recent Jobs</h1><span id="schedules-search-button-jobs" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="schedules-jobs-table", class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
@@ -234,11 +234,12 @@
       <div class='route' id='page-schedules-minion'>
         <div class='dashboard'>
           <div id="schedules-minion-panel" class='panel minion-list'>
+            <!-- 2715 = MULTIPLICATION X -->
             <div class='nearly-visible-button' id='schedules-minion-button-close'>&#x2715;</div>
-            <h1 id="schedules-minion-title">Schedules on ...</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
-            <table id="schedules-minion-list" class='schedules highlight-rows sortable'>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1 id="schedules-minion-title">Schedules on ...</h1><span id="schedules-minion-search-button" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="schedules-minion-table" class='schedules highlight-rows sortable'>
               <thead>
                 <tr><th>Name</th><th class="sorttable_nosort"></th><th>Details</th></tr>
               </thead>
@@ -248,10 +249,10 @@
             <div class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
-            <h1>Recent Jobs</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" list="data-list-jobs" placeholder="&#x1F50D;">
-            <table class='jobs highlight-rows'><tbody></tbody></table>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1>Recent Jobs</h1><span id="schedules-minion-search-button-jobs" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="schedules-minion-jobs-table", class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
@@ -260,10 +261,10 @@
       <div class='route' id='page-pillars'>
         <div class='dashboard'>
           <div class='panel minion-list'>
-            <h1>Pillars</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
-            <table id="minions" class='minions highlight-rows sortable'>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1>Pillars</h1><span id="pillars-search-button" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="pillars-table" class='minions highlight-rows sortable'>
               <thead>
                 <tr><th>Minion</th><th>Status</th><th>Pillars</th><th class="sorttable_nosort"></th></tr>
               </thead>
@@ -273,10 +274,10 @@
             <div class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
-            <h1>Recent Jobs</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" list="data-list-jobs" placeholder="&#x1F50D;">
-            <table class='jobs highlight-rows'><tbody></tbody></table>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1>Recent Jobs</h1><span id="pillars-search-button-jobs" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="pillars-jobs-table", class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
@@ -285,11 +286,12 @@
       <div class='route' id='page-pillars-minion'>
         <div class='dashboard'>
           <div id="pillars-minion-panel" class='panel minion-list'>
+            <!-- 2715 = MULTIPLICATION X -->
             <div class='nearly-visible-button' id='pillars-minion-button-close'>&#x2715;</div>
-            <h1 id="pillars-minion-title">Pillars on ...</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
-            <table id="pillars-minion-list" class='pillars highlight-rows sortable'>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1 id="pillars-minion-title">Pillars on ...</h1><span id="pillars-minion-search-button" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="pillars-minion-table" class='pillars highlight-rows sortable'>
               <thead>
                 <tr><th>Name</th><th>Value</th></tr>
               </thead>
@@ -299,10 +301,10 @@
             <div class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
-            <h1>Recent Jobs</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" list="data-list-jobs" placeholder="&#x1F50D;">
-            <table class='jobs highlight-rows'><tbody></tbody></table>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1>Recent Jobs</h1><span id="pillars-minion-search-button-jobs" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="pillars-minion-jobs-table", class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
@@ -311,10 +313,10 @@
       <div class='route' id='page-beacons'>
         <div class='dashboard'>
           <div class='panel minion-list'>
-            <h1>Beacons</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
-            <table id="minions" class='minions highlight-rows sortable'>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1>Beacons</h1><span id="beacons-search-button" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="beacons-table" class='minions highlight-rows sortable'>
               <thead>
                 <tr><th>Minion</th><th>Status</th><th>Beacons</th><th class="sorttable_nosort"></th></tr>
               </thead>
@@ -324,10 +326,10 @@
             <div class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
-            <h1>Recent Jobs</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" list="data-list-jobs" placeholder="&#x1F50D;">
-            <table class='jobs highlight-rows'><tbody></tbody></table>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1>Recent Jobs</h1><span id="beacons-search-button-jobs" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="beacons-jobs-table", class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
@@ -336,14 +338,15 @@
       <div class='route' id='page-beacons-minion'>
         <div class='dashboard'>
           <div id="beacons-minion-panel" class='panel minion-list'>
+            <!-- 2715 = MULTIPLICATION X -->
             <div class='nearly-visible-button' id='beacons-minion-button-close'>&#x2715;</div>
-            <h1 id="beacons-minion-title">Beacons on ...</h1>
+            <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1 id="beacons-minion-title">Beacons on ...</h1><span id="beacons-minion-search-button" class="search-button">&#x1F50D;&#xFE0E;</span>
             <!-- 2753 = BLACK QUESTION MARK ORNAMENT -->
             <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
             <span id="help" style="float: right; cursor: help; margin-right: 20px">&#x2753;&#xFE0E;</span>
-            <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
-            <table id="beacons-minion-list" class='beacons highlight-rows sortable'>
+            <table id="beacons-minion-table" class='beacons highlight-rows sortable'>
               <thead>
                 <tr><th>Name</th><th class="sorttable_nosort"></th><th>Config</th><th>Value</th></tr>
               </thead>
@@ -353,10 +356,10 @@
             <div class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
-            <h1>Recent Jobs</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" list="data-list-jobs" placeholder="&#x1F50D;">
-            <table class='jobs highlight-rows'><tbody></tbody></table>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1>Recent Jobs</h1><span id="beacons-minion-search-button-jobs" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="beacons-minion-jobs-table", class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
@@ -364,25 +367,24 @@
 
       <div class='route' id='page-job'>
         <div id="job-panel" class='panel job-info'>
+          <!-- 2715 = MULTIPLICATION X -->
           <div class='nearly-visible-button' id='job-button-close'>&#x2715;</div>
-          <h1 id="job-title" class='function'>&nbsp;</h1>
           <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
           <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
-          <div class='job-menu'><span class="search">&#x1F50D;&#xFE0E;</span></div>
+          <h1 id="job-title" class='function'>&nbsp;</h1><span id="job-search-button" class="search-button">&#x1F50D;&#xFE0E;</span>
+          <div class='job-menu'></div>
           <h2 class='time'></h2>
-          <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-          <input style="display: none" class="filter-text" list="data-list-job" placeholder="&#x1F50D;">
-          <pre class="output">...</pre>
+          <pre id="job-table" class="output">...</pre>
         </div>
       </div>
 
       <div class='route' id='page-jobs'>
         <div class='dashboard'>
           <div id='jobs-panel' class='panel job-list'>
-            <h1 id="jobs-title">Recent Jobs</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" list="data-list-jobs" placeholder="&#x1F50D;">
-            <table id="jobs" class='jobs highlight-rows sortable'>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1 id="jobs-title">Recent Jobs</h1><span id="jobs-search-button" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="jobs-table" class='jobs highlight-rows sortable'>
               <thead>
                 <tr><th>JID</th><th>Target</th><th>Function</th><th>Start Time</th><th class="sorttable_nosort"></th><th>Status</th><th>Details</th></tr>
               </thead>
@@ -397,10 +399,10 @@
       <div class='route' id='page-templates'>
         <div class='dashboard'>
           <div class='panel templates-list'>
-            <h1>Templates</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" placeholder="&#x1F50D;">
-            <table id="templates" class='templates highlight-rows sortable'>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1>Templates</h1><span id="templates-search-button" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="templates-table" class='templates highlight-rows sortable'>
               <thead>
                 <tr><th>Name</th><th>Description</th><th>Target</th><th>Command</th><th class="sorttable_nosort"></th></tr>
               </thead>
@@ -410,10 +412,10 @@
             <div class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
-            <h1>Recent Jobs</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" list="data-list-jobs" placeholder="&#x1F50D;">
-            <table class='jobs highlight-rows'><tbody></tbody></table>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1>Recent Jobs</h1><span id="templates-search-button-jobs" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="templates-jobs-table", class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
@@ -422,7 +424,9 @@
       <div class='route' id='page-events'>
         <div class='dashboard'>
           <div id='events-panel' class='panel events-list'>
-            <h1 id="events-title">Recent Events</h1>
+            <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1 id="events-title">Recent Events</h1><span id="events-search-button" class="search-button">&#x1F50D;&#xFE0E;</span>
             <!-- 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play) -->
             <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
             <span id="events-play-button" style="cursor: pointer; font-size: x-large">&#x23F5;&#xFE0E;</span>
@@ -432,9 +436,7 @@
             <!-- 2753 = BLACK QUESTION MARK ORNAMENT -->
             <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
             <span id="help" style="float: right; cursor: help">&#x2753;&#xFE0E;</span>
-            <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" list="data-list-events" placeholder="&#x1F50D;">
-            <table id="events" class='events highlight-rows'>
+            <table id="events-table" class='events highlight-rows'>
               <thead>
                 <!-- 2191 = UPWARDS ARROW -->
                 <tr><th>Timestamp&nbsp;&#x2191;</th><th>Tag</th><th>Data</th></tr>
@@ -450,11 +452,13 @@
       <div class='route' id='page-options'>
         <div class='dashboard'>
           <div id='options-panel' class='panel'>
-            <h1 id="options-title">Options</h1>
+            <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1 id="options-title">Options</h1><span id="options-search-button" class="search-button">&#x1F50D;&#xFE0E;</span>
             <!-- 2753 = BLACK QUESTION MARK ORNAMENT -->
             <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
             <span id="help" style="float: right; cursor: help">&#x2753;&#xFE0E;</span>
-            <table id="options" class="options">
+            <table id="options-table" class="options">
               <thead>
                 <tr><th>Name</th><th>Value</th></tr>
               </thead>
@@ -567,10 +571,10 @@
             <div class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
-            <h1>Recent Jobs</h1>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
-            <input style="display: none" class="filter-text" list="list-jobs" placeholder="&#x1F50D;">
-            <table class='jobs highlight-rows'><tbody></tbody></table>
+            <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
+            <h1>Recent Jobs</h1><span id="options-search-button-jobs" class="search-button">&#x1F50D;&#xFE0E;</span>
+            <table id="options-jobs-table", class='jobs highlight-rows'><tbody></tbody></table>
             <div class='msg'>(loading)</div>
           </div>
         </div>
@@ -579,6 +583,7 @@
 
     <div class='popup' id='popup-run-command'>
       <div class='run-command'>
+        <!-- 2715 = MULTIPLICATION X -->
         <div class='nearly-visible-button' id='button-close-cmd'>&#x2715;</div>
         <div><h1>Manual Run</h1><p id="template-menu-here"></p></div>
         <div id="target-box"><input list="data-list-target" id='target' type='text' placeholder="Target"/></div>
