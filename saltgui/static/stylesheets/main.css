@@ -207,9 +207,9 @@ input[type='submit'] {
   background-color: white;
   position: relative;
   top: 5px;
-  margin-left: 5px;
-  margin-right: 5px;
-  width: calc(100% - 10px); /* padding+margin */
+  margin-left: 15px;
+  margin-right: 15px;
+  width: calc(100% - 30px); /* padding+margin */
 }
 
 .run-command input[type='submit'] {

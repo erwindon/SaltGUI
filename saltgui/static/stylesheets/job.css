@@ -1,10 +1,7 @@
-#page-job .job-info {
-  margin: 5px;
-}
-
 #page-job .time {
   font-size: 15px;
   font-weight: normal;
+  margin-top: 5px;
   margin-bottom: 5px;
 }
 
