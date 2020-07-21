@@ -106,6 +106,11 @@ h1 {
   color: #4caf50;
 }
 
+.search-box {
+  display: flex;
+  width: 100%;
+}
+
 .nearly-visible-button {
   display: block;
   float: right;

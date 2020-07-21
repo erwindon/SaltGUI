@@ -125,18 +125,21 @@ export class Utils {
 
   static makeTableSearchable(pStartElement, pSearchButtonId, pTableId) {
 
-    const inputField = document.createElement("input");
-    inputField.style.display = "none";
-    inputField.classList.add("filter-text");
+    const div = Route.createDiv("search-box", "");
+    div.style.display = "none";
+
+    const input = document.createElement("input");
+    input.classList.add("filter-text");
     // 1F50D = D83D DD0D = LEFT-POINTING MAGNIFYING GLASS
-    inputField.placeholder = "\uD83D\uDD0D";
+    input.placeholder = "\uD83D\uDD0D";
+    div.append(input);
 
     const table = document.getElementById(pTableId);
-    table.parentElement.insertBefore(inputField, table);
+    table.parentElement.insertBefore(div, table);
 
     const searchButton = document.getElementById(pSearchButtonId);
     searchButton.onclick = ev =>
-      Utils.hideShowTableSearchBar(inputField, table);
+      Utils.hideShowTableSearchBar(div, table);
   }
 
   static addTableHelp(pStartElement, pHelpText, pStyle="bottom-right") {
@@ -157,7 +160,7 @@ export class Utils {
       fm.classList.remove("no-filter-match");
 
     // hide/show search box (the block may become more complicated later)
-    const input = pSearchBlock;
+    const input = pSearchBlock.querySelector("input");
     input.onkeyup = ev => {
       if(ev.key === "Escape") {
         Utils._updateTableFilter(pTable, "");
@@ -168,17 +171,17 @@ export class Utils {
     input.oninput = ev =>
       Utils._updateTableFilter(pTable, input.value);
 
-    pTable.parentElement.insertBefore(input, pTable);
-    if(pAction === "refresh" && input.style.display === "none") {
+    pTable.parentElement.insertBefore(pSearchBlock, pTable);
+    if(pAction === "refresh" && pSearchBlock.style.display === "none") {
       Utils._updateTableFilter(pTable, "");
     } else if(pAction === "refresh") {
       Utils._updateTableFilter(pTable, input.value);
-    } else if(input.style.display === "none") {
+    } else if(pSearchBlock.style.display === "none") {
       Utils._updateTableFilter(pTable, input.value);
-      input.style.display = "";
+      pSearchBlock.style.display = "";
     } else {
       Utils._updateTableFilter(pTable, "");
-      input.style.display = "none";
+      pSearchBlock.style.display = "none";
     }
     input.focus();
   }
