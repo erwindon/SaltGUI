@@ -197,7 +197,7 @@ export class Router {
       if(!route.getPath().test(pathUrl)) continue;
       // push history state for login (including redirect to /)
       if(pathUrl === config.NAV_URL + "/login" || pathUrl === config.NAV_URL + "/") {
-        window.history.pushState({}, undefined, pathUrl);
+        window.history.pushState({}, undefined, pPath);
       }
       this._showRoute(route);
       return;
