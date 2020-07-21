@@ -22,6 +22,7 @@ export class Router {
 
   constructor() {
     this._logoutTimer = this._logoutTimer.bind(this);
+    this._updateSessionTimeoutWarning = this._updateSessionTimeoutWarning.bind(this);
 
     this.api = new API();
     this.commandbox = new CommandBox(this.api);
@@ -164,8 +165,56 @@ export class Router {
           pLogoutData => window.location.replace(config.NAV_URL + "/login?reason=logout"));
       });
 
-    // don't verify the session too often
+    // don't verify for invalid sessions too often
+    // this happens only when the server was reset
     setInterval(this._logoutTimer, 60000);
+
+    // verify often for an expired session that we expect
+    setInterval(this._updateSessionTimeoutWarning, 1000);
+  }
+
+  _updateSessionTimeoutWarning() {
+    const warning = document.getElementById("warning");
+
+    const loginResponseStr = Utils.getStorageItem("session", "login-response", "{}");
+    const loginResponse = JSON.parse(loginResponseStr);
+
+    const expireValue = loginResponse.expire;
+    if(!expireValue) {
+      warning.style.display = "none";
+      return;
+    }
+
+    const leftMillis = expireValue*1000 - Date.now();
+
+    if(leftMillis <= 0) {
+      warning.style.display = "";
+      warning.innerText = "Logout";
+      // logout, and redirect to login screen
+      this.api.logout().then(() =>
+        window.location.replace(config.NAV_URL + "/login?reason=expired-session")
+      , () =>
+        window.location.replace(config.NAV_URL + "/login?reason=expired-session")
+      );
+      return;
+    }
+
+    if(leftMillis > 60000) {
+      // warn in the last minute
+      warning.style.display = "none";
+      warning.innerText = "";
+      return;
+    }
+
+    warning.style.display = "";
+    const left = new Date(leftMillis).toISOString();
+    if(left.startsWith("1970-01-01T")) {
+      // remove the date prefix and the millisecond suffix
+      warning.innerText = "Session expires in " + left.substr(11, 8);
+    } else {
+      // stupid fallback
+      warning.innerText = "Session expires in " + leftMillis + " milliseconds";
+    }
   }
 
   _logoutTimer() {

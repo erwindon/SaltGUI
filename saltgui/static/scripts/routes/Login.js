@@ -11,6 +11,7 @@ export class LoginRoute extends Route {
     this._onLogin = this._onLogin.bind(this);
     this._onLoginSuccess = this._onLoginSuccess.bind(this);
     this._onLoginFailure = this._onLoginFailure.bind(this);
+
     this._registerLoginRouteEventListeners();
   }
 
