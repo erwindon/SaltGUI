@@ -12,7 +12,6 @@ export class TargetType {
     TargetType.menuTargetType.addMenuItem(TargetType._targetTypeNodeGroupPrepare, this._manualUpdateTargetTypeText, "nodegroup");
     TargetType.menuTargetType.addMenuItem("Compound", this._manualUpdateTargetTypeText, "compound");
     TargetType.setTargetTypeDefault();
-    TargetType._updateTargetTypeText();
   }
 
   // It takes a while before we known the list of nodegroups
@@ -30,46 +29,14 @@ export class TargetType {
     }
   }
 
-  static autoSelectTargetType(pTarget) {
-
-    if(TargetType.menuTargetType._value !== undefined &&
-      TargetType.menuTargetType._value !== "" &&
-      !TargetType.menuTargetType._system) {
-      // user has selected the value, do not touch it
-      return;
-    }
-
-    if(pTarget.includes("@") || pTarget.includes(" ") ||
-      pTarget.includes("(") || pTarget.includes(")")) {
-      // "@" is a strong indicator for compound target
-      // but "space", "(" and ")" are also typical for compound target
-      TargetType.menuTargetType._value = "compound";
-      TargetType._updateTargetTypeText();
-      return;
-    }
-
-    if(pTarget.includes(",")) {
-      // "," is a strong indicator for list target (when it is also not compound)
-      TargetType.menuTargetType._value = "list";
-      TargetType._updateTargetTypeText();
-      return;
-    }
-
-    if(pTarget.startsWith("#")) {
-      // "#" at the start of a line is a strong indicator for nodegroup target
-      // this is not a SALTSTACK standard, but our own invention
-      TargetType.menuTargetType._value = "nodegroup";
-      TargetType._updateTargetTypeText();
-      return;
-    }
-
-    // do not show it when default and not explicitly selected
-    TargetType.setTargetTypeDefault();
-  }
-
   static _manualUpdateTargetTypeText() {
     TargetType.menuTargetType._system = false;
-    TargetType.menuTargetType._value = undefined;
+    TargetType._updateTargetTypeText();
+  }
+
+  static setTargetTypeDefault() {
+    TargetType.menuTargetType._system = true;
+    TargetType.menuTargetType._value = "glob";
     TargetType._updateTargetTypeText();
   }
 
@@ -81,8 +48,12 @@ export class TargetType {
       TargetType.menuTargetType.setTitle("Compound");
       break;
     case "glob":
-      // now that the menu is used show the menu title
-      TargetType.menuTargetType.setTitle("Normal");
+      if(TargetType.menuTargetType._system)
+        // reset the title to the absolute minimum
+        // so that the menu does not stand out in trivial situations
+        TargetType.menuTargetType.setTitle("");
+      else
+        TargetType.menuTargetType.setTitle("Normal");
       break;
     case "list":
       TargetType.menuTargetType.setTitle("List");
@@ -92,6 +63,13 @@ export class TargetType {
       break;
     }
 
+    TargetType.menuTargetType._value = targetType;
+
+    TargetType.setMenuMarker();
+  }
+
+  static setMenuMarker() {
+    const targetType = TargetType._getTargetType();
     const m = TargetType.menuTargetType.menuDropdownContent.children;
     for(let i = 0; i < m.length; i++) {
       let t = m[i].innerText;
@@ -102,12 +80,31 @@ export class TargetType {
     }
   }
 
-  static setTargetTypeDefault() {
-    TargetType.menuTargetType._value = "glob";
-    // reset the title to the absolute minimum
-    // so that the menu does not stand out in trivial situations
-    TargetType.menuTargetType.setTitle("");
-    TargetType.menuTargetType._system = true;
+  static autoSelectTargetType(pTarget) {
+
+    if(!TargetType.menuTargetType._system) {
+      // user has selected the value, do not touch it
+      return;
+    }
+
+    if(pTarget.includes("@") || pTarget.includes(" ") ||
+      pTarget.includes("(") || pTarget.includes(")")) {
+      // "@" is a strong indicator for compound target
+      // but "space", "(" and ")" are also typical for compound target
+      TargetType.menuTargetType._value = "compound";
+    } else if(pTarget.includes(",")) {
+      // "," is a strong indicator for list target (when it is also not compound)
+      TargetType.menuTargetType._value = "list";
+    } else if(pTarget.startsWith("#")) {
+      // "#" at the start of a line is a strong indicator for nodegroup target
+      // this is not a SALTSTACK standard, but our own invention
+      TargetType.menuTargetType._value = "nodegroup";
+    } else {
+      TargetType.menuTargetType._value = "glob";
+    }
+
+    // show the new title
+    TargetType._updateTargetTypeText();
   }
 
   static setTargetType(pTargetType) {
