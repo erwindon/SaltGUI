@@ -192,6 +192,11 @@ export class Router {
   goTo(pPath, hasPathPrefix=false) {
     if(this.switchingRoute) return;
     if(window.location.pathname === config.NAV_URL + pPath && this.currentRoute) return;
+    if(pPath === "/" && Utils.getStorageItem("session", "login-response") === null) {
+      // the fact that we don't have a session will be caught later
+      // but this was shows less error messages on the console
+      pPath = "/login";
+    }
     const pathUrl = (hasPathPrefix ? "" : config.NAV_URL) + pPath.split("?")[0];
     for(const route of this.routes) {
       if(!route.getPath().test(pathUrl)) continue;
