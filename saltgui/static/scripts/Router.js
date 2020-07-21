@@ -229,7 +229,8 @@ export class Router {
     wheelConfigValuesPromise.then(pWheelConfigValuesData => {
       // VOID
     }, pWheelConfigValuesMsg => {
-      // VOID
+      this.api.logout().then(
+        pLogoutData => window.location.replace(config.NAV_URL + "/login?reason=no-session"));
     });
   }
 
