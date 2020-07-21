@@ -57,7 +57,13 @@ export class OptionsRoute extends PageRoute {
       // remove the date prefix and the millisecond suffix
       durationStr = "\nduration is " + str.substr(11, 8);
     }
-    expireTd.innerText = expireValue + "\n" + expireStr + durationStr;
+    let expiresInStr = "";
+    const str2 = new Date(expireValue*1000 - Date.now()).toISOString();
+    if(str2.startsWith("1970-01-01T")) {
+      // remove the date prefix and the millisecond suffix
+      expiresInStr = "\nexpires in " + str2.substr(11, 8);
+    }
+    expireTd.innerText = expireValue + "\n" + expireStr + durationStr + expiresInStr;
 
     const eauthValue = loginResponse.eauth;
     const eauthTd = document.getElementById("option-eauth-value");
