@@ -245,7 +245,6 @@ export class API {
             , () =>
               window.location.replace(config.NAV_URL + "/login?reason=no-session")
             );
-            return null;
           }
 
           const loginResponse = JSON.parse(loginResponseStr);
@@ -259,7 +258,6 @@ export class API {
               , () =>
                 window.location.replace(config.NAV_URL + "/login?reason=expired-session")
               );
-              return null;
             }
           }
         }
