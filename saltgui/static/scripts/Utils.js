@@ -1,4 +1,5 @@
 import {Route} from './routes/Route.js';
+import {DropDownMenu} from './DropDown.js';
 
 export class Utils {
 
@@ -55,7 +56,7 @@ export class Utils {
   static clearStorage(pStorage) {
     const storage = Utils._getStorage(pStorage);
     if(!storage) { console.log("clearStorage", pStorage); return; }
-    //console.log("cleaStorage", pStorage);
+    //console.log("clearStorage", pStorage);
     storage.clear();
   }
 
@@ -123,16 +124,23 @@ export class Utils {
     return pElement.textContent.toUpperCase().includes(pSearchText);
   }
 
-  static makeTableSearchable(pStartElement, pSearchButtonId, pTableId) {
+  static makeTableSearchable(pStartElement, pButtonId, pTableId, pFieldList=null) {
 
     const div = Route.createDiv("search-box", "");
     div.style.display = "none";
+
+    const menuAndFieldDiv = Route.createDiv("search-menu-and-field", "");
+
+    const searchOptionsMenu = new DropDownMenu(menuAndFieldDiv);
 
     const input = document.createElement("input");
     input.classList.add("filter-text");
     // 1F50D = D83D DD0D = LEFT-POINTING MAGNIFYING GLASS
     input.placeholder = "\uD83D\uDD0D";
-    div.append(input);
+    if(pFieldList) input.setAttribute("list", pFieldList);
+    menuAndFieldDiv.append(input);
+
+    div.append(menuAndFieldDiv);
 
     const errorDiv = Route.createDiv("search-error", "");
     errorDiv.style.display = "none";
@@ -141,9 +149,50 @@ export class Utils {
     const table = document.getElementById(pTableId);
     table.parentElement.insertBefore(div, table);
 
-    const searchButton = document.getElementById(pSearchButtonId);
+    table.parentElement.insertBefore(div, table);
+
+    searchOptionsMenu.addMenuItem(
+      "Case sensitive",
+      ev => Utils._updateSearchOption(ev, table, searchOptionsMenu, input));
+    searchOptionsMenu.addMenuItem(
+      "Regular expression",
+      ev => Utils._updateSearchOption(ev, table, searchOptionsMenu, input));
+    searchOptionsMenu.addMenuItem(
+      "Invert search",
+      ev => Utils._updateSearchOption(ev, table, searchOptionsMenu, input));
+
+    // make the search function active
+    const searchButton = document.getElementById(pButtonId);
     searchButton.onclick = ev =>
       Utils.hideShowTableSearchBar(div, table);
+  }
+
+  static _updateSearchOption(ev, pTable, pSearchOptionsMenu, pInput) {
+    ev.target._value = !ev.target._value;
+
+    let t = ev.target.innerText;
+    t = t.replace(/^. /, "");
+    // 2714 = HEAVY CHECK MARK
+    if(ev.target._value === true) t = "\u2714 " + t;
+    ev.target.innerText = t;
+
+    Utils._updateTableFilter(
+      pTable,
+      pInput.value,
+      pSearchOptionsMenu.menuDropdownContent);
+
+    // D83D DD0D = 1F50D = LEFT-POINTING MAGNIFYING GLASS
+    let placeholder = "\uD83D\uDD0D";
+// TODO
+    if(pSearchOptionsMenu.menuDropdownContent.childNodes[0]._value === true)
+      placeholder += " caseSensitive(WIP)";
+// TODO
+    if(pSearchOptionsMenu.menuDropdownContent.childNodes[1]._value === true)
+      placeholder += " regExp(WIP)";
+// TODO
+    if(pSearchOptionsMenu.menuDropdownContent.childNodes[2]._value === true)
+      placeholder += " invertSearch(WIP)";
+    pInput.placeholder = placeholder;
   }
 
   static addTableHelp(pStartElement, pHelpText, pStyle="bottom-right") {

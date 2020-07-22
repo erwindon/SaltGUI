@@ -115,6 +115,13 @@ h1 {
   display: block;
   width: 100%;
   margin-bottom: 10px;
+  flex: 1;
+}
+
+.search-menu-and-field {
+  margin-top: 15px;
+  margin-bottom: 5px;
+  display: flex;
 }
 
 .search-error {

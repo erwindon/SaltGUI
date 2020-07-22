@@ -4,6 +4,10 @@
   cursor: pointer;
 }
 
+div.search-box .menu-dropdown {
+  padding: 0 10px 0 10px;
+}
+
 /* Dropdown Content (Hidden by Default) */
 .run-command-button .menu-dropdown-content {
   display: none;
