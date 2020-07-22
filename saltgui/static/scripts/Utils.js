@@ -134,6 +134,10 @@ export class Utils {
     input.placeholder = "\uD83D\uDD0D";
     div.append(input);
 
+    const errorDiv = Route.createDiv("search-error", "");
+    errorDiv.style.display = "none";
+    div.append(errorDiv);
+
     const table = document.getElementById(pTableId);
     table.parentElement.insertBefore(div, table);
 
