@@ -53,7 +53,8 @@ export class PillarsRoute extends PageRoute {
   _handlePillarsWheelKeyListAll(pWheelKeyListAllData) {
     const table = document.getElementById("pillars-table");
 
-    if(PageRoute.showErrorRowInstead(table, pWheelKeyListAllData)) return;
+    const msgDiv = this.getPageElement().querySelector(".msg");
+    if(PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
 
     const keys = pWheelKeyListAllData.return[0].data.return;
 
@@ -71,7 +72,6 @@ export class PillarsRoute extends PageRoute {
       );
     }
 
-    const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(minionIds.length,
       "No minions", "{0} minion", "{0} minions");
     msgDiv.innerText = txt;

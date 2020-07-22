@@ -64,17 +64,16 @@ export class GrainsMinionRoute extends PageRoute {
     const titleElement = document.getElementById("grains-minion-title");
     panel.insertBefore(menu.menuDropdown, titleElement.nextSibling);
 
-    if(PageRoute.showErrorRowInstead(container.tBodies[0], pLocalGrainsItemsData)) return;
+    const msgDiv = this.getPageElement().querySelector(".msg");
+    if(PageRoute.showErrorRowInstead(container.tBodies[0], pLocalGrainsItemsData, msgDiv)) return;
 
     const grains = pLocalGrainsItemsData.return[0][pMinionId];
 
     if(grains === undefined) {
-      const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
       msgDiv.innerText = "Unknown minion '" + pMinionId + "'";
       return;
     }
     if(grains === false) {
-      const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
       msgDiv.innerText = "Minion '" + pMinionId + "' did not answer";
       return;
     }
@@ -105,7 +104,6 @@ export class GrainsMinionRoute extends PageRoute {
       );
     }
 
-    const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(grainNames.length,
       "No grains", "{0} grain", "{0} grains");
     msgDiv.innerText = txt;

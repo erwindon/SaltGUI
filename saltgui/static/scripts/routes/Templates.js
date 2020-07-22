@@ -43,7 +43,8 @@ export class TemplatesRoute extends PageRoute {
   _handleTemplatesWheelConfigValues(pWheelConfigValuesData) {
     const container = this.getPageElement().querySelector(".templates");
 
-    if(PageRoute.showErrorRowInstead(container, pWheelConfigValuesData)) return;
+    const msgDiv = this.getPageElement().querySelector(".msg");
+    if(PageRoute.showErrorRowInstead(container, pWheelConfigValuesData, msgDiv)) return;
 
     // should we update it or just use from cache (see commandbox) ?
     let templates = pWheelConfigValuesData.return[0].data.return.saltgui_templates;
@@ -57,7 +58,6 @@ export class TemplatesRoute extends PageRoute {
       this._addTemplate(container, key, template);
     }
 
-    const msgDiv = this.pageElement.querySelector("div.templates-list .msg");
     const txt = Utils.txtZeroOneMany(keys.length,
       "No templates", "{0} template", "{0} templates");
     msgDiv.innerText = txt;

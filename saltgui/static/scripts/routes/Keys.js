@@ -91,7 +91,8 @@ export class KeysRoute extends PageRoute {
 
     const table = document.getElementById("keys-table");
 
-    if(PageRoute.showErrorRowInstead(table, pWheelKeyListAllData)) return;
+    const msgDiv = this.getPageElement().querySelector(".msg");
+    if(PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
 
     const allKeys = pWheelKeyListAllData.return[0].data.return;
 

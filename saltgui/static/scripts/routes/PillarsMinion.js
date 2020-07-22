@@ -64,17 +64,16 @@ export class PillarsMinionRoute extends PageRoute {
     const titleElement = document.getElementById("pillars-minion-title");
     panel.insertBefore(menu.menuDropdown, titleElement.nextSibling);
 
-    if(PageRoute.showErrorRowInstead(container.tBodies[0], pLocalPillarItemsData)) return;
+    const msgDiv = this.getPageElement().querySelector(".msg");
+    if(PageRoute.showErrorRowInstead(container.tBodies[0], pLocalPillarItemsData, msgDiv)) return;
 
     const pillars = pLocalPillarItemsData.return[0][pMinionId];
 
     if(pillars === undefined) {
-      const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
       msgDiv.innerText = "Unknown minion '" + pMinionId + "'";
       return;
     }
     if(pillars === false) {
-      const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
       msgDiv.innerText = "Minion '" + pMinionId + "' did not answer";
       return;
     }
@@ -146,7 +145,6 @@ export class PillarsMinionRoute extends PageRoute {
       container.tBodies[0].appendChild(pillar);
     }
 
-    const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(keys.length,
       "No pillars", "{0} pillar", "{0} pillars");
     msgDiv.innerText = txt;

@@ -342,7 +342,8 @@ export class PageRoute extends Route {
   handleRunnerJobsListJobs(pData, hasHeader = false, pMaxNumberOfJobs = 7) {
     const jobContainer = this.getPageElement().querySelector(".jobs tbody");
 
-    if(PageRoute.showErrorRowInstead(jobContainer, pData)) return;
+    const msgDiv = this.getPageElement().querySelector(".job-list .msg");
+    if(PageRoute.showErrorRowInstead(jobContainer, pData, msgDiv)) return;
 
     const jobs = this._jobsToArray(pData.return[0]);
     this._sortJobs(jobs);
@@ -429,7 +430,6 @@ export class PageRoute extends Route {
       numberOfJobsShown++;
     }
 
-    const msgDiv = this.pageElement.querySelector("div.job-list .msg");
     let txt = Utils.txtZeroOneMany(numberOfJobsShown,
       "No jobs shown", "{0} job shown", "{0} jobs shown");
     txt += Utils.txtZeroOneMany(numberOfJobsEligible,
@@ -607,7 +607,7 @@ export class PageRoute extends Route {
     Utils.addToolTip(pTarget, "Click to copy");
   }
 
-  static showErrorRowInstead(pTable, pData) {
+  static showErrorRowInstead(pTable, pData, pMsgDiv) {
 
     if(pData === null) {
       // not an error, but also nothing to show
@@ -631,8 +631,7 @@ export class PageRoute extends Route {
     pTable.appendChild(tr);
 
     // hide the "(loading)" message
-    const msgDiv = pTable.parentElement.parentElement.querySelector(".msg");
-    if(msgDiv !== null) msgDiv.style.display = "none";
+    if(pMsgDiv !== null) pMsgDiv.style.display = "none";
 
     return true;
   }

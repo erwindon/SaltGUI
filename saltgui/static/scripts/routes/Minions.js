@@ -65,7 +65,8 @@ export class MinionsRoute extends PageRoute {
   _handleMinionsWheelKeyListAll(pWheelKeyListAll) {
     const table = document.getElementById("minions-table");
 
-    if(PageRoute.showErrorRowInstead(table, pWheelKeyListAll)) return;
+    const msgDiv = this.getPageElement().querySelector(".msg");
+    if(PageRoute.showErrorRowInstead(table, pWheelKeyListAll, msgDiv)) return;
 
     const keys = pWheelKeyListAll.return[0].data.return;
 
@@ -84,7 +85,6 @@ export class MinionsRoute extends PageRoute {
       );
     }
 
-    const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
     const txt = Utils.txtZeroOneMany(minionIds.length,
       "No minions", "{0} minion", "{0} minions");
     msgDiv.innerText = txt;

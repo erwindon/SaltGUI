@@ -55,7 +55,8 @@ export class BeaconsMinionRoute extends PageRoute {
 
     const container = document.getElementById("beacons-minion-table");
 
-    if(PageRoute.showErrorRowInstead(container.tBodies[0], pLocalBeaconsListData)) return;
+    const msgDiv = this.getPageElement().querySelector(".msg");
+    if(PageRoute.showErrorRowInstead(container.tBodies[0], pLocalBeaconsListData, msgDiv)) return;
 
     const beacons0 = pLocalBeaconsListData.return[0][pMinionId];
 
@@ -67,12 +68,10 @@ export class BeaconsMinionRoute extends PageRoute {
     titleElement.innerText = txt;
 
     if(beacons === undefined) {
-      const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
       msgDiv.innerText = "Unknown minion '" + pMinionId + "'";
       return;
     }
     if(beacons === false) {
-      const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
       msgDiv.innerText = "Minion '" + pMinionId + "' did not answer";
       return;
     }
@@ -131,7 +130,6 @@ export class BeaconsMinionRoute extends PageRoute {
       );
     }
 
-    const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
     txt = Utils.txtZeroOneMany(keys.length,
       "No beacons", "{0} beacon", "{0} beacons");
     msgDiv.innerText = txt;

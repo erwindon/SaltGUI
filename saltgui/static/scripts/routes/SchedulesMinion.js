@@ -58,7 +58,8 @@ export class SchedulesMinionRoute extends PageRoute {
 
     const container = document.getElementById("schedules-minion-table");
 
-    if(PageRoute.showErrorRowInstead(container.tBodies[0], pLocalScheduleList)) return;
+    const msgDiv = this.getPageElement().querySelector(".msg");
+    if(PageRoute.showErrorRowInstead(container.tBodies[0], pLocalScheduleList, msgDiv)) return;
 
     let schedules = pLocalScheduleList.return[0][pMinionId];
     schedules = SchedulesRoute.fixSchedulesMinion(schedules);
@@ -69,12 +70,10 @@ export class SchedulesMinionRoute extends PageRoute {
     titleElement.innerText = txt;
 
     if(schedules === undefined) {
-      const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
       msgDiv.innerText = "Unknown minion '" + pMinionId + "'";
       return;
     }
     if(schedules === false) {
-      const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
       msgDiv.innerText = "Minion '" + pMinionId + "' did not answer";
       return;
     }
@@ -138,7 +137,6 @@ export class SchedulesMinionRoute extends PageRoute {
       );
     }
 
-    const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
     txt = Utils.txtZeroOneMany(keys.length,
       "No schedules", "{0} schedule", "{0} schedules");
     msgDiv.innerText = txt;
