@@ -189,9 +189,8 @@ export class Utils {
 // TODO
     if(pSearchOptionsMenu.menuDropdownContent.childNodes[1]._value === true)
       placeholder += " regExp(WIP)";
-// TODO
     if(pSearchOptionsMenu.menuDropdownContent.childNodes[2]._value === true)
-      placeholder += " invertSearch(WIP)";
+      placeholder += " invertSearch";
     pInput.placeholder = placeholder;
   }
 
@@ -202,6 +201,8 @@ export class Utils {
   }
 
   static hideShowTableSearchBar(pSearchBlock, pTable, pAction="toggle") {
+    const startElement = pTable.parentElement;
+
     // remove all highlights
     const searchInSelector = pTable.tagName === "TABLE" ? "tbody" : "";
     const hilitor = new Hilitor(pTable, searchInSelector);
@@ -212,39 +213,51 @@ export class Utils {
     for(const fm of allFM)
       fm.classList.remove("no-filter-match");
 
+    const menuItems = startElement.querySelector(".search-box .menu-dropdown-content");
+
     // hide/show search box (the block may become more complicated later)
     const input = pSearchBlock.querySelector("input");
     input.onkeyup = ev => {
       if(ev.key === "Escape") {
-        Utils._updateTableFilter(pTable, "");
+        Utils._updateTableFilter(pTable, "", menuItems);
         Utils.hideShowTableSearchBar(pSearchBlock, pTable);
         return;
       }
     };
     input.oninput = ev =>
-      Utils._updateTableFilter(pTable, input.value);
+      Utils._updateTableFilter(pTable, input.value, menuItems);
 
     pTable.parentElement.insertBefore(pSearchBlock, pTable);
     if(pAction === "refresh" && pSearchBlock.style.display === "none") {
-      Utils._updateTableFilter(pTable, "");
+      Utils._updateTableFilter(pTable, "", menuItems);
     } else if(pAction === "refresh") {
-      Utils._updateTableFilter(pTable, input.value);
+      Utils._updateTableFilter(pTable, input.value, menuItems);
     } else if(pSearchBlock.style.display === "none") {
-      Utils._updateTableFilter(pTable, input.value);
+      Utils._updateTableFilter(pTable, input.value, menuItems);
       pSearchBlock.style.display = "";
     } else {
-      Utils._updateTableFilter(pTable, "");
+      Utils._updateTableFilter(pTable, "", menuItems);
       pSearchBlock.style.display = "none";
     }
     input.focus();
   }
 
-  static _updateTableFilter(pTable, pSearchText) {
+  static _updateTableFilter(pTable, pSearchText, pMenuItems) {
     // remove highlighting before re-comparing
     // as it affects the texts
     const searchInSelector = pTable.tagName === "TABLE" ? "tbody" : "";
     const hilitor = new Hilitor(pTable, searchInSelector);
     hilitor.remove();
+
+    // values may be undefined, so convert to proper boolean
+    const caseSensitiveFlag = pMenuItems.childNodes[0]._value === true;
+    const regExpFlag = pMenuItems.childNodes[1]._value === true;
+    let invertFlag = pMenuItems.childNodes[2]._value === true;
+
+    // otherwise everything is immediatelly hidden
+    if(invertFlag && !pSearchText) {
+      invertFlag = false;
+    }
 
     // find text
     pSearchText = pSearchText.toUpperCase();
@@ -261,6 +274,7 @@ export class Utils {
           break;
         }
       }
+      if(invertFlag) show = !show;
       if(show)
         row.classList.remove("no-filter-match");
       else
