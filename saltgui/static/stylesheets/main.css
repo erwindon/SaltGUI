@@ -111,13 +111,6 @@ h1 {
   width: 100%;
 }
 
-.search-box input {
-  display: block;
-  width: 100%;
-  margin-bottom: 10px;
-  flex: 1;
-}
-
 .search-menu-and-field {
   margin-top: 15px;
   margin-bottom: 5px;
@@ -271,6 +264,13 @@ select {
   color: #272727;
   width: 60%;
   min-width: 200px;
+}
+
+.search-box input {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  flex: 1;
 }
 
 input:focus {
