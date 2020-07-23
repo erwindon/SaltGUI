@@ -116,12 +116,27 @@ export class Utils {
   static hasTextContent(pElement, pSearchText) {
     if(pElement.classList && pElement.classList.contains("run-command-button"))
       return false;
-    for(const childNode of pElement.childNodes)
-      if(this.hasTextContent(childNode, pSearchText))
-        return true;
+
+    let found = false;
+    for(const childNode of pElement.childNodes) {
+      const r = this.hasTextContent(childNode, pSearchText);
+      if(r == 2) return 2;
+      if(r == 1) found = true;
+    }
+    if(found) return 1;
+
     if(pElement.nodeType !== 3) // NODE_TEXT
-      return false;
-    return pElement.textContent.toUpperCase().includes(pSearchText);
+      return 0;
+
+    let s = pElement.textContent;
+    if(typeof pSearchText == "string") {
+      return s.includes(pSearchText) ? 1 : 0;
+    } else {
+      // then it is a RegExp
+      const regs = pSearchText.exec(s);
+      if(!regs) return 0;
+      return regs[0].length > 0 ? 1 : 2;
+    }
   }
 
   static makeTableSearchable(pStartElement, pButtonId, pTableId, pFieldList=null) {
@@ -186,9 +201,8 @@ export class Utils {
 // TODO
     if(pSearchOptionsMenu.menuDropdownContent.childNodes[0]._value === true)
       placeholder += " caseSensitive(WIP)";
-// TODO
     if(pSearchOptionsMenu.menuDropdownContent.childNodes[1]._value === true)
-      placeholder += " regExp(WIP)";
+      placeholder += " regExp";
     if(pSearchOptionsMenu.menuDropdownContent.childNodes[2]._value === true)
       placeholder += " invertSearch";
     pInput.placeholder = placeholder;
@@ -260,7 +274,23 @@ export class Utils {
     }
 
     // find text
-    pSearchText = pSearchText.toUpperCase();
+    let regexp = undefined;
+
+    const errorBox = pTable.parentElement.querySelector(".search-error");
+    if(regExpFlag) {
+      try {
+        regexp = new RegExp(pSearchText, "i");
+      } catch(err) {
+        errorBox.innerText = err.message;
+        errorBox.style.display = "";
+        return;
+      }
+    }
+    errorBox.style.display = "none";
+
+    const searchParam = regExpFlag ? regexp : pSearchText;
+    let hasEmptyMatches = false;
+    let hasNonEmptyMatches = false;
     const blocks = pTable.tagName === "TABLE" ? pTable.tBodies[0].rows : pTable.children;
     for(const row of blocks) {
       if(row.classList.contains("no-search")) continue;
@@ -269,10 +299,11 @@ export class Utils {
       for(const cell of items) {
         // do not use "innerText"
         // that one does not handle hidden text
-        if(Utils.hasTextContent(cell, pSearchText)) {
-          show = true;
-          break;
-        }
+        const res = Utils.hasTextContent(cell, searchParam);
+        if(res === 1) hasNonEmptyMatches = true;
+        if(res === 2) hasEmptyMatches = true;
+        // don't exit the loop, there might also be empty matches
+        if(res) show = true;
       }
       if(invertFlag) show = !show;
       if(show)
@@ -280,19 +311,31 @@ export class Utils {
       else
         row.classList.add("no-filter-match");
     }
+    if(pSearchText && hasEmptyMatches) {
+      const indicator = hasNonEmptyMatches ? "also" : "only";
+      errorBox.innerText = "warning: there were " + indicator + " empty matches, highlighting is not performed";
+      errorBox.style.display = "";
+      return;
+    }
 
     // show the result
     hilitor.setMatchType("open");
     hilitor.setEndRegExp(/^$/);
     hilitor.setBreakRegExp(/^$/);
 
-    // turn the text into a regexp
-    let pattern = "";
-    for(const chr of pSearchText) {
-      if((chr >= 'A' && chr <= 'Z') || (chr >= '0' && chr <= '9'))
-        pattern += chr;
-      else
-        pattern += "\\" + chr;
+    let pattern;
+    if(regExpFlag) {
+      pattern = pSearchText;
+    } else {
+      // turn the text into a regexp
+      pattern = "";
+      for(const chr of pSearchText) {
+        // prevent accidental construction of character classes
+        if((chr >= 'A' && chr <= 'Z') || (chr >= 'a' && chr <= 'z') || (chr >= '0' && chr <= '9'))
+          pattern += chr;
+        else
+          pattern += "\\" + chr;
+      }
     }
 
     hilitor.apply(pattern);
