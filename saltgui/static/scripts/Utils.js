@@ -113,13 +113,15 @@ export class Utils {
     pTd.appendChild(span);
   }
 
-  static hasTextContent(pElement, pSearchText) {
+  static hasTextContent(pElement, pSearchText, pCaseSensitiveFlag) {
+
+    // why?
     if(pElement.classList && pElement.classList.contains("run-command-button"))
       return false;
 
     let found = false;
     for(const childNode of pElement.childNodes) {
-      const r = this.hasTextContent(childNode, pSearchText);
+      const r = this.hasTextContent(childNode, pSearchText, pCaseSensitiveFlag);
       if(r == 2) return 2;
       if(r == 1) found = true;
     }
@@ -130,6 +132,7 @@ export class Utils {
 
     let s = pElement.textContent;
     if(typeof pSearchText == "string") {
+      if(!pCaseSensitiveFlag) s = s.toUpperCase();
       return s.includes(pSearchText) ? 1 : 0;
     } else {
       // then it is a RegExp
@@ -198,9 +201,8 @@ export class Utils {
 
     // D83D DD0D = 1F50D = LEFT-POINTING MAGNIFYING GLASS
     let placeholder = "\uD83D\uDD0D";
-// TODO
     if(pSearchOptionsMenu.menuDropdownContent.childNodes[0]._value === true)
-      placeholder += " caseSensitive(WIP)";
+      placeholder += " caseSensitive";
     if(pSearchOptionsMenu.menuDropdownContent.childNodes[1]._value === true)
       placeholder += " regExp";
     if(pSearchOptionsMenu.menuDropdownContent.childNodes[2]._value === true)
@@ -274,12 +276,16 @@ export class Utils {
     }
 
     // find text
+    if(!caseSensitiveFlag && !regExpFlag) {
+      pSearchText = pSearchText.toUpperCase();
+    }
+
     let regexp = undefined;
 
     const errorBox = pTable.parentElement.querySelector(".search-error");
     if(regExpFlag) {
       try {
-        regexp = new RegExp(pSearchText, "i");
+        regexp = new RegExp(pSearchText, caseSensitiveFlag ? "" : "i");
       } catch(err) {
         errorBox.innerText = err.message;
         errorBox.style.display = "";
@@ -299,7 +305,7 @@ export class Utils {
       for(const cell of items) {
         // do not use "innerText"
         // that one does not handle hidden text
-        const res = Utils.hasTextContent(cell, searchParam);
+        const res = Utils.hasTextContent(cell, searchParam, caseSensitiveFlag);
         if(res === 1) hasNonEmptyMatches = true;
         if(res === 2) hasEmptyMatches = true;
         // don't exit the loop, there might also be empty matches
@@ -338,7 +344,7 @@ export class Utils {
       }
     }
 
-    hilitor.apply(pattern);
+    hilitor.apply(pattern, caseSensitiveFlag);
   }
 
   static txtZeroOneMany(pCnt, pZeroText, pOneText, pManyText) {

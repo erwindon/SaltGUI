@@ -60,7 +60,7 @@ function Hilitor(start, id, tag)
     }
   };
 
-  this.setRegex = function(input)
+  this.setRegex = function(input, isCaseSensitive=false)
   {
     input = input.replace(endRegExp, "");
     input = input.replace(breakRegExp, "|");
@@ -69,7 +69,7 @@ function Hilitor(start, id, tag)
       var re = "(?:" + input + ")";
       if(!this.openLeft) re = "\\b" + re;
       if(!this.openRight) re = re + "\\b";
-      matchRegExp = new RegExp(re, "i");
+      matchRegExp = new RegExp(re, isCaseSensitive ? "" : "i");
       return matchRegExp;
     }
     return false;
@@ -133,11 +133,11 @@ function Hilitor(start, id, tag)
   };
 
   // start highlighting at target node
-  this.apply = function(input)
+  this.apply = function(input, isCaseSensitive=false)
   {
     this.remove();
     if(input === undefined || !input) return;
-    if(this.setRegex(input)) {
+    if(this.setRegex(input, isCaseSensitive)) {
       this.hiliteWords(targetNode);
     }
     return matchRegExp;
