@@ -87,6 +87,7 @@ export class CommandBox {
     if(template.target) {
       const targetField = document.querySelector(".run-command #target");
       targetField.value = template.target;
+      TargetType.autoSelectTargetType(targetField.value);
     }
 
     if(template.command) {
