@@ -159,10 +159,15 @@ export class MinionsRoute extends PageRoute {
   }
 
   _handleRunnerManageVersions(pRunnerManageVersionsData) {
+
+    // this is additional data
+    const msgDiv = this.getPageElement().querySelector(".msg");
+    const table = document.getElementById("minions-table");
+    if(PageRoute.showErrorRowInstead(table, pRunnerManageVersionsData, msgDiv)) return;
+
     const versionList = pRunnerManageVersionsData.return[0];
     const masterVersion = versionList["Master"];
     const isMasterAffected = this._isCveAffected(masterVersion);
-    const table = document.getElementById("minions-table");
 
     for(const outcome in versionList) {
 
