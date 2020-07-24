@@ -56,13 +56,15 @@ export class CommandBox {
     document.querySelector(".run-command input[type='submit']")
       .addEventListener("click", this._onRun);
 
-    this._addKeyEventListener("#target", pKeyboardEvent => {
-      const targetField = document.querySelector(".run-command #target");
-      const targetType = targetField.value;
-      TargetType.autoSelectTargetType(targetType);
-    });
+    document.querySelector("#target")
+      .addEventListener("input", pKeyboardEvent => {
+        const targetField = document.querySelector(".run-command #target");
+        const targetType = targetField.value;
+        TargetType.autoSelectTargetType(targetType);
+      });
 
-    this._addKeyEventListener("#command", this.cmdmenu.verifyAll);
+    document.querySelector("#command")
+      .addEventListener("input", this.cmdmenu.verifyAll);
   }
 
   _applyTemplate(template) {
@@ -91,18 +93,6 @@ export class CommandBox {
       const commandField = document.querySelector(".run-command #command");
       commandField.value = template.command;
     }
-  }
-
-  _addKeyEventListener(selector, func) {
-    // keydown is too early, keypress also does not work
-    const field = document.querySelector(selector);
-    field.addEventListener("keyup", func);
-    // cut/paste do not work everywhere
-    field.addEventListener("cut", func);
-    field.addEventListener("paste", func);
-    // blur/focus should not be needed but are a valuable fallback
-    field.addEventListener("blur", func);
-    field.addEventListener("focus", func);
   }
 
   _onRun() {
