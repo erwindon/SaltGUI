@@ -17,9 +17,9 @@ export class API {
 
   login(pUserName, pPassWord, pEauth="pam") {
     const params = {
-      username: pUserName,
+      eauth: pEauth,
       password: pPassWord,
-      eauth: pEauth
+      username: pUserName
     };
 
     // store it as the default login method
@@ -213,14 +213,14 @@ export class API {
     const token = Utils.getStorageItem("session", "token", "");
     const headers = {
       "Accept": "application/json",
-      "X-Auth-Token": token,
-      "Cache-Control": "no-cache"
+      "Cache-Control": "no-cache",
+      "X-Auth-Token": token
     };
     if(pRoute.endsWith(".txt")) headers["Accept"] = "text/plain";
     const options = {
+      headers: headers,
       method: pMethod,
-      url: location,
-      headers: headers
+      url: location
     };
 
     if(pMethod === "POST") options.body = JSON.stringify(pParams);

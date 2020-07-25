@@ -67,7 +67,9 @@ describe('Unittests for Output.js', function() {
     assert.equal(result, "{ \"a\": 11 }");
 
     // unordered input
+    /* eslint-disable sort-keys */
     outputData = {"a":11,"c":22,"b":33};
+    /* eslint-enable sort-keys */
     result = OutputJson.formatJSON(outputData);
     // ordered output
     assert.equal(result,
@@ -78,7 +80,9 @@ describe('Unittests for Output.js', function() {
       "}");
 
     // a more complex object, unordered input
+    /* eslint-disable sort-keys */
     outputData = {"ip6_interfaces":{"lo":["::1"],"eth0":["fe80::20d:3aff:fe38:576b"]}};
+    /* eslint-enable sort-keys */
     result = OutputJson.formatJSON(outputData);
     // ordered output
     assert.equal(result, 
@@ -158,7 +162,9 @@ describe('Unittests for Output.js', function() {
     assert.equal(result, "{ }");
 
     // unordered input
+    /* eslint-disable sort-keys */
     outputData = {"a":11,"c":22,"b":null};
+    /* eslint-enable sort-keys */
     result = OutputYaml.formatYAML(outputData);
     // ordered output
     assert.equal(result,
@@ -167,7 +173,9 @@ describe('Unittests for Output.js', function() {
       "c: 22");
 
     // a more complex object, unordered input
+    /* eslint-disable sort-keys */
     outputData = {"ip6_interfaces":{"lo":["::1"],"eth0":["fe80::20d:3aff:fe38:576b"]}};
+    /* eslint-enable sort-keys */
     result = OutputYaml.formatYAML(outputData);
     // ordered output
     // 00A0 = NO-BREAK SPACE
@@ -253,7 +261,9 @@ describe('Unittests for Output.js', function() {
     assert.equal(result, "");
 
     // unordered input
+    /* eslint-disable sort-keys */
     outputData = {"a":11,"c":22,"b":33};
+    /* eslint-enable sort-keys */
     result = OutputNested.formatNESTED(outputData);
     // ordered output
     assert.equal(result,
@@ -265,7 +275,9 @@ describe('Unittests for Output.js', function() {
       "    22");
 
     // a more complex object, unordered input
+    /* eslint-disable sort-keys */
     outputData = {"ip6_interfaces":{"lo":["::1"],"eth0":["fe80::20d:3aff:fe38:576b"]}};
+    /* eslint-enable sort-keys */
     result = OutputNested.formatNESTED(outputData);
     // ordered output
     // 00A0 = NO-BREAK SPACE
@@ -367,7 +379,7 @@ describe('Unittests for Output.js', function() {
     assert.deepEqual(out, {"DUMMY": {"topic": "explanation"}});
 
     // removed irrelevant documentation parts
-    out = {"host1": {"topic": "explanation", "othertopic": "otherexplanation"} };
+    out = {"host1": {"topic": "explanation", "zothertopic": "otherexplanation"} };
     OutputDocumentation.reduceDocumentationOutput(out, "DUMMY", "topic");
     assert.deepEqual(out, {"DUMMY": {"topic": "explanation"}});
 
