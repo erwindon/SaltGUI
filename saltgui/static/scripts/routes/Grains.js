@@ -7,7 +7,7 @@ import {Utils} from '../Utils.js';
 export class GrainsRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("grains", "Grains", "#page-grains", "#button-grains", pRouter);
+    super("grains", "Grains", "page-grains", "button-grains", pRouter);
 
     this._handleGrainsWheelKeyListAll = this._handleGrainsWheelKeyListAll.bind(this);
     this.updateMinion = this.updateMinion.bind(this);
@@ -19,7 +19,7 @@ export class GrainsRoute extends PageRoute {
       this._previewGrains = [ ];
     }
     // add the preview columns
-    const tr = this.pageElement.querySelector("#page-grains thead tr");
+    const tr = document.getElementById("grains-table-thead-tr");
     for(let i = 0; i < this._previewGrains.length; i++) {
       const th = document.createElement("th");
       th.innerText = this._previewGrains[i];
@@ -29,7 +29,7 @@ export class GrainsRoute extends PageRoute {
     // The new columns are not yet sortable, make sure they are.
     // First destroy all the default sorting handlers.
     // A (deep)copy of an element does not copy its handlers.
-    const oldHead = this.pageElement.querySelector("#page-grains table thead");
+    const oldHead = document.getElementById("grains-table-thead");
     const newHead = oldHead.cloneNode(true);
     oldHead.parentNode.replaceChild(newHead, oldHead);
     sorttable.makeSortable(newHead.parentNode);
@@ -76,7 +76,7 @@ export class GrainsRoute extends PageRoute {
   _handleGrainsWheelKeyListAll(pWheelKeyListAllData) {
     const table = document.getElementById('grains-table');
 
-    const msgDiv = this.getPageElement().querySelector(".msg");
+    const msgDiv = document.getElementById("grains-msg");
     if(PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
 
     const keys = pWheelKeyListAllData.return[0].data.return;

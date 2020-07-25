@@ -6,7 +6,7 @@ import {Utils} from '../Utils.js';
 export class PillarsRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("pillars", "Pillars", "#page-pillars", "#button-pillars", pRouter);
+    super("pillars", "Pillars", "page-pillars", "button-pillars", pRouter);
 
     this._handlePillarsWheelKeyListAll = this._handlePillarsWheelKeyListAll.bind(this);
     this.updateMinion = this.updateMinion.bind(this);
@@ -53,7 +53,7 @@ export class PillarsRoute extends PageRoute {
   _handlePillarsWheelKeyListAll(pWheelKeyListAllData) {
     const table = document.getElementById("pillars-table");
 
-    const msgDiv = this.getPageElement().querySelector(".msg");
+    const msgDiv = document.getElementById("pillars-msg");
     if(PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
 
     const keys = pWheelKeyListAllData.return[0].data.return;

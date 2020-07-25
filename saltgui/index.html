@@ -20,7 +20,7 @@
 
   <body>
     <header id="header">
-      <h1 class='logo'>SaltGUI</h1>
+      <h1 id="logo" class='logo'>SaltGUI</h1>
 <!-- full menu -->
       <div class="fullmenu">
         <div class="dropdown">
@@ -115,7 +115,7 @@
               <tbody>
               </tbody>
             </table>
-            <div class='msg'>(loading)</div>
+            <div id="minions-msg" class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
@@ -140,10 +140,10 @@
               <thead>
                 <tr><th>Minion</th><th>Status</th><th>Fingerprint</th><th class="sorttable_nosort"></th></tr>
               </thead>
-              <tbody>
+              <tbody id="keys-table-body">
               </tbody>
             </table>
-            <div class='msg'>(loading)</div>
+            <div id="keys-msg" class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
@@ -162,13 +162,13 @@
             <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
             <h1>Grains</h1><span id="grains-search-button" class="search-button">&#x1F50D;&#xFE0E;</span>
             <table id="grains-table" class='minions highlight-rows sortable'>
-              <thead>
-                <tr><th>Minion</th><th>Status</th><th>Salt&nbsp;version</th><th>OS&nbsp;version</th><th>Grains</th><th class="sorttable_nosort"></th></tr>
+              <thead id="grains-table-thead">
+                <tr id="grains-table-thead-tr"><th>Minion</th><th>Status</th><th>Salt&nbsp;version</th><th>OS&nbsp;version</th><th>Grains</th><th class="sorttable_nosort"></th></tr>
               </thead>
               <tbody>
               </tbody>
             </table>
-            <div class='msg'>(loading)</div>
+            <div id="grains-msg" class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
@@ -195,7 +195,7 @@
               <tbody>
               </tbody>
             </table>
-            <div class='msg'>(loading)</div>
+            <div id="grains-minion-msg" class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
@@ -220,7 +220,7 @@
               <tbody>
               </tbody>
             </table>
-            <div class='msg'>(loading)</div>
+            <div id="schedules-msg" class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
@@ -247,7 +247,7 @@
               <tbody>
               </tbody>
             </table>
-            <div class='msg'>(loading)</div>
+            <div id="schedules-minion-msg" class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
@@ -272,7 +272,7 @@
               <tbody>
               </tbody>
             </table>
-            <div class='msg'>(loading)</div>
+            <div id="pillars-msg" class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
@@ -299,7 +299,7 @@
               <tbody>
               </tbody>
             </table>
-            <div class='msg'>(loading)</div>
+            <div id="pillars-minion-msg" class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
@@ -324,7 +324,7 @@
               <tbody>
               </tbody>
             </table>
-            <div class='msg'>(loading)</div>
+            <div id="beacons-msg" class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
@@ -354,7 +354,7 @@
               <tbody>
               </tbody>
             </table>
-            <div class='msg'>(loading)</div>
+            <div id="beacons-minion-msg" class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
@@ -373,8 +373,8 @@
           <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
           <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
           <h1 id="job-title" class='function'>&nbsp;</h1><span id="job-search-button" class="search-button">&#x1F50D;&#xFE0E;</span>
-          <div class='job-menu'></div>
-          <h2 class='time'></h2>
+          <div id="job-menu" class='job-menu'></div>
+          <h2 id="job-time" class='time'></h2>
           <pre id="job-table" class="output">...</pre>
         </div>
       </div>
@@ -389,7 +389,7 @@
               <thead>
                 <tr><th>JID</th><th>Target</th><th>Function</th><th>Start Time</th><th class="sorttable_nosort"></th><th>Status</th><th>Details</th></tr>
               </thead>
-              <tbody>
+              <tbody id="jobs-table-tbody">
               </tbody>
             </table>
             <div class='msg'>(loading)</div>
@@ -410,7 +410,7 @@
               <tbody>
               </tbody>
             </table>
-            <div class='msg'>(loading)</div>
+            <div id="templates-msg" class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
@@ -442,10 +442,10 @@
                 <!-- 2191 = UPWARDS ARROW -->
                 <tr><th>Timestamp&nbsp;&#x2191;</th><th>Tag</th><th>Data</th></tr>
               </thead>
-              <tbody>
+              <tbody id="events-table-tbody">
               </tbody>
             </table>
-            <div class='msg'>...</div>
+            <div id="events-msg" class='msg'>...</div>
           </div>
         </div>
       </div>
@@ -569,7 +569,7 @@
                 </td>
               </tbody>
             </table>
-            <div class='msg'>(loading)</div>
+            <div id="options-msg" class='msg'>(loading)</div>
           </div>
           <div class='panel job-list'>
             <!-- 1F50D = LEFT-POINTING MAGNIFYING GLASS -->
@@ -590,7 +590,7 @@
         <div id="target-box"><input list="data-list-target" id='target' type='text' placeholder="Target"/></div>
         <div id="cmd-box"><input id='command' type='text' placeholder="Command"/></div>
         <div id="run-block"><input id="run-command" type='submit' value="Run command"/></div>
-        <pre class='output'>Waiting for command...</pre>
+        <pre id="popup-output" class='output'>Waiting for command...</pre>
       </div>
     </div>
 

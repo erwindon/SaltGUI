@@ -18,7 +18,7 @@ export class CommandBox {
     this.showManualRun = this.showManualRun.bind(this);
     this._hideManualRun = this._hideManualRun.bind(this);
 
-    const cmdbox = document.querySelector(".run-command #cmd-box");
+    const cmdbox = document.getElementById("cmd-box");
     this.cmdmenu = new DropDownMenu(cmdbox);
 
     this.documentation = new Documentation(this);
@@ -27,7 +27,7 @@ export class CommandBox {
     RunType.createMenu();
     TargetType.createMenu();
 
-    const titleElement = document.querySelector(".run-command #template-menu-here");
+    const titleElement = document.getElementById("template-menu-here");
     const menu = new DropDownMenu(titleElement);
     const templatesText = Utils.getStorageItem("session", "templates", "{}");
     const templates = JSON.parse(templatesText);
@@ -46,24 +46,24 @@ export class CommandBox {
   }
 
   _registerCommandBoxEventListeners() {
-    document.querySelector("#popup-run-command")
+    document.getElementById("popup-run-command")
       .addEventListener("click", this._hideManualRun);
-    document.querySelector("#button-manual-run")
+    document.getElementById("button-manual-run")
       .addEventListener("click", this.showManualRun);
-    document.querySelector("#button-close-cmd")
+    document.getElementById("button-close-cmd")
       .addEventListener("click", this._hideManualRun);
 
     document.querySelector(".run-command input[type='submit']")
       .addEventListener("click", this._onRun);
 
-    document.querySelector("#target")
+    document.getElementById("target")
       .addEventListener("input", pKeyboardEvent => {
-        const targetField = document.querySelector(".run-command #target");
+        const targetField = document.getElementById("target");
         const targetType = targetField.value;
         TargetType.autoSelectTargetType(targetType);
       });
 
-    document.querySelector("#command")
+    document.getElementById("command")
       .addEventListener("input", this.cmdmenu.verifyAll);
   }
 
@@ -71,7 +71,7 @@ export class CommandBox {
 
     if(template.targettype) {
       let targetType = template.targettype;
-      const targetbox = document.querySelector("#target-box");
+      const targetbox = document.getElementById("target-box");
       // show the extended selection controls when
       targetbox.style.display = "inherit";
       if(targetType !== "glob" && targetType !== "list" && targetType !== "compound" && targetType !== "nodegroup") {
@@ -85,13 +85,13 @@ export class CommandBox {
     }
 
     if(template.target) {
-      const targetField = document.querySelector(".run-command #target");
+      const targetField = document.getElementById("target");
       targetField.value = template.target;
       TargetType.autoSelectTargetType(targetField.value);
     }
 
     if(template.command) {
-      const commandField = document.querySelector(".run-command #command");
+      const commandField = document.getElementById("command");
       commandField.value = template.command;
     }
   }
@@ -101,9 +101,9 @@ export class CommandBox {
     if(button.disabled) return;
     const output = document.querySelector(".run-command pre");
 
-    const targetField = document.querySelector(".run-command #target");
+    const targetField = document.getElementById("target");
     const targetValue = targetField.value;
-    const commandField = document.querySelector(".run-command #command");
+    const commandField = document.getElementById("command");
     const commandValue = commandField.value;
 
     const targetType = TargetType.menuTargetType._value;
@@ -134,13 +134,13 @@ export class CommandBox {
   }
 
   showManualRun(pClickEvent) {
-    const manualRun = document.querySelector("#popup-run-command");
+    const manualRun = document.getElementById("popup-run-command");
     manualRun.style.display = "block";
 
     const outputField = document.querySelector(".run-command pre");
     outputField.innerText = "Waiting for command...";
 
-    const targetField = document.querySelector(".run-command #target");
+    const targetField = document.getElementById("target");
     TargetType.autoSelectTargetType(targetField.value);
     targetField.onkeyup = keyUpEvent => {
       if(keyUpEvent.key === "Escape") {
@@ -148,7 +148,7 @@ export class CommandBox {
       }
     };
 
-    const commandField = document.querySelector(".run-command #command");
+    const commandField = document.getElementById("command");
     commandField.onkeyup = keyUpEvent => {
       if(keyUpEvent.key === "Escape") {
         this._hideManualRun(keyUpEvent);
@@ -192,7 +192,7 @@ export class CommandBox {
     //Don't close if they click inside the window
     if(pEvent.type === "click" && pEvent.target.className !== "popup" && pEvent.target.className !== "nearly-visible-button") return;
 
-    const manualRun = document.querySelector("#popup-run-command");
+    const manualRun = document.getElementById("popup-run-command");
     manualRun.style.display = "none";
 
     // reset to default, so that its value is initially hidden
@@ -201,7 +201,7 @@ export class CommandBox {
 
     // test whether the command may have caused an update to the list
     // the user may have altered the text after running the command, just ignore that
-    const commandField = document.querySelector(".run-command #command");
+    const commandField = document.getElementById("command");
     const command = commandField.value.split(" ")[0];
     const outputField = document.querySelector(".run-command pre");
     const output = outputField.innerText;

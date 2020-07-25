@@ -6,7 +6,7 @@ import {Utils} from '../Utils.js';
 export class SchedulesRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("schedules", "Schedules", "#page-schedules", "#button-schedules", pRouter);
+    super("schedules", "Schedules", "page-schedules", "button-schedules", pRouter);
 
     this._handleSchedulesWheelKeyListAll = this._handleSchedulesWheelKeyListAll.bind(this);
     this.updateMinion = this.updateMinion.bind(this);
@@ -84,7 +84,7 @@ export class SchedulesRoute extends PageRoute {
   _handleSchedulesWheelKeyListAll(pWheelKeyListAllData) {
     const table = document.getElementById('schedules-table');
 
-    const msgDiv = this.getPageElement().querySelector(".msg");
+    const msgDiv = document.getElementById("schedules-msg");
     if(PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
 
     const keys = pWheelKeyListAllData.return[0].data.return;

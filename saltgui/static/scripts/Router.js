@@ -49,9 +49,9 @@ export class Router {
     // show template menu item if templates defined
     const templatesText = Utils.getStorageItem("session", "templates", "");
     if(templatesText) {
-      const item1 = document.querySelector("#button-templates1");
+      const item1 = document.getElementById("button-templates1");
       item1.style.display = "inline-block";
-      const item2 = document.querySelector("#button-templates2");
+      const item2 = document.getElementById("button-templates2");
       item2.style.display = "inline-block";
     }
 
@@ -63,7 +63,7 @@ export class Router {
   }
 
   _registerRouterEventListeners() {
-    document.querySelector(".logo")
+    document.getElementById("logo")
       .addEventListener("click", pClickEvent => {
         if(window.location.pathname === config.NAV_URL + "/login") return;
         if(window.event.ctrlKey) {
@@ -73,93 +73,93 @@ export class Router {
         }
       });
 
-    document.querySelector("#button-minions1")
+    document.getElementById("button-minions1")
       .addEventListener("click", pClickEvent =>
         window.location.replace(config.NAV_URL + "/")
       );
-    document.querySelector("#button-minions2")
+    document.getElementById("button-minions2")
       .addEventListener("click", pClickEvent =>
         window.location.replace(config.NAV_URL + "/")
       );
 
-    document.querySelector("#button-grains1")
+    document.getElementById("button-grains1")
       .addEventListener('click', pClickEvent =>
         window.location.replace(config.NAV_URL + "/grains")
       );
-    document.querySelector("#button-grains2")
+    document.getElementById("button-grains2")
       .addEventListener('click', pClickEvent =>
         window.location.replace(config.NAV_URL + "/grains")
       );
 
-    document.querySelector("#button-schedules1")
+    document.getElementById("button-schedules1")
       .addEventListener('click', pClickEvent =>
         window.location.replace(config.NAV_URL + "/schedules")
       );
-    document.querySelector("#button-schedules2")
+    document.getElementById("button-schedules2")
       .addEventListener('click', pClickEvent =>
         window.location.replace(config.NAV_URL + "/schedules")
       );
 
-    document.querySelector("#button-pillars1")
+    document.getElementById("button-pillars1")
       .addEventListener('click', pClickEvent =>
         window.location.replace(config.NAV_URL + "/pillars")
       );
-    document.querySelector("#button-pillars2")
+    document.getElementById("button-pillars2")
       .addEventListener('click', pClickEvent =>
         window.location.replace(config.NAV_URL + "/pillars")
       );
 
-    document.querySelector("#button-beacons1")
+    document.getElementById("button-beacons1")
       .addEventListener('click', pClickEvent =>
         window.location.replace(config.NAV_URL + "/beacons")
       );
-    document.querySelector("#button-beacons2")
+    document.getElementById("button-beacons2")
       .addEventListener('click', pClickEvent =>
         window.location.replace(config.NAV_URL + "/beacons")
       );
 
-    document.querySelector("#button-keys1")
+    document.getElementById("button-keys1")
       .addEventListener("click", pClickEvent =>
         window.location.replace(config.NAV_URL + "/keys")
       );
-    document.querySelector("#button-keys2")
+    document.getElementById("button-keys2")
       .addEventListener("click", pClickEvent =>
         window.location.replace(config.NAV_URL + "/keys")
       );
 
-    document.querySelector("#button-jobs1")
+    document.getElementById("button-jobs1")
       .addEventListener('click', pClickEvent =>
         window.location.replace(config.NAV_URL + "/jobs")
       );
-    document.querySelector("#button-jobs2")
+    document.getElementById("button-jobs2")
       .addEventListener('click', pClickEvent =>
         window.location.replace(config.NAV_URL + "/jobs")
       );
 
-    document.querySelector("#button-templates1")
+    document.getElementById("button-templates1")
       .addEventListener('click', pClickEvent =>
         window.location.replace(config.NAV_URL + "/templates")
       );
-    document.querySelector("#button-templates2")
+    document.getElementById("button-templates2")
       .addEventListener('click', pClickEvent =>
         window.location.replace(config.NAV_URL + "/templates")
       );
 
-    document.querySelector("#button-events1")
+    document.getElementById("button-events1")
       .addEventListener('click', pClickEvent =>
         window.location.replace(config.NAV_URL + "/eventsview")
       );
-    document.querySelector("#button-events2")
+    document.getElementById("button-events2")
       .addEventListener('click', pClickEvent =>
         window.location.replace(config.NAV_URL + "/eventsview")
       );
 
-    document.querySelector("#button-logout1")
+    document.getElementById("button-logout1")
       .addEventListener("click", pClickEvent => {
         this.api.logout().then(
           pLogoutData => window.location.replace(config.NAV_URL + "/login?reason=logout"));
       });
-    document.querySelector("#button-logout2")
+    document.getElementById("button-logout2")
       .addEventListener("click", pClickEvent => {
         this.api.logout().then(
           pLogoutData => window.location.replace(config.NAV_URL + "/login?reason=logout"));

@@ -6,7 +6,7 @@ import {Utils} from '../Utils.js';
 export class MinionsRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("", "Minions", "#page-minions", "#button-minions", pRouter);
+    super("", "Minions", "page-minions", "button-minions", pRouter);
 
     this._handleMinionsWheelKeyListAll = this._handleMinionsWheelKeyListAll.bind(this);
     this._handleRunnerManageVersions = this._handleRunnerManageVersions.bind(this);
@@ -65,7 +65,7 @@ export class MinionsRoute extends PageRoute {
   _handleMinionsWheelKeyListAll(pWheelKeyListAll) {
     const table = document.getElementById("minions-table");
 
-    const msgDiv = this.getPageElement().querySelector(".msg");
+    const msgDiv = document.getElementById("minions-msg");
     if(PageRoute.showErrorRowInstead(table, pWheelKeyListAll, msgDiv)) return;
 
     const keys = pWheelKeyListAll.return[0].data.return;
@@ -161,7 +161,7 @@ export class MinionsRoute extends PageRoute {
   _handleRunnerManageVersions(pRunnerManageVersionsData) {
 
     // this is additional data
-    const msgDiv = this.getPageElement().querySelector(".msg");
+    const msgDiv = document.getElementById("minions-msg");
     const table = document.getElementById("minions-table");
     if(PageRoute.showErrorRowInstead(table, pRunnerManageVersionsData, msgDiv)) return;
 

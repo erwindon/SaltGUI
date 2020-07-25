@@ -8,11 +8,11 @@ import {Utils} from '../Utils.js';
 export class BeaconsMinionRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("beacons-minion", "Beacons", "#page-beacons-minion", "#button-beacons", pRouter);
+    super("beacons-minion", "Beacons", "page-beacons-minion", "button-beacons", pRouter);
 
     this._handleLocalBeaconsList = this._handleLocalBeaconsList.bind(this);
 
-    const closeButton = this.pageElement.querySelector("#beacons-minion-button-close");
+    const closeButton = document.getElementById("beacons-minion-button-close");
     closeButton.addEventListener("click", pClickEvent =>
       this.router.goTo("/beacons")
     );
@@ -55,7 +55,7 @@ export class BeaconsMinionRoute extends PageRoute {
 
     const container = document.getElementById("beacons-minion-table");
 
-    const msgDiv = this.getPageElement().querySelector(".msg");
+    const msgDiv = document.getElementById("beacons-minion-msg");
     if(PageRoute.showErrorRowInstead(container.tBodies[0], pLocalBeaconsListData, msgDiv)) return;
 
     const beacons0 = pLocalBeaconsListData.return[0][pMinionId];

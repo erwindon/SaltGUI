@@ -8,11 +8,11 @@ import {Utils} from '../Utils.js';
 export class PillarsMinionRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("pillars-minion", "Pillars", "#page-pillars-minion", "#button-pillars", pRouter);
+    super("pillars-minion", "Pillars", "page-pillars-minion", "button-pillars", pRouter);
 
     this._handleLocalPillarItems = this._handleLocalPillarItems.bind(this);
 
-    const closeButton = this.pageElement.querySelector("#pillars-minion-button-close");
+    const closeButton = document.getElementById("pillars-minion-button-close");
     closeButton.addEventListener("click", pClickEvent =>
       this.router.goTo("/pillars")
     );
@@ -64,7 +64,7 @@ export class PillarsMinionRoute extends PageRoute {
     const titleElement = document.getElementById("pillars-minion-title");
     panel.insertBefore(menu.menuDropdown, titleElement.nextSibling);
 
-    const msgDiv = this.getPageElement().querySelector(".msg");
+    const msgDiv = document.getElementById("pillars-minion-msg");
     if(PageRoute.showErrorRowInstead(container.tBodies[0], pLocalPillarItemsData, msgDiv)) return;
 
     const pillars = pLocalPillarItemsData.return[0][pMinionId];

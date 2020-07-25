@@ -8,7 +8,7 @@ import {Utils} from '../Utils.js';
 export class JobsRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("jobs", "Jobs", "#page-jobs", "#button-jobs", pRouter);
+    super("jobs", "Jobs", "page-jobs", "button-jobs", pRouter);
 
     this._getJobDetails = this._getJobDetails.bind(this);
     this._updateNextJob = this._updateNextJob.bind(this);
@@ -67,7 +67,7 @@ export class JobsRoute extends PageRoute {
   }
 
   _updateNextJob() {
-    const tbody = this.pageElement.querySelector("#jobs-table tbody");
+    const tbody = document.getElementById("jobs-table-tbody");
     // find an item still marked as "(click)"
     for(const tr of tbody.rows) {
       const detailsField = tr.querySelector("td.details span");
@@ -218,7 +218,7 @@ export class JobsRoute extends PageRoute {
 
     if(typeof pData !== "object") {
       // update all jobs (page) with the error message
-      const tbody = this.pageElement.querySelector("#jobs-table tbody");
+      const tbody = document.getElementById("jobs-table-tbody");
       for(const tr of tbody.rows) {
         const statusField = tr.querySelector("td.status span.no-status");
         if(!statusField) continue;
@@ -260,7 +260,7 @@ export class JobsRoute extends PageRoute {
     }
 
     // update all finished jobs (page)
-    const tbody = this.pageElement.querySelector("#jobs-table tbody");
+    const tbody = document.getElementById("jobs-table-tbody");
     for(const tr of tbody.rows) {
       const statusField = tr.querySelector("td.status span.no-status");
       if(!statusField) continue;
@@ -286,7 +286,7 @@ export class JobsRoute extends PageRoute {
 
   _handleJobsRunnerJobsListJob(pJobId, pData) {
 
-    const detailsSpan = this.pageElement.querySelector(".jobs #" + Utils.getIdFromJobId(pJobId) + " td.details span");
+    const detailsSpan = this.pageElement.querySelector(".jobs tr#" + Utils.getIdFromJobId(pJobId) + " td.details span");
     if(!detailsSpan) return;
 
     if(typeof pData !== "object") {

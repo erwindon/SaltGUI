@@ -7,7 +7,7 @@ import {Utils} from '../Utils.js';
 export class JobRoute extends Route {
 
   constructor(pRouter) {
-    super("job", "Job", "#page-job", "#button-jobs", pRouter);
+    super("job", "Job", "page-job", "button-jobs", pRouter);
 
     this._handleJobRunnerJobsListJob = this._handleJobRunnerJobsListJob.bind(this);
     this.handleRunnerJobsActive = this.handleRunnerJobsActive.bind(this);
@@ -42,9 +42,9 @@ export class JobRoute extends Route {
   }
 
   _handleJobRunnerJobsListJob(pRunnerJobsListJobData, pJobId) {
-    const output = this.getPageElement().querySelector(".output");
+    const output = document.getElementById("job-table");
 
-    const closeButton = document.querySelector("#job-button-close");
+    const closeButton = document.getElementById("job-button-close");
     closeButton.addEventListener("click", pClickEvent =>
       window.history.back()
     );
@@ -54,7 +54,7 @@ export class JobRoute extends Route {
     if(typeof pRunnerJobsListJobData !== "object") {
       output.innerText = "";
       Utils.addErrorToTableCell(output, pRunnerJobsListJobData);
-      const functionField = this.getPageElement().querySelector(".function");
+      const functionField = document.getElementById("job-title");
       functionField.innerText = "ERROR";
       return;
     }
@@ -63,9 +63,9 @@ export class JobRoute extends Route {
 
     if(info.Error) {
       output.innerText = info.Error + " (" + pJobId + ")";
-      const functionField = this.getPageElement().querySelector(".function");
+      const functionField = document.getElementById("job-title");
       functionField.innerText = "ERROR";
-      const timeField = this.getPageElement().querySelector(".time");
+      const timeField = document.getElementById("job-time");
       timeField.innerText = Output.dateTimeStr(info.StartTime);
       return;
     }
@@ -75,7 +75,7 @@ export class JobRoute extends Route {
     // use same formatter as direct commands
     const argumentsText = this.decodeArgumentsText(info.Arguments);
     const commandText = info.Function + argumentsText;
-    const menuSection = this.getPageElement().querySelector(".job-menu");
+    const menuSection = document.getElementById("job-menu");
     const menu = new DropDownMenu(menuSection);
 
     // 1: re-run with original target pattern
@@ -100,10 +100,10 @@ export class JobRoute extends Route {
 
     const functionText = commandText + " on " +
       TargetType.makeTargetText(info["Target-type"], info.Target);
-    const functionField = this.getPageElement().querySelector(".function");
+    const functionField = document.getElementById("job-title");
     functionField.innerText = functionText;
 
-    const timeField = this.getPageElement().querySelector(".time");
+    const timeField = document.getElementById("job-time");
     timeField.innerText = Output.dateTimeStr(info.StartTime);
 
     let minions = ["WHEEL"];
@@ -268,7 +268,7 @@ export class JobRoute extends Route {
   }
 
   handleRunnerJobsActive(id, pData) {
-    const summaryJobsActiveSpan = this.getPageElement().querySelector("pre.output span#summary-jobs-active");
+    const summaryJobsActiveSpan = document.getElementById("summary-jobs-active");
     if(!summaryJobsActiveSpan) return;
 
     if(typeof pData !== "object") {
@@ -351,8 +351,9 @@ export class JobRoute extends Route {
     else if(pData.success === true) newLevel = 1;
     else newLevel = 2;
 
-    const spans = document.querySelectorAll("#status" + jid);
-    for(const span of spans) {
+    // This element only exists when the user happens to look at the output of that jobId.
+    const span = document.getElementById("status" + jid);
+    if(span) {
       let oldLevel = span.dataset.level;
       if(oldLevel === undefined) oldLevel = -1;
       if(newLevel > oldLevel) {

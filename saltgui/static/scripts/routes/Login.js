@@ -4,7 +4,7 @@ import {Utils} from '../Utils.js';
 export class LoginRoute extends Route {
 
   constructor(pRouter) {
-    super("login", "Login", "#page-login", "", pRouter);
+    super("login", "Login", "page-login", "", pRouter);
 
     this.loginPending = false;
 
@@ -16,8 +16,8 @@ export class LoginRoute extends Route {
   }
 
   _registerLoginRouteEventListeners() {
-    const submit = document.getElementById("login-form");
-    submit.addEventListener("submit", this._onLogin);
+    const loginForm = document.getElementById("login-form");
+    loginForm.addEventListener("submit", this._onLogin);
   }
 
   _showNoticeText(pBackgroundColour, pText, pInfoClass) {
@@ -162,7 +162,7 @@ export class LoginRoute extends Route {
 
   _toggleForm(pAllowSubmit) {
     this.loginPending = !pAllowSubmit;
-    const loginButton = this.pageElement.querySelector("#login-form input[type='submit']");
+    const loginButton = document.getElementById("login-submit");
     loginButton.disabled = !pAllowSubmit;
   }
 

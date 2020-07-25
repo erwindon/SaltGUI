@@ -5,7 +5,7 @@ import {Utils} from '../Utils.js';
 export class OptionsRoute extends PageRoute {
 
   constructor(router) {
-    super("options", "Options", "#page-options", "", router);
+    super("options", "Options", "page-options", "", router);
 
     this._newOutputFormats = this._newOutputFormats.bind(this);
 
@@ -171,7 +171,7 @@ export class OptionsRoute extends PageRoute {
     tm2.addEventListener("change", this._newTooltipMode);
     if(tooltipModeValue === "none") tm2.checked = true;
 
-    const msgSpan = this.getPageElement().querySelector(".msg");
+    const msgSpan = document.getElementById("options-msg");
     msgSpan.style.display = "none";
   }
 

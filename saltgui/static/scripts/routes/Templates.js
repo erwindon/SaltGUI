@@ -6,7 +6,7 @@ import {Utils} from '../Utils.js';
 export class TemplatesRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("templates", "Templates", "#page-templates", "#button-templates", pRouter);
+    super("templates", "Templates", "page-templates", "button-templates", pRouter);
 
     this._handleTemplatesWheelConfigValues = this._handleTemplatesWheelConfigValues.bind(this);
 
@@ -41,9 +41,9 @@ export class TemplatesRoute extends PageRoute {
   }
 
   _handleTemplatesWheelConfigValues(pWheelConfigValuesData) {
-    const container = this.getPageElement().querySelector(".templates");
+    const container = document.getElementById("templates-table");
 
-    const msgDiv = this.getPageElement().querySelector(".msg");
+    const msgDiv = document.getElementById("templates-msg");
     if(PageRoute.showErrorRowInstead(container, pWheelConfigValuesData, msgDiv)) return;
 
     // should we update it or just use from cache (see commandbox) ?

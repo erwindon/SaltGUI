@@ -7,11 +7,11 @@ import {Utils} from '../Utils.js';
 export class GrainsMinionRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("grains-minion", "Grains", "#page-grains-minion", "#button-grains", pRouter);
+    super("grains-minion", "Grains", "page-grains-minion", "button-grains", pRouter);
 
     this._handleLocalGrainsItems = this._handleLocalGrainsItems.bind(this);
 
-    const closeButton = this.pageElement.querySelector("#grains-minion-button-close");
+    const closeButton = document.getElementById("grains-minion-button-close");
     closeButton.addEventListener("click", pClickEvent =>
       this.router.goTo("/grains")
     );
@@ -64,7 +64,7 @@ export class GrainsMinionRoute extends PageRoute {
     const titleElement = document.getElementById("grains-minion-title");
     panel.insertBefore(menu.menuDropdown, titleElement.nextSibling);
 
-    const msgDiv = this.getPageElement().querySelector(".msg");
+    const msgDiv = document.getElementById("grains-minion-msg");
     if(PageRoute.showErrorRowInstead(container.tBodies[0], pLocalGrainsItemsData, msgDiv)) return;
 
     const grains = pLocalGrainsItemsData.return[0][pMinionId];

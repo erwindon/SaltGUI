@@ -236,7 +236,7 @@ input[type='submit'] {
   width: calc(100% - 30px); /* padding+margin */
 }
 
-.run-command input[type='submit'] {
+#run-command {
   margin-bottom: 20px;
 }
 

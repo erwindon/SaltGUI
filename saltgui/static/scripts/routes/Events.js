@@ -9,7 +9,7 @@ export class EventsRoute extends PageRoute {
 
   constructor(pRouter) {
     // don't use /events for the page, that url is reserved
-    super("eventsview", "Events", "#page-events", "#button-events", pRouter);
+    super("eventsview", "Events", "page-events", "button-events", pRouter);
 
     const eventsPlayButton = document.getElementById("events-play-button");
     eventsPlayButton.onclick = ev => this._clickEventsPlayButton(true);
@@ -33,8 +33,8 @@ export class EventsRoute extends PageRoute {
 
   _updateFooter() {
     // update the footer
-    const msgDiv = this.pageElement.querySelector(".msg");
-    const tbody = this.pageElement.querySelector("table tbody");
+    const msgDiv = document.getElementById("events-msg");
+    const tbody = document.getElementById("events-table-tbody");
     // when there are more than a screen-ful of events, the user
     // will not see the "press play" message. but ths user already
     // knows that because that cause the events to be shown...
@@ -54,7 +54,7 @@ export class EventsRoute extends PageRoute {
       return;
     }
 
-    const tbody = this.pageElement.querySelector("table tbody");
+    const tbody = document.getElementById("events-table-tbody");
     const tr = document.createElement("tr");
 
     // add timestamp value

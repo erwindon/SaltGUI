@@ -6,7 +6,7 @@ import {Utils} from '../Utils.js';
 export class KeysRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("keys", "Keys", "#page-keys", "#button-keys", pRouter);
+    super("keys", "Keys", "page-keys", "button-keys", pRouter);
 
     this.fingerprintPattern = /^[0-9a-f:]+$/i;
 
@@ -91,7 +91,7 @@ export class KeysRoute extends PageRoute {
 
     const table = document.getElementById("keys-table");
 
-    const msgDiv = this.getPageElement().querySelector(".msg");
+    const msgDiv = document.getElementById("keys-msg");
     if(PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
 
     const allKeys = pWheelKeyListAllData.return[0].data.return;
@@ -134,7 +134,7 @@ export class KeysRoute extends PageRoute {
     cnt["denied"] = 0;
     cnt["rejected"] = 0;
     //cnt["missing"] = 0;
-    const tbody = pTable.querySelector("table tbody");
+    const tbody = document.getElementById("keys-table-body");
     for(const tr of tbody.children) {
       const statusField = tr.querySelector("td.status");
       const statusText = statusField.innerText;  
@@ -155,7 +155,7 @@ export class KeysRoute extends PageRoute {
     // capitalize the first word (can only be "no")
     summary = summary.replace(/^no/, "No");
 
-    const msgDiv = this.getPageElement().querySelector(".minion-list .msg");
+    const msgDiv = document.getElementById("keys-msg");
     msgDiv.innerText = summary;
   }
 

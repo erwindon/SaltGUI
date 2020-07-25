@@ -8,11 +8,11 @@ import {Utils} from '../Utils.js';
 export class SchedulesMinionRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("schedules-minion", "Schedules", "#page-schedules-minion", "#button-schedules", pRouter);
+    super("schedules-minion", "Schedules", "page-schedules-minion", "button-schedules", pRouter);
 
     this._handleLocalScheduleList = this._handleLocalScheduleList.bind(this);
 
-    const closeButton = this.pageElement.querySelector("#schedules-minion-button-close");
+    const closeButton = document.getElementById("schedules-minion-button-close");
     closeButton.addEventListener("click", pClickEvent =>
       this.router.goTo("/schedules")
     );
@@ -58,7 +58,7 @@ export class SchedulesMinionRoute extends PageRoute {
 
     const container = document.getElementById("schedules-minion-table");
 
-    const msgDiv = this.getPageElement().querySelector(".msg");
+    const msgDiv = document.getElementById("schedules-minion-msg");
     if(PageRoute.showErrorRowInstead(container.tBodies[0], pLocalScheduleList, msgDiv)) return;
 
     let schedules = pLocalScheduleList.return[0][pMinionId];

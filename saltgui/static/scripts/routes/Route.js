@@ -7,11 +7,11 @@ export class Route {
   constructor(pPath, pPageName, pPageSelector, pMenuItemSelector, pRouter) {
     this.path = new RegExp("^" + config.NAV_URL.replace(/\//, "[/]") + "[/]" + pPath + "$");
     this.name = pPageName;
-    this.pageElement = document.querySelector(pPageSelector);
+    this.pageElement = document.getElementById(pPageSelector);
     this.router = pRouter;
     if(pMenuItemSelector) {
-      this.menuItemElement1 = document.querySelector(pMenuItemSelector + "1");
-      this.menuItemElement2 = document.querySelector(pMenuItemSelector + "2");
+      this.menuItemElement1 = document.getElementById(pMenuItemSelector + "1");
+      this.menuItemElement2 = document.getElementById(pMenuItemSelector + "2");
     }
 
     this.runCommand = this.runCommand.bind(this);
@@ -64,9 +64,9 @@ export class Route {
 
   runFullCommand(pClickEvent, pTargetType, pTargetString, pCommandString) {
     this.router.commandbox.showManualRun(pClickEvent);
-    const target = document.querySelector("#target");
-    const command = document.querySelector("#command");
-    const targetbox = document.querySelector("#target-box");
+    const target = document.getElementById("target");
+    const command = document.getElementById("command");
+    const targetbox = document.getElementById("target-box");
 
     if(!pTargetString) pTargetString = "";
     // handle https://github.com/saltstack/salt/issues/48734

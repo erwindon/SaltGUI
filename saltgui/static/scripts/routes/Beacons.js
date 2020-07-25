@@ -6,7 +6,7 @@ import {Utils} from '../Utils.js';
 export class BeaconsRoute extends PageRoute {
 
   constructor(pRouter) {
-    super("beacons", "Beacons", "#page-beacons", "#button-beacons", pRouter);
+    super("beacons", "Beacons", "page-beacons", "button-beacons", pRouter);
 
     this._handleBeaconsWheelKeyListAll = this._handleBeaconsWheelKeyListAll.bind(this);
     this.updateMinion = this.updateMinion.bind(this);
@@ -87,7 +87,7 @@ export class BeaconsRoute extends PageRoute {
   _handleBeaconsWheelKeyListAll(pWheelKeyListAllData) {
     const table = document.getElementById("beacons-table");
 
-    const msgDiv = this.getPageElement().querySelector(".msg");
+    const msgDiv = document.getElementById("beacons-msg");
     if(PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
 
     const keys = pWheelKeyListAllData.return[0].data.return;

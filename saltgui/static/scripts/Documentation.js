@@ -17,10 +17,10 @@ export class Documentation {
   }
 
   _manualRunMenuSysDocPrepare(pMenuItem) {
-    const targetField = document.querySelector(".run-command #target");
+    const targetField = document.getElementById("target");
     let target = targetField.value;
     target = target ? "target" : "all minions";
-    const commandField = document.querySelector(".run-command #command");
+    const commandField = document.getElementById("command");
     let command = commandField.value;
     // remove the command arguments
     command = command.trim().replace(/ .*/, "");
@@ -55,18 +55,18 @@ export class Documentation {
   }
 
   _manualRunMenuSysDocRun() {
-    const button = document.querySelector(".run-command input[type='submit']");
+    const button = document.getElementById("run-command");
     if(button.disabled) return;
-    const output = document.querySelector(".run-command pre");
+    const output = document.getElementById("popup-output");
 
-    const targetField = document.querySelector(".run-command #target");
+    const targetField = document.getElementById("target");
     let target = targetField.value;
     // the help text is taken from the first minion that answers
     // when no target is selected, just ask all minions
     if(target === "") target = "*";
 
     // do not use the command-parser
-    const commandField = document.querySelector(".run-command #command");
+    const commandField = document.getElementById("command");
     let command = commandField.value;
     // remove arguments
     command = command.trim().replace(/ .*/, "");
