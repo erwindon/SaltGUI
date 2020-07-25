@@ -42,9 +42,9 @@ export class EventsRoute extends PageRoute {
     // FE0E = VARIATION SELECTOR-15 (render as text)
     msgDiv.innerHTML = Utils.txtZeroOneMany(tbody.rows.length,
       "No events", "{0} event", "{0} events") +
-      (Utils.getStorageItem("session", "events-button") === "play" ?
-        "" :
-        ", press '&#x23F5;&#xFE0E;' to begin");
+      (Utils.getStorageItem("session", "events-button") === "play"
+        ? ""
+        : ", press '&#x23F5;&#xFE0E;' to begin");
   }
 
   handleAnyEvent(pTag, pData) {
