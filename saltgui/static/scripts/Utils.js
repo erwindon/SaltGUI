@@ -359,7 +359,8 @@ export class Utils {
   // the id may contain characters that are not allowed in an ID
   // btoa is the base64 encoder
   static getIdFromMinionId(pMinionId) {
-    const patEqualSigns = /==*/;
+    // prevent eslint: A regular expression literal can be confused with '/='
+    const patEqualSigns = /[=]=*/;
     return "m" + btoa(pMinionId).replace(patEqualSigns, "");
   }
 
