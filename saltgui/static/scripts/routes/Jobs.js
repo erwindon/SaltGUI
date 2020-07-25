@@ -86,7 +86,7 @@ export class JobsRoute extends PageRoute {
     let title = "Show&nbsp;first&nbsp;" + maxJobs + "&nbsp;jobs";
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     // 25CF = BLACK CIRCLE
-    if(cnt === "undefined" || cnt === ""+maxJobs) title = "\u25CF " + title;
+    if(cnt === "undefined" || cnt === maxJobs.toString()) title = "\u25CF " + title;
     pMenu.addMenuItem(title, function(pClickEvent) {
       window.location.assign(config.NAV_URL + "/jobs?cnt=" + maxJobs);
     }.bind(this));

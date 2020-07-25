@@ -244,7 +244,7 @@ export class CommandBox {
     this.onRunReturn("ERROR:\n\n" + pMessage, "");
   }
 
-  getRunParams(pTargetType, pTarget, pToRun, pisRunTypeNormalOnly=false) {
+  getRunParams(pTargetType, pTarget, pToRun, pisRunTypeNormalOnly = false) {
 
     // The leading # was used to indicate a nodegroup
     if(pTargetType === "nodegroup" && pTarget.startsWith("#")) {

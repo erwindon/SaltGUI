@@ -15,7 +15,7 @@ export class API {
     this.logout = this.logout.bind(this);
   }
 
-  login(pUserName, pPassWord, pEauth="pam") {
+  login(pUserName, pPassWord, pEauth = "pam") {
     const params = {
       eauth: pEauth,
       password: pPassWord,

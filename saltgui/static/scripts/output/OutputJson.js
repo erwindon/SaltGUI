@@ -49,7 +49,7 @@ export class OutputJson {
 
   // format an object as JSON
   // based on an initial indentation and an indentation increment
-  static formatJSON(pValue, pIndentLevel=0) {
+  static formatJSON(pValue, pIndentLevel = 0) {
 
     // indent each level with 4 spaces
     const indentStep = 4;

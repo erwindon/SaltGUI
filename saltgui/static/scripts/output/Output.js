@@ -56,7 +56,7 @@ export class Output {
   }
 
   // compose the host/minion-name label that is shown with each response
-  static getMinionIdHtml(pMinionId, pClassName="") {
+  static getMinionIdHtml(pMinionId, pClassName = "") {
     const span = Route.createSpan("minion-id", pMinionId);
     if(pClassName) span.classList.add(pClassName);
     return span;

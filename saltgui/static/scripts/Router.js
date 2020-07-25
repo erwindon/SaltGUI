@@ -185,7 +185,7 @@ export class Router {
       return;
     }
 
-    const leftMillis = expireValue*1000 - Date.now();
+    const leftMillis = expireValue * 1000 - Date.now();
 
     if(leftMillis <= 0) {
       warning.style.display = "";
@@ -239,7 +239,7 @@ export class Router {
     if(pRoute.onRegister) pRoute.onRegister();
   }
 
-  goTo(pPath, hasPathPrefix=false) {
+  goTo(pPath, hasPathPrefix = false) {
     if(this.switchingRoute) return;
     if(window.location.pathname === config.NAV_URL + pPath && this.currentRoute) return;
     if(pPath === "/" && Utils.getStorageItem("session", "login-response") === null) {

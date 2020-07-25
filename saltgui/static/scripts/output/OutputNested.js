@@ -3,7 +3,7 @@ export class OutputNested {
   // heavily inspired by the implementation for NESTED output
   // as originally implemented in salt/output/nested.py from Salt
 
-  static _ustring(pIndent, pTxt, pPrefix='', pSuffix='') {
+  static _ustring(pIndent, pTxt, pPrefix = '', pSuffix = '') {
     return " ".repeat(pIndent) + pPrefix + pTxt + pSuffix;
   }
 
@@ -33,7 +33,7 @@ export class OutputNested {
             prefix = '';
           else
             // 00A0 = NO-BREAK SPACE
-            prefix ='-\u00A0';
+            prefix = '-\u00A0';
           OutputNested.display(ind, pIndent + 2, prefix, pOutArray);
         } else {
           // 00A0 = NO-BREAK SPACE
@@ -57,7 +57,7 @@ export class OutputNested {
     return pOutArray;
   }
 
-  static formatNESTED(pValue, pIndentLevel=0) {
+  static formatNESTED(pValue, pIndentLevel = 0) {
     const lines = OutputNested.display(pValue, pIndentLevel, '', []);
     return lines.join('\n');
   }

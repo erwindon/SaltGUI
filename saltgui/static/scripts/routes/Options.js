@@ -41,12 +41,12 @@ export class OptionsRoute extends PageRoute {
 
     const startValue = loginResponse.start;
     const startTd = document.getElementById("option-start-value");
-    const startStr = new Date(startValue*1000);
+    const startStr = new Date(startValue * 1000);
     startTd.innerText = startValue + "\n" + startStr;
 
     const expireValue = loginResponse.expire;
     const expireTd = document.getElementById("option-expire-value");
-    const expireStr = new Date(expireValue*1000);
+    const expireStr = new Date(expireValue * 1000);
     const date = new Date(null);
     if(loginResponse.expire && loginResponse.start) {
       date.setSeconds(loginResponse.expire - loginResponse.start);
@@ -58,7 +58,7 @@ export class OptionsRoute extends PageRoute {
       durationStr = "\nduration is " + str.substr(11, 8);
     }
     let expiresInStr = "";
-    const str2 = new Date(expireValue*1000 - Date.now()).toISOString();
+    const str2 = new Date(expireValue * 1000 - Date.now()).toISOString();
     if(str2.startsWith("1970-01-01T")) {
       // remove the date prefix and the millisecond suffix
       expiresInStr = "\nexpires in " + str2.substr(11, 8);

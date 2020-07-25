@@ -239,7 +239,7 @@ export class KeysRoute extends PageRoute {
     pContainer.tBodies[0].appendChild(minionTr);
   }
 
-  _addPreMinion(pContainer, pMinionId, pMinionsDict, pInsertAtTop=false) {
+  _addPreMinion(pContainer, pMinionId, pMinionsDict, pInsertAtTop = false) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
     const minionIdTd = Route.createTd("", "");

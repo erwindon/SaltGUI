@@ -44,7 +44,7 @@ export class Utils {
     return null;
   }
 
-  static getStorageItem(pStorage, pKeyName, pDefaultValue=null) {
+  static getStorageItem(pStorage, pKeyName, pDefaultValue = null) {
     const storage = Utils._getStorage(pStorage);
     if(!storage) {
       console.log("getStorageItem", pStorage, pKeyName); return pDefaultValue;
@@ -76,7 +76,7 @@ export class Utils {
 
   // other functions
 
-  static addToolTip(pTooltipHost, pTooltipText, pStyle="bottom-center") {
+  static addToolTip(pTooltipHost, pTooltipText, pStyle = "bottom-center") {
 
     // Users may want to switch this on to improve browser performance
     const toolTipMode = Utils.getStorageItem("session", "tooltip_mode");
@@ -108,7 +108,7 @@ export class Utils {
     pTooltipHost.appendChild(tooltipSpan);
   }
 
-  static makeTableSortable(pStartElement, pIsReverseSort=false, pColumnNr=0) {
+  static makeTableSortable(pStartElement, pIsReverseSort = false, pColumnNr = 0) {
     const thArr = Array.prototype.slice.call(pStartElement.querySelectorAll("table th"));
     // we do not expect any rows in the table at this moment
     // but sorting is applied to show the sorting indicator
@@ -156,7 +156,7 @@ export class Utils {
     }
   }
 
-  static makeTableSearchable(pStartElement, pButtonId, pTableId, pFieldList=null) {
+  static makeTableSearchable(pStartElement, pButtonId, pTableId, pFieldList = null) {
 
     const div = Route.createDiv("search-box", "");
     div.style.display = "none";
@@ -224,13 +224,13 @@ export class Utils {
     pInput.placeholder = placeholder;
   }
 
-  static addTableHelp(pStartElement, pHelpText, pStyle="bottom-right") {
+  static addTableHelp(pStartElement, pHelpText, pStyle = "bottom-right") {
     const helpButton = pStartElement.querySelector("#help");
     helpButton.classList.add("search-button");
     Utils.addToolTip(helpButton, pHelpText, pStyle);
   }
 
-  static hideShowTableSearchBar(pSearchBlock, pTable, pAction="toggle") {
+  static hideShowTableSearchBar(pSearchBlock, pTable, pAction = "toggle") {
     const startElement = pTable.parentElement;
 
     // remove all highlights
