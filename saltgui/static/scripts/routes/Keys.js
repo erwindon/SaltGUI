@@ -99,23 +99,23 @@ export class KeysRoute extends PageRoute {
     const minionsDict = JSON.parse(Utils.getStorageItem("session", "minions-txt"));
 
     // Unaccepted goes first because that is where the user must decide
-    const minionIds_pre = allKeys.minions_pre.sort();
-    for(const minionId of minionIds_pre) {
+    const minionIdsPre = allKeys.minions_pre.sort();
+    for(const minionId of minionIdsPre) {
       this._addPreMinion(table, minionId, minionsDict);
     }
 
-    const minionIds_accepted = allKeys.minions.sort();
-    for(const minionId of minionIds_accepted) {
+    const minionIdsAccepted = allKeys.minions.sort();
+    for(const minionId of minionIdsAccepted) {
       this._addAcceptedMinion(table, minionId, minionsDict);
     }
 
-    const minionIds_denied = allKeys.minions_denied.sort();
-    for(const minionId of minionIds_denied) {
+    const minionIdsDenied = allKeys.minions_denied.sort();
+    for(const minionId of minionIdsDenied) {
       this._addDeniedMinion(table, minionId, minionsDict);
     }
 
-    const minionIds_rejected = allKeys.minions_rejected.sort();
-    for(const minionId of minionIds_rejected) {
+    const minionIdsRejected = allKeys.minions_rejected.sort();
+    for(const minionId of minionIdsRejected) {
       this._addRejectedMinion(table, minionId, minionsDict);
     }
 

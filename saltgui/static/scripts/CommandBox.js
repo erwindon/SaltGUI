@@ -321,7 +321,7 @@ export class CommandBox {
       params.client = "local";
       params.fun = functionToRun;
       params.tgt = pTarget;
-      if(pTargetType) params.tgt_type = pTargetType;
+      if(pTargetType) params["tgt_type"] = pTargetType;
       if(argsArray.length !== 0) params.arg = argsArray;
       if(Object.keys(argsObject).length > 0) params.kwarg = argsObject;
     }

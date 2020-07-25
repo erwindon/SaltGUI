@@ -253,11 +253,11 @@ export class PageRoute extends Route {
       addressTd.appendChild(addressSpan);
       // ipnumbers do not sort well, reformat into something sortable
       const ipv4parts = ipv4.split(".");
-      let sorttable_customkey = "";
+      let sorttableCustomkey = "";
       if(ipv4parts.length === 4) {
         // never mind adding '.'; this is only a sort-key
-        for(let i = 0; i < 4; i++) sorttable_customkey += ipv4parts[i].padStart(3, "0");
-        addressTd.setAttribute("sorttable_customkey", sorttable_customkey);
+        for(let i = 0; i < 4; i++) sorttableCustomkey += ipv4parts[i].padStart(3, "0");
+        addressTd.setAttribute("sorttable_customkey", sorttableCustomkey);
       }
       addressTd.classList.add("address");
       addressTd.setAttribute("tabindex", -1);

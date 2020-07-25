@@ -73,13 +73,13 @@ export class API {
     const params = {
       client: "local",
       fun: "beacons.list",
-      kwarg: { return_yaml: false }
+      kwarg: { "return_yaml": false }
     };
     if(pMinionId) {
-      params.tgt_type = "list";
+      params["tgt_type"] = "list";
       params.tgt = pMinionId;
     } else {
-      params.tgt_type = "glob";
+      params["tgt_type"] = "glob";
       params.tgt = "*";
     }
     return this.apiRequest("POST", "/", params);
@@ -91,10 +91,10 @@ export class API {
       fun: "grains.items",
     };
     if(pMinionId) {
-      params.tgt_type = "list";
+      params["tgt_type"] = "list";
       params.tgt = pMinionId;
     } else {
-      params.tgt_type = "glob";
+      params["tgt_type"] = "glob";
       params.tgt = "*";
     }
     return this.apiRequest("POST", "/", params);
@@ -106,10 +106,10 @@ export class API {
       fun: "pillar.items"
     };
     if(pMinionId) {
-      params.tgt_type = "list";
+      params["tgt_type"] = "list";
       params.tgt = pMinionId;
     } else {
-      params.tgt_type = "glob";
+      params["tgt_type"] = "glob";
       params.tgt = "*";
     }
     return this.apiRequest("POST", "/", params);
@@ -121,10 +121,10 @@ export class API {
       fun: "pillar.obfuscate"
     };
     if(pMinionId) {
-      params.tgt_type = "list";
+      params["tgt_type"] = "list";
       params.tgt = pMinionId;
     } else {
-      params.tgt_type = "glob";
+      params["tgt_type"] = "glob";
       params.tgt = "*";
     }
     return this.apiRequest("POST", "/", params);
@@ -134,13 +134,13 @@ export class API {
     const params = {
       client: "local",
       fun: "schedule.list",
-      kwarg: { return_yaml: false }
+      kwarg: { "return_yaml": false }
     };
     if(pMinionId) {
-      params.tgt_type = "list";
+      params["tgt_type"] = "list";
       params.tgt = pMinionId;
     } else {
-      params.tgt_type = "glob";
+      params["tgt_type"] = "glob";
       params.tgt = "*";
     }
     return this.apiRequest("POST", "/", params);
