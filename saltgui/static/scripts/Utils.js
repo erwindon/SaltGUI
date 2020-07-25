@@ -122,8 +122,8 @@ export class Utils {
     let found = false;
     for(const childNode of pElement.childNodes) {
       const r = this.hasTextContent(childNode, pSearchText, pCaseSensitiveFlag);
-      if(r == 2) return 2;
-      if(r == 1) found = true;
+      if(r === 2) return 2;
+      if(r === 1) found = true;
     }
     if(found) return 1;
 
@@ -131,7 +131,7 @@ export class Utils {
       return 0;
 
     let s = pElement.textContent;
-    if(typeof pSearchText == "string") {
+    if(typeof pSearchText === "string") {
       if(!pCaseSensitiveFlag) s = s.toUpperCase();
       return s.includes(pSearchText) ? 1 : 0;
     } else {

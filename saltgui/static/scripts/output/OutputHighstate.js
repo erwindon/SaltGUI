@@ -113,7 +113,7 @@ export class OutputHighstate {
       if(task.hasOwnProperty("changes")) {
         changes = task.changes;
         const keys = Object.keys(changes);
-        if(keys.length == 2 && keys[0] === "out" && keys[1] === "ret")
+        if(keys.length === 2 && keys[0] === "out" && keys[1] === "ret")
           changes = changes["ret"];
         const str = JSON.stringify(changes);
         if(str !== "{}") {
