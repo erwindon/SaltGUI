@@ -86,8 +86,8 @@ export class EventsRoute extends PageRoute {
 
     tbody.prepend(tr);
 
-    const inputField = this.pageElement.querySelector("input.filter-text");
-    Utils.hideShowTableSearchBar(inputField, tbody.parentElement, "refresh");
+    const searchBlock = this.pageElement.querySelector(".search-box");
+    Utils.hideShowTableSearchBar(searchBlock, tbody.parentElement, "refresh");
 
     // limit to MAX_EVENTS_IN_VIEW rows only
     while(tbody.rows.length > MAX_EVENTS_IN_VIEW) {
