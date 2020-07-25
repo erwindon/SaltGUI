@@ -44,16 +44,16 @@ export class TemplatesRoute extends PageRoute {
     const container = document.getElementById("templates-table");
 
     const msgDiv = document.getElementById("templates-msg");
-    if(PageRoute.showErrorRowInstead(container, pWheelConfigValuesData, msgDiv)) return;
+    if (PageRoute.showErrorRowInstead(container, pWheelConfigValuesData, msgDiv)) return;
 
     // should we update it or just use from cache (see commandbox) ?
     let templates = pWheelConfigValuesData.return[0].data.return.saltgui_templates;
-    if(templates)
+    if (templates)
       Utils.setStorageItem("session", "templates", JSON.stringify(templates));
     else
       templates = { };
     const keys = Object.keys(templates).sort();
-    for(const key of keys) {
+    for (const key of keys) {
       const template = templates[key];
       this._addTemplate(container, key, template);
     }
@@ -70,7 +70,7 @@ export class TemplatesRoute extends PageRoute {
 
     // calculate description
     const description = template["description"];
-    if(!description) {
+    if (!description) {
       tr.appendChild(Route.createTd("description value-none", "(none)"));
     } else {
       tr.appendChild(Route.createTd("description", description));
@@ -80,11 +80,11 @@ export class TemplatesRoute extends PageRoute {
     const targetType = template["targettype"];
     // calculate target
     const target = template["target"];
-    if(!targetType && !target) {
+    if (!targetType && !target) {
       tr.appendChild(Route.createTd("target value-none", "(none)"));
-    } else if(/* targetType && */ !target) {
+    } else if (/* targetType && */ !target) {
       tr.appendChild(Route.createTd("target", targetType));
-    } else if(!targetType /* && target */) {
+    } else if (!targetType /* && target */) {
       tr.appendChild(Route.createTd("target", target));
     } else {
       tr.appendChild(Route.createTd("target", targetType + " " + target));
@@ -92,7 +92,7 @@ export class TemplatesRoute extends PageRoute {
 
     // calculate command
     const command = template["command"];
-    if(!command) {
+    if (!command) {
       tr.appendChild(Route.createTd("command value-none", "(none)"));
     } else {
       tr.appendChild(Route.createTd("command", command));

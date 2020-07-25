@@ -30,7 +30,7 @@ export class PillarsRoute extends PageRoute {
         myThis.updateMinions("pillars-table", pLocalPillarObfuscateData);
       }, pLocalPillarObfuscateMsg => {
         const localPillarObfuscateData = {"return":[{}]};
-        for(const k of pWheelKeyListAllData.return[0].data.return.minions)
+        for (const k of pWheelKeyListAllData.return[0].data.return.minions)
           localPillarObfuscateData.return[0][k] = JSON.stringify(pLocalPillarObfuscateMsg);
         myThis.updateMinions("pillars-table", localPillarObfuscateData);
       });
@@ -54,12 +54,12 @@ export class PillarsRoute extends PageRoute {
     const table = document.getElementById("pillars-table");
 
     const msgDiv = document.getElementById("pillars-msg");
-    if(PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
+    if (PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
 
     const keys = pWheelKeyListAllData.return[0].data.return;
 
     const minionIds = keys.minions.sort();
-    for(const minionId of minionIds) {
+    for (const minionId of minionIds) {
       this.addMinion(table, minionId, 1);
 
       // preliminary dropdown menu
@@ -94,7 +94,7 @@ export class PillarsRoute extends PageRoute {
 
     let cnt;
     let pillarInfoText;
-    if(typeof pMinionData === "object") {
+    if (typeof pMinionData === "object") {
       cnt = Object.keys(pMinionData).length;
       pillarInfoText = Utils.txtZeroOneMany(cnt,
         "no pillars", "{0} pillar", "{0} pillars");
@@ -104,7 +104,7 @@ export class PillarsRoute extends PageRoute {
     }
     const pillarInfoTd = Route.createTd("pillarinfo", pillarInfoText);
     pillarInfoTd.setAttribute("sorttable_customkey", cnt);
-    if(typeof pMinionData !== "object") {
+    if (typeof pMinionData !== "object") {
       Utils.addErrorToTableCell(pillarInfoTd, pMinionData);
     }
     minionTr.appendChild(pillarInfoTd);

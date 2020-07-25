@@ -65,15 +65,15 @@ export class PillarsMinionRoute extends PageRoute {
     panel.insertBefore(menu.menuDropdown, titleElement.nextSibling);
 
     const msgDiv = document.getElementById("pillars-minion-msg");
-    if(PageRoute.showErrorRowInstead(container.tBodies[0], pLocalPillarItemsData, msgDiv)) return;
+    if (PageRoute.showErrorRowInstead(container.tBodies[0], pLocalPillarItemsData, msgDiv)) return;
 
     const pillars = pLocalPillarItemsData.return[0][pMinionId];
 
-    if(pillars === undefined) {
+    if (pillars === undefined) {
       msgDiv.innerText = "Unknown minion '" + pMinionId + "'";
       return;
     }
-    if(pillars === false) {
+    if (pillars === false) {
       msgDiv.innerText = "Minion '" + pMinionId + "' did not answer";
       return;
     }
@@ -81,11 +81,11 @@ export class PillarsMinionRoute extends PageRoute {
     // collect the public pillars and compile their regexps
     const publicPillarsText = Utils.getStorageItem("session", "public_pillars", "[]");
     let publicPillars = JSON.parse(publicPillarsText);
-    if(!Array.isArray(publicPillars)) publicPillars = [ ];
-    for(let i = 0; i < publicPillars.length; i++) {
+    if (!Array.isArray(publicPillars)) publicPillars = [ ];
+    for (let i = 0; i < publicPillars.length; i++) {
       try {
         publicPillars[i] = new RegExp(publicPillars[i]);
-      } catch(err) {
+      } catch (err) {
         // most likely a syntax error in the RE
         console.error("error in regexp saltgui_public_pillars[" + i + "]=" + OutputYaml.formatYAML(publicPillars[i]) + " --> " + err.name + ": " + err.message);
         publicPillars[i] = null;
@@ -93,7 +93,7 @@ export class PillarsMinionRoute extends PageRoute {
     }
 
     const keys = Object.keys(pillars).sort();
-    for(const k of keys) {
+    for (const k of keys) {
       const pillar = document.createElement('tr');
 
       const nameTd = Route.createTd("pillar-name", k);
@@ -120,8 +120,8 @@ export class PillarsMinionRoute extends PageRoute {
       pillarValueTd.appendChild(pillarShownDiv);
 
       // show public pillars immediatelly
-      for(let i = 0; i < publicPillars.length; i++) {
-        if(publicPillars[i] && publicPillars[i].test(k)) {
+      for (let i = 0; i < publicPillars.length; i++) {
+        if (publicPillars[i] && publicPillars[i].test(k)) {
           // same code as when clicking the hidden value
           pillarHiddenDiv.style.display = "none";
           pillarShownDiv.style.display = "inline-block";

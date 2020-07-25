@@ -18,7 +18,7 @@ export class TargetType {
   // so this conclusion must be re-evaluated each time
   static _targetTypeNodeGroupPrepare(pMenuItem) {
     const nodeGroupsText = Utils.getStorageItem("session", "nodegroups");
-    if(nodeGroupsText && nodeGroupsText !== "{}") {
+    if (nodeGroupsText && nodeGroupsText !== "{}") {
       pMenuItem.innerText = "Nodegroup";
       pMenuItem.style.display = "block";
       // optimization as the list of nodegroups will not change until the next login
@@ -43,12 +43,12 @@ export class TargetType {
   static _updateTargetTypeText() {
     const targetType = TargetType._getTargetType();
 
-    switch(targetType) {
+    switch (targetType) {
     case "compound":
       TargetType.menuTargetType.setTitle("Compound");
       break;
     case "glob":
-      if(TargetType.menuTargetType._system)
+      if (TargetType.menuTargetType._system)
         // reset the title to the absolute minimum
         // so that the menu does not stand out in trivial situations
         TargetType.menuTargetType.setTitle("");
@@ -73,31 +73,31 @@ export class TargetType {
   static setMenuMarker() {
     const targetType = TargetType._getTargetType();
     const m = TargetType.menuTargetType.menuDropdownContent.children;
-    for(let i = 0; i < m.length; i++) {
+    for (let i = 0; i < m.length; i++) {
       let t = m[i].innerText;
       t = t.replace(/^. /, "");
       // 25CF = BLACK CIRCLE
-      if(m[i]._value === targetType) t = "\u25CF " + t;
+      if (m[i]._value === targetType) t = "\u25CF " + t;
       m[i].innerText = t;
     }
   }
 
   static autoSelectTargetType(pTarget) {
 
-    if(!TargetType.menuTargetType._system) {
+    if (!TargetType.menuTargetType._system) {
       // user has selected the value, do not touch it
       return;
     }
 
-    if(pTarget.includes("@") || pTarget.includes(" ") ||
+    if (pTarget.includes("@") || pTarget.includes(" ") ||
       pTarget.includes("(") || pTarget.includes(")")) {
       // "@" is a strong indicator for compound target
       // but "space", "(" and ")" are also typical for compound target
       TargetType.menuTargetType._value = "compound";
-    } else if(pTarget.includes(",")) {
+    } else if (pTarget.includes(",")) {
       // "," is a strong indicator for list target (when it is also not compound)
       TargetType.menuTargetType._value = "list";
-    } else if(pTarget.startsWith("#")) {
+    } else if (pTarget.startsWith("#")) {
       // "#" at the start of a line is a strong indicator for nodegroup target
       // this is not a SALTSTACK standard, but our own invention
       TargetType.menuTargetType._value = "nodegroup";
@@ -117,7 +117,7 @@ export class TargetType {
 
   static _getTargetType() {
     const targetType = TargetType.menuTargetType._value;
-    if(targetType === undefined || targetType === "") return "glob";
+    if (targetType === undefined || targetType === "") return "glob";
     return targetType;
   }
 
@@ -132,7 +132,7 @@ export class TargetType {
     // therefore we suppress that one
 
     let returnText = "";
-    if(pTargetType !== "glob" && pTargetType !== "list") {
+    if (pTargetType !== "glob" && pTargetType !== "list") {
       returnText = pTargetType + " ";
     }
     returnText += pTargetPattern;

@@ -8,7 +8,7 @@ export class OutputSaltGuiHighstate {
   // the implementation from OutputHighstate is (re)used
 
   static _getDurationClauseSaltGui(pMilliSeconds) {
-    if(pMilliSeconds < 1000) {
+    if (pMilliSeconds < 1000) {
       return Utils.txtZeroOneMany(pMilliSeconds,
         "{0} milliseconds", "{0} millisecond", "{0} milliseconds");
     }
@@ -19,58 +19,58 @@ export class OutputSaltGuiHighstate {
     let anyFailures = false;
     let anySkips = false;
     // do not use Object.entries, that is not supported by the test framework
-    for(const key of Object.keys(pMinionHighStateResponse)) {
+    for (const key of Object.keys(pMinionHighStateResponse)) {
       const task = pMinionHighStateResponse[key];
-      if(task.result === null) anySkips = true;
-      else if(!task.result) anyFailures = true;
+      if (task.result === null) anySkips = true;
+      else if (!task.result) anyFailures = true;
     }
 
-    if(anyFailures) {
+    if (anyFailures) {
       return Output.getMinionIdHtml(pMinionId, "host-failure");
     }
-    if(anySkips) {
+    if (anySkips) {
       return Output.getMinionIdHtml(pMinionId, "host-skips");
     }
     return Output.getMinionIdHtml(pMinionId, "host-success");
   }
 
   static _addChangesInfo(pTaskDiv, pTask, pIndent) {
-    if(pTask["changes"] === undefined) {
+    if (pTask["changes"] === undefined) {
       return 0;
     }
 
-    if(typeof pTask.changes !== "object" || Array.isArray(pTask.changes)) {
+    if (typeof pTask.changes !== "object" || Array.isArray(pTask.changes)) {
       pTaskDiv.append(document.createElement("br"));
       pTaskDiv.append(document.createTextNode(pIndent + JSON.stringify(pTask.changes)));
       return 0;
     }
 
     let changes = 0;
-    for(const key of Object.keys(pTask.changes).sort()) {
+    for (const key of Object.keys(pTask.changes).sort()) {
 
       const change = pTask.changes[key];
 
-      if(key === "out" && change === "highstate") {
+      if (key === "out" && change === "highstate") {
         // skip trivial case for orchestration
         continue;
       }
 
       changes = changes + 1;
 
-      if(typeof change === "string" && Utils.isMultiLineString(change)) {
+      if (typeof change === "string" && Utils.isMultiLineString(change)) {
         pTaskDiv.append(document.createElement("br"));
         // show multi-line text as a separate block
         pTaskDiv.append(document.createTextNode(pIndent + key + ":"));
         const lines = change.trim().split("\n");
-        for(const line of lines) {
+        for (const line of lines) {
           pTaskDiv.append(document.createElement("br"));
           pTaskDiv.append(document.createTextNode("      " + line));
         }
         continue;
       }
 
-      if(Array.isArray(change)) {
-        for(const idx in change) {
+      if (Array.isArray(change)) {
+        for (const idx in change) {
           const task = change[idx];
           pTaskDiv.append(document.createElement("br"));
           pTaskDiv.append(document.createTextNode(
@@ -79,7 +79,7 @@ export class OutputSaltGuiHighstate {
         continue;
       }
 
-      if(typeof change !== "object") {
+      if (typeof change !== "object") {
         // show all other non-objects in a simple way
         pTaskDiv.append(document.createElement("br"));
         pTaskDiv.append(document.createTextNode(
@@ -89,7 +89,7 @@ export class OutputSaltGuiHighstate {
       }
 
       // treat old->new first
-      if(change["old"] !== undefined && change["new"] !== undefined) {
+      if (change["old"] !== undefined && change["new"] !== undefined) {
         pTaskDiv.append(document.createElement("br"));
         // place changes on one line
         // don't use arrows here, these are higher than a regular
@@ -101,11 +101,11 @@ export class OutputSaltGuiHighstate {
           JSON.stringify(change.new)));
       }
       // then show whatever remains
-      for(const taskkey of Object.keys(change).sort()) {
+      for (const taskkey of Object.keys(change).sort()) {
 
         // we already provided this as summary: old->new
-        if(taskkey === "old" && change["new"] !== undefined) continue;
-        if(taskkey === "new" && change["old"] !== undefined) continue;
+        if (taskkey === "old" && change["new"] !== undefined) continue;
+        if (taskkey === "new" && change["old"] !== undefined) continue;
 
         pTaskDiv.append(document.createElement("br"));
         pTaskDiv.append(document.createTextNode(
@@ -128,7 +128,7 @@ export class OutputSaltGuiHighstate {
     let totalMilliSeconds = 0;
     let changes = 0;
     let nr = 0;
-    for(const task of pTasks) {
+    for (const task of pTasks) {
 
       nr += 1;
 
@@ -136,12 +136,12 @@ export class OutputSaltGuiHighstate {
       taskDiv.id = Utils.getIdFromMinionId(pMinionId + "." + nr);
 
       const span = Route.createSpan("task-icon", "");
-      if(task.result === null) {
+      if (task.result === null) {
         // 2714 = HEAVY CHECK MARK
         span.innerText = "\u2714";
         span.style.color = "yellow";
         skipped += 1;
-      } else if(task.result) {
+      } else if (task.result) {
         // 2714 = HEAVY CHECK MARK
         span.innerText = "\u2714";
         span.style.color = "green";
@@ -154,7 +154,7 @@ export class OutputSaltGuiHighstate {
       }
       taskDiv.append(span);
 
-      if(task.name) {
+      if (task.name) {
         taskDiv.append(document.createTextNode(task.name));
       } else {
         // make sure that the checkbox/ballot-x is on a reasonable line
@@ -162,11 +162,11 @@ export class OutputSaltGuiHighstate {
         taskDiv.append(document.createTextNode("(anonymous task)"));
       }
 
-      if(task.__id__ && task.__id__ !== task.name) {
+      if (task.__id__ && task.__id__ !== task.name) {
         taskDiv.append(document.createTextNode(" id=" + encodeURIComponent(task.__id__)));
       }
 
-      if(task.__sls__) {
+      if (task.__sls__) {
         taskDiv.append(document.createTextNode(
           " (from " + task.__sls__.replace(".", "/") + ".sls)"));
       }
@@ -176,7 +176,7 @@ export class OutputSaltGuiHighstate {
       taskDiv.append(document.createTextNode(
         indent + "Function is " + components[0] + "." + components[3]));
 
-      if(task.comment) {
+      if (task.comment) {
         taskDiv.append(document.createElement("br"));
         let txt = task.comment;
         // trim extra whitespace
@@ -188,16 +188,16 @@ export class OutputSaltGuiHighstate {
 
       changes += OutputSaltGuiHighstate._addChangesInfo(taskDiv, task, indent);
 
-      if(task["start_time"] !== undefined) {
+      if (task["start_time"] !== undefined) {
         taskDiv.append(document.createElement("br"));
         taskDiv.append(document.createTextNode(
           indent + "Started at " + Output.dateTimeStr(task.start_time)));
       }
 
-      if(task["duration"] !== undefined) {
+      if (task["duration"] !== undefined) {
         const milliSeconds = Math.round(task.duration);
         totalMilliSeconds += milliSeconds;
-        if(milliSeconds >= 10) {
+        if (milliSeconds >= 10) {
           // anything below 10ms is not worth reporting
           // report only the "slow" jobs
           // it still counts for the grand total thought
@@ -209,25 +209,25 @@ export class OutputSaltGuiHighstate {
 
       // show any unknown attribute of a task
       // do not use Object.entries, that is not supported by the test framework
-      for(const key of Object.keys(task)) {
+      for (const key of Object.keys(task)) {
         const item = task[key];
-        if(key === "___key___") continue; // ignored, generated by us
-        if(key === "__id__") continue; // handled
-        if(key === "__jid__") continue; // internal use
-        if(key === "__orchestration__") continue; // internal use
-        if(key === "__sls__") continue; // handled
-        if(key === "__run_num__") continue; // handled, not shown
-        if(key === "changes") continue; // handled
-        if(key === "comment") continue; // handled
-        if(key === "duration") continue; // handled
-        if(key === "host") continue; // ignored, same as host
-        if(key === "id" && item === pMinionId) continue; // trivial
-        if(key === "jid" && item === pJobId) continue; // trivial
-        if(key === "name") continue; // handled
-        if(key === "pchanges") continue; // ignored, also ignored by cli
-        if(key === "result") continue; // handled
-        if(key === "skip_watch") continue; // related to onlyif
-        if(key === "start_time") continue; // handled
+        if (key === "___key___") continue; // ignored, generated by us
+        if (key === "__id__") continue; // handled
+        if (key === "__jid__") continue; // internal use
+        if (key === "__orchestration__") continue; // internal use
+        if (key === "__sls__") continue; // handled
+        if (key === "__run_num__") continue; // handled, not shown
+        if (key === "changes") continue; // handled
+        if (key === "comment") continue; // handled
+        if (key === "duration") continue; // handled
+        if (key === "host") continue; // ignored, same as host
+        if (key === "id" && item === pMinionId) continue; // trivial
+        if (key === "jid" && item === pJobId) continue; // trivial
+        if (key === "name") continue; // handled
+        if (key === "pchanges") continue; // ignored, also ignored by cli
+        if (key === "result") continue; // handled
+        if (key === "skip_watch") continue; // related to onlyif
+        if (key === "start_time") continue; // handled
         taskDiv.append(document.createElement("br"));
         taskDiv.append(document.createTextNode(
           indent + key + " = " + JSON.stringify(item)));
@@ -239,11 +239,11 @@ export class OutputSaltGuiHighstate {
     // add a summary line
     let line = "";
 
-    if(succeeded) line += ", " + succeeded + " succeeded";
-    if(skipped) line += ", " + skipped + " skipped";
-    if(failed) line += ", " + failed + " failed";
+    if (succeeded) line += ", " + succeeded + " succeeded";
+    if (skipped) line += ", " + skipped + " skipped";
+    if (failed) line += ", " + failed + " failed";
     const total = succeeded + skipped + failed;
-    if(total !== succeeded && total !== skipped && total !== failed) {
+    if (total !== succeeded && total !== skipped && total !== failed) {
       line += ", " + (succeeded + skipped + failed) + " total";
     }
 
@@ -253,11 +253,11 @@ export class OutputSaltGuiHighstate {
     line += Utils.txtZeroOneMany(changes, "", ", {0} change", ", {0} changes");
 
     // multiple durations and significant?
-    if(total > 1 && totalMilliSeconds >= 10) {
+    if (total > 1 && totalMilliSeconds >= 10) {
       line += ", " + OutputSaltGuiHighstate._getDurationClauseSaltGui(totalMilliSeconds);
     }
 
-    if(line) {
+    if (line) {
       div.append(document.createTextNode(line.substring(2)));
     }
 

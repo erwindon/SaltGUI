@@ -30,7 +30,7 @@ export class BeaconsRoute extends PageRoute {
         myThis.updateMinions("beacons-table", pLocalBeaconsListData);
       }, pLocalBeaconsListMsg => {
         const localBeaconsListData = {"return":[{}]};
-        for(const k of pWheelKeyListAllData.return[0].data.return.minions)
+        for (const k of pWheelKeyListAllData.return[0].data.return.minions)
           localBeaconsListData.return[0][k] = JSON.stringify(pLocalBeaconsListMsg);
         myThis.updateMinions("beacons-table", localBeaconsListData);
       });
@@ -51,7 +51,7 @@ export class BeaconsRoute extends PageRoute {
   }
 
   static fixBeaconsMinion(pData) {
-    if(typeof pData !== "object") return pData;
+    if (typeof pData !== "object") return pData;
 
     // the data is an array of objects
     // where each object has one key
@@ -59,14 +59,14 @@ export class BeaconsRoute extends PageRoute {
 
     const ret = { "beacons": {}, "enabled": true };
 
-    for(const k in pData) {
+    for (const k in pData) {
       // correct for empty list that returns this dummy value
-      if(k === "beacons" && JSON.stringify(pData[k]) === "{}") {
+      if (k === "beacons" && JSON.stringify(pData[k]) === "{}") {
         continue;
       }
 
       // "enabled" is always a boolean (when present)
-      if(k === "enabled") {
+      if (k === "enabled") {
         ret.enabled = pData.enabled;
         continue;
       }
@@ -75,8 +75,8 @@ export class BeaconsRoute extends PageRoute {
       // eliminates one layer in the datamodel
       // and looks much better
       const newData = { };
-      for(const elem of pData[k])
-        for(const p in elem)
+      for (const elem of pData[k])
+        for (const p in elem)
           newData[p] = elem[p];
       ret.beacons[k] = newData;
     }
@@ -88,12 +88,12 @@ export class BeaconsRoute extends PageRoute {
     const table = document.getElementById("beacons-table");
 
     const msgDiv = document.getElementById("beacons-msg");
-    if(PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
+    if (PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
 
     const keys = pWheelKeyListAllData.return[0].data.return;
 
     const minionIds = keys.minions.sort();
-    for(const minionId of minionIds) {
+    for (const minionId of minionIds) {
       this.addMinion(table, minionId, 1);
 
       // preliminary dropdown menu
@@ -129,11 +129,11 @@ export class BeaconsRoute extends PageRoute {
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
-    if(typeof pMinionData === "object") {
+    if (typeof pMinionData === "object") {
       const cnt = Object.keys(pMinionData.beacons).length;
       let beaconInfoText = Utils.txtZeroOneMany(cnt,
         "no beacons", "{0} beacon", "{0} beacons");
-      if(!pMinionData.enabled)
+      if (!pMinionData.enabled)
         beaconInfoText += " (disabled)";
       const beaconInfoTd = Route.createTd("beaconinfo", beaconInfoText);
       beaconInfoTd.setAttribute("sorttable_customkey", cnt);

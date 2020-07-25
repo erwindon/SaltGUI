@@ -49,7 +49,7 @@ export class EventsRoute extends PageRoute {
 
   handleAnyEvent(pTag, pData) {
 
-    if(Utils.getStorageItem("session", "events-button") !== "play") {
+    if (Utils.getStorageItem("session", "events-button") !== "play") {
       // includes un-set and empty
       return;
     }
@@ -60,7 +60,7 @@ export class EventsRoute extends PageRoute {
     // add timestamp value
     const stampTd = Route.createTd("", "");
     let stampTxt = pData["_stamp"];
-    if(!stampTxt) stampTxt = new Date().toISOString();
+    if (!stampTxt) stampTxt = new Date().toISOString();
     // The toISOString applies the same offset, so we do it twice
     const localTimeOffset = new Date().getTimezoneOffset() * 60 * 1000;
     const stampDateTime2 = Date.parse(stampTxt) - 2 * localTimeOffset;
@@ -90,7 +90,7 @@ export class EventsRoute extends PageRoute {
     Utils.hideShowTableSearchBar(searchBlock, tbody.parentElement, "refresh");
 
     // limit to MAX_EVENTS_IN_VIEW rows only
-    while(tbody.rows.length > MAX_EVENTS_IN_VIEW) {
+    while (tbody.rows.length > MAX_EVENTS_IN_VIEW) {
       tbody.deleteRow(tbody.rows.length - 1);
     }
 

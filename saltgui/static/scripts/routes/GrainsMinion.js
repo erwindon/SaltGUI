@@ -65,21 +65,21 @@ export class GrainsMinionRoute extends PageRoute {
     panel.insertBefore(menu.menuDropdown, titleElement.nextSibling);
 
     const msgDiv = document.getElementById("grains-minion-msg");
-    if(PageRoute.showErrorRowInstead(container.tBodies[0], pLocalGrainsItemsData, msgDiv)) return;
+    if (PageRoute.showErrorRowInstead(container.tBodies[0], pLocalGrainsItemsData, msgDiv)) return;
 
     const grains = pLocalGrainsItemsData.return[0][pMinionId];
 
-    if(grains === undefined) {
+    if (grains === undefined) {
       msgDiv.innerText = "Unknown minion '" + pMinionId + "'";
       return;
     }
-    if(grains === false) {
+    if (grains === false) {
       msgDiv.innerText = "Minion '" + pMinionId + "' did not answer";
       return;
     }
 
     const grainNames = Object.keys(grains).sort();
-    for(const grainName of grainNames) {
+    for (const grainName of grainNames) {
       const grainTr = document.createElement('tr');
 
       const grainNameTd = Route.createTd("grain-name", grainName);
@@ -130,7 +130,7 @@ export class GrainsMinionRoute extends PageRoute {
   }
 
   _addMenuItemGrainsAppendWhenNeeded(pMenu, pMinionId, key, pGrainValue) {
-    if(!pGrainValue.startsWith("[")) {
+    if (!pGrainValue.startsWith("[")) {
       return;
     }
     pMenu.addMenuItem("Add&nbsp;value...", function(pClickEvent) {

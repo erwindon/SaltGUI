@@ -28,7 +28,7 @@ export class API {
     return this.apiRequest("POST", "/login", params)
       .then(pLoginData => {
         const response = pLoginData.return[0];
-        if(Object.keys(response.perms).length === 0) {
+        if (Object.keys(response.perms).length === 0) {
           // We are allowed to login but there are no permissions available
           // This may happen e.g. for accounts that are in PAM,
           // but not in the 'master' file.
@@ -75,7 +75,7 @@ export class API {
       fun: "beacons.list",
       kwarg: { "return_yaml": false }
     };
-    if(pMinionId) {
+    if (pMinionId) {
       params["tgt_type"] = "list";
       params.tgt = pMinionId;
     } else {
@@ -90,7 +90,7 @@ export class API {
       client: "local",
       fun: "grains.items",
     };
-    if(pMinionId) {
+    if (pMinionId) {
       params["tgt_type"] = "list";
       params.tgt = pMinionId;
     } else {
@@ -105,7 +105,7 @@ export class API {
       client: "local",
       fun: "pillar.items"
     };
-    if(pMinionId) {
+    if (pMinionId) {
       params["tgt_type"] = "list";
       params.tgt = pMinionId;
     } else {
@@ -120,7 +120,7 @@ export class API {
       client: "local",
       fun: "pillar.obfuscate"
     };
-    if(pMinionId) {
+    if (pMinionId) {
       params["tgt_type"] = "list";
       params.tgt = pMinionId;
     } else {
@@ -136,7 +136,7 @@ export class API {
       fun: "schedule.list",
       kwarg: { "return_yaml": false }
     };
-    if(pMinionId) {
+    if (pMinionId) {
       params["tgt_type"] = "list";
       params.tgt = pMinionId;
     } else {
@@ -192,7 +192,7 @@ export class API {
       client: "wheel",
       fun: "key.finger"
     };
-    if(pMinionId) {
+    if (pMinionId) {
       params.match = pMinionId;
     } else {
       params.match = "*";
@@ -216,30 +216,30 @@ export class API {
       "Cache-Control": "no-cache",
       "X-Auth-Token": token
     };
-    if(pRoute.endsWith(".txt")) headers["Accept"] = "text/plain";
+    if (pRoute.endsWith(".txt")) headers["Accept"] = "text/plain";
     const options = {
       headers: headers,
       method: pMethod,
       url: location
     };
 
-    if(pMethod === "POST") options.body = JSON.stringify(pParams);
+    if (pMethod === "POST") options.body = JSON.stringify(pParams);
 
     const myThis = this;
     return fetch(location, options)
       .then(pResponse => {
-        if(pResponse.ok && pRoute.endsWith(".txt")) return pResponse.text();
-        if(pResponse.ok) return pResponse.json();
+        if (pResponse.ok && pRoute.endsWith(".txt")) return pResponse.text();
+        if (pResponse.ok) return pResponse.json();
         // fetch does not reject on > 300 http status codes,
         // so let's do it ourselves
-        if(pResponse.status === 401 && pRoute === "/logout") {
+        if (pResponse.status === 401 && pRoute === "/logout") {
           // so we can't logout?
           myThis._cleanStorage();
           return null;
         }
-        if(pResponse.status === 401 && pRoute !== "/login") {
+        if (pResponse.status === 401 && pRoute !== "/login") {
           const loginResponseStr = Utils.getStorageItem("session", "login-response");
-          if(!loginResponseStr) {
+          if (!loginResponseStr) {
             myThis.logout().then(() =>
               window.location.replace(config.NAV_URL + "/login?reason=no-session")
             , () =>
@@ -249,10 +249,10 @@ export class API {
 
           const loginResponse = JSON.parse(loginResponseStr);
           // just in case...
-          if(loginResponse) {
+          if (loginResponse) {
             const now = Date.now() / 1000;
             const expireValue = loginResponse.expire;
-            if(now > expireValue) {
+            if (now > expireValue) {
               myThis.logout().then(() =>
                 window.location.replace(config.NAV_URL + "/login?reason=expired-session")
               , () =>
@@ -261,7 +261,7 @@ export class API {
             }
           }
         }
-        if(pResponse.status === 404 && pRoute.endsWith(".txt")) {
+        if (pResponse.status === 404 && pRoute.endsWith(".txt")) {
           // ok
           return "";
         }
@@ -271,7 +271,7 @@ export class API {
 
   getEvents(pRouter) {
     const token = Utils.getStorageItem("session", "token");
-    if(!token) return;
+    if (!token) return;
 
     const source = new EventSource(config.API_URL + '/events?token=' + token);
     source.onopen = function() {
@@ -284,14 +284,14 @@ export class API {
     };
     source.onmessage = function(pMessage) {
       const token = Utils.getStorageItem("session", "token");
-      if(!token) {
+      if (!token) {
         // no token, stop the stream
         source.close();
         return;
       }
 
       const loginResponseStr = Utils.getStorageItem("session", "login-response");
-      if(!loginResponseStr) {
+      if (!loginResponseStr) {
         // no login details, stop the stream
         source.close();
         return;
@@ -299,7 +299,7 @@ export class API {
       const loginResponse = JSON.parse(loginResponseStr);
       const expireValue = loginResponse.expire;
       const now = Date.now() / 1000;
-      if(now > expireValue) {
+      if (now > expireValue) {
         // the regular session has expired, also stop the stream
         source.close();
         return;
@@ -311,18 +311,18 @@ export class API {
 
       // erase the public key value when it is present
       // it is long and boring (so not because it is a secret)
-      if(data.pub) data.pub = "...";
+      if (data.pub) data.pub = "...";
 
       // salt/beacon/<minion>/<beacon>/
-      if(tag.startsWith("salt/beacon/")) {
+      if (tag.startsWith("salt/beacon/")) {
         // new beacon-value is received
         pRouter.beaconsMinionRoute.handleSaltBeaconEvent(tag, data);
-      } else if(tag === "salt/auth") {
+      } else if (tag === "salt/auth") {
         // new key has been received
         pRouter.keysRoute.handleSaltAuthEvent(tag, data);
-      } else if(tag === "salt/key") {
+      } else if (tag === "salt/key") {
         pRouter.keysRoute.handleSaltKeyEvent(tag, data);
-      } else if(tag.startsWith("salt/job/") && tag.includes("/ret/")) {
+      } else if (tag.startsWith("salt/job/") && tag.includes("/ret/")) {
         pRouter.jobRoute.handleSaltJobRetEvent(tag, data);
       }
 

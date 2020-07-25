@@ -36,8 +36,8 @@ export class JobRoute extends Route {
   }
 
   _isResultOk(result) {
-    if(!result.success) return false;
-    if(result.retcode !== 0) return false;
+    if (!result.success) return false;
+    if (result.retcode !== 0) return false;
     return true;
   }
 
@@ -49,9 +49,9 @@ export class JobRoute extends Route {
       window.history.back()
     );
 
-    if(!pRunnerJobsListJobData) return;
+    if (!pRunnerJobsListJobData) return;
 
-    if(typeof pRunnerJobsListJobData !== "object") {
+    if (typeof pRunnerJobsListJobData !== "object") {
       output.innerText = "";
       Utils.addErrorToTableCell(output, pRunnerJobsListJobData);
       const functionField = document.getElementById("job-title");
@@ -61,7 +61,7 @@ export class JobRoute extends Route {
 
     const info = pRunnerJobsListJobData.return[0];
 
-    if(info.Error) {
+    if (info.Error) {
       output.innerText = info.Error + " (" + pJobId + ")";
       const functionField = document.getElementById("job-title");
       functionField.innerText = "ERROR";
@@ -107,9 +107,9 @@ export class JobRoute extends Route {
     timeField.innerText = Output.dateTimeStr(info.StartTime);
 
     let minions = ["WHEEL"];
-    if(info.Minions) minions = info.Minions;
+    if (info.Minions) minions = info.Minions;
     let initialStatus = "(loading)";
-    if(Object.keys(info.Result).length === info.Minions.length) {
+    if (Object.keys(info.Result).length === info.Minions.length) {
       // we have all the results
       // that means we are done
       // don't wait for RunnerJobsActive to also tell us that we are done
@@ -126,17 +126,17 @@ export class JobRoute extends Route {
     // event handlers in place, whicgh the will be removed
     const patJid = Output.getPatEmbeddedJid();
     const elements = output.querySelectorAll(".minion-output");
-    for(const element of elements) {
+    for (const element of elements) {
       let html = element.innerHTML;
       html = html.replace(patJid, "<a class='linkjid' id='linkjid\$&'>\$&</a>");
       element.innerHTML = html;
     }
 
     const links = output.querySelectorAll(".linkjid");
-    for(const link of links) {
+    for (const link of links) {
       const linkToJid = link.id.replace("linkjid", "");
 
-      if(linkToJid === pJobId) {
+      if (linkToJid === pJobId) {
         link.classList.add("disabled");
         Utils.addToolTip(link, "this job");
       } else {
@@ -148,7 +148,7 @@ export class JobRoute extends Route {
       // no longer needed
       link.removeAttribute("id");
       link.classList.remove("linkjid");
-      if(!link.classList.length) link.removeAttribute("class");
+      if (!link.classList.length) link.removeAttribute("class");
     }
   }
 
@@ -160,18 +160,18 @@ export class JobRoute extends Route {
   }
 
   _addMenuItemRerunJobOnAllMinionsWhenNeeded(pMenu, info, commandText) {
-    if(!info.Minions) return;
+    if (!info.Minions) return;
 
     let minionList = "";
-    for(const m of info.Minions) {
+    for (const m of info.Minions) {
       minionList += "," + m;
     }
 
     // suppress an empty list
-    if(!minionList) return;
+    if (!minionList) return;
 
     // suppress a trivial case
-    if(minionList === "," + info.Minions[0]) return;
+    if (minionList === "," + info.Minions[0]) return;
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
@@ -181,25 +181,25 @@ export class JobRoute extends Route {
   }
 
   _addMenuItemRerunJobOnUnsuccessfulMinionsWhenNeeded(pMenu, info, commandText) {
-    if(!info.Minions) return;
+    if (!info.Minions) return;
 
     let minionList = "";
     let has1 = false;
     let has2 = false;
-    for(const m of info.Minions) {
-      if(!(m in info.Result)) has1 = true;
-      if(m in info.Result && !this._isResultOk(info.Result[m])) has2 = true;
-      if(!(m in info.Result) || !this._isResultOk(info.Result[m])) {
+    for (const m of info.Minions) {
+      if (!(m in info.Result)) has1 = true;
+      if (m in info.Result && !this._isResultOk(info.Result[m])) has2 = true;
+      if (!(m in info.Result) || !this._isResultOk(info.Result[m])) {
         minionList += "," + m;
       }
     }
 
     // suppress an empty list
-    if(!minionList) return;
+    if (!minionList) return;
 
     // only when we have both types in the list
     // otherwise the #4 or #5 is sufficient
-    if(!has1 || !has2) return;
+    if (!has1 || !has2) return;
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
@@ -209,17 +209,17 @@ export class JobRoute extends Route {
   }
 
   _addMenuItemRerunJobOnFailedMinionsWhenNeeded(pMenu, info, commandText) {
-    if(!info.Minions) return;
+    if (!info.Minions) return;
 
     let minionList = "";
-    for(const m of info.Minions) {
-      if(m in info.Result && !this._isResultOk(info.Result[m])) {
+    for (const m of info.Minions) {
+      if (m in info.Result && !this._isResultOk(info.Result[m])) {
         minionList += "," + m;
       }
     }
 
     // suppress an empty list
-    if(!minionList) return;
+    if (!minionList) return;
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
@@ -229,17 +229,17 @@ export class JobRoute extends Route {
   }
 
   _addMenuItemRerunJobOnNonRespondingMinionsWhenNeeded(pMenu, info, commandText) {
-    if(!info.Minions) return;
+    if (!info.Minions) return;
 
     let minionList = "";
-    for(const m of info.Minions) {
-      if(!(m in info.Result)) {
+    for (const m of info.Minions) {
+      if (!(m in info.Result)) {
         minionList += "," + m;
       }
     }
 
     // suppress an empty list
-    if(!minionList) return;
+    if (!minionList) return;
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
@@ -268,9 +268,9 @@ export class JobRoute extends Route {
 
   handleRunnerJobsActive(id, pData) {
     const summaryJobsActiveSpan = document.getElementById("summary-jobs-active");
-    if(!summaryJobsActiveSpan) return;
+    if (!summaryJobsActiveSpan) return;
 
-    if(typeof pData !== "object") {
+    if (typeof pData !== "object") {
       summaryJobsActiveSpan.innerText = "(error)";
       Utils.addToolTip(summaryJobsActiveSpan, pData, "bottom-left");
       return;
@@ -279,17 +279,17 @@ export class JobRoute extends Route {
     const info = pData.return[0][id];
 
     // when the job is already completely done, nothing is returned
-    if(!info) {
+    if (!info) {
       summaryJobsActiveSpan.innerText = "done";
-      if(this.terminateJobMenuItem) {
+      if (this.terminateJobMenuItem) {
         // nothing left to terminate
         this.terminateJobMenuItem.style.display = "none";
       }
-      if(this.killJobMenuItem) {
+      if (this.killJobMenuItem) {
         // nothing left to kill
         this.killJobMenuItem.style.display = "none";
       }
-      if(this.signalJobMenuItem) {
+      if (this.signalJobMenuItem) {
         // nothing left to signal
         this.signalJobMenuItem.style.display = "none";
       }
@@ -305,12 +305,12 @@ export class JobRoute extends Route {
     Utils.addToolTip(summaryJobsActiveSpan, "Click to refresh", "bottom-left");
 
     // update the minion details
-    for(const minionInfo of info.Running) {
+    for (const minionInfo of info.Running) {
       // each minionInfo is like {'minion': pid}
-      for(const minionId in minionInfo) {
+      for (const minionId in minionInfo) {
         const pid = minionInfo[minionId];
         const noResponseSpan = this.getPageElement().querySelector("pre.output div#" + Utils.getIdFromMinionId(minionId) + " span.noresponse");
-        if(!noResponseSpan) continue;
+        if (!noResponseSpan) continue;
 
         // show that this minion is still active on the request
         noResponseSpan.innerText = "(active) ";
@@ -338,29 +338,29 @@ export class JobRoute extends Route {
   handleSaltJobRetEvent(pTag, pData) {
 
     // ignore the most common events until someone complains
-    if(pData.fun === "saltutil.find_job") return;
-    if(pData.fun === "saltutil.running") return;
+    if (pData.fun === "saltutil.find_job") return;
+    if (pData.fun === "saltutil.running") return;
 
     // { fun_args: […], jid: "20190704194624366796", return: true, retcode: 0, success: true, cmd: "_return", fun: "test.rand_sleep", id: "autobuild-it-4092", _stamp: "2019-07-04T17:46:28.448689" }
     const jid = pData.jid;
-    if(!jid) return;
+    if (!jid) return;
 
     let newLevel = -1;
-    if(pData.success === true && pData.retcode === 0) newLevel = 0;
-    else if(pData.success === true) newLevel = 1;
+    if (pData.success === true && pData.retcode === 0) newLevel = 0;
+    else if (pData.success === true) newLevel = 1;
     else newLevel = 2;
 
     // This element only exists when the user happens to look at the output of that jobId.
     const span = document.getElementById("status" + jid);
-    if(span) {
+    if (span) {
       let oldLevel = span.dataset.level;
-      if(oldLevel === undefined) oldLevel = -1;
-      if(newLevel > oldLevel) {
+      if (oldLevel === undefined) oldLevel = -1;
+      if (newLevel > oldLevel) {
         span.dataset.level = newLevel;
-        if(newLevel === 0) span.style.color = "green";
+        if (newLevel === 0) span.style.color = "green";
         // orange instead of yellow due to readability on white background
-        else if(newLevel === 1) span.style.color = "orange";
-        else if(newLevel === 2) span.style.color = "red";
+        else if (newLevel === 1) span.style.color = "orange";
+        else if (newLevel === 2) span.style.color = "red";
       }
       span.style.removeProperty("display");
     }

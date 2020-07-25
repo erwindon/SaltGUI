@@ -8,28 +8,28 @@ export class OutputNested {
   }
 
   static display(pValue, pIndent, pPrefix, pOutArray) {
-    if(pValue === null) {
+    if (pValue === null) {
       pOutArray.push(OutputNested._ustring(pIndent, "None", pPrefix));
-    } else if(pValue === undefined) {
+    } else if (pValue === undefined) {
       pOutArray.push(OutputNested._ustring(pIndent, "undefined", pPrefix));
-    } else if(typeof pValue === "boolean" || typeof pValue === "number") {
+    } else if (typeof pValue === "boolean" || typeof pValue === "number") {
       pOutArray.push(OutputNested._ustring(pIndent, pValue, pPrefix));
-    } else if(typeof pValue === "string") {
+    } else if (typeof pValue === "string") {
       let isFirstLine = true;
       pValue = pValue.replace(/\n$/, "");
-      for(const line of pValue.split("\n")) {
+      for (const line of pValue.split("\n")) {
         let linePrefix = pPrefix;
-        if(!isFirstLine)
+        if (!isFirstLine)
           linePrefix = " ".repeat(pPrefix.length);
         pOutArray.push(OutputNested._ustring(pIndent, line, linePrefix));
         isFirstLine = false;
       }
-    } else if(typeof pValue === "object" && Array.isArray(pValue)) {
-      for(const ind of pValue) {
-        if(typeof ind === "object" /* including array */ ) {
+    } else if (typeof pValue === "object" && Array.isArray(pValue)) {
+      for (const ind of pValue) {
+        if (typeof ind === "object" /* including array */ ) {
           pOutArray.push(OutputNested._ustring(pIndent, '|_'));
           let prefix;
-          if(!Array.isArray(ind))
+          if (!Array.isArray(ind))
             prefix = '';
           else
             // 00A0 = NO-BREAK SPACE
@@ -40,14 +40,14 @@ export class OutputNested {
           OutputNested.display(ind, pIndent, '-\u00A0', pOutArray);
         }
       }
-    } else if(typeof pValue === "object") {
-      if(pIndent) pOutArray.push(OutputNested._ustring(pIndent, '----------'));
-      for(const key of Object.keys(pValue).sort()) {
+    } else if (typeof pValue === "object") {
+      if (pIndent) pOutArray.push(OutputNested._ustring(pIndent, '----------'));
+      for (const key of Object.keys(pValue).sort()) {
         const val = pValue[key];
         pOutArray.push(OutputNested._ustring(pIndent, key, pPrefix, ':'));
-        if(val === null) {
+        if (val === null) {
           // VOID
-        } else if(val === "") {
+        } else if (val === "") {
           // VOID
         } else {
           OutputNested.display(val, pIndent + 4, '', pOutArray);

@@ -32,10 +32,10 @@ export class CommandBox {
     const templatesText = Utils.getStorageItem("session", "templates", "{}");
     const templates = JSON.parse(templatesText);
     const keys = Object.keys(templates).sort();
-    for(const key of keys) {
+    for (const key of keys) {
       const template = templates[key];
       let description = template["description"];
-      if(!description) description = "(" + key + ")";
+      if (!description) description = "(" + key + ")";
       menu.addMenuItem(
         description,
         function() {
@@ -69,12 +69,12 @@ export class CommandBox {
 
   _applyTemplate(template) {
 
-    if(template.targettype) {
+    if (template.targettype) {
       let targetType = template.targettype;
       const targetbox = document.getElementById("target-box");
       // show the extended selection controls when
       targetbox.style.display = "inherit";
-      if(targetType !== "glob" && targetType !== "list" && targetType !== "compound" && targetType !== "nodegroup") {
+      if (targetType !== "glob" && targetType !== "list" && targetType !== "compound" && targetType !== "nodegroup") {
         // we don't support that, revert to standard (not default)
         targetType = "glob";
       }
@@ -84,13 +84,13 @@ export class CommandBox {
       TargetType.setTargetTypeDefault();
     }
 
-    if(template.target) {
+    if (template.target) {
       const targetField = document.getElementById("target");
       targetField.value = template.target;
       TargetType.autoSelectTargetType(targetField.value);
     }
 
-    if(template.command) {
+    if (template.command) {
       const commandField = document.getElementById("command");
       commandField.value = template.command;
     }
@@ -98,7 +98,7 @@ export class CommandBox {
 
   _onRun() {
     const button = document.querySelector(".run-command input[type='submit']");
-    if(button.disabled) return;
+    if (button.disabled) return;
     const output = document.querySelector(".run-command pre");
 
     const targetField = document.getElementById("target");
@@ -109,13 +109,13 @@ export class CommandBox {
     const targetType = TargetType.menuTargetType._value;
 
     const func = this.getRunParams(targetType, targetValue, commandValue);
-    if(func === null) return;
+    if (func === null) return;
 
     button.disabled = true;
     output.innerText = "Loading...";
 
     func.then(pResponse => {
-      if(pResponse) this.onRunReturn(pResponse.return[0], commandValue);
+      if (pResponse) this.onRunReturn(pResponse.return[0], commandValue);
       else this._showError("null response");
     }, pResponse => {
       this._showError(JSON.stringify(pResponse));
@@ -125,8 +125,8 @@ export class CommandBox {
   onRunReturn(pResponse, pCommand) {
     const outputContainer = document.querySelector(".run-command pre");
     let minions = Object.keys(pResponse);
-    if(pCommand.startsWith("runners.")) minions = ["RUNNER"];
-    if(pCommand.startsWith("wheel.")) minions = ["WHEEL"];
+    if (pCommand.startsWith("runners.")) minions = ["RUNNER"];
+    if (pCommand.startsWith("wheel.")) minions = ["WHEEL"];
     // do not suppress the jobId (even when we can)
     Output.addResponseOutput(outputContainer, null, minions, pResponse, pCommand, "done");
     const button = document.querySelector(".run-command input[type='submit']");
@@ -143,14 +143,14 @@ export class CommandBox {
     const targetField = document.getElementById("target");
     TargetType.autoSelectTargetType(targetField.value);
     targetField.onkeyup = keyUpEvent => {
-      if(keyUpEvent.key === "Escape") {
+      if (keyUpEvent.key === "Escape") {
         this._hideManualRun(keyUpEvent);
       }
     };
 
     const commandField = document.getElementById("command");
     commandField.onkeyup = keyUpEvent => {
-      if(keyUpEvent.key === "Escape") {
+      if (keyUpEvent.key === "Escape") {
         this._hideManualRun(keyUpEvent);
       }
     };
@@ -159,18 +159,18 @@ export class CommandBox {
 
     // (re-)populate the dropdown box
     const targetList = document.getElementById("data-list-target");
-    while(targetList.firstChild) {
+    while (targetList.firstChild) {
       targetList.removeChild(targetList.firstChild);
     }
     const nodeGroupsText = Utils.getStorageItem("session", "nodegroups", "[]");
     const nodeGroups = JSON.parse(nodeGroupsText);
-    for(const nodeGroup of Object.keys(nodeGroups).sort()) {
+    for (const nodeGroup of Object.keys(nodeGroups).sort()) {
       const option = document.createElement("option");
       option.value = "#" + nodeGroup;
       targetList.appendChild(option);
     }
     const minions = JSON.parse(Utils.getStorageItem("session", "minions", "[]"));
-    for(const minionId of minions.sort()) {
+    for (const minionId of minions.sort()) {
       const option = document.createElement("option");
       option.value = minionId;
       targetList.appendChild(option);
@@ -190,7 +190,7 @@ export class CommandBox {
   // a KeyEvent(type="keyup")
   _hideManualRun(pEvent) {
     // Don't close if they click inside the window
-    if(pEvent.type === "click" && pEvent.target.className !== "popup" && pEvent.target.className !== "nearly-visible-button") return;
+    if (pEvent.type === "click" && pEvent.target.className !== "popup" && pEvent.target.className !== "nearly-visible-button") return;
 
     const manualRun = document.getElementById("popup-run-command");
     manualRun.style.display = "none";
@@ -233,7 +233,7 @@ export class CommandBox {
       "schedule.modify",
       "schedule.run_job",
     ];
-    if(screenModifyingCommands.includes(command) && output !== "Waiting for command...") {
+    if (screenModifyingCommands.includes(command) && output !== "Waiting for command...") {
       location.reload();
     }
 
@@ -247,11 +247,11 @@ export class CommandBox {
   getRunParams(pTargetType, pTarget, pToRun, pisRunTypeNormalOnly = false) {
 
     // The leading # was used to indicate a nodegroup
-    if(pTargetType === "nodegroup" && pTarget.startsWith("#")) {
+    if (pTargetType === "nodegroup" && pTarget.startsWith("#")) {
       pTarget = pTarget.substring(1);
     }
 
-    if(pToRun === "") {
+    if (pToRun === "") {
       this._showError("'Command' field cannot be empty");
       return null;
     }
@@ -263,20 +263,20 @@ export class CommandBox {
     const argsObject = { };
 
     const ret = ParseCommandLine.parseCommandLine(pToRun, argsArray, argsObject);
-    if(ret !== null) {
+    if (ret !== null) {
       // that is an error message being returned
       this._showError(ret);
       return null;
     }
 
-    if(argsArray.length === 0) {
+    if (argsArray.length === 0) {
       this._showError("First (unnamed) parameter is the function name, it is mandatory");
       return null;
     }
 
     const functionToRun = argsArray.shift();
 
-    if(typeof functionToRun !== "string") {
+    if (typeof functionToRun !== "string") {
       this._showError("First (unnamed) parameter is the function name, it must be a string, not a " + typeof functionToRun);
       return null;
     }
@@ -285,30 +285,30 @@ export class CommandBox {
     // WHEEL commands also do not have a target
     // but we use the TARGET value to form the usually required MATCH parameter
     // therefore for WHEEL commands it is still required
-    if(pTarget === "" && functionToRun !== "runners" && !functionToRun.startsWith("runners.")) {
+    if (pTarget === "" && functionToRun !== "runners" && !functionToRun.startsWith("runners.")) {
       this._showError("'Target' field cannot be empty");
       return null;
     }
 
     // SALT API returns a 500-InternalServerError when it hits an unknown group
     // Let's improve on that
-    if(pTargetType === "nodegroup") {
+    if (pTargetType === "nodegroup") {
       const nodeGroupsTxt = Utils.getStorageItem("session", "nodegroups", "{}");
       const nodeGroups = JSON.parse(nodeGroupsTxt);
-      if(!(pTarget in nodeGroups)) {
+      if (!(pTarget in nodeGroups)) {
         this._showError("Unknown nodegroup '" + pTarget + "'");
         return null;
       }
     }
 
     let params = { };
-    if(functionToRun.startsWith("runners.")) {
+    if (functionToRun.startsWith("runners.")) {
       params = argsObject;
       params.client = "runner";
       // use only the part after "runners." (8 chars)
       params.fun = functionToRun.substring(8);
-      if(argsArray.length > 0) params.arg = argsArray;
-    } else if(functionToRun.startsWith("wheel.")) {
+      if (argsArray.length > 0) params.arg = argsArray;
+    } else if (functionToRun.startsWith("wheel.")) {
       // wheel.key functions are treated slightly different
       // we re-use the "target" field to fill the parameter "match"
       // as used by the salt.wheel.key functions
@@ -321,13 +321,13 @@ export class CommandBox {
       params.client = "local";
       params.fun = functionToRun;
       params.tgt = pTarget;
-      if(pTargetType) params["tgt_type"] = pTargetType;
-      if(argsArray.length !== 0) params.arg = argsArray;
-      if(Object.keys(argsObject).length > 0) params.kwarg = argsObject;
+      if (pTargetType) params["tgt_type"] = pTargetType;
+      if (argsArray.length !== 0) params.arg = argsArray;
+      if (Object.keys(argsObject).length > 0) params.kwarg = argsObject;
     }
 
     const runType = RunType.getRunType();
-    if(!pisRunTypeNormalOnly && params.client === "local" && runType === "async") {
+    if (!pisRunTypeNormalOnly && params.client === "local" && runType === "async") {
       params.client = "local_async";
       // return looks like:
       // { "jid": "20180718173942195461", "minions": [ ... ] }

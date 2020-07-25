@@ -15,7 +15,7 @@ export class RunType {
   static _updateRunTypeText() {
     const runType = RunType.getRunType();
 
-    switch(runType) {
+    switch (runType) {
     case "normal":
       // now that the menu is used show the menu title
       RunType.menuRunType.setTitle("Normal");
@@ -28,11 +28,11 @@ export class RunType {
     }
 
     const m = RunType.menuRunType.menuDropdownContent.children;
-    for(let i = 0; i < m.length; i++) {
+    for (let i = 0; i < m.length; i++) {
       let t = m[i].innerText;
       t = t.replace(/^. /, "");
       // 25CF = BLACK CIRCLE
-      if(m[i]._value === runType) t = "\u25CF " + t;
+      if (m[i]._value === runType) t = "\u25CF " + t;
       m[i].innerText = t;
     }
   }
@@ -47,7 +47,7 @@ export class RunType {
 
   static getRunType() {
     const runType = RunType.menuRunType._value;
-    if(runType === undefined || runType === "") return "normal";
+    if (runType === undefined || runType === "") return "normal";
     return runType;
   }
 

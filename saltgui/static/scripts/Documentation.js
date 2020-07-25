@@ -25,27 +25,27 @@ export class Documentation {
     // remove the command arguments
     command = command.trim().replace(/ .*/, "");
     command = command.trim().replace(/[.]*$/, "");
-    if(!command.match(/^[a-z_][a-z0-9_.]*$/i)) {
+    if (!command.match(/^[a-z_][a-z0-9_.]*$/i)) {
       // When it is not a command, don't treat it as a command.
       // This RE still allows some illegal command formats, but
       // that is something that sys.doc/runners.doc can handle.
       pMenuItem.style.display = "none";
-    } else if(!command) {
+    } else if (!command) {
       // this spot was reserved for `sys.doc` without parameters
       // but that is far too slow for normal use
       pMenuItem.style.display = "none";
-    } else if(command === "runners" || command.startsWith("runners.")) {
+    } else if (command === "runners" || command.startsWith("runners.")) {
       // actually "command" is not passed, but we select that part of the actual result
       // because `runners.doc.runner` always returns all documentation for "runners"
       command = command.substring(8);
-      if(command) command = " " + command;
+      if (command) command = " " + command;
       pMenuItem.innerText = "Run 'runners.doc.runner" + command + "'";
       pMenuItem.style.display = "block";
-    } else if(command === "wheel" || command.startsWith("wheel.")) {
+    } else if (command === "wheel" || command.startsWith("wheel.")) {
       // actually "command" is not passed, but we select that part of the actual result
       // because `runners.doc.wheel` always returns all documentation for "wheel"
       command = command.substring(6);
-      if(command) command = " " + command;
+      if (command) command = " " + command;
       pMenuItem.innerText = "Run 'runners.doc.wheel" + command + "'";
       pMenuItem.style.display = "block";
     } else {
@@ -56,14 +56,14 @@ export class Documentation {
 
   _manualRunMenuSysDocRun() {
     const button = document.getElementById("run-command");
-    if(button.disabled) return;
+    if (button.disabled) return;
     const output = document.getElementById("popup-output");
 
     const targetField = document.getElementById("target");
     let target = targetField.value;
     // the help text is taken from the first minion that answers
     // when no target is selected, just ask all minions
-    if(target === "") target = "*";
+    if (target === "") target = "*";
 
     // do not use the command-parser
     const commandField = document.getElementById("command");
@@ -79,11 +79,11 @@ export class Documentation {
 
     let docCommand;
     let dummyCommand;
-    if(command === "runners" || command.startsWith("runners.")) {
+    if (command === "runners" || command.startsWith("runners.")) {
       // runners command. docCommand is WITHOUT further arguments
       docCommand = "runners.doc.runner";
       dummyCommand = "runners.doc.runner " + command;
-    } else if(command === "wheel" || command.startsWith("wheel.")) {
+    } else if (command === "wheel" || command.startsWith("wheel.")) {
       // wheel command. docCommand is WITHOUT further arguments
       docCommand = "runners.doc.wheel";
       dummyCommand = "runners.doc.wheel " + command;

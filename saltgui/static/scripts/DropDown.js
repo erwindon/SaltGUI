@@ -10,7 +10,7 @@ export class DropDownMenu {
     this.verifyAll = this.verifyAll.bind(this);
 
     // allow reduced code on the caller side
-    if(pParentElement.tagName === "TR") {
+    if (pParentElement.tagName === "TR") {
       const td = Route.createTd("", "");
       pParentElement.appendChild(td);
       pParentElement = td;
@@ -19,10 +19,10 @@ export class DropDownMenu {
     this.menuDropdown = Route.createDiv("run-command-button", "");
     this.menuDropdown.classList.add("no-search");
 
-    if(pParentElement.id === "cmd-box") {
+    if (pParentElement.id === "cmd-box") {
       // D83D+DCD6 = 1F4D6 = A BOOK
       this.menuButton = Route.createDiv("menu-dropdown", "\uD83D\uDCD6");
-    } else if(pParentElement.classList && pParentElement.classList.contains("minion-output")) {
+    } else if (pParentElement.classList && pParentElement.classList.contains("minion-output")) {
       // 2261 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
       this.menuButton = Route.createSpan("menu-dropdown", "\u2261");
     } else {
@@ -43,11 +43,11 @@ export class DropDownMenu {
 
   verifyAll() {
     let visibleCount = 0;
-    if(this.menuDropdownContent) {
-      for(const chld of this.menuDropdownContent.children) {
+    if (this.menuDropdownContent) {
+      for (const chld of this.menuDropdownContent.children) {
         const verifyCallBack = chld.verifyCallBack;
-        if(verifyCallBack) verifyCallBack(chld);
-        if(chld.style.display !== "none") visibleCount++;
+        if (verifyCallBack) verifyCallBack(chld);
+        if (chld.style.display !== "none") visibleCount++;
       }
     }
     // hide the menu when it has no visible menu-items
@@ -64,8 +64,8 @@ export class DropDownMenu {
   // or visibility (use menuitem.style.display = "none"/"inline-block")
   addMenuItem(pTitle, pCallBack, pValue) {
     const button = Route.createDiv("run-command-button", "...");
-    if(pValue) button._value = pValue;
-    if(typeof pTitle === "string")
+    if (pValue) button._value = pValue;
+    if (typeof pTitle === "string")
       button.innerHTML = pTitle;
     else
       button.verifyCallBack = pTitle;

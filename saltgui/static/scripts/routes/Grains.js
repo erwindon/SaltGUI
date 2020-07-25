@@ -15,12 +15,12 @@ export class GrainsRoute extends PageRoute {
     // collect the list of displayed minions
     const previewGrainsText = Utils.getStorageItem("session", "preview_grains", "[]");
     this._previewGrains = JSON.parse(previewGrainsText);
-    if(!Array.isArray(this._previewGrains)) {
+    if (!Array.isArray(this._previewGrains)) {
       this._previewGrains = [ ];
     }
     // add the preview columns
     const tr = document.getElementById("grains-table-thead-tr");
-    for(let i = 0; i < this._previewGrains.length; i++) {
+    for (let i = 0; i < this._previewGrains.length; i++) {
       const th = document.createElement("th");
       th.innerText = this._previewGrains[i];
       tr.appendChild(th);
@@ -53,7 +53,7 @@ export class GrainsRoute extends PageRoute {
         myThis.updateMinions("grains-table", pLocalGrainsItemsData);
       }, pLocalGrainsItemsMsg => {
         const localGrainsItemsData = {"return":[{}]};
-        for(const k of pWheelKeyListAllData.return[0].data.return.minions)
+        for (const k of pWheelKeyListAllData.return[0].data.return.minions)
           localGrainsItemsData.return[0][k] = JSON.stringify(pLocalGrainsItemsMsg);
         myThis.updateMinions("grains-table", localGrainsItemsData);
       });
@@ -77,12 +77,12 @@ export class GrainsRoute extends PageRoute {
     const table = document.getElementById('grains-table');
 
     const msgDiv = document.getElementById("grains-msg");
-    if(PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
+    if (PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
 
     const keys = pWheelKeyListAllData.return[0].data.return;
 
     const minionIds = keys.minions.sort();
-    for(const minionId of minionIds) {
+    for (const minionId of minionIds) {
       this.addMinion(table, minionId, 1 + this._previewGrains.length);
 
       // preliminary dropdown menu
@@ -90,7 +90,7 @@ export class GrainsRoute extends PageRoute {
       const menu = new DropDownMenu(minionTr);
       this._addMenuItemShowGrains(menu, minionId);
 
-      for(let i = 0; i < this._previewGrains.length; i++) {
+      for (let i = 0; i < this._previewGrains.length; i++) {
         minionTr.appendChild(Route.createTd("", ""));
       }
 
@@ -114,7 +114,7 @@ export class GrainsRoute extends PageRoute {
     minionTr.appendChild(Route.createTd("os", ""));
     minionTr.appendChild(Route.createTd("graininfo", ""));
     minionTr.appendChild(Route.createTd("run-command-button", ""));
-    for(let i = 0; i < this._previewGrains.length; i++) {
+    for (let i = 0; i < this._previewGrains.length; i++) {
       minionTr.appendChild(Route.createTd("", ""));
     }
   }
@@ -124,7 +124,7 @@ export class GrainsRoute extends PageRoute {
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
-    if(typeof pMinionData === "object") {
+    if (typeof pMinionData === "object") {
       const cnt = Object.keys(pMinionData).length;
       const grainInfoText = cnt + " grains";
       const grainInfoTd = Route.createTd("graininfo", grainInfoText);
@@ -140,14 +140,14 @@ export class GrainsRoute extends PageRoute {
     this._addMenuItemShowGrains(menu, pMinionId);
 
     // add the preview columns
-    for(let i = 0; i < this._previewGrains.length; i++) {
+    for (let i = 0; i < this._previewGrains.length; i++) {
       const td = Route.createTd("", "");
       const grainName = this._previewGrains[i];
-      if(typeof pMinionData === "object") {
-        if(grainName.startsWith("$")) {
+      if (typeof pMinionData === "object") {
+        if (grainName.startsWith("$")) {
           // it is a json path
           const obj = jsonPath(pMinionData, grainName);
-          if(Array.isArray(obj)) {
+          if (Array.isArray(obj)) {
             td.innerText = Output.formatObject(obj[0]);
             td.classList.add("grain-value");
           }
@@ -155,12 +155,12 @@ export class GrainsRoute extends PageRoute {
           // a plain grain-name or a path in the grains.get style
           const grainNames = grainName.split(":");
           let obj = pMinionData;
-          for(const gn of grainNames) {
-            if(obj) {
+          for (const gn of grainNames) {
+            if (obj) {
               obj = obj[gn];
             }
           }
-          if(obj) {
+          if (obj) {
             td.innerText = Output.formatObject(obj);
             td.classList.add("grain-value");
           }

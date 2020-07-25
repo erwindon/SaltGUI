@@ -6,13 +6,13 @@ export class OutputDocumentation {
   static _isDocuKeyMatch(pKey, pFilterKey) {
 
     // no filter is always OK
-    if(!pFilterKey) return true;
+    if (!pFilterKey) return true;
 
     // an exact match is great
-    if(pKey === pFilterKey) return true;
+    if (pKey === pFilterKey) return true;
 
     // a true prefix is also ok
-    if(pKey.startsWith(pFilterKey + ".")) return true;
+    if (pKey.startsWith(pFilterKey + ".")) return true;
 
     // no match
     return false;
@@ -26,47 +26,47 @@ export class OutputDocumentation {
   // 'output' is needed like this to prevent an error during testing
   static isDocumentationOutput(pResponse, pCommand) {
 
-    if(!Output.isOutputFormatAllowed("doc")) return false;
+    if (!Output.isOutputFormatAllowed("doc")) return false;
 
     let result = false;
 
     // reduce the search key to match the data in the response
     pCommand = OutputDocumentation._reduceFilterKey(pCommand);
 
-    for(const minionId of Object.keys(pResponse)) {
+    for (const minionId of Object.keys(pResponse)) {
 
       const output = pResponse[minionId];
 
-      if(!output) {
+      if (!output) {
         // some commands do not have help-text
         // e.g. wheel.key.get_key
         continue;
       }
 
-      if(typeof output !== "object") {
+      if (typeof output !== "object") {
         // strange --> no documentation object
         return false;
       }
 
       // arrays are also objects,
       // but not what we are looking for
-      if(Array.isArray(output)) {
+      if (Array.isArray(output)) {
         return false;
       }
 
-      for(const key of Object.keys(output)) {
+      for (const key of Object.keys(output)) {
         // e.g. for "test.rand_str"
-        if(output[key] === null) {
+        if (output[key] === null) {
           continue;
         }
 
         // but otherwise it must be a (documentation)string
-        if(typeof output[key] !== "string") {
+        if (typeof output[key] !== "string") {
           return false;
         }
 
         // is this what we were looking for?
-        if(OutputDocumentation._isDocuKeyMatch(key, pCommand)) {
+        if (OutputDocumentation._isDocuKeyMatch(key, pCommand)) {
           result = true;
         }
       }
@@ -78,18 +78,18 @@ export class OutputDocumentation {
 
   // reduce the search key to match the data in the response
   static _reduceFilterKey(pFilterKey) {
-    if(pFilterKey === "wheel") {
+    if (pFilterKey === "wheel") {
       return "";
     }
-    if(pFilterKey.startsWith("wheel.")) {
+    if (pFilterKey.startsWith("wheel.")) {
       // strip the prefix "wheel."
       return pFilterKey.substring(6);
     }
 
-    if(pFilterKey === "runners") {
+    if (pFilterKey === "runners") {
       return "";
     }
-    if(pFilterKey.startsWith("runners.")) {
+    if (pFilterKey.startsWith("runners.")) {
       // strip the prefix "runners."
       return pFilterKey.substring(8);
     }
@@ -112,7 +112,7 @@ export class OutputDocumentation {
   //              RUNNERS always return all documentation in that category
   //              thus that response must be reduced.
   static reduceDocumentationOutput(pResponse, pVisualKey, pFilterKey) {
-    if(!pResponse || typeof pResponse !== "object") {
+    if (!pResponse || typeof pResponse !== "object") {
       // strange --> don't try to fix anything
       return;
     }
@@ -122,17 +122,17 @@ export class OutputDocumentation {
     pFilterKey = OutputDocumentation._reduceFilterKey(pFilterKey);
 
     let selectedMinion = null;
-    for(const minionId of Object.keys(pResponse)) {
+    for (const minionId of Object.keys(pResponse)) {
 
       // When we already found the documentation ignore all others
-      if(selectedMinion) {
+      if (selectedMinion) {
         delete pResponse[minionId];
         continue;
       }
 
       // make sure it is an object (instead of e.g. "false" for an offline minion)
       // when it is not, the whole entry is ignored
-      if(!pResponse[minionId] || typeof pResponse[minionId] !== "object") {
+      if (!pResponse[minionId] || typeof pResponse[minionId] !== "object") {
         delete pResponse[minionId];
         continue;
       }
@@ -141,10 +141,10 @@ export class OutputDocumentation {
       // that's always the case for SYS.DOC output, but not for RUNNERS.DOC.RUNNER
       // and/or RUNNERS.DOC.WHEEL.
       const minionResponse = pResponse[minionId];
-      for(const key of Object.keys(minionResponse)) {
+      for (const key of Object.keys(minionResponse)) {
 
         // is this what we were looking for?
-        if(!OutputDocumentation._isDocuKeyMatch(key, pFilterKey)) {
+        if (!OutputDocumentation._isDocuKeyMatch(key, pFilterKey)) {
           // no match, ignore the whole entry
           delete minionResponse[key];
         }
@@ -152,7 +152,7 @@ export class OutputDocumentation {
 
       // no documentation present (or left) on this minion?
       // then discard the result of this minion
-      if(Object.keys(minionResponse).length === 0) {
+      if (Object.keys(minionResponse).length === 0) {
         delete pResponse[minionId];
         continue;
       }
@@ -162,7 +162,7 @@ export class OutputDocumentation {
       selectedMinion = minionId;
     }
 
-    if(selectedMinion) {
+    if (selectedMinion) {
       // basically rename the key
       const savedDocumentation = pResponse[selectedMinion];
       delete pResponse[selectedMinion];
@@ -180,14 +180,14 @@ export class OutputDocumentation {
 
     // we expect no minionIds present
     // as it should have been reduced already
-    for(const minionId of Object.keys(pResponse)) {
+    for (const minionId of Object.keys(pResponse)) {
 
       const minionResponse = pResponse[minionId];
 
-      for(const key of Object.keys(minionResponse).sort()) {
+      for (const key of Object.keys(minionResponse).sort()) {
 
         let out = minionResponse[key];
-        if(out === null) continue;
+        if (out === null) continue;
         out = out.trimRight();
 
         // internal links: remove the ".. rubric::" prefix
@@ -216,20 +216,20 @@ export class OutputDocumentation {
 
         // external links
         // e.g. in "sys.doc pkg.install"
-        while(out.includes(".. _")) {
+        while (out.includes(".. _")) {
           // take only a line containing ".. _"
           const reference = out.
             replace(/^(.|\n|\r)*[.][.] _/m, "").
             replace(/(\n|\r)(.|\n|\r)*$/m, "");
           const words = reference.split(": ");
-          if(words.length !== 2) {
+          if (words.length !== 2) {
             console.log("words", words);
             break;
           }
           const link = words[0];
           const target = words[1];
           // add link to all references
-          while(out.includes(link + "_")) {
+          while (out.includes(link + "_")) {
             out = out.replace(
               link + "_",
               "<a href='" + target + "' target='_blank'>" + link + "</a>");

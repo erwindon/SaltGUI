@@ -48,7 +48,7 @@ export class Router {
 
     // show template menu item if templates defined
     const templatesText = Utils.getStorageItem("session", "templates", "");
-    if(templatesText) {
+    if (templatesText) {
       const item1 = document.getElementById("button-templates1");
       item1.style.display = "inline-block";
       const item2 = document.getElementById("button-templates2");
@@ -65,8 +65,8 @@ export class Router {
   _registerRouterEventListeners() {
     document.getElementById("logo")
       .addEventListener("click", pClickEvent => {
-        if(window.location.pathname === config.NAV_URL + "/login") return;
-        if(window.event.ctrlKey) {
+        if (window.location.pathname === config.NAV_URL + "/login") return;
+        if (window.event.ctrlKey) {
           window.location.assign(config.NAV_URL + "/options");
         } else {
           window.location.assign(config.NAV_URL + "/");
@@ -180,14 +180,14 @@ export class Router {
     const loginResponse = JSON.parse(loginResponseStr);
 
     const expireValue = loginResponse.expire;
-    if(!expireValue) {
+    if (!expireValue) {
       warning.style.display = "none";
       return;
     }
 
     const leftMillis = expireValue * 1000 - Date.now();
 
-    if(leftMillis <= 0) {
+    if (leftMillis <= 0) {
       warning.style.display = "";
       warning.innerText = "Logout";
       // logout, and redirect to login screen
@@ -199,7 +199,7 @@ export class Router {
       return;
     }
 
-    if(leftMillis > 60000) {
+    if (leftMillis > 60000) {
       // warn in the last minute
       warning.style.display = "none";
       warning.innerText = "";
@@ -208,7 +208,7 @@ export class Router {
 
     warning.style.display = "";
     const left = new Date(leftMillis).toISOString();
-    if(left.startsWith("1970-01-01T")) {
+    if (left.startsWith("1970-01-01T")) {
       // remove the date prefix and the millisecond suffix
       warning.innerText = "Session expires in " + left.substr(11, 8);
     } else {
@@ -220,7 +220,7 @@ export class Router {
   _logoutTimer() {
     // are we logged in?
     const token = Utils.getStorageItem("session", "token");
-    if(!token) return;
+    if (!token) return;
 
     // just a random lightweight api call
     const wheelConfigValuesPromise = this.api.getWheelConfigValues();
@@ -236,22 +236,22 @@ export class Router {
 
   _registerRoute(pRoute) {
     this.routes.push(pRoute);
-    if(pRoute.onRegister) pRoute.onRegister();
+    if (pRoute.onRegister) pRoute.onRegister();
   }
 
   goTo(pPath, hasPathPrefix = false) {
-    if(this.switchingRoute) return;
-    if(window.location.pathname === config.NAV_URL + pPath && this.currentRoute) return;
-    if(pPath === "/" && Utils.getStorageItem("session", "login-response") === null) {
+    if (this.switchingRoute) return;
+    if (window.location.pathname === config.NAV_URL + pPath && this.currentRoute) return;
+    if (pPath === "/" && Utils.getStorageItem("session", "login-response") === null) {
       // the fact that we don't have a session will be caught later
       // but this was shows less error messages on the console
       pPath = "/login";
     }
     const pathUrl = (hasPathPrefix ? "" : config.NAV_URL) + pPath.split("?")[0];
-    for(const route of this.routes) {
-      if(!route.getPath().test(pathUrl)) continue;
+    for (const route of this.routes) {
+      if (!route.getPath().test(pathUrl)) continue;
       // push history state for login (including redirect to /)
-      if(pathUrl === config.NAV_URL + "/login" || pathUrl === config.NAV_URL + "/") {
+      if (pathUrl === config.NAV_URL + "/login" || pathUrl === config.NAV_URL + "/") {
         window.history.pushState({}, undefined, pPath);
       }
       this._showRoute(route);
@@ -278,23 +278,23 @@ export class Router {
     );
 
     const elem1 = pRoute.getMenuItemElement1();
-    if(elem1) {
+    if (elem1) {
       elem1.classList.add("menu-item-active");
       // activate also parent menu item if child element is selected
-      if(elem1.id === "button-pillars1" ||
+      if (elem1.id === "button-pillars1" ||
          elem1.id === "button-schedules1" ||
          elem1.id === "button-grains1" ||
          elem1.id === "button-beacons1") {
         minionMenuItem.classList.add("menu-item-active");
       }
-      if(elem1.id === "button-jobs1" ||
+      if (elem1.id === "button-jobs1" ||
          elem1.id === "button-templates1") {
         jobsMenuItem.classList.add("menu-item-active");
       }
     }
 
     const elem2 = pRoute.getMenuItemElement2();
-    if(elem2) {
+    if (elem2) {
       elem2.classList.add("menu-item-active");
     }
 
@@ -306,7 +306,7 @@ export class Router {
     // it is either not started, or needs restarting
     this.api.getEvents(this);
 
-    if(myThis.currentRoute) {
+    if (myThis.currentRoute) {
       myThis._hideRoute(myThis.currentRoute);
     }
 
@@ -323,7 +323,7 @@ export class Router {
       // Hide element after fade, so it does not expand the body
       page.style.display = "none";
     }, 500);
-    if(pRoute.onHide) pRoute.onHide();
+    if (pRoute.onHide) pRoute.onHide();
   }
 
 }

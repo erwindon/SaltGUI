@@ -24,12 +24,12 @@ export class JobsRoute extends PageRoute {
 
     const maxJobs = 50;
     let cnt = decodeURIComponent(Utils.getQueryParam("cnt", "" + maxJobs));
-    if(cnt === "eligible")
+    if (cnt === "eligible")
       cnt = 10000;
-    else if(cnt === "all")
+    else if (cnt === "all")
       // magic value to ignore all filters
       cnt = 99999;
-    else if(cnt.match(patInteger))
+    else if (cnt.match(patInteger))
       cnt = parseInt(cnt);
     else
       // pretend parameter was not present
@@ -69,9 +69,9 @@ export class JobsRoute extends PageRoute {
   _updateNextJob() {
     const tbody = document.getElementById("jobs-table-tbody");
     // find an item still marked as "(click)"
-    for(const tr of tbody.rows) {
+    for (const tr of tbody.rows) {
       const detailsField = tr.querySelector("td.details span");
-      if(!detailsField || detailsField.innerText !== "(click)") continue;
+      if (!detailsField || detailsField.innerText !== "(click)") continue;
       const jobId = tr.querySelector("td").innerText;
       detailsField.classList.add("no-status");
       detailsField.innerText = "loading...";
@@ -86,7 +86,7 @@ export class JobsRoute extends PageRoute {
     let title = "Show&nbsp;first&nbsp;" + maxJobs + "&nbsp;jobs";
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     // 25CF = BLACK CIRCLE
-    if(cnt === "undefined" || cnt === maxJobs.toString()) title = "\u25CF " + title;
+    if (cnt === "undefined" || cnt === maxJobs.toString()) title = "\u25CF " + title;
     pMenu.addMenuItem(title, function(pClickEvent) {
       window.location.assign(config.NAV_URL + "/jobs?cnt=" + maxJobs);
     }.bind(this));
@@ -96,7 +96,7 @@ export class JobsRoute extends PageRoute {
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     let title = "Show&nbsp;eligible&nbsp;jobs";
     // 25CF = BLACK CIRCLE
-    if(cnt === "eligible") title = "\u25CF " + title;
+    if (cnt === "eligible") title = "\u25CF " + title;
     pMenu.addMenuItem(title, function(pClickEvent) {
       window.location.assign(config.NAV_URL + "/jobs?cnt=eligible");
     }.bind(this));
@@ -106,7 +106,7 @@ export class JobsRoute extends PageRoute {
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     let title = "Show&nbsp;all&nbsp;jobs";
     // 25CF = BLACK CIRCLE
-    if(cnt === "all") title = "\u25CF " + title;
+    if (cnt === "all") title = "\u25CF " + title;
     pMenu.addMenuItem(title, function(pClickEvent) {
       window.location.assign(config.NAV_URL + "/jobs?cnt=all");
     }.bind(this));
@@ -120,7 +120,7 @@ export class JobsRoute extends PageRoute {
 
     let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
     const maxTextLength = 50;
-    if(targetText.length > maxTextLength) {
+    if (targetText.length > maxTextLength) {
       // prevent column becoming too wide
       targetText = targetText.substring(0, maxTextLength) + "...";
     }
@@ -128,7 +128,7 @@ export class JobsRoute extends PageRoute {
 
     const argumentsText = this.decodeArgumentsText(job.Arguments);
     let functionText = job.Function + argumentsText;
-    if(functionText.length > maxTextLength) {
+    if (functionText.length > maxTextLength) {
       // prevent column becoming too wide
       functionText = functionText.substring(0, maxTextLength) + "...";
     }
@@ -172,7 +172,7 @@ export class JobsRoute extends PageRoute {
     this._addMenuItemUpdateDetails(menu, detailsSpan, job);
 
     // fill out the number of columns to that of the header
-    while(tr.cells.length < pContainer.parentElement.tHead.rows[0].cells.length) {
+    while (tr.cells.length < pContainer.parentElement.tHead.rows[0].cells.length) {
       tr.appendChild(Route.createTd("", ""));
     }
 
@@ -214,14 +214,14 @@ export class JobsRoute extends PageRoute {
 
   handleRunnerJobsActive(pData) {
 
-    if(!pData) return;
+    if (!pData) return;
 
-    if(typeof pData !== "object") {
+    if (typeof pData !== "object") {
       // update all jobs (page) with the error message
       const tbody = document.getElementById("jobs-table-tbody");
-      for(const tr of tbody.rows) {
+      for (const tr of tbody.rows) {
         const statusField = tr.querySelector("td.status span.no-status");
-        if(!statusField) continue;
+        if (!statusField) continue;
         statusField.classList.remove("no-status");
         statusField.innerText = "(error)";
         Utils.addToolTip(statusField, pData);
@@ -232,26 +232,26 @@ export class JobsRoute extends PageRoute {
     const jobs = pData.return[0];
 
     // update all running jobs
-    for(const k in jobs) {
+    for (const k in jobs) {
       const job = jobs[k];
 
       let targetText = "";
       const targetField = this.pageElement.querySelector(".jobs tr#" + Utils.getIdFromJobId(k) + " td.status span");
       const maxTextLength = 50;
-      if(targetText.length > maxTextLength) {
+      if (targetText.length > maxTextLength) {
         // prevent column becoming too wide
         // yes, the addition of running/returned may again make
         // the string longer than 50 characters, we accept that
         targetText = targetText.substring(0, maxTextLength) + "...";
       }
       // then add the operational statistics
-      if(job.Running && job.Running.length > 0)
+      if (job.Running && job.Running.length > 0)
         targetText = targetText + job.Running.length + " running";
-      if(job.Returned && job.Returned.length > 0)
+      if (job.Returned && job.Returned.length > 0)
         targetText = targetText + ", " + job.Returned.length + " returned";
 
       // the field may not (yet) be on the screen
-      if(!targetField) continue;
+      if (!targetField) continue;
       targetField.classList.remove("no-status");
       targetField.innerText = targetText;
       targetField.insertBefore(Utils.createJobStatusSpan(k), targetField.firstChild);
@@ -260,9 +260,9 @@ export class JobsRoute extends PageRoute {
 
     // update all finished jobs (page)
     const tbody = document.getElementById("jobs-table-tbody");
-    for(const tr of tbody.rows) {
+    for (const tr of tbody.rows) {
       const statusField = tr.querySelector("td.status span.no-status");
-      if(!statusField) continue;
+      if (!statusField) continue;
       statusField.classList.remove("no-status");
       statusField.innerText = "done";
       // we show the tooltip here so that the user is invited to click on this
@@ -286,9 +286,9 @@ export class JobsRoute extends PageRoute {
   _handleJobsRunnerJobsListJob(pJobId, pData) {
 
     const detailsSpan = this.pageElement.querySelector(".jobs tr#" + Utils.getIdFromJobId(pJobId) + " td.details span");
-    if(!detailsSpan) return;
+    if (!detailsSpan) return;
 
-    if(typeof pData !== "object") {
+    if (typeof pData !== "object") {
       detailsSpan.innerText = "(error)";
       detailsSpan.classList.remove("no-status");
       Utils.addToolTip(detailsSpan, pData);
@@ -297,7 +297,7 @@ export class JobsRoute extends PageRoute {
 
     pData = pData.return[0];
 
-    if(pData.Error) {
+    if (pData.Error) {
       // typically happens for jobs that are expired from jobs-cache
       detailsSpan.innerText = "(error)";
       detailsSpan.classList.remove("no-status");
@@ -310,7 +310,7 @@ export class JobsRoute extends PageRoute {
 
     const keyCount = Object.keys(pData.Result).length;
     detailsTxt += ", ";
-    if(keyCount === pData.Minions.length)
+    if (keyCount === pData.Minions.length)
       detailsTxt += "<span style='color: green'>";
     else
       detailsTxt += "<span style='color: red'>";
@@ -319,28 +319,28 @@ export class JobsRoute extends PageRoute {
     detailsTxt += "</span>";
 
     const summary = { };
-    for(const minionId in pData.Result) {
+    for (const minionId in pData.Result) {
       const result = pData.Result[minionId];
       // use keys that can conveniently be sorted
       const key = (result.success ? "0-" : "1-") + result.retcode;
-      if(summary[key] === undefined) summary[key] = 0;
+      if (summary[key] === undefined) summary[key] = 0;
       summary[key] += 1;
     }
 
     const keys = Object.keys(summary).sort();
-    for(const key of keys) {
+    for (const key of keys) {
       detailsTxt += ", ";
-      if(key === "0-0") {
+      if (key === "0-0") {
         detailsTxt += "<span style='color: green'>";
         detailsTxt += Utils.txtZeroOneMany(summary[key], "", "{0} success", "{0} successes");
-      } else if(key.startsWith("0-")) {
+      } else if (key.startsWith("0-")) {
         detailsTxt += "<span style='color: orange'>";
         detailsTxt += Utils.txtZeroOneMany(summary[key], "", "{0} success", "{0} successes");
-      } else { // if(key.startsWith("1-"))
+      } else { // if (key.startsWith("1-"))
         detailsTxt += "<span style='color: red'>";
         detailsTxt += Utils.txtZeroOneMany(summary[key], "", "{0} failure", "{0} failures");
       }
-      if(key !== "0-0") {
+      if (key !== "0-0") {
         // don't show the retcode for real success
         detailsTxt += "(" + key.substr(2) + ")";
       }

@@ -5,51 +5,51 @@ export class OutputYaml {
   // i.e. no multi-line objects, no indentation here
   static _formatSimpleYAML(pValue) {
 
-    if(pValue === null) {
+    if (pValue === null) {
       return "null";
     }
 
-    if(pValue === undefined) {
+    if (pValue === undefined) {
       return "undefined";
     }
 
-    if(typeof pValue === "boolean") {
+    if (typeof pValue === "boolean") {
       return pValue ? "true" : "false";
     }
 
-    if(typeof pValue === "string") {
+    if (typeof pValue === "string") {
       let needQuotes = false;
 
       // simple number with extra 0's at the start is still a string
-      if(pValue.match(/^0[0-9]+$/)) return pValue;
+      if (pValue.match(/^0[0-9]+$/)) return pValue;
 
-      if(!isNaN(Number(pValue))) needQuotes = true;
+      if (!isNaN(Number(pValue))) needQuotes = true;
 
-      if(pValue.match(/^$/)) needQuotes = true;
+      if (pValue.match(/^$/)) needQuotes = true;
 
-      if(pValue.match(/^ /)) needQuotes = true;
-      if(pValue.match(/ $/)) needQuotes = true;
+      if (pValue.match(/^ /)) needQuotes = true;
+      if (pValue.match(/ $/)) needQuotes = true;
 
-      if(pValue.match(/^@/)) needQuotes = true;
-      if(pValue.match(/^`/)) needQuotes = true;
-      if(pValue.match(/^%/)) needQuotes = true;
+      if (pValue.match(/^@/)) needQuotes = true;
+      if (pValue.match(/^`/)) needQuotes = true;
+      if (pValue.match(/^%/)) needQuotes = true;
 
-      if(!pValue.match(/^[-a-z0-9_()./:+ ]+$/i)) needQuotes = true;
+      if (!pValue.match(/^[-a-z0-9_()./:+ ]+$/i)) needQuotes = true;
 
-      if(!needQuotes) return pValue;
+      if (!needQuotes) return pValue;
       return "'" + pValue + "'";
     }
 
-    if(typeof pValue !== "object") {
+    if (typeof pValue !== "object") {
       return "" + pValue;
     }
 
-    if(Array.isArray(pValue) && pValue.length === 0) {
+    if (Array.isArray(pValue) && pValue.length === 0) {
       // show the brackets for an empty array a bit wider apart
       return "[ ]";
     }
 
-    if(!Array.isArray(pValue) && Object.keys(pValue).length === 0) {
+    if (!Array.isArray(pValue) && Object.keys(pValue).length === 0) {
       // show the brackets for an empty object a bit wider apart
       return "{ }";
     }
@@ -67,14 +67,14 @@ export class OutputYaml {
     const indentStep = 2;
 
     const str = OutputYaml._formatSimpleYAML(pValue);
-    if(str !== null) {
+    if (str !== null) {
       return str;
     }
 
-    if(Array.isArray(pValue)) {
+    if (Array.isArray(pValue)) {
       let out = "";
       let separator = "";
-      for(const item of pValue) {
+      for (const item of pValue) {
         // 00A0 = NO-BREAK SPACE
         out += separator + "-\u00A0" + OutputYaml.formatYAML(item, pIndentLevel + 2);
         separator = "\n" + " ".repeat(pIndentLevel);
@@ -85,15 +85,15 @@ export class OutputYaml {
     // regular object
     let out = "";
     let separator = "";
-    for(const key of Object.keys(pValue).sort()) {
+    for (const key of Object.keys(pValue).sort()) {
       const item = pValue[key];
       out += separator + key + ":";
       const str = OutputYaml._formatSimpleYAML(item);
-      if(str !== null) {
+      if (str !== null) {
         out += " " + str;
-      } else if(Array.isArray(item)) {
+      } else if (Array.isArray(item)) {
         out += "\n" + " ".repeat(pIndentLevel) + OutputYaml.formatYAML(item, pIndentLevel);
-      } else if(typeof item === "object") {
+      } else if (typeof item === "object") {
         out += "\n" + " ".repeat(pIndentLevel + indentStep) + OutputYaml.formatYAML(item, pIndentLevel + indentStep);
       } else {
         /* istanbul ignore next */

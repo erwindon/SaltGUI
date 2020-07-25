@@ -16,7 +16,7 @@ export class PageRoute extends Route {
   }
 
   updateMinions(pTableId, pData) {
-    if(!pData) return;
+    if (!pData) return;
 
     const minions = pData.return[0];
 
@@ -28,7 +28,7 @@ export class PageRoute extends Route {
     // save for the autocompletion
     // This callback will also be called after LOGOUT due to the regular error handling
     // Do not store the information in that case
-    if(Utils.getStorageItem("session", "token")) {
+    if (Utils.getStorageItem("session", "token")) {
       Utils.setStorageItem("session", "minions", JSON.stringify(minionIds));
     }
 
@@ -36,11 +36,11 @@ export class PageRoute extends Route {
 
     let cntOnline = 0;
     let cntOffline = 0;
-    for(const minionId of minionIds) {
+    for (const minionId of minionIds) {
       const minionInfo = minions[minionId];
 
       // minions can be offline, then the info will be false
-      if(minionInfo === false) {
+      if (minionInfo === false) {
         this.updateOfflineMinion(table, minionId, minionsDict);
         cntOffline++;
       } else {
@@ -52,10 +52,10 @@ export class PageRoute extends Route {
     const msgDiv = this.pageElement.querySelector("div.minion-list .msg");
     let txt = Utils.txtZeroOneMany(minionIds.length,
       "No minions", "{0} minion", "{0} minions");
-    if(cntOnline !== minionIds.length)
+    if (cntOnline !== minionIds.length)
       txt += ", " + Utils.txtZeroOneMany(cntOnline,
         "none online", "{0} online", "{0} online");
-    if(cntOffline > 0)
+    if (cntOffline > 0)
       txt += ", " + Utils.txtZeroOneMany(cntOffline,
         "none offline", "{0} offline", "{0} offline");
     msgDiv.innerText = txt;
@@ -64,7 +64,7 @@ export class PageRoute extends Route {
   getElement(pContainer, id) {
     let minionTr = pContainer.querySelector("#" + id);
 
-    if(minionTr === null) {
+    if (minionTr === null) {
       // minion not found on screen...
       // construct a basic element that can be updated
       minionTr = document.createElement("tr");
@@ -73,7 +73,7 @@ export class PageRoute extends Route {
     }
 
     // remove existing content
-    while(minionTr.firstChild) {
+    while (minionTr.firstChild) {
       minionTr.removeChild(minionTr.firstChild);
     }
 
@@ -87,7 +87,7 @@ export class PageRoute extends Route {
 
     const offlineSpan = Route.createSpan("status", "offline");
     // add an opinion when we have one
-    if(pMinionId in pMinionsDict) {
+    if (pMinionId in pMinionsDict) {
       if (pMinionsDict[pMinionId] === "true") {
         Utils.addToolTip(offlineSpan, "Minion is offline\nIs the host running and is the salt-minion installed and started?\nUpdate file 'minions.txt' when needed", "bottom-left");
         offlineSpan.style.color = "red";
@@ -106,16 +106,16 @@ export class PageRoute extends Route {
     // Only use byte-boundaries for networks
     // Must match a subnet of A, B or C network
     const prefixes = { };
-    for(const minionId in pAllMinionsGrains) {
+    for (const minionId in pAllMinionsGrains) {
       const grains = pAllMinionsGrains[minionId];
-      if(!grains.fqdn_ip4) continue;
-      if(!Array.isArray(grains.fqdn_ip4)) continue;
-      for(const ip of grains.fqdn_ip4) {
+      if (!grains.fqdn_ip4) continue;
+      if (!Array.isArray(grains.fqdn_ip4)) continue;
+      for (const ip of grains.fqdn_ip4) {
         const parts = ip.split(".");
-        if(ip.startsWith("10.")) {
+        if (ip.startsWith("10.")) {
           prefixes[parts[0] + "."] = true;
         }
-        if(ip.startsWith("10.") ||
+        if (ip.startsWith("10.") ||
            ip.startsWith("172.16.") ||
            ip.startsWith("172.17.") ||
            ip.startsWith("172.18.") ||
@@ -142,19 +142,19 @@ export class PageRoute extends Route {
     // Then we look whether each minion uses the prefix
     // When at least one minion does not use the subnet,
     //    then it is not a suitable subnet
-    for(const prefix in prefixes) {
-      for(const minionId in pAllMinionsGrains) {
+    for (const prefix in prefixes) {
+      for (const minionId in pAllMinionsGrains) {
         let cnt = 0;
         const grains = pAllMinionsGrains[minionId];
-        if(!grains.fqdn_ip4) continue;
-        if(!Array.isArray(grains.fqdn_ip4)) continue;
-        for(const ip of grains.fqdn_ip4) {
-          if(!ip.startsWith(prefix)) continue;
+        if (!grains.fqdn_ip4) continue;
+        if (!Array.isArray(grains.fqdn_ip4)) continue;
+        for (const ip of grains.fqdn_ip4) {
+          if (!ip.startsWith(prefix)) continue;
           cnt++;
         }
         // multiple or unused?
         //    then it is not a suitable subnet
-        if(cnt !== 1) {
+        if (cnt !== 1) {
           prefixes[prefix] = false;
           break;
         }
@@ -162,8 +162,8 @@ export class PageRoute extends Route {
     }
 
     // actually remove the unused prefixes
-    for(const prefix in prefixes) {
-      if(!prefixes[prefix]) {
+    for (const prefix in prefixes) {
+      if (!prefixes[prefix]) {
         delete prefixes[prefix];
       }
     }
@@ -172,40 +172,40 @@ export class PageRoute extends Route {
   }
 
   _getBestIpNumber(pMinionData, prefixes) {
-    if(!pMinionData) return null;
+    if (!pMinionData) return null;
     const ipv4 = pMinionData.fqdn_ip4;
-    if(!ipv4) return null;
+    if (!ipv4) return null;
     // either a string or something strange
-    if(!Array.isArray(ipv4)) return ipv4;
+    if (!Array.isArray(ipv4)) return ipv4;
 
     // so, it is an array
 
     // get the public IP number (if any)
-    for(const s of ipv4) {
+    for (const s of ipv4) {
       // See https://nl.wikipedia.org/wiki/RFC_1918
       // local = 127.0.0.0/8
-      if(s.startsWith("127.")) continue;
+      if (s.startsWith("127.")) continue;
       // private A = 10.0.0.0/8
-      if(s.startsWith("10.")) continue;
+      if (s.startsWith("10.")) continue;
       // private B = 172.16.0.0/20
-      if(s.startsWith("172.16.")) continue;
-      if(s.startsWith("172.17.")) continue;
-      if(s.startsWith("172.18.")) continue;
-      if(s.startsWith("172.19.")) continue;
-      if(s.startsWith("172.20.")) continue;
-      if(s.startsWith("172.21.")) continue;
-      if(s.startsWith("172.22.")) continue;
-      if(s.startsWith("172.23.")) continue;
-      if(s.startsWith("172.24.")) continue;
-      if(s.startsWith("172.25.")) continue;
-      if(s.startsWith("172.26.")) continue;
-      if(s.startsWith("172.27.")) continue;
-      if(s.startsWith("172.28.")) continue;
-      if(s.startsWith("172.29.")) continue;
-      if(s.startsWith("172.30.")) continue;
-      if(s.startsWith("172.31.")) continue;
+      if (s.startsWith("172.16.")) continue;
+      if (s.startsWith("172.17.")) continue;
+      if (s.startsWith("172.18.")) continue;
+      if (s.startsWith("172.19.")) continue;
+      if (s.startsWith("172.20.")) continue;
+      if (s.startsWith("172.21.")) continue;
+      if (s.startsWith("172.22.")) continue;
+      if (s.startsWith("172.23.")) continue;
+      if (s.startsWith("172.24.")) continue;
+      if (s.startsWith("172.25.")) continue;
+      if (s.startsWith("172.26.")) continue;
+      if (s.startsWith("172.27.")) continue;
+      if (s.startsWith("172.28.")) continue;
+      if (s.startsWith("172.29.")) continue;
+      if (s.startsWith("172.30.")) continue;
+      if (s.startsWith("172.31.")) continue;
       // private C = 192.168.0.0/16
-      if(s.startsWith("192.168.")) continue;
+      if (s.startsWith("192.168.")) continue;
       // not a local/private address, therefore it is public
       return s;
     }
@@ -214,26 +214,26 @@ export class PageRoute extends Route {
     // Use a common prefix in all available IP numbers
     // get the private IP number (if any)
     // when it matches one of the common prefixes
-    for(const prefix in prefixes) {
-      for(const s of ipv4) {
-        if(s.startsWith(prefix)) return s;
+    for (const prefix in prefixes) {
+      for (const s of ipv4) {
+        if (s.startsWith(prefix)) return s;
       }
     }
 
     // no luck...
     // try again, but without the restrictions
-    for(const s of ipv4) {
+    for (const s of ipv4) {
       // C = 192.168.x.x
-      if(s.startsWith("192.168.")) return s;
+      if (s.startsWith("192.168.")) return s;
     }
-    for(const s of ipv4) {
+    for (const s of ipv4) {
       // B = 172.16.0.0 .. 172.31.255.255
       // never mind the sub-ranges
-      if(s.startsWith("172.")) return s;
+      if (s.startsWith("172.")) return s;
     }
-    for(const s of ipv4) {
+    for (const s of ipv4) {
       // A = 10.x.x.x
-      if(s.startsWith("10.")) return s;
+      if (s.startsWith("10.")) return s;
     }
 
     // just pick the first one, should then be a local address (127.x.x.x)
@@ -247,16 +247,16 @@ export class PageRoute extends Route {
     minionTr.appendChild(Route.createTd("minion-id", pMinionId));
 
     const ipv4 = this._getBestIpNumber(pMinionData, prefixes);
-    if(ipv4) {
+    if (ipv4) {
       const addressTd = Route.createTd("status", "");
       const addressSpan = Route.createSpan("status2", ipv4);
       addressTd.appendChild(addressSpan);
       // ipnumbers do not sort well, reformat into something sortable
       const ipv4parts = ipv4.split(".");
       let sorttableCustomkey = "";
-      if(ipv4parts.length === 4) {
+      if (ipv4parts.length === 4) {
         // never mind adding '.'; this is only a sort-key
-        for(let i = 0; i < 4; i++) sorttableCustomkey += ipv4parts[i].padStart(3, "0");
+        for (let i = 0; i < 4; i++) sorttableCustomkey += ipv4parts[i].padStart(3, "0");
         addressTd.setAttribute("sorttable_customkey", sorttableCustomkey);
       }
       addressTd.classList.add("address");
@@ -277,24 +277,24 @@ export class PageRoute extends Route {
     }
 
     let saltversion = "---";
-    if(typeof pMinionData === "string") saltversion = "";
-    else if(pMinionData && pMinionData.saltversion) saltversion = pMinionData.saltversion;
-    if(pMinionData) {
+    if (typeof pMinionData === "string") saltversion = "";
+    else if (pMinionData && pMinionData.saltversion) saltversion = pMinionData.saltversion;
+    if (pMinionData) {
       const td = Route.createTd("", "");
       const span = Route.createSpan("saltversion", saltversion);
       td.appendChild(span);
-      if(typeof pMinionData === "string") Utils.addErrorToTableCell(td, pMinionData);
+      if (typeof pMinionData === "string") Utils.addErrorToTableCell(td, pMinionData);
       minionTr.appendChild(td);
     }
 
     let os = "---";
-    if(typeof pMinionData === "string") os = "";
-    else if(pMinionData && pMinionData.os && pMinionData.osrelease) os = pMinionData.os + " " + pMinionData.osrelease;
-    else if(pMinionData && pMinionData.os) os = pMinionData.os;
-    if(pMinionData) {
+    if (typeof pMinionData === "string") os = "";
+    else if (pMinionData && pMinionData.os && pMinionData.osrelease) os = pMinionData.os + " " + pMinionData.osrelease;
+    else if (pMinionData && pMinionData.os) os = pMinionData.os;
+    if (pMinionData) {
       const td = Route.createTd("os", os);
-      if(typeof pMinionData === "string") Utils.addErrorToTableCell(td, pMinionData);
-      if(pMinionData.os && typeof pMinionData !== "string") {
+      if (typeof pMinionData === "string") Utils.addErrorToTableCell(td, pMinionData);
+      if (pMinionData.os && typeof pMinionData !== "string") {
         const img = document.createElement("img");
         img.setAttribute("src", config.NAV_URL + "/static/images/os-" + pMinionData.os.replace(" ", "-").toLowerCase() + ".png");
         img.classList.add("osimage");
@@ -307,7 +307,7 @@ export class PageRoute extends Route {
   addMinion(pContainer, pMinionId, freeColumns = 0) {
 
     let minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
-    if(minionTr !== null) {
+    if (minionTr !== null) {
       // minion already on screen...
       return;
     }
@@ -324,7 +324,7 @@ export class PageRoute extends Route {
     minionTr.appendChild(Route.createTd("os", "loading..."));
 
     // fill out the number of columns to that of the header
-    while(minionTr.cells.length < pContainer.tHead.rows[0].cells.length - freeColumns) {
+    while (minionTr.cells.length < pContainer.tHead.rows[0].cells.length - freeColumns) {
       minionTr.appendChild(Route.createTd("", ""));
     }
 
@@ -343,7 +343,7 @@ export class PageRoute extends Route {
     const jobContainer = this.getPageElement().querySelector(".jobs tbody");
 
     const msgDiv = this.getPageElement().querySelector(".job-list .msg");
-    if(PageRoute.showErrorRowInstead(jobContainer, pData, msgDiv)) return;
+    if (PageRoute.showErrorRowInstead(jobContainer, pData, msgDiv)) return;
 
     const jobs = this._jobsToArray(pData.return[0]);
     this._sortJobs(jobs);
@@ -351,13 +351,13 @@ export class PageRoute extends Route {
     // collect the list of hidden minions
     const hideJobsText = Utils.getStorageItem("session", "hide_jobs", "[]");
     this._hideJobs = JSON.parse(hideJobsText);
-    if(!Array.isArray(this._hideJobs)) {
+    if (!Array.isArray(this._hideJobs)) {
       this._hideJobs = [ ];
     }
     // collect the list of hidden minions
     const showJobsText = Utils.getStorageItem("session", "show_jobs", "[]");
     this._showJobs = JSON.parse(showJobsText);
-    if(!Array.isArray(this._showJobs)) {
+    if (!Array.isArray(this._showJobs)) {
       this._showJobs = [ ];
     }
 
@@ -412,17 +412,17 @@ export class PageRoute extends Route {
     let numberOfJobsShown = 0;
     let numberOfJobsEligible = 0;
     const numberOfJobsPresent = jobs.length;
-    for(const job of jobs) {
+    for (const job of jobs) {
 
-      if(!this._hideJobs.includes(job.Function) ||
+      if (!this._hideJobs.includes(job.Function) ||
          this._showJobs.includes(job.Function)) {
         numberOfJobsEligible++;
-      } else if(pMaxNumberOfJobs !== 99999) {
+      } else if (pMaxNumberOfJobs !== 99999) {
         continue;
       }
 
       // Add only <pMaxNumberOfJobs> most recent jobs
-      if(numberOfJobsShown >= pMaxNumberOfJobs) continue;
+      if (numberOfJobsShown >= pMaxNumberOfJobs) continue;
 
       // Note that "Jobs" has a specialized version
       this.addJob(jobContainer, job);
@@ -441,13 +441,13 @@ export class PageRoute extends Route {
 
   handleRunnerJobsActive(pData) {
 
-    if(!pData) return;
+    if (!pData) return;
 
-    if(typeof pData !== "object") {
+    if (typeof pData !== "object") {
       const tbody = this.pageElement.querySelector("table.jobs tbody");
-      for(const tr of tbody.rows) {
+      for (const tr of tbody.rows) {
         const statusSpan = tr.querySelector("span.status");
-        if(!statusSpan) continue;
+        if (!statusSpan) continue;
         statusSpan.classList.remove("no-status");
         statusSpan.innerText = "(error)";
         // we show the tooltip here so that the user is invited to click on this
@@ -459,9 +459,9 @@ export class PageRoute extends Route {
 
     // mark all jobs as done, then re-update the running jobs
     const tbody = this.pageElement.querySelector("table.jobs tbody");
-    for(const tr of tbody.rows) {
+    for (const tr of tbody.rows) {
       const statusSpan = tr.querySelector("span.status");
-      if(!statusSpan) continue;
+      if (!statusSpan) continue;
       statusSpan.classList.remove("no-status");
       statusSpan.innerText = "done";
       // we show the tooltip here so that the user is invited to click on this
@@ -472,19 +472,19 @@ export class PageRoute extends Route {
     const jobs = pData.return[0];
 
     // update all running jobs
-    for(const k in jobs) {
+    for (const k in jobs) {
       const job = jobs[k];
 
       // then add the operational statistics
       let statusText = "";
-      if(job.Running && job.Running.length > 0)
+      if (job.Running && job.Running.length > 0)
         statusText = statusText + ", " + job.Running.length + " running";
-      if(job.Returned && job.Returned.length > 0)
+      if (job.Returned && job.Returned.length > 0)
         statusText = statusText + ", " + job.Returned.length + " returned";
 
       const statusSpan = this.pageElement.querySelector("table.jobs td#" + Utils.getIdFromJobId(k) + " span.status");
       // the field may not (yet) be on the screen
-      if(!statusSpan) continue;
+      if (!statusSpan) continue;
 
       statusSpan.innerText = "";
       statusSpan.appendChild(Utils.createJobStatusSpan(k));
@@ -502,7 +502,7 @@ export class PageRoute extends Route {
 
     let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
     const maxTextLength = 50;
-    if(targetText.length > maxTextLength) {
+    if (targetText.length > maxTextLength) {
       // prevent column becoming too wide
       targetText = targetText.substring(0, maxTextLength) + "...";
     }
@@ -570,7 +570,7 @@ export class PageRoute extends Route {
     const keys = Object.keys(jobs);
     const newArray = [];
 
-    for(const key of keys) {
+    for (const key of keys) {
       const job = jobs[key];
       job.id = key;
       newArray.push(job);
@@ -583,8 +583,8 @@ export class PageRoute extends Route {
     jobs.sort(function(a, b){
       // The id is already a string value based on the date,
       // let's use it to sort the jobs
-      if(a.id < b.id) return 1;
-      if(a.id > b.id) return -1;
+      if (a.id < b.id) return 1;
+      if (a.id > b.id) return -1;
       return 0;
     });
   }
@@ -608,12 +608,12 @@ export class PageRoute extends Route {
 
   static showErrorRowInstead(pTable, pData, pMsgDiv) {
 
-    if(pData === null) {
+    if (pData === null) {
       // not an error, but also nothing to show
       return true;
     }
 
-    if(typeof pData === "object") {
+    if (typeof pData === "object") {
       // not an error
       return false;
     }
@@ -630,7 +630,7 @@ export class PageRoute extends Route {
     pTable.appendChild(tr);
 
     // hide the "(loading)" message
-    if(pMsgDiv !== null) pMsgDiv.style.display = "none";
+    if (pMsgDiv !== null) pMsgDiv.style.display = "none";
 
     return true;
   }
@@ -639,7 +639,7 @@ export class PageRoute extends Route {
     const staticMinionsTxtPromise = this.router.api.getStaticMinionsTxt();
 
     staticMinionsTxtPromise.then(pStaticMinionsTxt => {
-      if(!pStaticMinionsTxt)
+      if (!pStaticMinionsTxt)
         Utils.setStorageItem("session", "minions-txt", "{}");
       else {
         const lines = pStaticMinionsTxt.
@@ -647,9 +647,9 @@ export class PageRoute extends Route {
           split(/\r?\n/).
           filter(item => !item.startsWith("#"));
         const minions = { };
-        for(const line of lines) {
+        for (const line of lines) {
           const fields = line.split("\t");
-          if(fields.length === 1)
+          if (fields.length === 1)
             minions[fields[0]] = "true";
           else
             minions[fields[0]] = fields[1];

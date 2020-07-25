@@ -39,23 +39,23 @@ export class ParseCommandLine {
     // at the start of the line
     pToRun = pToRun.trim();
 
-    while(pToRun.length > 0) {
+    while (pToRun.length > 0) {
       let name = null;
 
       let firstSpaceChar = pToRun.indexOf(" ");
-      if(firstSpaceChar < 0)
+      if (firstSpaceChar < 0)
         firstSpaceChar = pToRun.length;
       const firstEqualSign = pToRun.indexOf("=");
-      if(firstEqualSign >= 0 && firstEqualSign < firstSpaceChar) {
+      if (firstEqualSign >= 0 && firstEqualSign < firstSpaceChar) {
         // we have the name of a named parameter
         name = pToRun.substr(0, firstEqualSign);
         pToRun = pToRun.substr(firstEqualSign + 1);
-        if(pToRun === "" || pToRun[0] === " ") {
+        if (pToRun === "" || pToRun[0] === " ") {
           return "Must have value for named parameter '" + name + "'";
         }
       }
 
-      if(patPlaceHolder.test(pToRun)) {
+      if (patPlaceHolder.test(pToRun)) {
         const placeHolder = pToRun.replace(/>.*/, ">");
         return "Must fill in all placeholders, e.g. " + placeHolder;
       }
@@ -64,26 +64,26 @@ export class ParseCommandLine {
       // character for a JSON type
       let endChar = undefined;
       let objType = undefined;
-      if(pToRun[0] === "{") {
+      if (pToRun[0] === "{") {
         endChar = "}";
         objType = "dictionary";
-      } else if(pToRun[0] === "[") {
+      } else if (pToRun[0] === "[") {
         endChar = "]";
         objType = "array";
-      } else if(pToRun[0] === "\"") {
+      } else if (pToRun[0] === "\"") {
         // note that json does not support single-quoted strings
         endChar = "\"";
         objType = "double-quoted-string";
       }
 
       let value;
-      if(endChar && objType) {
+      if (endChar && objType) {
         // The string starts with a character for a known JSON type
         let p = 1;
-        while(true) {
+        while (true) {
           // Try until the next closing character
           let n = pToRun.indexOf(endChar, p);
-          if(n < 0) {
+          if (n < 0) {
             return "No valid " + objType + " found";
           }
 
@@ -93,7 +93,7 @@ export class ParseCommandLine {
           const s = pToRun.substring(0, n + 1);
           try {
             value = JSON.parse(s);
-          } catch(err) {
+          } catch (err) {
             // the string that we tried to parse is not valid json
             // continue to add more text from the input
             p = n + 1;
@@ -102,7 +102,7 @@ export class ParseCommandLine {
 
           // the first part of the string is valid JSON
           n = n + 1;
-          if(n < pToRun.length && pToRun[n] !== " ") {
+          if (n < pToRun.length && pToRun[n] !== " ") {
             return "Valid " + objType + ", but followed by text:" + pToRun.substring(n) + "...";
           }
 
@@ -115,27 +115,27 @@ export class ParseCommandLine {
         // when we are done, we'll see whether it actually is a number
         // or any of the known constants
         let str = "";
-        while(pToRun.length > 0 && pToRun[0] !== " ") {
+        while (pToRun.length > 0 && pToRun[0] !== " ") {
           str += pToRun[0];
           pToRun = pToRun.substring(1);
         }
 
         // try to find whether the string is actually a known constant
         // or integer or float
-        if(patNull.test(str)) {
+        if (patNull.test(str)) {
           value = null;
-        } else if(patBooleanFalse.test(str)) {
+        } else if (patBooleanFalse.test(str)) {
           value = false;
-        } else if(patBooleanTrue.test(str)) {
+        } else if (patBooleanTrue.test(str)) {
           value = true;
-        } else if(ParseCommandLine.getPatJid().test(str)) {
+        } else if (ParseCommandLine.getPatJid().test(str)) {
           // jobIds look like numbers but must be strings
           value = str;
-        } else if(patInteger.test(str)) {
+        } else if (patInteger.test(str)) {
           value = parseInt(str);
-        } else if(patFloat.test(str)) {
+        } else if (patFloat.test(str)) {
           value = parseFloat(str);
-          if(!isFinite(value)) {
+          if (!isFinite(value)) {
             return "Numeric argument has overflowed or is infinity";
           }
         } else {
@@ -143,7 +143,7 @@ export class ParseCommandLine {
         }
       }
 
-      if(name !== null) {
+      if (name !== null) {
         // named parameter
         pArgsObject[name] = value;
       } else {

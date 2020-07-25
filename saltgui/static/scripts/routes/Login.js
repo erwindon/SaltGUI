@@ -35,7 +35,7 @@ export class LoginRoute extends Route {
     eauthSelector.value = Utils.getStorageItem("local", "eauth", "pam");
 
     const reason = decodeURIComponent(Utils.getQueryParam("reason"));
-    switch(reason){
+    switch (reason){
     case null:
     case "":
     case "undefined":
@@ -59,7 +59,7 @@ export class LoginRoute extends Route {
 
   _onLogin(pSubmitEvent) {
     pSubmitEvent.preventDefault();
-    if(this.loginPending) return; // Don't continue if waiting on a request
+    if (this.loginPending) return; // Don't continue if waiting on a request
 
     const userNameField = document.getElementById("username");
     const userName = userNameField.value;
@@ -68,7 +68,7 @@ export class LoginRoute extends Route {
     const eauthField = document.getElementById("eauth");
     const eauth = eauthField.value;
 
-    if(eauth === "default") {
+    if (eauth === "default") {
       this._onLoginFailure("Invalid login-type");
       return;
     }
@@ -128,7 +128,7 @@ export class LoginRoute extends Route {
     // Even when not set, the api server gives this an actual value "{}" here.
     // Let's assume the user never sets that value. Sounds reasonable because
     // when it is set, it is normally set to an actual value/list.
-    if(!nodeGroups || !Object.keys(nodeGroups).length) nodeGroups = undefined;
+    if (!nodeGroups || !Object.keys(nodeGroups).length) nodeGroups = undefined;
     Utils.setStorageItem("session", "nodegroups", JSON.stringify(nodeGroups));
 
     const outputFormats = wheelConfigValuesData.saltgui_output_formats;
@@ -144,14 +144,14 @@ export class LoginRoute extends Route {
   _onLoginFailure(error) {
     this._toggleForm(true);
 
-    if(typeof error === "string") {
+    if (typeof error === "string") {
       // something detected before trying to login
       this._showNoticeText("#F44336", error, "notice_login_string_error");
-    } else if(error && error.status === 503) {
+    } else if (error && error.status === 503) {
       // Service Unavailable
       // e.g. salt-api running but salt-master not running
       this._showNoticeText("#F44336", error.message, "notice_login_service_unavailable");
-    } else if(error && error.status === -1) {
+    } else if (error && error.status === -1) {
       // No permissions: login valid, but no api functions executable
       // e.g. PAM says OK and /etc/salt/master says NO
       this._showNoticeText("#F44336", error.message, "notice_login_other_error");

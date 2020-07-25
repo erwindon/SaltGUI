@@ -30,7 +30,7 @@ export class SchedulesRoute extends PageRoute {
         myThis.updateMinions("schedules-table", pLocalScheduleListData);
       }, pLocalBeaconsListMsg => {
         const localScheduleListData = {"return":[{}]};
-        for(const k of pWheelKeyListAllData.return[0].data.return.minions)
+        for (const k of pWheelKeyListAllData.return[0].data.return.minions)
           localScheduleListData.return[0][k] = JSON.stringify(pLocalBeaconsListMsg);
         myThis.updateMinions("schedules-table", localScheduleListData);
       });
@@ -54,19 +54,19 @@ export class SchedulesRoute extends PageRoute {
   // Meta-data is returned on the same level as
   // the list of scheduled items
   static fixSchedulesMinion(pData) {
-    if(typeof pData !== "object") return pData;
+    if (typeof pData !== "object") return pData;
 
     const ret = { "enabled": true, "schedules": {} };
 
-    for(const k in pData) {
+    for (const k in pData) {
       // "enabled" is always a boolean (when present)
-      if(k === "enabled") {
+      if (k === "enabled") {
         ret.enabled = pData.enabled;
         continue;
       }
 
       // correct for empty list that returns this dummy value
-      if(k === "schedule" && JSON.stringify(pData[k]) === "{}") {
+      if (k === "schedule" && JSON.stringify(pData[k]) === "{}") {
         continue;
       }
 
@@ -74,7 +74,7 @@ export class SchedulesRoute extends PageRoute {
 
       // Since 2019.02, splay is always added, even when not set
       // so remove it when it has an empty value
-      if(ret.schedules[k]["splay"] === null)
+      if (ret.schedules[k]["splay"] === null)
         delete ret.schedules[k]["splay"];
     }
 
@@ -85,12 +85,12 @@ export class SchedulesRoute extends PageRoute {
     const table = document.getElementById('schedules-table');
 
     const msgDiv = document.getElementById("schedules-msg");
-    if(PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
+    if (PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
 
     const keys = pWheelKeyListAllData.return[0].data.return;
 
     const minionIds = keys.minions.sort();
-    for(const minionId of minionIds) {
+    for (const minionId of minionIds) {
       this.addMinion(table, minionId, 1);
 
       // preliminary dropdown menu
@@ -132,11 +132,11 @@ export class SchedulesRoute extends PageRoute {
 
     let cnt;
     let scheduleinfo;
-    if(typeof pMinionData === "object") {
+    if (typeof pMinionData === "object") {
       cnt = Object.keys(pMinionData.schedules).length;
       scheduleinfo = Utils.txtZeroOneMany(cnt,
         "no schedules", "{0} schedule", "{0} schedules");
-      if(!pMinionData.enabled)
+      if (!pMinionData.enabled)
         scheduleinfo += " (disabled)";
     } else {
       cnt = -1;
@@ -144,7 +144,7 @@ export class SchedulesRoute extends PageRoute {
     }
 
     const td = Route.createTd("scheduleinfo", scheduleinfo);
-    if(typeof pMinionData !== "object") {
+    if (typeof pMinionData !== "object") {
       Utils.addErrorToTableCell(td, pMinionData);
     }
     td.setAttribute("sorttable_customkey", cnt);
