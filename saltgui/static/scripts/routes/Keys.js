@@ -133,7 +133,7 @@ export class KeysRoute extends PageRoute {
     cnt["accepted"] = 0;
     cnt["denied"] = 0;
     cnt["rejected"] = 0;
-    //cnt["missing"] = 0;
+    // cnt["missing"] = 0;
     const tbody = document.getElementById("keys-table-body");
     for(const tr of tbody.children) {
       const statusField = tr.querySelector("td.status");

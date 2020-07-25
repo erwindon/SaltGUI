@@ -192,7 +192,7 @@ export class Output {
 
       let nrChanges = 0;
       if(!task.changes) {
-        //txt += "\nno changes";
+        // txt += "\nno changes";
       } else if(typeof task.changes !== "object") {
         nrChanges = 1;
         txt += "\n'changes' has type " + typeof task.changes;

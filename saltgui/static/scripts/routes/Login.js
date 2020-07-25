@@ -59,7 +59,7 @@ export class LoginRoute extends Route {
 
   _onLogin(pSubmitEvent) {
     pSubmitEvent.preventDefault();
-    if(this.loginPending) return; //Don't continue if waiting on a request
+    if(this.loginPending) return; // Don't continue if waiting on a request
 
     const userNameField = document.getElementById("username");
     const userName = userNameField.value;
@@ -90,10 +90,10 @@ export class LoginRoute extends Route {
 
     this._showNoticeText("#4CAF50", "Please wait...", "notice_please_wait");
 
-    //we need these functions to populate the dropdown boxes
+    // We need these functions to populate the dropdown boxes
     const wheelConfigValuesPromise = this.router.api.getWheelConfigValues();
 
-    //we need these functions to populate the dropdown boxes
+    // We need these functions to populate the dropdown boxes
     const myThis = this;
     wheelConfigValuesPromise.then(pWheelConfigValuesData => {
       myThis._handleLoginWheelConfigValues(pWheelConfigValuesData);

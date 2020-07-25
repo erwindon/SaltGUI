@@ -23,7 +23,7 @@ describe('Funtional tests', function() {
       // show the browser and the debug window
       options.openDevTools = true;
       // to show in a separate window
-      //options.openDevTools = { mode: "detach" };
+      // options.openDevTools = { mode: "detach" };
       options.show = true;
     }
 

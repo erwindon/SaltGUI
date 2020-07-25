@@ -50,7 +50,7 @@ export class Utils {
       console.log("getStorageItem", pStorage, pKeyName); return pDefaultValue;
     }
     const v = storage.getItem(pKeyName);
-    //console.log("getStorageItem", pStorage, pKeyName, pDefaultValue, "-->", typeof v, v);
+    // console.log("getStorageItem", pStorage, pKeyName, pDefaultValue, "-->", typeof v, v);
     if(v === null) return pDefaultValue;
     if(v === "undefined") return pDefaultValue;
     return v;
@@ -61,7 +61,7 @@ export class Utils {
     if(!storage) {
       console.log("setStorageItem", pStorage, pKeyName, pValue); return;
     }
-    //console.log("setStorageItem", pStorage, pKeyName, pValue);
+    // console.log("setStorageItem", pStorage, pKeyName, pValue);
     storage.setItem(pKeyName, pValue);
   }
 
@@ -70,7 +70,7 @@ export class Utils {
     if(!storage) {
       console.log("clearStorage", pStorage); return;
     }
-    //console.log("clearStorage", pStorage);
+    // console.log("clearStorage", pStorage);
     storage.clear();
   }
 
@@ -117,7 +117,7 @@ export class Utils {
     for(const th of thArr) {
       if(th.classList.contains("sorttable_nosort")) continue;
       // the tooltip is too bulky to use, skip for now
-      //Utils.addToolTip(th, "Click to sort");
+      // Utils.addToolTip(th, "Click to sort");
     }
   }
 

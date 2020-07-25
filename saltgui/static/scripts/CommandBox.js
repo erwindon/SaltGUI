@@ -189,7 +189,7 @@ export class CommandBox {
   // a MouseEvent(type="click") or
   // a KeyEvent(type="keyup")
   _hideManualRun(pEvent) {
-    //Don't close if they click inside the window
+    // Don't close if they click inside the window
     if(pEvent.type === "click" && pEvent.target.className !== "popup" && pEvent.target.className !== "nearly-visible-button") return;
 
     const manualRun = document.getElementById("popup-run-command");

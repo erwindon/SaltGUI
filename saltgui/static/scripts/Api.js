@@ -275,7 +275,7 @@ export class API {
 
     const source = new EventSource(config.API_URL + '/events?token=' + token);
     source.onopen = function() {
-      //console.info('Listening for events...');
+      // console.info('Listening for events...');
     };
     source.onerror = function(err) {
       // Don't show the error
