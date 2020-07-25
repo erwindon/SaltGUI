@@ -70,10 +70,10 @@ export class TemplatesRoute extends PageRoute {
 
     // calculate description
     const description = template["description"];
-    if (!description) {
-      tr.appendChild(Route.createTd("description value-none", "(none)"));
-    } else {
+    if (description) {
       tr.appendChild(Route.createTd("description", description));
+    } else {
+      tr.appendChild(Route.createTd("description value-none", "(none)"));
     }
 
     // calculate targettype
@@ -92,10 +92,10 @@ export class TemplatesRoute extends PageRoute {
 
     // calculate command
     const command = template["command"];
-    if (!command) {
-      tr.appendChild(Route.createTd("command value-none", "(none)"));
-    } else {
+    if (command) {
       tr.appendChild(Route.createTd("command", command));
+    } else {
+      tr.appendChild(Route.createTd("command value-none", "(none)"));
     }
 
     const menu = new DropDownMenu(tr);

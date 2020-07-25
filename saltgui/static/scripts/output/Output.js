@@ -389,11 +389,12 @@ export class Output {
 
     masterTriangle.addEventListener("click", pClickEvent => {
       // 25BD = WHITE DOWN-POINTING TRIANGLE
-      if (masterTriangle.innerText !== "\u25BD") {
-        masterTriangle.innerText = "\u25BD";
-      } else {
+      if (masterTriangle.innerText === "\u25BD") {
         // 25B7 = WHITE RIGHT-POINTING TRIANGLE
         masterTriangle.innerText = "\u25B7";
+      } else {
+        // 25BD = WHITE DOWN-POINTING TRIANGLE
+        masterTriangle.innerText = "\u25BD";
       }
 
       for (const div of pOutputContainer.childNodes) {
