@@ -209,7 +209,7 @@ export class API {
   }
 
   apiRequest(pMethod, pRoute, pParams) {
-    const location = config.API_URL + pRoute;
+    const url = config.API_URL + pRoute;
     const token = Utils.getStorageItem("session", "token", "");
     const headers = {
       "Accept": "application/json",
@@ -220,13 +220,13 @@ export class API {
     const options = {
       "headers": headers,
       "method": pMethod,
-      "url": location
+      "url": url
     };
 
     if (pMethod === "POST") options.body = JSON.stringify(pParams);
 
     const myThis = this;
-    return fetch(location, options)
+    return fetch(url, options)
       .then(pResponse => {
         if (pResponse.ok && pRoute.endsWith(".txt")) return pResponse.text();
         if (pResponse.ok) return pResponse.json();
