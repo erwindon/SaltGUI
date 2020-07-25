@@ -236,7 +236,7 @@ export class OptionsRoute extends PageRoute {
   }
 
   _newDatetimeFractionDigits(evt) {
-    Utils.setStorageItem("session", "datetime_fraction_digits", parseInt(evt.target.value));
+    Utils.setStorageItem("session", "datetime_fraction_digits", parseInt(evt.target.value, 10));
     const datetimeFractionDigitsTd = document.getElementById("option-datetime-fraction-digits-value");
     datetimeFractionDigitsTd.innerText = evt.target.value;
   }

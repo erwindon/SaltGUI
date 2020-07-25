@@ -30,7 +30,7 @@ export class JobsRoute extends PageRoute {
       // magic value to ignore all filters
       cnt = 99999;
     else if (cnt.match(patInteger))
-      cnt = parseInt(cnt);
+      cnt = parseInt(cnt, 10);
     else
       // pretend parameter was not present
       cnt = maxJobs;

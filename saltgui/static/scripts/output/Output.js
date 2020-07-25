@@ -153,7 +153,7 @@ export class Output {
     if (dateTimeFractionDigitsText === null) return pDtStr;
 
     // setting is not a number, return the original
-    let dateTimeFractionDigits = Number.parseInt(dateTimeFractionDigitsText);
+    let dateTimeFractionDigits = Number.parseInt(dateTimeFractionDigitsText, 10);
     if (isNaN(dateTimeFractionDigits)) return pDtStr;
 
     // stick to the min/max values without complaining

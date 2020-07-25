@@ -132,7 +132,7 @@ export class ParseCommandLine {
           // jobIds look like numbers but must be strings
           value = str;
         } else if (patInteger.test(str)) {
-          value = parseInt(str);
+          value = parseInt(str, 10);
         } else if (patFloat.test(str)) {
           value = parseFloat(str);
           if (!isFinite(value)) {
