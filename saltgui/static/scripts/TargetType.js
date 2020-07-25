@@ -61,6 +61,8 @@ export class TargetType {
     case "nodegroup":
       TargetType.menuTargetType.setTitle("Nodegroup");
       break;
+    default:
+      console.error("targetType", targetType);
     }
 
     TargetType.menuTargetType._value = targetType;

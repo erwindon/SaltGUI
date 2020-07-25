@@ -23,6 +23,8 @@ export class RunType {
     case "async":
       RunType.menuRunType.setTitle("Async");
       break;
+    default:
+      console.error("runType", runType);
     }
 
     const m = RunType.menuRunType.menuDropdownContent.children;
