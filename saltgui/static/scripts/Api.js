@@ -88,7 +88,7 @@ export class API {
   getLocalGrainsItems(pMinionId) {
     const params = {
       client: "local",
-      fun: "grains.items",
+      fun: "grains.items"
     };
     if (pMinionId) {
       params["tgt_type"] = "list";
@@ -203,7 +203,7 @@ export class API {
   getWheelKeyListAll() {
     const params = {
       client: "wheel",
-      fun: "key.list_all",
+      fun: "key.list_all"
     };
     return this.apiRequest("POST", "/", params);
   }

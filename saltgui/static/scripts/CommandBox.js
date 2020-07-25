@@ -231,7 +231,7 @@ export class CommandBox {
       "schedule.enable",
       "schedule.enable_job",
       "schedule.modify",
-      "schedule.run_job",
+      "schedule.run_job"
     ];
     if (screenModifyingCommands.includes(command) && output !== "Waiting for command...") {
       location.reload();
