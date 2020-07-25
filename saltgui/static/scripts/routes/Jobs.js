@@ -318,7 +318,7 @@ export class JobsRoute extends PageRoute {
       "no results", "{0} result", "{0} results");
     detailsTxt += "</span>";
 
-    const summary = { };
+    const summary = {};
     for (const minionId in pData.Result) {
       const result = pData.Result[minionId];
       // use keys that can conveniently be sorted

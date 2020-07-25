@@ -56,7 +56,7 @@ export class SchedulesRoute extends PageRoute {
   static fixSchedulesMinion(pData) {
     if (typeof pData !== "object") return pData;
 
-    const ret = { "enabled": true, "schedules": {} };
+    const ret = {"enabled": true, "schedules": {}};
 
     for (const k in pData) {
       // "enabled" is always a boolean (when present)

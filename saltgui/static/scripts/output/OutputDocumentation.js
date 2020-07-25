@@ -170,7 +170,7 @@ export class OutputDocumentation {
     } else {
       // prepare a dummy response when no documentation could be found
       // otherwise leave all documentation responses organized by minion
-      pResponse["dummy"] = { };
+      pResponse["dummy"] = {};
       pResponse["dummy"][pVisualKey] = "no documentation found";
     }
   }

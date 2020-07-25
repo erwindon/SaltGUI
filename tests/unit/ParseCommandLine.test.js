@@ -73,7 +73,7 @@ describe("Unittests for ParseCommandLine.js", function() {
     result = ParseCommandLine.parseCommandLine("{\"a\":1}", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
-    assert.deepEqual(args[0], {"a":1});
+    assert.deepEqual(args[0], {"a": 1});
     assert.equal(Object.keys(params).length, 0);
 
     // a broken dictionary
@@ -103,7 +103,7 @@ describe("Unittests for ParseCommandLine.js", function() {
     result = ParseCommandLine.parseCommandLine("[1,2]", args, params);
     assert.isNull(result);
     assert.equal(args.length, 1);
-    assert.deepEqual(args[0], [1,2]);
+    assert.deepEqual(args[0], [1, 2]);
     assert.equal(Object.keys(params).length, 0);
 
     // a simple array that is not closed

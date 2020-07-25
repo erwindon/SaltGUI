@@ -43,12 +43,12 @@ export class Output {
 
     if (pCommand.startsWith("runners.")) {
       // Add a new level in the object
-      return { "RUNNER": pResponse };
+      return {"RUNNER": pResponse};
     }
 
     if (pCommand.startsWith("wheel.")) {
       // Add a new level in the object
-      return { "WHEEL": pResponse };
+      return {"WHEEL": pResponse};
     }
 
     // otherwise return the original
@@ -331,7 +331,7 @@ export class Output {
       txt += Utils.txtZeroOneMany(cntResponses,
         "no responses", "{0} response", "{0} responses");
 
-      const summary = { };
+      const summary = {};
       for (const minionId in pResponse) {
         const result = pResponse[minionId];
         // when full_return is not used, the result is simpler

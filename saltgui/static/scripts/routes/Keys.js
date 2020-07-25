@@ -128,7 +128,7 @@ export class KeysRoute extends PageRoute {
   }
 
   _updateTableSummary(pTable) {
-    const cnt = { };
+    const cnt = {};
     cnt["unaccepted"] = 0;
     cnt["accepted"] = 0;
     cnt["denied"] = 0;

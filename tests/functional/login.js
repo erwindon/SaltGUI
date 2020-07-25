@@ -10,7 +10,7 @@ describe("Funtional tests", function() {
   // the global electron timeout
   this.timeout(60 * 1000);
 
-  beforeEach( () => {
+  beforeEach(() => {
     const options = {
       fullscreen: true,
       // to make the typed input much faster
@@ -37,15 +37,15 @@ describe("Funtional tests", function() {
 
     it("we should be redirected to the login page", done => {
       browser
-        .wait( () => {
+        .wait(() => {
           return document.location.href.includes("login");
         })
         .wait(500)
-        .evaluate( () => {
+        .evaluate(() => {
           return document.location.href;
         } )
         .end()
-        .then( href => {
+        .then(href => {
           href = href.replace(/[?]reason=.*/, "");
           assert.equal(href, url + "login");
         })
@@ -63,11 +63,11 @@ describe("Funtional tests", function() {
         .wait(500)
         .wait("#notice-wrapper div.notice_auth_failed")
         .wait(1000)
-        .evaluate( () => {
+        .evaluate(() => {
           return document.querySelector("#notice-wrapper div").textContent;
         })
         .end()
-        .then( message => {
+        .then(message => {
           assert.equal(message, "Authentication failed");
         })
         .then(done)
@@ -82,17 +82,17 @@ describe("Funtional tests", function() {
         .wait(500)
         .click("#login-submit")
         .wait(500)
-        .wait( () => {
+        .wait(() => {
           // we wait here for the loginpage to be hidden
           const loginpage = document.querySelector("#page-login");
           return loginpage.style.display === "none";
         })
         .wait(1000)
-        .evaluate( () => {
+        .evaluate(() => {
           return document.location.href;
         })
         .end()
-        .then( href => {
+        .then(href => {
           assert.equal(href, url);
         })
         .then(done)
@@ -109,19 +109,19 @@ describe("Funtional tests", function() {
         .wait(500)
         .wait("#notice-wrapper div.notice_please_wait")
         .wait(5000)
-        .wait( () => {
+        .wait(() => {
           // we wait here for the loginpage to be hidden
           const loginpage = document.querySelector("#page-login");
           return loginpage.style.display === "none";
         })
         .click("#button-logout1")
         .wait(500)
-        .wait( () => {
+        .wait(() => {
           // we wait here for the loginpage to be shown
           const loginpage = document.querySelector("#page-login");
           return loginpage.style.display === "";
         })
-        .wait( () => {
+        .wait(() => {
           return document.location.href.includes("login");
         })
         .wait(1000)
@@ -129,7 +129,7 @@ describe("Funtional tests", function() {
           return document.location.href;
         })
         .end()
-        .then( href => {
+        .then(href => {
           // and we redirected to the login page
           assert.equal(href, url + "login?reason=logout");
         })

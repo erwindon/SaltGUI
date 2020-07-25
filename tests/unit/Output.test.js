@@ -39,7 +39,7 @@ describe("Unittests for Output.js", function() {
     result = OutputJson.formatJSON(outputData);
     assert.equal(result, "[ 1 ]");
 
-    outputData = [1,2];
+    outputData = [1, 2];
     result = OutputJson.formatJSON(outputData);
     assert.equal(result,
       "[\n" +
@@ -47,7 +47,7 @@ describe("Unittests for Output.js", function() {
       "    2\n" +
       "]");
 
-    outputData = [1,2,3,4,5];
+    outputData = [1, 2, 3, 4, 5];
     result = OutputJson.formatJSON(outputData);
     assert.equal(result,
       "[\n" +
@@ -62,13 +62,13 @@ describe("Unittests for Output.js", function() {
     result = OutputJson.formatJSON(outputData);
     assert.equal(result, "{ }");
 
-    outputData = {"a":11};
+    outputData = {"a": 11};
     result = OutputJson.formatJSON(outputData);
     assert.equal(result, "{ \"a\": 11 }");
 
     // unordered input
     /* eslint-disable sort-keys */
-    outputData = {"a":11,"c":22,"b":33};
+    outputData = {"a": 11, "c": 22, "b": 33};
     /* eslint-enable sort-keys */
     result = OutputJson.formatJSON(outputData);
     // ordered output
@@ -81,7 +81,7 @@ describe("Unittests for Output.js", function() {
 
     // a more complex object, unordered input
     /* eslint-disable sort-keys */
-    outputData = {"ip6_interfaces":{"lo":["::1"],"eth0":["fe80::20d:3aff:fe38:576b"]}};
+    outputData = {"ip6_interfaces": {"lo": ["::1"], "eth0": ["fe80::20d:3aff:fe38:576b"]}};
     /* eslint-enable sort-keys */
     result = OutputJson.formatJSON(outputData);
     // ordered output
@@ -147,7 +147,7 @@ describe("Unittests for Output.js", function() {
     // 00A0 = NO-BREAK SPACE
     assert.equal(result, "-\u00A01");
 
-    outputData = [1,2,3,4,5];
+    outputData = [1, 2, 3, 4, 5];
     result = OutputYaml.formatYAML(outputData);
     // 00A0 = NO-BREAK SPACE
     assert.equal(result,
@@ -163,7 +163,7 @@ describe("Unittests for Output.js", function() {
 
     // unordered input
     /* eslint-disable sort-keys */
-    outputData = {"a":11,"c":22,"b":null};
+    outputData = {"a": 11, "c": 22, "b": null};
     /* eslint-enable sort-keys */
     result = OutputYaml.formatYAML(outputData);
     // ordered output
@@ -174,7 +174,7 @@ describe("Unittests for Output.js", function() {
 
     // a more complex object, unordered input
     /* eslint-disable sort-keys */
-    outputData = {"ip6_interfaces":{"lo":["::1"],"eth0":["fe80::20d:3aff:fe38:576b"]}};
+    outputData = {"ip6_interfaces": {"lo": ["::1"], "eth0": ["fe80::20d:3aff:fe38:576b"]}};
     /* eslint-enable sort-keys */
     result = OutputYaml.formatYAML(outputData);
     // ordered output
@@ -223,7 +223,7 @@ describe("Unittests for Output.js", function() {
     // 00A0 = NO-BREAK SPACE
     assert.equal(result, "-\u00A01");
 
-    outputData = [1,2,3,4,5];
+    outputData = [1, 2, 3, 4, 5];
     result = OutputNested.formatNESTED(outputData);
     // 00A0 = NO-BREAK SPACE
     assert.equal(result,
@@ -233,7 +233,7 @@ describe("Unittests for Output.js", function() {
       "-\u00A04\n" +
       "-\u00A05");
 
-    outputData = [{"a":1},{"a":1},[1,2],7,{"a":""},{"a":null}];
+    outputData = [{"a": 1}, {"a": 1}, [1, 2], 7, {"a": ""}, {"a": null}];
     result = OutputNested.formatNESTED(outputData);
     // 00A0 = NO-BREAK SPACE
     assert.equal(result,
@@ -262,7 +262,7 @@ describe("Unittests for Output.js", function() {
 
     // unordered input
     /* eslint-disable sort-keys */
-    outputData = {"a":11,"c":22,"b":33};
+    outputData = {"a": 11, "c": 22, "b": 33};
     /* eslint-enable sort-keys */
     result = OutputNested.formatNESTED(outputData);
     // ordered output
@@ -276,7 +276,7 @@ describe("Unittests for Output.js", function() {
 
     // a more complex object, unordered input
     /* eslint-disable sort-keys */
-    outputData = {"ip6_interfaces":{"lo":["::1"],"eth0":["fe80::20d:3aff:fe38:576b"]}};
+    outputData = {"ip6_interfaces": {"lo": ["::1"], "eth0": ["fe80::20d:3aff:fe38:576b"]}};
     /* eslint-enable sort-keys */
     result = OutputNested.formatNESTED(outputData);
     // ordered output
@@ -297,42 +297,42 @@ describe("Unittests for Output.js", function() {
     let outputData, result;
 
     // ok, normal documentation case
-    outputData = { "host1": {"keyword": "explanation"} };
+    outputData = {"host1": {"keyword": "explanation"}};
     result = OutputDocumentation.isDocumentationOutput(outputData, "keyword");
     assert.isTrue(result);
 
     // wrong, does not match requested documentation
-    outputData = { "host1": {"keyword": "explanation"} };
+    outputData = {"host1": {"keyword": "explanation"}};
     result = OutputDocumentation.isDocumentationOutput(outputData, "another");
     assert.isFalse(result);
 
     // wrong, no resulting documentation
-    outputData = { "host1": {"keyword": null} };
+    outputData = {"host1": {"keyword": null}};
     result = OutputDocumentation.isDocumentationOutput(outputData, "keyword");
     assert.isFalse(result);
 
     // wrong, value is not text
-    outputData = { "host1": {"keyword": 123} };
+    outputData = {"host1": {"keyword": 123}};
     result = OutputDocumentation.isDocumentationOutput(outputData, "keyword");
     assert.isFalse(result);
 
     // wrong, returned structure is not a dict
-    outputData = { "host1": ["something"] };
+    outputData = {"host1": ["something"]};
     result = OutputDocumentation.isDocumentationOutput(outputData, "keyword");
     assert.isFalse(result);
 
     // wrong, returned structure is not a dict
-    outputData = { "host1": 123 };
+    outputData = {"host1": 123};
     result = OutputDocumentation.isDocumentationOutput(outputData, "keyword");
     assert.isFalse(result);
 
     // wrong, returned structure is not a dict
-    outputData = { "host1": "hello" };
+    outputData = {"host1": "hello"};
     result = OutputDocumentation.isDocumentationOutput(outputData, "keyword");
     assert.isFalse(result);
 
     // first host ignored, second host ok
-    outputData = { "host1": null, "host2": {"keyword": "explanation"} };
+    outputData = {"host1": null, "host2": {"keyword": "explanation"}};
     result = OutputDocumentation.isDocumentationOutput(outputData, "keyword");
     assert.isTrue(result);
 
@@ -379,22 +379,22 @@ describe("Unittests for Output.js", function() {
     assert.deepEqual(out, {"DUMMY": {"topic": "explanation"}});
 
     // removed irrelevant documentation parts
-    out = {"host1": {"topic": "explanation", "zothertopic": "otherexplanation"} };
+    out = {"host1": {"topic": "explanation", "zothertopic": "otherexplanation"}};
     OutputDocumentation.reduceDocumentationOutput(out, "DUMMY", "topic");
     assert.deepEqual(out, {"DUMMY": {"topic": "explanation"}});
 
     // removed hosts with same answer
-    out = {"host1": {"topic": "explanation"}, "host2": {"topic": "explanation"} };
+    out = {"host1": {"topic": "explanation"}, "host2": {"topic": "explanation"}};
     OutputDocumentation.reduceDocumentationOutput(out, "DUMMY", "topic");
     assert.deepEqual(out, {"DUMMY": {"topic": "explanation"}});
 
     // ignore hosts with incorrectly formatted answer
-    out = {"host1": null, "host2": {"topic": "explanation"} };
+    out = {"host1": null, "host2": {"topic": "explanation"}};
     OutputDocumentation.reduceDocumentationOutput(out, "DUMMY", "topic");
     assert.deepEqual(out, {"DUMMY": {"topic": "explanation"}});
 
     // ignore hosts with incorrectly formatted answer
-    out = {"host1": 123, "host2": {"topic": "explanation"} };
+    out = {"host1": 123, "host2": {"topic": "explanation"}};
     OutputDocumentation.reduceDocumentationOutput(out, "DUMMY", "topic");
     assert.deepEqual(out, {"DUMMY": {"topic": "explanation"}});
 

@@ -105,7 +105,7 @@ export class PageRoute extends Route {
     // First we gather all (resonable) prefixes
     // Only use byte-boundaries for networks
     // Must match a subnet of A, B or C network
-    const prefixes = { };
+    const prefixes = {};
     for (const minionId in pAllMinionsGrains) {
       const grains = pAllMinionsGrains[minionId];
       if (!grains.fqdn_ip4) continue;
@@ -352,13 +352,13 @@ export class PageRoute extends Route {
     const hideJobsText = Utils.getStorageItem("session", "hide_jobs", "[]");
     this._hideJobs = JSON.parse(hideJobsText);
     if (!Array.isArray(this._hideJobs)) {
-      this._hideJobs = [ ];
+      this._hideJobs = [];
     }
     // collect the list of hidden minions
     const showJobsText = Utils.getStorageItem("session", "show_jobs", "[]");
     this._showJobs = JSON.parse(showJobsText);
     if (!Array.isArray(this._showJobs)) {
-      this._showJobs = [ ];
+      this._showJobs = [];
     }
 
     // These jobs are likely started by the SaltGUI
@@ -646,7 +646,7 @@ export class PageRoute extends Route {
           trim().
           split(/\r?\n/).
           filter(item => !item.startsWith("#"));
-        const minions = { };
+        const minions = {};
         for (const line of lines) {
           const fields = line.split("\t");
           if (fields.length === 1)

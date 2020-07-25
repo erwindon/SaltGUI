@@ -51,7 +51,7 @@ export class TemplatesRoute extends PageRoute {
     if (templates)
       Utils.setStorageItem("session", "templates", JSON.stringify(templates));
     else
-      templates = { };
+      templates = {};
     const keys = Object.keys(templates).sort();
     for (const key of keys) {
       const template = templates[key];

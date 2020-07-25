@@ -26,7 +26,7 @@ export class OutputNested {
       }
     } else if (typeof pValue === "object" && Array.isArray(pValue)) {
       for (const ind of pValue) {
-        if (typeof ind === "object" /* including array */ ) {
+        if (typeof ind === "object" /* including array */) {
           pOutArray.push(OutputNested._ustring(pIndent, "|_"));
           let prefix;
           if (!Array.isArray(ind))

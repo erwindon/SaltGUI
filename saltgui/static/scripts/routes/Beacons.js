@@ -57,7 +57,7 @@ export class BeaconsRoute extends PageRoute {
     // where each object has one key
     // re-create as a normal object
 
-    const ret = { "beacons": {}, "enabled": true };
+    const ret = {"beacons": {}, "enabled": true};
 
     for (const k in pData) {
       // correct for empty list that returns this dummy value
@@ -74,7 +74,7 @@ export class BeaconsRoute extends PageRoute {
       // make one object from the settings
       // eliminates one layer in the datamodel
       // and looks much better
-      const newData = { };
+      const newData = {};
       for (const elem of pData[k])
         for (const p in elem)
           newData[p] = elem[p];

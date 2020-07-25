@@ -257,10 +257,10 @@ export class CommandBox {
     }
 
     // collection for unnamed parameters
-    const argsArray = [ ];
+    const argsArray = [];
 
     // collection for named parameters
-    const argsObject = { };
+    const argsObject = {};
 
     const ret = ParseCommandLine.parseCommandLine(pToRun, argsArray, argsObject);
     if (ret !== null) {
@@ -301,7 +301,7 @@ export class CommandBox {
       }
     }
 
-    let params = { };
+    let params = {};
     if (functionToRun.startsWith("runners.")) {
       params = argsObject;
       params.client = "runner";

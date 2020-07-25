@@ -73,7 +73,7 @@ export class API {
     const params = {
       client: "local",
       fun: "beacons.list",
-      kwarg: { "return_yaml": false }
+      kwarg: {"return_yaml": false}
     };
     if (pMinionId) {
       params["tgt_type"] = "list";
@@ -134,7 +134,7 @@ export class API {
     const params = {
       client: "local",
       fun: "schedule.list",
-      kwarg: { "return_yaml": false }
+      kwarg: {"return_yaml": false}
     };
     if (pMinionId) {
       params["tgt_type"] = "list";

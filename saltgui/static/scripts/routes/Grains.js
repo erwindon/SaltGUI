@@ -16,7 +16,7 @@ export class GrainsRoute extends PageRoute {
     const previewGrainsText = Utils.getStorageItem("session", "preview_grains", "[]");
     this._previewGrains = JSON.parse(previewGrainsText);
     if (!Array.isArray(this._previewGrains)) {
-      this._previewGrains = [ ];
+      this._previewGrains = [];
     }
     // add the preview columns
     const tr = document.getElementById("grains-table-thead-tr");
