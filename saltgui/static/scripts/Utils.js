@@ -151,12 +151,12 @@ export class Utils {
     if (typeof pSearchText === "string") {
       if (!pCaseSensitiveFlag) s = s.toUpperCase();
       return s.includes(pSearchText) ? 1 : 0;
-    } else {
-      // then it is a RegExp
-      const regs = pSearchText.exec(s);
-      if (!regs) return 0;
-      return regs[0].length > 0 ? 1 : 2;
     }
+
+    // then it is a RegExp
+    const regs = pSearchText.exec(s);
+    if (!regs) return 0;
+    return regs[0].length > 0 ? 1 : 2;
   }
 
   static makeTableSearchable(pStartElement, pButtonId, pTableId, pFieldList = null) {
