@@ -1,22 +1,22 @@
-import {API} from './Api.js';
-import {BeaconsMinionRoute} from './routes/BeaconsMinion.js';
-import {BeaconsRoute} from './routes/Beacons.js';
-import {CommandBox} from './CommandBox.js';
-import {EventsRoute} from './routes/Events.js';
-import {GrainsMinionRoute} from './routes/GrainsMinion.js';
-import {GrainsRoute} from './routes/Grains.js';
-import {JobRoute} from './routes/Job.js';
-import {JobsRoute} from './routes/Jobs.js';
-import {KeysRoute} from './routes/Keys.js';
-import {LoginRoute} from './routes/Login.js';
-import {MinionsRoute} from './routes/Minions.js';
-import {OptionsRoute} from './routes/Options.js';
-import {PillarsMinionRoute} from './routes/PillarsMinion.js';
-import {PillarsRoute} from './routes/Pillars.js';
-import {SchedulesMinionRoute} from './routes/SchedulesMinion.js';
-import {SchedulesRoute} from './routes/Schedules.js';
-import {TemplatesRoute} from './routes/Templates.js';
-import {Utils} from './Utils.js';
+import {API} from "./Api.js";
+import {BeaconsMinionRoute} from "./routes/BeaconsMinion.js";
+import {BeaconsRoute} from "./routes/Beacons.js";
+import {CommandBox} from "./CommandBox.js";
+import {EventsRoute} from "./routes/Events.js";
+import {GrainsMinionRoute} from "./routes/GrainsMinion.js";
+import {GrainsRoute} from "./routes/Grains.js";
+import {JobRoute} from "./routes/Job.js";
+import {JobsRoute} from "./routes/Jobs.js";
+import {KeysRoute} from "./routes/Keys.js";
+import {LoginRoute} from "./routes/Login.js";
+import {MinionsRoute} from "./routes/Minions.js";
+import {OptionsRoute} from "./routes/Options.js";
+import {PillarsMinionRoute} from "./routes/PillarsMinion.js";
+import {PillarsRoute} from "./routes/Pillars.js";
+import {SchedulesMinionRoute} from "./routes/SchedulesMinion.js";
+import {SchedulesRoute} from "./routes/Schedules.js";
+import {TemplatesRoute} from "./routes/Templates.js";
+import {Utils} from "./Utils.js";
 
 export class Router {
 
@@ -83,38 +83,38 @@ export class Router {
       );
 
     document.getElementById("button-grains1")
-      .addEventListener('click', pClickEvent =>
+      .addEventListener("click", pClickEvent =>
         window.location.replace(config.NAV_URL + "/grains")
       );
     document.getElementById("button-grains2")
-      .addEventListener('click', pClickEvent =>
+      .addEventListener("click", pClickEvent =>
         window.location.replace(config.NAV_URL + "/grains")
       );
 
     document.getElementById("button-schedules1")
-      .addEventListener('click', pClickEvent =>
+      .addEventListener("click", pClickEvent =>
         window.location.replace(config.NAV_URL + "/schedules")
       );
     document.getElementById("button-schedules2")
-      .addEventListener('click', pClickEvent =>
+      .addEventListener("click", pClickEvent =>
         window.location.replace(config.NAV_URL + "/schedules")
       );
 
     document.getElementById("button-pillars1")
-      .addEventListener('click', pClickEvent =>
+      .addEventListener("click", pClickEvent =>
         window.location.replace(config.NAV_URL + "/pillars")
       );
     document.getElementById("button-pillars2")
-      .addEventListener('click', pClickEvent =>
+      .addEventListener("click", pClickEvent =>
         window.location.replace(config.NAV_URL + "/pillars")
       );
 
     document.getElementById("button-beacons1")
-      .addEventListener('click', pClickEvent =>
+      .addEventListener("click", pClickEvent =>
         window.location.replace(config.NAV_URL + "/beacons")
       );
     document.getElementById("button-beacons2")
-      .addEventListener('click', pClickEvent =>
+      .addEventListener("click", pClickEvent =>
         window.location.replace(config.NAV_URL + "/beacons")
       );
 
@@ -128,29 +128,29 @@ export class Router {
       );
 
     document.getElementById("button-jobs1")
-      .addEventListener('click', pClickEvent =>
+      .addEventListener("click", pClickEvent =>
         window.location.replace(config.NAV_URL + "/jobs")
       );
     document.getElementById("button-jobs2")
-      .addEventListener('click', pClickEvent =>
+      .addEventListener("click", pClickEvent =>
         window.location.replace(config.NAV_URL + "/jobs")
       );
 
     document.getElementById("button-templates1")
-      .addEventListener('click', pClickEvent =>
+      .addEventListener("click", pClickEvent =>
         window.location.replace(config.NAV_URL + "/templates")
       );
     document.getElementById("button-templates2")
-      .addEventListener('click', pClickEvent =>
+      .addEventListener("click", pClickEvent =>
         window.location.replace(config.NAV_URL + "/templates")
       );
 
     document.getElementById("button-events1")
-      .addEventListener('click', pClickEvent =>
+      .addEventListener("click", pClickEvent =>
         window.location.replace(config.NAV_URL + "/eventsview")
       );
     document.getElementById("button-events2")
-      .addEventListener('click', pClickEvent =>
+      .addEventListener("click", pClickEvent =>
         window.location.replace(config.NAV_URL + "/eventsview")
       );
 

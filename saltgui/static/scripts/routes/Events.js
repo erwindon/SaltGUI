@@ -1,7 +1,7 @@
-import {Output} from '../output/Output.js';
-import {PageRoute} from './Page.js';
-import {Route} from './Route.js';
-import {Utils} from '../Utils.js';
+import {Output} from "../output/Output.js";
+import {PageRoute} from "./Page.js";
+import {Route} from "./Route.js";
+import {Utils} from "../Utils.js";
 
 const MAX_EVENTS_IN_VIEW = 100;
 

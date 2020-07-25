@@ -1,7 +1,7 @@
-import {DropDownMenu} from '../DropDown.js';
-import {PageRoute} from './Page.js';
-import {Route} from './Route.js';
-import {Utils} from '../Utils.js';
+import {DropDownMenu} from "../DropDown.js";
+import {PageRoute} from "./Page.js";
+import {Route} from "./Route.js";
+import {Utils} from "../Utils.js";
 
 export class SchedulesRoute extends PageRoute {
 
@@ -82,7 +82,7 @@ export class SchedulesRoute extends PageRoute {
   }
 
   _handleSchedulesWheelKeyListAll(pWheelKeyListAllData) {
-    const table = document.getElementById('schedules-table');
+    const table = document.getElementById("schedules-table");
 
     const msgDiv = document.getElementById("schedules-msg");
     if (PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;

@@ -1,5 +1,5 @@
-import {DropDownMenu} from './DropDown.js';
-import {Utils} from './Utils.js';
+import {DropDownMenu} from "./DropDown.js";
+import {Utils} from "./Utils.js";
 
 export class TargetType {
 

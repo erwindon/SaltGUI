@@ -1,5 +1,5 @@
-import {Route} from './Route.js';
-import {Utils} from '../Utils.js';
+import {Route} from "./Route.js";
+import {Utils} from "../Utils.js";
 
 export class LoginRoute extends Route {
 

@@ -1,9 +1,9 @@
-import {DropDownMenu} from '../DropDown.js';
-import {Output} from '../output/Output.js';
-import {PageRoute} from './Page.js';
-import {Route} from './Route.js';
-import {TargetType} from '../TargetType.js';
-import {Utils} from '../Utils.js';
+import {DropDownMenu} from "../DropDown.js";
+import {Output} from "../output/Output.js";
+import {PageRoute} from "./Page.js";
+import {Route} from "./Route.js";
+import {TargetType} from "../TargetType.js";
+import {Utils} from "../Utils.js";
 
 export class JobsRoute extends PageRoute {
 

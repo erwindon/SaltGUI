@@ -1,4 +1,4 @@
-import {Utils} from './Utils.js';
+import {Utils} from "./Utils.js";
 
 export class HTTPError extends Error {
   constructor(pStatus, pMessage) {
@@ -273,9 +273,9 @@ export class API {
     const token = Utils.getStorageItem("session", "token");
     if (!token) return;
 
-    const source = new EventSource(config.API_URL + '/events?token=' + token);
+    const source = new EventSource(config.API_URL + "/events?token=" + token);
     source.onopen = function() {
-      // console.info('Listening for events...');
+      // console.info("Listening for events...");
     };
     source.onerror = function(err) {
       // Don't show the error

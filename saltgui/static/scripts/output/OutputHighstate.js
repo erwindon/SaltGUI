@@ -1,7 +1,7 @@
-import {Output} from './Output.js';
-import {OutputNested} from './OutputNested.js';
-import {Route} from '../routes/Route.js';
-import {Utils} from '../Utils.js';
+import {Output} from "./Output.js";
+import {OutputNested} from "./OutputNested.js";
+import {Route} from "../routes/Route.js";
+import {Utils} from "../Utils.js";
 
 export class OutputHighstate {
 

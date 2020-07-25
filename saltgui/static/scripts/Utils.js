@@ -1,5 +1,5 @@
-import {DropDownMenu} from './DropDown.js';
-import {Route} from './routes/Route.js';
+import {DropDownMenu} from "./DropDown.js";
+import {Route} from "./routes/Route.js";
 
 export class Utils {
 
@@ -354,7 +354,7 @@ export class Utils {
       pattern = "";
       for (const chr of pSearchText) {
         // prevent accidental construction of character classes
-        if ((chr >= 'A' && chr <= 'Z') || (chr >= 'a' && chr <= 'z') || (chr >= '0' && chr <= '9'))
+        if ((chr >= "A" && chr <= "Z") || (chr >= "a" && chr <= "z") || (chr >= "0" && chr <= "9"))
           pattern += chr;
         else
           pattern += "\\" + chr;

@@ -1,9 +1,9 @@
-import {DropDownMenu} from '../DropDown.js';
-import {Output} from '../output/Output.js';
-import {OutputYaml} from '../output/OutputYaml.js';
-import {PageRoute} from './Page.js';
-import {Route} from './Route.js';
-import {Utils} from '../Utils.js';
+import {DropDownMenu} from "../DropDown.js";
+import {Output} from "../output/Output.js";
+import {OutputYaml} from "../output/OutputYaml.js";
+import {PageRoute} from "./Page.js";
+import {Route} from "./Route.js";
+import {Utils} from "../Utils.js";
 
 export class PillarsMinionRoute extends PageRoute {
 
@@ -94,7 +94,7 @@ export class PillarsMinionRoute extends PageRoute {
 
     const keys = Object.keys(pillars).sort();
     for (const k of keys) {
-      const pillar = document.createElement('tr');
+      const pillar = document.createElement("tr");
 
       const nameTd = Route.createTd("pillar-name", k);
       pillar.appendChild(nameTd);

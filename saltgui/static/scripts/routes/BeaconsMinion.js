@@ -1,9 +1,9 @@
-import {BeaconsRoute} from './Beacons.js';
-import {DropDownMenu} from '../DropDown.js';
-import {Output} from '../output/Output.js';
-import {PageRoute} from './Page.js';
-import {Route} from './Route.js';
-import {Utils} from '../Utils.js';
+import {BeaconsRoute} from "./Beacons.js";
+import {DropDownMenu} from "../DropDown.js";
+import {Output} from "../output/Output.js";
+import {PageRoute} from "./Page.js";
+import {Route} from "./Route.js";
+import {Utils} from "../Utils.js";
 
 export class BeaconsMinionRoute extends PageRoute {
 
@@ -89,7 +89,7 @@ export class BeaconsMinionRoute extends PageRoute {
 
     const keys = Object.keys(beacons.beacons).sort();
     for (const k of keys) {
-      const tr = document.createElement('tr');
+      const tr = document.createElement("tr");
 
       const nameTd = Route.createTd("beacon-name", k);
       tr.appendChild(nameTd);

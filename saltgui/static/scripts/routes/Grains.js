@@ -1,8 +1,8 @@
-import {DropDownMenu} from '../DropDown.js';
-import {Output} from '../output/Output.js';
-import {PageRoute} from './Page.js';
-import {Route} from './Route.js';
-import {Utils} from '../Utils.js';
+import {DropDownMenu} from "../DropDown.js";
+import {Output} from "../output/Output.js";
+import {PageRoute} from "./Page.js";
+import {Route} from "./Route.js";
+import {Utils} from "../Utils.js";
 
 export class GrainsRoute extends PageRoute {
 
@@ -74,7 +74,7 @@ export class GrainsRoute extends PageRoute {
   }
 
   _handleGrainsWheelKeyListAll(pWheelKeyListAllData) {
-    const table = document.getElementById('grains-table');
+    const table = document.getElementById("grains-table");
 
     const msgDiv = document.getElementById("grains-msg");
     if (PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;

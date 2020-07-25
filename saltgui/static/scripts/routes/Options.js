@@ -1,6 +1,6 @@
-import {OutputYaml} from '../output/OutputYaml.js';
-import {PageRoute} from './Page.js';
-import {Utils} from '../Utils.js';
+import {OutputYaml} from "../output/OutputYaml.js";
+import {PageRoute} from "./Page.js";
+import {Utils} from "../Utils.js";
 
 export class OptionsRoute extends PageRoute {
 

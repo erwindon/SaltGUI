@@ -1,8 +1,8 @@
-import {DropDownMenu} from '../DropDown.js';
-import {Output} from '../output/Output.js';
-import {PageRoute} from './Page.js';
-import {Route} from './Route.js';
-import {Utils} from '../Utils.js';
+import {DropDownMenu} from "../DropDown.js";
+import {Output} from "../output/Output.js";
+import {PageRoute} from "./Page.js";
+import {Route} from "./Route.js";
+import {Utils} from "../Utils.js";
 
 export class GrainsMinionRoute extends PageRoute {
 
@@ -80,7 +80,7 @@ export class GrainsMinionRoute extends PageRoute {
 
     const grainNames = Object.keys(grains).sort();
     for (const grainName of grainNames) {
-      const grainTr = document.createElement('tr');
+      const grainTr = document.createElement("tr");
 
       const grainNameTd = Route.createTd("grain-name", grainName);
       grainTr.appendChild(grainNameTd);

@@ -1,6 +1,6 @@
-import {Output} from '../output/Output.js';
-import {ParseCommandLine} from '../ParseCommandLine.js';
-import {TargetType} from '../TargetType.js';
+import {Output} from "../output/Output.js";
+import {ParseCommandLine} from "../ParseCommandLine.js";
+import {TargetType} from "../TargetType.js";
 
 export class Route {
 

@@ -1,10 +1,10 @@
-const assert = require('chai').assert;
+const assert = require("chai").assert;
 
-import {ParseCommandLine} from '../../saltgui/static/scripts/ParseCommandLine.js';
+import {ParseCommandLine} from "../../saltgui/static/scripts/ParseCommandLine.js";
 
-describe('Unittests for ParseCommandLine.js', function() {
+describe("Unittests for ParseCommandLine.js", function() {
 
-  it('test parseCommandLine', done => {
+  it("test parseCommandLine", done => {
     let args = [];
     let params = {};
     let result;

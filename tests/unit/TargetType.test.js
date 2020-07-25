@@ -1,10 +1,10 @@
-const assert = require('chai').assert;
+const assert = require("chai").assert;
 
-import {TargetType} from '../../saltgui/static/scripts/TargetType.js';
+import {TargetType} from "../../saltgui/static/scripts/TargetType.js";
 
-describe('Unittests for TargetType.js', function() {
+describe("Unittests for TargetType.js", function() {
   
-  it('test makeTargetText', done => {
+  it("test makeTargetText", done => {
 
     let result;
 

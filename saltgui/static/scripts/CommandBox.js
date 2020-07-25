@@ -1,10 +1,10 @@
-import {Documentation} from './Documentation.js';
-import {DropDownMenu} from './DropDown.js';
-import {Output} from './output/Output.js';
-import {ParseCommandLine} from './ParseCommandLine.js';
-import {RunType} from './RunType.js';
-import {TargetType} from './TargetType.js';
-import {Utils} from './Utils.js';
+import {Documentation} from "./Documentation.js";
+import {DropDownMenu} from "./DropDown.js";
+import {Output} from "./output/Output.js";
+import {ParseCommandLine} from "./ParseCommandLine.js";
+import {RunType} from "./RunType.js";
+import {TargetType} from "./TargetType.js";
+import {Utils} from "./Utils.js";
 
 export class CommandBox {
 

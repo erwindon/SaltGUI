@@ -1,9 +1,9 @@
-import {DropDownMenu} from '../DropDown.js';
-import {Output} from '../output/Output.js';
-import {PageRoute} from './Page.js';
-import {Route} from './Route.js';
-import {SchedulesRoute} from './Schedules.js';
-import {Utils} from '../Utils.js';
+import {DropDownMenu} from "../DropDown.js";
+import {Output} from "../output/Output.js";
+import {PageRoute} from "./Page.js";
+import {Route} from "./Route.js";
+import {SchedulesRoute} from "./Schedules.js";
+import {Utils} from "../Utils.js";
 
 export class SchedulesMinionRoute extends PageRoute {
 
@@ -101,7 +101,7 @@ export class SchedulesMinionRoute extends PageRoute {
       if (schedule.maxrunning === 1)
         delete schedule.maxrunning;
 
-      const tr = document.createElement('tr');
+      const tr = document.createElement("tr");
 
       const nameTd = Route.createTd("schedule-name", k);
       tr.appendChild(nameTd);

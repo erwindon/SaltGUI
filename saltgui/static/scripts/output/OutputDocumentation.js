@@ -1,4 +1,4 @@
-import {Output} from './Output.js';
+import {Output} from "./Output.js";
 
 export class OutputDocumentation {
 

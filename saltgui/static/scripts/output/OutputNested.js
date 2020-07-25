@@ -3,7 +3,7 @@ export class OutputNested {
   // heavily inspired by the implementation for NESTED output
   // as originally implemented in salt/output/nested.py from Salt
 
-  static _ustring(pIndent, pTxt, pPrefix = '', pSuffix = '') {
+  static _ustring(pIndent, pTxt, pPrefix = "", pSuffix = "") {
     return " ".repeat(pIndent) + pPrefix + pTxt + pSuffix;
   }
 
@@ -27,30 +27,30 @@ export class OutputNested {
     } else if (typeof pValue === "object" && Array.isArray(pValue)) {
       for (const ind of pValue) {
         if (typeof ind === "object" /* including array */ ) {
-          pOutArray.push(OutputNested._ustring(pIndent, '|_'));
+          pOutArray.push(OutputNested._ustring(pIndent, "|_"));
           let prefix;
           if (!Array.isArray(ind))
-            prefix = '';
+            prefix = "";
           else
             // 00A0 = NO-BREAK SPACE
-            prefix = '-\u00A0';
+            prefix = "-\u00A0";
           OutputNested.display(ind, pIndent + 2, prefix, pOutArray);
         } else {
           // 00A0 = NO-BREAK SPACE
-          OutputNested.display(ind, pIndent, '-\u00A0', pOutArray);
+          OutputNested.display(ind, pIndent, "-\u00A0", pOutArray);
         }
       }
     } else if (typeof pValue === "object") {
-      if (pIndent) pOutArray.push(OutputNested._ustring(pIndent, '----------'));
+      if (pIndent) pOutArray.push(OutputNested._ustring(pIndent, "----------"));
       for (const key of Object.keys(pValue).sort()) {
         const val = pValue[key];
-        pOutArray.push(OutputNested._ustring(pIndent, key, pPrefix, ':'));
+        pOutArray.push(OutputNested._ustring(pIndent, key, pPrefix, ":"));
         if (val === null) {
           // VOID
         } else if (val === "") {
           // VOID
         } else {
-          OutputNested.display(val, pIndent + 4, '', pOutArray);
+          OutputNested.display(val, pIndent + 4, "", pOutArray);
         }
       }
     }
@@ -58,8 +58,8 @@ export class OutputNested {
   }
 
   static formatNESTED(pValue, pIndentLevel = 0) {
-    const lines = OutputNested.display(pValue, pIndentLevel, '', []);
-    return lines.join('\n');
+    const lines = OutputNested.display(pValue, pIndentLevel, "", []);
+    return lines.join("\n");
   }
 
 }
