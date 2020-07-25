@@ -49,7 +49,7 @@ export class PillarsMinionRoute extends PageRoute {
       });
     }, pRunnerJobsListJobsMsg => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
-    }); 
+    });
   }
 
   _handleLocalPillarItems(pLocalPillarItemsData, pMinionId) {

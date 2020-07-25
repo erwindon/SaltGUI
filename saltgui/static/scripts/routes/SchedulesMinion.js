@@ -50,7 +50,7 @@ export class SchedulesMinionRoute extends PageRoute {
       });
     }, pRunnerJobsListJobsMsg => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
-    }); 
+    });
   }
 
   _handleLocalScheduleList(pLocalScheduleList, pMinionId) {

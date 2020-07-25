@@ -48,7 +48,7 @@ export class GrainsMinionRoute extends PageRoute {
       });
     }, pRunnerJobsListJobsMsg => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
-    }); 
+    });
   }
 
   _handleLocalGrainsItems(pLocalGrainsItemsData, pMinionId) {

@@ -53,7 +53,7 @@ export class KeysRoute extends PageRoute {
       });
     }, pRunnerJobsListJobsMsg => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
-    }); 
+    });
   }
 
   _handleWheelKeyFinger(pWheelKeyFingerData) {
@@ -137,7 +137,7 @@ export class KeysRoute extends PageRoute {
     const tbody = document.getElementById("keys-table-body");
     for (const tr of tbody.children) {
       const statusField = tr.querySelector("td.status");
-      const statusText = statusField.innerText;  
+      const statusText = statusField.innerText;
       if (cnt[statusText] === undefined) cnt[statusText] = 0;
       cnt[statusText]++;
     }

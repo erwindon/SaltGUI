@@ -85,7 +85,7 @@ describe("Unittests for Output.js", function() {
     /* eslint-enable sort-keys */
     result = OutputJson.formatJSON(outputData);
     // ordered output
-    assert.equal(result, 
+    assert.equal(result,
       // "{\n" +
       // "    \"ip6_interfaces\": {\n" +
       // "        \"eth0\": [\n" +
@@ -179,7 +179,7 @@ describe("Unittests for Output.js", function() {
     result = OutputYaml.formatYAML(outputData);
     // ordered output
     // 00A0 = NO-BREAK SPACE
-    assert.equal(result, 
+    assert.equal(result,
       "ip6_interfaces:\n" +
       "  eth0:\n" +
       "  -\u00A0fe80::20d:3aff:fe38:576b\n" +
@@ -281,7 +281,7 @@ describe("Unittests for Output.js", function() {
     result = OutputNested.formatNESTED(outputData);
     // ordered output
     // 00A0 = NO-BREAK SPACE
-    assert.equal(result, 
+    assert.equal(result,
       "ip6_interfaces:\n" +
       "    ----------\n" +
       "    eth0:\n" +

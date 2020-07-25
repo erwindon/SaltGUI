@@ -70,7 +70,7 @@ export class GrainsRoute extends PageRoute {
       });
     }, pRunnerJobsListJobsMsg => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
-    }); 
+    });
   }
 
   _handleGrainsWheelKeyListAll(pWheelKeyListAllData) {

@@ -204,7 +204,7 @@ export class Output {
         nrChanges = Object.keys(task.changes).length;
         txt += Utils.txtZeroOneMany(nrChanges, "", "\n" + nrChanges + " change", "\n" + nrChanges + " changes");
       }
-  
+
       if (task.result === null) {
         span.classList.add("task-skipped");
       } else if (!task.result) {
@@ -260,7 +260,7 @@ export class Output {
 
         // show where the information is
         taskDiv.classList.add("highlight-task");
-        setTimeout(_ => { 
+        setTimeout(_ => {
           taskDiv.classList.remove("highlight-task");
           if (!taskDiv.classList.length) taskDiv.removeAttribute("class");
         }, 1000);

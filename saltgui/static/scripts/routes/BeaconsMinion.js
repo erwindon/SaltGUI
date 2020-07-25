@@ -47,7 +47,7 @@ export class BeaconsMinionRoute extends PageRoute {
       });
     }, pRunnerJobsListJobsMsg => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
-    }); 
+    });
   }
 
   _handleLocalBeaconsList(pLocalBeaconsListData, pMinionId) {

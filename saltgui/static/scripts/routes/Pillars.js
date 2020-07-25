@@ -47,7 +47,7 @@ export class PillarsRoute extends PageRoute {
       });
     }, pRunnerJobsListJobsMsg => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
-    }); 
+    });
   }
 
   _handlePillarsWheelKeyListAll(pWheelKeyListAllData) {
