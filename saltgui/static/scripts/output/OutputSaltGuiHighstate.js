@@ -35,7 +35,7 @@ export class OutputSaltGuiHighstate {
   }
 
   static _addChangesInfo(pTaskDiv, pTask, pIndent) {
-    if(!pTask.hasOwnProperty("changes")) {
+    if(pTask["changes"] === undefined) {
       return 0;
     }
 
@@ -89,7 +89,7 @@ export class OutputSaltGuiHighstate {
       }
 
       // treat old->new first
-      if(change.hasOwnProperty("old") && change.hasOwnProperty("new")) {
+      if(change["old"] !== undefined && change["new"] !== undefined) {
         pTaskDiv.append(document.createElement("br"));
         // place changes on one line
         // don't use arrows here, these are higher than a regular
@@ -104,8 +104,8 @@ export class OutputSaltGuiHighstate {
       for(const taskkey of Object.keys(change).sort()) {
 
         // we already provided this as summary: old->new
-        if(taskkey === "old" && change.hasOwnProperty("new")) continue;
-        if(taskkey === "new" && change.hasOwnProperty("old")) continue;
+        if(taskkey === "old" && change["new"] !== undefined) continue;
+        if(taskkey === "new" && change["old"] !== undefined) continue;
 
         pTaskDiv.append(document.createElement("br"));
         pTaskDiv.append(document.createTextNode(
@@ -188,13 +188,13 @@ export class OutputSaltGuiHighstate {
 
       changes += OutputSaltGuiHighstate._addChangesInfo(taskDiv, task, indent);
 
-      if(task.hasOwnProperty("start_time")) {
+      if(task["start_time"] !== undefined) {
         taskDiv.append(document.createElement("br"));
         taskDiv.append(document.createTextNode(
           indent + "Started at " + Output.dateTimeStr(task.start_time)));
       }
 
-      if(task.hasOwnProperty("duration")) {
+      if(task["duration"] !== undefined) {
         const milliSeconds = Math.round(task.duration);
         totalMilliSeconds += milliSeconds;
         if(milliSeconds >= 10) {

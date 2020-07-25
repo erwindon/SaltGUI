@@ -324,7 +324,7 @@ export class JobsRoute extends PageRoute {
       const result = pData.Result[minionId];
       // use keys that can conveniently be sorted
       const key = (result.success ? "0-" : "1-") + result.retcode;
-      if(!summary.hasOwnProperty(key)) summary[key] = 0;
+      if(summary[key] === undefined) summary[key] = 0;
       summary[key] += 1;
     }
 

@@ -122,7 +122,7 @@ export class Output {
       return false;
     }
     for(const prop of pPropArr) {
-      if(!pObject.hasOwnProperty(prop)) {
+      if(pObject[prop] === undefined) {
         return false;
       }
     }
@@ -340,7 +340,7 @@ export class Output {
         if(!("success" in result)) continue;
         // use keys that can conveniently be sorted
         const key = (result.success ? "0-" : "1-") + result.retcode;
-        if(!summary.hasOwnProperty(key)) summary[key] = 0;
+        if(summary[key] === undefined) summary[key] = 0;
         summary[key] += 1;
       }
 
@@ -432,7 +432,7 @@ export class Output {
         retCode = minionResponse.retcode;
         minionResponse = minionResponse.return;
       }
-      else if(pCommand.startsWith("runner.") && minionResponse && minionResponse.hasOwnProperty("return")) {
+      else if(pCommand.startsWith("runner.") && minionResponse && minionResponse["return"] !== undefined) {
         // TODO: add isSuccess and retCode
         minionResponse = minionResponse.return.return;
       }
@@ -445,10 +445,10 @@ export class Output {
       // TODO: colored based on the retcode
       let minionClass = "host-success";
       if(!isSuccess) minionClass = "host-failure";
-      if(!pResponse.hasOwnProperty(minionId)) minionClass = "host-no-response";
+      if(pResponse[minionId] === undefined) minionClass = "host-no-response";
       let minionLabel = Output.getMinionIdHtml(minionId, minionClass);
 
-      if(/*!fndRepresentation&&*/ !pResponse.hasOwnProperty(minionId)) {
+      if(/*!fndRepresentation&&*/ pResponse[minionId] === undefined) {
         minionOutput = Output._getTextOutput("(no response)");
         minionOutput.classList.add("noresponse");
         fndRepresentation = true;
