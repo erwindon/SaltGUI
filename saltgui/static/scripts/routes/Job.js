@@ -184,7 +184,8 @@ export class JobRoute extends Route {
     if(!info.Minions) return;
 
     let minionList = "";
-    let has1 = false, has2 = false;
+    let has1 = false;
+    let has2 = false;
     for(const m of info.Minions) {
       if(!(m in info.Result)) has1 = true;
       if(m in info.Result && !this._isResultOk(info.Result[m])) has2 = true;
