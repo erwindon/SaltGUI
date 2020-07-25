@@ -267,7 +267,7 @@ export class Output {
 
         // behavior: smooth is ok, the destination is nearby
         // block: since block is below our summary, nearest is equivalent to end
-        taskDiv.scrollIntoView({behavior: "smooth", block: "nearest"});
+        taskDiv.scrollIntoView({"behavior": "smooth", "block": "nearest"});
       });
 
       Utils.addToolTip(span, txt);
@@ -566,7 +566,7 @@ export class Output {
       // or just collapse it and see the next minion
       if (isHighStateOutput) {
         minionOutput.addEventListener("click", pClickEvent =>
-          div.scrollIntoView({behavior: "smooth", block: "start"})
+          div.scrollIntoView({"behavior": "smooth", "block": "start"})
         );
       }
 

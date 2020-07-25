@@ -17,9 +17,9 @@ export class API {
 
   login(pUserName, pPassWord, pEauth = "pam") {
     const params = {
-      eauth: pEauth,
-      password: pPassWord,
-      username: pUserName
+      "eauth": pEauth,
+      "password": pPassWord,
+      "username": pUserName
     };
 
     // store it as the default login method
@@ -71,9 +71,9 @@ export class API {
 
   getLocalBeaconsList(pMinionId) {
     const params = {
-      client: "local",
-      fun: "beacons.list",
-      kwarg: {"return_yaml": false}
+      "client": "local",
+      "fun": "beacons.list",
+      "kwarg": {"return_yaml": false}
     };
     if (pMinionId) {
       params["tgt_type"] = "list";
@@ -87,8 +87,8 @@ export class API {
 
   getLocalGrainsItems(pMinionId) {
     const params = {
-      client: "local",
-      fun: "grains.items"
+      "client": "local",
+      "fun": "grains.items"
     };
     if (pMinionId) {
       params["tgt_type"] = "list";
@@ -102,8 +102,8 @@ export class API {
 
   getLocalPillarItems(pMinionId) {
     const params = {
-      client: "local",
-      fun: "pillar.items"
+      "client": "local",
+      "fun": "pillar.items"
     };
     if (pMinionId) {
       params["tgt_type"] = "list";
@@ -117,8 +117,8 @@ export class API {
 
   getLocalPillarObfuscate(pMinionId) {
     const params = {
-      client: "local",
-      fun: "pillar.obfuscate"
+      "client": "local",
+      "fun": "pillar.obfuscate"
     };
     if (pMinionId) {
       params["tgt_type"] = "list";
@@ -132,9 +132,9 @@ export class API {
 
   getLocalScheduleList(pMinionId) {
     const params = {
-      client: "local",
-      fun: "schedule.list",
-      kwarg: {"return_yaml": false}
+      "client": "local",
+      "fun": "schedule.list",
+      "kwarg": {"return_yaml": false}
     };
     if (pMinionId) {
       params["tgt_type"] = "list";
@@ -148,49 +148,49 @@ export class API {
 
   getRunnerJobsActive() {
     const params = {
-      client: "runner",
-      fun: "jobs.active"
+      "client": "runner",
+      "fun": "jobs.active"
     };
     return this.apiRequest("POST", "/", params);
   }
 
   getRunnerJobsListJob(pJobId) {
     const params = {
-      client: "runner",
-      fun: "jobs.list_job",
-      jid: pJobId
+      "client": "runner",
+      "fun": "jobs.list_job",
+      "jid": pJobId
     };
     return this.apiRequest("POST", "/", params);
   }
 
   getRunnerJobsListJobs() {
     const params = {
-      client: "runner",
-      fun: "jobs.list_jobs"
+      "client": "runner",
+      "fun": "jobs.list_jobs"
     };
     return this.apiRequest("POST", "/", params);
   }
 
   getRunnerManageVersions() {
     const params = {
-      client: "runner",
-      fun: "manage.versions"
+      "client": "runner",
+      "fun": "manage.versions"
     };
     return this.apiRequest("POST", "/", params);
   }
 
   getWheelConfigValues() {
     const params = {
-      client: "wheel",
-      fun: "config.values"
+      "client": "wheel",
+      "fun": "config.values"
     };
     return this.apiRequest("POST", "/", params);
   }
 
   getWheelKeyFinger(pMinionId) {
     const params = {
-      client: "wheel",
-      fun: "key.finger"
+      "client": "wheel",
+      "fun": "key.finger"
     };
     if (pMinionId) {
       params.match = pMinionId;
@@ -202,8 +202,8 @@ export class API {
 
   getWheelKeyListAll() {
     const params = {
-      client: "wheel",
-      fun: "key.list_all"
+      "client": "wheel",
+      "fun": "key.list_all"
     };
     return this.apiRequest("POST", "/", params);
   }
@@ -218,9 +218,9 @@ export class API {
     };
     if (pRoute.endsWith(".txt")) headers["Accept"] = "text/plain";
     const options = {
-      headers: headers,
-      method: pMethod,
-      url: location
+      "headers": headers,
+      "method": pMethod,
+      "url": location
     };
 
     if (pMethod === "POST") options.body = JSON.stringify(pParams);

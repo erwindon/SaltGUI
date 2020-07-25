@@ -12,11 +12,11 @@ describe("Funtional tests", function() {
 
   beforeEach(() => {
     const options = {
-      fullscreen: true,
+      "fullscreen": true,
       // to make the typed input much faster
-      typeInterval: 20,
+      "typeInterval": 20,
       // the wait function has a timeout as well
-      waitTimeout: 60 * 1000
+      "waitTimeout": 60 * 1000
     };
 
     if (process.env.NIGHTMARE_DEBUG === "1") {
