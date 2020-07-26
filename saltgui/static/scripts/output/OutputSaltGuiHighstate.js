@@ -7,7 +7,7 @@ export class OutputSaltGuiHighstate {
   // no separate `isHighStateOutput` here
   // the implementation from OutputHighstate is (re)used
 
-  static _getDurationClauseSaltGui(pMilliSeconds) {
+  static _getDurationClauseSaltGui (pMilliSeconds) {
     if (pMilliSeconds < 1000) {
       return Utils.txtZeroOneMany(pMilliSeconds,
         "{0} milliseconds", "{0} millisecond", "{0} milliseconds");
@@ -15,7 +15,7 @@ export class OutputSaltGuiHighstate {
     return Utils.txtZeroOneMany(pMilliSeconds / 1000, "", "{0} second", "{0} seconds");
   }
 
-  static getHighStateLabel(pMinionId, pMinionHighStateResponse) {
+  static getHighStateLabel (pMinionId, pMinionHighStateResponse) {
     let anyFailures = false;
     let anySkips = false;
     // do not use Object.entries, that is not supported by the test framework
@@ -34,7 +34,7 @@ export class OutputSaltGuiHighstate {
     return Output.getMinionIdHtml(pMinionId, "host-success");
   }
 
-  static _addChangesInfo(pTaskDiv, pTask, pIndent) {
+  static _addChangesInfo (pTaskDiv, pTask, pIndent) {
     if (pTask["changes"] === undefined) {
       return 0;
     }
@@ -116,7 +116,7 @@ export class OutputSaltGuiHighstate {
     return changes;
   }
 
-  static getHighStateOutput(pMinionId, pJobId, pTasks) {
+  static getHighStateOutput (pMinionId, pJobId, pTasks) {
 
     const indent = "    ";
 

@@ -5,7 +5,7 @@ import {Utils} from "../Utils.js";
 
 export class OutputHighstate {
 
-  static isHighStateOutput(pCommand, pResponse) {
+  static isHighStateOutput (pCommand, pResponse) {
 
     if (!Output.isOutputFormatAllowed("highstate")) return false;
 
@@ -33,17 +33,17 @@ export class OutputHighstate {
     return true;
   }
 
-  static _getDurationClauseMillis(pMilliSeconds) {
+  static _getDurationClauseMillis (pMilliSeconds) {
     const ms = Math.round(pMilliSeconds * 1000) / 1000;
     return `${ms} ms`;
   }
 
-  static _getDurationClauseSecs(pMilliSeconds) {
+  static _getDurationClauseSecs (pMilliSeconds) {
     const s = Math.round(pMilliSeconds) / 1000;
     return `${s} s`;
   }
 
-  static getHighStateLabel(pMinionId, pMinionResponse) {
+  static getHighStateLabel (pMinionId, pMinionResponse) {
     let anyFailures = false;
     let anySkips = false;
     // do not use Object.entries, that is not supported by the test framework
@@ -62,7 +62,7 @@ export class OutputHighstate {
     return Output.getMinionIdHtml(pMinionId, "host-success");
   }
 
-  static getHighStateOutput(pMinionId, pTasks) {
+  static getHighStateOutput (pMinionId, pTasks) {
 
     const div = Route.createDiv("", "");
 

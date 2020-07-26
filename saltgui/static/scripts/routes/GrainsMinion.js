@@ -6,7 +6,7 @@ import {Utils} from "../Utils.js";
 
 export class GrainsMinionRoute extends PageRoute {
 
-  constructor(pRouter) {
+  constructor (pRouter) {
     super("grains-minion", "Grains", "page-grains-minion", "button-grains", pRouter);
 
     this._handleLocalGrainsItems = this._handleLocalGrainsItems.bind(this);
@@ -21,7 +21,7 @@ export class GrainsMinionRoute extends PageRoute {
     Utils.makeTableSearchable(this.getPageElement(), "grains-minion-search-button-jobs", "grains-minion-jobs-table");
   }
 
-  onShow() {
+  onShow () {
     const myThis = this;
 
     const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
@@ -51,7 +51,7 @@ export class GrainsMinionRoute extends PageRoute {
     });
   }
 
-  _handleLocalGrainsItems(pLocalGrainsItemsData, pMinionId) {
+  _handleLocalGrainsItems (pLocalGrainsItemsData, pMinionId) {
     const panel = document.getElementById("grains-minion-panel");
     const menu = new DropDownMenu(panel);
     this._addMenuItemGrainsSetValAdd(menu, pMinionId);
@@ -109,27 +109,27 @@ export class GrainsMinionRoute extends PageRoute {
     msgDiv.innerText = txt;
   }
 
-  _addMenuItemGrainsSetValAdd(pMenu, pMinionId) {
+  _addMenuItemGrainsSetValAdd (pMenu, pMinionId) {
     pMenu.addMenuItem("Add&nbsp;grain...", (pClickEvent) => {
       // use placeholders for name and value
       this.runCommand(pClickEvent, pMinionId, "grains.setval <name> <value>");
     });
   }
 
-  _addMenuItemSaltUtilRefreshGrains(pMenu, pMinionId) {
+  _addMenuItemSaltUtilRefreshGrains (pMenu, pMinionId) {
     pMenu.addMenuItem("Refresh&nbsp;grains...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "saltutil.refresh_grains");
     });
   }
 
-  _addMenuItemGrainsSetValUpdate(pMenu, pMinionId, key, grains) {
+  _addMenuItemGrainsSetValUpdate (pMenu, pMinionId, key, grains) {
     pMenu.addMenuItem("Edit&nbsp;grain...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId,
         "grains.setval \"" + key + "\" " + JSON.stringify(grains[key]));
     });
   }
 
-  _addMenuItemGrainsAppendWhenNeeded(pMenu, pMinionId, key, pGrainValue) {
+  _addMenuItemGrainsAppendWhenNeeded (pMenu, pMinionId, key, pGrainValue) {
     if (!pGrainValue.startsWith("[")) {
       return;
     }
@@ -138,13 +138,13 @@ export class GrainsMinionRoute extends PageRoute {
     });
   }
 
-  _addMenuItemGrainsDelKey(pMenu, pMinionId, key) {
+  _addMenuItemGrainsDelKey (pMenu, pMinionId, key) {
     pMenu.addMenuItem("Delete&nbsp;key...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "grains.delkey \"" + key + "\"");
     });
   }
 
-  _addMenuItemGrainsDelVal(pMenu, pMinionId, key) {
+  _addMenuItemGrainsDelVal (pMenu, pMinionId, key) {
     pMenu.addMenuItem("Delete&nbsp;value...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "grains.delval \"" + key + "\"");
     });

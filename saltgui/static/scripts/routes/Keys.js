@@ -5,7 +5,7 @@ import {Utils} from "../Utils.js";
 
 export class KeysRoute extends PageRoute {
 
-  constructor(pRouter) {
+  constructor (pRouter) {
     super("keys", "Keys", "page-keys", "button-keys", pRouter);
 
     this.fingerprintPattern = /^[0-9a-f:]+$/i;
@@ -19,7 +19,7 @@ export class KeysRoute extends PageRoute {
     Utils.makeTableSearchable(this.getPageElement(), "keys-search-button-jobs", "keys-jobs-table");
   }
 
-  onShow() {
+  onShow () {
     const myThis = this;
 
     const wheelKeyListAllPromise = this.router.api.getWheelKeyListAll();
@@ -56,7 +56,7 @@ export class KeysRoute extends PageRoute {
     });
   }
 
-  _handleWheelKeyFinger(pWheelKeyFingerData) {
+  _handleWheelKeyFinger (pWheelKeyFingerData) {
     if (!pWheelKeyFingerData) return;
 
     const allKeys = pWheelKeyFingerData.return[0].data.return;
@@ -86,7 +86,7 @@ export class KeysRoute extends PageRoute {
     }
   }
 
-  _handleKeysWheelKeyListAll(pWheelKeyListAllData) {
+  _handleKeysWheelKeyListAll (pWheelKeyListAllData) {
     if (!pWheelKeyListAllData) return;
 
     const table = document.getElementById("keys-table");
@@ -127,7 +127,7 @@ export class KeysRoute extends PageRoute {
     this._updateTableSummary(table);
   }
 
-  _updateTableSummary(pTable) {
+  _updateTableSummary (pTable) {
     const cnt = {};
     cnt["unaccepted"] = 0;
     cnt["accepted"] = 0;
@@ -159,7 +159,7 @@ export class KeysRoute extends PageRoute {
     msgDiv.innerText = summary;
   }
 
-  _addAcceptedMinion(pContainer, pMinionId, pMinionsDict) {
+  _addAcceptedMinion (pContainer, pMinionId, pMinionsDict) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
     const minionIdTd = Route.createTd("", "");
@@ -185,7 +185,7 @@ export class KeysRoute extends PageRoute {
     this._addDropDownMenu(minionTr, pMinionId);
   }
 
-  _addRejectedMinion(pContainer, pMinionId, pMinionsDict) {
+  _addRejectedMinion (pContainer, pMinionId, pMinionsDict) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
     const minionIdTd = Route.createTd("", "");
@@ -212,7 +212,7 @@ export class KeysRoute extends PageRoute {
     pContainer.tBodies[0].appendChild(minionTr);
   }
 
-  _addDeniedMinion(pContainer, pMinionId, pMinionsDict) {
+  _addDeniedMinion (pContainer, pMinionId, pMinionsDict) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
     const minionIdTd = Route.createTd("", "");
@@ -239,7 +239,7 @@ export class KeysRoute extends PageRoute {
     pContainer.tBodies[0].appendChild(minionTr);
   }
 
-  _addPreMinion(pContainer, pMinionId, pMinionsDict, pInsertAtTop = false) {
+  _addPreMinion (pContainer, pMinionId, pMinionsDict, pInsertAtTop = false) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
     const minionIdTd = Route.createTd("", "");
@@ -275,7 +275,7 @@ export class KeysRoute extends PageRoute {
     }
   }
 
-  _addMissingMinion(pContainer, pMinionId, pMinionsDict) {
+  _addMissingMinion (pContainer, pMinionId, pMinionsDict) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId), "UNKNOWN");
 
     const minionIdTd = Route.createTd("", "");
@@ -296,7 +296,7 @@ export class KeysRoute extends PageRoute {
     this._addDropDownMenu(minionTr, pMinionId);
   }
 
-  _addDropDownMenu(pMinionTr, pMinionId) {
+  _addDropDownMenu (pMinionTr, pMinionId) {
     // final dropdownmenu
     const menu = new DropDownMenu(pMinionTr);
     this._addMenuItemWheelKeyAccept1(menu, pMinionId);
@@ -306,7 +306,7 @@ export class KeysRoute extends PageRoute {
     pMinionTr.saltguidropdownmenu = menu;
   }
 
-  _addMenuItemWheelKeyAccept1(pMenu, pMinionId) {
+  _addMenuItemWheelKeyAccept1 (pMenu, pMinionId) {
     pMenu.addMenuItem((pMenuItem) => {
       const minionTr = pMenu.menuDropdown.parentElement.parentElement;
       const status = minionTr.querySelector(".status").innerText;
@@ -325,7 +325,7 @@ export class KeysRoute extends PageRoute {
     });
   }
 
-  _addMenuItemWheelKeyAccept2(pMenu, pMinionId) {
+  _addMenuItemWheelKeyAccept2 (pMenu, pMinionId) {
     pMenu.addMenuItem((pMenuItem) => {
       const minionTr = pMenu.menuDropdown.parentElement.parentElement;
       const status = minionTr.querySelector(".status").innerText;
@@ -344,7 +344,7 @@ export class KeysRoute extends PageRoute {
     });
   }
 
-  _addMenuItemWheelKeyReject(pMenu, pMinionId) {
+  _addMenuItemWheelKeyReject (pMenu, pMinionId) {
     pMenu.addMenuItem((pMenuItem) => {
       const minionTr = pMenu.menuDropdown.parentElement.parentElement;
       const status = minionTr.querySelector(".status").innerText;
@@ -363,7 +363,7 @@ export class KeysRoute extends PageRoute {
     });
   }
 
-  _addMenuItemWheelKeyDelete(pMenu, pMinionId) {
+  _addMenuItemWheelKeyDelete (pMenu, pMinionId) {
     pMenu.addMenuItem((pMenuItem) => {
       const minionTr = pMenu.menuDropdown.parentElement.parentElement;
       const status = minionTr.querySelector(".status").innerText;
@@ -376,7 +376,7 @@ export class KeysRoute extends PageRoute {
     });
   }
 
-  handleSaltAuthEvent(pTag, pData) {
+  handleSaltAuthEvent (pTag, pData) {
     const table = document.getElementById("keys-table");
     const tr = table.querySelector("tr#" + Utils.getIdFromMinionId(pData.id));
     const minionsDict = JSON.parse(window.sessionStorage.getItem("minions-txt"));
@@ -452,7 +452,7 @@ export class KeysRoute extends PageRoute {
     this._updateTableSummary(table);
   }
 
-  handleSaltKeyEvent(pTag, pData) {
+  handleSaltKeyEvent (pTag, pData) {
     this.handleSaltAuthEvent(pTag, pData);
   }
 }

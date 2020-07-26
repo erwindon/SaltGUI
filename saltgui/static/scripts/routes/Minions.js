@@ -5,7 +5,7 @@ import {Utils} from "../Utils.js";
 
 export class MinionsRoute extends PageRoute {
 
-  constructor(pRouter) {
+  constructor (pRouter) {
     super("", "Minions", "page-minions", "button-minions", pRouter);
 
     this._handleMinionsWheelKeyListAll = this._handleMinionsWheelKeyListAll.bind(this);
@@ -16,7 +16,7 @@ export class MinionsRoute extends PageRoute {
     Utils.makeTableSearchable(this.getPageElement(), "minions-search-button-jobs", "minions-jobs-table");
   }
 
-  onShow() {
+  onShow () {
     const myThis = this;
 
     const wheelKeyListAllPromise = this.router.api.getWheelKeyListAll();
@@ -62,7 +62,7 @@ export class MinionsRoute extends PageRoute {
     });
   }
 
-  _handleMinionsWheelKeyListAll(pWheelKeyListAll) {
+  _handleMinionsWheelKeyListAll (pWheelKeyListAll) {
     const table = document.getElementById("minions-table");
 
     const msgDiv = document.getElementById("minions-msg");
@@ -90,7 +90,7 @@ export class MinionsRoute extends PageRoute {
     msgDiv.innerText = txt;
   }
 
-  updateOfflineMinion(pContainer, pMinionId, pMinionsDict) {
+  updateOfflineMinion (pContainer, pMinionId, pMinionsDict) {
     super.updateOfflineMinion(pContainer, pMinionId, pMinionsDict);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
@@ -101,7 +101,7 @@ export class MinionsRoute extends PageRoute {
     minionTr.appendChild(Route.createTd("run-command-button", ""));
   }
 
-  updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
+  updateMinion (pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
     super.updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
@@ -114,19 +114,19 @@ export class MinionsRoute extends PageRoute {
     );
   }
 
-  _addMenuItemStateApply(pMenu, pMinionId) {
+  _addMenuItemStateApply (pMenu, pMinionId) {
     pMenu.addMenuItem("Apply&nbsp;state...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "state.apply");
     });
   }
 
-  _addMenuItemStateApplyTest(pMenu, pMinionId) {
+  _addMenuItemStateApplyTest (pMenu, pMinionId) {
     pMenu.addMenuItem("Test&nbsp;state...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "state.apply test=True");
     });
   }
 
-  _isCveAffected(version) {
+  _isCveAffected (version) {
     // see https://community.saltstack.com/blog/critical-vulnerabilities-update-cve-2020-11651-and-cve-2020-11652/
     // and https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-11651
     // and https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-11652
@@ -158,7 +158,7 @@ export class MinionsRoute extends PageRoute {
     return "unknown";
   }
 
-  _handleRunnerManageVersions(pRunnerManageVersionsData) {
+  _handleRunnerManageVersions (pRunnerManageVersionsData) {
 
     // this is additional data
     const msgDiv = document.getElementById("minions-msg");

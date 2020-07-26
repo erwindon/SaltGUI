@@ -3,7 +3,7 @@ import {Utils} from "../Utils.js";
 
 export class LoginRoute extends Route {
 
-  constructor(pRouter) {
+  constructor (pRouter) {
     super("login", "Login", "page-login", "", pRouter);
 
     this.loginPending = false;
@@ -15,12 +15,12 @@ export class LoginRoute extends Route {
     this._registerLoginRouteEventListeners();
   }
 
-  _registerLoginRouteEventListeners() {
+  _registerLoginRouteEventListeners () {
     const loginForm = document.getElementById("login-form");
     loginForm.addEventListener("submit", this._onLogin);
   }
 
-  _showNoticeText(pBackgroundColour, pText, pInfoClass) {
+  _showNoticeText (pBackgroundColour, pText, pInfoClass) {
     // create a new child every time to restart the animation
     const noticeDiv = Route.createDiv("", pText);
     noticeDiv.id = "notice";
@@ -30,7 +30,7 @@ export class LoginRoute extends Route {
     noticeWrapperDiv.replaceChild(noticeDiv, noticeWrapperDiv.firstChild);
   }
 
-  onShow() {
+  onShow () {
     const eauthSelector = document.getElementById("eauth");
     eauthSelector.value = Utils.getStorageItem("local", "eauth", "pam");
 
@@ -57,7 +57,7 @@ export class LoginRoute extends Route {
     }
   }
 
-  _onLogin(pSubmitEvent) {
+  _onLogin (pSubmitEvent) {
     pSubmitEvent.preventDefault();
     if (this.loginPending) return; // Don't continue if waiting on a request
 
@@ -78,7 +78,7 @@ export class LoginRoute extends Route {
       .then(this._onLoginSuccess, this._onLoginFailure);
   }
 
-  _onLoginSuccess() {
+  _onLoginSuccess () {
     this._toggleForm(true);
 
     const userNameField = document.getElementById("username");
@@ -105,7 +105,7 @@ export class LoginRoute extends Route {
     setTimeout(_ => this.router.goTo("/"), 1000);
   }
 
-  _handleLoginWheelConfigValues(pWheelConfigValuesData) {
+  _handleLoginWheelConfigValues (pWheelConfigValuesData) {
     // store for later use
 
     const wheelConfigValuesData = pWheelConfigValuesData.return[0].data.return;
@@ -141,7 +141,7 @@ export class LoginRoute extends Route {
     Utils.setStorageItem("session", "tooltip_mode", toolTipMode);
   }
 
-  _onLoginFailure(error) {
+  _onLoginFailure (error) {
     this._toggleForm(true);
 
     if (typeof error === "string") {
@@ -160,7 +160,7 @@ export class LoginRoute extends Route {
     }
   }
 
-  _toggleForm(pAllowSubmit) {
+  _toggleForm (pAllowSubmit) {
     this.loginPending = !pAllowSubmit;
     const loginButton = document.getElementById("login-submit");
     loginButton.disabled = !pAllowSubmit;

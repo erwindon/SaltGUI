@@ -5,7 +5,7 @@ import {Utils} from "../Utils.js";
 
 export class BeaconsRoute extends PageRoute {
 
-  constructor(pRouter) {
+  constructor (pRouter) {
     super("beacons", "Beacons", "page-beacons", "button-beacons", pRouter);
 
     this._handleBeaconsWheelKeyListAll = this._handleBeaconsWheelKeyListAll.bind(this);
@@ -16,7 +16,7 @@ export class BeaconsRoute extends PageRoute {
     Utils.makeTableSearchable(this.getPageElement(), "beacons-search-button-jobs", "beacons-jobs-table");
   }
 
-  onShow() {
+  onShow () {
     const myThis = this;
 
     const wheelKeyListAllPromise = this.router.api.getWheelKeyListAll();
@@ -50,7 +50,7 @@ export class BeaconsRoute extends PageRoute {
     });
   }
 
-  static fixBeaconsMinion(pData) {
+  static fixBeaconsMinion (pData) {
     if (typeof pData !== "object") return pData;
 
     // the data is an array of objects
@@ -84,7 +84,7 @@ export class BeaconsRoute extends PageRoute {
     return ret;
   }
 
-  _handleBeaconsWheelKeyListAll(pWheelKeyListAllData) {
+  _handleBeaconsWheelKeyListAll (pWheelKeyListAllData) {
     const table = document.getElementById("beacons-table");
 
     const msgDiv = document.getElementById("beacons-msg");
@@ -111,7 +111,7 @@ export class BeaconsRoute extends PageRoute {
     msgDiv.innerText = txt;
   }
 
-  updateOfflineMinion(pContainer, pMinionId, pMinionsDict) {
+  updateOfflineMinion (pContainer, pMinionId, pMinionsDict) {
     super.updateOfflineMinion(pContainer, pMinionId, pMinionsDict);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
@@ -121,7 +121,7 @@ export class BeaconsRoute extends PageRoute {
     minionTr.appendChild(Route.createTd("run-command-button", ""));
   }
 
-  updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
+  updateMinion (pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
 
     pMinionData = BeaconsRoute.fixBeaconsMinion(pMinionData);
 
@@ -152,7 +152,7 @@ export class BeaconsRoute extends PageRoute {
     );
   }
 
-  _addMenuItemShowBeacons(pMenu, pMinionId) {
+  _addMenuItemShowBeacons (pMenu, pMinionId) {
     pMenu.addMenuItem("Show&nbsp;beacons", (pClickEvent) => {
       window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(pMinionId));
     });

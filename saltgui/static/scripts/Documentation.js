@@ -16,7 +16,7 @@ export class Documentation {
       this._manualRunMenuSysDocRun);
   }
 
-  _manualRunMenuSysDocPrepare(pMenuItem) {
+  _manualRunMenuSysDocPrepare (pMenuItem) {
     const targetField = document.getElementById("target");
     let target = targetField.value;
     target = target ? "target" : "all minions";
@@ -54,7 +54,7 @@ export class Documentation {
     }
   }
 
-  _manualRunMenuSysDocRun() {
+  _manualRunMenuSysDocRun () {
     const button = document.getElementById("run-command");
     if (button.disabled) return;
     const output = document.getElementById("popup-output");

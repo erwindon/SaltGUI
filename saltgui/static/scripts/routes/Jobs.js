@@ -7,7 +7,7 @@ import {Utils} from "../Utils.js";
 
 export class JobsRoute extends PageRoute {
 
-  constructor(pRouter) {
+  constructor (pRouter) {
     super("jobs", "Jobs", "page-jobs", "button-jobs", pRouter);
 
     this._getJobDetails = this._getJobDetails.bind(this);
@@ -17,7 +17,7 @@ export class JobsRoute extends PageRoute {
     Utils.makeTableSearchable(this.getPageElement(), "jobs-search-button", "jobs-table");
   }
 
-  onShow() {
+  onShow () {
     const myThis = this;
 
     const patInteger = /^((0)|([-+]?[1-9][0-9]*))$/;
@@ -66,7 +66,7 @@ export class JobsRoute extends PageRoute {
     setInterval(this._updateNextJob, 1000);
   }
 
-  _updateNextJob() {
+  _updateNextJob () {
     const tbody = document.getElementById("jobs-table-tbody");
     // find an item still marked as "(click)"
     for (const tr of tbody.rows) {
@@ -81,7 +81,7 @@ export class JobsRoute extends PageRoute {
     }
   }
 
-  _addMenuItemShowSome(pMenu) {
+  _addMenuItemShowSome (pMenu) {
     const maxJobs = 50;
     let title = "Show&nbsp;first&nbsp;" + maxJobs + "&nbsp;jobs";
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
@@ -92,7 +92,7 @@ export class JobsRoute extends PageRoute {
     });
   }
 
-  _addMenuItemShowEligible(pMenu) {
+  _addMenuItemShowEligible (pMenu) {
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     let title = "Show&nbsp;eligible&nbsp;jobs";
     // 25CF = BLACK CIRCLE
@@ -102,7 +102,7 @@ export class JobsRoute extends PageRoute {
     });
   }
 
-  _addMenuItemShowAll(pMenu) {
+  _addMenuItemShowAll (pMenu) {
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     let title = "Show&nbsp;all&nbsp;jobs";
     // 25CF = BLACK CIRCLE
@@ -112,7 +112,7 @@ export class JobsRoute extends PageRoute {
     });
   }
 
-  addJob(pContainer, job) {
+  addJob (pContainer, job) {
     const tr = document.createElement("tr");
     tr.id = Utils.getIdFromJobId(job.id);
     const jobIdText = job.id;
@@ -183,20 +183,20 @@ export class JobsRoute extends PageRoute {
     );
   }
 
-  _addJobsMenuItemShowDetails(pMenu, job) {
+  _addJobsMenuItemShowDetails (pMenu, job) {
     pMenu.addMenuItem("Show&nbsp;details", (pClickEvent) => {
       window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
     });
   }
 
-  _addMenuItemJobsRerunJob(pMenu, job, argumentsText) {
+  _addMenuItemJobsRerunJob (pMenu, job, argumentsText) {
     // 2011 = NON-BREAKING HYPHEN
     pMenu.addMenuItem("Re&#x2011;run&nbsp;job...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, job["Target-type"], job.Target, job.Function + argumentsText);
     });
   }
 
-  _addJobsMenuItemUpdateStatus(pMenu, pStatusSpan) {
+  _addJobsMenuItemUpdateStatus (pMenu, pStatusSpan) {
     pMenu.addMenuItem("Update&nbsp;status", (pClickEvent) => {
       pStatusSpan.classList.add("no-status");
       pStatusSpan.innerText = "loading...";
@@ -204,7 +204,7 @@ export class JobsRoute extends PageRoute {
     });
   }
 
-  _addMenuItemUpdateDetails(pMenu, pDetailsSpan, job) {
+  _addMenuItemUpdateDetails (pMenu, pDetailsSpan, job) {
     pMenu.addMenuItem("Update&nbsp;details", (pClickEvent) => {
       pDetailsSpan.classList.add("no-status");
       pDetailsSpan.innerText = "loading...";
@@ -212,7 +212,7 @@ export class JobsRoute extends PageRoute {
     });
   }
 
-  handleRunnerJobsActive(pData) {
+  handleRunnerJobsActive (pData) {
 
     if (!pData) return;
 
@@ -271,7 +271,7 @@ export class JobsRoute extends PageRoute {
     }
   }
 
-  _getJobDetails(pJobId) {
+  _getJobDetails (pJobId) {
     const myThis = this;
 
     const runnerJobsListJobPromise = this.router.api.getRunnerJobsListJob(pJobId);
@@ -283,7 +283,7 @@ export class JobsRoute extends PageRoute {
     });
   }
 
-  _handleJobsRunnerJobsListJob(pJobId, pData) {
+  _handleJobsRunnerJobsListJob (pJobId, pData) {
 
     const detailsSpan = this.pageElement.querySelector(".jobs tr#" + Utils.getIdFromJobId(pJobId) + " td.details span");
     if (!detailsSpan) return;

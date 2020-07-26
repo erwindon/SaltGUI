@@ -6,7 +6,7 @@ import {Utils} from "../Utils.js";
 
 export class JobRoute extends Route {
 
-  constructor(pRouter) {
+  constructor (pRouter) {
     super("job", "Job", "page-job", "button-jobs", pRouter);
 
     this._handleJobRunnerJobsListJob = this._handleJobRunnerJobsListJob.bind(this);
@@ -15,7 +15,7 @@ export class JobRoute extends Route {
     Utils.makeTableSearchable(this.getPageElement(), "job-search-button", "job-table");
   }
 
-  onShow() {
+  onShow () {
     const myThis = this;
 
     const id = decodeURIComponent(Utils.getQueryParam("id"));
@@ -35,13 +35,13 @@ export class JobRoute extends Route {
     });
   }
 
-  _isResultOk(result) {
+  _isResultOk (result) {
     if (!result.success) return false;
     if (result.retcode !== 0) return false;
     return true;
   }
 
-  _handleJobRunnerJobsListJob(pRunnerJobsListJobData, pJobId) {
+  _handleJobRunnerJobsListJob (pRunnerJobsListJobData, pJobId) {
     const output = document.getElementById("job-table");
 
     const closeButton = document.getElementById("job-button-close");
@@ -152,14 +152,14 @@ export class JobRoute extends Route {
     }
   }
 
-  _addMenuItemJobRerunJob(pMenu, info, commandText) {
+  _addMenuItemJobRerunJob (pMenu, info, commandText) {
     // 2011 = NON-BREAKING HYPHEN
     pMenu.addMenuItem("Re&#x2011;run&nbsp;job...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, info["Target-type"], info.Target, commandText);
     });
   }
 
-  _addMenuItemRerunJobOnAllMinionsWhenNeeded(pMenu, info, commandText) {
+  _addMenuItemRerunJobOnAllMinionsWhenNeeded (pMenu, info, commandText) {
     if (!info.Minions) return;
 
     let minionList = "";
@@ -180,7 +180,7 @@ export class JobRoute extends Route {
     });
   }
 
-  _addMenuItemRerunJobOnUnsuccessfulMinionsWhenNeeded(pMenu, info, commandText) {
+  _addMenuItemRerunJobOnUnsuccessfulMinionsWhenNeeded (pMenu, info, commandText) {
     if (!info.Minions) return;
 
     let minionList = "";
@@ -208,7 +208,7 @@ export class JobRoute extends Route {
     });
   }
 
-  _addMenuItemRerunJobOnFailedMinionsWhenNeeded(pMenu, info, commandText) {
+  _addMenuItemRerunJobOnFailedMinionsWhenNeeded (pMenu, info, commandText) {
     if (!info.Minions) return;
 
     let minionList = "";
@@ -228,7 +228,7 @@ export class JobRoute extends Route {
     });
   }
 
-  _addMenuItemRerunJobOnNonRespondingMinionsWhenNeeded(pMenu, info, commandText) {
+  _addMenuItemRerunJobOnNonRespondingMinionsWhenNeeded (pMenu, info, commandText) {
     if (!info.Minions) return;
 
     let minionList = "";
@@ -248,25 +248,25 @@ export class JobRoute extends Route {
     });
   }
 
-  _addMenuItemTerminateJob(pMenu, info, pJobId) {
+  _addMenuItemTerminateJob (pMenu, info, pJobId) {
     this.terminateJobMenuItem = pMenu.addMenuItem("Terminate&nbsp;job...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.term_job " + pJobId);
     });
   }
 
-  _addMenuItemKillJob(pMenu, info, pJobId) {
+  _addMenuItemKillJob (pMenu, info, pJobId) {
     this.killJobMenuItem = pMenu.addMenuItem("Kill&nbsp;job...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.kill_job " + pJobId);
     });
   }
 
-  _addMenuItemSignalJob(pMenu, info, pJobId) {
+  _addMenuItemSignalJob (pMenu, info, pJobId) {
     this.signalJobMenuItem = pMenu.addMenuItem("Signal&nbsp;job...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.signal_job " + pJobId + " signal=<signalnumber>");
     });
   }
 
-  handleRunnerJobsActive(id, pData) {
+  handleRunnerJobsActive (id, pData) {
     const summaryJobsActiveSpan = document.getElementById("summary-jobs-active");
     if (!summaryJobsActiveSpan) return;
 
@@ -335,7 +335,7 @@ export class JobRoute extends Route {
     }
   }
 
-  handleSaltJobRetEvent(pTag, pData) {
+  handleSaltJobRetEvent (pTag, pData) {
 
     // ignore the most common events until someone complains
     if (pData.fun === "saltutil.find_job") return;

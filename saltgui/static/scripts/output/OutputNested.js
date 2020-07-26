@@ -3,11 +3,11 @@ export class OutputNested {
   // heavily inspired by the implementation for NESTED output
   // as originally implemented in salt/output/nested.py from Salt
 
-  static _ustring(pIndent, pTxt, pPrefix = "", pSuffix = "") {
+  static _ustring (pIndent, pTxt, pPrefix = "", pSuffix = "") {
     return " ".repeat(pIndent) + pPrefix + pTxt + pSuffix;
   }
 
-  static display(pValue, pIndent, pPrefix, pOutArray) {
+  static display (pValue, pIndent, pPrefix, pOutArray) {
     if (pValue === null) {
       pOutArray.push(OutputNested._ustring(pIndent, "None", pPrefix));
     } else if (pValue === undefined) {
@@ -57,7 +57,7 @@ export class OutputNested {
     return pOutArray;
   }
 
-  static formatNESTED(pValue, pIndentLevel = 0) {
+  static formatNESTED (pValue, pIndentLevel = 0) {
     const lines = OutputNested.display(pValue, pIndentLevel, "", []);
     return lines.join("\n");
   }

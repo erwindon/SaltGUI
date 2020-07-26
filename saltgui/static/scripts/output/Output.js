@@ -31,7 +31,7 @@ import {Utils} from "../Utils.js";
 
 export class Output {
 
-  static isOutputFormatAllowed(pRequestedOutputFormat) {
+  static isOutputFormatAllowed (pRequestedOutputFormat) {
     const supportedOutputFormats = Utils.getStorageItem("session", "output_formats", "doc,saltguihighstate,json");
     return supportedOutputFormats.includes(pRequestedOutputFormat);
   }
@@ -39,7 +39,7 @@ export class Output {
   // Re-organize the output to let it appear as if the output comes
   // from a single node called "RUNNER" or "MASTER".
   // This way all responses are organized by minion
-  static _addVirtualMinion(pResponse, pCommand) {
+  static _addVirtualMinion (pResponse, pCommand) {
 
     if (pCommand.startsWith("runners.")) {
       // Add a new level in the object
@@ -56,19 +56,19 @@ export class Output {
   }
 
   // compose the host/minion-name label that is shown with each response
-  static getMinionIdHtml(pMinionId, pClassName = "") {
+  static getMinionIdHtml (pMinionId, pClassName = "") {
     const span = Route.createSpan("minion-id", pMinionId);
     if (pClassName) span.classList.add(pClassName);
     return span;
   }
 
-  static getPatEmbeddedJid() {
+  static getPatEmbeddedJid () {
     return /[2-9][0-9][0-9][0-9][01][0-9][0-3][0-9][0-2][0-9][0-5][0-9][0-5][0-9][0-9][0-9][0-9][0-9][0-9][0-9]/g;
   }
 
   // the output is only text
   // note: do not return a text-node
-  static _getTextOutput(pMinionResponse) {
+  static _getTextOutput (pMinionResponse) {
     // strip trailing whitespace
     pMinionResponse = pMinionResponse.replace(/[ \r\n]+$/g, "");
 
@@ -88,7 +88,7 @@ export class Output {
 
 
   // format an object in the preferred style
-  static formatObject(pObject) {
+  static formatObject (pObject) {
     if (Output.isOutputFormatAllowed("json")) {
       return OutputJson.formatJSON(pObject);
     }
@@ -109,7 +109,7 @@ export class Output {
   // this is the default output form
   // just format the returned objects
   // note: do not return a text-node
-  static _getNormalOutput(pMinionResponse) {
+  static _getNormalOutput (pMinionResponse) {
     const content = Output.formatObject(pMinionResponse);
     const element = document.createElement(Utils.isMultiLineString(content) ? "div" : "span");
     element.innerText = content;
@@ -117,7 +117,7 @@ export class Output {
   }
 
 
-  static _hasProperties(pObject, pPropArr) {
+  static _hasProperties (pObject, pPropArr) {
     if (!pObject || typeof pObject !== "object") {
       return false;
     }
@@ -130,7 +130,7 @@ export class Output {
   }
 
 
-  static _isAsyncOutput(pResponse) {
+  static _isAsyncOutput (pResponse) {
     const keys = Object.keys(pResponse);
     if (keys.length !== 2) return false;
     keys.sort();
@@ -146,7 +146,7 @@ export class Output {
   // (datetime) 2019, Jan 26 19:05:22.808348
   // current action is (only):
   // - reduce the number of digits for the fractional seconds
-  static dateTimeStr(pDtStr) {
+  static dateTimeStr (pDtStr) {
 
     // no available setting, then return the original
     const dateTimeFractionDigitsText = Utils.getStorageItem("session", "datetime_fraction_digits");
@@ -171,7 +171,7 @@ export class Output {
   }
 
   // add the status summary
-  static _addHighStateSummary(pMinionDiv, pMinionId, pTasks) {
+  static _addHighStateSummary (pMinionDiv, pMinionId, pTasks) {
 
     let nr = 0;
 
@@ -279,7 +279,7 @@ export class Output {
 
   // the orchestrator for the output
   // determines what format should be used and uses that
-  static addResponseOutput(pOutputContainer, pJobId, pMinionData, pResponse, pCommand, pInitialStatus) {
+  static addResponseOutput (pOutputContainer, pJobId, pMinionData, pResponse, pCommand, pInitialStatus) {
 
     // remove old content
     pOutputContainer.innerText = "";

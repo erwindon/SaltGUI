@@ -5,7 +5,7 @@ import {Utils} from "../Utils.js";
 
 export class TemplatesRoute extends PageRoute {
 
-  constructor(pRouter) {
+  constructor (pRouter) {
     super("templates", "Templates", "page-templates", "button-templates", pRouter);
 
     this._handleTemplatesWheelConfigValues = this._handleTemplatesWheelConfigValues.bind(this);
@@ -15,7 +15,7 @@ export class TemplatesRoute extends PageRoute {
     Utils.makeTableSearchable(this.getPageElement(), "templates-search-button-jobs", "templates-jobs-table");
   }
 
-  onShow() {
+  onShow () {
     const myThis = this;
 
     const wheelConfigValuesPromise = this.router.api.getWheelConfigValues();
@@ -40,7 +40,7 @@ export class TemplatesRoute extends PageRoute {
     });
   }
 
-  _handleTemplatesWheelConfigValues(pWheelConfigValuesData) {
+  _handleTemplatesWheelConfigValues (pWheelConfigValuesData) {
     const container = document.getElementById("templates-table");
 
     const msgDiv = document.getElementById("templates-msg");
@@ -63,7 +63,7 @@ export class TemplatesRoute extends PageRoute {
     msgDiv.innerText = txt;
   }
 
-  _addTemplate(pContainer, pTemplateName, template) {
+  _addTemplate (pContainer, pTemplateName, template) {
     const tr = document.createElement("tr");
 
     tr.appendChild(Route.createTd("name", pTemplateName));
@@ -108,7 +108,7 @@ export class TemplatesRoute extends PageRoute {
     );
   }
 
-  _addMenuItemApplyTemplate(pMenu, pTargetType, target, pCommand) {
+  _addMenuItemApplyTemplate (pMenu, pTargetType, target, pCommand) {
     pMenu.addMenuItem("Apply&nbsp;template...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, pTargetType, target, pCommand);
     });

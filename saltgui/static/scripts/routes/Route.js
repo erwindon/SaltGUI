@@ -4,7 +4,7 @@ import {TargetType} from "../TargetType.js";
 
 export class Route {
 
-  constructor(pPath, pPageName, pPageSelector, pMenuItemSelector, pRouter) {
+  constructor (pPath, pPageName, pPageSelector, pMenuItemSelector, pRouter) {
     this.path = new RegExp("^" + config.NAV_URL.replace(/\//, "[/]") + "[/]" + pPath + "$");
     this.name = pPageName;
     this.pageElement = document.getElementById(pPageSelector);
@@ -17,52 +17,52 @@ export class Route {
     this.runCommand = this.runCommand.bind(this);
   }
 
-  __getName() {
+  __getName () {
     return this.name;
   }
 
-  getPath() {
+  getPath () {
     return this.path;
   }
 
-  getPageElement() {
+  getPageElement () {
     return this.pageElement;
   }
 
-  getMenuItemElement1() {
+  getMenuItemElement1 () {
     return this.menuItemElement1;
   }
 
-  getMenuItemElement2() {
+  getMenuItemElement2 () {
     return this.menuItemElement2;
   }
 
-  static createTd(pClassName, pInnerText) {
+  static createTd (pClassName, pInnerText) {
     const td = document.createElement("td");
     if (pClassName) td.className = pClassName;
     if (pInnerText) td.innerText = pInnerText;
     return td;
   }
 
-  static createDiv(pClassName, pInnerText) {
+  static createDiv (pClassName, pInnerText) {
     const div = document.createElement("div");
     if (pClassName) div.className = pClassName;
     if (pInnerText) div.innerText = pInnerText;
     return div;
   }
 
-  static createSpan(pClassName, pInnerText) {
+  static createSpan (pClassName, pInnerText) {
     const span = document.createElement("span");
     if (pClassName) span.className = pClassName;
     if (pInnerText) span.innerText = pInnerText;
     return span;
   }
 
-  runCommand(pClickEvent, pTargetString, pCommandString) {
+  runCommand (pClickEvent, pTargetString, pCommandString) {
     this.runFullCommand(pClickEvent, "", pTargetString, pCommandString);
   }
 
-  runFullCommand(pClickEvent, pTargetType, pTargetString, pCommandString) {
+  runFullCommand (pClickEvent, pTargetType, pTargetString, pCommandString) {
     this.router.commandbox.showManualRun(pClickEvent);
     const target = document.getElementById("target");
     const command = document.getElementById("command");
@@ -106,7 +106,7 @@ export class Route {
     this.router.commandbox.cmdmenu.verifyAll();
   }
 
-  decodeArgumentsText(rawArguments) {
+  decodeArgumentsText (rawArguments) {
 
     if (rawArguments === undefined) {
       // no arguments
@@ -147,7 +147,7 @@ export class Route {
     return ret;
   }
 
-  onShow() {
+  onShow () {
     // VOID
   }
 }

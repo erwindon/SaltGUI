@@ -3,7 +3,7 @@ export class OutputYaml {
   // format an object as YAML
   // returns NULL when it is not a simple object
   // i.e. no multi-line objects, no indentation here
-  static _formatSimpleYAML(pValue) {
+  static _formatSimpleYAML (pValue) {
 
     if (pValue === null) {
       return "null";
@@ -59,7 +59,7 @@ export class OutputYaml {
 
   // format an object as YAML
   // based on an initial indentation and an indentation increment
-  static formatYAML(pValue, pIndentLevel = 0) {
+  static formatYAML (pValue, pIndentLevel = 0) {
 
     // indent each level with this number of spaces
     // note that list items are indented with 2 spaces

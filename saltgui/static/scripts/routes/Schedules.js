@@ -5,7 +5,7 @@ import {Utils} from "../Utils.js";
 
 export class SchedulesRoute extends PageRoute {
 
-  constructor(pRouter) {
+  constructor (pRouter) {
     super("schedules", "Schedules", "page-schedules", "button-schedules", pRouter);
 
     this._handleSchedulesWheelKeyListAll = this._handleSchedulesWheelKeyListAll.bind(this);
@@ -16,7 +16,7 @@ export class SchedulesRoute extends PageRoute {
     Utils.makeTableSearchable(this.getPageElement(), "schedules-search-button-jobs", "schedules-jobs-table");
   }
 
-  onShow() {
+  onShow () {
     const myThis = this;
 
     const wheelKeyListAllPromise = this.router.api.getWheelKeyListAll();
@@ -53,7 +53,7 @@ export class SchedulesRoute extends PageRoute {
   // This one has some historic ballast:
   // Meta-data is returned on the same level as
   // the list of scheduled items
-  static fixSchedulesMinion(pData) {
+  static fixSchedulesMinion (pData) {
     if (typeof pData !== "object") return pData;
 
     const ret = {"enabled": true, "schedules": {}};
@@ -81,7 +81,7 @@ export class SchedulesRoute extends PageRoute {
     return ret;
   }
 
-  _handleSchedulesWheelKeyListAll(pWheelKeyListAllData) {
+  _handleSchedulesWheelKeyListAll (pWheelKeyListAllData) {
     const table = document.getElementById("schedules-table");
 
     const msgDiv = document.getElementById("schedules-msg");
@@ -108,7 +108,7 @@ export class SchedulesRoute extends PageRoute {
     msgDiv.innerText = txt;
   }
 
-  updateOfflineMinion(pContainer, pMinionId, pMinionsDict) {
+  updateOfflineMinion (pContainer, pMinionId, pMinionsDict) {
     super.updateOfflineMinion(pContainer, pMinionId, pMinionsDict);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
@@ -118,7 +118,7 @@ export class SchedulesRoute extends PageRoute {
     minionTr.appendChild(Route.createTd("run-command-button", ""));
   }
 
-  updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
+  updateMinion (pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
 
     pMinionData = SchedulesRoute.fixSchedulesMinion(pMinionData);
 
@@ -159,7 +159,7 @@ export class SchedulesRoute extends PageRoute {
     );
   }
 
-  _addMenuItemShowSchedules(pMenu, pMinionId) {
+  _addMenuItemShowSchedules (pMenu, pMinionId) {
     pMenu.addMenuItem("Show&nbsp;schedules", (pClickEvent) => {
       window.location.assign(config.NAV_URL + "/schedules-minion?minionid=" + encodeURIComponent(pMinionId));
     });

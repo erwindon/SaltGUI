@@ -6,7 +6,7 @@ import {Utils} from "../Utils.js";
 
 export class PageRoute extends Route {
 
-  constructor(pPath, pPageName, pPageSelector, pMenuItemSelector, pRouter) {
+  constructor (pPath, pPageName, pPageSelector, pMenuItemSelector, pRouter) {
     super(pPath, pPageName, pPageSelector, pMenuItemSelector, pRouter);
 
     this.handleRunnerJobsActive = this.handleRunnerJobsActive.bind(this);
@@ -15,7 +15,7 @@ export class PageRoute extends Route {
     this.updateMinions = this.updateMinions.bind(this);
   }
 
-  updateMinions(pTableId, pData) {
+  updateMinions (pTableId, pData) {
     if (!pData) return;
 
     const minions = pData.return[0];
@@ -61,7 +61,7 @@ export class PageRoute extends Route {
     msgDiv.innerText = txt;
   }
 
-  getElement(pContainer, id) {
+  getElement (pContainer, id) {
     let minionTr = pContainer.querySelector("#" + id);
 
     if (minionTr === null) {
@@ -80,7 +80,7 @@ export class PageRoute extends Route {
     return minionTr;
   }
 
-  updateOfflineMinion(pContainer, pMinionId, pMinionsDict) {
+  updateOfflineMinion (pContainer, pMinionId, pMinionsDict) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
     minionTr.appendChild(Route.createTd("minion-id", pMinionId));
@@ -101,7 +101,7 @@ export class PageRoute extends Route {
     minionTr.appendChild(offlineTd);
   }
 
-  _getIpNumberPrefixes(pAllMinionsGrains) {
+  _getIpNumberPrefixes (pAllMinionsGrains) {
     // First we gather all (resonable) prefixes
     // Only use byte-boundaries for networks
     // Must match a subnet of A, B or C network
@@ -171,7 +171,7 @@ export class PageRoute extends Route {
     return prefixes;
   }
 
-  _getBestIpNumber(pMinionData, prefixes) {
+  _getBestIpNumber (pMinionData, prefixes) {
     if (!pMinionData) return null;
     const ipv4 = pMinionData.fqdn_ip4;
     if (!ipv4) return null;
@@ -240,7 +240,7 @@ export class PageRoute extends Route {
     return ipv4[0];
   }
 
-  updateMinion(pContainer, pMinionData, pMinionId, prefixes) {
+  updateMinion (pContainer, pMinionData, pMinionId, prefixes) {
 
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
@@ -304,7 +304,7 @@ export class PageRoute extends Route {
     }
   }
 
-  addMinion(pContainer, pMinionId, freeColumns = 0) {
+  addMinion (pContainer, pMinionId, freeColumns = 0) {
 
     let minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
     if (minionTr !== null) {
@@ -331,7 +331,7 @@ export class PageRoute extends Route {
     pContainer.tBodies[0].appendChild(minionTr);
   }
 
-  _addNone(pContainer) {
+  _addNone (pContainer) {
     const tr = document.createElement("tr");
     const td = Route.createTd("minion-id", "none");
     td.setAttribute("colspan", pContainer.rows[0].cells.length);
@@ -339,7 +339,7 @@ export class PageRoute extends Route {
     pContainer.appendChild(tr);
   }
 
-  handleRunnerJobsListJobs(pData, hasHeader = false, pMaxNumberOfJobs = 7) {
+  handleRunnerJobsListJobs (pData, hasHeader = false, pMaxNumberOfJobs = 7) {
     const jobContainer = this.getPageElement().querySelector(".jobs tbody");
 
     const msgDiv = this.getPageElement().querySelector(".job-list .msg");
@@ -439,7 +439,7 @@ export class PageRoute extends Route {
     msgDiv.innerText = txt;
   }
 
-  handleRunnerJobsActive(pData) {
+  handleRunnerJobsActive (pData) {
 
     if (!pData) return;
 
@@ -494,7 +494,7 @@ export class PageRoute extends Route {
     }
   }
 
-  addJob(pContainer, job) {
+  addJob (pContainer, job) {
     const tr = document.createElement("tr");
 
     const td = Route.createTd("", "");
@@ -542,13 +542,13 @@ export class PageRoute extends Route {
     );
   }
 
-  _addPageMenuItemShowDetails(pMenu, job) {
+  _addPageMenuItemShowDetails (pMenu, job) {
     pMenu.addMenuItem("Show&nbsp;details", (pClickEvent) => {
       window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
     });
   }
 
-  _addPageMenuItemUpdateStatus(pMenu, statusSpan) {
+  _addPageMenuItemUpdateStatus (pMenu, statusSpan) {
     pMenu.addMenuItem("Update&nbsp;status", (pClickEvent) => {
       statusSpan.classList.add("no-status");
       statusSpan.innerText = "loading...";
@@ -556,7 +556,7 @@ export class PageRoute extends Route {
     });
   }
 
-  startRunningJobs() {
+  startRunningJobs () {
     const myThis = this;
 
     this.router.api.getRunnerJobsActive().then((pRunnerJobsActiveData) => {
@@ -566,7 +566,7 @@ export class PageRoute extends Route {
     });
   }
 
-  _jobsToArray(jobs) {
+  _jobsToArray (jobs) {
     const keys = Object.keys(jobs);
     const newArray = [];
 
@@ -579,7 +579,7 @@ export class PageRoute extends Route {
     return newArray;
   }
 
-  _sortJobs(jobs) {
+  _sortJobs (jobs) {
     jobs.sort((a, b) => {
       // The id is already a string value based on the date,
       // let's use it to sort the jobs
@@ -589,7 +589,7 @@ export class PageRoute extends Route {
     });
   }
 
-  _copyAddress(pTarget) {
+  _copyAddress (pTarget) {
     const selection = window.getSelection();
     const range = document.createRange();
 
@@ -602,11 +602,11 @@ export class PageRoute extends Route {
     Utils.addToolTip(pTarget, "Copied!");
   }
 
-  _restoreClickToCopy(pTarget) {
+  _restoreClickToCopy (pTarget) {
     Utils.addToolTip(pTarget, "Click to copy");
   }
 
-  static showErrorRowInstead(pTable, pData, pMsgDiv) {
+  static showErrorRowInstead (pTable, pData, pMsgDiv) {
 
     if (pData === null) {
       // not an error, but also nothing to show
@@ -635,7 +635,7 @@ export class PageRoute extends Route {
     return true;
   }
 
-  loadMinionsTxt() {
+  loadMinionsTxt () {
     const staticMinionsTxtPromise = this.router.api.getStaticMinionsTxt();
 
     staticMinionsTxtPromise.then((pStaticMinionsTxt) => {

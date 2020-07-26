@@ -17,11 +17,11 @@
 
 export class ParseCommandLine {
 
-  static getPatJid() {
+  static getPatJid () {
     return /^[2-9][0-9][0-9][0-9][01][0-9][0-3][0-9][0-2][0-9][0-5][0-9][0-5][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$/;
   }
 
-  static parseCommandLine(pToRun, pArgsArray, pArgsObject) {
+  static parseCommandLine (pToRun, pArgsArray, pArgsObject) {
 
     const patPlaceHolder = /^<[a-z]+>/;
 

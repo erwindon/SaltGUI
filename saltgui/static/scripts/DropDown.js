@@ -4,7 +4,7 @@ export class DropDownMenu {
 
   // Creates an empty dropdown menu
   // The visual clue for the menu is added to the given element
-  constructor(pParentElement) {
+  constructor (pParentElement) {
 
     this._callback = this._callback.bind(this);
     this.verifyAll = this.verifyAll.bind(this);
@@ -41,7 +41,7 @@ export class DropDownMenu {
     pParentElement.appendChild(this.menuDropdown);
   }
 
-  verifyAll() {
+  verifyAll () {
     let visibleCount = 0;
     if (this.menuDropdownContent) {
       for (const chld of this.menuDropdownContent.children) {
@@ -62,7 +62,7 @@ export class DropDownMenu {
   // function is called each time the menu opens
   // This allows dynamic menuitem titles (use menuitem.innerText/innerHTML)
   // or visibility (use menuitem.style.display = "none"/"inline-block")
-  addMenuItem(pTitle, pCallBack, pValue) {
+  addMenuItem (pTitle, pCallBack, pValue) {
     const button = Route.createDiv("run-command-button", "...");
     if (pValue) button._value = pValue;
     if (typeof pTitle === "string")
@@ -77,13 +77,13 @@ export class DropDownMenu {
     return button;
   }
 
-  _callback(pClickEvent, pCallBack, pValue) {
+  _callback (pClickEvent, pCallBack, pValue) {
     this._value = pValue;
     pCallBack(pClickEvent);
     pClickEvent.stopPropagation();
   }
 
-  setTitle(pTitle) {
+  setTitle (pTitle) {
     // Setting the title implies that we are interested
     // in the menu values, rather than their actions.
     // Use a slightly different clue for that.
@@ -91,11 +91,11 @@ export class DropDownMenu {
     this.menuButton.innerHTML = pTitle + "&nbsp;\u25BC";
   }
 
-  __showMenu() {
+  __showMenu () {
     this.menuDropdown.style.display = "inline-block";
   }
 
-  __hideMenu() {
+  __hideMenu () {
     this.menuDropdown.style.display = "none";
   }
 

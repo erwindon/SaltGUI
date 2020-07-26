@@ -5,7 +5,7 @@ export class Utils {
 
   // functions for URL parameters
 
-  static _getQueryParam2(pUrl, pName) {
+  static _getQueryParam2 (pUrl, pName) {
     const questionmarkPos = pUrl.indexOf("?");
     if (questionmarkPos < 0) return undefined;
     const parameters = pUrl.slice(questionmarkPos + 1).split("&");
@@ -18,7 +18,7 @@ export class Utils {
   }
 
   /* istanbul ignore next */
-  static getQueryParam(pName) {
+  static getQueryParam (pName) {
     let w = null;
     try {
       w = window;
@@ -31,7 +31,7 @@ export class Utils {
 
   // functions for storage handling
 
-  static _getStorage(pStorage) {
+  static _getStorage (pStorage) {
     // "window" is not defined during unit testing
     try {
       const w = window;
@@ -44,7 +44,7 @@ export class Utils {
     return null;
   }
 
-  static getStorageItem(pStorage, pKeyName, pDefaultValue = null) {
+  static getStorageItem (pStorage, pKeyName, pDefaultValue = null) {
     const storage = Utils._getStorage(pStorage);
     if (!storage) {
       console.log("getStorageItem", pStorage, pKeyName);
@@ -57,7 +57,7 @@ export class Utils {
     return v;
   }
 
-  static setStorageItem(pStorage, pKeyName, pValue) {
+  static setStorageItem (pStorage, pKeyName, pValue) {
     const storage = Utils._getStorage(pStorage);
     if (!storage) {
       console.log("setStorageItem", pStorage, pKeyName, pValue);
@@ -67,7 +67,7 @@ export class Utils {
     storage.setItem(pKeyName, pValue);
   }
 
-  static clearStorage(pStorage) {
+  static clearStorage (pStorage) {
     const storage = Utils._getStorage(pStorage);
     if (!storage) {
       console.log("clearStorage", pStorage);
@@ -79,7 +79,7 @@ export class Utils {
 
   // other functions
 
-  static addToolTip(pTooltipHost, pTooltipText, pStyle = "bottom-center") {
+  static addToolTip (pTooltipHost, pTooltipText, pStyle = "bottom-center") {
 
     // Users may want to switch this on to improve browser performance
     const toolTipMode = Utils.getStorageItem("session", "tooltip_mode");
@@ -111,7 +111,7 @@ export class Utils {
     pTooltipHost.appendChild(tooltipSpan);
   }
 
-  static makeTableSortable(pStartElement, pIsReverseSort = false, pColumnNr = 0) {
+  static makeTableSortable (pStartElement, pIsReverseSort = false, pColumnNr = 0) {
     const thArr = Array.prototype.slice.call(pStartElement.querySelectorAll("table th"));
     // we do not expect any rows in the table at this moment
     // but sorting is applied to show the sorting indicator
@@ -124,13 +124,13 @@ export class Utils {
     }
   }
 
-  static addErrorToTableCell(pTd, pErrorMessage) {
+  static addErrorToTableCell (pTd, pErrorMessage) {
     const span = Route.createSpan("", "(error)");
     Utils.addToolTip(span, pErrorMessage, "bottom-left");
     pTd.appendChild(span);
   }
 
-  static hasTextContent(pElement, pSearchText, pCaseSensitiveFlag) {
+  static hasTextContent (pElement, pSearchText, pCaseSensitiveFlag) {
 
     // why?
     if (pElement.classList && pElement.classList.contains("run-command-button"))
@@ -159,7 +159,7 @@ export class Utils {
     return regs[0].length > 0 ? 1 : 2;
   }
 
-  static makeTableSearchable(pStartElement, pButtonId, pTableId, pFieldList = null) {
+  static makeTableSearchable (pStartElement, pButtonId, pTableId, pFieldList = null) {
 
     const div = Route.createDiv("search-box", "");
     div.style.display = "none";
@@ -202,7 +202,7 @@ export class Utils {
       Utils.hideShowTableSearchBar(div, table);
   }
 
-  static _updateSearchOption(ev, pTable, pSearchOptionsMenu, pInput) {
+  static _updateSearchOption (ev, pTable, pSearchOptionsMenu, pInput) {
     ev.target._value = !ev.target._value;
 
     let t = ev.target.innerText;
@@ -227,13 +227,13 @@ export class Utils {
     pInput.placeholder = placeholder;
   }
 
-  static addTableHelp(pStartElement, pHelpText, pStyle = "bottom-right") {
+  static addTableHelp (pStartElement, pHelpText, pStyle = "bottom-right") {
     const helpButton = pStartElement.querySelector("#help");
     helpButton.classList.add("search-button");
     Utils.addToolTip(helpButton, pHelpText, pStyle);
   }
 
-  static hideShowTableSearchBar(pSearchBlock, pTable, pAction = "toggle") {
+  static hideShowTableSearchBar (pSearchBlock, pTable, pAction = "toggle") {
     const startElement = pTable.parentElement;
 
     // remove all highlights
@@ -275,7 +275,7 @@ export class Utils {
     input.focus();
   }
 
-  static _updateTableFilter(pTable, pSearchText, pMenuItems) {
+  static _updateTableFilter (pTable, pSearchText, pMenuItems) {
     // remove highlighting before re-comparing
     // as it affects the texts
     const searchInSelector = pTable.tagName === "TABLE" ? "tbody" : "";
@@ -364,7 +364,7 @@ export class Utils {
     hilitor.apply(pattern, caseSensitiveFlag);
   }
 
-  static txtZeroOneMany(pCnt, pZeroText, pOneText, pManyText) {
+  static txtZeroOneMany (pCnt, pZeroText, pOneText, pManyText) {
     let txt = pManyText;
     if (pCnt === 0) txt = pZeroText;
     if (pCnt === 1) txt = pOneText;
@@ -375,7 +375,7 @@ export class Utils {
   // MinionIds cannot directly be used as IDs for HTML elements
   // the id may contain characters that are not allowed in an ID
   // btoa is the base64 encoder
-  static getIdFromMinionId(pMinionId) {
+  static getIdFromMinionId (pMinionId) {
     // prevent eslint: A regular expression literal can be confused with '/='
     const patEqualSigns = /[=]=*/;
     return "m" + btoa(pMinionId).replace(patEqualSigns, "");
@@ -383,17 +383,17 @@ export class Utils {
 
   // JobIds are in the format 20190529175411210984
   // so just adding a prefix is sufficient
-  static getIdFromJobId(pJobId) {
+  static getIdFromJobId (pJobId) {
     return "j" + pJobId;
   }
 
-  static isMultiLineString(pStr) {
+  static isMultiLineString (pStr) {
     if (pStr.includes("\r")) return true;
     if (pStr.includes("\n")) return true;
     return false;
   }
 
-  static createJobStatusSpan(pJobId) {
+  static createJobStatusSpan (pJobId) {
     const span = Route.createSpan("", "");
     // 21BB = CLOCKWISE OPEN CIRCLE ARROW
     span.innerHTML = "&#x21BB;&nbsp;";

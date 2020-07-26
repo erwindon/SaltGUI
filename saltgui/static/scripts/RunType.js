@@ -2,7 +2,7 @@ import {DropDownMenu} from "./DropDown.js";
 
 export class RunType {
 
-  static createMenu() {
+  static createMenu () {
     const runblock = document.getElementById("run-block");
     RunType.menuRunType = new DropDownMenu(runblock);
     // do not show the menu title at first
@@ -12,7 +12,7 @@ export class RunType {
     RunType._updateRunTypeText();
   }
 
-  static _updateRunTypeText() {
+  static _updateRunTypeText () {
     const runType = RunType.getRunType();
 
     switch (runType) {
@@ -37,7 +37,7 @@ export class RunType {
     }
   }
 
-  static setRunTypeDefault() {
+  static setRunTypeDefault () {
     RunType.menuRunType._value = "normal";
     RunType._updateRunTypeText();
     // reset the title to the absolute minimum
@@ -45,7 +45,7 @@ export class RunType {
     RunType.menuRunType.setTitle("");
   }
 
-  static getRunType() {
+  static getRunType () {
     const runType = RunType.menuRunType._value;
     if (runType === undefined || runType === "") return "normal";
     return runType;

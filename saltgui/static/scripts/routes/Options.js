@@ -4,7 +4,7 @@ import {Utils} from "../Utils.js";
 
 export class OptionsRoute extends PageRoute {
 
-  constructor(router) {
+  constructor (router) {
     super("options", "Options", "page-options", "", router);
 
     this._newOutputFormats = this._newOutputFormats.bind(this);
@@ -15,7 +15,7 @@ export class OptionsRoute extends PageRoute {
     Utils.makeTableSearchable(this.getPageElement(), "options-search-button-jobs", "options-jobs-table");
   }
 
-  onShow() {
+  onShow () {
     const myThis = this;
 
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
@@ -175,7 +175,7 @@ export class OptionsRoute extends PageRoute {
     msgSpan.style.display = "none";
   }
 
-  _parseAndFormat(valueStr) {
+  _parseAndFormat (valueStr) {
     if (valueStr === undefined) return "(undefined)";
     if (valueStr === null) return "(undefined)";
     if (valueStr === "undefined") return "(undefined)";
@@ -183,35 +183,35 @@ export class OptionsRoute extends PageRoute {
     return OutputYaml.formatYAML(value);
   }
 
-  _makeTemplatesValue(value) {
+  _makeTemplatesValue (value) {
     return this._parseAndFormat(value);
   }
 
-  _makePublicPillarsValue(value) {
+  _makePublicPillarsValue (value) {
     return this._parseAndFormat(value);
   }
 
-  _makePreviewGrainsValue(value) {
+  _makePreviewGrainsValue (value) {
     return this._parseAndFormat(value);
   }
 
-  _makeHideJobsValue(value) {
+  _makeHideJobsValue (value) {
     return this._parseAndFormat(value);
   }
 
-  _makeShowJobsValue(value) {
+  _makeShowJobsValue (value) {
     return this._parseAndFormat(value);
   }
 
-  _makeNodegroupsValue(value) {
+  _makeNodegroupsValue (value) {
     return this._parseAndFormat(value);
   }
 
-  _makeOutputFormatsValue(value) {
+  _makeOutputFormatsValue (value) {
     return this._parseAndFormat(value);
   }
 
-  _newOutputFormats(evt) {
+  _newOutputFormats (evt) {
     let v = "";
     const of0 = document.getElementById("output-formats-doc-doc");
     if (of0.checked) v += ",doc";
@@ -231,24 +231,24 @@ export class OptionsRoute extends PageRoute {
     Utils.setStorageItem("session", "output_formats", v);
   }
 
-  _makeDatetimeFractionDigitsValue(value) {
+  _makeDatetimeFractionDigitsValue (value) {
     return this._parseAndFormat(value);
   }
 
-  _newDatetimeFractionDigits(evt) {
+  _newDatetimeFractionDigits (evt) {
     Utils.setStorageItem("session", "datetime_fraction_digits", parseInt(evt.target.value, 10));
     const datetimeFractionDigitsTd = document.getElementById("option-datetime-fraction-digits-value");
     datetimeFractionDigitsTd.innerText = evt.target.value;
   }
 
-  _makeTooltipModeValue(value) {
+  _makeTooltipModeValue (value) {
     if (value === undefined) return "(undefined)";
     if (value === null) return "(undefined)";
     if (value === "undefined") return "(undefined)";
     return value;
   }
 
-  _newTooltipMode(evt) {
+  _newTooltipMode (evt) {
     Utils.setStorageItem("session", "tooltip_mode", evt.target.value);
     const tooltipModeTd = document.getElementById("option-tooltip-mode-value");
     tooltipModeTd.innerText = evt.target.value;

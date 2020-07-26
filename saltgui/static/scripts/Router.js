@@ -20,7 +20,7 @@ import {Utils} from "./Utils.js";
 
 export class Router {
 
-  constructor() {
+  constructor () {
     this._logoutTimer = this._logoutTimer.bind(this);
     this._updateSessionTimeoutWarning = this._updateSessionTimeoutWarning.bind(this);
 
@@ -62,7 +62,7 @@ export class Router {
     this.goTo(window.location.pathname + window.location.search, true);
   }
 
-  _registerRouterEventListeners() {
+  _registerRouterEventListeners () {
     document.getElementById("logo")
       .addEventListener("click", (pClickEvent) => {
         if (window.location.pathname === config.NAV_URL + "/login") return;
@@ -173,7 +173,7 @@ export class Router {
     setInterval(this._updateSessionTimeoutWarning, 1000);
   }
 
-  _updateSessionTimeoutWarning() {
+  _updateSessionTimeoutWarning () {
     const warning = document.getElementById("warning");
 
     const loginResponseStr = Utils.getStorageItem("session", "login-response", "{}");
@@ -217,7 +217,7 @@ export class Router {
     }
   }
 
-  _logoutTimer() {
+  _logoutTimer () {
     // are we logged in?
     const token = Utils.getStorageItem("session", "token");
     if (!token) return;
@@ -234,12 +234,12 @@ export class Router {
     });
   }
 
-  _registerRoute(pRoute) {
+  _registerRoute (pRoute) {
     this.routes.push(pRoute);
     if (pRoute.onRegister) pRoute.onRegister();
   }
 
-  goTo(pPath, hasPathPrefix = false) {
+  goTo (pPath, hasPathPrefix = false) {
     if (this.switchingRoute) return;
     if (window.location.pathname === config.NAV_URL + pPath && this.currentRoute) return;
     if (pPath === "/" && Utils.getStorageItem("session", "login-response") === null) {
@@ -262,7 +262,7 @@ export class Router {
     this.goTo("/");
   }
 
-  _showRoute(pRoute) {
+  _showRoute (pRoute) {
     const myThis = this;
 
     pRoute.getPageElement().style.display = "";
@@ -315,7 +315,7 @@ export class Router {
     myThis.switchingRoute = false;
   }
 
-  _hideRoute(pRoute) {
+  _hideRoute (pRoute) {
     const page = pRoute.getPageElement();
     page.classList.remove("current");
     // 500ms matches the timeout in main.css (.route)

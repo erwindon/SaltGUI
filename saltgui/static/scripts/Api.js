@@ -1,7 +1,7 @@
 import {Utils} from "./Utils.js";
 
 export class HTTPError extends Error {
-  constructor(pStatus, pMessage) {
+  constructor (pStatus, pMessage) {
     super();
     this.status = pStatus;
     this.message = pMessage;
@@ -9,13 +9,13 @@ export class HTTPError extends Error {
 }
 
 export class API {
-  constructor() {
+  constructor () {
     this.apiRequest = this.apiRequest.bind(this);
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
   }
 
-  login(pUserName, pPassWord, pEauth = "pam") {
+  login (pUserName, pPassWord, pEauth = "pam") {
     const params = {
       "eauth": pEauth,
       "password": pPassWord,
@@ -41,7 +41,7 @@ export class API {
       });
   }
 
-  _cleanStorage() {
+  _cleanStorage () {
     // clear local storage except key 'eauth'
     const eauth = Utils.getStorageItem("local", "eauth");
     Utils.clearStorage("local");
@@ -51,7 +51,7 @@ export class API {
     Utils.clearStorage("session");
   }
 
-  logout() {
+  logout () {
     // only delete the session here as the router should take care of
     // redirecting to the login screen
     const myThis = this;
@@ -65,11 +65,11 @@ export class API {
       });
   }
 
-  getStaticMinionsTxt() {
+  getStaticMinionsTxt () {
     return this.apiRequest("GET", "/static/minions.txt");
   }
 
-  getLocalBeaconsList(pMinionId) {
+  getLocalBeaconsList (pMinionId) {
     const params = {
       "client": "local",
       "fun": "beacons.list",
@@ -85,7 +85,7 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getLocalGrainsItems(pMinionId) {
+  getLocalGrainsItems (pMinionId) {
     const params = {
       "client": "local",
       "fun": "grains.items"
@@ -100,7 +100,7 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getLocalPillarItems(pMinionId) {
+  getLocalPillarItems (pMinionId) {
     const params = {
       "client": "local",
       "fun": "pillar.items"
@@ -115,7 +115,7 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getLocalPillarObfuscate(pMinionId) {
+  getLocalPillarObfuscate (pMinionId) {
     const params = {
       "client": "local",
       "fun": "pillar.obfuscate"
@@ -130,7 +130,7 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getLocalScheduleList(pMinionId) {
+  getLocalScheduleList (pMinionId) {
     const params = {
       "client": "local",
       "fun": "schedule.list",
@@ -146,7 +146,7 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getRunnerJobsActive() {
+  getRunnerJobsActive () {
     const params = {
       "client": "runner",
       "fun": "jobs.active"
@@ -154,7 +154,7 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getRunnerJobsListJob(pJobId) {
+  getRunnerJobsListJob (pJobId) {
     const params = {
       "client": "runner",
       "fun": "jobs.list_job",
@@ -163,7 +163,7 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getRunnerJobsListJobs() {
+  getRunnerJobsListJobs () {
     const params = {
       "client": "runner",
       "fun": "jobs.list_jobs"
@@ -171,7 +171,7 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getRunnerManageVersions() {
+  getRunnerManageVersions () {
     const params = {
       "client": "runner",
       "fun": "manage.versions"
@@ -179,7 +179,7 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getWheelConfigValues() {
+  getWheelConfigValues () {
     const params = {
       "client": "wheel",
       "fun": "config.values"
@@ -187,7 +187,7 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getWheelKeyFinger(pMinionId) {
+  getWheelKeyFinger (pMinionId) {
     const params = {
       "client": "wheel",
       "fun": "key.finger"
@@ -200,7 +200,7 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getWheelKeyListAll() {
+  getWheelKeyListAll () {
     const params = {
       "client": "wheel",
       "fun": "key.list_all"
@@ -208,7 +208,7 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  apiRequest(pMethod, pRoute, pParams) {
+  apiRequest (pMethod, pRoute, pParams) {
     const url = config.API_URL + pRoute;
     const token = Utils.getStorageItem("session", "token", "");
     const headers = {
@@ -269,7 +269,7 @@ export class API {
       });
   }
 
-  getEvents(pRouter) {
+  getEvents (pRouter) {
     const token = Utils.getStorageItem("session", "token");
     if (!token) return;
 

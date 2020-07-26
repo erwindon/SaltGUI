@@ -3,7 +3,7 @@ export class OutputJson {
   // format an object as JSON
   // returns NULL when it is not a simple object
   // i.e. no multi-line objects, no indentation here
-  static _formatSimpleJSON(pValue) {
+  static _formatSimpleJSON (pValue) {
 
     if (pValue === null) {
       // null is an object, but not really
@@ -49,7 +49,7 @@ export class OutputJson {
 
   // format an object as JSON
   // based on an initial indentation and an indentation increment
-  static formatJSON(pValue, pIndentLevel = 0) {
+  static formatJSON (pValue, pIndentLevel = 0) {
 
     // indent each level with 4 spaces
     const indentStep = 4;

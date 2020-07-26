@@ -7,7 +7,7 @@ import {Utils} from "../Utils.js";
 
 export class PillarsMinionRoute extends PageRoute {
 
-  constructor(pRouter) {
+  constructor (pRouter) {
     super("pillars-minion", "Pillars", "page-pillars-minion", "button-pillars", pRouter);
 
     this._handleLocalPillarItems = this._handleLocalPillarItems.bind(this);
@@ -22,7 +22,7 @@ export class PillarsMinionRoute extends PageRoute {
     Utils.makeTableSearchable(this.getPageElement(), "pillars-minion-search-button-jobs", "pillars-minion-jobs-table");
   }
 
-  onShow() {
+  onShow () {
     const myThis = this;
 
     const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
@@ -52,7 +52,7 @@ export class PillarsMinionRoute extends PageRoute {
     });
   }
 
-  _handleLocalPillarItems(pLocalPillarItemsData, pMinionId) {
+  _handleLocalPillarItems (pLocalPillarItemsData, pMinionId) {
     const panel = document.getElementById("pillars-minion-panel");
     const menu = new DropDownMenu(panel);
     this._addMenuItemSaltUtilRefreshPillar(menu, pMinionId);
@@ -149,7 +149,7 @@ export class PillarsMinionRoute extends PageRoute {
     msgDiv.innerText = txt;
   }
 
-  _addMenuItemSaltUtilRefreshPillar(pMenu, pMinionId) {
+  _addMenuItemSaltUtilRefreshPillar (pMenu, pMinionId) {
     pMenu.addMenuItem("Refresh&nbsp;pillar...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "saltutil.refresh_pillar");
     });

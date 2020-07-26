@@ -3,7 +3,7 @@ import {Output} from "./Output.js";
 export class OutputDocumentation {
 
   // test whether the returned data matches the requested data
-  static _isDocuKeyMatch(pKey, pFilterKey) {
+  static _isDocuKeyMatch (pKey, pFilterKey) {
 
     // no filter is always OK
     if (!pFilterKey) return true;
@@ -24,7 +24,7 @@ export class OutputDocumentation {
   // and when its key matches the requested documentation
   // empty values are allowed due to errors in the documentation
   // 'output' is needed like this to prevent an error during testing
-  static isDocumentationOutput(pResponse, pCommand) {
+  static isDocumentationOutput (pResponse, pCommand) {
 
     if (!Output.isOutputFormatAllowed("doc")) return false;
 
@@ -77,7 +77,7 @@ export class OutputDocumentation {
 
 
   // reduce the search key to match the data in the response
-  static _reduceFilterKey(pFilterKey) {
+  static _reduceFilterKey (pFilterKey) {
     if (pFilterKey === "wheel") {
       return "";
     }
@@ -111,7 +111,7 @@ export class OutputDocumentation {
   //              was requested for. The internal functions for WHEEL and
   //              RUNNERS always return all documentation in that category
   //              thus that response must be reduced.
-  static reduceDocumentationOutput(pResponse, pVisualKey, pFilterKey) {
+  static reduceDocumentationOutput (pResponse, pVisualKey, pFilterKey) {
     if (!pResponse || typeof pResponse !== "object") {
       // strange --> don't try to fix anything
       return;
@@ -176,7 +176,7 @@ export class OutputDocumentation {
   }
 
   // add the output of a documentation command to the display
-  static addDocumentationOutput(pOutputContainer, pResponse) {
+  static addDocumentationOutput (pOutputContainer, pResponse) {
 
     // we expect no minionIds present
     // as it should have been reduced already

@@ -7,7 +7,7 @@ const MAX_EVENTS_IN_VIEW = 100;
 
 export class EventsRoute extends PageRoute {
 
-  constructor(pRouter) {
+  constructor (pRouter) {
     // don't use /events for the page, that url is reserved
     super("eventsview", "Events", "page-events", "button-events", pRouter);
 
@@ -22,7 +22,7 @@ export class EventsRoute extends PageRoute {
     Utils.makeTableSearchable(this.getPageElement(), "events-search-button", "events-table");
   }
 
-  _clickEventsPlayButton(isPlay) {
+  _clickEventsPlayButton (isPlay) {
     const eventsPlayButton = document.getElementById("events-play-button");
     eventsPlayButton.style.display = isPlay ? "none" : "";
     const eventsPauseButton = document.getElementById("events-pause-button");
@@ -31,7 +31,7 @@ export class EventsRoute extends PageRoute {
     this._updateFooter();
   }
 
-  _updateFooter() {
+  _updateFooter () {
     // update the footer
     const msgDiv = document.getElementById("events-msg");
     const tbody = document.getElementById("events-table-tbody");
@@ -47,7 +47,7 @@ export class EventsRoute extends PageRoute {
         : ", press '&#x23F5;&#xFE0E;' to begin");
   }
 
-  handleAnyEvent(pTag, pData) {
+  handleAnyEvent (pTag, pData) {
 
     if (Utils.getStorageItem("session", "events-button") !== "play") {
       // includes un-set and empty

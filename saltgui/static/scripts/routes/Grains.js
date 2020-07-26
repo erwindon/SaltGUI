@@ -6,7 +6,7 @@ import {Utils} from "../Utils.js";
 
 export class GrainsRoute extends PageRoute {
 
-  constructor(pRouter) {
+  constructor (pRouter) {
     super("grains", "Grains", "page-grains", "button-grains", pRouter);
 
     this._handleGrainsWheelKeyListAll = this._handleGrainsWheelKeyListAll.bind(this);
@@ -39,7 +39,7 @@ export class GrainsRoute extends PageRoute {
     Utils.makeTableSearchable(this.getPageElement(), "grains-search-button-jobs", "grains-jobs-table");
   }
 
-  onShow() {
+  onShow () {
     const myThis = this;
 
     const wheelKeyListAllPromise = this.router.api.getWheelKeyListAll();
@@ -73,7 +73,7 @@ export class GrainsRoute extends PageRoute {
     });
   }
 
-  _handleGrainsWheelKeyListAll(pWheelKeyListAllData) {
+  _handleGrainsWheelKeyListAll (pWheelKeyListAllData) {
     const table = document.getElementById("grains-table");
 
     const msgDiv = document.getElementById("grains-msg");
@@ -104,7 +104,7 @@ export class GrainsRoute extends PageRoute {
     msgDiv.innerText = txt;
   }
 
-  updateOfflineMinion(pContainer, pMinionId, pMinionsDict) {
+  updateOfflineMinion (pContainer, pMinionId, pMinionsDict) {
     super.updateOfflineMinion(pContainer, pMinionId, pMinionsDict);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
@@ -119,7 +119,7 @@ export class GrainsRoute extends PageRoute {
     }
   }
 
-  updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
+  updateMinion (pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
     super.updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
@@ -176,7 +176,7 @@ export class GrainsRoute extends PageRoute {
     );
   }
 
-  _addMenuItemShowGrains(pMenu, pMinionId) {
+  _addMenuItemShowGrains (pMenu, pMinionId) {
     pMenu.addMenuItem("Show&nbsp;grains", (pClickEvent) => {
       window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(pMinionId));
     });

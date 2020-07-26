@@ -5,7 +5,7 @@ import {Utils} from "../Utils.js";
 
 export class PillarsRoute extends PageRoute {
 
-  constructor(pRouter) {
+  constructor (pRouter) {
     super("pillars", "Pillars", "page-pillars", "button-pillars", pRouter);
 
     this._handlePillarsWheelKeyListAll = this._handlePillarsWheelKeyListAll.bind(this);
@@ -16,7 +16,7 @@ export class PillarsRoute extends PageRoute {
     Utils.makeTableSearchable(this.getPageElement(), "pillars-search-button-jobs", "pillars-jobs-table");
   }
 
-  onShow() {
+  onShow () {
     const myThis = this;
 
     const wheelKeyListAllPromise = this.router.api.getWheelKeyListAll();
@@ -50,7 +50,7 @@ export class PillarsRoute extends PageRoute {
     });
   }
 
-  _handlePillarsWheelKeyListAll(pWheelKeyListAllData) {
+  _handlePillarsWheelKeyListAll (pWheelKeyListAllData) {
     const table = document.getElementById("pillars-table");
 
     const msgDiv = document.getElementById("pillars-msg");
@@ -77,7 +77,7 @@ export class PillarsRoute extends PageRoute {
     msgDiv.innerText = txt;
   }
 
-  updateOfflineMinion(pContainer, pMinionId, pMinionsDict) {
+  updateOfflineMinion (pContainer, pMinionId, pMinionsDict) {
     super.updateOfflineMinion(pContainer, pMinionId, pMinionsDict);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
@@ -87,7 +87,7 @@ export class PillarsRoute extends PageRoute {
     minionTr.appendChild(Route.createTd("run-command-button", ""));
   }
 
-  updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
+  updateMinion (pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
     super.updateMinion(pContainer, null, pMinionId, pAllMinionsGrains);
 
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
@@ -117,7 +117,7 @@ export class PillarsRoute extends PageRoute {
     );
   }
 
-  _addMenuItemShowPillars(pMenu, pMinionId) {
+  _addMenuItemShowPillars (pMenu, pMinionId) {
     pMenu.addMenuItem("Show&nbsp;pillars", (pClickEvent) => {
       window.location.assign(config.NAV_URL + "/pillars-minion?minionid=" + encodeURIComponent(pMinionId));
     });

@@ -8,7 +8,7 @@ import {Utils} from "./Utils.js";
 
 export class CommandBox {
 
-  constructor(pApi) {
+  constructor (pApi) {
     const myThis = this;
 
     this.api = pApi;
@@ -45,7 +45,7 @@ export class CommandBox {
     }
   }
 
-  _registerCommandBoxEventListeners() {
+  _registerCommandBoxEventListeners () {
     document.getElementById("popup-run-command")
       .addEventListener("click", this._hideManualRun);
     document.getElementById("button-manual-run")
@@ -67,7 +67,7 @@ export class CommandBox {
       .addEventListener("input", this.cmdmenu.verifyAll);
   }
 
-  _applyTemplate(template) {
+  _applyTemplate (template) {
 
     if (template.targettype) {
       let targetType = template.targettype;
@@ -96,7 +96,7 @@ export class CommandBox {
     }
   }
 
-  _onRun() {
+  _onRun () {
     const button = document.querySelector(".run-command input[type='submit']");
     if (button.disabled) return;
     const output = document.querySelector(".run-command pre");
@@ -122,7 +122,7 @@ export class CommandBox {
     });
   }
 
-  onRunReturn(pResponse, pCommand) {
+  onRunReturn (pResponse, pCommand) {
     const outputContainer = document.querySelector(".run-command pre");
     let minions = Object.keys(pResponse);
     if (pCommand.startsWith("runners.")) minions = ["RUNNER"];
@@ -133,7 +133,7 @@ export class CommandBox {
     button.disabled = false;
   }
 
-  showManualRun(pClickEvent) {
+  showManualRun (pClickEvent) {
     const manualRun = document.getElementById("popup-run-command");
     manualRun.style.display = "block";
 
@@ -188,7 +188,7 @@ export class CommandBox {
   // pEvent is:
   // a MouseEvent(type="click") or
   // a KeyEvent(type="keyup")
-  _hideManualRun(pEvent) {
+  _hideManualRun (pEvent) {
     // Don't close if they click inside the window
     if (pEvent.type === "click" && pEvent.target.className !== "popup" && pEvent.target.className !== "nearly-visible-button") return;
 
@@ -240,11 +240,11 @@ export class CommandBox {
     pEvent.stopPropagation();
   }
 
-  _showError(pMessage) {
+  _showError (pMessage) {
     this.onRunReturn("ERROR:\n\n" + pMessage, "");
   }
 
-  getRunParams(pTargetType, pTarget, pToRun, pisRunTypeNormalOnly = false) {
+  getRunParams (pTargetType, pTarget, pToRun, pisRunTypeNormalOnly = false) {
 
     // The leading # was used to indicate a nodegroup
     if (pTargetType === "nodegroup" && pTarget.startsWith("#")) {

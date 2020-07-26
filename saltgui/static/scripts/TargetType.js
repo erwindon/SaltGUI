@@ -3,7 +3,7 @@ import {Utils} from "./Utils.js";
 
 export class TargetType {
 
-  static createMenu() {
+  static createMenu () {
     const targetbox = document.getElementById("target-box");
     TargetType.menuTargetType = new DropDownMenu(targetbox);
     // do not show the menu title at first
@@ -16,7 +16,7 @@ export class TargetType {
 
   // It takes a while before we known the list of nodegroups
   // so this conclusion must be re-evaluated each time
-  static _targetTypeNodeGroupPrepare(pMenuItem) {
+  static _targetTypeNodeGroupPrepare (pMenuItem) {
     const nodeGroupsText = Utils.getStorageItem("session", "nodegroups");
     if (nodeGroupsText && nodeGroupsText !== "{}") {
       pMenuItem.innerText = "Nodegroup";
@@ -29,18 +29,18 @@ export class TargetType {
     }
   }
 
-  static _manualUpdateTargetTypeText() {
+  static _manualUpdateTargetTypeText () {
     TargetType.menuTargetType._system = false;
     TargetType._updateTargetTypeText();
   }
 
-  static setTargetTypeDefault() {
+  static setTargetTypeDefault () {
     TargetType.menuTargetType._system = true;
     TargetType.menuTargetType._value = "glob";
     TargetType._updateTargetTypeText();
   }
 
-  static _updateTargetTypeText() {
+  static _updateTargetTypeText () {
     const targetType = TargetType._getTargetType();
 
     switch (targetType) {
@@ -70,7 +70,7 @@ export class TargetType {
     TargetType.setMenuMarker();
   }
 
-  static setMenuMarker() {
+  static setMenuMarker () {
     const targetType = TargetType._getTargetType();
     const m = TargetType.menuTargetType.menuDropdownContent.children;
     for (let i = 0; i < m.length; i++) {
@@ -82,7 +82,7 @@ export class TargetType {
     }
   }
 
-  static autoSelectTargetType(pTarget) {
+  static autoSelectTargetType (pTarget) {
 
     if (!TargetType.menuTargetType._system) {
       // user has selected the value, do not touch it
@@ -109,19 +109,19 @@ export class TargetType {
     TargetType._updateTargetTypeText();
   }
 
-  static setTargetType(pTargetType) {
+  static setTargetType (pTargetType) {
     TargetType.menuTargetType._value = pTargetType;
     TargetType.menuTargetType._system = true;
     TargetType._updateTargetTypeText();
   }
 
-  static _getTargetType() {
+  static _getTargetType () {
     const targetType = TargetType.menuTargetType._value;
     if (targetType === undefined || targetType === "") return "glob";
     return targetType;
   }
 
-  static makeTargetText(pTargetType, pTargetPattern) {
+  static makeTargetText (pTargetType, pTargetPattern) {
     // note that "glob" is the most common case
     // when used from the command-line, that target-type
     // is not even specified.
