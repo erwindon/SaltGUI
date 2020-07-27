@@ -55,7 +55,7 @@ export class OutputSaltGuiHighstate {
         continue;
       }
 
-      changes = changes + 1;
+      changes += 1;
 
       if (typeof change === "string" && Utils.isMultiLineString(change)) {
         pTaskDiv.append(document.createElement("br"));

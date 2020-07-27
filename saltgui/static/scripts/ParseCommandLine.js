@@ -101,7 +101,7 @@ export class ParseCommandLine {
           }
 
           // the first part of the string is valid JSON
-          n = n + 1;
+          n += 1;
           if (n < pToRun.length && pToRun[n] !== " ") {
             return "Valid " + objType + ", but followed by text:" + pToRun.substring(n) + "...";
           }
