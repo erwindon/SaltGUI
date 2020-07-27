@@ -24,28 +24,28 @@ export class SchedulesRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    wheelKeyListAllPromise.then(pWheelKeyListAllData => {
+    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       myThis._handleSchedulesWheelKeyListAll(pWheelKeyListAllData);
-      localScheduleListPromise.then(pLocalScheduleListData => {
+      localScheduleListPromise.then((pLocalScheduleListData) => {
         myThis.updateMinions("schedules-table", pLocalScheduleListData);
-      }, pLocalBeaconsListMsg => {
+      }, (pLocalBeaconsListMsg) => {
         const localScheduleListData = {"return":[{}]};
         for (const k of pWheelKeyListAllData.return[0].data.return.minions)
           localScheduleListData.return[0][k] = JSON.stringify(pLocalBeaconsListMsg);
         myThis.updateMinions("schedules-table", localScheduleListData);
       });
-    }, pWheelKeyListAllMsg => {
+    }, (pWheelKeyListAllMsg) => {
       myThis._handleSchedulesWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
     });
 
-    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+    runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
-      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+      runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
-      }, pRunnerJobsActiveMsg => {
+      }, (pRunnerJobsActiveMsg) => {
         myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pRunnerJobsListJobsMsg => {
+    }, (pRunnerJobsListJobsMsg) => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }
@@ -98,7 +98,7 @@ export class SchedulesRoute extends PageRoute {
       const menu = new DropDownMenu(minionTr);
       this._addMenuItemShowSchedules(menu, minionId);
 
-      minionTr.addEventListener("click", pClickEvent =>
+      minionTr.addEventListener("click", (pClickEvent) =>
         window.location.assign(config.NAV_URL + "/schedules-minion?minionid=" + encodeURIComponent(minionId))
       );
     }
@@ -154,7 +154,7 @@ export class SchedulesRoute extends PageRoute {
     const menu = new DropDownMenu(minionTr);
     this._addMenuItemShowSchedules(menu, pMinionId);
 
-    minionTr.addEventListener("click", pClickEvent =>
+    minionTr.addEventListener("click", (pClickEvent) =>
       window.location.assign(config.NAV_URL + "/schedules-minion?minionid=" + encodeURIComponent(pMinionId))
     );
   }

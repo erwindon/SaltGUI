@@ -27,12 +27,12 @@ export class MinionsRoute extends PageRoute {
 
     this.loadMinionsTxt();
 
-    wheelKeyListAllPromise.then(pWheelKeyListAllData => {
+    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       myThis._handleMinionsWheelKeyListAll(pWheelKeyListAllData);
 
-      localGrainsItemsPromise.then(pLocalGrainsItemsData => {
+      localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
         myThis.updateMinions("minions-table", pLocalGrainsItemsData);
-      }, pLocalGrainsItemsMsg => {
+      }, (pLocalGrainsItemsMsg) => {
         const localGrainsItemsData = {"return":[{}]};
         if (pWheelKeyListAllData)
           for (const k of pWheelKeyListAllData.return[0].data.return.minions)
@@ -40,24 +40,24 @@ export class MinionsRoute extends PageRoute {
         myThis.updateMinions("minions-table", localGrainsItemsData);
       });
 
-      runnerManageVersionsPromise.then(pRunnerManageVersionsData => {
+      runnerManageVersionsPromise.then((pRunnerManageVersionsData) => {
         myThis._handleRunnerManageVersions(pRunnerManageVersionsData);
-      }, pRunnerManageVersionsMsg => {
+      }, (pRunnerManageVersionsMsg) => {
         myThis._handleRunnerManageVersions(JSON.stringify(pRunnerManageVersionsMsg));
       });
-    }, pWheelKeyListAllMsg => {
+    }, (pWheelKeyListAllMsg) => {
       myThis._handleMinionsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
     });
 
-    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+    runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
 
-      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+      runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
-      }, pRunnerJobsActiveMsg => {
+      }, (pRunnerJobsActiveMsg) => {
         myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pRunnerJobsListJobsMsg => {
+    }, (pRunnerJobsListJobsMsg) => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }
@@ -80,7 +80,7 @@ export class MinionsRoute extends PageRoute {
       this._addMenuItemStateApply(menu, minionId);
       this._addMenuItemStateApplyTest(menu, minionId);
 
-      minionTr.addEventListener("click", pClickEvent =>
+      minionTr.addEventListener("click", (pClickEvent) =>
         this.runCommand(pClickEvent, minionId, "state.apply")
       );
     }
@@ -109,7 +109,7 @@ export class MinionsRoute extends PageRoute {
     this._addMenuItemStateApply(menu, pMinionId);
     this._addMenuItemStateApplyTest(menu, pMinionId);
 
-    minionTr.addEventListener("click", pClickEvent =>
+    minionTr.addEventListener("click", (pClickEvent) =>
       this.runCommand(pClickEvent, pMinionId, "state.apply")
     );
   }

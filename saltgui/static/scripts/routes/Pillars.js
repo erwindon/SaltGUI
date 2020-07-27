@@ -24,28 +24,28 @@ export class PillarsRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    wheelKeyListAllPromise.then(pWheelKeyListAllData => {
+    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       myThis._handlePillarsWheelKeyListAll(pWheelKeyListAllData);
-      localPillarObfuscatePromise.then(pLocalPillarObfuscateData => {
+      localPillarObfuscatePromise.then((pLocalPillarObfuscateData) => {
         myThis.updateMinions("pillars-table", pLocalPillarObfuscateData);
-      }, pLocalPillarObfuscateMsg => {
+      }, (pLocalPillarObfuscateMsg) => {
         const localPillarObfuscateData = {"return":[{}]};
         for (const k of pWheelKeyListAllData.return[0].data.return.minions)
           localPillarObfuscateData.return[0][k] = JSON.stringify(pLocalPillarObfuscateMsg);
         myThis.updateMinions("pillars-table", localPillarObfuscateData);
       });
-    }, pWheelKeyListAllMsg => {
+    }, (pWheelKeyListAllMsg) => {
       myThis._handlePillarsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
     });
 
-    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+    runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
-      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+      runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
-      }, pRunnerJobsActiveMsg => {
+      }, (pRunnerJobsActiveMsg) => {
         myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pRunnerJobsListJobsMsg => {
+    }, (pRunnerJobsListJobsMsg) => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }
@@ -67,7 +67,7 @@ export class PillarsRoute extends PageRoute {
       const menu = new DropDownMenu(minionTr);
       this._addMenuItemShowPillars(menu, minionId);
 
-      minionTr.addEventListener("click", pClickEvent =>
+      minionTr.addEventListener("click", (pClickEvent) =>
         window.location.assign("pillars-minion?minionid=" + encodeURIComponent(minionId))
       );
     }
@@ -112,7 +112,7 @@ export class PillarsRoute extends PageRoute {
     const menu = new DropDownMenu(minionTr);
     this._addMenuItemShowPillars(menu, pMinionId);
 
-    minionTr.addEventListener("click", pClickEvent =>
+    minionTr.addEventListener("click", (pClickEvent) =>
       window.location.assign(config.NAV_URL + "/pillars-minion?minionid=" + encodeURIComponent(pMinionId))
     );
   }

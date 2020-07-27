@@ -101,7 +101,7 @@ export class BeaconsRoute extends PageRoute {
       const menu = new DropDownMenu(minionTr);
       this._addMenuItemShowBeacons(menu, minionId);
 
-      minionTr.addEventListener("click", pClickEvent =>
+      minionTr.addEventListener("click", (pClickEvent) =>
         window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(minionId))
       );
     }
@@ -147,7 +147,7 @@ export class BeaconsRoute extends PageRoute {
     const menu = new DropDownMenu(minionTr);
     this._addMenuItemShowBeacons(menu, pMinionId);
 
-    minionTr.addEventListener("click", pClickEvent =>
+    minionTr.addEventListener("click", (pClickEvent) =>
       window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(pMinionId))
     );
   }

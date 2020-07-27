@@ -26,7 +26,7 @@ export class API {
     Utils.setStorageItem("local", "eauth", pEauth);
 
     return this.apiRequest("POST", "/login", params)
-      .then(pLoginData => {
+      .then((pLoginData) => {
         const response = pLoginData.return[0];
         if (Object.keys(response.perms).length === 0) {
           // We are allowed to login but there are no permissions available
@@ -56,10 +56,10 @@ export class API {
     // redirecting to the login screen
     const myThis = this;
     return this.apiRequest("POST", "/logout", {})
-      .then(pResponse => {
+      .then((pResponse) => {
         // we could logout, assume the session is terminated
         myThis._cleanStorage();
-      }, pResponse => {
+      }, (pResponse) => {
         // we could not logout, assume the session is broken
         myThis._cleanStorage();
       });
@@ -227,7 +227,7 @@ export class API {
 
     const myThis = this;
     return fetch(url, options)
-      .then(pResponse => {
+      .then((pResponse) => {
         if (pResponse.ok && pRoute.endsWith(".txt")) return pResponse.text();
         if (pResponse.ok) return pResponse.json();
         // fetch does not reject on > 300 http status codes,

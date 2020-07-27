@@ -22,20 +22,20 @@ export class TemplatesRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    wheelConfigValuesPromise.then(pWheelConfigValuesData => {
+    wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
       myThis._handleTemplatesWheelConfigValues(pWheelConfigValuesData);
-    }, pWheelConfigValuesMsg => {
+    }, (pWheelConfigValuesMsg) => {
       myThis._handleTemplatesWheelConfigValues(JSON.stringify(pWheelConfigValuesMsg));
     });
 
-    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+    runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
-      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+      runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
-      }, pRunnerJobsActiveMsg => {
+      }, (pRunnerJobsActiveMsg) => {
         myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pRunnerJobsListJobsMsg => {
+    }, (pRunnerJobsListJobsMsg) => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }
@@ -103,7 +103,7 @@ export class TemplatesRoute extends PageRoute {
 
     pContainer.tBodies[0].appendChild(tr);
 
-    tr.addEventListener("click", pClickEvent =>
+    tr.addEventListener("click", (pClickEvent) =>
       this.runFullCommand(pClickEvent, targetType, target, command)
     );
   }

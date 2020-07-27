@@ -188,17 +188,17 @@ export class Utils {
 
     searchOptionsMenu.addMenuItem(
       "Case sensitive",
-      ev => Utils._updateSearchOption(ev, table, searchOptionsMenu, input));
+      (ev) => Utils._updateSearchOption(ev, table, searchOptionsMenu, input));
     searchOptionsMenu.addMenuItem(
       "Regular expression",
-      ev => Utils._updateSearchOption(ev, table, searchOptionsMenu, input));
+      (ev) => Utils._updateSearchOption(ev, table, searchOptionsMenu, input));
     searchOptionsMenu.addMenuItem(
       "Invert search",
-      ev => Utils._updateSearchOption(ev, table, searchOptionsMenu, input));
+      (ev) => Utils._updateSearchOption(ev, table, searchOptionsMenu, input));
 
     // make the search function active
     const searchButton = document.getElementById(pButtonId);
-    searchButton.onclick = ev =>
+    searchButton.onclick = (ev) =>
       Utils.hideShowTableSearchBar(div, table);
   }
 
@@ -250,14 +250,14 @@ export class Utils {
 
     // hide/show search box (the block may become more complicated later)
     const input = pSearchBlock.querySelector("input");
-    input.onkeyup = ev => {
+    input.onkeyup = (ev) => {
       if (ev.key === "Escape") {
         Utils._updateTableFilter(pTable, "", menuItems);
         Utils.hideShowTableSearchBar(pSearchBlock, pTable);
         return;
       }
     };
-    input.oninput = ev =>
+    input.oninput = (ev) =>
       Utils._updateTableFilter(pTable, input.value, menuItems);
 
     pTable.parentElement.insertBefore(pSearchBlock, pTable);

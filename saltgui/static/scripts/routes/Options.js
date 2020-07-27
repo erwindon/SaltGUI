@@ -21,14 +21,14 @@ export class OptionsRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+    runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
-      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+      runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
-      }, pRunnerJobsActiveMsg => {
+      }, (pRunnerJobsActiveMsg) => {
         myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pRunnerJobsListJobsMsg => {
+    }, (pRunnerJobsListJobsMsg) => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
 

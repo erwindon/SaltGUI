@@ -47,28 +47,28 @@ export class GrainsRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    wheelKeyListAllPromise.then(pWheelKeyListAllData => {
+    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       myThis._handleGrainsWheelKeyListAll(pWheelKeyListAllData);
-      localGrainsItemsPromise.then(pLocalGrainsItemsData => {
+      localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
         myThis.updateMinions("grains-table", pLocalGrainsItemsData);
-      }, pLocalGrainsItemsMsg => {
+      }, (pLocalGrainsItemsMsg) => {
         const localGrainsItemsData = {"return":[{}]};
         for (const k of pWheelKeyListAllData.return[0].data.return.minions)
           localGrainsItemsData.return[0][k] = JSON.stringify(pLocalGrainsItemsMsg);
         myThis.updateMinions("grains-table", localGrainsItemsData);
       });
-    }, pWheelKeyListAllMsg => {
+    }, (pWheelKeyListAllMsg) => {
       myThis._handleGrainsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
     });
 
-    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+    runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
-      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+      runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
-      }, pRunnerJobsActiveMsg => {
+      }, (pRunnerJobsActiveMsg) => {
         myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pRunnerJobsListJobsMsg => {
+    }, (pRunnerJobsListJobsMsg) => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }
@@ -94,7 +94,7 @@ export class GrainsRoute extends PageRoute {
         minionTr.appendChild(Route.createTd("", ""));
       }
 
-      minionTr.addEventListener("click", pClickEvent =>
+      minionTr.addEventListener("click", (pClickEvent) =>
         window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(minionId))
       );
     }
@@ -171,7 +171,7 @@ export class GrainsRoute extends PageRoute {
       minionTr.appendChild(td);
     }
 
-    minionTr.addEventListener("click", pClickEvent =>
+    minionTr.addEventListener("click", (pClickEvent) =>
       window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(pMinionId))
     );
   }

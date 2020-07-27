@@ -57,7 +57,7 @@ export class CommandBox {
       .addEventListener("click", this._onRun);
 
     document.getElementById("target")
-      .addEventListener("input", pKeyboardEvent => {
+      .addEventListener("input", (pKeyboardEvent) => {
         const targetField = document.getElementById("target");
         const targetType = targetField.value;
         TargetType.autoSelectTargetType(targetType);
@@ -114,10 +114,10 @@ export class CommandBox {
     button.disabled = true;
     output.innerText = "Loading...";
 
-    func.then(pResponse => {
+    func.then((pResponse) => {
       if (pResponse) this.onRunReturn(pResponse.return[0], commandValue);
       else this._showError("null response");
-    }, pResponse => {
+    }, (pResponse) => {
       this._showError(JSON.stringify(pResponse));
     });
   }
@@ -142,14 +142,14 @@ export class CommandBox {
 
     const targetField = document.getElementById("target");
     TargetType.autoSelectTargetType(targetField.value);
-    targetField.onkeyup = keyUpEvent => {
+    targetField.onkeyup = (keyUpEvent) => {
       if (keyUpEvent.key === "Escape") {
         this._hideManualRun(keyUpEvent);
       }
     };
 
     const commandField = document.getElementById("command");
-    commandField.onkeyup = keyUpEvent => {
+    commandField.onkeyup = (keyUpEvent) => {
       if (keyUpEvent.key === "Escape") {
         this._hideManualRun(keyUpEvent);
       }

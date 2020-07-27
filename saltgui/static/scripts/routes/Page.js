@@ -261,11 +261,11 @@ export class PageRoute extends Route {
       }
       addressTd.classList.add("address");
       addressTd.setAttribute("tabindex", -1);
-      addressSpan.addEventListener("click", pClickEvent => {
+      addressSpan.addEventListener("click", (pClickEvent) => {
         this._copyAddress(addressSpan);
         pClickEvent.stopPropagation();
       });
-      addressSpan.addEventListener("mouseout", pClickEvent => {
+      addressSpan.addEventListener("mouseout", (pClickEvent) => {
         this._restoreClickToCopy(addressSpan);
       });
       Utils.addToolTip(addressSpan, "Click to copy");
@@ -516,7 +516,7 @@ export class PageRoute extends Route {
     const statusSpan = Route.createSpan("status", "loading...");
     statusSpan.classList.add("no-status");
     /* effectively also the whole column, but it does not look like a column on screen */
-    statusSpan.addEventListener("click", pClickEvent => {
+    statusSpan.addEventListener("click", (pClickEvent) => {
       // show "loading..." only once, but we are updating the whole column
       statusSpan.classList.add("no-status");
       statusSpan.innerText = "loading...";
@@ -537,7 +537,7 @@ export class PageRoute extends Route {
 
     pContainer.appendChild(tr);
 
-    tr.addEventListener("click", pClickEvent =>
+    tr.addEventListener("click", (pClickEvent) =>
       window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id))
     );
   }
@@ -559,9 +559,9 @@ export class PageRoute extends Route {
   startRunningJobs() {
     const myThis = this;
 
-    this.router.api.getRunnerJobsActive().then(pRunnerJobsActiveData => {
+    this.router.api.getRunnerJobsActive().then((pRunnerJobsActiveData) => {
       myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
-    }, pRunnerJobsActiveMsg => {
+    }, (pRunnerJobsActiveMsg) => {
       myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
     });
   }
@@ -638,7 +638,7 @@ export class PageRoute extends Route {
   loadMinionsTxt() {
     const staticMinionsTxtPromise = this.router.api.getStaticMinionsTxt();
 
-    staticMinionsTxtPromise.then(pStaticMinionsTxt => {
+    staticMinionsTxtPromise.then((pStaticMinionsTxt) => {
       if (!pStaticMinionsTxt)
         Utils.setStorageItem("session", "minions-txt", "{}");
       else {
@@ -656,7 +656,7 @@ export class PageRoute extends Route {
         }
         Utils.setStorageItem("session", "minions-txt", JSON.stringify(minions));
       }
-    }, pStaticMinionsTxt => {
+    }, (pStaticMinionsTxt) => {
       Utils.setStorageItem("session", "minions-txt", "{}");
     });
   }

@@ -13,7 +13,7 @@ export class BeaconsMinionRoute extends PageRoute {
     this._handleLocalBeaconsList = this._handleLocalBeaconsList.bind(this);
 
     const closeButton = document.getElementById("beacons-minion-button-close");
-    closeButton.addEventListener("click", pClickEvent =>
+    closeButton.addEventListener("click", (pClickEvent) =>
       this.router.goTo("/beacons")
     );
 
@@ -32,20 +32,20 @@ export class BeaconsMinionRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    localBeaconsListPromise.then(pLocalBeaconsListData => {
+    localBeaconsListPromise.then((pLocalBeaconsListData) => {
       myThis._handleLocalBeaconsList(pLocalBeaconsListData, minionId);
-    }, pLocalBeaconsListMsg => {
+    }, (pLocalBeaconsListMsg) => {
       myThis._handleLocalBeaconsList(JSON.stringify(pLocalBeaconsListMsg), minionId);
     });
 
-    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+    runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
-      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+      runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
-      }, pRunnerJobsActiveMsg => {
+      }, (pRunnerJobsActiveMsg) => {
         myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pRunnerJobsListJobsMsg => {
+    }, (pRunnerJobsListJobsMsg) => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }
@@ -125,7 +125,7 @@ export class BeaconsMinionRoute extends PageRoute {
       container.tBodies[0].appendChild(tr);
 
       // run the command with the original beacon definition
-      tr.addEventListener("click", pClickEvent =>
+      tr.addEventListener("click", (pClickEvent) =>
         this.runCommand(pClickEvent, pMinionId, "beacons.modify " + k + " " + JSON.stringify(beacons0[k]))
       );
     }

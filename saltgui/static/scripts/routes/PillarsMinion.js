@@ -13,7 +13,7 @@ export class PillarsMinionRoute extends PageRoute {
     this._handleLocalPillarItems = this._handleLocalPillarItems.bind(this);
 
     const closeButton = document.getElementById("pillars-minion-button-close");
-    closeButton.addEventListener("click", pClickEvent =>
+    closeButton.addEventListener("click", (pClickEvent) =>
       this.router.goTo("/pillars")
     );
 
@@ -34,20 +34,20 @@ export class PillarsMinionRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    localPillarItemsPromise.then(pLocalPillarItemsData => {
+    localPillarItemsPromise.then((pLocalPillarItemsData) => {
       myThis._handleLocalPillarItems(pLocalPillarItemsData, minionId);
-    }, pLocalPillarItemsMsg => {
+    }, (pLocalPillarItemsMsg) => {
       myThis._handleLocalPillarItems(JSON.stringify(pLocalPillarItemsMsg), minionId);
     });
 
-    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+    runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
-      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+      runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
-      }, pRunnerJobsActiveMsg => {
+      }, (pRunnerJobsActiveMsg) => {
         myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pRunnerJobsListJobsMsg => {
+    }, (pRunnerJobsListJobsMsg) => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }

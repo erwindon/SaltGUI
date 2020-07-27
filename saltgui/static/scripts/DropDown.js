@@ -69,7 +69,7 @@ export class DropDownMenu {
       button.innerHTML = pTitle;
     else
       button.verifyCallBack = pTitle;
-    button.addEventListener("click", pClickEvent =>
+    button.addEventListener("click", (pClickEvent) =>
       this._callback(pClickEvent, pCallBack, pValue)
     );
     this.menuDropdownContent.appendChild(button);

@@ -29,29 +29,29 @@ export class KeysRoute extends PageRoute {
 
     this.loadMinionsTxt();
 
-    wheelKeyListAllPromise.then(pWheelKeyListAllData => {
+    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       myThis._handleKeysWheelKeyListAll(pWheelKeyListAllData);
-      wheelKeyFingerPromise.then(pWheelKeyFingerData => {
+      wheelKeyFingerPromise.then((pWheelKeyFingerData) => {
         myThis._handleWheelKeyFinger(pWheelKeyFingerData);
-      }, pWheelKeyFingerMsg => {
+      }, (pWheelKeyFingerMsg) => {
         const wheelKeyFingerData = {"return":[{"data":{"return":{"minions":{}}}}]};
         if (pWheelKeyListAllData)
           for (const k of pWheelKeyListAllData.return[0].data.return.minions)
             wheelKeyFingerData.return[0]["data"]["return"]["minions"][k] = JSON.stringify(pWheelKeyFingerMsg);
         myThis._handleWheelKeyFinger(wheelKeyFingerData);
       });
-    }, pWheelKeyListAllMsg => {
+    }, (pWheelKeyListAllMsg) => {
       myThis._handleKeysWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
     });
 
-    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+    runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
-      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+      runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
-      }, pRunnerJobsActiveMsg => {
+      }, (pRunnerJobsActiveMsg) => {
         myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pRunnerJobsListJobsMsg => {
+    }, (pRunnerJobsListJobsMsg) => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }
@@ -442,7 +442,7 @@ export class KeysRoute extends PageRoute {
       fingerprintSpan.innerText = "(refresh page for fingerprint)";
       const wheelKeyFingerPromise = this.router.api.getWheelKeyFinger(pData.id);
       const myThis = this;
-      wheelKeyFingerPromise.then(this._handleWheelKeyFinger, pWheelKeyFingerMsg => {
+      wheelKeyFingerPromise.then(this._handleWheelKeyFinger, (pWheelKeyFingerMsg) => {
         const wheelKeyFingerData = {"return":[{"data":{"return":{"minions":{}}}}]};
         wheelKeyFingerData.return[0]["data"]["return"]["minions"][pData.id] = JSON.stringify(pWheelKeyFingerMsg);
         myThis._handleWheelKeyFinger(wheelKeyFingerData);

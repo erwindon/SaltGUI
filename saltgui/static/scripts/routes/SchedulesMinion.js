@@ -13,7 +13,7 @@ export class SchedulesMinionRoute extends PageRoute {
     this._handleLocalScheduleList = this._handleLocalScheduleList.bind(this);
 
     const closeButton = document.getElementById("schedules-minion-button-close");
-    closeButton.addEventListener("click", pClickEvent =>
+    closeButton.addEventListener("click", (pClickEvent) =>
       this.router.goTo("/schedules")
     );
 
@@ -35,20 +35,20 @@ export class SchedulesMinionRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    localScheduleListPromise.then(pLocalScheduleListData => {
+    localScheduleListPromise.then((pLocalScheduleListData) => {
       myThis._handleLocalScheduleList(pLocalScheduleListData, minionId);
-    }, pLocalScheduleListMsg => {
+    }, (pLocalScheduleListMsg) => {
       myThis._handleLocalScheduleList(JSON.stringify(pLocalScheduleListMsg), minionId);
     });
 
-    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+    runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
-      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+      runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
-      }, pRunnerJobsActiveMsg => {
+      }, (pRunnerJobsActiveMsg) => {
         myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pRunnerJobsListJobsMsg => {
+    }, (pRunnerJobsListJobsMsg) => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }
@@ -132,7 +132,7 @@ export class SchedulesMinionRoute extends PageRoute {
 
       container.tBodies[0].appendChild(tr);
 
-      tr.addEventListener("click", pClickEvent =>
+      tr.addEventListener("click", (pClickEvent) =>
         this.runCommand(pClickEvent, pMinionId, scheduleModifyCmd)
       );
     }

@@ -49,14 +49,14 @@ export class JobsRoute extends PageRoute {
     this._addMenuItemShowEligible(menu);
     this._addMenuItemShowAll(menu);
 
-    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+    runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData, true, cnt);
-      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+      runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
-      }, pRunnerJobsActiveMsg => {
+      }, (pRunnerJobsActiveMsg) => {
         myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pRunnerJobsListJobsMsg => {
+    }, (pRunnerJobsListJobsMsg) => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
 
@@ -144,7 +144,7 @@ export class JobsRoute extends PageRoute {
     const statusTd = Route.createTd("status", "");
     const statusSpan = Route.createSpan("status2", "loading...");
     statusSpan.classList.add("no-status");
-    statusSpan.addEventListener("click", pClickEvent => {
+    statusSpan.addEventListener("click", (pClickEvent) => {
       // show "loading..." only once, but we are updating the whole column
       statusSpan.classList.add("no-status");
       statusSpan.innerText = "loading...";
@@ -159,7 +159,7 @@ export class JobsRoute extends PageRoute {
     const detailsTd = Route.createTd("details", "");
     const detailsSpan = Route.createSpan("details2", "(click)");
     detailsSpan.classList.add("no-status");
-    detailsSpan.addEventListener("click", pClickEvent => {
+    detailsSpan.addEventListener("click", (pClickEvent) => {
       detailsSpan.classList.add("no-status");
       detailsSpan.innerText = "loading...";
       this._getJobDetails(job.id);
@@ -178,7 +178,7 @@ export class JobsRoute extends PageRoute {
 
     pContainer.appendChild(tr);
 
-    tr.addEventListener("click", pClickEvent =>
+    tr.addEventListener("click", (pClickEvent) =>
       window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id))
     );
   }
@@ -276,9 +276,9 @@ export class JobsRoute extends PageRoute {
 
     const runnerJobsListJobPromise = this.router.api.getRunnerJobsListJob(pJobId);
 
-    runnerJobsListJobPromise.then(pRunnerJobsListJobData => {
+    runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
       myThis._handleJobsRunnerJobsListJob(pJobId, pRunnerJobsListJobData);
-    }, pRunnerJobsListJobMsg => {
+    }, (pRunnerJobsListJobMsg) => {
       myThis._handleJobsRunnerJobsListJob(pJobId, JSON.stringify(pRunnerJobsListJobMsg));
     });
   }

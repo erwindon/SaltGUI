@@ -23,14 +23,14 @@ export class JobRoute extends Route {
     const runnerJobsListJobPromise = this.router.api.getRunnerJobsListJob(id);
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    runnerJobsListJobPromise.then(pRunnerJobsListJobData => {
+    runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
       myThis._handleJobRunnerJobsListJob(pRunnerJobsListJobData, id);
-      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+      runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         myThis.handleRunnerJobsActive(id, pRunnerJobsActiveData);
-      }, pRunnerJobsActiveMsg => {
+      }, (pRunnerJobsActiveMsg) => {
         myThis.handleRunnerJobsActive(id, JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pRunnerJobsListJobsMsg => {
+    }, (pRunnerJobsListJobsMsg) => {
       myThis._handleJobRunnerJobsListJob(JSON.stringify(pRunnerJobsListJobsMsg), id);
     });
   }
@@ -45,7 +45,7 @@ export class JobRoute extends Route {
     const output = document.getElementById("job-table");
 
     const closeButton = document.getElementById("job-button-close");
-    closeButton.addEventListener("click", pClickEvent =>
+    closeButton.addEventListener("click", (pClickEvent) =>
       window.history.back()
     );
 
@@ -140,7 +140,7 @@ export class JobRoute extends Route {
         link.classList.add("disabled");
         Utils.addToolTip(link, "this job");
       } else {
-        link.addEventListener("click", pClickEvent =>
+        link.addEventListener("click", (pClickEvent) =>
           window.location.assign(config.NAV_URL + "/job?id=" + linkToJid)
         );
       }
@@ -298,7 +298,7 @@ export class JobRoute extends Route {
 
     summaryJobsActiveSpan.innerText = info.Running.length + " active";
     summaryJobsActiveSpan.insertBefore(Utils.createJobStatusSpan(id), summaryJobsActiveSpan.firstChild);
-    summaryJobsActiveSpan.addEventListener("click", pClickEvent =>
+    summaryJobsActiveSpan.addEventListener("click", (pClickEvent) =>
       window.location.reload()
     );
     summaryJobsActiveSpan.style.cursor = "pointer";

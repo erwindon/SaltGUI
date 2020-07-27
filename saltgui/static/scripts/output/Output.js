@@ -246,7 +246,7 @@ export class Output {
       }
 
       const myNr = nr;
-      span.addEventListener("click", pClickEvent => {
+      span.addEventListener("click", (pClickEvent) => {
 
         // show the output, it might be hidden
         const triangle = pMinionDiv.querySelector("span.triangle");
@@ -387,7 +387,7 @@ export class Output {
 
     pOutputContainer.appendChild(allDiv);
 
-    masterTriangle.addEventListener("click", pClickEvent => {
+    masterTriangle.addEventListener("click", (pClickEvent) => {
       // 25BD = WHITE DOWN-POINTING TRIANGLE
       if (masterTriangle.innerText === "\u25BD") {
         // 25B7 = WHITE RIGHT-POINTING TRIANGLE
@@ -542,7 +542,7 @@ export class Output {
       if (minionMultiLine) {
         triangle = Route.createSpan("triangle", masterTriangle.innerText);
         triangle.style = "cursor: pointer";
-        triangle.addEventListener("click", pClickEvent => {
+        triangle.addEventListener("click", (pClickEvent) => {
           // 25BD = WHITE DOWN-POINTING TRIANGLE
           if (triangle.innerText !== "\u25BD") {
             triangle.innerText = "\u25BD";
@@ -566,7 +566,7 @@ export class Output {
       // it easier to select the next highstate part
       // or just collapse it and see the next minion
       if (isHighStateOutput) {
-        minionOutput.addEventListener("click", pClickEvent =>
+        minionOutput.addEventListener("click", (pClickEvent) =>
           div.scrollIntoView({"behavior": "smooth", "block": "start"})
         );
       }

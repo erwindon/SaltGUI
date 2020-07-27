@@ -12,7 +12,7 @@ export class GrainsMinionRoute extends PageRoute {
     this._handleLocalGrainsItems = this._handleLocalGrainsItems.bind(this);
 
     const closeButton = document.getElementById("grains-minion-button-close");
-    closeButton.addEventListener("click", pClickEvent =>
+    closeButton.addEventListener("click", (pClickEvent) =>
       this.router.goTo("/grains")
     );
 
@@ -33,20 +33,20 @@ export class GrainsMinionRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    localGrainsItemsPromise.then(pLocalGrainsItemsData => {
+    localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
       myThis._handleLocalGrainsItems(pLocalGrainsItemsData, minionId);
-    }, pLocalGrainsItemsMsg => {
+    }, (pLocalGrainsItemsMsg) => {
       myThis._handleLocalGrainsItems(JSON.stringify(pLocalGrainsItemsMsg), minionId);
     });
 
-    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+    runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
-      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+      runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
-      }, pRunnerJobsActiveMsg => {
+      }, (pRunnerJobsActiveMsg) => {
         myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pRunnerJobsListJobsMsg => {
+    }, (pRunnerJobsListJobsMsg) => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }
@@ -99,7 +99,7 @@ export class GrainsMinionRoute extends PageRoute {
 
       container.tBodies[0].appendChild(grainTr);
 
-      grainTr.addEventListener("click", pClickEvent =>
+      grainTr.addEventListener("click", (pClickEvent) =>
         this.runCommand(pClickEvent, pMinionId, "grains.setval \"" + grainName + "\" " + JSON.stringify(grains[grainName]))
       );
     }
