@@ -65,7 +65,9 @@ export class Router {
   _registerRouterEventListeners () {
     document.getElementById("logo")
       .addEventListener("click", (pClickEvent) => {
-        if (window.location.pathname === config.NAV_URL + "/login") return;
+        if (window.location.pathname === config.NAV_URL + "/login") {
+          return;
+        }
         if (window.event.ctrlKey) {
           window.location.assign(config.NAV_URL + "/options");
         } else {
@@ -220,7 +222,9 @@ export class Router {
   _logoutTimer () {
     // are we logged in?
     const token = Utils.getStorageItem("session", "token");
-    if (!token) return;
+    if (!token) {
+      return;
+    }
 
     // just a random lightweight api call
     const wheelConfigValuesPromise = this.api.getWheelConfigValues();
@@ -236,12 +240,18 @@ export class Router {
 
   _registerRoute (pRoute) {
     this.routes.push(pRoute);
-    if (pRoute.onRegister) pRoute.onRegister();
+    if (pRoute.onRegister) {
+      pRoute.onRegister();
+    }
   }
 
   goTo (pPath, hasPathPrefix = false) {
-    if (this.switchingRoute) return;
-    if (window.location.pathname === config.NAV_URL + pPath && this.currentRoute) return;
+    if (this.switchingRoute) {
+      return;
+    }
+    if (window.location.pathname === config.NAV_URL + pPath && this.currentRoute) {
+      return;
+    }
     if (pPath === "/" && Utils.getStorageItem("session", "login-response") === null) {
       // the fact that we don't have a session will be caught later
       // but this was shows less error messages on the console
@@ -249,7 +259,9 @@ export class Router {
     }
     const pathUrl = (hasPathPrefix ? "" : config.NAV_URL) + pPath.split("?")[0];
     for (const route of this.routes) {
-      if (!route.getPath().test(pathUrl)) continue;
+      if (!route.getPath().test(pathUrl)) {
+        continue;
+      }
       // push history state for login (including redirect to /)
       if (pathUrl === config.NAV_URL + "/login" || pathUrl === config.NAV_URL + "/") {
         window.history.pushState({}, undefined, pPath);
@@ -323,7 +335,9 @@ export class Router {
       // Hide element after fade, so it does not expand the body
       page.style.display = "none";
     }, 500);
-    if (pRoute.onHide) pRoute.onHide();
+    if (pRoute.onHide) {
+      pRoute.onHide();
+    }
   }
 
 }

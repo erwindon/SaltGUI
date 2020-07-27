@@ -7,12 +7,18 @@ export class Utils {
 
   static _getQueryParam2 (pUrl, pName) {
     const questionmarkPos = pUrl.indexOf("?");
-    if (questionmarkPos < 0) return undefined;
+    if (questionmarkPos < 0) {
+      return undefined;
+    }
     const parameters = pUrl.slice(questionmarkPos + 1).split("&");
     for (const parameter of parameters) {
       const namevalue = parameter.split("=");
-      if (namevalue.length !== 2) continue;
-      if (namevalue[0] === pName) return namevalue[1];
+      if (namevalue.length !== 2) {
+        continue;
+      }
+      if (namevalue[0] === pName) {
+        return namevalue[1];
+      }
     }
     return undefined;
   }
@@ -25,7 +31,9 @@ export class Utils {
     } catch (error) {
       /* VOID */
     }
-    if (!w || !w.location) return undefined;
+    if (!w || !w.location) {
+      return undefined;
+    }
     return Utils._getQueryParam2(w.location.href, pName);
   }
 
@@ -38,8 +46,12 @@ export class Utils {
     } catch (error) {
       return null;
     }
-    if (pStorage === "local") return window.localStorage;
-    if (pStorage === "session") return window.sessionStorage;
+    if (pStorage === "local") {
+      return window.localStorage;
+    }
+    if (pStorage === "session") {
+      return window.sessionStorage;
+    }
     console.error("UNKNOWN STORAGE TYPE", pStorage);
     return null;
   }
@@ -52,8 +64,12 @@ export class Utils {
     }
     const v = storage.getItem(pKeyName);
     // console.log("getStorageItem", pStorage, pKeyName, pDefaultValue, "-->", typeof v, v);
-    if (v === null) return pDefaultValue;
-    if (v === "undefined") return pDefaultValue;
+    if (v === null) {
+      return pDefaultValue;
+    }
+    if (v === "undefined") {
+      return pDefaultValue;
+    }
     return v;
   }
 
@@ -116,9 +132,13 @@ export class Utils {
     // we do not expect any rows in the table at this moment
     // but sorting is applied to show the sorting indicator
     sorttable.innerSortFunction.apply(thArr[pColumnNr], []);
-    if (pIsReverseSort) sorttable.innerSortFunction.apply(thArr[pColumnNr], []);
+    if (pIsReverseSort) {
+      sorttable.innerSortFunction.apply(thArr[pColumnNr], []);
+    }
     for (const th of thArr) {
-      if (th.classList.contains("sorttable_nosort")) continue;
+      if (th.classList.contains("sorttable_nosort")) {
+        continue;
+      }
       // the tooltip is too bulky to use, skip for now
       // Utils.addToolTip(th, "Click to sort");
     }
@@ -133,29 +153,42 @@ export class Utils {
   static hasTextContent (pElement, pSearchText, pCaseSensitiveFlag) {
 
     // why?
-    if (pElement.classList && pElement.classList.contains("run-command-button"))
+    if (pElement.classList && pElement.classList.contains("run-command-button")) {
       return false;
+    }
 
     let found = false;
     for (const childNode of pElement.childNodes) {
       const r = this.hasTextContent(childNode, pSearchText, pCaseSensitiveFlag);
-      if (r === 2) return 2;
-      if (r === 1) found = true;
+      if (r === 2) {
+        return 2;
+      }
+      if (r === 1) {
+        found = true;
+      }
     }
-    if (found) return 1;
+    if (found) {
+      return 1;
+    }
 
-    if (pElement.nodeType !== 3) // NODE_TEXT
+    // NODE_TEXT
+    if (pElement.nodeType !== 3) {
       return 0;
+    }
 
     let s = pElement.textContent;
     if (typeof pSearchText === "string") {
-      if (!pCaseSensitiveFlag) s = s.toUpperCase();
+      if (!pCaseSensitiveFlag) {
+        s = s.toUpperCase();
+      }
       return s.includes(pSearchText) ? 1 : 0;
     }
 
     // then it is a RegExp
     const regs = pSearchText.exec(s);
-    if (!regs) return 0;
+    if (!regs) {
+      return 0;
+    }
     return regs[0].length > 0 ? 1 : 2;
   }
 
@@ -172,7 +205,9 @@ export class Utils {
     input.classList.add("filter-text");
     // 1F50D = D83D DD0D = LEFT-POINTING MAGNIFYING GLASS
     input.placeholder = "\uD83D\uDD0D";
-    if (pFieldList) input.setAttribute("list", pFieldList);
+    if (pFieldList) {
+      input.setAttribute("list", pFieldList);
+    }
     menuAndFieldDiv.append(input);
 
     div.append(menuAndFieldDiv);
@@ -207,8 +242,10 @@ export class Utils {
 
     let t = ev.target.innerText;
     t = t.replace(/^. /, "");
-    // 2714 = HEAVY CHECK MARK
-    if (ev.target._value === true) t = "\u2714 " + t;
+    if (ev.target._value === true) {
+      // 2714 = HEAVY CHECK MARK
+      t = "\u2714 " + t;
+    }
     ev.target.innerText = t;
 
     Utils._updateTableFilter(
@@ -218,12 +255,15 @@ export class Utils {
 
     // D83D DD0D = 1F50D = LEFT-POINTING MAGNIFYING GLASS
     let placeholder = "\uD83D\uDD0D";
-    if (pSearchOptionsMenu.menuDropdownContent.childNodes[0]._value === true)
+    if (pSearchOptionsMenu.menuDropdownContent.childNodes[0]._value === true) {
       placeholder += " caseSensitive";
-    if (pSearchOptionsMenu.menuDropdownContent.childNodes[1]._value === true)
+    }
+    if (pSearchOptionsMenu.menuDropdownContent.childNodes[1]._value === true) {
       placeholder += " regExp";
-    if (pSearchOptionsMenu.menuDropdownContent.childNodes[2]._value === true)
+    }
+    if (pSearchOptionsMenu.menuDropdownContent.childNodes[2]._value === true) {
       placeholder += " invertSearch";
+    }
     pInput.placeholder = placeholder;
   }
 
@@ -243,8 +283,9 @@ export class Utils {
 
     // show rows in all tables
     const allFM = pTable.querySelectorAll(".no-filter-match");
-    for (const fm of allFM)
+    for (const fm of allFM) {
       fm.classList.remove("no-filter-match");
+    }
 
     const menuItems = startElement.querySelector(".search-box .menu-dropdown-content");
 
@@ -316,23 +357,34 @@ export class Utils {
     let hasNonEmptyMatches = false;
     const blocks = pTable.tagName === "TABLE" ? pTable.tBodies[0].rows : pTable.children;
     for (const row of blocks) {
-      if (row.classList.contains("no-search")) continue;
+      if (row.classList.contains("no-search")) {
+        continue;
+      }
       let show = false;
       const items = row.tagName === "TR" ? row.cells : [row];
       for (const cell of items) {
         // do not use "innerText"
         // that one does not handle hidden text
         const res = Utils.hasTextContent(cell, searchParam, caseSensitiveFlag);
-        if (res === 1) hasNonEmptyMatches = true;
-        if (res === 2) hasEmptyMatches = true;
+        if (res === 1) {
+          hasNonEmptyMatches = true;
+        }
+        if (res === 2) {
+          hasEmptyMatches = true;
+        }
         // don't exit the loop, there might also be empty matches
-        if (res) show = true;
+        if (res) {
+          show = true;
+        }
       }
-      if (invertFlag) show = !show;
-      if (show)
+      if (invertFlag) {
+        show = !show;
+      }
+      if (show) {
         row.classList.remove("no-filter-match");
-      else
+      } else {
         row.classList.add("no-filter-match");
+      }
     }
     if (pSearchText && hasEmptyMatches) {
       const indicator = hasNonEmptyMatches ? "also" : "only";
@@ -354,10 +406,13 @@ export class Utils {
       pattern = "";
       for (const chr of pSearchText) {
         // prevent accidental construction of character classes
-        if ((chr >= "A" && chr <= "Z") || (chr >= "a" && chr <= "z") || (chr >= "0" && chr <= "9"))
+        /* eslint-disable no-extra-parens */
+        if ((chr >= "A" && chr <= "Z") || (chr >= "a" && chr <= "z") || (chr >= "0" && chr <= "9")) {
           pattern += chr;
-        else
+        } else {
           pattern += "\\" + chr;
+        }
+        /* eslint-enable no-extra-parens */
       }
     }
 
@@ -366,8 +421,11 @@ export class Utils {
 
   static txtZeroOneMany (pCnt, pZeroText, pOneText, pManyText) {
     let txt = pManyText;
-    if (pCnt === 0) txt = pZeroText;
-    if (pCnt === 1) txt = pOneText;
+    if (pCnt === 0) {
+      txt = pZeroText;
+    } else if (pCnt === 1) {
+      txt = pOneText;
+    }
     txt = txt.replace("{0}", pCnt);
     return txt;
   }
@@ -388,8 +446,12 @@ export class Utils {
   }
 
   static isMultiLineString (pStr) {
-    if (pStr.includes("\r")) return true;
-    if (pStr.includes("\n")) return true;
+    if (pStr.includes("\r")) {
+      return true;
+    }
+    if (pStr.includes("\n")) {
+      return true;
+    }
     return false;
   }
 

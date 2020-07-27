@@ -6,13 +6,19 @@ export class OutputDocumentation {
   static _isDocuKeyMatch (pKey, pFilterKey) {
 
     // no filter is always OK
-    if (!pFilterKey) return true;
+    if (!pFilterKey) {
+      return true;
+    }
 
     // an exact match is great
-    if (pKey === pFilterKey) return true;
+    if (pKey === pFilterKey) {
+      return true;
+    }
 
     // a true prefix is also ok
-    if (pKey.startsWith(pFilterKey + ".")) return true;
+    if (pKey.startsWith(pFilterKey + ".")) {
+      return true;
+    }
 
     // no match
     return false;
@@ -26,7 +32,9 @@ export class OutputDocumentation {
   // 'output' is needed like this to prevent an error during testing
   static isDocumentationOutput (pResponse, pCommand) {
 
-    if (!Output.isOutputFormatAllowed("doc")) return false;
+    if (!Output.isOutputFormatAllowed("doc")) {
+      return false;
+    }
 
     let result = false;
 
@@ -187,7 +195,9 @@ export class OutputDocumentation {
       for (const key of Object.keys(minionResponse).sort()) {
 
         let out = minionResponse[key];
-        if (out === null) continue;
+        if (out === null) {
+          continue;
+        }
         out = out.trimRight();
 
         // internal links: remove the ".. rubric::" prefix

@@ -65,7 +65,9 @@ export class GrainsMinionRoute extends PageRoute {
     panel.insertBefore(menu.menuDropdown, titleElement.nextSibling);
 
     const msgDiv = document.getElementById("grains-minion-msg");
-    if (PageRoute.showErrorRowInstead(container.tBodies[0], pLocalGrainsItemsData, msgDiv)) return;
+    if (PageRoute.showErrorRowInstead(container.tBodies[0], pLocalGrainsItemsData, msgDiv)) {
+      return;
+    }
 
     const grains = pLocalGrainsItemsData.return[0][pMinionId];
 

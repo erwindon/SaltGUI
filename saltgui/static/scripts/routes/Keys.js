@@ -57,12 +57,16 @@ export class KeysRoute extends PageRoute {
   }
 
   _handleWheelKeyFinger (pWheelKeyFingerData) {
-    if (!pWheelKeyFingerData) return;
+    if (!pWheelKeyFingerData) {
+      return;
+    }
 
     const allKeys = pWheelKeyFingerData.return[0].data.return;
 
     for (const property of Object.keys(allKeys)) {
-      if (property === "local") continue;
+      if (property === "local") {
+        continue;
+      }
       const hosts = allKeys[property];
       for (const minionId of Object.keys(hosts)) {
         const item = this.pageElement.querySelector("#" + Utils.getIdFromMinionId(minionId) + " .os");
@@ -75,7 +79,9 @@ export class KeysRoute extends PageRoute {
         // update td.fingerprint with fingerprint value
         const fingerprintElement = this.pageElement.querySelector("#" + Utils.getIdFromMinionId(minionId) + " .fingerprint");
         const fingerprint = hosts[minionId];
-        if (!fingerprintElement) continue;
+        if (!fingerprintElement) {
+          continue;
+        }
         if (!fingerprint.match(this.fingerprintPattern)) {
           fingerprintElement.innerText = "";
           Utils.addErrorToTableCell(fingerprintElement, fingerprint);
@@ -87,12 +93,16 @@ export class KeysRoute extends PageRoute {
   }
 
   _handleKeysWheelKeyListAll (pWheelKeyListAllData) {
-    if (!pWheelKeyListAllData) return;
+    if (!pWheelKeyListAllData) {
+      return;
+    }
 
     const table = document.getElementById("keys-table");
 
     const msgDiv = document.getElementById("keys-msg");
-    if (PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
+    if (PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) {
+      return;
+    }
 
     const allKeys = pWheelKeyListAllData.return[0].data.return;
 
@@ -120,7 +130,9 @@ export class KeysRoute extends PageRoute {
     }
 
     for (const minionId of Object.keys(minionsDict)) {
-      if (table.querySelector("#" + Utils.getIdFromMinionId(minionId))) continue;
+      if (table.querySelector("#" + Utils.getIdFromMinionId(minionId))) {
+        continue;
+      }
       this._addMissingMinion(table, minionId, minionsDict);
     }
 
@@ -138,8 +150,10 @@ export class KeysRoute extends PageRoute {
     for (const tr of tbody.children) {
       const statusField = tr.querySelector("td.status");
       const statusText = statusField.innerText;
-      if (cnt[statusText] === undefined) cnt[statusText] = 0;
-      cnt[statusText]++;
+      if (cnt[statusText] === undefined) {
+        cnt[statusText] = 0;
+      }
+      cnt[statusText] += 1;
     }
 
     let summary = "";
@@ -317,10 +331,11 @@ export class KeysRoute extends PageRoute {
       let cmd = "wheel.key.accept";
       const minionTr = pMenu.menuDropdown.parentElement.parentElement;
       const status = minionTr.querySelector(".status").innerText;
-      if (status === "denied")
+      if (status === "denied") {
         cmd += " include_denied=true";
-      else if (status === "rejected")
+      } else if (status === "rejected") {
         cmd += " include_rejected=true";
+      }
       this.runCommand(pClickEvent, pMinionId, cmd);
     });
   }
@@ -336,10 +351,11 @@ export class KeysRoute extends PageRoute {
       let cmd = "wheel.key.accept";
       const minionTr = pMenu.menuDropdown.parentElement.parentElement;
       const status = minionTr.querySelector(".status").innerText;
-      if (status === "denied")
+      if (status === "denied") {
         cmd += " include_denied=true";
-      else if (status === "rejected")
+      } else if (status === "rejected") {
         cmd += " include_rejected=true";
+      }
       this.runCommand(pClickEvent, pMinionId, cmd);
     });
   }
@@ -355,10 +371,11 @@ export class KeysRoute extends PageRoute {
       let cmd = "wheel.key.reject";
       const minionTr = pMenu.menuDropdown.parentElement.parentElement;
       const status = minionTr.querySelector(".status").innerText;
-      if (status === "accepted")
+      if (status === "accepted") {
         cmd += " include_accepted=true";
-      else if (status === "denied")
+      } else if (status === "denied") {
         cmd += " include_denied=true";
+      }
       this.runCommand(pClickEvent, pMinionId, cmd);
     });
   }
@@ -387,20 +404,27 @@ export class KeysRoute extends PageRoute {
       if (pData.act === "accept") {
         statusTd.className = "status";
         statusTd.classList.add("accepted");
-        if (statusTd.innerText !== "accepted") statusTd.innerText = "accepted";
+        if (statusTd.innerText !== "accepted") {
+	  statusTd.innerText = "accepted";
+        }
       } else if (pData.act === "reject") {
         statusTd.className = "status";
         statusTd.classList.add("rejected");
-        if (statusTd.innerText !== "rejected") statusTd.innerText = "rejected";
+        if (statusTd.innerText !== "rejected") {
+	  statusTd.innerText = "rejected";
+        }
       } else if (pData.act === "pend") {
         statusTd.className = "status";
         statusTd.classList.add("unaccepted");
-        if (statusTd.innerText !== "unaccepted") statusTd.innerText = "unaccepted";
+        if (statusTd.innerText !== "unaccepted") {
+	  statusTd.innerText = "unaccepted";
+        }
       } else if (pData.act === "delete") {
         // "-1" due to the <tr> for the header that is inside <thead>
         tr.parentNode.deleteRow(tr.rowIndex - 1);
-        if (pData.id in minionsDict)
+        if (pData.id in minionsDict) {
           this._addMissingMinion(table, pData.id, minionsDict);
+        }
       } else {
         // unknown status
         // do not update screen
@@ -437,7 +461,9 @@ export class KeysRoute extends PageRoute {
     // we do not have the fingerprint yet
     // pre-fill with a dummy value and then retrieve the actual value
     const tr2 = table.querySelector("tr#" + Utils.getIdFromMinionId(pData.id));
-    if (!tr2) return;
+    if (!tr2) {
+      return;
+    }
     // at this stage, the field is still classed "os" instead of "fingerprint"
     const fingerprintSpan = tr2.querySelector("td.os");
     if (fingerprintSpan && (fingerprintSpan.innerText === "" || fingerprintSpan.innerText === "loading...")) {

@@ -43,8 +43,9 @@ export class ParseCommandLine {
       let name = null;
 
       let firstSpaceChar = pToRun.indexOf(" ");
-      if (firstSpaceChar < 0)
+      if (firstSpaceChar < 0) {
         firstSpaceChar = pToRun.length;
+      }
       const firstEqualSign = pToRun.indexOf("=");
       if (firstEqualSign >= 0 && firstEqualSign < firstSpaceChar) {
         // we have the name of a named parameter

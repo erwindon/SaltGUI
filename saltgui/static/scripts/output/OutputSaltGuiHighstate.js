@@ -21,8 +21,11 @@ export class OutputSaltGuiHighstate {
     // do not use Object.entries, that is not supported by the test framework
     for (const key of Object.keys(pMinionHighStateResponse)) {
       const task = pMinionHighStateResponse[key];
-      if (task.result === null) anySkips = true;
-      else if (!task.result) anyFailures = true;
+      if (task.result === null) {
+        anySkips = true;
+      } else if (!task.result) {
+        anyFailures = true;
+      }
     }
 
     if (anyFailures) {
@@ -104,8 +107,12 @@ export class OutputSaltGuiHighstate {
       for (const taskkey of Object.keys(change).sort()) {
 
         // we already provided this as summary: old->new
-        if (taskkey === "old" && change["new"] !== undefined) continue;
-        if (taskkey === "new" && change["old"] !== undefined) continue;
+        if (taskkey === "old" && change["new"] !== undefined) {
+          continue;
+        }
+        if (taskkey === "new" && change["old"] !== undefined) {
+          continue;
+        }
 
         pTaskDiv.append(document.createElement("br"));
         pTaskDiv.append(document.createTextNode(
@@ -239,9 +246,15 @@ export class OutputSaltGuiHighstate {
     // add a summary line
     let line = "";
 
-    if (succeeded) line += ", " + succeeded + " succeeded";
-    if (skipped) line += ", " + skipped + " skipped";
-    if (failed) line += ", " + failed + " failed";
+    if (succeeded) {
+      line += ", " + succeeded + " succeeded";
+    }
+    if (skipped) {
+      line += ", " + skipped + " skipped";
+    }
+    if (failed) {
+      line += ", " + failed + " failed";
+    }
     const total = succeeded + skipped + failed;
     if (total !== succeeded && total !== skipped && total !== failed) {
       line += ", " + (succeeded + skipped + failed) + " total";

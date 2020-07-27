@@ -56,7 +56,9 @@ export class BeaconsMinionRoute extends PageRoute {
     const container = document.getElementById("beacons-minion-table");
 
     const msgDiv = document.getElementById("beacons-minion-msg");
-    if (PageRoute.showErrorRowInstead(container.tBodies[0], pLocalBeaconsListData, msgDiv)) return;
+    if (PageRoute.showErrorRowInstead(container.tBodies[0], pLocalBeaconsListData, msgDiv)) {
+      return;
+    }
 
     const beacons0 = pLocalBeaconsListData.return[0][pMinionId];
 
@@ -64,7 +66,9 @@ export class BeaconsMinionRoute extends PageRoute {
 
     const titleElement = document.getElementById("beacons-minion-title");
     let txt = "Beacons on " + pMinionId;
-    if (beacons && beacons.enabled === false) txt += " (disabled)";
+    if (beacons && beacons.enabled === false) {
+      txt += " (disabled)";
+    }
     titleElement.innerText = txt;
 
     if (beacons === undefined) {
@@ -97,10 +101,12 @@ export class BeaconsMinionRoute extends PageRoute {
       const beacon = beacons.beacons[k];
 
       // simplify the beacon information
-      if ("name" in beacon)
+      if ("name" in beacon) {
         delete beacon.name;
-      if (beacon.enabled === true)
+      }
+      if (beacon.enabled === true) {
         delete beacon.enabled;
+      }
 
       const menu = new DropDownMenu(tr);
       let cmd = "beacons.modify " + k;
@@ -114,8 +120,11 @@ export class BeaconsMinionRoute extends PageRoute {
       // menu comes before this data on purpose
       const beaconConfig = Output.formatObject(beacon);
       const beaconConfigTd = Route.createTd("beacon-config", beaconConfig);
-      if (beacons.enabled === false) beaconConfigTd.classList.add("beacon-disabled");
-      if (beacon.enabled === false) beaconConfigTd.classList.add("beacon-disabled");
+      if (beacons.enabled === false) {
+        beaconConfigTd.classList.add("beacon-disabled");
+      } else if (beacon.enabled === false) {
+        beaconConfigTd.classList.add("beacon-disabled");
+      }
       tr.appendChild(beaconConfigTd);
 
       const beaconValueTd = Route.createTd("beacon-value", "(waiting)");
@@ -136,14 +145,18 @@ export class BeaconsMinionRoute extends PageRoute {
   }
 
   _addMenuItemBeaconsDisableWhenNeeded (pMenu, pMinionId, beacons) {
-    if (beacons.enabled === false) return;
+    if (beacons.enabled === false) {
+      return;
+    }
     pMenu.addMenuItem("Disable&nbsp;beacons...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.disable");
     });
   }
 
   _addMenuItemBeaconsEnableWhenNeeded (pMenu, pMinionId, beacons) {
-    if (beacons.enabled !== false) return;
+    if (beacons.enabled !== false) {
+      return;
+    }
     pMenu.addMenuItem("Enable&nbsp;beacons...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.enable");
     });
@@ -168,14 +181,18 @@ export class BeaconsMinionRoute extends PageRoute {
   }
 
   _addMenuItemBeaconsDisableBeaconWhenNeeded (pMenu, pMinionId, key, beacon) {
-    if (beacon.enabled === false) return;
+    if (beacon.enabled === false) {
+      return;
+    }
     pMenu.addMenuItem("Disable&nbsp;beacon...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.disable_beacon " + key);
     });
   }
 
   _addMenuItemBeaconsEnableBeaconWhenNeeded (pMenu, pMinionId, key, beacon) {
-    if (beacon.enabled !== false) return;
+    if (beacon.enabled !== false) {
+      return;
+    }
     pMenu.addMenuItem("Enable&nbsp;beacon...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.enable_beacon " + key);
     });
@@ -190,12 +207,16 @@ export class BeaconsMinionRoute extends PageRoute {
   handleSaltBeaconEvent (pTag, pData) {
     const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
     const prefix = "salt/beacon/" + minionId + "/";
-    if (!pTag.startsWith(prefix)) return;
+    if (!pTag.startsWith(prefix)) {
+      return;
+    }
     const table = document.getElementById("beacons-minion-table");
     let beaconName = pTag.substring(prefix.length);
     beaconName = beaconName.replace(/[/].*/, "");
     for (const row of table.tBodies[0].rows) {
-      if (row.getElementsByTagName("td")[0].innerText !== beaconName) continue;
+      if (row.getElementsByTagName("td")[0].innerText !== beaconName) {
+        continue;
+      }
       let txt = "";
       if (pData["_stamp"]) {
         txt += Output.dateTimeStr(pData["_stamp"]) + "\n";

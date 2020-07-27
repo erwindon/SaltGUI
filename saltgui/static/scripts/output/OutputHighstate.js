@@ -7,10 +7,16 @@ export class OutputHighstate {
 
   static isHighStateOutput (pCommand, pResponse) {
 
-    if (!Output.isOutputFormatAllowed("highstate")) return false;
+    if (!Output.isOutputFormatAllowed("highstate")) {
+      return false;
+    }
 
-    if (typeof pResponse !== "object") return false;
-    if (Array.isArray(pResponse)) return false;
+    if (typeof pResponse !== "object") {
+      return false;
+    }
+    if (Array.isArray(pResponse)) {
+      return false;
+    }
     switch (pCommand) {
     case "state.apply":
     case "state.high":
@@ -28,7 +34,9 @@ export class OutputHighstate {
     }
     for (const taskKey of Object.keys(pResponse)) {
       const components = taskKey.split("_|-");
-      if (components.length !== 4) return false;
+      if (components.length !== 4) {
+        return false;
+      }
     }
     return true;
   }
@@ -49,8 +57,11 @@ export class OutputHighstate {
     // do not use Object.entries, that is not supported by the test framework
     for (const taskKey of Object.keys(pMinionResponse)) {
       const task = pMinionResponse[taskKey];
-      if (task.result === null) anySkips = true;
-      else if (!task.result) anyFailures = true;
+      if (task.result === null) {
+        anySkips = true;
+      } else if (!task.result) {
+        anyFailures = true;
+      }
     }
 
     if (anyFailures) {
@@ -87,20 +98,23 @@ export class OutputHighstate {
 
       let txt = "----------";
 
-      if (task.name)
+      if (task.name) {
         txt += "\n          ID: " + task.name;
-      else
+      } else {
         txt += "\n          ID: (anonymous task)";
+      }
 
       txt += "\n    Function: " + components[0] + "." + components[3];
 
       txt += "\n      Result: " + JSON.stringify(task.result);
 
-      if (task.comment)
+      if (task.comment) {
         txt += "\n     Comment: " + task.comment;
+      }
 
-      if (task.start_time)
+      if (task.start_time) {
         txt += "\n     Started: " + task.start_time;
+      }
 
       if (task.duration) {
         txt += "\n    Duration: " + OutputHighstate._getDurationClauseMillis(task.duration);
@@ -113,8 +127,9 @@ export class OutputHighstate {
       if (task["changes"] !== undefined) {
         changes = task.changes;
         const keys = Object.keys(changes);
-        if (keys.length === 2 && keys[0] === "out" && keys[1] === "ret")
+        if (keys.length === 2 && keys[0] === "out" && keys[1] === "ret") {
           changes = changes["ret"];
+        }
         const str = JSON.stringify(changes);
         if (str !== "{}") {
           hasChanges = true;

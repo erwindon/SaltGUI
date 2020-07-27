@@ -48,12 +48,13 @@ export class TargetType {
       TargetType.menuTargetType.setTitle("Compound");
       break;
     case "glob":
-      if (TargetType.menuTargetType._system)
+      if (TargetType.menuTargetType._system) {
         // reset the title to the absolute minimum
         // so that the menu does not stand out in trivial situations
         TargetType.menuTargetType.setTitle("");
-      else
+      } else {
         TargetType.menuTargetType.setTitle("Normal");
+      }
       break;
     case "list":
       TargetType.menuTargetType.setTitle("List");
@@ -76,8 +77,10 @@ export class TargetType {
     for (let i = 0; i < m.length; i++) {
       let t = m[i].innerText;
       t = t.replace(/^. /, "");
-      // 25CF = BLACK CIRCLE
-      if (m[i]._value === targetType) t = "\u25CF " + t;
+      if (m[i]._value === targetType) {
+        // 25CF = BLACK CIRCLE
+        t = "\u25CF " + t;
+      }
       m[i].innerText = t;
     }
   }
@@ -117,7 +120,9 @@ export class TargetType {
 
   static _getTargetType () {
     const targetType = TargetType.menuTargetType._value;
-    if (targetType === undefined || targetType === "") return "glob";
+    if (targetType === undefined || targetType === "") {
+      return "glob";
+    }
     return targetType;
   }
 

@@ -38,14 +38,18 @@ export class Documentation {
       // actually "command" is not passed, but we select that part of the actual result
       // because `runners.doc.runner` always returns all documentation for "runners"
       command = command.substring(8);
-      if (command) command = " " + command;
+      if (command) {
+        command = " " + command;
+      }
       pMenuItem.innerText = "Run 'runners.doc.runner" + command + "'";
       pMenuItem.style.display = "block";
     } else if (command === "wheel" || command.startsWith("wheel.")) {
       // actually "command" is not passed, but we select that part of the actual result
       // because `runners.doc.wheel` always returns all documentation for "wheel"
       command = command.substring(6);
-      if (command) command = " " + command;
+      if (command) {
+        command = " " + command;
+      }
       pMenuItem.innerText = "Run 'runners.doc.wheel" + command + "'";
       pMenuItem.style.display = "block";
     } else {
@@ -56,14 +60,18 @@ export class Documentation {
 
   _manualRunMenuSysDocRun () {
     const button = document.getElementById("run-command");
-    if (button.disabled) return;
+    if (button.disabled) {
+      return;
+    }
     const output = document.getElementById("popup-output");
 
     const targetField = document.getElementById("target");
     let target = targetField.value;
     // the help text is taken from the first minion that answers
     // when no target is selected, just ask all minions
-    if (target === "") target = "*";
+    if (target === "") {
+      target = "*";
+    }
 
     // do not use the command-parser
     const commandField = document.getElementById("command");

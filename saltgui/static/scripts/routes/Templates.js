@@ -44,14 +44,17 @@ export class TemplatesRoute extends PageRoute {
     const container = document.getElementById("templates-table");
 
     const msgDiv = document.getElementById("templates-msg");
-    if (PageRoute.showErrorRowInstead(container, pWheelConfigValuesData, msgDiv)) return;
+    if (PageRoute.showErrorRowInstead(container, pWheelConfigValuesData, msgDiv)) {
+      return;
+    }
 
     // should we update it or just use from cache (see commandbox) ?
     let templates = pWheelConfigValuesData.return[0].data.return.saltgui_templates;
-    if (templates)
+    if (templates) {
       Utils.setStorageItem("session", "templates", JSON.stringify(templates));
-    else
+    } else {
       templates = {};
+    }
     const keys = Object.keys(templates).sort();
     for (const key of keys) {
       const template = templates[key];
@@ -82,11 +85,14 @@ export class TemplatesRoute extends PageRoute {
     const target = template["target"];
     if (!targetType && !target) {
       tr.appendChild(Route.createTd("target value-none", "(none)"));
-    } else if (/* targetType && */ !target) {
+    } else if (!target) {
+      // implies: targetType is not empty
       tr.appendChild(Route.createTd("target", targetType));
-    } else if (!targetType /* && target */) {
+    } else if (!targetType) {
+      // implies: target is not empty
       tr.appendChild(Route.createTd("target", target));
     } else {
+      // implies: both are not empty
       tr.appendChild(Route.createTd("target", targetType + " " + target));
     }
 

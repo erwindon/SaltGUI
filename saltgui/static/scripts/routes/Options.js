@@ -242,9 +242,15 @@ export class OptionsRoute extends PageRoute {
   }
 
   _makeTooltipModeValue (value) {
-    if (value === undefined) return "(undefined)";
-    if (value === null) return "(undefined)";
-    if (value === "undefined") return "(undefined)";
+    if (value === undefined) {
+      return "(undefined)";
+    }
+    if (value === null) {
+      return "(undefined)";
+    }
+    if (value === "undefined") {
+      return "(undefined)";
+    }
     return value;
   }
 

@@ -59,14 +59,18 @@ export class SchedulesMinionRoute extends PageRoute {
     const container = document.getElementById("schedules-minion-table");
 
     const msgDiv = document.getElementById("schedules-minion-msg");
-    if (PageRoute.showErrorRowInstead(container.tBodies[0], pLocalScheduleList, msgDiv)) return;
+    if (PageRoute.showErrorRowInstead(container.tBodies[0], pLocalScheduleList, msgDiv)) {
+      return;
+    }
 
     let schedules = pLocalScheduleList.return[0][pMinionId];
     schedules = SchedulesRoute.fixSchedulesMinion(schedules);
 
     const titleElement = document.getElementById("schedules-minion-title");
     let txt = "Schedules on " + pMinionId;
-    if (schedules && schedules.enabled === false) txt += " (disabled)";
+    if (schedules && schedules.enabled === false) {
+      txt += " (disabled)";
+    }
     titleElement.innerText = txt;
 
     if (schedules === undefined) {
@@ -92,14 +96,18 @@ export class SchedulesMinionRoute extends PageRoute {
       const schedule = schedules.schedules[k];
 
       // simplify the schedule information
-      if ("name" in schedule)
+      if ("name" in schedule) {
         delete schedule.name;
-      if (schedule.enabled === true)
+      }
+      if (schedule.enabled === true) {
         delete schedule.enabled;
-      if (schedule.jid_include === true)
+      }
+      if (schedule.jid_include === true) {
         delete schedule.jid_include;
-      if (schedule.maxrunning === 1)
+      }
+      if (schedule.maxrunning === 1) {
         delete schedule.maxrunning;
+      }
 
       const tr = document.createElement("tr");
 
@@ -109,12 +117,13 @@ export class SchedulesMinionRoute extends PageRoute {
       const menu = new DropDownMenu(tr);
       let scheduleModifyCmd = "schedule.modify " + k;
       for (const key in schedule) {
-        if (key === "args")
+        if (key === "args") {
           scheduleModifyCmd += " job_args";
-        else if (key === "kwargs")
+        } else if (key === "kwargs") {
           scheduleModifyCmd += " job_kwargs";
-        else
+        } else {
           scheduleModifyCmd += " " + key;
+        }
         scheduleModifyCmd += "=" + JSON.stringify(schedule[key]);
       }
       this._addMenuItemModifyJob(menu, pMinionId, scheduleModifyCmd);
@@ -126,8 +135,12 @@ export class SchedulesMinionRoute extends PageRoute {
       // menu comes before this data on purpose
       const scheduleValue = Output.formatObject(schedule);
       const scheduleValueTd = Route.createTd("schedule-value", scheduleValue);
-      if (schedule.enabled === false) scheduleValueTd.classList.add("schedule-disabled");
-      if (schedules.enabled === false) scheduleValueTd.classList.add("schedule-disabled");
+      if (schedule.enabled === false) {
+        scheduleValueTd.classList.add("schedule-disabled");
+      }
+      if (schedules.enabled === false) {
+        scheduleValueTd.classList.add("schedule-disabled");
+      }
       tr.appendChild(scheduleValueTd);
 
       container.tBodies[0].appendChild(tr);
@@ -143,14 +156,18 @@ export class SchedulesMinionRoute extends PageRoute {
   }
 
   _addMenuItemScheduleEnableWhenNeeded (pMenu, pMinionId, schedules) {
-    if (schedules.enabled !== false) return;
+    if (schedules.enabled !== false) {
+      return;
+    }
     pMenu.addMenuItem("Enable&nbsp;scheduler...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "schedule.enable");
     });
   }
 
   _addMenuItemScheduleDisableWhenNeeded (pMenu, pMinionId, schedules) {
-    if (schedules.enabled === false) return;
+    if (schedules.enabled === false) {
+      return;
+    }
     pMenu.addMenuItem("Disable&nbsp;scheduler...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "schedule.disable");
     });
@@ -163,14 +180,18 @@ export class SchedulesMinionRoute extends PageRoute {
   }
 
   _addMenuItemScheduleEnableJobWhenNeeded (pMenu, pMinionId, pJobName, schedule) {
-    if (schedule.enabled !== false) return;
+    if (schedule.enabled !== false) {
+      return;
+    }
     pMenu.addMenuItem("Enable&nbsp;job...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "schedule.enable_job " + pJobName);
     });
   }
 
   _addMenuItemScheduleDisableJobWhenNeeded (pMenu, pMinionId, pJobName, schedule) {
-    if (schedule.enabled === false) return;
+    if (schedule.enabled === false) {
+      return;
+    }
     pMenu.addMenuItem("Disable&nbsp;job...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "schedule.disable_job " + pJobName);
     });
@@ -185,7 +206,9 @@ export class SchedulesMinionRoute extends PageRoute {
   _addMenuItemScheduleRunJob (pMenu, pMinionId, pJobName, schedule) {
     pMenu.addMenuItem("Run&nbsp;job...", (pClickEvent) => {
       let scheduleRunJobCmd = "schedule.run_job";
-      if (schedule.enabled === false) scheduleRunJobCmd += " force=true";
+      if (schedule.enabled === false) {
+        scheduleRunJobCmd += " force=true";
+      }
       scheduleRunJobCmd += " " + pJobName;
       this.runCommand(pClickEvent, pMinionId, scheduleRunJobCmd);
     });

@@ -54,7 +54,9 @@ export class PillarsRoute extends PageRoute {
     const table = document.getElementById("pillars-table");
 
     const msgDiv = document.getElementById("pillars-msg");
-    if (PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
+    if (PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) {
+      return;
+    }
 
     const keys = pWheelKeyListAllData.return[0].data.return;
 

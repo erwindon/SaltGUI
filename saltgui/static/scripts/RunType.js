@@ -31,8 +31,10 @@ export class RunType {
     for (let i = 0; i < m.length; i++) {
       let t = m[i].innerText;
       t = t.replace(/^. /, "");
-      // 25CF = BLACK CIRCLE
-      if (m[i]._value === runType) t = "\u25CF " + t;
+      if (m[i]._value === runType) {
+        // 25CF = BLACK CIRCLE
+        t = "\u25CF " + t;
+      }
       m[i].innerText = t;
     }
   }
@@ -47,7 +49,9 @@ export class RunType {
 
   static getRunType () {
     const runType = RunType.menuRunType._value;
-    if (runType === undefined || runType === "") return "normal";
+    if (runType === undefined || runType === "") {
+      return "normal";
+    }
     return runType;
   }
 

@@ -21,22 +21,42 @@ export class OutputYaml {
       let needQuotes = false;
 
       // simple number with extra 0's at the start is still a string
-      if (pValue.match(/^0[0-9]+$/)) return pValue;
+      if (pValue.match(/^0[0-9]+$/)) {
+        return pValue;
+      }
 
-      if (!isNaN(Number(pValue))) needQuotes = true;
+      if (!isNaN(Number(pValue))) {
+        needQuotes = true;
+      }
 
-      if (pValue.match(/^$/)) needQuotes = true;
+      if (pValue.match(/^$/)) {
+        needQuotes = true;
+      }
 
-      if (pValue.match(/^ /)) needQuotes = true;
-      if (pValue.match(/ $/)) needQuotes = true;
+      if (pValue.match(/^ /)) {
+        needQuotes = true;
+      }
+      if (pValue.match(/ $/)) {
+        needQuotes = true;
+      }
 
-      if (pValue.match(/^@/)) needQuotes = true;
-      if (pValue.match(/^`/)) needQuotes = true;
-      if (pValue.match(/^%/)) needQuotes = true;
+      if (pValue.match(/^@/)) {
+        needQuotes = true;
+      }
+      if (pValue.match(/^`/)) {
+        needQuotes = true;
+      }
+      if (pValue.match(/^%/)) {
+        needQuotes = true;
+      }
 
-      if (!pValue.match(/^[-a-z0-9_()./:+ ]+$/i)) needQuotes = true;
+      if (!pValue.match(/^[-a-z0-9_()./:+ ]+$/i)) {
+        needQuotes = true;
+      }
 
-      if (!needQuotes) return pValue;
+      if (!needQuotes) {
+        return pValue;
+      }
       return "'" + pValue + "'";
     }
 
@@ -88,9 +108,9 @@ export class OutputYaml {
     for (const key of Object.keys(pValue).sort()) {
       const item = pValue[key];
       out += separator + key + ":";
-      const str = OutputYaml._formatSimpleYAML(item);
-      if (str !== null) {
-        out += " " + str;
+      const systr = OutputYaml._formatSimpleYAML(item);
+      if (systr !== null) {
+        out += " " + systr;
       } else if (Array.isArray(item)) {
         out += "\n" + " ".repeat(pIndentLevel) + OutputYaml.formatYAML(item, pIndentLevel);
       } else if (typeof item === "object") {

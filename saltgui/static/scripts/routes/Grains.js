@@ -77,7 +77,9 @@ export class GrainsRoute extends PageRoute {
     const table = document.getElementById("grains-table");
 
     const msgDiv = document.getElementById("grains-msg");
-    if (PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
+    if (PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) {
+      return;
+    }
 
     const keys = pWheelKeyListAllData.return[0].data.return;
 

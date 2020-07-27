@@ -24,34 +24,37 @@ export class BeaconsRoute extends PageRoute {
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
-    wheelKeyListAllPromise.then(pWheelKeyListAllData => {
+    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       myThis._handleBeaconsWheelKeyListAll(pWheelKeyListAllData);
-      localBeaconsListPromise.then(pLocalBeaconsListData => {
+      localBeaconsListPromise.then((pLocalBeaconsListData) => {
         myThis.updateMinions("beacons-table", pLocalBeaconsListData);
-      }, pLocalBeaconsListMsg => {
-        const localBeaconsListData = {"return":[{}]};
-        for (const k of pWheelKeyListAllData.return[0].data.return.minions)
+      }, (pLocalBeaconsListMsg) => {
+        const localBeaconsListData = {"return": [{}]};
+        for (const k of pWheelKeyListAllData.return[0].data.return.minions) {
           localBeaconsListData.return[0][k] = JSON.stringify(pLocalBeaconsListMsg);
+        }
         myThis.updateMinions("beacons-table", localBeaconsListData);
       });
-    }, pWheelKeyListAllMsg => {
+    }, (pWheelKeyListAllMsg) => {
       myThis._handleBeaconsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
     });
 
-    runnerJobsListJobsPromise.then(pRunnerJobsListJobsData => {
+    runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
       myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
-      runnerJobsActivePromise.then(pRunnerJobsActiveData => {
+      runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
-      }, pRunnerJobsActiveMsg => {
+      }, (pRunnerJobsActiveMsg) => {
         myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
-    }, pRunnerJobsListJobsMsg => {
+    }, (pRunnerJobsListJobsMsg) => {
       myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }
 
   static fixBeaconsMinion (pData) {
-    if (typeof pData !== "object") return pData;
+    if (typeof pData !== "object") {
+      return pData;
+    }
 
     // the data is an array of objects
     // where each object has one key
@@ -75,9 +78,11 @@ export class BeaconsRoute extends PageRoute {
       // eliminates one layer in the datamodel
       // and looks much better
       const newData = {};
-      for (const elem of pData[k])
-        for (const p in elem)
+      for (const elem of pData[k]) {
+        for (const p in elem) {
           newData[p] = elem[p];
+        }
+      }
       ret.beacons[k] = newData;
     }
 
@@ -88,7 +93,9 @@ export class BeaconsRoute extends PageRoute {
     const table = document.getElementById("beacons-table");
 
     const msgDiv = document.getElementById("beacons-msg");
-    if (PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
+    if (PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) {
+      return;
+    }
 
     const keys = pWheelKeyListAllData.return[0].data.return;
 
@@ -133,8 +140,9 @@ export class BeaconsRoute extends PageRoute {
       const cnt = Object.keys(pMinionData.beacons).length;
       let beaconInfoText = Utils.txtZeroOneMany(cnt,
         "no beacons", "{0} beacon", "{0} beacons");
-      if (!pMinionData.enabled)
+      if (!pMinionData.enabled) {
         beaconInfoText += " (disabled)";
+      }
       const beaconInfoTd = Route.createTd("beaconinfo", beaconInfoText);
       beaconInfoTd.setAttribute("sorttable_customkey", cnt);
       minionTr.appendChild(beaconInfoTd);

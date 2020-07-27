@@ -216,20 +216,28 @@ export class API {
       "Cache-Control": "no-cache",
       "X-Auth-Token": token
     };
-    if (pRoute.endsWith(".txt")) headers["Accept"] = "text/plain";
+    if (pRoute.endsWith(".txt")) {
+      headers["Accept"] = "text/plain";
+    }
     const options = {
       "headers": headers,
       "method": pMethod,
       "url": url
     };
 
-    if (pMethod === "POST") options.body = JSON.stringify(pParams);
+    if (pMethod === "POST") {
+      options.body = JSON.stringify(pParams);
+    }
 
     const myThis = this;
     return fetch(url, options)
       .then((pResponse) => {
-        if (pResponse.ok && pRoute.endsWith(".txt")) return pResponse.text();
-        if (pResponse.ok) return pResponse.json();
+        if (pResponse.ok && pRoute.endsWith(".txt")) {
+          return pResponse.text();
+        }
+        if (pResponse.ok) {
+          return pResponse.json();
+        }
         // fetch does not reject on > 300 http status codes,
         // so let's do it ourselves
         if (pResponse.status === 401 && pRoute === "/logout") {
@@ -271,7 +279,9 @@ export class API {
 
   getEvents (pRouter) {
     const token = Utils.getStorageItem("session", "token");
-    if (!token) return;
+    if (!token) {
+      return;
+    }
 
     const source = new EventSource(config.API_URL + "/events?token=" + token);
     source.onopen = () => {
@@ -311,7 +321,9 @@ export class API {
 
       // erase the public key value when it is present
       // it is long and boring (so not because it is a secret)
-      if (data.pub) data.pub = "...";
+      if (data.pub) {
+        data.pub = "...";
+      }
 
       // salt/beacon/<minion>/<beacon>/
       if (tag.startsWith("salt/beacon/")) {

@@ -54,7 +54,9 @@ export class SchedulesRoute extends PageRoute {
   // Meta-data is returned on the same level as
   // the list of scheduled items
   static fixSchedulesMinion (pData) {
-    if (typeof pData !== "object") return pData;
+    if (typeof pData !== "object") {
+      return pData;
+    }
 
     const ret = {"enabled": true, "schedules": {}};
 
@@ -74,8 +76,9 @@ export class SchedulesRoute extends PageRoute {
 
       // Since 2019.02, splay is always added, even when not set
       // so remove it when it has an empty value
-      if (ret.schedules[k]["splay"] === null)
+      if (ret.schedules[k]["splay"] === null) {
         delete ret.schedules[k]["splay"];
+      }
     }
 
     return ret;
@@ -85,7 +88,9 @@ export class SchedulesRoute extends PageRoute {
     const table = document.getElementById("schedules-table");
 
     const msgDiv = document.getElementById("schedules-msg");
-    if (PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) return;
+    if (PageRoute.showErrorRowInstead(table, pWheelKeyListAllData, msgDiv)) {
+      return;
+    }
 
     const keys = pWheelKeyListAllData.return[0].data.return;
 
@@ -136,8 +141,9 @@ export class SchedulesRoute extends PageRoute {
       cnt = Object.keys(pMinionData.schedules).length;
       scheduleinfo = Utils.txtZeroOneMany(cnt,
         "no schedules", "{0} schedule", "{0} schedules");
-      if (!pMinionData.enabled)
+      if (!pMinionData.enabled) {
         scheduleinfo += " (disabled)";
+      }
     } else {
       cnt = -1;
       scheduleinfo = "";

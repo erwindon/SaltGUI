@@ -19,8 +19,9 @@ export class OutputNested {
       pValue = pValue.replace(/\n$/, "");
       for (const line of pValue.split("\n")) {
         let linePrefix = pPrefix;
-        if (!isFirstLine)
+        if (!isFirstLine) {
           linePrefix = " ".repeat(pPrefix.length);
+        }
         pOutArray.push(OutputNested._ustring(pIndent, line, linePrefix));
         isFirstLine = false;
       }
@@ -29,11 +30,12 @@ export class OutputNested {
         if (typeof ind === "object" /* including array */) {
           pOutArray.push(OutputNested._ustring(pIndent, "|_"));
           let prefix;
-          if (Array.isArray(ind))
+          if (Array.isArray(ind)) {
             // 00A0 = NO-BREAK SPACE
             prefix = "-\u00A0";
-          else
+          } else {
             prefix = "";
+          }
           OutputNested.display(ind, pIndent + 2, prefix, pOutArray);
         } else {
           // 00A0 = NO-BREAK SPACE
@@ -41,7 +43,9 @@ export class OutputNested {
         }
       }
     } else if (typeof pValue === "object") {
-      if (pIndent) pOutArray.push(OutputNested._ustring(pIndent, "----------"));
+      if (pIndent) {
+        pOutArray.push(OutputNested._ustring(pIndent, "----------"));
+      }
       for (const key of Object.keys(pValue).sort()) {
         const val = pValue[key];
         pOutArray.push(OutputNested._ustring(pIndent, key, pPrefix, ":"));

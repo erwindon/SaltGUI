@@ -35,7 +35,9 @@ export class CommandBox {
     for (const key of keys) {
       const template = templates[key];
       let description = template["description"];
-      if (!description) description = "(" + key + ")";
+      if (!description) {
+        description = "(" + key + ")";
+      }
       menu.addMenuItem(
         description,
         () => {
@@ -98,7 +100,9 @@ export class CommandBox {
 
   _onRun () {
     const button = document.querySelector(".run-command input[type='submit']");
-    if (button.disabled) return;
+    if (button.disabled) {
+      return;
+    }
     const output = document.querySelector(".run-command pre");
 
     const targetField = document.getElementById("target");
@@ -109,14 +113,19 @@ export class CommandBox {
     const targetType = TargetType.menuTargetType._value;
 
     const func = this.getRunParams(targetType, targetValue, commandValue);
-    if (func === null) return;
+    if (func === null) {
+      return;
+    }
 
     button.disabled = true;
     output.innerText = "Loading...";
 
     func.then((pResponse) => {
-      if (pResponse) this.onRunReturn(pResponse.return[0], commandValue);
-      else this._showError("null response");
+      if (pResponse) {
+        this.onRunReturn(pResponse.return[0], commandValue);
+      } else {
+        this._showError("null response");
+      }
     }, (pResponse) => {
       this._showError(JSON.stringify(pResponse));
     });
@@ -125,8 +134,11 @@ export class CommandBox {
   onRunReturn (pResponse, pCommand) {
     const outputContainer = document.querySelector(".run-command pre");
     let minions = Object.keys(pResponse);
-    if (pCommand.startsWith("runners.")) minions = ["RUNNER"];
-    if (pCommand.startsWith("wheel.")) minions = ["WHEEL"];
+    if (pCommand.startsWith("runners.")) {
+      minions = ["RUNNER"];
+    } else if (pCommand.startsWith("wheel.")) {
+      minions = ["WHEEL"];
+    }
     // do not suppress the jobId (even when we can)
     Output.addResponseOutput(outputContainer, null, minions, pResponse, pCommand, "done");
     const button = document.querySelector(".run-command input[type='submit']");
@@ -190,7 +202,9 @@ export class CommandBox {
   // a KeyEvent(type="keyup")
   _hideManualRun (pEvent) {
     // Don't close if they click inside the window
-    if (pEvent.type === "click" && pEvent.target.className !== "popup" && pEvent.target.className !== "nearly-visible-button") return;
+    if (pEvent.type === "click" && pEvent.target.className !== "popup" && pEvent.target.className !== "nearly-visible-button") {
+      return;
+    }
 
     const manualRun = document.getElementById("popup-run-command");
     manualRun.style.display = "none";
@@ -307,7 +321,9 @@ export class CommandBox {
       params.client = "runner";
       // use only the part after "runners." (8 chars)
       params.fun = functionToRun.substring(8);
-      if (argsArray.length > 0) params.arg = argsArray;
+      if (argsArray.length > 0) {
+        params.arg = argsArray;
+      }
     } else if (functionToRun.startsWith("wheel.")) {
       // wheel.key functions are treated slightly different
       // we re-use the "target" field to fill the parameter "match"
@@ -321,9 +337,15 @@ export class CommandBox {
       params.client = "local";
       params.fun = functionToRun;
       params.tgt = pTarget;
-      if (pTargetType) params["tgt_type"] = pTargetType;
-      if (argsArray.length !== 0) params.arg = argsArray;
-      if (Object.keys(argsObject).length > 0) params.kwarg = argsObject;
+      if (pTargetType) {
+        params["tgt_type"] = pTargetType;
+      }
+      if (argsArray.length !== 0) {
+        params.arg = argsArray;
+      }
+      if (Object.keys(argsObject).length > 0) {
+        params.kwarg = argsObject;
+      }
     }
 
     const runType = RunType.getRunType();

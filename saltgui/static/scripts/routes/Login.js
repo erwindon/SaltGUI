@@ -35,7 +35,7 @@ export class LoginRoute extends Route {
     eauthSelector.value = Utils.getStorageItem("local", "eauth", "pam");
 
     const reason = decodeURIComponent(Utils.getQueryParam("reason"));
-    switch (reason){
+    switch (reason) {
     case null:
     case "":
     case "undefined":
@@ -59,7 +59,10 @@ export class LoginRoute extends Route {
 
   _onLogin (pSubmitEvent) {
     pSubmitEvent.preventDefault();
-    if (this.loginPending) return; // Don't continue if waiting on a request
+    if (this.loginPending) {
+      // Don't continue if waiting on a request
+      return;
+    }
 
     const userNameField = document.getElementById("username");
     const userName = userNameField.value;
@@ -128,7 +131,9 @@ export class LoginRoute extends Route {
     // Even when not set, the api server gives this an actual value "{}" here.
     // Let's assume the user never sets that value. Sounds reasonable because
     // when it is set, it is normally set to an actual value/list.
-    if (!nodeGroups || !Object.keys(nodeGroups).length) nodeGroups = undefined;
+    if (!nodeGroups || !Object.keys(nodeGroups).length) {
+      nodeGroups = undefined;
+    }
     Utils.setStorageItem("session", "nodegroups", JSON.stringify(nodeGroups));
 
     const outputFormats = wheelConfigValuesData.saltgui_output_formats;

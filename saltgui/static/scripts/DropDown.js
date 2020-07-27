@@ -46,8 +46,12 @@ export class DropDownMenu {
     if (this.menuDropdownContent) {
       for (const chld of this.menuDropdownContent.children) {
         const verifyCallBack = chld.verifyCallBack;
-        if (verifyCallBack) verifyCallBack(chld);
-        if (chld.style.display !== "none") visibleCount++;
+        if (verifyCallBack) {
+          verifyCallBack(chld);
+        }
+        if (chld.style.display !== "none") {
+          visibleCount += 1;
+        }
       }
     }
     // hide the menu when it has no visible menu-items
@@ -64,11 +68,14 @@ export class DropDownMenu {
   // or visibility (use menuitem.style.display = "none"/"inline-block")
   addMenuItem (pTitle, pCallBack, pValue) {
     const button = Route.createDiv("run-command-button", "...");
-    if (pValue) button._value = pValue;
-    if (typeof pTitle === "string")
+    if (pValue) {
+      button._value = pValue;
+    }
+    if (typeof pTitle === "string") {
       button.innerHTML = pTitle;
-    else
+    } else {
       button.verifyCallBack = pTitle;
+    }
     button.addEventListener("click", (pClickEvent) =>
       this._callback(pClickEvent, pCallBack, pValue)
     );

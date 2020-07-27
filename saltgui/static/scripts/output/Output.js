@@ -58,7 +58,9 @@ export class Output {
   // compose the host/minion-name label that is shown with each response
   static getMinionIdHtml (pMinionId, pClassName = "") {
     const span = Route.createSpan("minion-id", pMinionId);
-    if (pClassName) span.classList.add(pClassName);
+    if (pClassName) {
+      span.classList.add(pClassName);
+    }
     return span;
   }
 
@@ -132,10 +134,16 @@ export class Output {
 
   static _isAsyncOutput (pResponse) {
     const keys = Object.keys(pResponse);
-    if (keys.length !== 2) return false;
+    if (keys.length !== 2) {
+      return false;
+    }
     keys.sort();
-    if (keys[0] !== "jid") return false;
-    if (keys[1] !== "minions") return false;
+    if (keys[0] !== "jid") {
+      return false;
+    }
+    if (keys[1] !== "minions") {
+      return false;
+    }
     return true;
   }
 
@@ -150,22 +158,33 @@ export class Output {
 
     // no available setting, then return the original
     const dateTimeFractionDigitsText = Utils.getStorageItem("session", "datetime_fraction_digits");
-    if (dateTimeFractionDigitsText === null) return pDtStr;
+    if (dateTimeFractionDigitsText === null) {
+      return pDtStr;
+    }
 
     // setting is not a number, return the original
     let dateTimeFractionDigits = Number.parseInt(dateTimeFractionDigitsText, 10);
-    if (isNaN(dateTimeFractionDigits)) return pDtStr;
+    if (isNaN(dateTimeFractionDigits)) {
+      return pDtStr;
+    }
 
     // stick to the min/max values without complaining
-    if (dateTimeFractionDigits < 0) dateTimeFractionDigits = 0;
-    if (dateTimeFractionDigits > 6) dateTimeFractionDigits = 6;
+    if (dateTimeFractionDigits < 0) {
+      dateTimeFractionDigits = 0;
+    } else if (dateTimeFractionDigits > 6) {
+      dateTimeFractionDigits = 6;
+    }
 
     // find the fractional part (assume only one '.' in the string)
     let dotPos = pDtStr.indexOf(".");
-    if (dotPos < 0) return pDtStr;
+    if (dotPos < 0) {
+      return pDtStr;
+    }
 
     // with no digits, also remove the dot
-    if (dateTimeFractionDigits === 0) dotPos -= 1;
+    if (dateTimeFractionDigits === 0) {
+      dotPos -= 1;
+    }
 
     return pDtStr.substring(0, dotPos + dateTimeFractionDigits + 1);
   }
@@ -237,12 +256,15 @@ export class Output {
         if (key === "start_time") continue;
         if (key === "success") continue;
         // skip trivial info: result = true
-        if (key === "result" && task[key]) continue;
+        if (key === "result" && task[key]) {
+          continue;
+        }
         txt += "\n" + key + " = ";
-        if (typeof task.changes === "object")
+        if (typeof task.changes === "object") {
           txt += JSON.stringify(task[key]);
-        else
+        } else {
           txt += task[key];
+        }
       }
 
       const myNr = nr;
@@ -262,7 +284,9 @@ export class Output {
         taskDiv.classList.add("highlight-task");
         setTimeout(_ => {
           taskDiv.classList.remove("highlight-task");
-          if (!taskDiv.classList.length) taskDiv.removeAttribute("class");
+          if (!taskDiv.classList.length) {
+            taskDiv.removeAttribute("class");
+          }
         }, 1000);
 
         // behavior: smooth is ok, the destination is nearby
@@ -335,12 +359,20 @@ export class Output {
       for (const minionId in pResponse) {
         const result = pResponse[minionId];
         // when full_return is not used, the result is simpler
-        if (result === null) continue;
-        if (typeof result !== "object") continue;
-        if (!("success" in result)) continue;
+        if (result === null) {
+          continue;
+        }
+        if (typeof result !== "object") {
+          continue;
+        }
+        if (!("success" in result)) {
+          continue;
+        }
         // use keys that can conveniently be sorted
         const key = (result.success ? "0-" : "1-") + result.retcode;
-        if (summary[key] === undefined) summary[key] = 0;
+        if (summary[key] === undefined) {
+          summary[key] = 0;
+        }
         summary[key] += 1;
       }
 
@@ -376,12 +408,13 @@ export class Output {
     const masterTriangle = Route.createSpan("", "");
     // use cntMinions instead of cntResponses to be predictable
     // hide details when there are many minions to show
-    if (cntMinions > 50)
+    if (cntMinions > 50) {
       // 25B7 = WHITE RIGHT-POINTING TRIANGLE
       masterTriangle.innerText = "\u25B7";
-    else
+    } else {
       // 25BD = WHITE DOWN-POINTING TRIANGLE
       masterTriangle.innerText = "\u25BD";
+    }
     masterTriangle.style = "cursor: pointer";
     allDiv.appendChild(masterTriangle);
 
@@ -400,12 +433,18 @@ export class Output {
       for (const div of pOutputContainer.childNodes) {
         // only click on items that are collapsible
         const childs = div.getElementsByClassName("triangle");
-        if (childs.length !== 1) continue;
+        if (childs.length !== 1) {
+          continue;
+        }
         // do not collapse the "all" item again
         const tr = childs[0];
-        if (tr === masterTriangle) continue;
+        if (tr === masterTriangle) {
+          continue;
+        }
         // only click on items that are not already the same as "all"
-        if (tr.innerText === masterTriangle.innerText) continue;
+        if (tr.innerText === masterTriangle.innerText) {
+          continue;
+        }
         // (un)collapse the minion
         const clickEvent = new MouseEvent("click", {});
         tr.dispatchEvent(clickEvent);
@@ -444,8 +483,11 @@ export class Output {
       // the standard label is the minionId,
       // TODO: colored based on the retcode
       let minionClass = "host-success";
-      if (!isSuccess) minionClass = "host-failure";
-      if (pResponse[minionId] === undefined) minionClass = "host-no-response";
+      if (!isSuccess) {
+        minionClass = "host-failure";
+      } else if (pResponse[minionId] === undefined) {
+        minionClass = "host-no-response";
+      }
       let minionLabel = Output.getMinionIdHtml(minionId, minionClass);
 
       if (/*!fndRepresentation&&*/ pResponse[minionId] === undefined) {
@@ -527,7 +569,9 @@ export class Output {
         }
       }
 
-      if (minionMultiLine) nrMultiLineBlocks += 1;
+      if (minionMultiLine) {
+        nrMultiLineBlocks += 1;
+      }
 
       // compose the actual output
       const div = Route.createDiv("", "");
@@ -574,8 +618,9 @@ export class Output {
       minionOutput.classList.add("minion-output");
       // hide the per-minion details when we have so many minions
       // 25B7 = WHITE RIGHT-POINTING TRIANGLE
-      if (triangle && triangle.innerText === "\u25B7")
+      if (triangle && triangle.innerText === "\u25B7") {
         minionOutput.style.display = "none";
+      }
       div.append(minionOutput);
 
       pOutputContainer.append(div);
