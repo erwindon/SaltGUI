@@ -47,7 +47,8 @@ export class Utils {
   static getStorageItem(pStorage, pKeyName, pDefaultValue = null) {
     const storage = Utils._getStorage(pStorage);
     if(!storage) {
-      console.log("getStorageItem", pStorage, pKeyName); return pDefaultValue;
+      console.log("getStorageItem", pStorage, pKeyName);
+      return pDefaultValue;
     }
     const v = storage.getItem(pKeyName);
     // console.log("getStorageItem", pStorage, pKeyName, pDefaultValue, "-->", typeof v, v);
@@ -59,7 +60,8 @@ export class Utils {
   static setStorageItem(pStorage, pKeyName, pValue) {
     const storage = Utils._getStorage(pStorage);
     if(!storage) {
-      console.log("setStorageItem", pStorage, pKeyName, pValue); return;
+      console.log("setStorageItem", pStorage, pKeyName, pValue);
+      return;
     }
     // console.log("setStorageItem", pStorage, pKeyName, pValue);
     storage.setItem(pKeyName, pValue);
@@ -68,7 +70,8 @@ export class Utils {
   static clearStorage(pStorage) {
     const storage = Utils._getStorage(pStorage);
     if(!storage) {
-      console.log("clearStorage", pStorage); return;
+      console.log("clearStorage", pStorage);
+      return;
     }
     // console.log("clearStorage", pStorage);
     storage.clear();
