@@ -314,19 +314,15 @@ export class API {
       if(data.pub) data.pub = "...";
 
       // salt/beacon/<minion>/<beacon>/
-      if(tag.startsWith("salt/beacon/"))
-      {
+      if(tag.startsWith("salt/beacon/")) {
         // new beacon-value is received
         pRouter.beaconsMinionRoute.handleSaltBeaconEvent(tag, data);
-      } else if(tag === "salt/auth")
-      {
+      } else if(tag === "salt/auth") {
         // new key has been received
         pRouter.keysRoute.handleSaltAuthEvent(tag, data);
-      } else if(tag === "salt/key")
-      {
+      } else if(tag === "salt/key") {
         pRouter.keysRoute.handleSaltKeyEvent(tag, data);
-      } else if(tag.startsWith("salt/job/") && tag.includes("/ret/"))
-      {
+      } else if(tag.startsWith("salt/job/") && tag.includes("/ret/")) {
         pRouter.jobRoute.handleSaltJobRetEvent(tag, data);
       }
 

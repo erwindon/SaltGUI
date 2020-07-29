@@ -39,8 +39,7 @@ export class ParseCommandLine {
     // at the start of the line
     pToRun = pToRun.trim();
 
-    while(pToRun.length > 0)
-    {
+    while(pToRun.length > 0) {
       let name = null;
 
       let firstSpaceChar = pToRun.indexOf(" ");

@@ -232,8 +232,7 @@ export class JobsRoute extends PageRoute {
     const jobs = pData.return[0];
 
     // update all running jobs
-    for(const k in jobs)
-    {
+    for(const k in jobs) {
       const job = jobs[k];
 
       let targetText = "";

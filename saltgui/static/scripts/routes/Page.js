@@ -472,8 +472,7 @@ export class PageRoute extends Route {
     const jobs = pData.return[0];
 
     // update all running jobs
-    for(const k in jobs)
-    {
+    for(const k in jobs) {
       const job = jobs[k];
 
       // then add the operational statistics
