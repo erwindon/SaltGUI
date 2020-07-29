@@ -642,7 +642,10 @@ export class PageRoute extends Route {
       if(!pStaticMinionsTxt)
         Utils.setStorageItem("session", "minions-txt", "{}");
       else {
-        const lines = pStaticMinionsTxt.trim().split(/\r?\n/).filter(item => !item.startsWith("#"));
+        const lines = pStaticMinionsTxt.
+          trim().
+          split(/\r?\n/).
+          filter(item => !item.startsWith("#"));
         const minions = { };
         for(const line of lines) {
           const fields = line.split("\t");
