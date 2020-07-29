@@ -139,8 +139,7 @@ export class JobRoute extends Route {
       if(linkToJid === pJobId) {
         link.classList.add("disabled");
         Utils.addToolTip(link, "this job");
-      }
-      else
+      } else
       {
         link.addEventListener("click", pClickEvent =>
           window.location.assign(config.NAV_URL + "/job?id=" + linkToJid)

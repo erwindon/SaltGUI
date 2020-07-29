@@ -94,8 +94,7 @@ export class ParseCommandLine {
           const s = pToRun.substring(0, n + 1);
           try {
             value = JSON.parse(s);
-          }
-          catch(err) {
+          } catch(err) {
             // the string that we tried to parse is not valid json
             // continue to add more text from the input
             p = n + 1;

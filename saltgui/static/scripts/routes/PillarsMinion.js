@@ -85,8 +85,7 @@ export class PillarsMinionRoute extends PageRoute {
     for(let i = 0; i < publicPillars.length; i++) {
       try {
         publicPillars[i] = new RegExp(publicPillars[i]);
-      }
-      catch(err) {
+      } catch(err) {
         // most likely a syntax error in the RE
         console.error("error in regexp saltgui_public_pillars[" + i + "]=" + OutputYaml.formatYAML(publicPillars[i]) + " --> " + err.name + ": " + err.message);
         publicPillars[i] = null;

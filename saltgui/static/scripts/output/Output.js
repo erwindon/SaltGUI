@@ -431,8 +431,7 @@ export class Output {
         isSuccess = minionResponse.success;
         retCode = minionResponse.retcode;
         minionResponse = minionResponse.return;
-      }
-      else if(pCommand.startsWith("runner.") && minionResponse && minionResponse["return"] !== undefined) {
+      } else if(pCommand.startsWith("runner.") && minionResponse && minionResponse["return"] !== undefined) {
         // TODO: add isSuccess and retCode
         minionResponse = minionResponse.return.return;
       }
