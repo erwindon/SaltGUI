@@ -10,7 +10,7 @@
     "@babel/register": "^7.4.0",
     "babel-plugin-istanbul": "^5.1.1",
     "chai": "^4.1.2",
-    "eslint": "^5.3.0",
+    "eslint": "^7.5.0",
     "mocha": "^5.2.0",
     "nightmare": "^3.0.1",
     "nyc": "^13.3.0",
@@ -18,23 +18,51 @@
     "stylelint-config-standard": "^18.2.0"
   },
   "eslintConfig": {
-    "extends": "eslint:recommended",
+    "extends": "eslint:all",
     "parserOptions": {
       "ecmaVersion": 6,
       "sourceType": "module"
     },
     "rules": {
-      "//": "see https://eslint.org/docs/rules/ for details",
-      "semi": 2,
-      "no-undef": 0,
-      "no-unused-vars": 0,
-      "no-console": 0,
+      "array-element-newline": 0,
+      "capitalized-comments": 0,
+      "class-methods-use-this": 0,
+      "complexity": 0,
+      "consistent-this": 0,
+      "dot-notation": 0,
+      "func-names": 0,
+      "function-call-argument-newline": 0,
+      "function-paren-newline": 0,
+      "guard-for-in": 0,
+      "handle-callback-err": 0,
+      "id-length": 0,
       "indent": [
         "error",
         2
       ],
+      "init-declarations": 0,
+      "lines-around-comment": 0,
+      "max-classes-per-file": 0,
+      "max-len": 0,
+      "max-lines": 0,
+      "max-lines-per-function": 0,
+      "max-params": 0,
+      "max-statements": 0,
+      "multiline-comment-style": 0,
+      "multiline-ternary": 0,
+      "no-console": 0,
+      "no-constant-condition": [
+        "error",
+        {
+          "checkLoops": false
+        }
+      ],
+      "no-continue": 0,
       "no-irregular-whitespace": 2,
-      "no-whitespace-before-property": 2,
+      "no-loop-func": 0,
+      "no-loss-of-precision": 0,
+      "no-magic-numbers": 0,
+      "no-mixed-operators": 0,
       "no-multiple-empty-lines": [
         "error",
         {
@@ -42,15 +70,33 @@
           "maxEOF": 1
         }
       ],
-      "no-useless-escape": 0,
-      "no-constant-condition": [
+      "no-negated-condition": 0,
+      "no-param-reassign": 0,
+      "no-plusplus": [
         "error",
         {
-          "checkLoops": false
+          "allowForLoopAfterthoughts": true
         }
       ],
+      "no-ternary": 0,
+      "no-undef": 0,
+      "no-undef-init": 0,
+      "no-undefined": 0,
+      "no-underscore-dangle": 0,
+      "no-unused-vars": 0,
+      "no-useless-escape": 0,
       "no-var": 2,
-      "prefer-const": 2
+      "no-warning-comments": 0,
+      "no-whitespace-before-property": 2,
+      "object-property-newline": 0,
+      "object-shorthand": 0,
+      "one-var": 0,
+      "padded-blocks": 0,
+      "prefer-const": 2,
+      "prefer-destructuring": 0,
+      "prefer-template": 0,
+      "require-unicode-regexp": 0,
+      "semi": 2
     }
   },
   "stylelint": {
