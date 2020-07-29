@@ -20,7 +20,11 @@ export class Utils {
   /* istanbul ignore next */
   static getQueryParam(pName) {
     let w = null;
-    try { w = window; } catch(error) { /* VOID */ }
+    try {
+      w = window;
+    } catch(error) {
+      /* VOID */
+    }
     if(!w || !w.location) return undefined;
     return Utils._getQueryParam2(w.location.href, pName);
   }
@@ -29,7 +33,11 @@ export class Utils {
 
   static _getStorage(pStorage) {
     // "window" is not defined during unit testing
-    try { const w = window; } catch(error) { return null; }
+    try {
+      const w = window;
+    } catch(error) {
+      return null;
+    }
     if(pStorage === "local") return window.localStorage;
     if(pStorage === "session") return window.sessionStorage;
     console.error("UNKNOWN STORAGE TYPE", pStorage);
@@ -38,7 +46,9 @@ export class Utils {
 
   static getStorageItem(pStorage, pKeyName, pDefaultValue=null) {
     const storage = Utils._getStorage(pStorage);
-    if(!storage) { console.log("getStorageItem", pStorage, pKeyName); return pDefaultValue; }
+    if(!storage) {
+      console.log("getStorageItem", pStorage, pKeyName); return pDefaultValue;
+    }
     const v = storage.getItem(pKeyName);
     //console.log("getStorageItem", pStorage, pKeyName, pDefaultValue, "-->", typeof v, v);
     if(v === null) return pDefaultValue;
@@ -48,14 +58,18 @@ export class Utils {
 
   static setStorageItem(pStorage, pKeyName, pValue) {
     const storage = Utils._getStorage(pStorage);
-    if(!storage) { console.log("setStorageItem", pStorage, pKeyName, pValue); return; }
+    if(!storage) {
+      console.log("setStorageItem", pStorage, pKeyName, pValue); return;
+    }
     //console.log("setStorageItem", pStorage, pKeyName, pValue);
     storage.setItem(pKeyName, pValue);
   }
 
   static clearStorage(pStorage) {
     const storage = Utils._getStorage(pStorage);
-    if(!storage) { console.log("clearStorage", pStorage); return; }
+    if(!storage) {
+      console.log("clearStorage", pStorage); return;
+    }
     //console.log("clearStorage", pStorage);
     storage.clear();
   }

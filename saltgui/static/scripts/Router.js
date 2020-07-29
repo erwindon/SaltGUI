@@ -272,7 +272,9 @@ export class Router {
 
     const activeMenuItems = Array.from(document.querySelectorAll(".menu-item-active"));
     activeMenuItems.forEach(
-      function (e){ e.classList.remove("menu-item-active"); }
+      function (e){
+        e.classList.remove("menu-item-active");
+      }
     );
 
     const elem1 = pRoute.getMenuItemElement1();

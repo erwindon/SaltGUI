@@ -222,7 +222,9 @@ export class OutputDocumentation {
             replace(/^(.|\n|\r)*[.][.] _/m, "").
             replace(/(\n|\r)(.|\n|\r)*$/m, "");
           const words = reference.split(": ");
-          if(words.length !== 2) { console.log("words", words); break; }
+          if(words.length !== 2) {
+            console.log("words", words); break;
+          }
           const link = words[0];
           const target = words[1];
           // add link to all references

@@ -41,7 +41,9 @@ describe('Funtional tests', function() {
           return document.location.href.includes('login');
         })
         .wait(500)
-        .evaluate( () => { return document.location.href; } )
+        .evaluate( () => {
+          return document.location.href;
+        } )
         .end()
         .then( href => {
           href = href.replace(/[?]reason=.*/, "");
@@ -86,7 +88,9 @@ describe('Funtional tests', function() {
           return loginpage.style.display === 'none';
         })
         .wait(1000)
-        .evaluate( () => { return document.location.href; })
+        .evaluate( () => {
+          return document.location.href;
+        })
         .end()
         .then( href => {
           assert.equal(href, url);
@@ -121,7 +125,9 @@ describe('Funtional tests', function() {
           return document.location.href.includes('login');
         })
         .wait(1000)
-        .evaluate( () => { return document.location.href; })
+        .evaluate( () => {
+          return document.location.href;
+        })
         .end()
         .then( href => {
           // and we redirected to the login page
