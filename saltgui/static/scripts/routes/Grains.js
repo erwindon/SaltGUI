@@ -52,7 +52,7 @@ export class GrainsRoute extends PageRoute {
       localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
         myThis.updateMinions("grains-table", pLocalGrainsItemsData);
       }, (pLocalGrainsItemsMsg) => {
-        const localGrainsItemsData = {"return":[{}]};
+        const localGrainsItemsData = {"return": [{}]};
         for (const k of pWheelKeyListAllData.return[0].data.return.minions) {
           localGrainsItemsData.return[0][k] = JSON.stringify(pLocalGrainsItemsMsg);
         }

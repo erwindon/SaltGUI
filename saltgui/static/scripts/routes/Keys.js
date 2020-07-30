@@ -34,7 +34,7 @@ export class KeysRoute extends PageRoute {
       wheelKeyFingerPromise.then((pWheelKeyFingerData) => {
         myThis._handleWheelKeyFinger(pWheelKeyFingerData);
       }, (pWheelKeyFingerMsg) => {
-        const wheelKeyFingerData = {"return":[{"data":{"return":{"minions":{}}}}]};
+        const wheelKeyFingerData = {"return": [{"data": {"return": {"minions": {}}}}]};
         if (pWheelKeyListAllData) {
           for (const k of pWheelKeyListAllData.return[0].data.return.minions) {
             wheelKeyFingerData.return[0]["data"]["return"]["minions"][k] = JSON.stringify(pWheelKeyFingerMsg);
@@ -473,7 +473,7 @@ export class KeysRoute extends PageRoute {
       const wheelKeyFingerPromise = this.router.api.getWheelKeyFinger(pData.id);
       const myThis = this;
       wheelKeyFingerPromise.then(this._handleWheelKeyFinger, (pWheelKeyFingerMsg) => {
-        const wheelKeyFingerData = {"return":[{"data":{"return":{"minions":{}}}}]};
+        const wheelKeyFingerData = {"return": [{"data": {"return": {"minions": {}}}}]};
         wheelKeyFingerData.return[0]["data"]["return"]["minions"][pData.id] = JSON.stringify(pWheelKeyFingerMsg);
         myThis._handleWheelKeyFinger(wheelKeyFingerData);
       });

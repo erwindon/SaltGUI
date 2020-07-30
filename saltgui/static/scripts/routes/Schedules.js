@@ -29,7 +29,7 @@ export class SchedulesRoute extends PageRoute {
       localScheduleListPromise.then((pLocalScheduleListData) => {
         myThis.updateMinions("schedules-table", pLocalScheduleListData);
       }, (pLocalBeaconsListMsg) => {
-        const localScheduleListData = {"return":[{}]};
+        const localScheduleListData = {"return": [{}]};
         for (const k of pWheelKeyListAllData.return[0].data.return.minions) {
           localScheduleListData.return[0][k] = JSON.stringify(pLocalBeaconsListMsg);
         }
