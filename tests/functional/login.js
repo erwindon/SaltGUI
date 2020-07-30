@@ -37,13 +37,9 @@ describe("Funtional tests", function () {
 
     it("we should be redirected to the login page", done => {
       browser
-        .wait(() => {
-          return document.location.href.includes("login");
-        })
+        .wait(() => document.location.href.includes("login"))
         .wait(500)
-        .evaluate(() => {
-          return document.location.href;
-        } )
+        .evaluate(() => document.location.href)
         .end()
         .then(href => {
           href = href.replace(/[?]reason=.*/, "");
@@ -63,9 +59,7 @@ describe("Funtional tests", function () {
         .wait(500)
         .wait("#notice-wrapper div.notice_auth_failed")
         .wait(1000)
-        .evaluate(() => {
-          return document.querySelector("#notice-wrapper div").textContent;
-        })
+        .evaluate(() => document.querySelector("#notice-wrapper div").textContent)
         .end()
         .then(message => {
           assert.equal(message, "Authentication failed");
@@ -88,9 +82,7 @@ describe("Funtional tests", function () {
           return loginpage.style.display === "none";
         })
         .wait(1000)
-        .evaluate(() => {
-          return document.location.href;
-        })
+        .evaluate(() => document.location.href)
         .end()
         .then(href => {
           assert.equal(href, url);
@@ -121,13 +113,9 @@ describe("Funtional tests", function () {
           const loginpage = document.querySelector("#page-login");
           return loginpage.style.display === "";
         })
-        .wait(() => {
-          return document.location.href.includes("login");
-        })
+        .wait(() => document.location.href.includes("login"))
         .wait(1000)
-        .evaluate( () => {
-          return document.location.href;
-        })
+        .evaluate(() => document.location.href)
         .end()
         .then(href => {
           // and we redirected to the login page
