@@ -105,7 +105,7 @@ export class LoginRoute extends Route {
     });
 
     // allow the success message to be seen
-    setTimeout(_ => this.router.goTo("/"), 1000);
+    setTimeout(() => this.router.goTo("/"), 1000);
   }
 
   _handleLoginWheelConfigValues (pWheelConfigValuesData) {

@@ -4,7 +4,7 @@ import {TargetType} from "../../saltgui/static/scripts/TargetType.js";
 
 describe("Unittests for TargetType.js", () => {
 
-  it("test makeTargetText", done => {
+  it("test makeTargetText", (done) => {
 
     let result;
 

@@ -4,7 +4,7 @@ import {ParseCommandLine} from "../../saltgui/static/scripts/ParseCommandLine.js
 
 describe("Unittests for ParseCommandLine.js", () => {
 
-  it("test parseCommandLine", done => {
+  it("test parseCommandLine", (done) => {
     let args = [];
     let params = {};
     let result;

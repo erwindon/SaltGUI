@@ -1,3 +1,3 @@
 /* istanbul ignore file */
 import {Router} from "./Router.js";
-window.addEventListener("load", _ => new Router());
+window.addEventListener("load", () => new Router());

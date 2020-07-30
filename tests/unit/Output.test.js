@@ -7,7 +7,7 @@ import {OutputYaml} from "../../saltgui/static/scripts/output/OutputYaml.js";
 
 describe("Unittests for Output.js", () => {
 
-  it("test formatJSON", done => {
+  it("test formatJSON", (done) => {
 
     let outputData, result;
 
@@ -106,7 +106,7 @@ describe("Unittests for Output.js", () => {
     done();
   });
 
-  it("test formatYAML", done => {
+  it("test formatYAML", (done) => {
 
     let outputData, result;
 
@@ -189,7 +189,7 @@ describe("Unittests for Output.js", () => {
     done();
   });
 
-  it("test formatNESTED", done => {
+  it("test formatNESTED", (done) => {
 
     let outputData, result;
 
@@ -292,7 +292,7 @@ describe("Unittests for Output.js", () => {
     done();
   });
 
-  it("test isDocumentationOutput", done => {
+  it("test isDocumentationOutput", (done) => {
 
     let outputData, result;
 
@@ -339,7 +339,7 @@ describe("Unittests for Output.js", () => {
     done();
   });
 
-  it("test isDocuKeyMatch", done => {
+  it("test isDocuKeyMatch", (done) => {
 
     let result;
 
@@ -370,7 +370,7 @@ describe("Unittests for Output.js", () => {
     done();
   });
 
-  it("test reduceDocumentationOutput", done => {
+  it("test reduceDocumentationOutput", (done) => {
     let out;
 
     // normal case, hostname replaced by search key
@@ -401,7 +401,7 @@ describe("Unittests for Output.js", () => {
     done();
   });
 
-  it("test documentation external link conversion", done => {
+  it("test documentation external link conversion", (done) => {
     // external links will be converted to html
     const container = {"innerHTML": ""};
     const output = {"host1": {"pkg.install": "`systemd-run(1)`_\n .. _`systemd-run(1)`: https://www.freedesktop.org/software/systemd/man/systemd-run.html"}};

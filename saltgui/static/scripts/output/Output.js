@@ -282,7 +282,7 @@ export class Output {
 
         // show where the information is
         taskDiv.classList.add("highlight-task");
-        setTimeout(_ => {
+        setTimeout(() => {
           taskDiv.classList.remove("highlight-task");
           if (!taskDiv.classList.length) {
             taskDiv.removeAttribute("class");
