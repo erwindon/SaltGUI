@@ -536,9 +536,7 @@ export class Output {
           }
         );
         // then sort the array
-        tasks.sort(function(a, b) {
-          return a.__run_num__ - b.__run_num__;
-        } );
+        tasks.sort((a, b) => a.__run_num__ - b.__run_num__);
       }
 
       let addHighStateSummaryFlag = false;
