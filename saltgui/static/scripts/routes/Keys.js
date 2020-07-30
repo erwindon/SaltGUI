@@ -418,6 +418,7 @@ export class KeysRoute extends PageRoute {
       // new items will be added at the bottom of the table
       // except new pending keys, which come at the top.
       // so that it gets the proper attention.
+      /* eslint-disable no-lonely-if */
       if (pData.act === "pend") {
         this._addPreMinion(table, pData.id, minionsDict, true);
       } else if (pData.act === "accept") {
@@ -430,6 +431,7 @@ export class KeysRoute extends PageRoute {
         // unknown status
         // do not update screen
       }
+      /* eslint-enable no-lonely-if */
     }
 
     // we do not have the fingerprint yet
