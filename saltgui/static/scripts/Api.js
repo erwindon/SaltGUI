@@ -278,12 +278,12 @@ export class API {
   }
 
   getEvents (pRouter) {
-    const token = Utils.getStorageItem("session", "token");
-    if (!token) {
+    const tokenOnSetup = Utils.getStorageItem("session", "token");
+    if (!tokenOnSetup) {
       return;
     }
 
-    const source = new EventSource(config.API_URL + "/events?token=" + token);
+    const source = new EventSource(config.API_URL + "/events?token=" + tokenOnSetup);
     source.onopen = () => {
       // console.info("Listening for events...");
     };
@@ -293,8 +293,8 @@ export class API {
       source.close();
     };
     source.onmessage = (pMessage) => {
-      const token = Utils.getStorageItem("session", "token");
-      if (!token) {
+      const tokenOnMessage = Utils.getStorageItem("session", "token");
+      if (!tokenOnMessage) {
         // no token, stop the stream
         source.close();
         return;

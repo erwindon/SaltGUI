@@ -82,13 +82,13 @@ export class SchedulesMinionRoute extends PageRoute {
       return;
     }
 
-    const menu = new DropDownMenu(panel);
-    this._addMenuItemScheduleEnableWhenNeeded(menu, pMinionId, schedules);
-    this._addMenuItemScheduleDisableWhenNeeded(menu, pMinionId, schedules);
+    const minionMenu = new DropDownMenu(panel);
+    this._addMenuItemScheduleEnableWhenNeeded(minionMenu, pMinionId, schedules);
+    this._addMenuItemScheduleDisableWhenNeeded(minionMenu, pMinionId, schedules);
 
     // new menus are always added at the bottom of the div
     // fix that by re-adding it to its proper place
-    panel.insertBefore(menu.menuDropdown, titleElement.nextSibling);
+    panel.insertBefore(minionMenu.menuDropdown, titleElement.nextSibling);
 
     const keys = Object.keys(schedules.schedules).sort();
     for (const k of keys) {
@@ -114,7 +114,7 @@ export class SchedulesMinionRoute extends PageRoute {
       const nameTd = Route.createTd("schedule-name", k);
       tr.appendChild(nameTd);
 
-      const menu = new DropDownMenu(tr);
+      const scheduleMenu = new DropDownMenu(tr);
       let scheduleModifyCmd = "schedule.modify " + k;
       for (const key in schedule) {
         if (key === "args") {
@@ -126,11 +126,11 @@ export class SchedulesMinionRoute extends PageRoute {
         }
         scheduleModifyCmd += "=" + JSON.stringify(schedule[key]);
       }
-      this._addMenuItemModifyJob(menu, pMinionId, scheduleModifyCmd);
-      this._addMenuItemScheduleEnableJobWhenNeeded(menu, pMinionId, k, schedule);
-      this._addMenuItemScheduleDisableJobWhenNeeded(menu, pMinionId, k, schedule);
-      this._addMenuItemScheduleDeleteJob(menu, pMinionId, k);
-      this._addMenuItemScheduleRunJob(menu, pMinionId, k, schedule);
+      this._addMenuItemModifyJob(scheduleMenu, pMinionId, scheduleModifyCmd);
+      this._addMenuItemScheduleEnableJobWhenNeeded(scheduleMenu, pMinionId, k, schedule);
+      this._addMenuItemScheduleDisableJobWhenNeeded(scheduleMenu, pMinionId, k, schedule);
+      this._addMenuItemScheduleDeleteJob(scheduleMenu, pMinionId, k);
+      this._addMenuItemScheduleRunJob(scheduleMenu, pMinionId, k, schedule);
 
       // menu comes before this data on purpose
       const scheduleValue = Output.formatObject(schedule);

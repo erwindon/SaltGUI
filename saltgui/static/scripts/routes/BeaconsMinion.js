@@ -80,16 +80,16 @@ export class BeaconsMinionRoute extends PageRoute {
       return;
     }
 
-    const menu = new DropDownMenu(panel);
-    this._addMenuItemBeaconsDisableWhenNeeded(menu, pMinionId, beacons);
-    this._addMenuItemBeaconsEnableWhenNeeded(menu, pMinionId, beacons);
-    this._addMenuItemBeaconsAdd(menu, pMinionId);
-    this._addMenuItemBeaconsReset(menu, pMinionId);
-    this._addMenuItemBeaconsSave(menu, pMinionId);
+    const minionMenu = new DropDownMenu(panel);
+    this._addMenuItemBeaconsDisableWhenNeeded(minionMenu, pMinionId, beacons);
+    this._addMenuItemBeaconsEnableWhenNeeded(minionMenu, pMinionId, beacons);
+    this._addMenuItemBeaconsAdd(minionMenu, pMinionId);
+    this._addMenuItemBeaconsReset(minionMenu, pMinionId);
+    this._addMenuItemBeaconsSave(minionMenu, pMinionId);
 
     // new menus are always added at the bottom of the div
     // fix that by re-adding it to its proper place
-    panel.insertBefore(menu.menuDropdown, titleElement.nextSibling);
+    panel.insertBefore(minionMenu.menuDropdown, titleElement.nextSibling);
 
     const keys = Object.keys(beacons.beacons).sort();
     for (const k of keys) {
@@ -108,14 +108,14 @@ export class BeaconsMinionRoute extends PageRoute {
         delete beacon.enabled;
       }
 
-      const menu = new DropDownMenu(tr);
+      const beaconMenu = new DropDownMenu(tr);
       let cmd = "beacons.modify " + k;
       for (const key in beacon) {
         cmd = cmd + " " + key + "=" + JSON.stringify(beacon[key]);
       }
-      this._addMenuItemBeaconsDisableBeaconWhenNeeded(menu, pMinionId, k, beacon);
-      this._addMenuItemBeaconsEnableBeaconWhenNeeded(menu, pMinionId, k, beacon);
-      this._addMenuItemBeaconsDelete(menu, pMinionId, k);
+      this._addMenuItemBeaconsDisableBeaconWhenNeeded(beaconMenu, pMinionId, k, beacon);
+      this._addMenuItemBeaconsEnableBeaconWhenNeeded(beaconMenu, pMinionId, k, beacon);
+      this._addMenuItemBeaconsDelete(beaconMenu, pMinionId, k);
 
       // menu comes before this data on purpose
       const beaconConfig = Output.formatObject(beacon);

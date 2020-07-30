@@ -53,16 +53,16 @@ export class GrainsMinionRoute extends PageRoute {
 
   _handleLocalGrainsItems (pLocalGrainsItemsData, pMinionId) {
     const panel = document.getElementById("grains-minion-panel");
-    const menu = new DropDownMenu(panel);
-    this._addMenuItemGrainsSetValAdd(menu, pMinionId);
-    this._addMenuItemSaltUtilRefreshGrains(menu, pMinionId);
+    const minionMenu = new DropDownMenu(panel);
+    this._addMenuItemGrainsSetValAdd(minionMenu, pMinionId);
+    this._addMenuItemSaltUtilRefreshGrains(minionMenu, pMinionId);
 
     const container = document.getElementById("grains-minion-table");
 
     // new menus are always added at the bottom of the div
     // fix that by re-adding it to its proper place
     const titleElement = document.getElementById("grains-minion-title");
-    panel.insertBefore(menu.menuDropdown, titleElement.nextSibling);
+    panel.insertBefore(minionMenu.menuDropdown, titleElement.nextSibling);
 
     const msgDiv = document.getElementById("grains-minion-msg");
     if (PageRoute.showErrorRowInstead(container.tBodies[0], pLocalGrainsItemsData, msgDiv)) {
@@ -89,11 +89,11 @@ export class GrainsMinionRoute extends PageRoute {
 
       const grainValue = Output.formatObject(grains[grainName]);
 
-      const menu = new DropDownMenu(grainTr);
-      this._addMenuItemGrainsSetValUpdate(menu, pMinionId, grainName, grains);
-      this._addMenuItemGrainsAppendWhenNeeded(menu, pMinionId, grainName, grainValue);
-      this._addMenuItemGrainsDelKey(menu, pMinionId, grainName);
-      this._addMenuItemGrainsDelVal(menu, pMinionId, grainName);
+      const grainMenu = new DropDownMenu(grainTr);
+      this._addMenuItemGrainsSetValUpdate(grainMenu, pMinionId, grainName, grains);
+      this._addMenuItemGrainsAppendWhenNeeded(grainMenu, pMinionId, grainName, grainValue);
+      this._addMenuItemGrainsDelKey(grainMenu, pMinionId, grainName);
+      this._addMenuItemGrainsDelVal(grainMenu, pMinionId, grainName);
 
       // menu comes before this data on purpose
       const grainValueTd = Route.createTd("grain-value", grainValue);
