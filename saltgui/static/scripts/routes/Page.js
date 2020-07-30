@@ -44,10 +44,10 @@ export class PageRoute extends Route {
       // minions can be offline, then the info will be false
       if (minionInfo === false) {
         this.updateOfflineMinion(table, minionId, minionsDict);
-        cntOffline++;
+        cntOffline += 1;
       } else {
         this.updateMinion(table, minionInfo, minionId, minions);
-        cntOnline++;
+        cntOnline += 1;
       }
     }
 
@@ -460,7 +460,7 @@ export class PageRoute extends Route {
 
       if (!this._hideJobs.includes(job.Function) ||
          this._showJobs.includes(job.Function)) {
-        numberOfJobsEligible++;
+        numberOfJobsEligible += 1;
       } else if (pMaxNumberOfJobs !== 99999) {
         continue;
       }
@@ -473,7 +473,7 @@ export class PageRoute extends Route {
       // Note that "Jobs" has a specialized version
       this.addJob(jobContainer, job);
 
-      numberOfJobsShown++;
+      numberOfJobsShown += 1;
     }
 
     let txt = Utils.txtZeroOneMany(numberOfJobsShown,
