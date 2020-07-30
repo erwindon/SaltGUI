@@ -48,25 +48,25 @@ export class CommandBox {
   }
 
   _registerCommandBoxEventListeners () {
-    document.getElementById("popup-run-command")
-      .addEventListener("click", this._hideManualRun);
-    document.getElementById("button-manual-run")
-      .addEventListener("click", this.showManualRun);
-    document.getElementById("button-close-cmd")
-      .addEventListener("click", this._hideManualRun);
+    document.getElementById("popup-run-command").
+      addEventListener("click", this._hideManualRun);
+    document.getElementById("button-manual-run").
+      addEventListener("click", this.showManualRun);
+    document.getElementById("button-close-cmd").
+      addEventListener("click", this._hideManualRun);
 
-    document.querySelector(".run-command input[type='submit']")
-      .addEventListener("click", this._onRun);
+    document.querySelector(".run-command input[type='submit']").
+      addEventListener("click", this._onRun);
 
-    document.getElementById("target")
-      .addEventListener("input", (pKeyboardEvent) => {
+    document.getElementById("target").
+      addEventListener("input", (pKeyboardEvent) => {
         const targetField = document.getElementById("target");
         const targetType = targetField.value;
         TargetType.autoSelectTargetType(targetType);
       });
 
-    document.getElementById("command")
-      .addEventListener("input", this.cmdmenu.verifyAll);
+    document.getElementById("command").
+      addEventListener("input", this.cmdmenu.verifyAll);
   }
 
   _applyTemplate (template) {

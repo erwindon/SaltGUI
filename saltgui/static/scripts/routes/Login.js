@@ -77,8 +77,8 @@ export class LoginRoute extends Route {
     }
 
     this._toggleForm(false);
-    this.router.api.login(userName, passWord, eauth)
-      .then(this._onLoginSuccess, this._onLoginFailure);
+    this.router.api.login(userName, passWord, eauth).
+      then(this._onLoginSuccess, this._onLoginFailure);
   }
 
   _onLoginSuccess () {

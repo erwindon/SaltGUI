@@ -25,8 +25,8 @@ export class API {
     // store it as the default login method
     Utils.setStorageItem("local", "eauth", pEauth);
 
-    return this.apiRequest("POST", "/login", params)
-      .then((pLoginData) => {
+    return this.apiRequest("POST", "/login", params).
+      then((pLoginData) => {
         const response = pLoginData.return[0];
         if (Object.keys(response.perms).length === 0) {
           // We are allowed to login but there are no permissions available
@@ -55,8 +55,8 @@ export class API {
     // only delete the session here as the router should take care of
     // redirecting to the login screen
     const myThis = this;
-    return this.apiRequest("POST", "/logout", {})
-      .then((pResponse) => {
+    return this.apiRequest("POST", "/logout", {}).
+      then((pResponse) => {
         // we could logout, assume the session is terminated
         myThis._cleanStorage();
       }, (pResponse) => {
@@ -230,8 +230,8 @@ export class API {
     }
 
     const myThis = this;
-    return fetch(url, options)
-      .then((pResponse) => {
+    return fetch(url, options).
+      then((pResponse) => {
         if (pResponse.ok && pRoute.endsWith(".txt")) {
           return pResponse.text();
         }
