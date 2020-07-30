@@ -4,7 +4,7 @@ const url = "http://localhost:3333";
 
 console.log("waiting for docker setup to be ready");
 
-function waitfordocker() {
+waitfordocker = () => {
   request
     .get(url)
     .on("response", (response) => {
@@ -13,6 +13,6 @@ function waitfordocker() {
     .on("error", (err) => {
       setTimeout(waitfordocker, 1000);
     });
-}
+};
 
 waitfordocker();
