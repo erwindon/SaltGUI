@@ -61,7 +61,7 @@ export class OutputYaml {
     }
 
     if (typeof pValue !== "object") {
-      return "" + pValue;
+      return String(pValue);
     }
 
     if (Array.isArray(pValue) && pValue.length === 0) {
