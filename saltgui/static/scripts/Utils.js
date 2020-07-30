@@ -295,7 +295,7 @@ export class Utils {
       if (ev.key === "Escape") {
         Utils._updateTableFilter(pTable, "", menuItems);
         Utils.hideShowTableSearchBar(pSearchBlock, pTable);
-        return;
+        // return;
       }
     };
     input.oninput = (ev) =>
