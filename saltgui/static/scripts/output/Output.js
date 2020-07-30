@@ -490,7 +490,8 @@ export class Output {
       }
       let minionLabel = Output.getMinionIdHtml(minionId, minionClass);
 
-      if (/*!fndRepresentation&&*/ pResponse[minionId] === undefined) {
+      // implicit !fndRepresentation&&
+      if (pResponse[minionId] === undefined) {
         minionOutput = Output._getTextOutput("(no response)");
         minionOutput.classList.add("noresponse");
         fndRepresentation = true;
