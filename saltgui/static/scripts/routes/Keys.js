@@ -405,19 +405,19 @@ export class KeysRoute extends PageRoute {
         statusTd.className = "status";
         statusTd.classList.add("accepted");
         if (statusTd.innerText !== "accepted") {
-	  statusTd.innerText = "accepted";
+          statusTd.innerText = "accepted";
         }
       } else if (pData.act === "reject") {
         statusTd.className = "status";
         statusTd.classList.add("rejected");
         if (statusTd.innerText !== "rejected") {
-	  statusTd.innerText = "rejected";
+          statusTd.innerText = "rejected";
         }
       } else if (pData.act === "pend") {
         statusTd.className = "status";
         statusTd.classList.add("unaccepted");
         if (statusTd.innerText !== "unaccepted") {
-	  statusTd.innerText = "unaccepted";
+          statusTd.innerText = "unaccepted";
         }
       } else if (pData.act === "delete") {
         // "-1" due to the <tr> for the header that is inside <thead>
