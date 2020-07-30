@@ -118,8 +118,8 @@ export class PillarsRoute extends PageRoute {
   }
 
   _addMenuItemShowPillars(pMenu, pMinionId) {
-    pMenu.addMenuItem("Show&nbsp;pillars", function(pClickEvent) {
+    pMenu.addMenuItem("Show&nbsp;pillars", (pClickEvent) => {
       window.location.assign(config.NAV_URL + "/pillars-minion?minionid=" + encodeURIComponent(pMinionId));
-    }.bind(this));
+    });
   }
 }

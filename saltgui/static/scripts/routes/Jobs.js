@@ -86,10 +86,10 @@ export class JobsRoute extends PageRoute {
     let title = "Show&nbsp;first&nbsp;" + maxJobs + "&nbsp;jobs";
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     // 25CF = BLACK CIRCLE
-    if (cnt === "undefined" || cnt === maxJobs.toString()) title = "\u25CF " + title;
-    pMenu.addMenuItem(title, function(pClickEvent) {
+    if (cnt === "undefined" || cnt === String(maxJobs)) title = "\u25CF " + title;
+    pMenu.addMenuItem(title, (pClickEvent) => {
       window.location.assign(config.NAV_URL + "/jobs?cnt=" + maxJobs);
-    }.bind(this));
+    });
   }
 
   _addMenuItemShowEligible(pMenu) {
@@ -97,9 +97,9 @@ export class JobsRoute extends PageRoute {
     let title = "Show&nbsp;eligible&nbsp;jobs";
     // 25CF = BLACK CIRCLE
     if (cnt === "eligible") title = "\u25CF " + title;
-    pMenu.addMenuItem(title, function(pClickEvent) {
+    pMenu.addMenuItem(title, (pClickEvent) => {
       window.location.assign(config.NAV_URL + "/jobs?cnt=eligible");
-    }.bind(this));
+    });
   }
 
   _addMenuItemShowAll(pMenu) {
@@ -107,9 +107,9 @@ export class JobsRoute extends PageRoute {
     let title = "Show&nbsp;all&nbsp;jobs";
     // 25CF = BLACK CIRCLE
     if (cnt === "all") title = "\u25CF " + title;
-    pMenu.addMenuItem(title, function(pClickEvent) {
+    pMenu.addMenuItem(title, (pClickEvent) => {
       window.location.assign(config.NAV_URL + "/jobs?cnt=all");
-    }.bind(this));
+    });
   }
 
   addJob(pContainer, job) {
@@ -184,32 +184,32 @@ export class JobsRoute extends PageRoute {
   }
 
   _addJobsMenuItemShowDetails(pMenu, job) {
-    pMenu.addMenuItem("Show&nbsp;details", function(pClickEvent) {
+    pMenu.addMenuItem("Show&nbsp;details", (pClickEvent) => {
       window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
-    }.bind(this));
+    });
   }
 
   _addMenuItemJobsRerunJob(pMenu, job, argumentsText) {
     // 2011 = NON-BREAKING HYPHEN
-    pMenu.addMenuItem("Re&#x2011;run&nbsp;job...", function(pClickEvent) {
+    pMenu.addMenuItem("Re&#x2011;run&nbsp;job...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, job["Target-type"], job.Target, job.Function + argumentsText);
-    }.bind(this));
+    });
   }
 
   _addJobsMenuItemUpdateStatus(pMenu, pStatusSpan) {
-    pMenu.addMenuItem("Update&nbsp;status", function(pClickEvent) {
+    pMenu.addMenuItem("Update&nbsp;status", (pClickEvent) => {
       pStatusSpan.classList.add("no-status");
       pStatusSpan.innerText = "loading...";
       this.startRunningJobs();
-    }.bind(this));
+    });
   }
 
   _addMenuItemUpdateDetails(pMenu, pDetailsSpan, job) {
-    pMenu.addMenuItem("Update&nbsp;details", function(pClickEvent) {
+    pMenu.addMenuItem("Update&nbsp;details", (pClickEvent) => {
       pDetailsSpan.classList.add("no-status");
       pDetailsSpan.innerText = "loading...";
       this._getJobDetails(job.id);
-    }.bind(this));
+    });
   }
 
   handleRunnerJobsActive(pData) {

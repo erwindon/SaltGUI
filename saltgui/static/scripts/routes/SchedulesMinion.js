@@ -144,50 +144,50 @@ export class SchedulesMinionRoute extends PageRoute {
 
   _addMenuItemScheduleEnableWhenNeeded(pMenu, pMinionId, schedules) {
     if (schedules.enabled !== false) return;
-    pMenu.addMenuItem("Enable&nbsp;scheduler...", function(pClickEvent) {
+    pMenu.addMenuItem("Enable&nbsp;scheduler...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "schedule.enable");
-    }.bind(this));
+    });
   }
 
   _addMenuItemScheduleDisableWhenNeeded(pMenu, pMinionId, schedules) {
     if (schedules.enabled === false) return;
-    pMenu.addMenuItem("Disable&nbsp;scheduler...", function(pClickEvent) {
+    pMenu.addMenuItem("Disable&nbsp;scheduler...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "schedule.disable");
-    }.bind(this));
+    });
   }
 
   _addMenuItemModifyJob(pMenu, pMinionId, scheduleModifyCmd) {
-    pMenu.addMenuItem("Modify&nbsp;job...", function(pClickEvent) {
+    pMenu.addMenuItem("Modify&nbsp;job...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, scheduleModifyCmd);
-    }.bind(this));
+    });
   }
 
   _addMenuItemScheduleEnableJobWhenNeeded(pMenu, pMinionId, pJobName, schedule) {
     if (schedule.enabled !== false) return;
-    pMenu.addMenuItem("Enable&nbsp;job...", function(pClickEvent) {
+    pMenu.addMenuItem("Enable&nbsp;job...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "schedule.enable_job " + pJobName);
-    }.bind(this));
+    });
   }
 
   _addMenuItemScheduleDisableJobWhenNeeded(pMenu, pMinionId, pJobName, schedule) {
     if (schedule.enabled === false) return;
-    pMenu.addMenuItem("Disable&nbsp;job...", function(pClickEvent) {
+    pMenu.addMenuItem("Disable&nbsp;job...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "schedule.disable_job " + pJobName);
-    }.bind(this));
+    });
   }
 
   _addMenuItemScheduleDeleteJob(pMenu, pMinionId, pJobName) {
-    pMenu.addMenuItem("Delete&nbsp;job...", function(pClickEvent) {
+    pMenu.addMenuItem("Delete&nbsp;job...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "schedule.delete " + pJobName);
-    }.bind(this));
+    });
   }
 
   _addMenuItemScheduleRunJob(pMenu, pMinionId, pJobName, schedule) {
-    pMenu.addMenuItem("Run&nbsp;job...", function(pClickEvent) {
+    pMenu.addMenuItem("Run&nbsp;job...", (pClickEvent) => {
       let scheduleRunJobCmd = "schedule.run_job";
       if (schedule.enabled === false) scheduleRunJobCmd += " force=true";
       scheduleRunJobCmd += " " + pJobName;
       this.runCommand(pClickEvent, pMinionId, scheduleRunJobCmd);
-    }.bind(this));
+    });
   }
 }

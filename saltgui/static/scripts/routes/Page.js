@@ -543,17 +543,17 @@ export class PageRoute extends Route {
   }
 
   _addPageMenuItemShowDetails(pMenu, job) {
-    pMenu.addMenuItem("Show&nbsp;details", function(pClickEvent) {
+    pMenu.addMenuItem("Show&nbsp;details", (pClickEvent) => {
       window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
-    }.bind(this));
+    });
   }
 
   _addPageMenuItemUpdateStatus(pMenu, statusSpan) {
-    pMenu.addMenuItem("Update&nbsp;status", function(pClickEvent) {
+    pMenu.addMenuItem("Update&nbsp;status", (pClickEvent) => {
       statusSpan.classList.add("no-status");
       statusSpan.innerText = "loading...";
       this.startRunningJobs();
-    }.bind(this));
+    });
   }
 
   startRunningJobs() {
@@ -580,7 +580,7 @@ export class PageRoute extends Route {
   }
 
   _sortJobs(jobs) {
-    jobs.sort(function(a, b){
+    jobs.sort((a, b) => {
       // The id is already a string value based on the date,
       // let's use it to sort the jobs
       if (a.id < b.id) return 1;

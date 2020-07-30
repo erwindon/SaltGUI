@@ -110,43 +110,43 @@ export class GrainsMinionRoute extends PageRoute {
   }
 
   _addMenuItemGrainsSetValAdd(pMenu, pMinionId) {
-    pMenu.addMenuItem("Add&nbsp;grain...", function(pClickEvent) {
+    pMenu.addMenuItem("Add&nbsp;grain...", (pClickEvent) => {
       // use placeholders for name and value
       this.runCommand(pClickEvent, pMinionId, "grains.setval <name> <value>");
-    }.bind(this));
+    });
   }
 
   _addMenuItemSaltUtilRefreshGrains(pMenu, pMinionId) {
-    pMenu.addMenuItem("Refresh&nbsp;grains...", function(pClickEvent) {
+    pMenu.addMenuItem("Refresh&nbsp;grains...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "saltutil.refresh_grains");
-    }.bind(this));
+    });
   }
 
   _addMenuItemGrainsSetValUpdate(pMenu, pMinionId, key, grains) {
-    pMenu.addMenuItem("Edit&nbsp;grain...", function(pClickEvent) {
+    pMenu.addMenuItem("Edit&nbsp;grain...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId,
         "grains.setval \"" + key + "\" " + JSON.stringify(grains[key]));
-    }.bind(this));
+    });
   }
 
   _addMenuItemGrainsAppendWhenNeeded(pMenu, pMinionId, key, pGrainValue) {
     if (!pGrainValue.startsWith("[")) {
       return;
     }
-    pMenu.addMenuItem("Add&nbsp;value...", function(pClickEvent) {
+    pMenu.addMenuItem("Add&nbsp;value...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "grains.append \"" + key + "\" <value>");
-    }.bind(this));
+    });
   }
 
   _addMenuItemGrainsDelKey(pMenu, pMinionId, key) {
-    pMenu.addMenuItem("Delete&nbsp;key...", function(pClickEvent) {
+    pMenu.addMenuItem("Delete&nbsp;key...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "grains.delkey \"" + key + "\"");
-    }.bind(this));
+    });
   }
 
   _addMenuItemGrainsDelVal(pMenu, pMinionId, key) {
-    pMenu.addMenuItem("Delete&nbsp;value...", function(pClickEvent) {
+    pMenu.addMenuItem("Delete&nbsp;value...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "grains.delval \"" + key + "\"");
-    }.bind(this));
+    });
   }
 }

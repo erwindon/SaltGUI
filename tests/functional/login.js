@@ -3,7 +3,7 @@ const assert = require("chai").assert;
 
 const url = "http://localhost:3333/";
 
-describe("Funtional tests", function() {
+describe("Funtional tests", function () {
 
   let browser = null;
 

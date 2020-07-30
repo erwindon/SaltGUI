@@ -115,15 +115,15 @@ export class MinionsRoute extends PageRoute {
   }
 
   _addMenuItemStateApply(pMenu, pMinionId) {
-    pMenu.addMenuItem("Apply&nbsp;state...", function(pClickEvent) {
+    pMenu.addMenuItem("Apply&nbsp;state...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "state.apply");
-    }.bind(this));
+    });
   }
 
   _addMenuItemStateApplyTest(pMenu, pMinionId) {
-    pMenu.addMenuItem("Test&nbsp;state...", function(pClickEvent) {
+    pMenu.addMenuItem("Test&nbsp;state...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "state.apply test=True");
-    }.bind(this));
+    });
   }
 
   _isCveAffected(version) {

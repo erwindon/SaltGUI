@@ -160,8 +160,8 @@ export class SchedulesRoute extends PageRoute {
   }
 
   _addMenuItemShowSchedules(pMenu, pMinionId) {
-    pMenu.addMenuItem("Show&nbsp;schedules", function(pClickEvent) {
+    pMenu.addMenuItem("Show&nbsp;schedules", (pClickEvent) => {
       window.location.assign(config.NAV_URL + "/schedules-minion?minionid=" + encodeURIComponent(pMinionId));
-    }.bind(this));
+    });
   }
 }

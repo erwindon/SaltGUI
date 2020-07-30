@@ -272,7 +272,7 @@ export class Router {
 
     const activeMenuItems = Array.from(document.querySelectorAll(".menu-item-active"));
     activeMenuItems.forEach(
-      function (e){
+      (e) => {
         e.classList.remove("menu-item-active");
       }
     );
@@ -319,7 +319,7 @@ export class Router {
     const page = pRoute.getPageElement();
     page.classList.remove("current");
     // 500ms matches the timeout in main.css (.route)
-    setTimeout(function() {
+    setTimeout((ev) => {
       // Hide element after fade, so it does not expand the body
       page.style.display = "none";
     }, 500);

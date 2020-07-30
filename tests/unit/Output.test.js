@@ -5,7 +5,7 @@ import {OutputJson} from "../../saltgui/static/scripts/output/OutputJson.js";
 import {OutputNested} from "../../saltgui/static/scripts/output/OutputNested.js";
 import {OutputYaml} from "../../saltgui/static/scripts/output/OutputYaml.js";
 
-describe("Unittests for Output.js", function() {
+describe("Unittests for Output.js", () => {
 
   it("test formatJSON", done => {
 

@@ -274,15 +274,15 @@ export class API {
     if (!token) return;
 
     const source = new EventSource(config.API_URL + "/events?token=" + token);
-    source.onopen = function() {
+    source.onopen = () => {
       // console.info("Listening for events...");
     };
-    source.onerror = function(err) {
+    source.onerror = (err) => {
       // Don't show the error
       // It appears with every page-load
       source.close();
     };
-    source.onmessage = function(pMessage) {
+    source.onmessage = (pMessage) => {
       const token = Utils.getStorageItem("session", "token");
       if (!token) {
         // no token, stop the stream
@@ -328,6 +328,6 @@ export class API {
 
       pRouter.eventsRoute.handleAnyEvent(tag, data);
 
-    }.bind(this);
+    };
   }
 }

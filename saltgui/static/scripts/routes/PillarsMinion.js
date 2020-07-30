@@ -131,12 +131,12 @@ export class PillarsMinionRoute extends PageRoute {
 
       pillar.appendChild(pillarValueTd);
 
-      pillarHiddenDiv.addEventListener("click", function(pClickEvent) {
+      pillarHiddenDiv.addEventListener("click", (pClickEvent) => {
         pillarHiddenDiv.style.display = "none";
         pillarShownDiv.style.display = "inline-block";
       });
 
-      pillarShownDiv.addEventListener("click", function(pClickEvent) {
+      pillarShownDiv.addEventListener("click", (pClickEvent) => {
         pillarShownDiv.style.display = "none";
         pillarHiddenDiv.style.display = "inline-block";
       });
@@ -150,8 +150,8 @@ export class PillarsMinionRoute extends PageRoute {
   }
 
   _addMenuItemSaltUtilRefreshPillar(pMenu, pMinionId) {
-    pMenu.addMenuItem("Refresh&nbsp;pillar...", function(pClickEvent) {
+    pMenu.addMenuItem("Refresh&nbsp;pillar...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "saltutil.refresh_pillar");
-    }.bind(this));
+    });
   }
 }

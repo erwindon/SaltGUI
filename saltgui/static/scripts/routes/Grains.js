@@ -177,8 +177,8 @@ export class GrainsRoute extends PageRoute {
   }
 
   _addMenuItemShowGrains(pMenu, pMinionId) {
-    pMenu.addMenuItem("Show&nbsp;grains", function(pClickEvent) {
+    pMenu.addMenuItem("Show&nbsp;grains", (pClickEvent) => {
       window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(pMinionId));
-    }.bind(this));
+    });
   }
 }

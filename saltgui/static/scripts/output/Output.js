@@ -488,7 +488,7 @@ export class Output {
         // convert it to an array that is in execution order
         // first put all the values in an array
         Object.keys(minionResponse).forEach(
-          function(taskKey) {
+          (taskKey) => {
             minionResponse[taskKey].___key___ = taskKey;
             tasks.push(minionResponse[taskKey]);
           }

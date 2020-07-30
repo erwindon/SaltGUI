@@ -154,9 +154,9 @@ export class JobRoute extends Route {
 
   _addMenuItemJobRerunJob(pMenu, info, commandText) {
     // 2011 = NON-BREAKING HYPHEN
-    pMenu.addMenuItem("Re&#x2011;run&nbsp;job...", function(pClickEvent) {
+    pMenu.addMenuItem("Re&#x2011;run&nbsp;job...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, info["Target-type"], info.Target, commandText);
-    }.bind(this));
+    });
   }
 
   _addMenuItemRerunJobOnAllMinionsWhenNeeded(pMenu, info, commandText) {
@@ -175,9 +175,9 @@ export class JobRoute extends Route {
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
-    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;all&nbsp;minions...", function(pClickEvent) {
+    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;all&nbsp;minions...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, "list", lst, commandText);
-    }.bind(this));
+    });
   }
 
   _addMenuItemRerunJobOnUnsuccessfulMinionsWhenNeeded(pMenu, info, commandText) {
@@ -203,9 +203,9 @@ export class JobRoute extends Route {
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
-    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;unsuccessful&nbsp;minions...", function(pClickEvent) {
+    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;unsuccessful&nbsp;minions...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, "list", lst, commandText);
-    }.bind(this));
+    });
   }
 
   _addMenuItemRerunJobOnFailedMinionsWhenNeeded(pMenu, info, commandText) {
@@ -223,9 +223,9 @@ export class JobRoute extends Route {
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
-    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;failed&nbsp;minions...", function(pClickEvent) {
+    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;failed&nbsp;minions...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, "list", lst, commandText);
-    }.bind(this));
+    });
   }
 
   _addMenuItemRerunJobOnNonRespondingMinionsWhenNeeded(pMenu, info, commandText) {
@@ -243,27 +243,27 @@ export class JobRoute extends Route {
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
-    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;non&nbsp;responding&nbsp;minions...", function(pClickEvent) {
+    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;non&nbsp;responding&nbsp;minions...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, "list", lst, commandText);
-    }.bind(this));
+    });
   }
 
   _addMenuItemTerminateJob(pMenu, info, pJobId) {
-    this.terminateJobMenuItem = pMenu.addMenuItem("Terminate&nbsp;job...", function(pClickEvent) {
+    this.terminateJobMenuItem = pMenu.addMenuItem("Terminate&nbsp;job...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.term_job " + pJobId);
-    }.bind(this));
+    });
   }
 
   _addMenuItemKillJob(pMenu, info, pJobId) {
-    this.killJobMenuItem = pMenu.addMenuItem("Kill&nbsp;job...", function(pClickEvent) {
+    this.killJobMenuItem = pMenu.addMenuItem("Kill&nbsp;job...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.kill_job " + pJobId);
-    }.bind(this));
+    });
   }
 
   _addMenuItemSignalJob(pMenu, info, pJobId) {
-    this.signalJobMenuItem = pMenu.addMenuItem("Signal&nbsp;job...", function(pClickEvent) {
+    this.signalJobMenuItem = pMenu.addMenuItem("Signal&nbsp;job...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.signal_job " + pJobId + " signal=<signalnumber>");
-    }.bind(this));
+    });
   }
 
   handleRunnerJobsActive(id, pData) {
@@ -316,18 +316,18 @@ export class JobRoute extends Route {
         noResponseSpan.innerText = "(active) ";
 
         const menu = new DropDownMenu(noResponseSpan);
-        menu.addMenuItem("Show&nbsp;process&nbsp;info...", function(pClickEvent) {
+        menu.addMenuItem("Show&nbsp;process&nbsp;info...", (pClickEvent) => {
           this.runFullCommand(pClickEvent, "list", minionId, "ps.proc_info " + pid);
-        }.bind(this));
-        menu.addMenuItem("Terminate&nbsp;process...", function(pClickEvent) {
+        });
+        menu.addMenuItem("Terminate&nbsp;process...", (pClickEvent) => {
           this.runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=15");
-        }.bind(this));
-        menu.addMenuItem("Kill&nbsp;process...", function(pClickEvent) {
+        });
+        menu.addMenuItem("Kill&nbsp;process...", (pClickEvent) => {
           this.runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=9");
-        }.bind(this));
-        menu.addMenuItem("Signal&nbsp;process...", function(pClickEvent) {
+        });
+        menu.addMenuItem("Signal&nbsp;process...", (pClickEvent) => {
           this.runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=<signalnumber>");
-        }.bind(this));
+        });
 
         noResponseSpan.classList.remove("noresponse");
         noResponseSpan.classList.add("active");

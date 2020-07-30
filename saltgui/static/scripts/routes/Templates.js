@@ -109,8 +109,8 @@ export class TemplatesRoute extends PageRoute {
   }
 
   _addMenuItemApplyTemplate(pMenu, pTargetType, target, pCommand) {
-    pMenu.addMenuItem("Apply&nbsp;template...", function(pClickEvent) {
+    pMenu.addMenuItem("Apply&nbsp;template...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, pTargetType, target, pCommand);
-    }.bind(this));
+    });
   }
 }

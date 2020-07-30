@@ -7,10 +7,10 @@ console.log("waiting for docker setup to be ready");
 function waitfordocker() {
   request
     .get(url)
-    .on("response", function(response) {
+    .on("response", (response) => {
       console.log("docker setup is ready");
     })
-    .on("error", function(err) {
+    .on("error", (err) => {
       setTimeout(waitfordocker, 1000);
     });
 }

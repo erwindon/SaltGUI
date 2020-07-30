@@ -137,54 +137,54 @@ export class BeaconsMinionRoute extends PageRoute {
 
   _addMenuItemBeaconsDisableWhenNeeded(pMenu, pMinionId, beacons) {
     if (beacons.enabled === false) return;
-    pMenu.addMenuItem("Disable&nbsp;beacons...", function(pClickEvent) {
+    pMenu.addMenuItem("Disable&nbsp;beacons...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.disable");
-    }.bind(this));
+    });
   }
 
   _addMenuItemBeaconsEnableWhenNeeded(pMenu, pMinionId, beacons) {
     if (beacons.enabled !== false) return;
-    pMenu.addMenuItem("Enable&nbsp;beacons...", function(pClickEvent) {
+    pMenu.addMenuItem("Enable&nbsp;beacons...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.enable");
-    }.bind(this));
+    });
   }
 
   _addMenuItemBeaconsAdd(pMenu, pMinionId) {
-    pMenu.addMenuItem("Add&nbsp;beacon...", function(pClickEvent) {
+    pMenu.addMenuItem("Add&nbsp;beacon...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.add <name> <data>");
-    }.bind(this));
+    });
   }
 
   _addMenuItemBeaconsReset(pMenu, pMinionId) {
-    pMenu.addMenuItem("Reset&nbsp;beacons...", function(pClickEvent) {
+    pMenu.addMenuItem("Reset&nbsp;beacons...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.reset");
-    }.bind(this));
+    });
   }
 
   _addMenuItemBeaconsSave(pMenu, pMinionId) {
-    pMenu.addMenuItem("Save&nbsp;beacons...", function(pClickEvent) {
+    pMenu.addMenuItem("Save&nbsp;beacons...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.save");
-    }.bind(this));
+    });
   }
 
   _addMenuItemBeaconsDisableBeaconWhenNeeded(pMenu, pMinionId, key, beacon) {
     if (beacon.enabled === false) return;
-    pMenu.addMenuItem("Disable&nbsp;beacon...", function(pClickEvent) {
+    pMenu.addMenuItem("Disable&nbsp;beacon...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.disable_beacon " + key);
-    }.bind(this));
+    });
   }
 
   _addMenuItemBeaconsEnableBeaconWhenNeeded(pMenu, pMinionId, key, beacon) {
     if (beacon.enabled !== false) return;
-    pMenu.addMenuItem("Enable&nbsp;beacon...", function(pClickEvent) {
+    pMenu.addMenuItem("Enable&nbsp;beacon...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.enable_beacon " + key);
-    }.bind(this));
+    });
   }
 
   _addMenuItemBeaconsDelete(pMenu, pMinionId, key) {
-    pMenu.addMenuItem("Delete&nbsp;beacon...", function(pClickEvent) {
+    pMenu.addMenuItem("Delete&nbsp;beacon...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.delete " + key);
-    }.bind(this));
+    });
   }
 
   handleSaltBeaconEvent(pTag, pData) {

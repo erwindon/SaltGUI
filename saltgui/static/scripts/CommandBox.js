@@ -38,7 +38,7 @@ export class CommandBox {
       if (!description) description = "(" + key + ")";
       menu.addMenuItem(
         description,
-        function() {
+        () => {
           myThis._applyTemplate(template);
         }
       );

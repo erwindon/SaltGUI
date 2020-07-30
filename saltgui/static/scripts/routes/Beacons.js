@@ -153,8 +153,8 @@ export class BeaconsRoute extends PageRoute {
   }
 
   _addMenuItemShowBeacons(pMenu, pMinionId) {
-    pMenu.addMenuItem("Show&nbsp;beacons", function(pClickEvent) {
+    pMenu.addMenuItem("Show&nbsp;beacons", (pClickEvent) => {
       window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(pMinionId));
-    }.bind(this));
+    });
   }
 }
