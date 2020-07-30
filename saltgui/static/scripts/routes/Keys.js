@@ -35,9 +35,11 @@ export class KeysRoute extends PageRoute {
         myThis._handleWheelKeyFinger(pWheelKeyFingerData);
       }, (pWheelKeyFingerMsg) => {
         const wheelKeyFingerData = {"return":[{"data":{"return":{"minions":{}}}}]};
-        if (pWheelKeyListAllData)
-          for (const k of pWheelKeyListAllData.return[0].data.return.minions)
+        if (pWheelKeyListAllData) {
+          for (const k of pWheelKeyListAllData.return[0].data.return.minions) {
             wheelKeyFingerData.return[0]["data"]["return"]["minions"][k] = JSON.stringify(pWheelKeyFingerMsg);
+          }
+        }
         myThis._handleWheelKeyFinger(wheelKeyFingerData);
       });
     }, (pWheelKeyListAllMsg) => {
