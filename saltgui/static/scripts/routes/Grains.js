@@ -142,6 +142,7 @@ export class GrainsRoute extends PageRoute {
     this._addMenuItemShowGrains(menu, pMinionId);
 
     // add the preview columns
+    /* eslint-disable max-depth */
     for (let i = 0; i < this._previewGrains.length; i++) {
       const td = Route.createTd("", "");
       const grainName = this._previewGrains[i];
@@ -172,6 +173,7 @@ export class GrainsRoute extends PageRoute {
       }
       minionTr.appendChild(td);
     }
+    /* eslint-enable max-depth */
 
     minionTr.addEventListener("click", (pClickEvent) =>
       window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(pMinionId))
