@@ -8,7 +8,9 @@ describe("Funtional tests", function () {
   let browser = null;
 
   // the global electron timeout
+  /* eslint-disable no-invalid-this */
   this.timeout(60 * 1000);
+  /* eslint-enable no-invalid-this */
 
   beforeEach(() => {
     const options = {
