@@ -51,7 +51,6 @@
       "multiline-ternary": 0,
       "no-console": 0,
       "no-continue": 0,
-      "no-loop-func": 0,
       "no-loss-of-precision": 0,
       "no-magic-numbers": 0,
       "no-mixed-operators": 0,
