@@ -5,7 +5,9 @@ const assert = require("chai").assert;
 
 const url = "http://localhost:3333/";
 
+/* eslint-disable func-names */
 describe("Funtional tests", function () {
+/* eslint-enable func-names */
 
   let browser = null;
 
