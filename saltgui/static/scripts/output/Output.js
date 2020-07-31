@@ -236,6 +236,7 @@ export class Output {
       }
 
       for (const key in task) {
+        /* eslint-disable curly */
         if (key === "___key___") continue;
         if (key === "__id__") continue;
         if (key === "__jid__") continue;
@@ -255,6 +256,7 @@ export class Output {
         if (key === "skip_watch") continue;
         if (key === "start_time") continue;
         if (key === "success") continue;
+        /* eslint-enable curly */
         // skip trivial info: result = true
         if (key === "result" && task[key]) {
           continue;

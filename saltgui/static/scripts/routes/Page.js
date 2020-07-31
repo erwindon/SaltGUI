@@ -209,6 +209,7 @@ export class PageRoute extends Route {
         continue;
       }
       // private B = 172.16.0.0/20
+      /* eslint-disable curly */
       if (s.startsWith("172.16.")) continue;
       if (s.startsWith("172.17.")) continue;
       if (s.startsWith("172.18.")) continue;
@@ -225,6 +226,7 @@ export class PageRoute extends Route {
       if (s.startsWith("172.29.")) continue;
       if (s.startsWith("172.30.")) continue;
       if (s.startsWith("172.31.")) continue;
+      /* eslint-enable curly */
       // private C = 192.168.0.0/16
       if (s.startsWith("192.168.")) {
         continue;
@@ -287,7 +289,9 @@ export class PageRoute extends Route {
       let sorttableCustomkey = "";
       if (ipv4parts.length === 4) {
         // never mind adding '.'; this is only a sort-key
-        for (let i = 0; i < 4; i++) sorttableCustomkey += ipv4parts[i].padStart(3, "0");
+        for (let i = 0; i < 4; i++) {
+          sorttableCustomkey += ipv4parts[i].padStart(3, "0");
+        }
         addressTd.setAttribute("sorttable_customkey", sorttableCustomkey);
       }
       addressTd.classList.add("address");
@@ -639,8 +643,10 @@ export class PageRoute extends Route {
     jobs.sort((a, b) => {
       // The id is already a string value based on the date,
       // let's use it to sort the jobs
+      /* eslint-disable curly */
       if (a.id < b.id) return 1;
       if (a.id > b.id) return -1;
+      /* eslint-enable curly */
       return 0;
     });
   }

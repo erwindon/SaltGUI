@@ -133,6 +133,7 @@ export class OptionsRoute extends PageRoute {
     of7.addEventListener("change", this._newOutputFormats);
     of7.checked = outputFormatsValue && outputFormatsValue.includes("yaml");
 
+    /* eslint-disable curly */
     const datetimeFractionDigitsValue = Utils.getStorageItem("session", "datetime_fraction_digits");
     const datetimeFractionDigitsTd = document.getElementById("option-datetime-fraction-digits-value");
     datetimeFractionDigitsTd.innerText = this._makeDatetimeFractionDigitsValue(datetimeFractionDigitsValue);
@@ -157,7 +158,9 @@ export class OptionsRoute extends PageRoute {
     const dfd6 = document.getElementById("datetime-fraction-digits6");
     dfd6.addEventListener("change", this._newDatetimeFractionDigits);
     if (datetimeFractionDigitsValue === "6") dfd6.checked = true;
+    /* eslint-enable curly */
 
+    /* eslint-disable curly */
     const tooltipModeValue = Utils.getStorageItem("session", "tooltip_mode");
     const tooltipModeTd = document.getElementById("option-tooltip-mode-value");
     tooltipModeTd.innerText = this._makeTooltipModeValue(tooltipModeValue);
@@ -170,15 +173,18 @@ export class OptionsRoute extends PageRoute {
     const tm2 = document.getElementById("tooltip-mode-none");
     tm2.addEventListener("change", this._newTooltipMode);
     if (tooltipModeValue === "none") tm2.checked = true;
+    /* eslint-enable curly */
 
     const msgSpan = document.getElementById("options-msg");
     msgSpan.style.display = "none";
   }
 
   _parseAndFormat (valueStr) {
+    /* eslint-disable curly */
     if (valueStr === undefined) return "(undefined)";
     if (valueStr === null) return "(undefined)";
     if (valueStr === "undefined") return "(undefined)";
+    /* eslint-enable curly */
     const value = JSON.parse(valueStr);
     return OutputYaml.formatYAML(value);
   }
@@ -213,6 +219,7 @@ export class OptionsRoute extends PageRoute {
 
   _newOutputFormats (evt) {
     let v = "";
+    /* eslint-disable curly */
     const of0 = document.getElementById("output-formats-doc-doc");
     if (of0.checked) v += ",doc";
     const of2 = document.getElementById("output-formats-highstate-saltgui");
@@ -225,6 +232,7 @@ export class OptionsRoute extends PageRoute {
     if (of6.checked) v += ",nested";
     const of7 = document.getElementById("output-formats-output-yaml");
     if (of7.checked) v += ",yaml";
+    /* eslint-enable curly */
     v = "\"" + v.substring(1) + "\"";
     const outputFormatsTd = document.getElementById("option-output-formats-value");
     outputFormatsTd.innerText = this._makeOutputFormatsValue(v);

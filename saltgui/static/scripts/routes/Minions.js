@@ -135,6 +135,7 @@ export class MinionsRoute extends PageRoute {
     // and https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-11651
     // and https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-11652
     const items = version.split(".");
+    /* eslint-disable curly */
     if (items[0] === "0") return "yes";
     if (items[0] === "2015") return "yes";
     if (items[0] === "2016") return "yes";
@@ -157,6 +158,7 @@ export class MinionsRoute extends PageRoute {
     if (items[0] >= "3001") {
       return "no";
     }
+    /* eslint-enable curly */
 
     // should be something newer than we know of
     return "unknown";
