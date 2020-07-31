@@ -206,7 +206,7 @@ export class OutputDocumentation {
 
         // internal links: remove prefixes like ":mod:" and ":py:func:"
         // e.g. in "sys.doc state.apply"
-        out = out.replace(/(:[a-z_]*)*:`/g, "`");
+        out = out.replace(/(?::[a-z_]*)*:`/g, "`");
 
         // internal links: remove link indicators in highlighted text
         // e.g. in "sys.doc state.apply"
@@ -229,8 +229,8 @@ export class OutputDocumentation {
         while (out.includes(".. _")) {
           // take only a line containing ".. _"
           const reference = out.
-            replace(/^(.|\n|\r)*[.][.] _/m, "").
-            replace(/(\n|\r)(.|\n|\r)*$/m, "");
+            replace(/^(?:.|\n|\r)*[.][.] _/m, "").
+            replace(/(?:\n|\r)(?:.|\n|\r)*$/m, "");
           const words = reference.split(": ");
           if (words.length !== 2) {
             console.log("words", words);
@@ -250,11 +250,15 @@ export class OutputDocumentation {
 
         // replace ``......``
         // e.g. in "sys.doc state.apply"
+        /* eslint-disable prefer-named-capture-group */
         out = out.replace(/``([^`]*)``/g, "<span style='background-color: #575757'>$1</span>");
+        /* eslint-enable prefer-named-capture-group */
 
         // replace `......`
         // e.g. in "sys.doc state.apply"
+        /* eslint-disable prefer-named-capture-group */
         out = out.replace(/`([^`]*)`/g, "<span style='color: yellow'>$1</span>");
+        /* eslint-enable prefer-named-capture-group */
 
         // remove whitespace at end of lines
         out = out.replace(/  *\n/gm, "");

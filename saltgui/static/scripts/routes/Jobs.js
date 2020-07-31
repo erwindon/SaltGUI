@@ -20,7 +20,7 @@ export class JobsRoute extends PageRoute {
   onShow () {
     const myThis = this;
 
-    const patInteger = /^((0)|([-+]?[1-9][0-9]*))$/;
+    const patInteger = /^(?:(?:0)|(?:[-+]?[1-9][0-9]*))$/;
 
     const maxJobs = 50;
     let cnt = decodeURIComponent(Utils.getQueryParam("cnt", String(maxJobs)));

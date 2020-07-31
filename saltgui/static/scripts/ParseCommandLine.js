@@ -26,14 +26,14 @@ export class ParseCommandLine {
     const patPlaceHolder = /^<[a-z]+>/;
 
     // note that "none" is not case-insensitive, but "null" is
-    const patNull = /^(None|null|Null|NULL)$/;
+    const patNull = /^(?:None|null|Null|NULL)$/;
 
-    const patBooleanFalse = /^(false|False|FALSE)$/;
-    const patBooleanTrue = /^(true|True|TRUE)$/;
+    const patBooleanFalse = /^(?:false|False|FALSE)$/;
+    const patBooleanTrue = /^(?:true|True|TRUE)$/;
 
-    const patInteger = /^((0)|([-+]?[1-9][0-9]*))$/;
+    const patInteger = /^(?:(?:0)|(?:[-+]?[1-9][0-9]*))$/;
 
-    const patFloat = /^([-+]?(([0-9]+)|([0-9]+[.][0-9]*)|([0-9]*[.][0-9]+))([eE][-+]?[0-9]+)?)$/;
+    const patFloat = /^(?:[-+]?(?:(?:[0-9]+)|(?:[0-9]+[.][0-9]*)|(?:[0-9]*[.][0-9]+))(?:[eE][-+]?[0-9]+)?)$/;
 
     // just in case the user typed some extra whitespace
     // at the start of the line
