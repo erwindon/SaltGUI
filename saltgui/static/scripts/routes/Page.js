@@ -200,41 +200,41 @@ export class PageRoute extends Route {
     // so, it is an array
 
     // get the public IP number (if any)
-    for (const s of ipv4) {
+    for (const ipv4Number of ipv4) {
       // See https://nl.wikipedia.org/wiki/RFC_1918
       // local = 127.0.0.0/8
-      if (s.startsWith("127.")) {
+      if (ipv4Number.startsWith("127.")) {
         continue;
       }
       // private A = 10.0.0.0/8
-      if (s.startsWith("10.")) {
+      if (ipv4Number.startsWith("10.")) {
         continue;
       }
       // private B = 172.16.0.0/20
       /* eslint-disable curly */
-      if (s.startsWith("172.16.")) continue;
-      if (s.startsWith("172.17.")) continue;
-      if (s.startsWith("172.18.")) continue;
-      if (s.startsWith("172.19.")) continue;
-      if (s.startsWith("172.20.")) continue;
-      if (s.startsWith("172.21.")) continue;
-      if (s.startsWith("172.22.")) continue;
-      if (s.startsWith("172.23.")) continue;
-      if (s.startsWith("172.24.")) continue;
-      if (s.startsWith("172.25.")) continue;
-      if (s.startsWith("172.26.")) continue;
-      if (s.startsWith("172.27.")) continue;
-      if (s.startsWith("172.28.")) continue;
-      if (s.startsWith("172.29.")) continue;
-      if (s.startsWith("172.30.")) continue;
-      if (s.startsWith("172.31.")) continue;
+      if (ipv4Number.startsWith("172.16.")) continue;
+      if (ipv4Number.startsWith("172.17.")) continue;
+      if (ipv4Number.startsWith("172.18.")) continue;
+      if (ipv4Number.startsWith("172.19.")) continue;
+      if (ipv4Number.startsWith("172.20.")) continue;
+      if (ipv4Number.startsWith("172.21.")) continue;
+      if (ipv4Number.startsWith("172.22.")) continue;
+      if (ipv4Number.startsWith("172.23.")) continue;
+      if (ipv4Number.startsWith("172.24.")) continue;
+      if (ipv4Number.startsWith("172.25.")) continue;
+      if (ipv4Number.startsWith("172.26.")) continue;
+      if (ipv4Number.startsWith("172.27.")) continue;
+      if (ipv4Number.startsWith("172.28.")) continue;
+      if (ipv4Number.startsWith("172.29.")) continue;
+      if (ipv4Number.startsWith("172.30.")) continue;
+      if (ipv4Number.startsWith("172.31.")) continue;
       /* eslint-enable curly */
       // private C = 192.168.0.0/16
-      if (s.startsWith("192.168.")) {
+      if (ipv4Number.startsWith("192.168.")) {
         continue;
       }
       // not a local/private address, therefore it is public
-      return s;
+      return ipv4Number;
     }
 
     // No public IP was found
@@ -242,32 +242,32 @@ export class PageRoute extends Route {
     // get the private IP number (if any)
     // when it matches one of the common prefixes
     for (const prefix in prefixes) {
-      for (const s of ipv4) {
-        if (s.startsWith(prefix)) {
-          return s;
+      for (const ipv4Number of ipv4) {
+        if (ipv4Number.startsWith(prefix)) {
+          return ipv4Number;
         }
       }
     }
 
     // no luck...
     // try again, but without the restrictions
-    for (const s of ipv4) {
+    for (const ipv4Number of ipv4) {
       // C = 192.168.x.x
-      if (s.startsWith("192.168.")) {
-        return s;
+      if (ipv4Number.startsWith("192.168.")) {
+        return ipv4Number;
       }
     }
-    for (const s of ipv4) {
+    for (const ipv4Number of ipv4) {
       // B = 172.16.0.0 .. 172.31.255.255
       // never mind the sub-ranges
-      if (s.startsWith("172.")) {
-        return s;
+      if (ipv4Number.startsWith("172.")) {
+        return ipv4Number;
       }
     }
-    for (const s of ipv4) {
+    for (const ipv4Number of ipv4) {
       // A = 10.x.x.x
-      if (s.startsWith("10.")) {
-        return s;
+      if (ipv4Number.startsWith("10.")) {
+        return ipv4Number;
       }
     }
 
@@ -530,8 +530,8 @@ export class PageRoute extends Route {
     const jobs = pData.return[0];
 
     // update all running jobs
-    for (const k in jobs) {
-      const job = jobs[k];
+    for (const jobId in jobs) {
+      const job = jobs[jobId];
 
       // then add the operational statistics
       let statusText = "";
@@ -542,14 +542,14 @@ export class PageRoute extends Route {
         statusText = statusText + ", " + job.Returned.length + " returned";
       }
 
-      const statusSpan = this.pageElement.querySelector("table.jobs td#" + Utils.getIdFromJobId(k) + " span.status");
+      const statusSpan = this.pageElement.querySelector("table.jobs td#" + Utils.getIdFromJobId(jobId) + " span.status");
       // the field may not (yet) be on the screen
       if (!statusSpan) {
         continue;
       }
 
       statusSpan.innerText = "";
-      statusSpan.appendChild(Utils.createJobStatusSpan(k));
+      statusSpan.appendChild(Utils.createJobStatusSpan(jobId));
       statusSpan.appendChild(document.createTextNode(statusText.substring(2)));
 
       Utils.addToolTip(statusSpan, "Click to refresh", "bottom-left");
@@ -642,12 +642,12 @@ export class PageRoute extends Route {
   }
 
   _sortJobs (jobs) {
-    jobs.sort((a, b) => {
+    jobs.sort((aa, bb) => {
       // The id is already a string value based on the date,
       // let's use it to sort the jobs
       /* eslint-disable curly */
-      if (a.id < b.id) return 1;
-      if (a.id > b.id) return -1;
+      if (aa.id < bb.id) return 1;
+      if (aa.id > bb.id) return -1;
       /* eslint-enable curly */
       return 0;
     });

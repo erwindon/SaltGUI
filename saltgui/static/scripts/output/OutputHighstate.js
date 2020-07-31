@@ -42,13 +42,14 @@ export class OutputHighstate {
   }
 
   static _getDurationClauseMillis (pMilliSeconds) {
-    const ms = Math.round(pMilliSeconds * 1000) / 1000;
-    return `${ms} ms`;
+    // discard the microseconds
+    const nrMilliSeconds = Math.round(pMilliSeconds * 1000) / 1000;
+    return `${nrMilliSeconds} ms`;
   }
 
   static _getDurationClauseSecs (pMilliSeconds) {
-    const s = Math.round(pMilliSeconds) / 1000;
-    return `${s} s`;
+    const nrSeconds = Math.round(pMilliSeconds) / 1000;
+    return `${nrSeconds} s`;
   }
 
   static getHighStateLabel (pMinionId, pMinionResponse) {

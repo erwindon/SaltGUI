@@ -29,15 +29,15 @@ export class RunType {
       console.error("runType", runType);
     }
 
-    const m = RunType.menuRunType.menuDropdownContent.children;
-    for (let i = 0; i < m.length; i++) {
-      let t = m[i].innerText;
-      t = t.replace(/^. /, "");
-      if (m[i]._value === runType) {
+    const menuItems = RunType.menuRunType.menuDropdownContent.children;
+    for (let i = 0; i < menuItems.length; i++) {
+      let menuItemText = menuItems[i].innerText;
+      menuItemText = menuItemText.replace(/^. /, "");
+      if (menuItems[i]._value === runType) {
         // 25CF = BLACK CIRCLE
-        t = "\u25CF " + t;
+        menuItemText = "\u25CF " + menuItemText;
       }
-      m[i].innerText = t;
+      menuItems[i].innerText = menuItemText;
     }
   }
 

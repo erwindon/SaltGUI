@@ -32,8 +32,8 @@ export class BeaconsRoute extends PageRoute {
         that.updateMinions("beacons-table", pLocalBeaconsListData);
       }, (pLocalBeaconsListMsg) => {
         const localBeaconsListData = {"return": [{}]};
-        for (const k of pWheelKeyListAllData.return[0].data.return.minions) {
-          localBeaconsListData.return[0][k] = JSON.stringify(pLocalBeaconsListMsg);
+        for (const minionId of pWheelKeyListAllData.return[0].data.return.minions) {
+          localBeaconsListData.return[0][minionId] = JSON.stringify(pLocalBeaconsListMsg);
         }
         that.updateMinions("beacons-table", localBeaconsListData);
       });
@@ -64,14 +64,14 @@ export class BeaconsRoute extends PageRoute {
 
     const ret = {"beacons": {}, "enabled": true};
 
-    for (const k in pData) {
+    for (const beaconName in pData) {
       // correct for empty list that returns this dummy value
-      if (k === "beacons" && JSON.stringify(pData[k]) === "{}") {
+      if (beaconName === "beacons" && JSON.stringify(pData[beaconName]) === "{}") {
         continue;
       }
 
       // "enabled" is always a boolean (when present)
-      if (k === "enabled") {
+      if (beaconName === "enabled") {
         ret.enabled = pData.enabled;
         continue;
       }
@@ -80,12 +80,12 @@ export class BeaconsRoute extends PageRoute {
       // eliminates one layer in the datamodel
       // and looks much better
       const newData = {};
-      for (const elem of pData[k]) {
-        for (const p in elem) {
-          newData[p] = elem[p];
+      for (const elem of pData[beaconName]) {
+        for (const valueKey in elem) {
+          newData[valueKey] = elem[valueKey];
         }
       }
-      ret.beacons[k] = newData;
+      ret.beacons[beaconName] = newData;
     }
 
     return ret;

@@ -220,25 +220,25 @@ export class OptionsRoute extends PageRoute {
   }
 
   _newOutputFormats (evt) {
-    let v = "";
+    let value = "";
     /* eslint-disable curly */
     const of0 = document.getElementById("output-formats-doc-doc");
-    if (of0.checked) v += ",doc";
+    if (of0.checked) value += ",doc";
     const of2 = document.getElementById("output-formats-highstate-saltgui");
-    if (of2.checked) v += ",saltguihighstate";
+    if (of2.checked) value += ",saltguihighstate";
     const of3 = document.getElementById("output-formats-highstate-normal");
-    if (of3.checked) v += ",highstate";
+    if (of3.checked) value += ",highstate";
     const of5 = document.getElementById("output-formats-output-json");
-    if (of5.checked) v += ",json";
+    if (of5.checked) value += ",json";
     const of6 = document.getElementById("output-formats-output-nested");
-    if (of6.checked) v += ",nested";
+    if (of6.checked) value += ",nested";
     const of7 = document.getElementById("output-formats-output-yaml");
-    if (of7.checked) v += ",yaml";
+    if (of7.checked) value += ",yaml";
     /* eslint-enable curly */
-    v = "\"" + v.substring(1) + "\"";
+    value = "\"" + value.substring(1) + "\"";
     const outputFormatsTd = document.getElementById("option-output-formats-value");
-    outputFormatsTd.innerText = this._makeOutputFormatsValue(v);
-    Utils.setStorageItem("session", "output_formats", v);
+    outputFormatsTd.innerText = this._makeOutputFormatsValue(value);
+    Utils.setStorageItem("session", "output_formats", value);
   }
 
   _makeDatetimeFractionDigitsValue (value) {

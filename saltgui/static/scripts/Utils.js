@@ -27,16 +27,16 @@ export class Utils {
 
   /* istanbul ignore next */
   static getQueryParam (pName) {
-    let w = null;
+    let theWindow = null;
     try {
-      w = window;
+      theWindow = window;
     } catch (error) {
       /* VOID */
     }
-    if (!w || !w.location) {
+    if (!theWindow || !theWindow.location) {
       return undefined;
     }
-    return Utils._getQueryParam2(w.location.href, pName);
+    return Utils._getQueryParam2(theWindow.location.href, pName);
   }
 
   // functions for storage handling
@@ -44,7 +44,7 @@ export class Utils {
   static _getStorage (pStorage) {
     // "window" is not defined during unit testing
     try {
-      const w = window;
+      const theWindow = window;
     } catch (error) {
       return null;
     }
@@ -64,15 +64,15 @@ export class Utils {
       console.log("getStorageItem", pStorage, pKeyName);
       return pDefaultValue;
     }
-    const v = storage.getItem(pKeyName);
-    // console.log("getStorageItem", pStorage, pKeyName, pDefaultValue, "-->", typeof v, v);
-    if (v === null) {
+    const value = storage.getItem(pKeyName);
+    // console.log("getStorageItem", pStorage, pKeyName, pDefaultValue, "-->", typeof value, value);
+    if (value === null) {
       return pDefaultValue;
     }
-    if (v === "undefined") {
+    if (value === "undefined") {
       return pDefaultValue;
     }
-    return v;
+    return value;
   }
 
   static setStorageItem (pStorage, pKeyName, pValue) {
@@ -161,11 +161,11 @@ export class Utils {
 
     let found = false;
     for (const childNode of pElement.childNodes) {
-      const r = this.hasTextContent(childNode, pSearchText, pCaseSensitiveFlag);
-      if (r === 2) {
+      const searchResult = this.hasTextContent(childNode, pSearchText, pCaseSensitiveFlag);
+      if (searchResult === 2) {
         return 2;
       }
-      if (r === 1) {
+      if (searchResult === 1) {
         found = true;
       }
     }
@@ -178,16 +178,16 @@ export class Utils {
       return 0;
     }
 
-    let s = pElement.textContent;
+    let textValue = pElement.textContent;
     if (typeof pSearchText === "string") {
       if (!pCaseSensitiveFlag) {
-        s = s.toUpperCase();
+        textValue = textValue.toUpperCase();
       }
-      return s.includes(pSearchText) ? 1 : 0;
+      return textValue.includes(pSearchText) ? 1 : 0;
     }
 
     // then it is a RegExp
-    const regs = pSearchText.exec(s);
+    const regs = pSearchText.exec(textValue);
     if (!regs) {
       return 0;
     }
@@ -246,13 +246,13 @@ export class Utils {
   static _updateSearchOption (ev, pTable, pSearchOptionsMenu, pInput) {
     ev.target._value = !ev.target._value;
 
-    let t = ev.target.innerText;
-    t = t.replace(/^. /, "");
+    let menuItemText = ev.target.innerText;
+    menuItemText = menuItemText.replace(/^. /, "");
     if (ev.target._value === true) {
       // 2714 = HEAVY CHECK MARK
-      t = "\u2714 " + t;
+      menuItemText = "\u2714 " + menuItemText;
     }
-    ev.target.innerText = t;
+    ev.target.innerText = menuItemText;
 
     Utils._updateTableFilter(
       pTable,

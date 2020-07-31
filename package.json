@@ -32,7 +32,10 @@
       "function-call-argument-newline": 0,
       "function-paren-newline": 0,
       "guard-for-in": 0,
-      "id-length": 0,
+      "id-length": [
+        "error",
+        { "exceptions": ["i"] }
+      ],
       "indent": [
         "error",
         2

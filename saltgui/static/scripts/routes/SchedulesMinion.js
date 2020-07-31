@@ -93,9 +93,9 @@ export class SchedulesMinionRoute extends PageRoute {
     panel.insertBefore(minionMenu.menuDropdown, titleElement.nextSibling);
 
     const keys = Object.keys(schedules.schedules).sort();
-    for (const k of keys) {
+    for (const scheduleName of keys) {
 
-      const schedule = schedules.schedules[k];
+      const schedule = schedules.schedules[scheduleName];
 
       // simplify the schedule information
       if ("name" in schedule) {
@@ -113,11 +113,11 @@ export class SchedulesMinionRoute extends PageRoute {
 
       const tr = document.createElement("tr");
 
-      const nameTd = Route.createTd("schedule-name", k);
+      const nameTd = Route.createTd("schedule-name", scheduleName);
       tr.appendChild(nameTd);
 
       const scheduleMenu = new DropDownMenu(tr);
-      let scheduleModifyCmd = "schedule.modify " + k;
+      let scheduleModifyCmd = "schedule.modify " + scheduleName;
       for (const key in schedule) {
         if (key === "args") {
           scheduleModifyCmd += " job_args";
@@ -129,10 +129,10 @@ export class SchedulesMinionRoute extends PageRoute {
         scheduleModifyCmd += "=" + JSON.stringify(schedule[key]);
       }
       this._addMenuItemModifyJob(scheduleMenu, pMinionId, scheduleModifyCmd);
-      this._addMenuItemScheduleEnableJobWhenNeeded(scheduleMenu, pMinionId, k, schedule);
-      this._addMenuItemScheduleDisableJobWhenNeeded(scheduleMenu, pMinionId, k, schedule);
-      this._addMenuItemScheduleDeleteJob(scheduleMenu, pMinionId, k);
-      this._addMenuItemScheduleRunJob(scheduleMenu, pMinionId, k, schedule);
+      this._addMenuItemScheduleEnableJobWhenNeeded(scheduleMenu, pMinionId, scheduleName, schedule);
+      this._addMenuItemScheduleDisableJobWhenNeeded(scheduleMenu, pMinionId, scheduleName, schedule);
+      this._addMenuItemScheduleDeleteJob(scheduleMenu, pMinionId, scheduleName);
+      this._addMenuItemScheduleRunJob(scheduleMenu, pMinionId, scheduleName, schedule);
 
       // menu comes before this data on purpose
       const scheduleValue = Output.formatObject(schedule);

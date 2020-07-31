@@ -79,10 +79,10 @@ export class Output {
     // replace all returned JIDs to links
     // typically found in the output of an async job
     if (pMinionResponse.match(ParseCommandLine.getPatJid())) {
-      const a = document.createElement("a");
-      a.href = config.NAV_URL + "/job?id=" + encodeURIComponent(pMinionResponse);
-      a.innerText = pMinionResponse;
-      return a;
+      const link = document.createElement("a");
+      link.href = config.NAV_URL + "/job?id=" + encodeURIComponent(pMinionResponse);
+      link.innerText = pMinionResponse;
+      return link;
     }
 
     // all regular text
@@ -542,7 +542,7 @@ export class Output {
           }
         );
         // then sort the array
-        tasks.sort((a, b) => a.__run_num__ - b.__run_num__);
+        tasks.sort((aa, bb) => aa.__run_num__ - bb.__run_num__);
       }
 
       let addHighStateSummaryFlag = false;

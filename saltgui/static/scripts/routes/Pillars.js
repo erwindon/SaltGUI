@@ -32,8 +32,8 @@ export class PillarsRoute extends PageRoute {
         that.updateMinions("pillars-table", pLocalPillarObfuscateData);
       }, (pLocalPillarObfuscateMsg) => {
         const localPillarObfuscateData = {"return": [{}]};
-        for (const k of pWheelKeyListAllData.return[0].data.return.minions) {
-          localPillarObfuscateData.return[0][k] = JSON.stringify(pLocalPillarObfuscateMsg);
+        for (const minionId of pWheelKeyListAllData.return[0].data.return.minions) {
+          localPillarObfuscateData.return[0][minionId] = JSON.stringify(pLocalPillarObfuscateMsg);
         }
         that.updateMinions("pillars-table", localPillarObfuscateData);
       });

@@ -99,10 +99,10 @@ export class PillarsMinionRoute extends PageRoute {
     }
 
     const keys = Object.keys(pillars).sort();
-    for (const k of keys) {
+    for (const pillarName of keys) {
       const pillar = document.createElement("tr");
 
-      const nameTd = Route.createTd("pillar-name", k);
+      const nameTd = Route.createTd("pillar-name", pillarName);
       pillar.appendChild(nameTd);
 
       // menu comes before this data if there was any
@@ -117,7 +117,7 @@ export class PillarsMinionRoute extends PageRoute {
       // initially use the hidden view
       pillarValueTd.appendChild(pillarHiddenDiv);
 
-      const pillarValueShown = Output.formatObject(pillars[k]);
+      const pillarValueShown = Output.formatObject(pillars[pillarName]);
       const pillarShownDiv = Route.createDiv("pillar-shown", pillarValueShown);
       // initially hide the normal view
       pillarShownDiv.style.display = "none";
@@ -127,7 +127,7 @@ export class PillarsMinionRoute extends PageRoute {
 
       // show public pillars immediatelly
       for (let i = 0; i < publicPillars.length; i++) {
-        if (publicPillars[i] && publicPillars[i].test(k)) {
+        if (publicPillars[i] && publicPillars[i].test(pillarName)) {
           // same code as when clicking the hidden value
           pillarHiddenDiv.style.display = "none";
           pillarShownDiv.style.display = "inline-block";

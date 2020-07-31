@@ -94,13 +94,13 @@ export class BeaconsMinionRoute extends PageRoute {
     panel.insertBefore(minionMenu.menuDropdown, titleElement.nextSibling);
 
     const keys = Object.keys(beacons.beacons).sort();
-    for (const k of keys) {
+    for (const beaconName of keys) {
       const tr = document.createElement("tr");
 
-      const nameTd = Route.createTd("beacon-name", k);
+      const nameTd = Route.createTd("beacon-name", beaconName);
       tr.appendChild(nameTd);
 
-      const beacon = beacons.beacons[k];
+      const beacon = beacons.beacons[beaconName];
 
       // simplify the beacon information
       if ("name" in beacon) {
@@ -111,13 +111,13 @@ export class BeaconsMinionRoute extends PageRoute {
       }
 
       const beaconMenu = new DropDownMenu(tr);
-      let cmd = "beacons.modify " + k;
+      let cmd = "beacons.modify " + beaconName;
       for (const key in beacon) {
         cmd = cmd + " " + key + "=" + JSON.stringify(beacon[key]);
       }
-      this._addMenuItemBeaconsDisableBeaconWhenNeeded(beaconMenu, pMinionId, k, beacon);
-      this._addMenuItemBeaconsEnableBeaconWhenNeeded(beaconMenu, pMinionId, k, beacon);
-      this._addMenuItemBeaconsDelete(beaconMenu, pMinionId, k);
+      this._addMenuItemBeaconsDisableBeaconWhenNeeded(beaconMenu, pMinionId, beaconName, beacon);
+      this._addMenuItemBeaconsEnableBeaconWhenNeeded(beaconMenu, pMinionId, beaconName, beacon);
+      this._addMenuItemBeaconsDelete(beaconMenu, pMinionId, beaconName);
 
       // menu comes before this data on purpose
       const beaconConfig = Output.formatObject(beacon);
@@ -137,7 +137,7 @@ export class BeaconsMinionRoute extends PageRoute {
 
       // run the command with the original beacon definition
       tr.addEventListener("click", (pClickEvent) => {
-        this.runCommand(pClickEvent, pMinionId, "beacons.modify " + k + " " + JSON.stringify(beacons0[k]));
+        this.runCommand(pClickEvent, pMinionId, "beacons.modify " + beaconName + " " + JSON.stringify(beacons0[beaconName]));
       });
     }
 

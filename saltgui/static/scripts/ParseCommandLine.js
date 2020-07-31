@@ -80,35 +80,35 @@ export class ParseCommandLine {
       let value;
       if (endChar && objType) {
         // The string starts with a character for a known JSON type
-        let p = 1;
+        let charPos = 1;
         while (true) {
           // Try until the next closing character
-          let n = pToRun.indexOf(endChar, p);
-          if (n < 0) {
+          let endCharPos = pToRun.indexOf(endChar, charPos);
+          if (endCharPos < 0) {
             return "No valid " + objType + " found";
           }
 
           // parse what we have found so far
           // the string ends with a closing character
           // but that may not be enough, e.g. "{a:{}"
-          const s = pToRun.substring(0, n + 1);
+          const fndStr = pToRun.substring(0, endCharPos + 1);
           try {
-            value = JSON.parse(s);
+            value = JSON.parse(fndStr);
           } catch (err) {
             // the string that we tried to parse is not valid json
             // continue to add more text from the input
-            p = n + 1;
+            charPos = endCharPos + 1;
             continue;
           }
 
           // the first part of the string is valid JSON
-          n += 1;
-          if (n < pToRun.length && pToRun[n] !== " ") {
-            return "Valid " + objType + ", but followed by text:" + pToRun.substring(n) + "...";
+          endCharPos += 1;
+          if (endCharPos < pToRun.length && pToRun[endCharPos] !== " ") {
+            return "Valid " + objType + ", but followed by text:" + pToRun.substring(endCharPos) + "...";
           }
 
           // valid JSON and not followed by strange characters
-          pToRun = pToRun.substring(n);
+          pToRun = pToRun.substring(endCharPos);
           break;
         }
       } else {

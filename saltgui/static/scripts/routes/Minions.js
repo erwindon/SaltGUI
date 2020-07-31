@@ -37,8 +37,8 @@ export class MinionsRoute extends PageRoute {
       }, (pLocalGrainsItemsMsg) => {
         const localGrainsItemsData = {"return": [{}]};
         if (pWheelKeyListAllData) {
-          for (const k of pWheelKeyListAllData.return[0].data.return.minions) {
-            localGrainsItemsData.return[0][k] = JSON.stringify(pLocalGrainsItemsMsg);
+          for (const minionId of pWheelKeyListAllData.return[0].data.return.minions) {
+            localGrainsItemsData.return[0][minionId] = JSON.stringify(pLocalGrainsItemsMsg);
           }
         }
         that.updateMinions("minions-table", localGrainsItemsData);

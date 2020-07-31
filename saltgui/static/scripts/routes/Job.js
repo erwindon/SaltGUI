@@ -177,8 +177,8 @@ export class JobRoute extends Route {
     }
 
     let minionList = "";
-    for (const m of info.Minions) {
-      minionList += "," + m;
+    for (const minionId of info.Minions) {
+      minionList += "," + minionId;
     }
 
     // suppress an empty list
@@ -206,15 +206,15 @@ export class JobRoute extends Route {
     let minionList = "";
     let has1 = false;
     let has2 = false;
-    for (const m of info.Minions) {
-      if (!(m in info.Result)) {
+    for (const minionId of info.Minions) {
+      if (!(minionId in info.Result)) {
         has1 = true;
       }
-      if (m in info.Result && !this._isResultOk(info.Result[m])) {
+      if (minionId in info.Result && !this._isResultOk(info.Result[minionId])) {
         has2 = true;
       }
-      if (!(m in info.Result) || !this._isResultOk(info.Result[m])) {
-        minionList += "," + m;
+      if (!(minionId in info.Result) || !this._isResultOk(info.Result[minionId])) {
+        minionList += "," + minionId;
       }
     }
 
@@ -242,9 +242,9 @@ export class JobRoute extends Route {
     }
 
     let minionList = "";
-    for (const m of info.Minions) {
-      if (m in info.Result && !this._isResultOk(info.Result[m])) {
-        minionList += "," + m;
+    for (const minionId of info.Minions) {
+      if (minionId in info.Result && !this._isResultOk(info.Result[minionId])) {
+        minionList += "," + minionId;
       }
     }
 
@@ -266,9 +266,9 @@ export class JobRoute extends Route {
     }
 
     let minionList = "";
-    for (const m of info.Minions) {
-      if (!(m in info.Result)) {
-        minionList += "," + m;
+    for (const minionId of info.Minions) {
+      if (!(minionId in info.Result)) {
+        minionList += "," + minionId;
       }
     }
 

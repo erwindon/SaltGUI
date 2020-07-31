@@ -32,8 +32,8 @@ export class SchedulesRoute extends PageRoute {
         that.updateMinions("schedules-table", pLocalScheduleListData);
       }, (pLocalBeaconsListMsg) => {
         const localScheduleListData = {"return": [{}]};
-        for (const k of pWheelKeyListAllData.return[0].data.return.minions) {
-          localScheduleListData.return[0][k] = JSON.stringify(pLocalBeaconsListMsg);
+        for (const minionId of pWheelKeyListAllData.return[0].data.return.minions) {
+          localScheduleListData.return[0][minionId] = JSON.stringify(pLocalBeaconsListMsg);
         }
         that.updateMinions("schedules-table", localScheduleListData);
       });
@@ -63,24 +63,24 @@ export class SchedulesRoute extends PageRoute {
 
     const ret = {"enabled": true, "schedules": {}};
 
-    for (const k in pData) {
+    for (const scheduleName in pData) {
       // "enabled" is always a boolean (when present)
-      if (k === "enabled") {
+      if (scheduleName === "enabled") {
         ret.enabled = pData.enabled;
         continue;
       }
 
       // correct for empty list that returns this dummy value
-      if (k === "schedule" && JSON.stringify(pData[k]) === "{}") {
+      if (scheduleName === "schedule" && JSON.stringify(pData[scheduleName]) === "{}") {
         continue;
       }
 
-      ret.schedules[k] = pData[k];
+      ret.schedules[scheduleName] = pData[scheduleName];
 
       // Since 2019.02, splay is always added, even when not set
       // so remove it when it has an empty value
-      if (ret.schedules[k]["splay"] === null) {
-        delete ret.schedules[k]["splay"];
+      if (ret.schedules[scheduleName]["splay"] === null) {
+        delete ret.schedules[scheduleName]["splay"];
       }
     }
 

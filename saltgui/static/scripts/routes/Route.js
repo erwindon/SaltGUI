@@ -159,8 +159,8 @@ export class Route {
         // prevent quotes being added on JIDs
         ret += " " + obj;
       } else {
-        const s = Output.formatObject(obj);
-        ret += " " + s.replace(/\n/g, " ");
+        const objAsString = Output.formatObject(obj);
+        ret += " " + objAsString.replace(/\n/g, " ");
       }
     }
 

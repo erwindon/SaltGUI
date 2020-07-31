@@ -288,8 +288,8 @@ export class Router {
     const jobsMenuItem = document.getElementById("button-jobs1");
 
     const activeMenuItems = Array.from(document.querySelectorAll(".menu-item-active"));
-    activeMenuItems.forEach((e) => {
-      e.classList.remove("menu-item-active");
+    activeMenuItems.forEach((menuItem) => {
+      menuItem.classList.remove("menu-item-active");
     });
 
     const elem1 = pRoute.getMenuItemElement1();

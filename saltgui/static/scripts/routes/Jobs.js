@@ -247,11 +247,11 @@ export class JobsRoute extends PageRoute {
     const jobs = pData.return[0];
 
     // update all running jobs
-    for (const k in jobs) {
-      const job = jobs[k];
+    for (const jobId in jobs) {
+      const job = jobs[jobId];
 
       let targetText = "";
-      const targetField = this.pageElement.querySelector(".jobs tr#" + Utils.getIdFromJobId(k) + " td.status span");
+      const targetField = this.pageElement.querySelector(".jobs tr#" + Utils.getIdFromJobId(jobId) + " td.status span");
       const maxTextLength = 50;
       if (targetText.length > maxTextLength) {
         // prevent column becoming too wide
@@ -273,7 +273,7 @@ export class JobsRoute extends PageRoute {
       }
       targetField.classList.remove("no-status");
       targetField.innerText = targetText;
-      targetField.insertBefore(Utils.createJobStatusSpan(k), targetField.firstChild);
+      targetField.insertBefore(Utils.createJobStatusSpan(jobId), targetField.firstChild);
       Utils.addToolTip(targetField, "Click to refresh column");
     }
 
