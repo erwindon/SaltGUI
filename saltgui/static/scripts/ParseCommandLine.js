@@ -81,7 +81,7 @@ export class ParseCommandLine {
       if (endChar && objType) {
         // The string starts with a character for a known JSON type
         let charPos = 1;
-        while (true) {
+        for (;;) {
           // Try until the next closing character
           let endCharPos = pToRun.indexOf(endChar, charPos);
           if (endCharPos < 0) {

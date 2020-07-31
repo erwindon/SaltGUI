@@ -50,12 +50,6 @@
       "multiline-comment-style": 0,
       "multiline-ternary": 0,
       "no-console": 0,
-      "no-constant-condition": [
-        "error",
-        {
-          "checkLoops": false
-        }
-      ],
       "no-continue": 0,
       "no-irregular-whitespace": 2,
       "no-loop-func": 0,
