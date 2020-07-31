@@ -1,10 +1,12 @@
+/* global console require setTimeout */
+
 const request = require("request");
 
 const url = "http://localhost:3333";
 
 console.log("waiting for docker setup to be ready");
 
-waitfordocker = () => {
+const waitfordocker = () => {
   request.
     get(url).
     on("response", (response) => {

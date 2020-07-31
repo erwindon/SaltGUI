@@ -1,3 +1,5 @@
+/* global describe it require */
+
 const assert = require("chai").assert;
 
 import {OutputDocumentation} from "../../saltgui/static/scripts/output/OutputDocumentation.js";

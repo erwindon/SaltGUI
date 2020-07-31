@@ -1,3 +1,5 @@
+/* global console */
+
 import {Output} from "./Output.js";
 
 export class OutputDocumentation {

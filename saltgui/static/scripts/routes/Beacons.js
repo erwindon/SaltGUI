@@ -1,3 +1,5 @@
+/* global config document window */
+
 import {DropDownMenu} from "../DropDown.js";
 import {PageRoute} from "./Page.js";
 import {Route} from "./Route.js";

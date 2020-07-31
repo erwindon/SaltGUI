@@ -1,3 +1,5 @@
+/* global console document */
+
 import {DropDownMenu} from "./DropDown.js";
 import {Utils} from "./Utils.js";
 

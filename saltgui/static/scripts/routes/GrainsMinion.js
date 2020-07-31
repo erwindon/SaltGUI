@@ -1,3 +1,5 @@
+/* global document */
+
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
 import {PageRoute} from "./Page.js";

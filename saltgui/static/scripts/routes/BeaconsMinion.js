@@ -1,3 +1,5 @@
+/* global document */
+
 import {BeaconsRoute} from "./Beacons.js";
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";

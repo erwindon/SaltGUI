@@ -1,3 +1,5 @@
+/* global console document Hilitor sorttable window */
+
 import {DropDownMenu} from "./DropDown.js";
 import {Route} from "./routes/Route.js";
 
@@ -441,7 +443,7 @@ export class Utils {
   static getIdFromMinionId (pMinionId) {
     // prevent eslint: A regular expression literal can be confused with '/='
     const patEqualSigns = /[=]=*/;
-    return "m" + btoa(pMinionId).replace(patEqualSigns, "");
+    return "m" + window.btoa(pMinionId).replace(patEqualSigns, "");
   }
 
   // JobIds are in the format 20190529175411210984

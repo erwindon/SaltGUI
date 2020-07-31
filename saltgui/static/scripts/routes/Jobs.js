@@ -1,3 +1,5 @@
+/* global config document window */
+
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
 import {PageRoute} from "./Page.js";
@@ -64,7 +66,7 @@ export class JobsRoute extends PageRoute {
     // to update details
     // interval should be larger than the retrieval time
     // to prevent many of such jobs to appear
-    setInterval(this._updateNextJob, 1000);
+    window.setInterval(this._updateNextJob, 1000);
   }
 
   _updateNextJob () {

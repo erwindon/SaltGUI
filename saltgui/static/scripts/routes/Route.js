@@ -1,3 +1,5 @@
+/* global config document */
+
 import {Output} from "../output/Output.js";
 import {ParseCommandLine} from "../ParseCommandLine.js";
 import {TargetType} from "../TargetType.js";
@@ -132,13 +134,13 @@ export class Route {
     if (typeof rawArguments !== "object") {
       // expecting an array (which is an object)
       // just return the representation of anything else
-      return " " + JSON.stringify(rawObject);
+      return " " + JSON.stringify(rawArguments);
     }
 
     if (!Array.isArray(rawArguments)) {
       // expecting an array
       // just return the representation of anything else
-      return " " + JSON.stringify(rawObject);
+      return " " + JSON.stringify(rawArguments);
     }
 
     let ret = "";

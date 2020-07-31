@@ -1,3 +1,5 @@
+/* global document */
+
 import {OutputYaml} from "../output/OutputYaml.js";
 import {PageRoute} from "./Page.js";
 import {Utils} from "../Utils.js";

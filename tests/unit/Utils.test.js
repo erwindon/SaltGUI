@@ -1,3 +1,5 @@
+/* global describe it require */
+
 const assert = require("chai").assert;
 
 import {Utils} from "../../saltgui/static/scripts/Utils.js";

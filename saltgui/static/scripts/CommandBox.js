@@ -1,3 +1,5 @@
+/* global document window */
+
 import {Documentation} from "./Documentation.js";
 import {DropDownMenu} from "./DropDown.js";
 import {Output} from "./output/Output.js";
@@ -248,7 +250,7 @@ export class CommandBox {
       "schedule.run_job"
     ];
     if (screenModifyingCommands.includes(command) && output !== "Waiting for command...") {
-      location.reload();
+      window.location.reload();
     }
 
     pEvent.stopPropagation();

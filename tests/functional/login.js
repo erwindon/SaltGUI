@@ -1,3 +1,5 @@
+/* global beforeEach describe document it process require */
+
 const Nightmare = require("nightmare");
 const assert = require("chai").assert;
 

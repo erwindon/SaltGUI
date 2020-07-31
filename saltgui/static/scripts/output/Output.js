@@ -1,3 +1,5 @@
+/* global config document MouseEvent window */
+
 import {OutputDocumentation} from "./OutputDocumentation.js";
 import {OutputHighstate} from "./OutputHighstate.js";
 import {OutputJson} from "./OutputJson.js";
@@ -284,7 +286,7 @@ export class Output {
 
         // show where the information is
         taskDiv.classList.add("highlight-task");
-        setTimeout(() => {
+        window.setTimeout(() => {
           taskDiv.classList.remove("highlight-task");
           if (!taskDiv.classList.length) {
             taskDiv.removeAttribute("class");

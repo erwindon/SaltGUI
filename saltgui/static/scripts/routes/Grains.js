@@ -1,3 +1,5 @@
+/* global config document jsonPath sorttable window */
+
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
 import {PageRoute} from "./Page.js";

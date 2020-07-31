@@ -1,3 +1,5 @@
+/* global document */
+
 // documentation utilities
 
 import {TargetType} from "./TargetType.js";

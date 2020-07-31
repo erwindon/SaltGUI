@@ -79,7 +79,6 @@
         }
       ],
       "no-ternary": 0,
-      "no-undef": 0,
       "no-undef-init": 0,
       "no-undefined": 0,
       "no-underscore-dangle": 0,

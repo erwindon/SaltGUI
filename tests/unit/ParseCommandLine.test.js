@@ -1,3 +1,5 @@
+/* global describe it require */
+
 const assert = require("chai").assert;
 
 import {ParseCommandLine} from "../../saltgui/static/scripts/ParseCommandLine.js";

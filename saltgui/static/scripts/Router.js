@@ -1,3 +1,5 @@
+/* global config document window */
+
 import {API} from "./Api.js";
 import {BeaconsMinionRoute} from "./routes/BeaconsMinion.js";
 import {BeaconsRoute} from "./routes/Beacons.js";
@@ -171,10 +173,10 @@ export class Router {
 
     // don't verify for invalid sessions too often
     // this happens only when the server was reset
-    setInterval(this._logoutTimer, 60000);
+    window.setInterval(this._logoutTimer, 60000);
 
     // verify often for an expired session that we expect
-    setInterval(this._updateSessionTimeoutWarning, 1000);
+    window.setInterval(this._updateSessionTimeoutWarning, 1000);
   }
 
   _updateSessionTimeoutWarning () {
@@ -332,7 +334,7 @@ export class Router {
     const page = pRoute.getPageElement();
     page.classList.remove("current");
     // 500ms matches the timeout in main.css (.route)
-    setTimeout((ev) => {
+    window.setTimeout((ev) => {
       // Hide element after fade, so it does not expand the body
       page.style.display = "none";
     }, 500);

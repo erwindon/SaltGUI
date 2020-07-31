@@ -1,3 +1,5 @@
+/* global document */
+
 import {Output} from "../output/Output.js";
 import {PageRoute} from "./Page.js";
 import {Route} from "./Route.js";

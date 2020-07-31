@@ -1,3 +1,5 @@
+/* global config EventSource window */
+
 import {Utils} from "./Utils.js";
 
 export class HTTPError extends Error {
@@ -230,7 +232,7 @@ export class API {
     }
 
     const myThis = this;
-    return fetch(url, options).
+    return window.fetch(url, options).
       then((pResponse) => {
         if (pResponse.ok && pRoute.endsWith(".txt")) {
           return pResponse.text();

@@ -1,3 +1,5 @@
+/* global document window */
+
 import {Route} from "./Route.js";
 import {Utils} from "../Utils.js";
 
@@ -105,7 +107,7 @@ export class LoginRoute extends Route {
     });
 
     // allow the success message to be seen
-    setTimeout(() => this.router.goTo("/"), 1000);
+    window.setTimeout(() => this.router.goTo("/"), 1000);
   }
 
   _handleLoginWheelConfigValues (pWheelConfigValuesData) {

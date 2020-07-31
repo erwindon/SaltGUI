@@ -1,3 +1,5 @@
+/* global config document window */
+
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
 import {Route} from "./Route.js";

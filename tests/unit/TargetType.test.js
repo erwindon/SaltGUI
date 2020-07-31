@@ -1,3 +1,5 @@
+/* global describe it require */
+
 const assert = require("chai").assert;
 
 import {TargetType} from "../../saltgui/static/scripts/TargetType.js";
