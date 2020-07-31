@@ -54,13 +54,6 @@
       "no-loss-of-precision": 0,
       "no-magic-numbers": 0,
       "no-mixed-operators": 0,
-      "no-multiple-empty-lines": [
-        "error",
-        {
-          "max": 2,
-          "maxEOF": 1
-        }
-      ],
       "no-negated-condition": 0,
       "no-param-reassign": 0,
       "no-plusplus": [
