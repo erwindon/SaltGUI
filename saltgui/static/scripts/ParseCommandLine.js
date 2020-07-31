@@ -144,12 +144,12 @@ export class ParseCommandLine {
         }
       }
 
-      if (name !== null) {
-        // named parameter
-        pArgsObject[name] = value;
-      } else {
+      if (name === null) {
         // anonymous parameter
         pArgsArray.push(value);
+      } else {
+        // named parameter
+        pArgsObject[name] = value;
       }
 
       // ignore the whitespace before the next part

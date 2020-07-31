@@ -228,10 +228,10 @@ export class Output {
 
       if (task.result === null) {
         span.classList.add("task-skipped");
-      } else if (!task.result) {
-        span.classList.add("task-failure");
-      } else {
+      } else if (task.result) {
         span.classList.add("task-success");
+      } else {
+        span.classList.add("task-failure");
       }
       if (nrChanges) {
         span.classList.add("task-changes");
@@ -592,13 +592,14 @@ export class Output {
         triangle.style = "cursor: pointer";
         triangle.addEventListener("click", (pClickEvent) => {
           // 25BD = WHITE DOWN-POINTING TRIANGLE
-          if (triangle.innerText !== "\u25BD") {
-            triangle.innerText = "\u25BD";
-            minionOutput.style.display = "";
-          } else {
+          if (triangle.innerText === "\u25BD") {
             // 25B7 = WHITE RIGHT-POINTING TRIANGLE
             triangle.innerText = "\u25B7";
             minionOutput.style.display = "none";
+          } else {
+            // 25BD = WHITE DOWN-POINTING TRIANGLE
+            triangle.innerText = "\u25BD";
+            minionOutput.style.display = "";
           }
         });
         div.appendChild(triangle);

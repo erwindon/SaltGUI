@@ -90,12 +90,12 @@ export class TemplatesRoute extends PageRoute {
     } else if (!target) {
       // implies: targetType is not empty
       tr.appendChild(Route.createTd("target", targetType));
-    } else if (!targetType) {
-      // implies: target is not empty
-      tr.appendChild(Route.createTd("target", target));
-    } else {
+    } else if (targetType) {
       // implies: both are not empty
       tr.appendChild(Route.createTd("target", targetType + " " + target));
+    } else {
+      // implies: target is not empty
+      tr.appendChild(Route.createTd("target", target));
     }
 
     // calculate command

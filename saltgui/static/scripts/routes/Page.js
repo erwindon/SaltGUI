@@ -705,9 +705,7 @@ export class PageRoute extends Route {
     const staticMinionsTxtPromise = this.router.api.getStaticMinionsTxt();
 
     staticMinionsTxtPromise.then((pStaticMinionsTxt) => {
-      if (!pStaticMinionsTxt) {
-        Utils.setStorageItem("session", "minions-txt", "{}");
-      } else {
+      if (pStaticMinionsTxt) {
         const lines = pStaticMinionsTxt.
           trim().
           split(/\r?\n/).
@@ -722,6 +720,8 @@ export class PageRoute extends Route {
           }
         }
         Utils.setStorageItem("session", "minions-txt", JSON.stringify(minions));
+      } else {
+        Utils.setStorageItem("session", "minions-txt", "{}");
       }
     }, (pStaticMinionsTxt) => {
       Utils.setStorageItem("session", "minions-txt", "{}");
