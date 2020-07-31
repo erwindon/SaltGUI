@@ -13,9 +13,9 @@ export class PillarsMinionRoute extends PageRoute {
     this._handleLocalPillarItems = this._handleLocalPillarItems.bind(this);
 
     const closeButton = document.getElementById("pillars-minion-button-close");
-    closeButton.addEventListener("click", (pClickEvent) =>
-      this.router.goTo("/pillars")
-    );
+    closeButton.addEventListener("click", (pClickEvent) => {
+      this.router.goTo("/pillars");
+    });
 
     Utils.makeTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement(), "pillars-minion-search-button", "pillars-minion-table");

@@ -70,9 +70,9 @@ export class PillarsRoute extends PageRoute {
       const menu = new DropDownMenu(minionTr);
       this._addMenuItemShowPillars(menu, minionId);
 
-      minionTr.addEventListener("click", (pClickEvent) =>
-        window.location.assign("pillars-minion?minionid=" + encodeURIComponent(minionId))
-      );
+      minionTr.addEventListener("click", (pClickEvent) => {
+        window.location.assign("pillars-minion?minionid=" + encodeURIComponent(minionId));
+      });
     }
 
     const txt = Utils.txtZeroOneMany(minionIds.length,
@@ -115,9 +115,9 @@ export class PillarsRoute extends PageRoute {
     const menu = new DropDownMenu(minionTr);
     this._addMenuItemShowPillars(menu, pMinionId);
 
-    minionTr.addEventListener("click", (pClickEvent) =>
-      window.location.assign(config.NAV_URL + "/pillars-minion?minionid=" + encodeURIComponent(pMinionId))
-    );
+    minionTr.addEventListener("click", (pClickEvent) => {
+      window.location.assign(config.NAV_URL + "/pillars-minion?minionid=" + encodeURIComponent(pMinionId));
+    });
   }
 
   _addMenuItemShowPillars (pMenu, pMinionId) {

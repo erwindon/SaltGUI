@@ -109,9 +109,9 @@ export class TemplatesRoute extends PageRoute {
 
     pContainer.tBodies[0].appendChild(tr);
 
-    tr.addEventListener("click", (pClickEvent) =>
-      this.runFullCommand(pClickEvent, targetType, target, command)
-    );
+    tr.addEventListener("click", (pClickEvent) => {
+      this.runFullCommand(pClickEvent, targetType, target, command);
+    });
   }
 
   _addMenuItemApplyTemplate (pMenu, pTargetType, target, pCommand) {

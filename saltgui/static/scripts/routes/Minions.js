@@ -84,9 +84,9 @@ export class MinionsRoute extends PageRoute {
       this._addMenuItemStateApply(menu, minionId);
       this._addMenuItemStateApplyTest(menu, minionId);
 
-      minionTr.addEventListener("click", (pClickEvent) =>
-        this.runCommand(pClickEvent, minionId, "state.apply")
-      );
+      minionTr.addEventListener("click", (pClickEvent) => {
+        this.runCommand(pClickEvent, minionId, "state.apply");
+      });
     }
 
     const txt = Utils.txtZeroOneMany(minionIds.length,
@@ -113,9 +113,9 @@ export class MinionsRoute extends PageRoute {
     this._addMenuItemStateApply(menu, pMinionId);
     this._addMenuItemStateApplyTest(menu, pMinionId);
 
-    minionTr.addEventListener("click", (pClickEvent) =>
-      this.runCommand(pClickEvent, pMinionId, "state.apply")
-    );
+    minionTr.addEventListener("click", (pClickEvent) => {
+      this.runCommand(pClickEvent, pMinionId, "state.apply");
+    });
   }
 
   _addMenuItemStateApply (pMenu, pMinionId) {

@@ -108,9 +108,9 @@ export class BeaconsRoute extends PageRoute {
       const menu = new DropDownMenu(minionTr);
       this._addMenuItemShowBeacons(menu, minionId);
 
-      minionTr.addEventListener("click", (pClickEvent) =>
-        window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(minionId))
-      );
+      minionTr.addEventListener("click", (pClickEvent) => {
+        window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(minionId));
+      });
     }
 
     const txt = Utils.txtZeroOneMany(minionIds.length,
@@ -155,9 +155,9 @@ export class BeaconsRoute extends PageRoute {
     const menu = new DropDownMenu(minionTr);
     this._addMenuItemShowBeacons(menu, pMinionId);
 
-    minionTr.addEventListener("click", (pClickEvent) =>
-      window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(pMinionId))
-    );
+    minionTr.addEventListener("click", (pClickEvent) => {
+      window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(pMinionId));
+    });
   }
 
   _addMenuItemShowBeacons (pMenu, pMinionId) {

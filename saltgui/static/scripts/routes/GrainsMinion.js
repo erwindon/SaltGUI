@@ -12,9 +12,9 @@ export class GrainsMinionRoute extends PageRoute {
     this._handleLocalGrainsItems = this._handleLocalGrainsItems.bind(this);
 
     const closeButton = document.getElementById("grains-minion-button-close");
-    closeButton.addEventListener("click", (pClickEvent) =>
-      this.router.goTo("/grains")
-    );
+    closeButton.addEventListener("click", (pClickEvent) => {
+      this.router.goTo("/grains");
+    });
 
     Utils.makeTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement(), "grains-minion-search-button", "grains-minion-table");
@@ -101,9 +101,9 @@ export class GrainsMinionRoute extends PageRoute {
 
       container.tBodies[0].appendChild(grainTr);
 
-      grainTr.addEventListener("click", (pClickEvent) =>
-        this.runCommand(pClickEvent, pMinionId, "grains.setval \"" + grainName + "\" " + JSON.stringify(grains[grainName]))
-      );
+      grainTr.addEventListener("click", (pClickEvent) => {
+        this.runCommand(pClickEvent, pMinionId, "grains.setval \"" + grainName + "\" " + JSON.stringify(grains[grainName]));
+      });
     }
 
     const txt = Utils.txtZeroOneMany(grainNames.length,

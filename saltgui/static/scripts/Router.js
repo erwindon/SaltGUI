@@ -76,95 +76,97 @@ export class Router {
       });
 
     document.getElementById("button-minions1").
-      addEventListener("click", (pClickEvent) =>
-        window.location.replace(config.NAV_URL + "/")
-      );
+      addEventListener("click", (pClickEvent) => {
+        window.location.replace(config.NAV_URL + "/");
+      });
     document.getElementById("button-minions2").
-      addEventListener("click", (pClickEvent) =>
-        window.location.replace(config.NAV_URL + "/")
-      );
+      addEventListener("click", (pClickEvent) => {
+        window.location.replace(config.NAV_URL + "/");
+      });
 
     document.getElementById("button-grains1").
-      addEventListener("click", (pClickEvent) =>
-        window.location.replace(config.NAV_URL + "/grains")
-      );
+      addEventListener("click", (pClickEvent) => {
+        window.location.replace(config.NAV_URL + "/grains");
+      });
     document.getElementById("button-grains2").
-      addEventListener("click", (pClickEvent) =>
-        window.location.replace(config.NAV_URL + "/grains")
-      );
+      addEventListener("click", (pClickEvent) => {
+        window.location.replace(config.NAV_URL + "/grains");
+      });
 
     document.getElementById("button-schedules1").
-      addEventListener("click", (pClickEvent) =>
-        window.location.replace(config.NAV_URL + "/schedules")
-      );
+      addEventListener("click", (pClickEvent) => {
+        window.location.replace(config.NAV_URL + "/schedules");
+      });
     document.getElementById("button-schedules2").
-      addEventListener("click", (pClickEvent) =>
-        window.location.replace(config.NAV_URL + "/schedules")
-      );
+      addEventListener("click", (pClickEvent) => {
+        window.location.replace(config.NAV_URL + "/schedules");
+      });
 
     document.getElementById("button-pillars1").
-      addEventListener("click", (pClickEvent) =>
-        window.location.replace(config.NAV_URL + "/pillars")
-      );
+      addEventListener("click", (pClickEvent) => {
+        window.location.replace(config.NAV_URL + "/pillars");
+      });
     document.getElementById("button-pillars2").
-      addEventListener("click", (pClickEvent) =>
-        window.location.replace(config.NAV_URL + "/pillars")
-      );
+      addEventListener("click", (pClickEvent) => {
+        window.location.replace(config.NAV_URL + "/pillars");
+      });
 
     document.getElementById("button-beacons1").
-      addEventListener("click", (pClickEvent) =>
-        window.location.replace(config.NAV_URL + "/beacons")
-      );
+      addEventListener("click", (pClickEvent) => {
+        window.location.replace(config.NAV_URL + "/beacons");
+      });
     document.getElementById("button-beacons2").
-      addEventListener("click", (pClickEvent) =>
-        window.location.replace(config.NAV_URL + "/beacons")
-      );
+      addEventListener("click", (pClickEvent) => {
+        window.location.replace(config.NAV_URL + "/beacons");
+      });
 
     document.getElementById("button-keys1").
-      addEventListener("click", (pClickEvent) =>
-        window.location.replace(config.NAV_URL + "/keys")
-      );
+      addEventListener("click", (pClickEvent) => {
+        window.location.replace(config.NAV_URL + "/keys");
+      });
     document.getElementById("button-keys2").
-      addEventListener("click", (pClickEvent) =>
-        window.location.replace(config.NAV_URL + "/keys")
-      );
+      addEventListener("click", (pClickEvent) => {
+        window.location.replace(config.NAV_URL + "/keys");
+      });
 
     document.getElementById("button-jobs1").
-      addEventListener("click", (pClickEvent) =>
-        window.location.replace(config.NAV_URL + "/jobs")
-      );
+      addEventListener("click", (pClickEvent) => {
+        window.location.replace(config.NAV_URL + "/jobs");
+      });
     document.getElementById("button-jobs2").
-      addEventListener("click", (pClickEvent) =>
-        window.location.replace(config.NAV_URL + "/jobs")
-      );
+      addEventListener("click", (pClickEvent) => {
+        window.location.replace(config.NAV_URL + "/jobs");
+      });
 
     document.getElementById("button-templates1").
-      addEventListener("click", (pClickEvent) =>
-        window.location.replace(config.NAV_URL + "/templates")
-      );
+      addEventListener("click", (pClickEvent) => {
+        window.location.replace(config.NAV_URL + "/templates");
+      });
     document.getElementById("button-templates2").
-      addEventListener("click", (pClickEvent) =>
-        window.location.replace(config.NAV_URL + "/templates")
-      );
+      addEventListener("click", (pClickEvent) => {
+        window.location.replace(config.NAV_URL + "/templates");
+      });
 
     document.getElementById("button-events1").
-      addEventListener("click", (pClickEvent) =>
-        window.location.replace(config.NAV_URL + "/eventsview")
-      );
+      addEventListener("click", (pClickEvent) => {
+        window.location.replace(config.NAV_URL + "/eventsview");
+      });
     document.getElementById("button-events2").
-      addEventListener("click", (pClickEvent) =>
-        window.location.replace(config.NAV_URL + "/eventsview")
-      );
+      addEventListener("click", (pClickEvent) => {
+        window.location.replace(config.NAV_URL + "/eventsview");
+      });
 
     document.getElementById("button-logout1").
       addEventListener("click", (pClickEvent) => {
-        this.api.logout().then(
-          (pLogoutData) => window.location.replace(config.NAV_URL + "/login?reason=logout"));
+        this.api.logout().then((pLogoutData) => {
+          window.location.replace(config.NAV_URL + "/login?reason=logout");
+        });
       });
     document.getElementById("button-logout2").
       addEventListener("click", (pClickEvent) => {
-        this.api.logout().then(
-          (pLogoutData) => window.location.replace(config.NAV_URL + "/login?reason=logout"));
+        this.api.logout().then((pLogoutData) => {
+          window.location.replace(config.NAV_URL + "/login?reason=logout");
+        });
       });
 
     // don't verify for invalid sessions too often
@@ -193,11 +195,11 @@ export class Router {
       warning.style.display = "";
       warning.innerText = "Logout";
       // logout, and redirect to login screen
-      this.api.logout().then(() =>
-        window.location.replace(config.NAV_URL + "/login?reason=expired-session")
-      , () =>
-        window.location.replace(config.NAV_URL + "/login?reason=expired-session")
-      );
+      this.api.logout().then(() => {
+        window.location.replace(config.NAV_URL + "/login?reason=expired-session");
+      }, () => {
+        window.location.replace(config.NAV_URL + "/login?reason=expired-session");
+      });
       return;
     }
 
@@ -233,8 +235,9 @@ export class Router {
     wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
       // VOID
     }, (pWheelConfigValuesMsg) => {
-      this.api.logout().then(
-        (pLogoutData) => window.location.replace(config.NAV_URL + "/login?reason=no-session"));
+      this.api.logout().then((pLogoutData) => {
+        window.location.replace(config.NAV_URL + "/login?reason=no-session");
+      });
     });
   }
 
@@ -283,11 +286,9 @@ export class Router {
     const jobsMenuItem = document.getElementById("button-jobs1");
 
     const activeMenuItems = Array.from(document.querySelectorAll(".menu-item-active"));
-    activeMenuItems.forEach(
-      (e) => {
-        e.classList.remove("menu-item-active");
-      }
-    );
+    activeMenuItems.forEach((e) => {
+      e.classList.remove("menu-item-active");
+    });
 
     const elem1 = pRoute.getMenuItemElement1();
     if (elem1) {

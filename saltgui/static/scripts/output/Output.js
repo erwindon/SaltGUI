@@ -610,9 +610,9 @@ export class Output {
       // it easier to select the next highstate part
       // or just collapse it and see the next minion
       if (isHighStateOutput) {
-        minionOutput.addEventListener("click", (pClickEvent) =>
-          div.scrollIntoView({"behavior": "smooth", "block": "start"})
-        );
+        minionOutput.addEventListener("click", (pClickEvent) => {
+          div.scrollIntoView({"behavior": "smooth", "block": "start"});
+        });
       }
 
       minionOutput.classList.add("minion-output");

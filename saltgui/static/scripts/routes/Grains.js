@@ -97,9 +97,9 @@ export class GrainsRoute extends PageRoute {
         minionTr.appendChild(Route.createTd("", ""));
       }
 
-      minionTr.addEventListener("click", (pClickEvent) =>
-        window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(minionId))
-      );
+      minionTr.addEventListener("click", (pClickEvent) => {
+        window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(minionId));
+      });
     }
 
     const txt = Utils.txtZeroOneMany(minionIds.length,
@@ -176,9 +176,9 @@ export class GrainsRoute extends PageRoute {
     }
     /* eslint-enable max-depth */
 
-    minionTr.addEventListener("click", (pClickEvent) =>
-      window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(pMinionId))
-    );
+    minionTr.addEventListener("click", (pClickEvent) => {
+      window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(pMinionId));
+    });
   }
 
   _addMenuItemShowGrains (pMenu, pMinionId) {

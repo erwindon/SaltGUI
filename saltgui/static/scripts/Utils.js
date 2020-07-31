@@ -222,19 +222,23 @@ export class Utils {
     table.parentElement.insertBefore(div, table);
 
     searchOptionsMenu.addMenuItem(
-      "Case sensitive",
-      (ev) => Utils._updateSearchOption(ev, table, searchOptionsMenu, input));
+      "Case sensitive", (ev) => {
+        Utils._updateSearchOption(ev, table, searchOptionsMenu, input);
+      });
     searchOptionsMenu.addMenuItem(
-      "Regular expression",
-      (ev) => Utils._updateSearchOption(ev, table, searchOptionsMenu, input));
+      "Regular expression", (ev) => {
+        Utils._updateSearchOption(ev, table, searchOptionsMenu, input);
+      });
     searchOptionsMenu.addMenuItem(
-      "Invert search",
-      (ev) => Utils._updateSearchOption(ev, table, searchOptionsMenu, input));
+      "Invert search", (ev) => {
+        Utils._updateSearchOption(ev, table, searchOptionsMenu, input);
+      });
 
     // make the search function active
     const searchButton = document.getElementById(pButtonId);
-    searchButton.onclick = (ev) =>
+    searchButton.onclick = (ev) => {
       Utils.hideShowTableSearchBar(div, table);
+    };
   }
 
   static _updateSearchOption (ev, pTable, pSearchOptionsMenu, pInput) {
@@ -298,8 +302,9 @@ export class Utils {
         // return;
       }
     };
-    input.oninput = (ev) =>
+    input.oninput = (ev) => {
       Utils._updateTableFilter(pTable, input.value, menuItems);
+    };
 
     pTable.parentElement.insertBefore(pSearchBlock, pTable);
     if (pAction === "refresh" && pSearchBlock.style.display === "none") {

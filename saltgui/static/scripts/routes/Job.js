@@ -49,9 +49,9 @@ export class JobRoute extends Route {
     const output = document.getElementById("job-table");
 
     const closeButton = document.getElementById("job-button-close");
-    closeButton.addEventListener("click", (pClickEvent) =>
-      window.history.back()
-    );
+    closeButton.addEventListener("click", (pClickEvent) => {
+      window.history.back();
+    });
 
     if (!pRunnerJobsListJobData) {
       return;
@@ -148,9 +148,9 @@ export class JobRoute extends Route {
         link.classList.add("disabled");
         Utils.addToolTip(link, "this job");
       } else {
-        link.addEventListener("click", (pClickEvent) =>
-          window.location.assign(config.NAV_URL + "/job?id=" + linkToJid)
-        );
+        link.addEventListener("click", (pClickEvent) => {
+          window.location.assign(config.NAV_URL + "/job?id=" + linkToJid);
+        });
       }
 
       // no longer needed
@@ -334,9 +334,9 @@ export class JobRoute extends Route {
 
     summaryJobsActiveSpan.innerText = info.Running.length + " active";
     summaryJobsActiveSpan.insertBefore(Utils.createJobStatusSpan(id), summaryJobsActiveSpan.firstChild);
-    summaryJobsActiveSpan.addEventListener("click", (pClickEvent) =>
-      window.location.reload()
-    );
+    summaryJobsActiveSpan.addEventListener("click", (pClickEvent) => {
+      window.location.reload();
+    });
     summaryJobsActiveSpan.style.cursor = "pointer";
     Utils.addToolTip(summaryJobsActiveSpan, "Click to refresh", "bottom-left");
 

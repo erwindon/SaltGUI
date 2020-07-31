@@ -13,9 +13,9 @@ export class BeaconsMinionRoute extends PageRoute {
     this._handleLocalBeaconsList = this._handleLocalBeaconsList.bind(this);
 
     const closeButton = document.getElementById("beacons-minion-button-close");
-    closeButton.addEventListener("click", (pClickEvent) =>
-      this.router.goTo("/beacons")
-    );
+    closeButton.addEventListener("click", (pClickEvent) => {
+      this.router.goTo("/beacons");
+    });
 
     Utils.addTableHelp(this.getPageElement(), "The content of column 'Value' is automatically refreshed\nNote that some beacons produce multiple values, e.g. one per disk.\nIn that case, effectively only one of the values is visible here.");
     Utils.makeTableSortable(this.getPageElement());
@@ -134,9 +134,9 @@ export class BeaconsMinionRoute extends PageRoute {
       container.tBodies[0].appendChild(tr);
 
       // run the command with the original beacon definition
-      tr.addEventListener("click", (pClickEvent) =>
-        this.runCommand(pClickEvent, pMinionId, "beacons.modify " + k + " " + JSON.stringify(beacons0[k]))
-      );
+      tr.addEventListener("click", (pClickEvent) => {
+        this.runCommand(pClickEvent, pMinionId, "beacons.modify " + k + " " + JSON.stringify(beacons0[k]));
+      });
     }
 
     txt = Utils.txtZeroOneMany(keys.length,

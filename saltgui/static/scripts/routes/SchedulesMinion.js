@@ -13,9 +13,9 @@ export class SchedulesMinionRoute extends PageRoute {
     this._handleLocalScheduleList = this._handleLocalScheduleList.bind(this);
 
     const closeButton = document.getElementById("schedules-minion-button-close");
-    closeButton.addEventListener("click", (pClickEvent) =>
-      this.router.goTo("/schedules")
-    );
+    closeButton.addEventListener("click", (pClickEvent) => {
+      this.router.goTo("/schedules");
+    });
 
     Utils.makeTableSortable(this.getPageElement());
     Utils.makeTableSearchable(this.getPageElement(), "schedules-minion-search-button", "schedules-minion-table");
@@ -145,9 +145,9 @@ export class SchedulesMinionRoute extends PageRoute {
 
       container.tBodies[0].appendChild(tr);
 
-      tr.addEventListener("click", (pClickEvent) =>
-        this.runCommand(pClickEvent, pMinionId, scheduleModifyCmd)
-      );
+      tr.addEventListener("click", (pClickEvent) => {
+        this.runCommand(pClickEvent, pMinionId, scheduleModifyCmd);
+      });
     }
 
     txt = Utils.txtZeroOneMany(keys.length,

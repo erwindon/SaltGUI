@@ -593,9 +593,9 @@ export class PageRoute extends Route {
 
     pContainer.appendChild(tr);
 
-    tr.addEventListener("click", (pClickEvent) =>
-      window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id))
-    );
+    tr.addEventListener("click", (pClickEvent) => {
+      window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
+    });
   }
 
   _addPageMenuItemShowDetails (pMenu, job) {

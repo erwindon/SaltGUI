@@ -76,9 +76,9 @@ export class DropDownMenu {
     } else {
       button.verifyCallBack = pTitle;
     }
-    button.addEventListener("click", (pClickEvent) =>
-      this._callback(pClickEvent, pCallBack, pValue)
-    );
+    button.addEventListener("click", (pClickEvent) => {
+      this._callback(pClickEvent, pCallBack, pValue);
+    });
     this.menuDropdownContent.appendChild(button);
     this.verifyAll();
     return button;
