@@ -382,7 +382,8 @@ export class Output {
         if (key.startsWith("0-")) {
           txt += Utils.txtZeroOneMany(summary[key],
             "", "{0} success", "{0} successes");
-        } else { // if (key.startsWith("1-"))
+        } else {
+          // if (key.startsWith("1-"))
           txt += Utils.txtZeroOneMany(summary[key],
             "", "{0} failure", "{0} failures");
         }
