@@ -99,9 +99,9 @@ export class LoginRoute extends Route {
     const wheelConfigValuesPromise = this.router.api.getWheelConfigValues();
 
     // We need these functions to populate the dropdown boxes
-    const myThis = this;
+    const that = this;
     wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
-      myThis._handleLoginWheelConfigValues(pWheelConfigValuesData);
+      that._handleLoginWheelConfigValues(pWheelConfigValuesData);
     }, (pWheelConfigValuesMsg) => {
       // never mind
     });

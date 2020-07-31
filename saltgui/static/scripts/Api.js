@@ -56,14 +56,14 @@ export class API {
   logout () {
     // only delete the session here as the router should take care of
     // redirecting to the login screen
-    const myThis = this;
+    const that = this;
     return this.apiRequest("POST", "/logout", {}).
       then((pResponse) => {
         // we could logout, assume the session is terminated
-        myThis._cleanStorage();
+        that._cleanStorage();
       }, (pResponse) => {
         // we could not logout, assume the session is broken
-        myThis._cleanStorage();
+        that._cleanStorage();
       });
   }
 
@@ -231,7 +231,7 @@ export class API {
       options.body = JSON.stringify(pParams);
     }
 
-    const myThis = this;
+    const that = this;
     return window.fetch(url, options).
       then((pResponse) => {
         if (pResponse.ok && pRoute.endsWith(".txt")) {
@@ -244,13 +244,13 @@ export class API {
         // so let's do it ourselves
         if (pResponse.status === 401 && pRoute === "/logout") {
           // so we can't logout?
-          myThis._cleanStorage();
+          that._cleanStorage();
           return null;
         }
         if (pResponse.status === 401 && pRoute !== "/login") {
           const loginResponseStr = Utils.getStorageItem("session", "login-response");
           if (!loginResponseStr) {
-            myThis.logout().then(() => {
+            that.logout().then(() => {
               window.location.replace(config.NAV_URL + "/login?reason=no-session");
             }, () => {
               window.location.replace(config.NAV_URL + "/login?reason=no-session");
@@ -263,7 +263,7 @@ export class API {
             const now = Date.now() / 1000;
             const expireValue = loginResponse.expire;
             if (now > expireValue) {
-              myThis.logout().then(() => {
+              that.logout().then(() => {
                 window.location.replace(config.NAV_URL + "/login?reason=expired-session");
               }, () => {
                 window.location.replace(config.NAV_URL + "/login?reason=expired-session");

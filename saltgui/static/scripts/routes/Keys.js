@@ -22,7 +22,7 @@ export class KeysRoute extends PageRoute {
   }
 
   onShow () {
-    const myThis = this;
+    const that = this;
 
     const wheelKeyListAllPromise = this.router.api.getWheelKeyListAll();
     const wheelKeyFingerPromise = this.router.api.getWheelKeyFinger();
@@ -32,9 +32,9 @@ export class KeysRoute extends PageRoute {
     this.loadMinionsTxt();
 
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
-      myThis._handleKeysWheelKeyListAll(pWheelKeyListAllData);
+      that._handleKeysWheelKeyListAll(pWheelKeyListAllData);
       wheelKeyFingerPromise.then((pWheelKeyFingerData) => {
-        myThis._handleWheelKeyFinger(pWheelKeyFingerData);
+        that._handleWheelKeyFinger(pWheelKeyFingerData);
       }, (pWheelKeyFingerMsg) => {
         const wheelKeyFingerData = {"return": [{"data": {"return": {"minions": {}}}}]};
         if (pWheelKeyListAllData) {
@@ -42,21 +42,21 @@ export class KeysRoute extends PageRoute {
             wheelKeyFingerData.return[0]["data"]["return"]["minions"][k] = JSON.stringify(pWheelKeyFingerMsg);
           }
         }
-        myThis._handleWheelKeyFinger(wheelKeyFingerData);
+        that._handleWheelKeyFinger(wheelKeyFingerData);
       });
     }, (pWheelKeyListAllMsg) => {
-      myThis._handleKeysWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+      that._handleKeysWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
     });
 
     runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
-      myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
+      that.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
       runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
-        myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
+        that.handleRunnerJobsActive(pRunnerJobsActiveData);
       }, (pRunnerJobsActiveMsg) => {
-        myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
+        that.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
     }, (pRunnerJobsListJobsMsg) => {
-      myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
+      that.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }
 
@@ -473,11 +473,11 @@ export class KeysRoute extends PageRoute {
     if (fingerprintSpan && (fingerprintSpan.innerText === "" || fingerprintSpan.innerText === "loading...")) {
       fingerprintSpan.innerText = "(refresh page for fingerprint)";
       const wheelKeyFingerPromise = this.router.api.getWheelKeyFinger(pData.id);
-      const myThis = this;
+      const that = this;
       wheelKeyFingerPromise.then(this._handleWheelKeyFinger, (pWheelKeyFingerMsg) => {
         const wheelKeyFingerData = {"return": [{"data": {"return": {"minions": {}}}}]};
         wheelKeyFingerData.return[0]["data"]["return"]["minions"][pData.id] = JSON.stringify(pWheelKeyFingerMsg);
-        myThis._handleWheelKeyFinger(wheelKeyFingerData);
+        that._handleWheelKeyFinger(wheelKeyFingerData);
       });
     }
 

@@ -18,27 +18,27 @@ export class TemplatesRoute extends PageRoute {
   }
 
   onShow () {
-    const myThis = this;
+    const that = this;
 
     const wheelConfigValuesPromise = this.router.api.getWheelConfigValues();
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
-      myThis._handleTemplatesWheelConfigValues(pWheelConfigValuesData);
+      that._handleTemplatesWheelConfigValues(pWheelConfigValuesData);
     }, (pWheelConfigValuesMsg) => {
-      myThis._handleTemplatesWheelConfigValues(JSON.stringify(pWheelConfigValuesMsg));
+      that._handleTemplatesWheelConfigValues(JSON.stringify(pWheelConfigValuesMsg));
     });
 
     runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
-      myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
+      that.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
       runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
-        myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
+        that.handleRunnerJobsActive(pRunnerJobsActiveData);
       }, (pRunnerJobsActiveMsg) => {
-        myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
+        that.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
     }, (pRunnerJobsListJobsMsg) => {
-      myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
+      that.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }
 

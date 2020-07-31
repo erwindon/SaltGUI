@@ -25,7 +25,7 @@ export class SchedulesMinionRoute extends PageRoute {
   }
 
   onShow () {
-    const myThis = this;
+    const that = this;
 
     const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
 
@@ -38,20 +38,20 @@ export class SchedulesMinionRoute extends PageRoute {
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     localScheduleListPromise.then((pLocalScheduleListData) => {
-      myThis._handleLocalScheduleList(pLocalScheduleListData, minionId);
+      that._handleLocalScheduleList(pLocalScheduleListData, minionId);
     }, (pLocalScheduleListMsg) => {
-      myThis._handleLocalScheduleList(JSON.stringify(pLocalScheduleListMsg), minionId);
+      that._handleLocalScheduleList(JSON.stringify(pLocalScheduleListMsg), minionId);
     });
 
     runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
-      myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
+      that.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
       runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
-        myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
+        that.handleRunnerJobsActive(pRunnerJobsActiveData);
       }, (pRunnerJobsActiveMsg) => {
-        myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
+        that.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
     }, (pRunnerJobsListJobsMsg) => {
-      myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
+      that.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }
 

@@ -280,7 +280,7 @@ export class Router {
   }
 
   _showRoute (pRoute) {
-    const myThis = this;
+    const that = this;
 
     pRoute.getPageElement().style.display = "";
 
@@ -321,13 +321,13 @@ export class Router {
     // it is either not started, or needs restarting
     this.api.getEvents(this);
 
-    if (myThis.currentRoute) {
-      myThis._hideRoute(myThis.currentRoute);
+    if (that.currentRoute) {
+      that._hideRoute(that.currentRoute);
     }
 
-    myThis.currentRoute = pRoute;
-    myThis.currentRoute.getPageElement().classList.add("current");
-    myThis.switchingRoute = false;
+    that.currentRoute = pRoute;
+    that.currentRoute.getPageElement().classList.add("current");
+    that.switchingRoute = false;
   }
 
   _hideRoute (pRoute) {

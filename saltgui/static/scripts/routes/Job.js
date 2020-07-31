@@ -18,7 +18,7 @@ export class JobRoute extends Route {
   }
 
   onShow () {
-    const myThis = this;
+    const that = this;
 
     const id = decodeURIComponent(Utils.getQueryParam("id"));
 
@@ -26,14 +26,14 @@ export class JobRoute extends Route {
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
-      myThis._handleJobRunnerJobsListJob(pRunnerJobsListJobData, id);
+      that._handleJobRunnerJobsListJob(pRunnerJobsListJobData, id);
       runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
-        myThis.handleRunnerJobsActive(id, pRunnerJobsActiveData);
+        that.handleRunnerJobsActive(id, pRunnerJobsActiveData);
       }, (pRunnerJobsActiveMsg) => {
-        myThis.handleRunnerJobsActive(id, JSON.stringify(pRunnerJobsActiveMsg));
+        that.handleRunnerJobsActive(id, JSON.stringify(pRunnerJobsActiveMsg));
       });
     }, (pRunnerJobsListJobsMsg) => {
-      myThis._handleJobRunnerJobsListJob(JSON.stringify(pRunnerJobsListJobsMsg), id);
+      that._handleJobRunnerJobsListJob(JSON.stringify(pRunnerJobsListJobsMsg), id);
     });
   }
 

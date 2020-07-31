@@ -19,7 +19,7 @@ export class BeaconsRoute extends PageRoute {
   }
 
   onShow () {
-    const myThis = this;
+    const that = this;
 
     const wheelKeyListAllPromise = this.router.api.getWheelKeyListAll();
     const localBeaconsListPromise = this.router.api.getLocalBeaconsList(null);
@@ -27,29 +27,29 @@ export class BeaconsRoute extends PageRoute {
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
-      myThis._handleBeaconsWheelKeyListAll(pWheelKeyListAllData);
+      that._handleBeaconsWheelKeyListAll(pWheelKeyListAllData);
       localBeaconsListPromise.then((pLocalBeaconsListData) => {
-        myThis.updateMinions("beacons-table", pLocalBeaconsListData);
+        that.updateMinions("beacons-table", pLocalBeaconsListData);
       }, (pLocalBeaconsListMsg) => {
         const localBeaconsListData = {"return": [{}]};
         for (const k of pWheelKeyListAllData.return[0].data.return.minions) {
           localBeaconsListData.return[0][k] = JSON.stringify(pLocalBeaconsListMsg);
         }
-        myThis.updateMinions("beacons-table", localBeaconsListData);
+        that.updateMinions("beacons-table", localBeaconsListData);
       });
     }, (pWheelKeyListAllMsg) => {
-      myThis._handleBeaconsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+      that._handleBeaconsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
     });
 
     runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
-      myThis.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
+      that.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
       runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
-        myThis.handleRunnerJobsActive(pRunnerJobsActiveData);
+        that.handleRunnerJobsActive(pRunnerJobsActiveData);
       }, (pRunnerJobsActiveMsg) => {
-        myThis.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
+        that.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
     }, (pRunnerJobsListJobsMsg) => {
-      myThis.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
+      that.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }
 
