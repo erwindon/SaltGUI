@@ -31,7 +31,7 @@ export class Utils {
     try {
       theWindow = window;
     } catch (error) {
-      /* VOID */
+      // VOID
     }
     if (!theWindow || !theWindow.location) {
       return undefined;

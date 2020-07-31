@@ -577,7 +577,7 @@ export class PageRoute extends Route {
 
     const statusSpan = Route.createSpan("status", "loading...");
     statusSpan.classList.add("no-status");
-    /* effectively also the whole column, but it does not look like a column on screen */
+    // effectively also the whole column, but it does not look like a column on screen
     statusSpan.addEventListener("click", (pClickEvent) => {
       // show "loading..." only once, but we are updating the whole column
       statusSpan.classList.add("no-status");
