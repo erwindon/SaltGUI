@@ -137,13 +137,13 @@ export class KeysRoute extends PageRoute {
       if (table.querySelector("#" + Utils.getIdFromMinionId(minionId))) {
         continue;
       }
-      this._addMissingMinion(table, minionId, minionsDict);
+      this._addMissingMinion(table, minionId);
     }
 
-    this._updateTableSummary(table);
+    this._updateTableSummary();
   }
 
-  _updateTableSummary (pTable) {
+  _updateTableSummary () {
     const cnt = {};
     cnt["unaccepted"] = 0;
     cnt["accepted"] = 0;
@@ -293,7 +293,7 @@ export class KeysRoute extends PageRoute {
     }
   }
 
-  _addMissingMinion (pContainer, pMinionId, pMinionsDict) {
+  _addMissingMinion (pContainer, pMinionId) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId), "UNKNOWN");
 
     const minionIdTd = Route.createTd("", "");
@@ -427,7 +427,7 @@ export class KeysRoute extends PageRoute {
         // "-1" due to the <tr> for the header that is inside <thead>
         tr.parentNode.deleteRow(tr.rowIndex - 1);
         if (pData.id in minionsDict) {
-          this._addMissingMinion(table, pData.id, minionsDict);
+          this._addMissingMinion(table, pData.id);
         }
       } else {
         // unknown status
@@ -481,7 +481,7 @@ export class KeysRoute extends PageRoute {
       });
     }
 
-    this._updateTableSummary(table);
+    this._updateTableSummary();
   }
 
   handleSaltKeyEvent (pTag, pData) {

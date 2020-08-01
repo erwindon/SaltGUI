@@ -53,7 +53,7 @@ export class JobsRoute extends PageRoute {
     this._addMenuItemShowAll(menu);
 
     runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
-      that.handleRunnerJobsListJobs(pRunnerJobsListJobsData, true, cnt);
+      that.handleRunnerJobsListJobs(pRunnerJobsListJobsData, cnt);
       runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         that.handleRunnerJobsActive(pRunnerJobsActiveData);
       }, (pRunnerJobsActiveMsg) => {
@@ -94,7 +94,7 @@ export class JobsRoute extends PageRoute {
       // 25CF = BLACK CIRCLE
       title = "\u25CF " + title;
     }
-    pMenu.addMenuItem(title, (pClickEvent) => {
+    pMenu.addMenuItem(title, () => {
       window.location.assign(config.NAV_URL + "/jobs?cnt=" + maxJobs);
     });
   }
@@ -106,7 +106,7 @@ export class JobsRoute extends PageRoute {
       // 25CF = BLACK CIRCLE
       title = "\u25CF " + title;
     }
-    pMenu.addMenuItem(title, (pClickEvent) => {
+    pMenu.addMenuItem(title, () => {
       window.location.assign(config.NAV_URL + "/jobs?cnt=eligible");
     });
   }
@@ -118,7 +118,7 @@ export class JobsRoute extends PageRoute {
       // 25CF = BLACK CIRCLE
       title = "\u25CF " + title;
     }
-    pMenu.addMenuItem(title, (pClickEvent) => {
+    pMenu.addMenuItem(title, () => {
       window.location.assign(config.NAV_URL + "/jobs?cnt=all");
     });
   }
@@ -189,13 +189,13 @@ export class JobsRoute extends PageRoute {
 
     pContainer.appendChild(tr);
 
-    tr.addEventListener("click", (pClickEvent) => {
+    tr.addEventListener("click", () => {
       window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
     });
   }
 
   _addJobsMenuItemShowDetails (pMenu, job) {
-    pMenu.addMenuItem("Show&nbsp;details", (pClickEvent) => {
+    pMenu.addMenuItem("Show&nbsp;details", () => {
       window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
     });
   }
@@ -208,7 +208,7 @@ export class JobsRoute extends PageRoute {
   }
 
   _addJobsMenuItemUpdateStatus (pMenu, pStatusSpan) {
-    pMenu.addMenuItem("Update&nbsp;status", (pClickEvent) => {
+    pMenu.addMenuItem("Update&nbsp;status", () => {
       pStatusSpan.classList.add("no-status");
       pStatusSpan.innerText = "loading...";
       this.startRunningJobs();
@@ -216,7 +216,7 @@ export class JobsRoute extends PageRoute {
   }
 
   _addMenuItemUpdateDetails (pMenu, pDetailsSpan, job) {
-    pMenu.addMenuItem("Update&nbsp;details", (pClickEvent) => {
+    pMenu.addMenuItem("Update&nbsp;details", () => {
       pDetailsSpan.classList.add("no-status");
       pDetailsSpan.innerText = "loading...";
       this._getJobDetails(job.id);

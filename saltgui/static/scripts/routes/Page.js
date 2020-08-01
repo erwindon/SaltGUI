@@ -36,8 +36,6 @@ export class PageRoute extends Route {
       Utils.setStorageItem("session", "minions", JSON.stringify(minionIds));
     }
 
-    const ipNumberPrefixes = this._getIpNumberPrefixes(minions);
-
     let cntOnline = 0;
     let cntOffline = 0;
     for (const minionId of minionIds) {
@@ -302,7 +300,7 @@ export class PageRoute extends Route {
         this._copyAddress(addressSpan);
         pClickEvent.stopPropagation();
       });
-      addressSpan.addEventListener("mouseout", (pClickEvent) => {
+      addressSpan.addEventListener("mouseout", () => {
         this._restoreClickToCopy(addressSpan);
       });
       Utils.addToolTip(addressSpan, "Click to copy");
@@ -387,7 +385,7 @@ export class PageRoute extends Route {
     pContainer.appendChild(tr);
   }
 
-  handleRunnerJobsListJobs (pData, hasHeader = false, pMaxNumberOfJobs = 7) {
+  handleRunnerJobsListJobs (pData, pMaxNumberOfJobs = 7) {
     const jobContainer = this.getPageElement().querySelector(".jobs tbody");
 
     const msgDiv = this.getPageElement().querySelector(".job-list .msg");
@@ -599,19 +597,19 @@ export class PageRoute extends Route {
 
     pContainer.appendChild(tr);
 
-    tr.addEventListener("click", (pClickEvent) => {
+    tr.addEventListener("click", () => {
       window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
     });
   }
 
   _addPageMenuItemShowDetails (pMenu, job) {
-    pMenu.addMenuItem("Show&nbsp;details", (pClickEvent) => {
+    pMenu.addMenuItem("Show&nbsp;details", () => {
       window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
     });
   }
 
   _addPageMenuItemUpdateStatus (pMenu, statusSpan) {
-    pMenu.addMenuItem("Update&nbsp;status", (pClickEvent) => {
+    pMenu.addMenuItem("Update&nbsp;status", () => {
       statusSpan.classList.add("no-status");
       statusSpan.innerText = "loading...";
       this.startRunningJobs();
@@ -723,7 +721,7 @@ export class PageRoute extends Route {
       } else {
         Utils.setStorageItem("session", "minions-txt", "{}");
       }
-    }, (pStaticMinionsTxt) => {
+    }, () => {
       Utils.setStorageItem("session", "minions-txt", "{}");
     });
   }

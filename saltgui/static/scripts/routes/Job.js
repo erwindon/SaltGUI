@@ -51,7 +51,7 @@ export class JobRoute extends Route {
     const output = document.getElementById("job-table");
 
     const closeButton = document.getElementById("job-button-close");
-    closeButton.addEventListener("click", (pClickEvent) => {
+    closeButton.addEventListener("click", () => {
       window.history.back();
     });
 
@@ -150,7 +150,7 @@ export class JobRoute extends Route {
         link.classList.add("disabled");
         Utils.addToolTip(link, "this job");
       } else {
-        link.addEventListener("click", (pClickEvent) => {
+        link.addEventListener("click", () => {
           window.location.assign(config.NAV_URL + "/job?id=" + linkToJid);
         });
       }
@@ -336,7 +336,7 @@ export class JobRoute extends Route {
 
     summaryJobsActiveSpan.innerText = info.Running.length + " active";
     summaryJobsActiveSpan.insertBefore(Utils.createJobStatusSpan(id), summaryJobsActiveSpan.firstChild);
-    summaryJobsActiveSpan.addEventListener("click", (pClickEvent) => {
+    summaryJobsActiveSpan.addEventListener("click", () => {
       window.location.reload();
     });
     summaryJobsActiveSpan.style.cursor = "pointer";

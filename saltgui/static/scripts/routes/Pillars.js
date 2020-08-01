@@ -72,7 +72,7 @@ export class PillarsRoute extends PageRoute {
       const menu = new DropDownMenu(minionTr);
       this._addMenuItemShowPillars(menu, minionId);
 
-      minionTr.addEventListener("click", (pClickEvent) => {
+      minionTr.addEventListener("click", () => {
         window.location.assign("pillars-minion?minionid=" + encodeURIComponent(minionId));
       });
     }
@@ -117,13 +117,13 @@ export class PillarsRoute extends PageRoute {
     const menu = new DropDownMenu(minionTr);
     this._addMenuItemShowPillars(menu, pMinionId);
 
-    minionTr.addEventListener("click", (pClickEvent) => {
+    minionTr.addEventListener("click", () => {
       window.location.assign(config.NAV_URL + "/pillars-minion?minionid=" + encodeURIComponent(pMinionId));
     });
   }
 
   _addMenuItemShowPillars (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show&nbsp;pillars", (pClickEvent) => {
+    pMenu.addMenuItem("Show&nbsp;pillars", () => {
       window.location.assign(config.NAV_URL + "/pillars-minion?minionid=" + encodeURIComponent(pMinionId));
     });
   }

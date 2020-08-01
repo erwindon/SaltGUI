@@ -14,7 +14,7 @@ export class GrainsMinionRoute extends PageRoute {
     this._handleLocalGrainsItems = this._handleLocalGrainsItems.bind(this);
 
     const closeButton = document.getElementById("grains-minion-button-close");
-    closeButton.addEventListener("click", (pClickEvent) => {
+    closeButton.addEventListener("click", () => {
       this.router.goTo("/grains");
     });
 

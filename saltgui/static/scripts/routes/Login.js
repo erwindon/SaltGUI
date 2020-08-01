@@ -102,7 +102,7 @@ export class LoginRoute extends Route {
     const that = this;
     wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
       that._handleLoginWheelConfigValues(pWheelConfigValuesData);
-    }, (pWheelConfigValuesMsg) => {
+    }, () => {
       // never mind
     });
 

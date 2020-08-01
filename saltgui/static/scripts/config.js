@@ -1,4 +1,5 @@
 /* istanbul ignore file */
+/* eslint-disable no-unused-vars */
 const config = {
   // additional prefix for the API urls
   // with an empty string, the defaults will be used
@@ -9,3 +10,4 @@ const config = {
   // with an empty string, the defaults will be used
   "NAV_URL": ""
 };
+/* eslint-enable no-unused-vars */

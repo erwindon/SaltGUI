@@ -99,7 +99,7 @@ export class GrainsRoute extends PageRoute {
         minionTr.appendChild(Route.createTd("", ""));
       }
 
-      minionTr.addEventListener("click", (pClickEvent) => {
+      minionTr.addEventListener("click", () => {
         window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(minionId));
       });
     }
@@ -178,13 +178,13 @@ export class GrainsRoute extends PageRoute {
     }
     /* eslint-enable max-depth */
 
-    minionTr.addEventListener("click", (pClickEvent) => {
+    minionTr.addEventListener("click", () => {
       window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(pMinionId));
     });
   }
 
   _addMenuItemShowGrains (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show&nbsp;grains", (pClickEvent) => {
+    pMenu.addMenuItem("Show&nbsp;grains", () => {
       window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(pMinionId));
     });
   }

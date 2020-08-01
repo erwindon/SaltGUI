@@ -44,7 +44,9 @@ export class Utils {
   static _getStorage (pStorage) {
     // "window" is not defined during unit testing
     try {
+      /* eslint-disable no-unused-vars */
       const theWindow = window;
+      /* eslint-enable no-unused-vars */
     } catch (error) {
       return null;
     }
@@ -238,7 +240,7 @@ export class Utils {
 
     // make the search function active
     const searchButton = document.getElementById(pButtonId);
-    searchButton.onclick = (ev) => {
+    searchButton.onclick = () => {
       Utils.hideShowTableSearchBar(div, table);
     };
   }
@@ -304,7 +306,7 @@ export class Utils {
         // return;
       }
     };
-    input.oninput = (ev) => {
+    input.oninput = () => {
       Utils._updateTableFilter(pTable, input.value, menuItems);
     };
 

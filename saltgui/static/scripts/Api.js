@@ -58,10 +58,10 @@ export class API {
     // redirecting to the login screen
     const that = this;
     return this.apiRequest("POST", "/logout", {}).
-      then((pResponse) => {
+      then(() => {
         // we could logout, assume the session is terminated
         that._cleanStorage();
-      }, (pResponse) => {
+      }, () => {
         // we could not logout, assume the session is broken
         that._cleanStorage();
       });
@@ -289,7 +289,7 @@ export class API {
     source.onopen = () => {
       // console.info("Listening for events...");
     };
-    source.onerror = (err) => {
+    source.onerror = () => {
       // Don't show the error
       // It appears with every page-load
       source.close();

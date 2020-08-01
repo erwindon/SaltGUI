@@ -9,10 +9,10 @@ console.log("waiting for docker setup to be ready");
 const waitfordocker = () => {
   request.
     get(url).
-    on("response", (response) => {
+    on("response", () => {
       console.log("docker setup is ready");
     }).
-    on("error", (err) => {
+    on("error", () => {
       setTimeout(waitfordocker, 1000);
     });
 };

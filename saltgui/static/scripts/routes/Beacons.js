@@ -110,7 +110,7 @@ export class BeaconsRoute extends PageRoute {
       const menu = new DropDownMenu(minionTr);
       this._addMenuItemShowBeacons(menu, minionId);
 
-      minionTr.addEventListener("click", (pClickEvent) => {
+      minionTr.addEventListener("click", () => {
         window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(minionId));
       });
     }
@@ -157,13 +157,13 @@ export class BeaconsRoute extends PageRoute {
     const menu = new DropDownMenu(minionTr);
     this._addMenuItemShowBeacons(menu, pMinionId);
 
-    minionTr.addEventListener("click", (pClickEvent) => {
+    minionTr.addEventListener("click", () => {
       window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(pMinionId));
     });
   }
 
   _addMenuItemShowBeacons (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show&nbsp;beacons", (pClickEvent) => {
+    pMenu.addMenuItem("Show&nbsp;beacons", () => {
       window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(pMinionId));
     });
   }

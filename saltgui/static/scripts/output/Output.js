@@ -272,7 +272,7 @@ export class Output {
       }
 
       const myNr = nr;
-      span.addEventListener("click", (pClickEvent) => {
+      span.addEventListener("click", () => {
 
         // show the output, it might be hidden
         const triangle = pMinionDiv.querySelector("span.triangle");
@@ -425,7 +425,7 @@ export class Output {
 
     pOutputContainer.appendChild(allDiv);
 
-    masterTriangle.addEventListener("click", (pClickEvent) => {
+    masterTriangle.addEventListener("click", () => {
       // 25BD = WHITE DOWN-POINTING TRIANGLE
       if (masterTriangle.innerText === "\u25BD") {
         // 25B7 = WHITE RIGHT-POINTING TRIANGLE
@@ -469,12 +469,12 @@ export class Output {
     for (const minionId of pMinionData.sort()) {
 
       let isSuccess = true;
-      let retCode = 0;
+      // let retCode = 0;
 
       let minionResponse = pResponse[minionId];
       if (Output._hasProperties(minionResponse, ["retcode", "return", "success"])) {
         isSuccess = minionResponse.success;
-        retCode = minionResponse.retcode;
+        // retCode = minionResponse.retcode;
         minionResponse = minionResponse.return;
       } else if (pCommand.startsWith("runner.") && minionResponse && minionResponse["return"] !== undefined) {
         // TODO: add isSuccess and retCode
@@ -590,7 +590,7 @@ export class Output {
       if (minionMultiLine) {
         triangle = Route.createSpan("triangle", masterTriangle.innerText);
         triangle.style = "cursor: pointer";
-        triangle.addEventListener("click", (pClickEvent) => {
+        triangle.addEventListener("click", () => {
           // 25BD = WHITE DOWN-POINTING TRIANGLE
           if (triangle.innerText === "\u25BD") {
             // 25B7 = WHITE RIGHT-POINTING TRIANGLE
@@ -615,7 +615,7 @@ export class Output {
       // it easier to select the next highstate part
       // or just collapse it and see the next minion
       if (isHighStateOutput) {
-        minionOutput.addEventListener("click", (pClickEvent) => {
+        minionOutput.addEventListener("click", () => {
           div.scrollIntoView({"behavior": "smooth", "block": "start"});
         });
       }

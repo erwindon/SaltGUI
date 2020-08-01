@@ -15,7 +15,7 @@ export class PillarsMinionRoute extends PageRoute {
     this._handleLocalPillarItems = this._handleLocalPillarItems.bind(this);
 
     const closeButton = document.getElementById("pillars-minion-button-close");
-    closeButton.addEventListener("click", (pClickEvent) => {
+    closeButton.addEventListener("click", () => {
       this.router.goTo("/pillars");
     });
 
@@ -137,12 +137,12 @@ export class PillarsMinionRoute extends PageRoute {
 
       pillar.appendChild(pillarValueTd);
 
-      pillarHiddenDiv.addEventListener("click", (pClickEvent) => {
+      pillarHiddenDiv.addEventListener("click", () => {
         pillarHiddenDiv.style.display = "none";
         pillarShownDiv.style.display = "inline-block";
       });
 
-      pillarShownDiv.addEventListener("click", (pClickEvent) => {
+      pillarShownDiv.addEventListener("click", () => {
         pillarShownDiv.style.display = "none";
         pillarHiddenDiv.style.display = "inline-block";
       });

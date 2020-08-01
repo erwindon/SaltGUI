@@ -61,7 +61,7 @@ export class CommandBox {
       addEventListener("click", this._onRun);
 
     document.getElementById("target").
-      addEventListener("input", (pKeyboardEvent) => {
+      addEventListener("input", () => {
         const targetField = document.getElementById("target");
         const targetType = targetField.value;
         TargetType.autoSelectTargetType(targetType);

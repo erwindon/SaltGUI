@@ -66,7 +66,7 @@ export class Router {
 
   _registerRouterEventListeners () {
     document.getElementById("logo").
-      addEventListener("click", (pClickEvent) => {
+      addEventListener("click", () => {
         if (window.location.pathname === config.NAV_URL + "/login") {
           return;
         }
@@ -78,95 +78,95 @@ export class Router {
       });
 
     document.getElementById("button-minions1").
-      addEventListener("click", (pClickEvent) => {
+      addEventListener("click", () => {
         window.location.replace(config.NAV_URL + "/");
       });
     document.getElementById("button-minions2").
-      addEventListener("click", (pClickEvent) => {
+      addEventListener("click", () => {
         window.location.replace(config.NAV_URL + "/");
       });
 
     document.getElementById("button-grains1").
-      addEventListener("click", (pClickEvent) => {
+      addEventListener("click", () => {
         window.location.replace(config.NAV_URL + "/grains");
       });
     document.getElementById("button-grains2").
-      addEventListener("click", (pClickEvent) => {
+      addEventListener("click", () => {
         window.location.replace(config.NAV_URL + "/grains");
       });
 
     document.getElementById("button-schedules1").
-      addEventListener("click", (pClickEvent) => {
+      addEventListener("click", () => {
         window.location.replace(config.NAV_URL + "/schedules");
       });
     document.getElementById("button-schedules2").
-      addEventListener("click", (pClickEvent) => {
+      addEventListener("click", () => {
         window.location.replace(config.NAV_URL + "/schedules");
       });
 
     document.getElementById("button-pillars1").
-      addEventListener("click", (pClickEvent) => {
+      addEventListener("click", () => {
         window.location.replace(config.NAV_URL + "/pillars");
       });
     document.getElementById("button-pillars2").
-      addEventListener("click", (pClickEvent) => {
+      addEventListener("click", () => {
         window.location.replace(config.NAV_URL + "/pillars");
       });
 
     document.getElementById("button-beacons1").
-      addEventListener("click", (pClickEvent) => {
+      addEventListener("click", () => {
         window.location.replace(config.NAV_URL + "/beacons");
       });
     document.getElementById("button-beacons2").
-      addEventListener("click", (pClickEvent) => {
+      addEventListener("click", () => {
         window.location.replace(config.NAV_URL + "/beacons");
       });
 
     document.getElementById("button-keys1").
-      addEventListener("click", (pClickEvent) => {
+      addEventListener("click", () => {
         window.location.replace(config.NAV_URL + "/keys");
       });
     document.getElementById("button-keys2").
-      addEventListener("click", (pClickEvent) => {
+      addEventListener("click", () => {
         window.location.replace(config.NAV_URL + "/keys");
       });
 
     document.getElementById("button-jobs1").
-      addEventListener("click", (pClickEvent) => {
+      addEventListener("click", () => {
         window.location.replace(config.NAV_URL + "/jobs");
       });
     document.getElementById("button-jobs2").
-      addEventListener("click", (pClickEvent) => {
+      addEventListener("click", () => {
         window.location.replace(config.NAV_URL + "/jobs");
       });
 
     document.getElementById("button-templates1").
-      addEventListener("click", (pClickEvent) => {
+      addEventListener("click", () => {
         window.location.replace(config.NAV_URL + "/templates");
       });
     document.getElementById("button-templates2").
-      addEventListener("click", (pClickEvent) => {
+      addEventListener("click", () => {
         window.location.replace(config.NAV_URL + "/templates");
       });
 
     document.getElementById("button-events1").
-      addEventListener("click", (pClickEvent) => {
+      addEventListener("click", () => {
         window.location.replace(config.NAV_URL + "/eventsview");
       });
     document.getElementById("button-events2").
-      addEventListener("click", (pClickEvent) => {
+      addEventListener("click", () => {
         window.location.replace(config.NAV_URL + "/eventsview");
       });
 
     document.getElementById("button-logout1").
-      addEventListener("click", (pClickEvent) => {
-        this.api.logout().then((pLogoutData) => {
+      addEventListener("click", () => {
+        this.api.logout().then(() => {
           window.location.replace(config.NAV_URL + "/login?reason=logout");
         });
       });
     document.getElementById("button-logout2").
-      addEventListener("click", (pClickEvent) => {
-        this.api.logout().then((pLogoutData) => {
+      addEventListener("click", () => {
+        this.api.logout().then(() => {
           window.location.replace(config.NAV_URL + "/login?reason=logout");
         });
       });
@@ -234,10 +234,10 @@ export class Router {
     const wheelConfigValuesPromise = this.api.getWheelConfigValues();
     // don't act in the callbacks
     // Api.apiRequest will do all the work
-    wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
+    wheelConfigValuesPromise.then(() => {
       // VOID
-    }, (pWheelConfigValuesMsg) => {
-      this.api.logout().then((pLogoutData) => {
+    }, () => {
+      this.api.logout().then(() => {
         window.location.replace(config.NAV_URL + "/login?reason=no-session");
       });
     });
@@ -334,7 +334,7 @@ export class Router {
     const page = pRoute.getPageElement();
     page.classList.remove("current");
     // 500ms matches the timeout in main.css (.route)
-    window.setTimeout((ev) => {
+    window.setTimeout(() => {
       // Hide element after fade, so it does not expand the body
       page.style.display = "none";
     }, 500);

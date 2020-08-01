@@ -219,7 +219,7 @@ export class OptionsRoute extends PageRoute {
     return this._parseAndFormat(value);
   }
 
-  _newOutputFormats (evt) {
+  _newOutputFormats () {
     let value = "";
     /* eslint-disable curly */
     const of0 = document.getElementById("output-formats-doc-doc");

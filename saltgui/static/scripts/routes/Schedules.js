@@ -106,7 +106,7 @@ export class SchedulesRoute extends PageRoute {
       const menu = new DropDownMenu(minionTr);
       this._addMenuItemShowSchedules(menu, minionId);
 
-      minionTr.addEventListener("click", (pClickEvent) => {
+      minionTr.addEventListener("click", () => {
         window.location.assign(config.NAV_URL + "/schedules-minion?minionid=" + encodeURIComponent(minionId));
       });
     }
@@ -129,6 +129,8 @@ export class SchedulesRoute extends PageRoute {
   updateMinion (pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
 
     pMinionData = SchedulesRoute.fixSchedulesMinion(pMinionData);
+
+    super.updateMinion(pContainer, pMinionData, pMinionId, pAllMinionsGrains);
 
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
@@ -163,13 +165,13 @@ export class SchedulesRoute extends PageRoute {
     const menu = new DropDownMenu(minionTr);
     this._addMenuItemShowSchedules(menu, pMinionId);
 
-    minionTr.addEventListener("click", (pClickEvent) => {
+    minionTr.addEventListener("click", () => {
       window.location.assign(config.NAV_URL + "/schedules-minion?minionid=" + encodeURIComponent(pMinionId));
     });
   }
 
   _addMenuItemShowSchedules (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show&nbsp;schedules", (pClickEvent) => {
+    pMenu.addMenuItem("Show&nbsp;schedules", () => {
       window.location.assign(config.NAV_URL + "/schedules-minion?minionid=" + encodeURIComponent(pMinionId));
     });
   }

@@ -14,9 +14,9 @@ export class EventsRoute extends PageRoute {
     super("eventsview", "Events", "page-events", "button-events", pRouter);
 
     const eventsPlayButton = document.getElementById("events-play-button");
-    eventsPlayButton.onclick = (ev) => this._clickEventsPlayButton(true);
+    eventsPlayButton.onclick = () => this._clickEventsPlayButton(true);
     const eventsPauseButton = document.getElementById("events-pause-button");
-    eventsPauseButton.onclick = (ev) => this._clickEventsPlayButton(false);
+    eventsPauseButton.onclick = () => this._clickEventsPlayButton(false);
     // initially paused
     this._clickEventsPlayButton(false);
 
