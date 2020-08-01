@@ -66,7 +66,6 @@
       "no-undefined": 0,
       "no-underscore-dangle": 0,
       "no-warning-comments": 0,
-      "no-whitespace-before-property": 2,
       "object-property-newline": 0,
       "object-shorthand": 0,
       "one-var": 0,
