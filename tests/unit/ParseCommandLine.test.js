@@ -157,10 +157,10 @@ describe("Unittests for ParseCommandLine.js", () => {
     // it evalueates as a string (the whole thing)
     args = [];
     params = {};
-    result = ParseCommandLine.parseCommandLine("\'string\'", args, params);
+    result = ParseCommandLine.parseCommandLine("'string'", args, params);
     assert.equal(result, null);
     assert.equal(args.length, 1);
-    assert.equal(args[0], "\'string\'");
+    assert.equal(args[0], "'string'");
     assert.equal(Object.keys(params).length, 0);
 
     // a single-quoted string is not supported
@@ -168,10 +168,10 @@ describe("Unittests for ParseCommandLine.js", () => {
     // even when that looks rediculous
     args = [];
     params = {};
-    result = ParseCommandLine.parseCommandLine("\'string", args, params);
+    result = ParseCommandLine.parseCommandLine("'string", args, params);
     assert.equal(result, null);
     assert.equal(args.length, 1);
-    assert.equal(args[0], "\'string");
+    assert.equal(args[0], "'string");
     assert.equal(Object.keys(params).length, 0);
 
     // INTEGER

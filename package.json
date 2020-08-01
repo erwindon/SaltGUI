@@ -65,7 +65,6 @@
       "no-undef-init": 0,
       "no-undefined": 0,
       "no-underscore-dangle": 0,
-      "no-useless-escape": 0,
       "no-var": 2,
       "no-warning-comments": 0,
       "no-whitespace-before-property": 2,
