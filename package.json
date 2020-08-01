@@ -72,8 +72,7 @@
       "padded-blocks": 0,
       "prefer-destructuring": 0,
       "prefer-template": 0,
-      "require-unicode-regexp": 0,
-      "semi": 2
+      "require-unicode-regexp": 0
     }
   },
   "stylelint": {
