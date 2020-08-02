@@ -32,3 +32,11 @@
 .minion-output {
   margin-left: 0.7em;
 }
+
+.minion-output-single {
+  display: inline;
+}
+
+.minion-output-multiple {
+  display: block;
+}

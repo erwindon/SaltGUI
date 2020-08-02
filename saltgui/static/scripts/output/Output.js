@@ -621,6 +621,7 @@ export class Output {
       }
 
       minionOutput.classList.add("minion-output");
+      minionOutput.classList.add(minionMultiLine ? "minion-output-multiple" : "minion-output-single");
       // hide the per-minion details when we have so many minions
       // 25B7 = WHITE RIGHT-POINTING TRIANGLE
       if (triangle && triangle.innerText === "\u25B7") {
