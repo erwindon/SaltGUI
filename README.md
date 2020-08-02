@@ -288,6 +288,15 @@ SaltGUI includes these libraries (with possible modifications):
 
 ## Changelog
 
+## 1.21.0 (2020-08-02)
+- added event-monitoring page (erwindon, thx mchugh19)
+- added search-options (erwindon, thx mchugh19)
+- upgraded eslint to 7.5; applied most rules (erwindon)
+- warn for imminent session timout (erwindon)
+- simplified html object selection (erwindon)
+- unified search handling (erwindon)
+- mark current choice in selection menus (erwindon)
+
 ## 1.20.0 (2020-05-22)
 - Cleanup handling of urls; allow alternative prefixes (erwindon, thx ggiesen)
 - Now supporting list of minion that are known to be down (erwindon)
