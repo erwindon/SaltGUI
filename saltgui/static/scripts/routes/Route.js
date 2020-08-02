@@ -117,6 +117,7 @@ export class Route {
       }
       TargetType.setTargetType(targetType);
     }
+    TargetType.autoSelectTargetType(pTargetString);
 
     target.value = pTargetString;
     command.value = pCommandString;
