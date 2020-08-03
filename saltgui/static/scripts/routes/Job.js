@@ -20,20 +20,20 @@ export class JobRoute extends Route {
   onShow () {
     const that = this;
 
-    const id = decodeURIComponent(Utils.getQueryParam("id"));
+    const jobId = decodeURIComponent(Utils.getQueryParam("id"));
 
-    const runnerJobsListJobPromise = this.router.api.getRunnerJobsListJob(id);
+    const runnerJobsListJobPromise = this.router.api.getRunnerJobsListJob(jobId);
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
-      that._handleJobRunnerJobsListJob(pRunnerJobsListJobData, id);
+      that._handleJobRunnerJobsListJob(pRunnerJobsListJobData, jobId);
       runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
-        that.handleRunnerJobsActive(id, pRunnerJobsActiveData);
+        that.handleRunnerJobsActive(jobId, pRunnerJobsActiveData);
       }, (pRunnerJobsActiveMsg) => {
-        that.handleRunnerJobsActive(id, JSON.stringify(pRunnerJobsActiveMsg));
+        that.handleRunnerJobsActive(jobId, JSON.stringify(pRunnerJobsActiveMsg));
       });
     }, (pRunnerJobsListJobsMsg) => {
-      that._handleJobRunnerJobsListJob(JSON.stringify(pRunnerJobsListJobsMsg), id);
+      that._handleJobRunnerJobsListJob(JSON.stringify(pRunnerJobsListJobsMsg), jobId);
     });
   }
 
@@ -302,7 +302,7 @@ export class JobRoute extends Route {
     });
   }
 
-  handleRunnerJobsActive (id, pData) {
+  handleRunnerJobsActive (pJobId, pData) {
     const summaryJobsActiveSpan = document.getElementById("summary-jobs-active");
     if (!summaryJobsActiveSpan) {
       return;
@@ -314,7 +314,7 @@ export class JobRoute extends Route {
       return;
     }
 
-    const info = pData.return[0][id];
+    const info = pData.return[0][pJobId];
 
     // when the job is already completely done, nothing is returned
     if (!info) {
@@ -335,7 +335,7 @@ export class JobRoute extends Route {
     }
 
     summaryJobsActiveSpan.innerText = info.Running.length + " active";
-    summaryJobsActiveSpan.insertBefore(Utils.createJobStatusSpan(id), summaryJobsActiveSpan.firstChild);
+    summaryJobsActiveSpan.insertBefore(Utils.createJobStatusSpan(pJobId), summaryJobsActiveSpan.firstChild);
     summaryJobsActiveSpan.addEventListener("click", () => {
       window.location.reload();
     });
