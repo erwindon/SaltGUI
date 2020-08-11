@@ -9,9 +9,22 @@ describe("Unittests for RunType.js", () => {
   beforeEach(() => {
     Utils.clearStorage("local");
     RunType.menuRunType = {
-      _value: undefined,
+      _defaultValue: undefined,
+      _value: null,
+      getValue () {
+        if (this._value === null) {
+          return this._defaultValue;
+        }
+        return this._value;
+      },
       menuDropdownContent: {children: []},
-      setTitle: () => {}
+      setDefaultValue (pDefaultValue) {
+        this._defaultValue = pDefaultValue;
+      },
+      setTitle: () => {},
+      setValue (pValue) {
+        this._value = pValue;
+      }
     };
   });
 

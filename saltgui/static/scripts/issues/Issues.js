@@ -1,7 +1,7 @@
 /* global window */
 
 import {Character} from "../Character.js";
-import {DropDownMenu} from "../DropDown.js";
+import {DropDownMenuCmd} from "../DropDownCmd.js";
 import {Utils} from "../Utils.js";
 
 export class Issues {
@@ -121,7 +121,7 @@ export class Issues {
   static _renderIssue (pPanel, pCatName, pIssueName, pIssueData) {
     const theTr = Utils.createTr();
 
-    const menu = new DropDownMenu(theTr, "smaller");
+    const menu = new DropDownMenuCmd(theTr, "smaller");
     theTr.menu = menu;
 
     const descTd = Utils.createTd();

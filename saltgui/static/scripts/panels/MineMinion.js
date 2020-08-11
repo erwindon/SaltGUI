@@ -1,7 +1,7 @@
 /* global document */
 
 import {Character} from "../Character.js";
-import {DropDownMenu} from "../DropDown.js";
+import {DropDownMenuCmd} from "../DropDownCmd.js";
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
@@ -116,7 +116,7 @@ export class MineMinionPanel extends Panel {
       mineTr.id = "mine." + mineName;
 
       const menuTd = Utils.createTd();
-      const menu = new DropDownMenu(menuTd, "smaller");
+      const menu = new DropDownMenuCmd(menuTd, "smaller");
       mineTr.dropdownmenu = menu;
       mineTr.appendChild(menuTd);
 
@@ -146,7 +146,7 @@ export class MineMinionPanel extends Panel {
   }
 
   _addMenuItemMineFlush () {
-    this.panelMenu.addMenuItem("Flush...", () => {
+    this.panelMenu.addMenuItemCmd("Flush...", () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
       const cmdArr = ["mine.flush"];
       this.runCommand("", minionId, cmdArr);
@@ -154,7 +154,7 @@ export class MineMinionPanel extends Panel {
   }
 
   _addMenuItemMineUpdate () {
-    this.panelMenu.addMenuItem("Update...", () => {
+    this.panelMenu.addMenuItemCmd("Update...", () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
       const cmdArr = ["mine.update"];
       this.runCommand("", minionId, cmdArr);
@@ -162,7 +162,7 @@ export class MineMinionPanel extends Panel {
   }
 
   _addMenuItemMineDelete (pMenu, pMinionId, pKey) {
-    pMenu.addMenuItem("Delete key...", () => {
+    pMenu.addMenuItemCmd("Delete key...", () => {
       const cmdArr = ["mine.delete", pKey];
       this.runCommand("", pMinionId, cmdArr);
     });

@@ -1,7 +1,7 @@
 /* global document */
 
 import {Character} from "../Character.js";
-import {DropDownMenu} from "../DropDown.js";
+import {DropDownMenuCmd} from "../DropDownCmd.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
 
@@ -188,7 +188,7 @@ export class NodegroupsPanel extends Panel {
     }
     const newMenuButton = Utils.createTd();
     minionTr.insertBefore(newMenuButton, minionTr.firstChild.nextSibling);
-    minionTr.dropdownmenu = new DropDownMenu(newMenuButton, "smaller");
+    minionTr.dropdownmenu = new DropDownMenuCmd(newMenuButton, "smaller");
     if (minionIsOk) {
       this._addMenuItemStateApplyMinion(minionTr.dropdownmenu, pMinionId);
       this._addMenuItemStateApplyTestMinion(minionTr.dropdownmenu, pMinionId);
@@ -327,7 +327,7 @@ export class NodegroupsPanel extends Panel {
     this.addSelectionCheckbox (tr, "select_nodegroups");
 
     const menuTd = Utils.createTd();
-    tr.dropdownmenu = new DropDownMenu(menuTd, "smaller");
+    tr.dropdownmenu = new DropDownMenuCmd(menuTd, "smaller");
     tr.appendChild(menuTd);
 
     const titleTd = Utils.createTd();
@@ -417,65 +417,65 @@ export class NodegroupsPanel extends Panel {
   }
 
   _addMenuItemStateApplyGroup (pMenu, pNodegroup, pAllNodegroups) {
-    pMenu.addMenuItem("Apply state...", () => {
+    pMenu.addMenuItemCmd("Apply state...", () => {
       const cmdArr = ["state.apply"];
       this.runCommand("", NodegroupsPanel._getGroupTarget(pNodegroup, pAllNodegroups), cmdArr);
     });
   }
 
   _addMenuItemStateApplyTestGroup (pMenu, pNodegroup, pAllNodegroups) {
-    pMenu.addMenuItem("Test state...", () => {
+    pMenu.addMenuItemCmd("Test state...", () => {
       const cmdArr = ["state.apply", "test=", true];
       this.runCommand("", NodegroupsPanel._getGroupTarget(pNodegroup, pAllNodegroups), cmdArr);
     });
   }
 
   _addMenuItemStateApplyMinion (pMenu, pMinionId) {
-    pMenu.addMenuItem("Apply state...", () => {
+    pMenu.addMenuItemCmd("Apply state...", () => {
       const cmdArr = ["state.apply"];
       this.runCommand("", pMinionId, cmdArr, ["select_minions", "select_nodegroups"]);
     });
   }
 
   _addMenuItemStateApplyTestMinion (pMenu, pMinionId) {
-    pMenu.addMenuItem("Test state...", () => {
+    pMenu.addMenuItemCmd("Test state...", () => {
       const cmdArr = ["state.apply", "test=", true];
       this.runCommand("", pMinionId, cmdArr, ["select_minions", "select_nodegroups"]);
     });
   }
 
   _addMenuItemShowKeys (pMenu) {
-    pMenu.addMenuItem("Show keys", (pClickEvent) => {
+    pMenu.addMenuItemCmd("Show keys", (pClickEvent) => {
       this.router.goTo("keys", undefined, undefined, pClickEvent);
     });
   }
 
   _addMenuItemShowGrains (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show grains", (pClickEvent) => {
+    pMenu.addMenuItemCmd("Show grains", (pClickEvent) => {
       this.router.goTo("grains-minion", {"minionid": pMinionId}, undefined, pClickEvent);
     });
   }
 
   _addMenuItemShowPillars (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show pillars", (pClickEvent) => {
+    pMenu.addMenuItemCmd("Show pillars", (pClickEvent) => {
       this.router.goTo("pillars-minion", {"minionid": pMinionId}, undefined, pClickEvent);
     });
   }
 
   _addMenuItemShowMine (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show mine", (pClickEvent) => {
+    pMenu.addMenuItemCmd("Show mine", (pClickEvent) => {
       this.router.goTo("mine-minion", {"minionid": pMinionId}, undefined, pClickEvent);
     });
   }
 
   _addMenuItemShowBeacons (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show beacons", (pClickEvent) => {
+    pMenu.addMenuItemCmd("Show beacons", (pClickEvent) => {
       this.router.goTo("beacons-minion", {"minionid": pMinionId}, undefined, pClickEvent);
     });
   }
 
   _addMenuItemShowSchedules (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show schedules", (pClickEvent) => {
+    pMenu.addMenuItemCmd("Show schedules", (pClickEvent) => {
       this.router.goTo("schedules-minion", {"minionid": pMinionId}, undefined, pClickEvent);
     });
   }
