@@ -2,7 +2,7 @@
 
 import {BeaconsPanel} from "./Beacons.js";
 import {Character} from "../Character.js";
-import {DropDownMenu} from "../DropDown.js";
+import {DropDownMenuCmd} from "../DropDownCmd.js";
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
@@ -145,7 +145,7 @@ export class BeaconsMinionPanel extends Panel {
     for (const beaconName of keys) {
       const tr = Utils.createTr("", "", "beacon-" + beaconName);
 
-      const beaconMenu = new DropDownMenu(tr, "smaller");
+      const beaconMenu = new DropDownMenuCmd(tr, "smaller");
 
       const nameTd = Utils.createTd("beacon-name", beaconName);
       tr.appendChild(nameTd);
@@ -218,7 +218,7 @@ export class BeaconsMinionPanel extends Panel {
   }
 
   _addPanelMenuItemBeaconsDisableWhenNeeded () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (!this.beaconsEnabled) {
         return null;
       }
@@ -231,7 +231,7 @@ export class BeaconsMinionPanel extends Panel {
   }
 
   _addPanelMenuItemBeaconsEnableWhenNeeded () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (this.beaconsEnabled) {
         return null;
       }
@@ -244,7 +244,7 @@ export class BeaconsMinionPanel extends Panel {
   }
 
   _addPanelMenuItemBeaconsAdd () {
-    this.panelMenu.addMenuItem("Add beacon...", () => {
+    this.panelMenu.addMenuItemCmd("Add beacon...", () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
       const cmdArr = ["beacons.add", "<name>", "<data>"];
       this.runCommand("", minionId, cmdArr);
@@ -252,7 +252,7 @@ export class BeaconsMinionPanel extends Panel {
   }
 
   _addPanelMenuItemBeaconsReset () {
-    this.panelMenu.addMenuItem("Reset beacons...", () => {
+    this.panelMenu.addMenuItemCmd("Reset beacons...", () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
       const cmdArr = ["beacons.reset"];
       this.runCommand("", minionId, cmdArr);
@@ -260,7 +260,7 @@ export class BeaconsMinionPanel extends Panel {
   }
 
   _addPanelMenuItemBeaconsSave () {
-    this.panelMenu.addMenuItem("Save beacons...", () => {
+    this.panelMenu.addMenuItemCmd("Save beacons...", () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
       const cmdArr = ["beacons.save"];
       this.runCommand("", minionId, cmdArr);
@@ -271,7 +271,7 @@ export class BeaconsMinionPanel extends Panel {
     if (beacon.enabled === false) {
       return;
     }
-    pMenu.addMenuItem("Disable beacon...", () => {
+    pMenu.addMenuItemCmd("Disable beacon...", () => {
       const cmdArr = ["beacons.disable_beacon", key];
       this.runCommand("", pMinionId, cmdArr);
     });
@@ -281,14 +281,14 @@ export class BeaconsMinionPanel extends Panel {
     if (beacon.enabled !== false) {
       return;
     }
-    pMenu.addMenuItem("Enable beacon...", () => {
+    pMenu.addMenuItemCmd("Enable beacon...", () => {
       const cmdArr = ["beacons.enable_beacon", key];
       this.runCommand("", pMinionId, cmdArr);
     });
   }
 
   _addMenuItemBeaconsDelete (pMenu, pMinionId, key) {
-    pMenu.addMenuItem("Delete beacon...", () => {
+    pMenu.addMenuItemCmd("Delete beacon...", () => {
       const cmdArr = ["beacons.delete", key];
       this.runCommand("", pMinionId, cmdArr);
     });

@@ -1,10 +1,11 @@
 /* global document window */
 
 import {Character} from "../Character.js";
-import {DropDownMenu} from "../DropDown.js";
+import {DropDownMenuCmd} from "../DropDownCmd.js";
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
 import {ParseCommandLine} from "../ParseCommandLine.js";
+import {Search} from "../Search.js";
 import {TargetType} from "../TargetType.js";
 import {Utils} from "../Utils.js";
 
@@ -52,7 +53,7 @@ export class JobPanel extends Panel {
     const output = Utils.createElem("pre", "output", "", "job-table");
     this.output = output;
 
-    const searchBox = Utils.makeSearchBox(this.searchButton, this.output, "data-list-job");
+    const searchBox = Search.makeSearchBox(this.searchButton, this.output, "data-list-job");
     this.div.appendChild(searchBox);
 
     this.div.append(this.output);
@@ -344,7 +345,7 @@ export class JobPanel extends Panel {
   }
 
   _addPanelMenuItemJobRerunJob () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (!this.target && !this.commandtext) {
         return null;
       }
@@ -379,7 +380,7 @@ export class JobPanel extends Panel {
   }
 
   _addPanelMenuItemRerunJobOnAllMinionsWhenNeeded () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       const lst = this._listForRerunJobOnAllMinions();
       if (!lst) {
         return null;
@@ -427,7 +428,7 @@ export class JobPanel extends Panel {
   }
 
   _addPanelMenuItemRerunJobOnUnsuccessfulMinionsWhenNeeded () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       const lst = this._listForRerunJobOnUnsuccessfulMinions();
       if (!lst) {
         return null;
@@ -461,7 +462,7 @@ export class JobPanel extends Panel {
   }
 
   _addPanelMenuItemRerunJobOnFailedMinionsWhenNeeded () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       const lst = this._listForRerunJobOnFailedMinions();
       if (!lst) {
         return null;
@@ -495,7 +496,7 @@ export class JobPanel extends Panel {
   }
 
   _addPanelMenuItemRerunJobOnNonRespondingMinionsWhenNeeded () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       const lst = this._listForRerunJobOnNonRespondingMinions();
       if (!lst) {
         return null;
@@ -508,7 +509,7 @@ export class JobPanel extends Panel {
   }
 
   _addPanelMenuItemTerminateJob () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (this.jobIsTerminated !== false) {
         return null;
       }
@@ -520,7 +521,7 @@ export class JobPanel extends Panel {
   }
 
   _addPanelMenuItemKillJob () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (this.jobIsTerminated !== false) {
         return null;
       }
@@ -532,7 +533,7 @@ export class JobPanel extends Panel {
   }
 
   _addPanelMenuItemSignalJob () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (this.jobIsTerminated !== false) {
         return null;
       }
@@ -591,20 +592,20 @@ export class JobPanel extends Panel {
         // show that this minion is still active on the request
         noResponseSpan.innerText = "(active) ";
 
-        const menu = new DropDownMenu(noResponseSpan, "verysmall");
-        menu.addMenuItem("Show process info...", () => {
+        const menu = new DropDownMenuCmd(noResponseSpan, "verysmall");
+        menu.addMenuItemCmd("Show process info...", () => {
           const cmdArr = ["ps.proc_info", pid];
           this.runCommand("", minionId, cmdArr);
         });
-        menu.addMenuItem("Terminate process...", () => {
+        menu.addMenuItemCmd("Terminate process...", () => {
           const cmdArr = ["ps.kill_pid", pid, "signal=", 15];
           this.runCommand("", minionId, cmdArr);
         });
-        menu.addMenuItem("Kill process...", () => {
+        menu.addMenuItemCmd("Kill process...", () => {
           const cmdArr = ["ps.kill_pid", pid, "signal=", 9];
           this.runCommand("", minionId, cmdArr);
         });
-        menu.addMenuItem("Signal process...", () => {
+        menu.addMenuItemCmd("Signal process...", () => {
           const cmdArr = ["ps.kill_pid", pid, "signal=", "<signalnumber>"];
           this.runCommand("", minionId, cmdArr);
         });
