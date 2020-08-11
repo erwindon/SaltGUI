@@ -101,7 +101,7 @@ export class MinePanel extends Panel {
   }
 
   _addMenuItemShowMine (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show functions", () => {
+    pMenu.addMenuItemCmd("Show functions", () => {
       this.router.goTo("mine-minion", {"minionid": pMinionId});
     });
   }
