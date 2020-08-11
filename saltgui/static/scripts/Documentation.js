@@ -26,23 +26,23 @@ export class Documentation {
     this.router = pRouter;
     this.commandbox = pCommandBox;
 
-    pCommandBox.cmdmenu.addMenuItem(
-      () => Documentation._manualRunMenuSysDocPrepare(),
-      () => this._manualRunMenuSysDocRun());
-    pCommandBox.cmdmenu.addMenuItem(
-      () => Documentation._manualRunMenuHtmlDocPrepare(),
-      () => Documentation._manualRunMenuHtmlDocRun());
-    pCommandBox.cmdmenu.addMenuItem(
-      () => Documentation._manualRunMenuBeaconNamePrepare(),
-      () => Documentation._manualRunMenuBeaconNameRun());
-    pCommandBox.cmdmenu.addMenuItem(
-      () => Documentation._manualRunMenuCustomHelpPrepare(),
-      () => Documentation._manualRunMenuCustomHelpRun());
-
     Documentation.DOCUMENTATION_URL = "https://docs.saltproject.io/en/latest/ref/";
     Documentation.EXTERNAL_LINK = Character.NO_BREAK_SPACE + Character.EXTERNAL_LINK_IMG;
 
     Documentation.PROVIDERS = { };
+
+    pCommandBox.cmdmenu.addMenuItemCmd(
+      () => Documentation._manualRunMenuSysDocPrepare(),
+      () => this._manualRunMenuSysDocRun());
+    pCommandBox.cmdmenu.addMenuItemCmd(
+      () => Documentation._manualRunMenuHtmlDocPrepare(),
+      () => Documentation._manualRunMenuHtmlDocRun());
+    pCommandBox.cmdmenu.addMenuItemCmd(
+      () => Documentation._manualRunMenuBeaconNamePrepare(),
+      () => Documentation._manualRunMenuBeaconNameRun());
+    pCommandBox.cmdmenu.addMenuItemCmd(
+      () => Documentation._manualRunMenuCustomHelpPrepare(),
+      () => Documentation._manualRunMenuCustomHelpRun());
   }
 
   // INTERNAL DOCUMENTATION
@@ -129,7 +129,7 @@ export class Documentation {
       dummyCommand = "sys.doc " + cmd;
     }
 
-    const targetType = TargetType.menuTargetType._value;
+    const targetType = TargetType.menuTargetType.getValue();
 
     const func = this.commandbox.getRunParams(targetType, target, docCommand, true, false);
     if (func === null) {
