@@ -202,39 +202,39 @@ export class MinionsPanel extends Panel {
   }
 
   _addMenuItemStateApply (pMenu, pMinionId) {
-    pMenu.addMenuItem("Apply state...", () => {
+    pMenu.addMenuItemCmd("Apply state...", () => {
       const cmdArr = ["state.apply"];
       this.runCommand("", pMinionId, cmdArr);
     });
   }
 
   _addMenuItemStateApplyTest (pMenu, pMinionId) {
-    pMenu.addMenuItem("Test state...", () => {
+    pMenu.addMenuItemCmd("Test state...", () => {
       const cmdArr = ["state.apply", "test=", true];
       this.runCommand("", pMinionId, cmdArr);
     });
   }
 
   _addMenuItemShowGrains (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show grains", (pClickEvent) => {
+    pMenu.addMenuItemCmd("Show grains", (pClickEvent) => {
       this.router.goTo("grains-minion", {"minionid": pMinionId}, undefined, pClickEvent);
     });
   }
 
   _addMenuItemShowSchedules (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show schedules", (pClickEvent) => {
+    pMenu.addMenuItemCmd("Show schedules", (pClickEvent) => {
       this.router.goTo("schedules-minion", {"minionid": pMinionId}, undefined, pClickEvent);
     });
   }
 
   _addMenuItemShowPillars (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show pillars", (pClickEvent) => {
+    pMenu.addMenuItemCmd("Show pillars", (pClickEvent) => {
       this.router.goTo("pillars-minion", {"minionid": pMinionId}, undefined, pClickEvent);
     });
   }
 
   _addMenuItemShowBeacons (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show beacons", (pClickEvent) => {
+    pMenu.addMenuItemCmd("Show beacons", (pClickEvent) => {
       this.router.goTo("beacons-minion", {"minionid": pMinionId}, undefined, pClickEvent);
     });
   }
