@@ -264,7 +264,7 @@ NIGHTMARE_DEBUG=1 ./runtests.sh
 
 We use the following testing libraries:
 - [nightmare.js](https://github.com/segmentio/nightmare), for functional/browser tests
-- [mocha](https://https://mochajs.org/), a well documented testing framework for javascript
+- [mocha](https://mochajs.org/), a well documented testing framework for javascript
 - [chai](http://www.chaijs.com/), the preferred assertion library for testing
 
 You'll need at least:
