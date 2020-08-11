@@ -14,8 +14,8 @@ export class BeaconsRoute extends PageRoute {
     this.updateMinion = this.updateMinion.bind(this);
 
     Utils.makeTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement(), "beacons-search-button", "beacons-table");
-    Utils.makeTableSearchable(this.getPageElement(), "beacons-search-button-jobs", "beacons-jobs-table");
+    Utils.makeTableSearchable("beacons-search-button", "beacons-table");
+    Utils.makeTableSearchable("beacons-search-button-jobs", "beacons-jobs-table");
   }
 
   onShow () {

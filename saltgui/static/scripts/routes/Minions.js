@@ -14,8 +14,8 @@ export class MinionsRoute extends PageRoute {
     this._handleRunnerManageVersions = this._handleRunnerManageVersions.bind(this);
 
     Utils.makeTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement(), "minions-search-button", "minions-table");
-    Utils.makeTableSearchable(this.getPageElement(), "minions-search-button-jobs", "minions-jobs-table");
+    Utils.makeTableSearchable("minions-search-button", "minions-table");
+    Utils.makeTableSearchable("minions-search-button-jobs", "minions-jobs-table");
   }
 
   onShow () {

@@ -20,8 +20,8 @@ export class SchedulesMinionRoute extends PageRoute {
     });
 
     Utils.makeTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement(), "schedules-minion-search-button", "schedules-minion-table");
-    Utils.makeTableSearchable(this.getPageElement(), "schedules-minion-search-button-jobs", "schedules-minion-jobs-table");
+    Utils.makeTableSearchable("schedules-minion-search-button", "schedules-minion-table");
+    Utils.makeTableSearchable("schedules-minion-search-button-jobs", "schedules-minion-jobs-table");
   }
 
   onShow () {

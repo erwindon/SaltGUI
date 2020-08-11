@@ -14,8 +14,8 @@ export class PillarsRoute extends PageRoute {
     this.updateMinion = this.updateMinion.bind(this);
 
     Utils.makeTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement(), "pillars-search-button", "pillars-table");
-    Utils.makeTableSearchable(this.getPageElement(), "pillars-search-button-jobs", "pillars-jobs-table");
+    Utils.makeTableSearchable("pillars-search-button", "pillars-table");
+    Utils.makeTableSearchable("pillars-search-button-jobs", "pillars-jobs-table");
   }
 
   onShow () {
