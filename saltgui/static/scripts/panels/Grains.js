@@ -169,7 +169,7 @@ export class GrainsPanel extends Panel {
   }
 
   _addMenuItemShowGrains (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show grains", (pClickEvent) => {
+    pMenu.addMenuItemCmd("Show grains", (pClickEvent) => {
       this.router.goTo("grains-minion", {"minionid": pMinionId}, undefined, pClickEvent);
     });
   }

@@ -1,7 +1,7 @@
 /* global */
 
 import {Character} from "../Character.js";
-import {DropDownMenu} from "../DropDown.js";
+import {DropDownMenuCmd} from "../DropDownCmd.js";
 import {JobPanel} from "./Job.js";
 import {JobsPanel} from "./Jobs.js";
 import {Output} from "../output/Output.js";
@@ -88,7 +88,7 @@ export class JobsDetailsPanel extends JobsPanel {
   }
 
   _addSettingsMenuItemShowSome () {
-    this.settingsMenu.addMenuItem(() => {
+    this.settingsMenu.addMenuItemCmd(() => {
       let title = "Show first " + MAX_JOBS_DETAILS + " jobs";
       const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
       if (cnt === "undefined" || cnt === String(MAX_JOBS_DETAILS)) {
@@ -101,7 +101,7 @@ export class JobsDetailsPanel extends JobsPanel {
   }
 
   _addSettingsMenuItemShowEligible () {
-    this.settingsMenu.addMenuItem(() => {
+    this.settingsMenu.addMenuItemCmd(() => {
       const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
       let title = "Show eligible jobs";
       if (cnt === "eligible") {
@@ -114,7 +114,7 @@ export class JobsDetailsPanel extends JobsPanel {
   }
 
   _addSettingsMenuItemShowAll () {
-    this.settingsMenu.addMenuItem(() => {
+    this.settingsMenu.addMenuItemCmd(() => {
       const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
       let title = "Show all jobs";
       if (cnt === "all") {
@@ -346,7 +346,7 @@ export class JobsDetailsPanel extends JobsPanel {
     tr.id = Utils.getIdFromJobId(job.id);
     tr.dataset.jobid = job.id;
 
-    const menu = new DropDownMenu(tr, "smaller");
+    const menu = new DropDownMenuCmd(tr, "smaller");
 
     tr.appendChild(Utils.createTd("", job.id));
 
@@ -419,20 +419,20 @@ export class JobsDetailsPanel extends JobsPanel {
   }
 
   _addJobsMenuItemShowDetails (pMenu, job) {
-    pMenu.addMenuItem("Show details", (pClickEvent) => {
+    pMenu.addMenuItemCmd("Show details", (pClickEvent) => {
       this.router.goTo("job", {"id": job.id}, undefined, pClickEvent);
     });
   }
 
   _addMenuItemJobsRerunJob (pMenu, job, argumentsText) {
-    pMenu.addMenuItem("Re-run job...", () => {
+    pMenu.addMenuItemCmd("Re-run job...", () => {
       const cmdStr = job.Function + argumentsText;
       this.runCommand(job["Target-type"], job.Target, cmdStr);
     });
   }
 
   _addJobsMenuItemUpdateStatus (pMenu, pStatusSpan) {
-    pMenu.addMenuItem("Update status", () => {
+    pMenu.addMenuItemCmd("Update status", () => {
       pStatusSpan.classList.add("no-job-status");
       pStatusSpan.innerText = "loading" + Character.HORIZONTAL_ELLIPSIS;
       this.startRunningJobs();
@@ -440,7 +440,7 @@ export class JobsDetailsPanel extends JobsPanel {
   }
 
   _addMenuItemUpdateDetails (pMenu, pDetailsSpan, job) {
-    pMenu.addMenuItem("Update details", () => {
+    pMenu.addMenuItemCmd("Update details", () => {
       pDetailsSpan.classList.add("no-job-details");
       pDetailsSpan.innerText = "loading" + Character.HORIZONTAL_ELLIPSIS;
       this._getJobDetails(job.id);

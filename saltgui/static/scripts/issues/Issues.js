@@ -1,6 +1,6 @@
 /* global */
 
-import {DropDownMenu} from "../DropDown.js";
+import {DropDownMenuCmd} from "../DropDownCmd.js";
 import {Utils} from "../Utils.js";
 
 export class Issues {
@@ -49,7 +49,7 @@ export class Issues {
 
     const theTr = Utils.createTr();
 
-    const menu = new DropDownMenu(theTr, "smaller");
+    const menu = new DropDownMenuCmd(theTr, "smaller");
     theTr.menu = menu;
 
     const descTd = Utils.createTd();
@@ -77,7 +77,7 @@ export class Issues {
   }
 
   static addIssueCmd (pTr, pTitle, pTarget, pCommand) {
-    pTr.menu.addMenuItem(pTitle + "...", () => {
+    pTr.menu.addMenuItemCmd(pTitle + "...", () => {
       pTr.panel.runCommand("", pTarget, pCommand);
     });
 
@@ -98,7 +98,7 @@ export class Issues {
     } else {
       title = "Go to " + pPage + " page";
     }
-    pTr.menu.addMenuItem(title, (pClickEvent) => {
+    pTr.menu.addMenuItemCmd(title, (pClickEvent) => {
       pTr.panel.router.goTo(pPage, pArgs, undefined, pClickEvent);
     });
 

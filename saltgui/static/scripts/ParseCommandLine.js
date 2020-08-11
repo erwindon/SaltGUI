@@ -1,3 +1,5 @@
+/* global */
+
 // Function to parse a commandline
 // The line is broken into individual tokens
 // Each token that is recognized as a JS type will get that type

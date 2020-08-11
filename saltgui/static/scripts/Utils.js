@@ -1,7 +1,6 @@
 /* global Hilitor */
 
 import {Character} from "./Character.js";
-import {DropDownMenu} from "./DropDown.js";
 
 export class Utils {
 
@@ -252,80 +251,6 @@ export class Utils {
     return regs[0].length > 0 ? 1 : 2;
   }
 
-  static makeSearchBox (pSearchButton, pTable, pFieldList = null) {
-
-    const div = Utils.createDiv("search-box", "");
-    div.style.display = "none";
-
-    const menuAndFieldDiv = Utils.createDiv("search-menu-and-field", "");
-
-    const searchOptionsMenu = new DropDownMenu(menuAndFieldDiv, "smaller");
-
-    const input = Utils.createElem("input", "filter-text");
-    input.type = "text";
-    input.spellcheck = false;
-    input.placeholder = Character.LEFT_POINTING_MAGNIFYING_GLASS;
-    if (pFieldList) {
-      input.setAttribute("list", pFieldList);
-    }
-    menuAndFieldDiv.append(input);
-
-    div.append(menuAndFieldDiv);
-
-    const errorDiv = Utils.createDiv("search-error", "");
-    errorDiv.style.display = "none";
-    div.append(errorDiv);
-
-    searchOptionsMenu.addMenuItem(
-      "Case sensitive", (ev) => {
-        Utils._updateSearchOption(ev, pTable, searchOptionsMenu, input);
-      });
-    searchOptionsMenu.addMenuItem(
-      "Regular expression", (ev) => {
-        Utils._updateSearchOption(ev, pTable, searchOptionsMenu, input);
-      });
-    searchOptionsMenu.addMenuItem(
-      "Invert search", (ev) => {
-        Utils._updateSearchOption(ev, pTable, searchOptionsMenu, input);
-      });
-
-    // make the search function active
-    pSearchButton.addEventListener("click", (pClickEvent) => {
-      Utils.hideShowTableSearchBar(div, pTable);
-      pClickEvent.stopPropagation();
-    });
-
-    return div;
-  }
-
-  static _updateSearchOption (ev, pTable, pSearchOptionsMenu, pInput) {
-    ev.target._value = !ev.target._value;
-
-    let menuItemText = ev.target.innerText;
-    menuItemText = menuItemText.replace(/^. /, "");
-    if (ev.target._value === true) {
-      menuItemText = Character.HEAVY_CHECK_MARK + " " + menuItemText;
-    }
-    ev.target.innerText = menuItemText;
-
-    Utils._updateTableFilter(
-      pTable,
-      pInput.value,
-      pSearchOptionsMenu.menuDropdownContent);
-
-    let placeholder = Character.LEFT_POINTING_MAGNIFYING_GLASS;
-    if (pSearchOptionsMenu.menuDropdownContent.childNodes[0]._value === true) {
-      placeholder += " caseSensitive";
-    }
-    if (pSearchOptionsMenu.menuDropdownContent.childNodes[1]._value === true) {
-      placeholder += " regExp";
-    }
-    if (pSearchOptionsMenu.menuDropdownContent.childNodes[2]._value === true) {
-      placeholder += " invertSearch";
-    }
-    pInput.placeholder = placeholder;
-  }
-
   static addTableHelp (pStartElement, pHelpText, pStyle = "bottom-right") {
     const helpButton = pStartElement.querySelector("#help");
     helpButton.classList.add("search-button");
@@ -333,7 +258,6 @@ export class Utils {
   }
 
   static hideShowTableSearchBar (pSearchBlock, pTable, pAction = "toggle") {
-    const startElement = pTable.parentElement;
 
     // remove all highlights
     const searchInSelector = pTable.tagName === "TABLE" ? "tbody" : "";
@@ -346,7 +270,7 @@ export class Utils {
       fm.classList.remove("no-filter-match");
     }
 
-    const menuItems = startElement.querySelector(".search-box .menu-dropdown-content");
+    const menuItems = pSearchBlock.searchOptionsMenu;
 
     // hide/show search box (the block may become more complicated later)
     const input = pSearchBlock.querySelector("input");
@@ -379,7 +303,7 @@ export class Utils {
     input.focus();
   }
 
-  static _updateTableFilter (pTable, pSearchText, pMenuItems) {
+  static _updateTableFilter (pTable, pSearchText, pSearchMenu) {
     // remove highlighting before re-comparing
     // as it affects the texts
     const searchInSelector = pTable.tagName === "TABLE" ? "tbody" : "";
@@ -387,9 +311,9 @@ export class Utils {
     hilitor.remove();
 
     // values may be undefined, so convert to proper boolean
-    const caseSensitiveFlag = pMenuItems.childNodes[0]._value === true;
-    const regExpFlag = pMenuItems.childNodes[1]._value === true;
-    let invertFlag = pMenuItems.childNodes[2]._value === true;
+    const caseSensitiveFlag = pSearchMenu.isSet("cs");
+    const regExpFlag = pSearchMenu.isSet("re");
+    let invertFlag = pSearchMenu.isSet("is");
 
     // otherwise everything is immediatelly hidden
     if (invertFlag && !pSearchText) {

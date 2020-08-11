@@ -2,7 +2,8 @@
 
 import {Character} from "../Character.js";
 import {CommandBox} from "../CommandBox.js";
-import {DropDownMenu} from "../DropDown.js";
+import {DropDownMenuCmd} from "../DropDownCmd.js";
+import {Search} from "../Search.js";
 import {SortTable} from "../../sorttable/sorttable.js";
 import {TargetType} from "../TargetType.js";
 import {Utils} from "../Utils.js";
@@ -47,7 +48,7 @@ export class Panel {
   addPanelMenu () {
     const span = Utils.createSpan();
     span.id = this.key + "-menu";
-    const menu = new DropDownMenu(span);
+    const menu = new DropDownMenuCmd(span);
     menu.menuButton.classList.add("small-button-left", "no-print");
     this.div.appendChild(span);
     this.panelMenu = menu;
@@ -56,7 +57,7 @@ export class Panel {
   addSettingsMenu () {
     const span = Utils.createSpan();
     span.id = this.key + "-settings";
-    const menu = new DropDownMenu(span);
+    const menu = new DropDownMenuCmd(span);
     menu.menuButton.classList.add("small-button-left");
     this.div.appendChild(span);
     this.settingsMenu = menu;
@@ -208,7 +209,7 @@ export class Panel {
     // most tables are searchable (but not all)
     // when it is, we already prepared the search button for it
     if (this.div.querySelector(".search-button") !== null) {
-      const searchBox = Utils.makeSearchBox(this.searchButton, table, pFieldList);
+      const searchBox = Search.makeSearchBox(this.searchButton, table, pFieldList);
       this.div.appendChild(searchBox);
       this.searchBox = searchBox;
     }
@@ -394,7 +395,7 @@ export class Panel {
 
     // drop down menu
     const menuTd = Utils.createTd();
-    const menu = new DropDownMenu(menuTd, "smaller");
+    const menu = new DropDownMenuCmd(menuTd, "smaller");
     minionTr.dropdownmenu = menu;
     minionTr.appendChild(menuTd);
 
@@ -434,7 +435,7 @@ export class Panel {
 
     // drop down menu
     const menuTd = Utils.createTd();
-    const menu = new DropDownMenu(menuTd, "smaller");
+    const menu = new DropDownMenuCmd(menuTd, "smaller");
     minionTr.dropdownmenu = menu;
     minionTr.appendChild(menuTd);
 
