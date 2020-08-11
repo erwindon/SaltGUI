@@ -280,8 +280,6 @@ export class Router {
   }
 
   _showRoute (pRoute) {
-    const that = this;
-
     pRoute.getPageElement().style.display = "";
 
     const minionMenuItem = document.getElementById("button-minions1");
@@ -321,13 +319,13 @@ export class Router {
     // it is either not started, or needs restarting
     this.api.getEvents(this);
 
-    if (that.currentRoute) {
-      that._hideRoute(that.currentRoute);
+    if (this.currentRoute) {
+      this._hideRoute(this.currentRoute);
     }
 
-    that.currentRoute = pRoute;
-    that.currentRoute.getPageElement().classList.add("current");
-    that.switchingRoute = false;
+    this.currentRoute = pRoute;
+    this.currentRoute.getPageElement().classList.add("current");
+    this.switchingRoute = false;
   }
 
   _hideRoute (pRoute) {
