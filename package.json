@@ -4,6 +4,7 @@
   "author": "Martijn Jacobs",
   "version": "0.0.1",
   "license": "MIT",
+  "private": true,
   "devDependencies": {
     "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
@@ -34,7 +35,11 @@
       "guard-for-in": 0,
       "id-length": [
         "error",
-        { "exceptions": ["i"] }
+        {
+          "exceptions": [
+            "i"
+          ]
+        }
       ],
       "indent": [
         "error",
