@@ -94,8 +94,8 @@ export class GrainsMinionRoute extends PageRoute {
       const grainMenu = new DropDownMenu(grainTr);
       this._addMenuItemGrainsSetValUpdate(grainMenu, pMinionId, grainName, grains);
       this._addMenuItemGrainsAppendWhenNeeded(grainMenu, pMinionId, grainName, grainValue);
-      this._addMenuItemGrainsDelKey(grainMenu, pMinionId, grainName);
-      this._addMenuItemGrainsDelVal(grainMenu, pMinionId, grainName);
+      this._addMenuItemGrainsDelKey(grainMenu, pMinionId, grainName, grains[grainName]);
+      this._addMenuItemGrainsDelVal(grainMenu, pMinionId, grainName, grains[grainName]);
 
       // menu comes before this data on purpose
       const grainValueTd = Route.createTd("grain-value", grainValue);
@@ -142,15 +142,17 @@ export class GrainsMinionRoute extends PageRoute {
     });
   }
 
-  _addMenuItemGrainsDelKey (pMenu, pMinionId, key) {
+  _addMenuItemGrainsDelKey (pMenu, pMinionId, pKey, pValue) {
+    const forceClause = pValue !== null && typeof pValue === "object" ? " force=true" : "";
     pMenu.addMenuItem("Delete&nbsp;key...", (pClickEvent) => {
-      this.runCommand(pClickEvent, pMinionId, "grains.delkey \"" + key + "\"");
+      this.runCommand(pClickEvent, pMinionId, "grains.delkey" + forceClause + " \"" + pKey + "\"");
     });
   }
 
-  _addMenuItemGrainsDelVal (pMenu, pMinionId, key) {
+  _addMenuItemGrainsDelVal (pMenu, pMinionId, pKey, pValue) {
+    const forceClause = pValue !== null && typeof pValue === "object" ? " force=true" : "";
     pMenu.addMenuItem("Delete&nbsp;value...", (pClickEvent) => {
-      this.runCommand(pClickEvent, pMinionId, "grains.delval \"" + key + "\"");
+      this.runCommand(pClickEvent, pMinionId, "grains.delval" + forceClause + " \"" + pKey + "\"");
     });
   }
 }
