@@ -17,8 +17,8 @@ export class KeysRoute extends PageRoute {
 
     Utils.addTableHelp(this.getPageElement(), "The content of this page is\nautomatically refreshed");
     Utils.makeTableSortable(this.getPageElement(), false, 1);
-    Utils.makeTableSearchable(this.getPageElement(), "keys-search-button", "keys-table");
-    Utils.makeTableSearchable(this.getPageElement(), "keys-search-button-jobs", "keys-jobs-table");
+    Utils.makeTableSearchable("keys-search-button", "keys-table");
+    Utils.makeTableSearchable("keys-search-button-jobs", "keys-jobs-table");
   }
 
   onShow () {
@@ -397,7 +397,7 @@ export class KeysRoute extends PageRoute {
     });
   }
 
-  handleSaltAuthEvent (pTag, pData) {
+  handleSaltAuthEvent (pData) {
     const table = document.getElementById("keys-table");
     const tr = table.querySelector("tr#" + Utils.getIdFromMinionId(pData.id));
     const minionsDict = JSON.parse(window.sessionStorage.getItem("minions-txt"));
@@ -484,7 +484,7 @@ export class KeysRoute extends PageRoute {
     this._updateTableSummary();
   }
 
-  handleSaltKeyEvent (pTag, pData) {
-    this.handleSaltAuthEvent(pTag, pData);
+  handleSaltKeyEvent (pData) {
+    this.handleSaltAuthEvent(pData);
   }
 }

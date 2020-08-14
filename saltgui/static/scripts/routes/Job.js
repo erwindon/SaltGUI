@@ -14,7 +14,7 @@ export class JobRoute extends Route {
     this._handleJobRunnerJobsListJob = this._handleJobRunnerJobsListJob.bind(this);
     this.handleRunnerJobsActive = this.handleRunnerJobsActive.bind(this);
 
-    Utils.makeTableSearchable(this.getPageElement(), "job-search-button", "job-table");
+    Utils.makeTableSearchable("job-search-button", "job-table");
   }
 
   onShow () {
@@ -375,7 +375,7 @@ export class JobRoute extends Route {
     }
   }
 
-  handleSaltJobRetEvent (pTag, pData) {
+  handleSaltJobRetEvent (pData) {
 
     // ignore the most common events until someone complains
     if (pData.fun === "saltutil.find_job") {

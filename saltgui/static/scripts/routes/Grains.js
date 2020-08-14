@@ -37,8 +37,8 @@ export class GrainsRoute extends PageRoute {
     sorttable.makeSortable(newHead.parentNode);
 
     Utils.makeTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement(), "grains-search-button", "grains-table");
-    Utils.makeTableSearchable(this.getPageElement(), "grains-search-button-jobs", "grains-jobs-table");
+    Utils.makeTableSearchable("grains-search-button", "grains-table");
+    Utils.makeTableSearchable("grains-search-button-jobs", "grains-jobs-table");
   }
 
   onShow () {

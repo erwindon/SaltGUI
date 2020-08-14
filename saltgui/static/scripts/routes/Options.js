@@ -13,8 +13,8 @@ export class OptionsRoute extends PageRoute {
 
     Utils.addTableHelp(this.getPageElement(), "Names 'session_*' show the values from the login session\nNames 'saltgui_*' show the values from the master file '/etc/salt/master'\nChanges made in this screen are valid for this session ONLY");
 
-    Utils.makeTableSearchable(this.getPageElement(), "options-search-button", "options-table");
-    Utils.makeTableSearchable(this.getPageElement(), "options-search-button-jobs", "options-jobs-table");
+    Utils.makeTableSearchable("options-search-button", "options-table");
+    Utils.makeTableSearchable("options-search-button-jobs", "options-jobs-table");
   }
 
   onShow () {

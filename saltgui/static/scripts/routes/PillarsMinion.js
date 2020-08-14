@@ -20,8 +20,8 @@ export class PillarsMinionRoute extends PageRoute {
     });
 
     Utils.makeTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement(), "pillars-minion-search-button", "pillars-minion-table");
-    Utils.makeTableSearchable(this.getPageElement(), "pillars-minion-search-button-jobs", "pillars-minion-jobs-table");
+    Utils.makeTableSearchable("pillars-minion-search-button", "pillars-minion-table");
+    Utils.makeTableSearchable("pillars-minion-search-button-jobs", "pillars-minion-jobs-table");
   }
 
   onShow () {

@@ -16,7 +16,7 @@ export class JobsRoute extends PageRoute {
     this._updateNextJob = this._updateNextJob.bind(this);
 
     Utils.makeTableSortable(this.getPageElement(), true);
-    Utils.makeTableSearchable(this.getPageElement(), "jobs-search-button", "jobs-table");
+    Utils.makeTableSearchable("jobs-search-button", "jobs-table");
   }
 
   onShow () {

@@ -196,7 +196,7 @@ export class Utils {
     return regs[0].length > 0 ? 1 : 2;
   }
 
-  static makeTableSearchable (pStartElement, pButtonId, pTableId, pFieldList = null) {
+  static makeTableSearchable (pButtonId, pTableId, pFieldList = null) {
 
     const div = Route.createDiv("search-box", "");
     div.style.display = "none";

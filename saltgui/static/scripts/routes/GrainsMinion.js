@@ -19,8 +19,8 @@ export class GrainsMinionRoute extends PageRoute {
     });
 
     Utils.makeTableSortable(this.getPageElement());
-    Utils.makeTableSearchable(this.getPageElement(), "grains-minion-search-button", "grains-minion-table");
-    Utils.makeTableSearchable(this.getPageElement(), "grains-minion-search-button-jobs", "grains-minion-jobs-table");
+    Utils.makeTableSearchable("grains-minion-search-button", "grains-minion-table");
+    Utils.makeTableSearchable("grains-minion-search-button-jobs", "grains-minion-jobs-table");
   }
 
   onShow () {

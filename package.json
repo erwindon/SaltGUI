@@ -70,6 +70,12 @@
       "no-undef-init": 0,
       "no-undefined": 0,
       "no-underscore-dangle": 0,
+      "no-unused-vars": [
+        "error",
+        {
+          "args": "all"
+        }
+      ],
       "no-warning-comments": 0,
       "object-property-newline": 0,
       "object-shorthand": 0,

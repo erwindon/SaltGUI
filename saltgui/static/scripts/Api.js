@@ -333,11 +333,11 @@ export class API {
         pRouter.beaconsMinionRoute.handleSaltBeaconEvent(tag, data);
       } else if (tag === "salt/auth") {
         // new key has been received
-        pRouter.keysRoute.handleSaltAuthEvent(tag, data);
+        pRouter.keysRoute.handleSaltAuthEvent(data);
       } else if (tag === "salt/key") {
         pRouter.keysRoute.handleSaltKeyEvent(tag, data);
       } else if (tag.startsWith("salt/job/") && tag.includes("/ret/")) {
-        pRouter.jobRoute.handleSaltJobRetEvent(tag, data);
+        pRouter.jobRoute.handleSaltJobRetEvent(data);
       }
 
       pRouter.eventsRoute.handleAnyEvent(tag, data);
