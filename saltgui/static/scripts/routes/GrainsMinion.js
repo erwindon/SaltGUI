@@ -103,7 +103,7 @@ export class GrainsMinionRoute extends PageRoute {
       container.tBodies[0].appendChild(grainTr);
 
       grainTr.addEventListener("click", (pClickEvent) => {
-        this.runCommand(pClickEvent, pMinionId, "grains.setval \"" + grainName + "\" " + JSON.stringify(grains[grainName]));
+        this.runCommand(pClickEvent, pMinionId, "grains.setval " + JSON.stringify(grainName) + " " + JSON.stringify(grains[grainName]));
       });
     }
 
@@ -128,7 +128,7 @@ export class GrainsMinionRoute extends PageRoute {
   _addMenuItemGrainsSetValUpdate (pMenu, pMinionId, key, grains) {
     pMenu.addMenuItem("Edit&nbsp;grain...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId,
-        "grains.setval \"" + key + "\" " + JSON.stringify(grains[key]));
+        "grains.setval " + JSON.stringify(key) + " " + JSON.stringify(grains[key]));
     });
   }
 
@@ -137,21 +137,21 @@ export class GrainsMinionRoute extends PageRoute {
       return;
     }
     pMenu.addMenuItem("Add&nbsp;value...", (pClickEvent) => {
-      this.runCommand(pClickEvent, pMinionId, "grains.append \"" + key + "\" <value>");
+      this.runCommand(pClickEvent, pMinionId, "grains.append " + JSON.stringify(key) + " <value>");
     });
   }
 
   _addMenuItemGrainsDelKey (pMenu, pMinionId, pKey, pValue) {
     const forceClause = pValue !== null && typeof pValue === "object" ? " force=true" : "";
     pMenu.addMenuItem("Delete&nbsp;key...", (pClickEvent) => {
-      this.runCommand(pClickEvent, pMinionId, "grains.delkey" + forceClause + " \"" + pKey + "\"");
+      this.runCommand(pClickEvent, pMinionId, "grains.delkey" + forceClause + " " + JSON.stringify(pKey));
     });
   }
 
   _addMenuItemGrainsDelVal (pMenu, pMinionId, pKey, pValue) {
     const forceClause = pValue !== null && typeof pValue === "object" ? " force=true" : "";
     pMenu.addMenuItem("Delete&nbsp;value...", (pClickEvent) => {
-      this.runCommand(pClickEvent, pMinionId, "grains.delval" + forceClause + " \"" + pKey + "\"");
+      this.runCommand(pClickEvent, pMinionId, "grains.delval" + forceClause + " " + JSON.stringify(pKey));
     });
   }
 }

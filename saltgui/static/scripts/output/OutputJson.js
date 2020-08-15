@@ -81,7 +81,7 @@ export class OutputJson {
     const sortedKeys = Object.keys(pValue).sort();
     for (const key of sortedKeys) {
       const item = pValue[key];
-      str += separator + "\n" + " ".repeat(pIndentLevel + indentStep) + "\"" + key + "\": " +
+      str += separator + "\n" + " ".repeat(pIndentLevel + indentStep) + JSON.stringify(key) + ": " +
         OutputJson.formatJSON(item, pIndentLevel + indentStep);
       separator = ",";
     }

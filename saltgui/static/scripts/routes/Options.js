@@ -235,7 +235,7 @@ export class OptionsRoute extends PageRoute {
     const of7 = document.getElementById("output-formats-output-yaml");
     if (of7.checked) value += ",yaml";
     /* eslint-enable curly */
-    value = "\"" + value.substring(1) + "\"";
+    value = JSON.stringify(value.substring(1));
     const outputFormatsTd = document.getElementById("option-output-formats-value");
     outputFormatsTd.innerText = this._makeOutputFormatsValue(value);
     Utils.setStorageItem("session", "output_formats", value);
