@@ -132,13 +132,29 @@ describe("Unittests for Output.js", () => {
     result = OutputYaml.formatYAML(outputData);
     assert.equal(result, "txt");
 
+    outputData = "@txt";
+    result = OutputYaml.formatYAML(outputData);
+    assert.equal(result, "'@txt'");
+
+    outputData = "`txt";
+    result = OutputYaml.formatYAML(outputData);
+    assert.equal(result, "'`txt'");
+
+    outputData = "%txt";
+    result = OutputYaml.formatYAML(outputData);
+    assert.equal(result, "'%txt'");
+
     outputData = " ";
     result = OutputYaml.formatYAML(outputData);
     assert.equal(result, "' '");
 
+    outputData = "0123";
+    result = OutputYaml.formatYAML(outputData);
+    assert.equal(result, "'0123'");
+
     outputData = "";
-    result = OutputJson.formatJSON(outputData);
-    assert.equal(result, "\"\"");
+    result = OutputYaml.formatYAML(outputData);
+    assert.equal(result, "''");
 
     outputData = [];
     result = OutputYaml.formatYAML(outputData);
@@ -399,6 +415,11 @@ describe("Unittests for Output.js", () => {
     out = {"host1": 123, "host2": {"topic": "explanation"}};
     OutputDocumentation.reduceDocumentationOutput(out, "DUMMY", "topic");
     assert.deepEqual(out, {"DUMMY": {"topic": "explanation"}});
+
+    // ignore hosts with incorrectly formatted answer (all hosts)
+    out = {"host1": 123, "host2": 321};
+    OutputDocumentation.reduceDocumentationOutput(out, "DUMMY", "topic");
+    assert.deepEqual(out, {"dummy": {"DUMMY": "no documentation found"}});
 
     done();
   });

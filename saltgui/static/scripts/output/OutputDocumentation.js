@@ -235,7 +235,9 @@ export class OutputDocumentation {
             replace(/(?:\n|\r)(?:.|\n|\r)*$/m, "");
           const words = reference.split(": ");
           if (words.length !== 2) {
+            /* istanbul ignore next */
             console.log("words", words);
+            /* istanbul ignore next */
             break;
           }
           const link = words[0];

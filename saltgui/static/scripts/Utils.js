@@ -24,7 +24,6 @@ export class Utils {
     return undefined;
   }
 
-  /* istanbul ignore next */
   static getQueryParam (pName) {
     let theWindow = null;
     try {
@@ -35,6 +34,7 @@ export class Utils {
     if (!theWindow || !theWindow.location) {
       return undefined;
     }
+    /* istanbul ignore next */
     return Utils._getQueryParam2(theWindow.location.href, pName);
   }
 
@@ -49,13 +49,17 @@ export class Utils {
     } catch (error) {
       return null;
     }
+    /* istanbul ignore next */
     if (pStorage === "local") {
       return window.localStorage;
     }
+    /* istanbul ignore next */
     if (pStorage === "session") {
       return window.sessionStorage;
     }
+    /* istanbul ignore next */
     console.error("UNKNOWN STORAGE TYPE", pStorage);
+    /* istanbul ignore next */
     return null;
   }
 
@@ -65,14 +69,18 @@ export class Utils {
       console.log("getStorageItem", pStorage, pKeyName);
       return pDefaultValue;
     }
+    /* istanbul ignore next */
     const value = storage.getItem(pKeyName);
     // console.log("getStorageItem", pStorage, pKeyName, pDefaultValue, "-->", typeof value, value);
+    /* istanbul ignore next */
     if (value === null) {
       return pDefaultValue;
     }
+    /* istanbul ignore next */
     if (value === "undefined") {
       return pDefaultValue;
     }
+    /* istanbul ignore next */
     return value;
   }
 
@@ -83,6 +91,7 @@ export class Utils {
       return;
     }
     // console.log("setStorageItem", pStorage, pKeyName, pValue);
+    /* istanbul ignore next */
     storage.setItem(pKeyName, pValue);
   }
 
@@ -93,6 +102,7 @@ export class Utils {
       return;
     }
     // console.log("clearStorage", pStorage);
+    /* istanbul ignore next */
     storage.clear();
   }
 

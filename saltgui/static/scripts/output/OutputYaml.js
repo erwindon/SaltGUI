@@ -22,7 +22,7 @@ export class OutputYaml {
 
       // simple number with extra 0's at the start is still a string
       if (pValue.match(/^0[0-9]+$/)) {
-        return pValue;
+        needQuotes = true;
       }
 
       if (!isNaN(Number(pValue))) {
