@@ -5,6 +5,7 @@ import {OutputDocumentation} from "./OutputDocumentation.js";
 import {OutputHighstate} from "./OutputHighstate.js";
 import {OutputJson} from "./OutputJson.js";
 import {OutputNested} from "./OutputNested.js";
+import {OutputToml} from "./OutputToml.js";
 import {OutputYaml} from "./OutputYaml.js";
 import {ParseCommandLine} from "../ParseCommandLine.js";
 import {Utils} from "../Utils.js";
@@ -98,6 +99,10 @@ export class Output {
 
     if (Output.isOutputFormatAllowed("nested")) {
       return OutputNested.formatNESTED(pObject);
+    }
+
+    if (Output.isOutputFormatAllowed("toml")) {
+      return OutputToml.formatTOML(pObject);
     }
 
     if (Output.isOutputFormatAllowed("yaml")) {
@@ -885,6 +890,8 @@ export class Output {
       JSON.stringify, "RAW-JSON", "application/json", "raw.json");
     Output._addDownload(topSummaryDiv, pJobId, downloadObject,
       OutputYaml.formatYAML, "YAML", "text/vnd.yaml", "yaml");
+    Output._addDownload(topSummaryDiv, pJobId, downloadObject,
+      OutputToml.formatTOML, "TOML", "text/plain", "toml.txt");
     Output._addDownload(topSummaryDiv, pJobId, downloadObject,
       OutputNested.formatNESTED, "NESTED", "text/plain", "nested.txt");
     Output._addDownload(topSummaryDiv, pJobId, downloadObject,
