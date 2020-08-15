@@ -56,14 +56,13 @@ export class API {
   logout () {
     // only delete the session here as the router should take care of
     // redirecting to the login screen
-    const that = this;
     return this.apiRequest("POST", "/logout", {}).
       then(() => {
         // we could logout, assume the session is terminated
-        that._cleanStorage();
+        this._cleanStorage();
       }, () => {
         // we could not logout, assume the session is broken
-        that._cleanStorage();
+        this._cleanStorage();
       });
   }
 
@@ -231,7 +230,6 @@ export class API {
       options.body = JSON.stringify(pParams);
     }
 
-    const that = this;
     return window.fetch(url, options).
       then((pResponse) => {
         if (pResponse.ok && pRoute.endsWith(".txt")) {
@@ -244,13 +242,13 @@ export class API {
         // so let's do it ourselves
         if (pResponse.status === 401 && pRoute === "/logout") {
           // so we can't logout?
-          that._cleanStorage();
+          this._cleanStorage();
           return null;
         }
         if (pResponse.status === 401 && pRoute !== "/login") {
           const loginResponseStr = Utils.getStorageItem("session", "login-response");
           if (!loginResponseStr) {
-            that.logout().then(() => {
+            this.logout().then(() => {
               window.location.replace(config.NAV_URL + "/login?reason=no-session");
             }, () => {
               window.location.replace(config.NAV_URL + "/login?reason=no-session");
@@ -263,7 +261,7 @@ export class API {
             const now = Date.now() / 1000;
             const expireValue = loginResponse.expire;
             if (now > expireValue) {
-              that.logout().then(() => {
+              this.logout().then(() => {
                 window.location.replace(config.NAV_URL + "/login?reason=expired-session");
               }, () => {
                 window.location.replace(config.NAV_URL + "/login?reason=expired-session");

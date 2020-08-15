@@ -19,7 +19,9 @@ export class LoginRoute extends Route {
 
   _registerLoginRouteEventListeners () {
     const loginForm = document.getElementById("login-form");
-    loginForm.addEventListener("submit", this._onLogin);
+    loginForm.addEventListener("submit", (ev) => {
+      this._onLogin(ev);
+    });
   }
 
   _showNoticeText (pBackgroundColour, pText, pInfoClass) {
@@ -99,15 +101,16 @@ export class LoginRoute extends Route {
     const wheelConfigValuesPromise = this.router.api.getWheelConfigValues();
 
     // We need these functions to populate the dropdown boxes
-    const that = this;
     wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
-      that._handleLoginWheelConfigValues(pWheelConfigValuesData);
+      this._handleLoginWheelConfigValues(pWheelConfigValuesData);
     }, () => {
       // never mind
     });
 
     // allow the success message to be seen
-    window.setTimeout(() => this.router.goTo("/"), 1000);
+    window.setTimeout(() => {
+      this.router.goTo("/");
+    }, 1000);
   }
 
   _handleLoginWheelConfigValues (pWheelConfigValuesData) {

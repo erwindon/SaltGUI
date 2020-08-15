@@ -19,8 +19,6 @@ export class JobsRoute extends PageRoute {
   }
 
   onShow () {
-    const that = this;
-
     const patInteger = /^(?:(?:0)|(?:[-+]?[1-9][0-9]*))$/;
 
     const maxJobs = 50;
@@ -52,14 +50,14 @@ export class JobsRoute extends PageRoute {
     this._addMenuItemShowAll(menu);
 
     runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
-      that.handleRunnerJobsListJobs(pRunnerJobsListJobsData, cnt);
+      this.handleRunnerJobsListJobs(pRunnerJobsListJobsData, cnt);
       runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
-        that.handleRunnerJobsActive(pRunnerJobsActiveData);
+        this.handleRunnerJobsActive(pRunnerJobsActiveData);
       }, (pRunnerJobsActiveMsg) => {
-        that.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
+        this.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
     }, (pRunnerJobsListJobsMsg) => {
-      that.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
+      this.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
 
     // to update details
@@ -292,14 +290,12 @@ export class JobsRoute extends PageRoute {
   }
 
   _getJobDetails (pJobId) {
-    const that = this;
-
     const runnerJobsListJobPromise = this.router.api.getRunnerJobsListJob(pJobId);
 
     runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
-      that._handleJobsRunnerJobsListJob(pJobId, pRunnerJobsListJobData);
+      this._handleJobsRunnerJobsListJob(pJobId, pRunnerJobsListJobData);
     }, (pRunnerJobsListJobMsg) => {
-      that._handleJobsRunnerJobsListJob(pJobId, JSON.stringify(pRunnerJobsListJobMsg));
+      this._handleJobsRunnerJobsListJob(pJobId, JSON.stringify(pRunnerJobsListJobMsg));
     });
   }
 

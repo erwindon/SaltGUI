@@ -18,37 +18,35 @@ export class PillarsRoute extends PageRoute {
   }
 
   onShow () {
-    const that = this;
-
     const wheelKeyListAllPromise = this.router.api.getWheelKeyListAll();
     const localPillarObfuscatePromise = this.router.api.getLocalPillarObfuscate(null);
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
-      that._handlePillarsWheelKeyListAll(pWheelKeyListAllData);
+      this._handlePillarsWheelKeyListAll(pWheelKeyListAllData);
       localPillarObfuscatePromise.then((pLocalPillarObfuscateData) => {
-        that.updateMinions("pillars-table", pLocalPillarObfuscateData);
+        this.updateMinions("pillars-table", pLocalPillarObfuscateData);
       }, (pLocalPillarObfuscateMsg) => {
         const localPillarObfuscateData = {"return": [{}]};
         for (const minionId of pWheelKeyListAllData.return[0].data.return.minions) {
           localPillarObfuscateData.return[0][minionId] = JSON.stringify(pLocalPillarObfuscateMsg);
         }
-        that.updateMinions("pillars-table", localPillarObfuscateData);
+        this.updateMinions("pillars-table", localPillarObfuscateData);
       });
     }, (pWheelKeyListAllMsg) => {
-      that._handlePillarsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+      this._handlePillarsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
     });
 
     runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
-      that.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
+      this.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
       runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
-        that.handleRunnerJobsActive(pRunnerJobsActiveData);
+        this.handleRunnerJobsActive(pRunnerJobsActiveData);
       }, (pRunnerJobsActiveMsg) => {
-        that.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
+        this.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
     }, (pRunnerJobsListJobsMsg) => {
-      that.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
+      this.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }
 

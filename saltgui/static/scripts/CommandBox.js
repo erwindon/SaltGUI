@@ -11,8 +11,6 @@ import {Utils} from "./Utils.js";
 export class CommandBox {
 
   constructor (pApi) {
-    const that = this;
-
     this.api = pApi;
     this.getRunParams = this.getRunParams.bind(this);
     this._onRun = this._onRun.bind(this);
@@ -43,7 +41,7 @@ export class CommandBox {
       menu.addMenuItem(
         description,
         () => {
-          that._applyTemplate(template);
+          this._applyTemplate(template);
         }
       );
     }

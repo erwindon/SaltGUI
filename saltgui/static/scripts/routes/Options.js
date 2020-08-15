@@ -18,20 +18,18 @@ export class OptionsRoute extends PageRoute {
   }
 
   onShow () {
-    const that = this;
-
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
-      that.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
+      this.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
       runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
-        that.handleRunnerJobsActive(pRunnerJobsActiveData);
+        this.handleRunnerJobsActive(pRunnerJobsActiveData);
       }, (pRunnerJobsActiveMsg) => {
-        that.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
+        this.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
     }, (pRunnerJobsListJobsMsg) => {
-      that.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
+      this.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
 
     const loginResponseStr = Utils.getStorageItem("session", "login-response", "{}");

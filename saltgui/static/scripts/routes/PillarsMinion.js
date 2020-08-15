@@ -24,8 +24,6 @@ export class PillarsMinionRoute extends PageRoute {
   }
 
   onShow () {
-    const that = this;
-
     const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
 
     const titleElement = document.getElementById("pillars-minion-title");
@@ -36,20 +34,20 @@ export class PillarsMinionRoute extends PageRoute {
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     localPillarItemsPromise.then((pLocalPillarItemsData) => {
-      that._handleLocalPillarItems(pLocalPillarItemsData, minionId);
+      this._handleLocalPillarItems(pLocalPillarItemsData, minionId);
     }, (pLocalPillarItemsMsg) => {
-      that._handleLocalPillarItems(JSON.stringify(pLocalPillarItemsMsg), minionId);
+      this._handleLocalPillarItems(JSON.stringify(pLocalPillarItemsMsg), minionId);
     });
 
     runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
-      that.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
+      this.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
       runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
-        that.handleRunnerJobsActive(pRunnerJobsActiveData);
+        this.handleRunnerJobsActive(pRunnerJobsActiveData);
       }, (pRunnerJobsActiveMsg) => {
-        that.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
+        this.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
     }, (pRunnerJobsListJobsMsg) => {
-      that.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
+      this.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }
 

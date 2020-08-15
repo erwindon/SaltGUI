@@ -21,8 +21,6 @@ export class KeysRoute extends PageRoute {
   }
 
   onShow () {
-    const that = this;
-
     const wheelKeyListAllPromise = this.router.api.getWheelKeyListAll();
     const wheelKeyFingerPromise = this.router.api.getWheelKeyFinger();
     const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
@@ -31,9 +29,9 @@ export class KeysRoute extends PageRoute {
     this.loadMinionsTxt();
 
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
-      that._handleKeysWheelKeyListAll(pWheelKeyListAllData);
+      this._handleKeysWheelKeyListAll(pWheelKeyListAllData);
       wheelKeyFingerPromise.then((pWheelKeyFingerData) => {
-        that._handleWheelKeyFinger(pWheelKeyFingerData);
+        this._handleWheelKeyFinger(pWheelKeyFingerData);
       }, (pWheelKeyFingerMsg) => {
         const wheelKeyFingerData = {"return": [{"data": {"return": {"minions": {}}}}]};
         if (pWheelKeyListAllData) {
@@ -41,21 +39,21 @@ export class KeysRoute extends PageRoute {
             wheelKeyFingerData.return[0]["data"]["return"]["minions"][minionId] = JSON.stringify(pWheelKeyFingerMsg);
           }
         }
-        that._handleWheelKeyFinger(wheelKeyFingerData);
+        this._handleWheelKeyFinger(wheelKeyFingerData);
       });
     }, (pWheelKeyListAllMsg) => {
-      that._handleKeysWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+      this._handleKeysWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
     });
 
     runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
-      that.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
+      this.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
       runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
-        that.handleRunnerJobsActive(pRunnerJobsActiveData);
+        this.handleRunnerJobsActive(pRunnerJobsActiveData);
       }, (pRunnerJobsActiveMsg) => {
-        that.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
+        this.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
     }, (pRunnerJobsListJobsMsg) => {
-      that.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
+      this.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }
 
@@ -472,11 +470,10 @@ export class KeysRoute extends PageRoute {
     if (fingerprintSpan && (fingerprintSpan.innerText === "" || fingerprintSpan.innerText === "loading...")) {
       fingerprintSpan.innerText = "(refresh page for fingerprint)";
       const wheelKeyFingerPromise = this.router.api.getWheelKeyFinger(pData.id);
-      const that = this;
       wheelKeyFingerPromise.then(this._handleWheelKeyFinger, (pWheelKeyFingerMsg) => {
         const wheelKeyFingerData = {"return": [{"data": {"return": {"minions": {}}}}]};
         wheelKeyFingerData.return[0]["data"]["return"]["minions"][pData.id] = JSON.stringify(pWheelKeyFingerMsg);
-        that._handleWheelKeyFinger(wheelKeyFingerData);
+        this._handleWheelKeyFinger(wheelKeyFingerData);
       });
     }
 

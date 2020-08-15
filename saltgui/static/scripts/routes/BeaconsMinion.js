@@ -25,8 +25,6 @@ export class BeaconsMinionRoute extends PageRoute {
   }
 
   onShow () {
-    const that = this;
-
     const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
 
     const localBeaconsListPromise = this.router.api.getLocalBeaconsList(minionId);
@@ -34,20 +32,20 @@ export class BeaconsMinionRoute extends PageRoute {
     const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
 
     localBeaconsListPromise.then((pLocalBeaconsListData) => {
-      that._handleLocalBeaconsList(pLocalBeaconsListData, minionId);
+      this._handleLocalBeaconsList(pLocalBeaconsListData, minionId);
     }, (pLocalBeaconsListMsg) => {
-      that._handleLocalBeaconsList(JSON.stringify(pLocalBeaconsListMsg), minionId);
+      this._handleLocalBeaconsList(JSON.stringify(pLocalBeaconsListMsg), minionId);
     });
 
     runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
-      that.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
+      this.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
       runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
-        that.handleRunnerJobsActive(pRunnerJobsActiveData);
+        this.handleRunnerJobsActive(pRunnerJobsActiveData);
       }, (pRunnerJobsActiveMsg) => {
-        that.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
+        this.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
       });
     }, (pRunnerJobsListJobsMsg) => {
-      that.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
+      this.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
     });
   }
 
