@@ -3,7 +3,6 @@
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
 import {PageRoute} from "./Page.js";
-import {Route} from "./Route.js";
 import {Utils} from "../Utils.js";
 
 export class GrainsMinionRoute extends PageRoute {
@@ -86,7 +85,7 @@ export class GrainsMinionRoute extends PageRoute {
     for (const grainName of grainNames) {
       const grainTr = document.createElement("tr");
 
-      const grainNameTd = Route.createTd("grain-name", grainName);
+      const grainNameTd = Utils.createTd("grain-name", grainName);
       grainTr.appendChild(grainNameTd);
 
       const grainValue = Output.formatObject(grains[grainName]);
@@ -98,7 +97,7 @@ export class GrainsMinionRoute extends PageRoute {
       this._addMenuItemGrainsDelVal(grainMenu, pMinionId, grainName, grains[grainName]);
 
       // menu comes before this data on purpose
-      const grainValueTd = Route.createTd("grain-value", grainValue);
+      const grainValueTd = Utils.createTd("grain-value", grainValue);
       grainTr.appendChild(grainValueTd);
 
       container.tBodies[0].appendChild(grainTr);

@@ -24,7 +24,7 @@ export class LoginRoute extends Route {
 
   _showNoticeText (pBackgroundColour, pText, pInfoClass) {
     // create a new child every time to restart the animation
-    const noticeDiv = Route.createDiv("", pText);
+    const noticeDiv = Utils.createDiv("", pText);
     noticeDiv.id = "notice";
     noticeDiv.classList.add(pInfoClass);
     noticeDiv.style.backgroundColor = pBackgroundColour;

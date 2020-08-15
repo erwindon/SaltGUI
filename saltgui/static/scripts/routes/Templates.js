@@ -2,7 +2,6 @@
 
 import {DropDownMenu} from "../DropDown.js";
 import {PageRoute} from "./Page.js";
-import {Route} from "./Route.js";
 import {Utils} from "../Utils.js";
 
 export class TemplatesRoute extends PageRoute {
@@ -71,14 +70,14 @@ export class TemplatesRoute extends PageRoute {
   _addTemplate (pContainer, pTemplateName, template) {
     const tr = document.createElement("tr");
 
-    tr.appendChild(Route.createTd("name", pTemplateName));
+    tr.appendChild(Utils.createTd("name", pTemplateName));
 
     // calculate description
     const description = template["description"];
     if (description) {
-      tr.appendChild(Route.createTd("description", description));
+      tr.appendChild(Utils.createTd("description", description));
     } else {
-      tr.appendChild(Route.createTd("description value-none", "(none)"));
+      tr.appendChild(Utils.createTd("description value-none", "(none)"));
     }
 
     // calculate targettype
@@ -86,24 +85,24 @@ export class TemplatesRoute extends PageRoute {
     // calculate target
     const target = template["target"];
     if (!targetType && !target) {
-      tr.appendChild(Route.createTd("target value-none", "(none)"));
+      tr.appendChild(Utils.createTd("target value-none", "(none)"));
     } else if (!target) {
       // implies: targetType is not empty
-      tr.appendChild(Route.createTd("target", targetType));
+      tr.appendChild(Utils.createTd("target", targetType));
     } else if (targetType) {
       // implies: both are not empty
-      tr.appendChild(Route.createTd("target", targetType + " " + target));
+      tr.appendChild(Utils.createTd("target", targetType + " " + target));
     } else {
       // implies: target is not empty
-      tr.appendChild(Route.createTd("target", target));
+      tr.appendChild(Utils.createTd("target", target));
     }
 
     // calculate command
     const command = template["command"];
     if (command) {
-      tr.appendChild(Route.createTd("command", command));
+      tr.appendChild(Utils.createTd("command", command));
     } else {
-      tr.appendChild(Route.createTd("command value-none", "(none)"));
+      tr.appendChild(Utils.createTd("command value-none", "(none)"));
     }
 
     const menu = new DropDownMenu(tr);

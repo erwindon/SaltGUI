@@ -7,7 +7,6 @@ import {OutputNested} from "./OutputNested.js";
 import {OutputSaltGuiHighstate} from "./OutputSaltGuiHighstate.js";
 import {OutputYaml} from "./OutputYaml.js";
 import {ParseCommandLine} from "../ParseCommandLine.js";
-import {Route} from "../routes/Route.js";
 import {Utils} from "../Utils.js";
 
 // Functions to turn responses from the salt system into visual information
@@ -59,7 +58,7 @@ export class Output {
 
   // compose the host/minion-name label that is shown with each response
   static getMinionIdHtml (pMinionId, pClassName = "") {
-    const span = Route.createSpan("minion-id", pMinionId);
+    const span = Utils.createSpan("minion-id", pMinionId);
     if (pClassName) {
       span.classList.add(pClassName);
     }
@@ -86,7 +85,7 @@ export class Output {
     }
 
     // all regular text
-    const span = Route.createSpan("", pMinionResponse);
+    const span = Utils.createSpan("", pMinionResponse);
     return span;
   }
 
@@ -201,7 +200,7 @@ export class Output {
       nr += 1;
 
       // 25CF = BLACK CIRCLE
-      const span = Route.createSpan("", "\u25CF");
+      const span = Utils.createSpan("", "\u25CF");
 
       let txt = task.name;
       if (task.__id__ && task.__id__ !== task.name) {
@@ -335,7 +334,7 @@ export class Output {
       return;
     }
 
-    const allDiv = Route.createDiv("no-search", "");
+    const allDiv = Utils.createDiv("no-search", "");
     const cntMinions = pMinionData.length;
 
     if (!pCommand.startsWith("runners.") &&
@@ -345,11 +344,11 @@ export class Output {
       // Do not produce a #response line for async-start confirmation
 
       // for the result of jobs.active
-      const summaryJobsActiveSpan = Route.createSpan("", pInitialStatus);
+      const summaryJobsActiveSpan = Utils.createSpan("", pInitialStatus);
       summaryJobsActiveSpan.id = "summary-jobs-active";
 
       // for the result of jobs.list_job
-      const summaryJobsListJobSpan = Route.createSpan("", "");
+      const summaryJobsListJobSpan = Utils.createSpan("", "");
       summaryJobsListJobSpan.id = "summary-list-job";
 
       const cntResponses = Object.keys(pResponse).length;
@@ -410,7 +409,7 @@ export class Output {
       allDiv.appendChild(summaryJobsListJobSpan);
     }
 
-    const masterTriangle = Route.createSpan("", "");
+    const masterTriangle = Utils.createSpan("", "");
     // use cntMinions instead of cntResponses to be predictable
     // hide details when there are many minions to show
     if (cntMinions > 50) {
@@ -578,7 +577,7 @@ export class Output {
       }
 
       // compose the actual output
-      const div = Route.createDiv("", "");
+      const div = Utils.createDiv("", "");
       div.id = Utils.getIdFromMinionId(minionId);
 
       div.append(minionLabel);
@@ -588,7 +587,7 @@ export class Output {
       // multiple line, collapsible
       let triangle = null;
       if (minionMultiLine) {
-        triangle = Route.createSpan("triangle", masterTriangle.innerText);
+        triangle = Utils.createSpan("triangle", masterTriangle.innerText);
         triangle.style = "cursor: pointer";
         triangle.addEventListener("click", () => {
           // 25BD = WHITE DOWN-POINTING TRIANGLE

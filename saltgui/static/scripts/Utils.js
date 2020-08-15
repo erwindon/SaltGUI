@@ -1,7 +1,6 @@
 /* global console document Hilitor sorttable window */
 
 import {DropDownMenu} from "./DropDown.js";
-import {Route} from "./routes/Route.js";
 
 export class Utils {
 
@@ -114,7 +113,7 @@ export class Utils {
     }
 
     // null or "full" (or anything else)
-    const tooltipSpan = Route.createSpan("", pTooltipText);
+    const tooltipSpan = Utils.createSpan("", pTooltipText);
     tooltipSpan.classList.add("tooltip-text");
     tooltipSpan.classList.add("tooltip-text-" + pStyle);
     pTooltipHost.classList.add("tooltip");
@@ -149,7 +148,7 @@ export class Utils {
   }
 
   static addErrorToTableCell (pTd, pErrorMessage) {
-    const span = Route.createSpan("", "(error)");
+    const span = Utils.createSpan("", "(error)");
     Utils.addToolTip(span, pErrorMessage, "bottom-left");
     pTd.appendChild(span);
   }
@@ -198,10 +197,10 @@ export class Utils {
 
   static makeTableSearchable (pButtonId, pTableId, pFieldList = null) {
 
-    const div = Route.createDiv("search-box", "");
+    const div = Utils.createDiv("search-box", "");
     div.style.display = "none";
 
-    const menuAndFieldDiv = Route.createDiv("search-menu-and-field", "");
+    const menuAndFieldDiv = Utils.createDiv("search-menu-and-field", "");
 
     const searchOptionsMenu = new DropDownMenu(menuAndFieldDiv);
 
@@ -216,7 +215,7 @@ export class Utils {
 
     div.append(menuAndFieldDiv);
 
-    const errorDiv = Route.createDiv("search-error", "");
+    const errorDiv = Utils.createDiv("search-error", "");
     errorDiv.style.display = "none";
     div.append(errorDiv);
 
@@ -465,12 +464,45 @@ export class Utils {
   }
 
   static createJobStatusSpan (pJobId) {
-    const span = Route.createSpan("", "");
+    const span = Utils.createSpan("", "");
     // 21BB = CLOCKWISE OPEN CIRCLE ARROW
     span.innerHTML = "&#x21BB;&nbsp;";
     span.id = "status" + pJobId;
     span.style.display = "none";
     span.style.fontWeight = "bold";
+    return span;
+  }
+
+  static createTd (pClassName, pInnerText) {
+    const td = document.createElement("td");
+    if (pClassName) {
+      td.className = pClassName;
+    }
+    if (pInnerText) {
+      td.innerText = pInnerText;
+    }
+    return td;
+  }
+
+  static createDiv (pClassName, pInnerText) {
+    const div = document.createElement("div");
+    if (pClassName) {
+      div.className = pClassName;
+    }
+    if (pInnerText) {
+      div.innerText = pInnerText;
+    }
+    return div;
+  }
+
+  static createSpan (pClassName, pInnerText) {
+    const span = document.createElement("span");
+    if (pClassName) {
+      span.className = pClassName;
+    }
+    if (pInnerText) {
+      span.innerText = pInnerText;
+    }
     return span;
   }
 }

@@ -2,7 +2,6 @@
 
 import {DropDownMenu} from "../DropDown.js";
 import {PageRoute} from "./Page.js";
-import {Route} from "./Route.js";
 import {Utils} from "../Utils.js";
 
 export class SchedulesRoute extends PageRoute {
@@ -122,8 +121,8 @@ export class SchedulesRoute extends PageRoute {
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
     // force same columns on all rows
-    minionTr.appendChild(Route.createTd("scheduleinfo", ""));
-    minionTr.appendChild(Route.createTd("run-command-button", ""));
+    minionTr.appendChild(Utils.createTd("scheduleinfo", ""));
+    minionTr.appendChild(Utils.createTd("run-command-button", ""));
   }
 
   updateMinion (pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
@@ -134,9 +133,9 @@ export class SchedulesRoute extends PageRoute {
 
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    minionTr.appendChild(Route.createTd("minion-id", pMinionId));
+    minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 
-    const statusDiv = Route.createTd("status", "accepted");
+    const statusDiv = Utils.createTd("status", "accepted");
     statusDiv.classList.add("accepted");
     minionTr.appendChild(statusDiv);
 
@@ -154,7 +153,7 @@ export class SchedulesRoute extends PageRoute {
       scheduleinfo = "";
     }
 
-    const td = Route.createTd("scheduleinfo", scheduleinfo);
+    const td = Utils.createTd("scheduleinfo", scheduleinfo);
     if (typeof pMinionData !== "object") {
       Utils.addErrorToTableCell(td, pMinionData);
     }

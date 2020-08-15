@@ -1,4 +1,4 @@
-import {Route} from "./routes/Route.js";
+import {Utils} from "./Utils.js";
 
 export class DropDownMenu {
 
@@ -11,31 +11,31 @@ export class DropDownMenu {
 
     // allow reduced code on the caller side
     if (pParentElement.tagName === "TR") {
-      const td = Route.createTd("", "");
+      const td = Utils.createTd("", "");
       pParentElement.appendChild(td);
       pParentElement = td;
     }
 
-    this.menuDropdown = Route.createDiv("run-command-button", "");
+    this.menuDropdown = Utils.createDiv("run-command-button", "");
     this.menuDropdown.classList.add("no-search");
 
     if (pParentElement.id === "cmd-box") {
       // D83D+DCD6 = 1F4D6 = A BOOK
-      this.menuButton = Route.createDiv("menu-dropdown", "\uD83D\uDCD6");
+      this.menuButton = Utils.createDiv("menu-dropdown", "\uD83D\uDCD6");
     } else if (pParentElement.classList && pParentElement.classList.contains("minion-output")) {
       // 2261 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
-      this.menuButton = Route.createSpan("menu-dropdown", "\u2261");
+      this.menuButton = Utils.createSpan("menu-dropdown", "\u2261");
     } else {
       // assume it will be a command menu
       // 2261 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
-      this.menuButton = Route.createDiv("menu-dropdown", "\u2261");
+      this.menuButton = Utils.createDiv("menu-dropdown", "\u2261");
     }
 
     // hide the menu until it receives menu-items
     this.verifyAll();
 
     this.menuDropdown.appendChild(this.menuButton);
-    this.menuDropdownContent = Route.createDiv("menu-dropdown-content", "");
+    this.menuDropdownContent = Utils.createDiv("menu-dropdown-content", "");
     this.menuDropdown.appendChild(this.menuDropdownContent);
     this.menuDropdown.addEventListener("mouseenter", this.verifyAll);
     pParentElement.appendChild(this.menuDropdown);
@@ -67,7 +67,7 @@ export class DropDownMenu {
   // This allows dynamic menuitem titles (use menuitem.innerText/innerHTML)
   // or visibility (use menuitem.style.display = "none"/"inline-block")
   addMenuItem (pTitle, pCallBack, pValue) {
-    const button = Route.createDiv("run-command-button", "...");
+    const button = Utils.createDiv("run-command-button", "...");
     if (pValue) {
       button._value = pValue;
     }

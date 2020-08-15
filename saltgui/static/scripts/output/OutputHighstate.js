@@ -1,6 +1,5 @@
 import {Output} from "./Output.js";
 import {OutputNested} from "./OutputNested.js";
-import {Route} from "../routes/Route.js";
 import {Utils} from "../Utils.js";
 
 export class OutputHighstate {
@@ -76,7 +75,7 @@ export class OutputHighstate {
 
   static getHighStateOutput (pMinionId, pTasks) {
 
-    const div = Route.createDiv("", "");
+    const div = Utils.createDiv("", "");
 
     let succeeded = 0;
     let failed = 0;
@@ -139,7 +138,7 @@ export class OutputHighstate {
         }
       }
 
-      const taskSpan = Route.createSpan("", txt);
+      const taskSpan = Utils.createSpan("", txt);
       if (!task.result) {
         taskSpan.style.color = "red";
       } else if (hasChanges) {
@@ -147,7 +146,7 @@ export class OutputHighstate {
       } else {
         taskSpan.style.color = "lime";
       }
-      const taskDiv = Route.createDiv("", "");
+      const taskDiv = Utils.createDiv("", "");
       taskDiv.id = Utils.getIdFromMinionId(pMinionId + "." + nr);
       taskDiv.append(taskSpan);
 
@@ -156,34 +155,34 @@ export class OutputHighstate {
 
     let txt = "\nSummary for " + pMinionId;
     txt += "\n------------";
-    const summarySpan = Route.createSpan("", txt);
+    const summarySpan = Utils.createSpan("", txt);
     summarySpan.style.color = "aqua";
     div.append(summarySpan);
 
     txt = "\nSucceeded: " + succeeded;
-    const succeededSpan = Route.createSpan("", txt);
+    const succeededSpan = Utils.createSpan("", txt);
     succeededSpan.style.color = "lime";
     div.append(succeededSpan);
 
     if (changes > 0) {
       txt = " (";
-      const oSpan = Route.createSpan("", txt);
+      const oSpan = Utils.createSpan("", txt);
       oSpan.style.color = "white";
       div.append(oSpan);
 
       txt = "changed=" + changes;
-      const changedSpan = Route.createSpan("", txt);
+      const changedSpan = Utils.createSpan("", txt);
       changedSpan.style.color = "lime";
       div.append(changedSpan);
 
       txt = ")";
-      const cSpan = Route.createSpan("", txt);
+      const cSpan = Utils.createSpan("", txt);
       cSpan.style.color = "white";
       div.append(cSpan);
     }
 
     txt = "\nFailed:    " + failed;
-    const failedSpan = Route.createSpan("", txt);
+    const failedSpan = Utils.createSpan("", txt);
     if (failed > 0) {
       failedSpan.style.color = "red";
     } else {
@@ -194,7 +193,7 @@ export class OutputHighstate {
     txt = "\n------------";
     txt += "\nTotal states run: " + (succeeded + skipped + failed);
     txt += "\nTotal run time: " + OutputHighstate._getDurationClauseSecs(totalMilliSeconds);
-    const totalsSpan = Route.createSpan("", txt);
+    const totalsSpan = Utils.createSpan("", txt);
     totalsSpan.style.color = "aqua";
     div.append(totalsSpan);
 

@@ -2,7 +2,6 @@
 
 import {DropDownMenu} from "../DropDown.js";
 import {PageRoute} from "./Page.js";
-import {Route} from "./Route.js";
 import {Utils} from "../Utils.js";
 
 export class PillarsRoute extends PageRoute {
@@ -88,8 +87,8 @@ export class PillarsRoute extends PageRoute {
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
     // force same columns on all rows
-    minionTr.appendChild(Route.createTd("pillarinfo", ""));
-    minionTr.appendChild(Route.createTd("run-command-button", ""));
+    minionTr.appendChild(Utils.createTd("pillarinfo", ""));
+    minionTr.appendChild(Utils.createTd("run-command-button", ""));
   }
 
   updateMinion (pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
@@ -107,7 +106,7 @@ export class PillarsRoute extends PageRoute {
       cnt = -1;
       pillarInfoText = "";
     }
-    const pillarInfoTd = Route.createTd("pillarinfo", pillarInfoText);
+    const pillarInfoTd = Utils.createTd("pillarinfo", pillarInfoText);
     pillarInfoTd.setAttribute("sorttable_customkey", cnt);
     if (typeof pMinionData !== "object") {
       Utils.addErrorToTableCell(pillarInfoTd, pMinionData);

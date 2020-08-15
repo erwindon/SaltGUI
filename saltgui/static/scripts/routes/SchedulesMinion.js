@@ -3,7 +3,6 @@
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
 import {PageRoute} from "./Page.js";
-import {Route} from "./Route.js";
 import {SchedulesRoute} from "./Schedules.js";
 import {Utils} from "../Utils.js";
 
@@ -113,7 +112,7 @@ export class SchedulesMinionRoute extends PageRoute {
 
       const tr = document.createElement("tr");
 
-      const nameTd = Route.createTd("schedule-name", scheduleName);
+      const nameTd = Utils.createTd("schedule-name", scheduleName);
       tr.appendChild(nameTd);
 
       const scheduleMenu = new DropDownMenu(tr);
@@ -136,7 +135,7 @@ export class SchedulesMinionRoute extends PageRoute {
 
       // menu comes before this data on purpose
       const scheduleValue = Output.formatObject(schedule);
-      const scheduleValueTd = Route.createTd("schedule-value", scheduleValue);
+      const scheduleValueTd = Utils.createTd("schedule-value", scheduleValue);
       if (schedule.enabled === false) {
         scheduleValueTd.classList.add("schedule-disabled");
       }

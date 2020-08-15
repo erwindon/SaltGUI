@@ -84,9 +84,9 @@ export class PageRoute extends Route {
   updateOfflineMinion (pContainer, pMinionId, pMinionsDict) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    minionTr.appendChild(Route.createTd("minion-id", pMinionId));
+    minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 
-    const offlineSpan = Route.createSpan("status", "offline");
+    const offlineSpan = Utils.createSpan("status", "offline");
     // add an opinion when we have one
     if (pMinionId in pMinionsDict) {
       if (pMinionsDict[pMinionId] === "true") {
@@ -97,7 +97,7 @@ export class PageRoute extends Route {
       }
     }
     offlineSpan.classList.add("offline");
-    const offlineTd = Route.createTd("", "");
+    const offlineTd = Utils.createTd("", "");
     offlineTd.appendChild(offlineSpan);
     minionTr.appendChild(offlineTd);
   }
@@ -277,12 +277,12 @@ export class PageRoute extends Route {
 
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    minionTr.appendChild(Route.createTd("minion-id", pMinionId));
+    minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 
     const ipv4 = this._getBestIpNumber(pMinionData, prefixes);
     if (ipv4) {
-      const addressTd = Route.createTd("status", "");
-      const addressSpan = Route.createSpan("status2", ipv4);
+      const addressTd = Utils.createTd("status", "");
+      const addressSpan = Utils.createSpan("status2", ipv4);
       addressTd.appendChild(addressSpan);
       // ipnumbers do not sort well, reformat into something sortable
       const ipv4parts = ipv4.split(".");
@@ -306,7 +306,7 @@ export class PageRoute extends Route {
       Utils.addToolTip(addressSpan, "Click to copy");
       minionTr.appendChild(addressTd);
     } else {
-      const accepted = Route.createTd("status", "accepted");
+      const accepted = Utils.createTd("status", "accepted");
       accepted.classList.add("accepted");
       minionTr.appendChild(accepted);
     }
@@ -318,8 +318,8 @@ export class PageRoute extends Route {
       saltversion = pMinionData.saltversion;
     }
     if (pMinionData) {
-      const td = Route.createTd("", "");
-      const span = Route.createSpan("saltversion", saltversion);
+      const td = Utils.createTd("", "");
+      const span = Utils.createSpan("saltversion", saltversion);
       td.appendChild(span);
       if (typeof pMinionData === "string") {
         Utils.addErrorToTableCell(td, pMinionData);
@@ -336,7 +336,7 @@ export class PageRoute extends Route {
       os = pMinionData.os;
     }
     if (pMinionData) {
-      const td = Route.createTd("os", os);
+      const td = Utils.createTd("os", os);
       if (typeof pMinionData === "string") {
         Utils.addErrorToTableCell(td, pMinionData);
       }
@@ -361,17 +361,17 @@ export class PageRoute extends Route {
     minionTr = document.createElement("tr");
     minionTr.id = Utils.getIdFromMinionId(pMinionId);
 
-    minionTr.appendChild(Route.createTd("minion-id", pMinionId));
+    minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 
-    const minionTd = Route.createTd("status", "accepted");
+    const minionTd = Utils.createTd("status", "accepted");
     minionTd.classList.add("accepted");
     minionTr.appendChild(minionTd);
 
-    minionTr.appendChild(Route.createTd("os", "loading..."));
+    minionTr.appendChild(Utils.createTd("os", "loading..."));
 
     // fill out the number of columns to that of the header
     while (minionTr.cells.length < pContainer.tHead.rows[0].cells.length - freeColumns) {
-      minionTr.appendChild(Route.createTd("", ""));
+      minionTr.appendChild(Utils.createTd("", ""));
     }
 
     pContainer.tBodies[0].appendChild(minionTr);
@@ -379,7 +379,7 @@ export class PageRoute extends Route {
 
   _addNone (pContainer) {
     const tr = document.createElement("tr");
-    const td = Route.createTd("minion-id", "none");
+    const td = Utils.createTd("minion-id", "none");
     td.setAttribute("colspan", pContainer.rows[0].cells.length);
     tr.appendChild(td);
     pContainer.appendChild(tr);
@@ -557,7 +557,7 @@ export class PageRoute extends Route {
   addJob (pContainer, job) {
     const tr = document.createElement("tr");
 
-    const td = Route.createTd("", "");
+    const td = Utils.createTd("", "");
     td.id = Utils.getIdFromJobId(job.id);
 
     let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
@@ -566,14 +566,14 @@ export class PageRoute extends Route {
       // prevent column becoming too wide
       targetText = targetText.substring(0, maxTextLength) + "...";
     }
-    const targetDiv = Route.createDiv("target", targetText);
+    const targetDiv = Utils.createDiv("target", targetText);
     td.appendChild(targetDiv);
 
     const functionText = job.Function;
-    const functionDiv = Route.createDiv("function", functionText);
+    const functionDiv = Utils.createDiv("function", functionText);
     td.appendChild(functionDiv);
 
-    const statusSpan = Route.createSpan("status", "loading...");
+    const statusSpan = Utils.createSpan("status", "loading...");
     statusSpan.classList.add("no-status");
     // effectively also the whole column, but it does not look like a column on screen
     statusSpan.addEventListener("click", (pClickEvent) => {
@@ -586,7 +586,7 @@ export class PageRoute extends Route {
     td.appendChild(statusSpan);
 
     const startTimeText = Output.dateTimeStr(job.StartTime);
-    const startTimeDiv = Route.createDiv("time", startTimeText);
+    const startTimeDiv = Utils.createDiv("time", startTimeText);
     td.appendChild(startTimeDiv);
 
     tr.appendChild(td);
@@ -680,9 +680,9 @@ export class PageRoute extends Route {
       return false;
     }
 
-    const td = Route.createTd("", "");
+    const td = Utils.createTd("", "");
     td.colSpan = 99;
-    const span = Route.createSpan("", "(error)");
+    const span = Utils.createSpan("", "(error)");
     Utils.addToolTip(span, pData, "bottom-left");
     td.appendChild(span);
 

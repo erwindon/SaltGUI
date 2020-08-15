@@ -2,7 +2,6 @@
 
 import {Output} from "../output/Output.js";
 import {PageRoute} from "./Page.js";
-import {Route} from "./Route.js";
 import {Utils} from "../Utils.js";
 
 const MAX_EVENTS_IN_VIEW = 100;
@@ -60,7 +59,7 @@ export class EventsRoute extends PageRoute {
     const tr = document.createElement("tr");
 
     // add timestamp value
-    const stampTd = Route.createTd("", "");
+    const stampTd = Utils.createTd("", "");
     let stampTxt = pData["_stamp"];
     if (!stampTxt) {
       stampTxt = new Date().toISOString();
@@ -77,11 +76,11 @@ export class EventsRoute extends PageRoute {
     tr.append(stampTd);
 
     // add tag value
-    const tagTd = Route.createTd("", pTag);
+    const tagTd = Utils.createTd("", pTag);
     tr.append(tagTd);
 
     // add data value
-    const dataTd = Route.createTd("event-data", "");
+    const dataTd = Utils.createTd("event-data", "");
     const pDataObj = {};
     Object.assign(pDataObj, pData);
     delete pDataObj._stamp;

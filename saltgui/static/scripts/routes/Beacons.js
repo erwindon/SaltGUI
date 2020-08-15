@@ -2,7 +2,6 @@
 
 import {DropDownMenu} from "../DropDown.js";
 import {PageRoute} from "./Page.js";
-import {Route} from "./Route.js";
 import {Utils} from "../Utils.js";
 
 export class BeaconsRoute extends PageRoute {
@@ -126,8 +125,8 @@ export class BeaconsRoute extends PageRoute {
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
     // force same columns on all rows
-    minionTr.appendChild(Route.createTd("beaconinfo", ""));
-    minionTr.appendChild(Route.createTd("run-command-button", ""));
+    minionTr.appendChild(Utils.createTd("beaconinfo", ""));
+    minionTr.appendChild(Utils.createTd("run-command-button", ""));
   }
 
   updateMinion (pContainer, pMinionData, pMinionId, pAllMinionsGrains) {
@@ -145,11 +144,11 @@ export class BeaconsRoute extends PageRoute {
       if (!pMinionData.enabled) {
         beaconInfoText += " (disabled)";
       }
-      const beaconInfoTd = Route.createTd("beaconinfo", beaconInfoText);
+      const beaconInfoTd = Utils.createTd("beaconinfo", beaconInfoText);
       beaconInfoTd.setAttribute("sorttable_customkey", cnt);
       minionTr.appendChild(beaconInfoTd);
     } else {
-      const beaconInfoTd = Route.createTd("", "");
+      const beaconInfoTd = Utils.createTd("", "");
       Utils.addErrorToTableCell(beaconInfoTd, pMinionData);
       minionTr.appendChild(beaconInfoTd);
     }

@@ -3,7 +3,6 @@
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
 import {PageRoute} from "./Page.js";
-import {Route} from "./Route.js";
 import {Utils} from "../Utils.js";
 
 export class GrainsRoute extends PageRoute {
@@ -96,7 +95,7 @@ export class GrainsRoute extends PageRoute {
       this._addMenuItemShowGrains(menu, minionId);
 
       for (let i = 0; i < this._previewGrains.length; i++) {
-        minionTr.appendChild(Route.createTd("", ""));
+        minionTr.appendChild(Utils.createTd("", ""));
       }
 
       minionTr.addEventListener("click", () => {
@@ -115,12 +114,12 @@ export class GrainsRoute extends PageRoute {
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
     // force same columns on all rows
-    minionTr.appendChild(Route.createTd("saltversion", ""));
-    minionTr.appendChild(Route.createTd("os", ""));
-    minionTr.appendChild(Route.createTd("graininfo", ""));
-    minionTr.appendChild(Route.createTd("run-command-button", ""));
+    minionTr.appendChild(Utils.createTd("saltversion", ""));
+    minionTr.appendChild(Utils.createTd("os", ""));
+    minionTr.appendChild(Utils.createTd("graininfo", ""));
+    minionTr.appendChild(Utils.createTd("run-command-button", ""));
     for (let i = 0; i < this._previewGrains.length; i++) {
-      minionTr.appendChild(Route.createTd("", ""));
+      minionTr.appendChild(Utils.createTd("", ""));
     }
   }
 
@@ -132,11 +131,11 @@ export class GrainsRoute extends PageRoute {
     if (typeof pMinionData === "object") {
       const cnt = Object.keys(pMinionData).length;
       const grainInfoText = cnt + " grains";
-      const grainInfoTd = Route.createTd("graininfo", grainInfoText);
+      const grainInfoTd = Utils.createTd("graininfo", grainInfoText);
       grainInfoTd.setAttribute("sorttable_customkey", cnt);
       minionTr.appendChild(grainInfoTd);
     } else {
-      const grainInfoTd = Route.createTd("", "");
+      const grainInfoTd = Utils.createTd("", "");
       Utils.addErrorToTableCell(grainInfoTd, pMinionData);
       minionTr.appendChild(grainInfoTd);
     }
@@ -147,7 +146,7 @@ export class GrainsRoute extends PageRoute {
     // add the preview columns
     /* eslint-disable max-depth */
     for (let i = 0; i < this._previewGrains.length; i++) {
-      const td = Route.createTd("", "");
+      const td = Utils.createTd("", "");
       const grainName = this._previewGrains[i];
       if (typeof pMinionData === "object") {
         if (grainName.startsWith("$")) {

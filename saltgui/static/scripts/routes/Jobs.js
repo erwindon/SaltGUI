@@ -3,7 +3,6 @@
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
 import {PageRoute} from "./Page.js";
-import {Route} from "./Route.js";
 import {TargetType} from "../TargetType.js";
 import {Utils} from "../Utils.js";
 
@@ -127,7 +126,7 @@ export class JobsRoute extends PageRoute {
     const tr = document.createElement("tr");
     tr.id = Utils.getIdFromJobId(job.id);
     const jobIdText = job.id;
-    tr.appendChild(Route.createTd(Utils.getIdFromJobId(job.id), jobIdText));
+    tr.appendChild(Utils.createTd(Utils.getIdFromJobId(job.id), jobIdText));
 
     let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
     const maxTextLength = 50;
@@ -135,7 +134,7 @@ export class JobsRoute extends PageRoute {
       // prevent column becoming too wide
       targetText = targetText.substring(0, maxTextLength) + "...";
     }
-    tr.appendChild(Route.createTd("target", targetText));
+    tr.appendChild(Utils.createTd("target", targetText));
 
     const argumentsText = this.decodeArgumentsText(job.Arguments);
     let functionText = job.Function + argumentsText;
@@ -143,17 +142,17 @@ export class JobsRoute extends PageRoute {
       // prevent column becoming too wide
       functionText = functionText.substring(0, maxTextLength) + "...";
     }
-    tr.appendChild(Route.createTd("function", functionText));
+    tr.appendChild(Utils.createTd("function", functionText));
 
     const startTimeText = Output.dateTimeStr(job.StartTime);
-    tr.appendChild(Route.createTd("starttime", startTimeText));
+    tr.appendChild(Utils.createTd("starttime", startTimeText));
 
     const menu = new DropDownMenu(tr);
     this._addJobsMenuItemShowDetails(menu, job);
     this._addMenuItemJobsRerunJob(menu, job, argumentsText);
 
-    const statusTd = Route.createTd("status", "");
-    const statusSpan = Route.createSpan("status2", "loading...");
+    const statusTd = Utils.createTd("status", "");
+    const statusSpan = Utils.createSpan("status2", "loading...");
     statusSpan.classList.add("no-status");
     statusSpan.addEventListener("click", (pClickEvent) => {
       // show "loading..." only once, but we are updating the whole column
@@ -167,8 +166,8 @@ export class JobsRoute extends PageRoute {
 
     this._addJobsMenuItemUpdateStatus(menu, statusSpan);
 
-    const detailsTd = Route.createTd("details", "");
-    const detailsSpan = Route.createSpan("details2", "(click)");
+    const detailsTd = Utils.createTd("details", "");
+    const detailsSpan = Utils.createSpan("details2", "(click)");
     detailsSpan.classList.add("no-status");
     detailsSpan.addEventListener("click", (pClickEvent) => {
       detailsSpan.classList.add("no-status");
@@ -184,7 +183,7 @@ export class JobsRoute extends PageRoute {
 
     // fill out the number of columns to that of the header
     while (tr.cells.length < pContainer.parentElement.tHead.rows[0].cells.length) {
-      tr.appendChild(Route.createTd("", ""));
+      tr.appendChild(Utils.createTd("", ""));
     }
 
     pContainer.appendChild(tr);
@@ -376,7 +375,7 @@ export class JobsRoute extends PageRoute {
 
     detailsSpan.innerText = "";
     detailsSpan.appendChild(Utils.createJobStatusSpan(pJobId));
-    const statusSpan = Route.createSpan("", "");
+    const statusSpan = Utils.createSpan("", "");
     statusSpan.innerHTML = detailsTxt;
     detailsSpan.appendChild(statusSpan);
     detailsSpan.classList.remove("no-status");

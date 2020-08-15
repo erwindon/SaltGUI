@@ -4,7 +4,6 @@ import {BeaconsRoute} from "./Beacons.js";
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
 import {PageRoute} from "./Page.js";
-import {Route} from "./Route.js";
 import {Utils} from "../Utils.js";
 
 export class BeaconsMinionRoute extends PageRoute {
@@ -97,7 +96,7 @@ export class BeaconsMinionRoute extends PageRoute {
     for (const beaconName of keys) {
       const tr = document.createElement("tr");
 
-      const nameTd = Route.createTd("beacon-name", beaconName);
+      const nameTd = Utils.createTd("beacon-name", beaconName);
       tr.appendChild(nameTd);
 
       const beacon = beacons.beacons[beaconName];
@@ -121,7 +120,7 @@ export class BeaconsMinionRoute extends PageRoute {
 
       // menu comes before this data on purpose
       const beaconConfig = Output.formatObject(beacon);
-      const beaconConfigTd = Route.createTd("beacon-config", beaconConfig);
+      const beaconConfigTd = Utils.createTd("beacon-config", beaconConfig);
       if (beacons.enabled === false) {
         beaconConfigTd.classList.add("beacon-disabled");
       } else if (beacon.enabled === false) {
@@ -129,7 +128,7 @@ export class BeaconsMinionRoute extends PageRoute {
       }
       tr.appendChild(beaconConfigTd);
 
-      const beaconValueTd = Route.createTd("beacon-value", "(waiting)");
+      const beaconValueTd = Utils.createTd("beacon-value", "(waiting)");
       beaconValueTd.classList.add("beacon-waiting");
       tr.appendChild(beaconValueTd);
 

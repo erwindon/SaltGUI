@@ -39,39 +39,6 @@ export class Route {
     return this.menuItemElement2;
   }
 
-  static createTd (pClassName, pInnerText) {
-    const td = document.createElement("td");
-    if (pClassName) {
-      td.className = pClassName;
-    }
-    if (pInnerText) {
-      td.innerText = pInnerText;
-    }
-    return td;
-  }
-
-  static createDiv (pClassName, pInnerText) {
-    const div = document.createElement("div");
-    if (pClassName) {
-      div.className = pClassName;
-    }
-    if (pInnerText) {
-      div.innerText = pInnerText;
-    }
-    return div;
-  }
-
-  static createSpan (pClassName, pInnerText) {
-    const span = document.createElement("span");
-    if (pClassName) {
-      span.className = pClassName;
-    }
-    if (pInnerText) {
-      span.innerText = pInnerText;
-    }
-    return span;
-  }
-
   runCommand (pClickEvent, pTargetString, pCommandString) {
     this.runFullCommand(pClickEvent, "", pTargetString, pCommandString);
   }

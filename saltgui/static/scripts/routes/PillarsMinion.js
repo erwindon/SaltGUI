@@ -4,7 +4,6 @@ import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
 import {OutputYaml} from "../output/OutputYaml.js";
 import {PageRoute} from "./Page.js";
-import {Route} from "./Route.js";
 import {Utils} from "../Utils.js";
 
 export class PillarsMinionRoute extends PageRoute {
@@ -102,23 +101,23 @@ export class PillarsMinionRoute extends PageRoute {
     for (const pillarName of keys) {
       const pillar = document.createElement("tr");
 
-      const nameTd = Route.createTd("pillar-name", pillarName);
+      const nameTd = Utils.createTd("pillar-name", pillarName);
       pillar.appendChild(nameTd);
 
       // menu comes before this data if there was any
 
-      const pillarValueTd = Route.createTd("", "");
+      const pillarValueTd = Utils.createTd("", "");
 
       // 25CF = BLACK CIRCLE, 8 of these
       const pillarValueHidden = "\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF";
-      const pillarHiddenDiv = Route.createDiv("pillar-hidden", pillarValueHidden);
+      const pillarHiddenDiv = Utils.createDiv("pillar-hidden", pillarValueHidden);
       pillarHiddenDiv.style.display = "inline-block";
       Utils.addToolTip(pillarHiddenDiv, "Click to show");
       // initially use the hidden view
       pillarValueTd.appendChild(pillarHiddenDiv);
 
       const pillarValueShown = Output.formatObject(pillars[pillarName]);
-      const pillarShownDiv = Route.createDiv("pillar-shown", pillarValueShown);
+      const pillarShownDiv = Utils.createDiv("pillar-shown", pillarValueShown);
       // initially hide the normal view
       pillarShownDiv.style.display = "none";
       Utils.addToolTip(pillarShownDiv, "Click to hide");

@@ -2,7 +2,6 @@
 
 import {DropDownMenu} from "../DropDown.js";
 import {PageRoute} from "./Page.js";
-import {Route} from "./Route.js";
 import {Utils} from "../Utils.js";
 
 export class MinionsRoute extends PageRoute {
@@ -102,9 +101,9 @@ export class MinionsRoute extends PageRoute {
     const minionTr = pContainer.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
     // force same columns on all rows
-    minionTr.appendChild(Route.createTd("saltversion", ""));
-    minionTr.appendChild(Route.createTd("os", ""));
-    minionTr.appendChild(Route.createTd("run-command-button", ""));
+    minionTr.appendChild(Utils.createTd("saltversion", ""));
+    minionTr.appendChild(Utils.createTd("os", ""));
+    minionTr.appendChild(Utils.createTd("run-command-button", ""));
   }
 
   updateMinion (pContainer, pMinionData, pMinionId, pAllMinionsGrains) {

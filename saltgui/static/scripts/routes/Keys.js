@@ -2,7 +2,6 @@
 
 import {DropDownMenu} from "../DropDown.js";
 import {PageRoute} from "./Page.js";
-import {Route} from "./Route.js";
 import {Utils} from "../Utils.js";
 
 export class KeysRoute extends PageRoute {
@@ -180,8 +179,8 @@ export class KeysRoute extends PageRoute {
   _addAcceptedMinion (pContainer, pMinionId, pMinionsDict) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    const minionIdTd = Route.createTd("", "");
-    const minionIdSpan = Route.createSpan("minion-id", pMinionId);
+    const minionIdTd = Utils.createTd("", "");
+    const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
     if (Object.keys(pMinionsDict).length && !Object.keys(pMinionsDict).includes(pMinionId)) {
       Utils.addToolTip(minionIdSpan, "Unexpected entry\nThis entry may need to be rejected!\nUpdate file 'minions.txt' when needed", "bottom-left");
@@ -190,14 +189,14 @@ export class KeysRoute extends PageRoute {
     }
     minionTr.appendChild(minionIdTd);
 
-    const accepted = Route.createTd("status", "accepted");
+    const accepted = Utils.createTd("status", "accepted");
     accepted.setAttribute("sorttable_customkey", 2);
     accepted.classList.add("accepted");
     minionTr.appendChild(accepted);
 
     // force same columns on all rows
     // do not use class "fingerprint" yet
-    minionTr.appendChild(Route.createTd("os", "loading..."));
+    minionTr.appendChild(Utils.createTd("os", "loading..."));
 
     // drop down menu
     this._addDropDownMenu(minionTr, pMinionId);
@@ -206,8 +205,8 @@ export class KeysRoute extends PageRoute {
   _addRejectedMinion (pContainer, pMinionId, pMinionsDict) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    const minionIdTd = Route.createTd("", "");
-    const minionIdSpan = Route.createSpan("minion-id", pMinionId);
+    const minionIdTd = Utils.createTd("", "");
+    const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
     if (Object.keys(pMinionsDict).length && !Object.keys(pMinionsDict).includes(pMinionId)) {
       Utils.addToolTip(minionIdSpan, "Unexpected entry\nBut it is already rejected\nUpdate file 'minions.txt' when needed", "bottom-left");
@@ -215,14 +214,14 @@ export class KeysRoute extends PageRoute {
     }
     minionTr.appendChild(minionIdTd);
 
-    const rejected = Route.createTd("status", "rejected");
+    const rejected = Utils.createTd("status", "rejected");
     rejected.setAttribute("sorttable_customkey", 4);
     rejected.classList.add("rejected");
     minionTr.appendChild(rejected);
 
     // force same columns on all rows
     // do not use class "fingerprint" yet
-    minionTr.appendChild(Route.createTd("os", "loading..."));
+    minionTr.appendChild(Utils.createTd("os", "loading..."));
 
     // drop down menu
     this._addDropDownMenu(minionTr, pMinionId);
@@ -233,8 +232,8 @@ export class KeysRoute extends PageRoute {
   _addDeniedMinion (pContainer, pMinionId, pMinionsDict) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    const minionIdTd = Route.createTd("", "");
-    const minionIdSpan = Route.createSpan("minion-id", pMinionId);
+    const minionIdTd = Utils.createTd("", "");
+    const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
     if (Object.keys(pMinionsDict).length && !Object.keys(pMinionsDict).includes(pMinionId)) {
       Utils.addToolTip(minionIdSpan, "Unexpected entry\nBut it is already denied\nUpdate file 'minions.txt' when needed", "bottom-left");
@@ -242,14 +241,14 @@ export class KeysRoute extends PageRoute {
     }
     minionTr.appendChild(minionIdTd);
 
-    const denied = Route.createTd("status", "denied");
+    const denied = Utils.createTd("status", "denied");
     denied.setAttribute("sorttable_customkey", 3);
     denied.classList.add("denied");
     minionTr.appendChild(denied);
 
     // force same columns on all rows
     // do not use class "fingerprint" yet
-    minionTr.appendChild(Route.createTd("os", "loading..."));
+    minionTr.appendChild(Utils.createTd("os", "loading..."));
 
     // drop down menu
     this._addDropDownMenu(minionTr, pMinionId);
@@ -260,8 +259,8 @@ export class KeysRoute extends PageRoute {
   _addPreMinion (pContainer, pMinionId, pMinionsDict, pInsertAtTop = false) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId));
 
-    const minionIdTd = Route.createTd("", "");
-    const minionIdSpan = Route.createSpan("minion-id", pMinionId);
+    const minionIdTd = Utils.createTd("", "");
+    const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
     if (Object.keys(pMinionsDict).length && !Object.keys(pMinionsDict).includes(pMinionId)) {
       Utils.addToolTip(minionIdSpan, "Unexpected entry\nDo not accept this entry without proper verification!\nUpdate file 'minions.txt' when needed", "bottom-left");
@@ -270,7 +269,7 @@ export class KeysRoute extends PageRoute {
     }
     minionTr.appendChild(minionIdTd);
 
-    const pre = Route.createTd("status", "unaccepted");
+    const pre = Utils.createTd("status", "unaccepted");
     // unaccepted comes first because user action is needed
     // all others have the same order as in 'salt-key'
     pre.setAttribute("sorttable_customkey", 1);
@@ -279,7 +278,7 @@ export class KeysRoute extends PageRoute {
 
     // force same columns on all rows
     // do not use class "fingerprint" yet
-    minionTr.appendChild(Route.createTd("os", "loading..."));
+    minionTr.appendChild(Utils.createTd("os", "loading..."));
 
     // drop down menu
     this._addDropDownMenu(minionTr, pMinionId);
@@ -296,19 +295,19 @@ export class KeysRoute extends PageRoute {
   _addMissingMinion (pContainer, pMinionId) {
     const minionTr = this.getElement(pContainer, Utils.getIdFromMinionId(pMinionId), "UNKNOWN");
 
-    const minionIdTd = Route.createTd("", "");
-    const minionIdSpan = Route.createSpan("minion-id", pMinionId);
+    const minionIdTd = Utils.createTd("", "");
+    const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
     Utils.addToolTip(minionIdSpan, "Entry is missing\nIs the host running and is the salt-minion installed and started?\nUpdate file 'minions.txt' when needed", "bottom-left");
     minionIdTd.style.color = "red";
     minionTr.appendChild(minionIdTd);
 
-    const missing = Route.createTd("status", "missing");
+    const missing = Utils.createTd("status", "missing");
     missing.setAttribute("sorttable_customkey", 5);
     missing.classList.add("missing");
     minionTr.appendChild(missing);
 
-    minionTr.appendChild(Route.createTd("fingerprint", ""));
+    minionTr.appendChild(Utils.createTd("fingerprint", ""));
 
     // drop down menu
     this._addDropDownMenu(minionTr, pMinionId);
