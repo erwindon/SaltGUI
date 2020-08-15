@@ -26,6 +26,13 @@ export class CommandBox {
 
     RunType.createMenu();
     TargetType.createMenu();
+
+    const manualRun = document.getElementById("popup-run-command");
+    Utils.addTableHelp(manualRun, "Click for help");
+    const helpButton = manualRun.querySelector("#help");
+    helpButton.addEventListener("click", () => {
+      this._showHelp();
+    });
   }
 
   _populateTemplateMenu () {
@@ -52,6 +59,31 @@ export class CommandBox {
         }
       );
     }
+  }
+
+  _showHelp () {
+    const output = document.querySelector(".run-command pre");
+    let txt = "Hello World!";
+    txt = "<h2>Target field</h2>";
+    txt += "<p>Entries that contain a @, (, ) or space are assumed to be a compound target selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/#compound-targeting' target='_blank'>Compound Targeting<img src='static/images/externallink.png' width='12px'></a>.";
+    txt += "<br/>Entries that contain a COMMA are assumed to be a list target selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/globbing.html#lists' target='_blank'>List Targeting<img src='static/images/externallink.png' width='12px'></a>.";
+    txt += "<br/>Entries that start with a # are assumed to be a nodegroup target selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/nodegroups.html' target='_blank'>Nodegroup Targeting<img src='static/images/externallink.png' width='12px'></a>.";
+    txt += "<br/>Otherwise, the target is assumed to be a regular glob selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/globbing.html#globbing' target='_blank'>Globbing Targeting<img src='static/images/externallink.png' width='12px'></a>.";
+    txt += "<br/>The dropdown-box to the right of the field is automatically updated with the assumed target type. When you do not agree, it is possible to manually select a value. That value will then be left alone by the system. Note that the dropdown-box only contains the choice 'Nodegroup' when nodegroups are configured in the <b>master</b> file.";
+    txt += "<br/>For <b>wheel</b> commands, the value of the target field is added to the commandline as the named variable 'match'. Wheel commands that do not use that parameter do not have a problem with that.";
+    txt += "<br/>For <b>runners</b> commands, the value of the target field can be left empty. Any value is silently ignored.</p>";
+    txt += "<br/><h2>Command field</h2>";
+    txt += "<p>The command field is used to enter the command and its parameters. Double quotes (\") are needed around each item that contains spaces, or when it is otherwise mistaken for a number, boolean, list or object.";
+    txt += "<br/>Parameters in the form name=value are used to pass named variables. The same quoting rules apply to the value. The named parameters are used from left-to-right. Their actual position within the line is otherwise not important.";
+    txt += "<br/>A help button is visible when the command field contains some text. It will issue a <b>sys.doc</b> (or <b>runners.doc.wheel</b> or <b>runners.doc.runner</b>) command for the current command. The <b>sys.doc</b> command will be targetted to the given minions when the target field is not empty. It will be targetted to all minions when it is empty. The <b>runners.doc.wheel</b> or <b>runners.doc.runner</b> will always run on the master. When answers from multiple minions are available from <b>sys.doc</b>, the first reasonable answer is used. Small variations in the answer may exist when not all minions have the same software version.</p>";
+    txt += "<br/><h2>Run command button</h2>";
+    txt += "<p>The 'Run command' button starts the given command for the given minions.";
+    txt += "<br/>A dropdown menu to the right of the button can be used to specify that the command must be run asynchronously. In that case the output consists only of a link to retrieve the actual output. When a command takes too long, the command window can be closed without waiting for the output. The Jobs page can then be used to find that command and watch its progress or results.<p>";
+    txt += "<br/><h2>Output panel</h2>";
+    txt += "<p>When the output is recognized as output from (a command similar to) <b>state.highstate</b>, then the output is formatted for readability. e.g. durations shorter than 10 milliseconds are removed. On the same line as the minion name, a summary is shown in the form of coloured CIRCLE characters. There is one character for each state. When the circle has a double bar over/under it (it is always both) then the state reported that work was done and it may be interesting to see it. Clicking on a circle will scroll to the corresponding state output and shortly highlight it.";
+    txt += "</br>Clicking on any output will scroll back to the minion name.";
+    txt += "</br>When a minion has multiple lines of output, it can be collapsed.</p>";
+    output.innerHTML = txt;
   }
 
   _registerCommandBoxEventListeners () {
