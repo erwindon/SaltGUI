@@ -26,8 +26,15 @@ export class CommandBox {
 
     RunType.createMenu();
     TargetType.createMenu();
+  }
 
+  _populateTemplateMenu () {
     const titleElement = document.getElementById("template-menu-here");
+    if (titleElement.childElementCount) {
+      // only build one dropdown menu. cannot be done in constructor
+      // since the storage-item is then not populated yet.
+      return;
+    }
     const menu = new DropDownMenu(titleElement);
     const templatesText = Utils.getStorageItem("session", "templates", "{}");
     const templates = JSON.parse(templatesText);
@@ -201,6 +208,8 @@ export class CommandBox {
     // the dropdown box opens, and we don't want that...
     commandField.focus();
     targetField.focus();
+
+    this._populateTemplateMenu();
 
     pClickEvent.stopPropagation();
   }
