@@ -151,6 +151,38 @@ describe("Unittests for ParseCommandLine.js", () => {
     result = ParseCommandLine.parseCommandLine("\"string", args, params);
     assert.equal(result, "No valid double-quoted-string found");
 
+    // TRIPLE-DOUBLE-QUOTED-STRINGS
+
+    // a simple string
+    args = [];
+    params = {};
+    result = ParseCommandLine.parseCommandLine("\"\"\"string\"\"\"", args, params);
+    assert.isNull(result);
+    assert.equal(args.length, 1);
+    assert.equal(args[0], "string");
+    assert.equal(Object.keys(params).length, 0);
+
+    // a simple string with embedded nasties
+    args = [];
+    params = {};
+    result = ParseCommandLine.parseCommandLine("\"\"\"abc\"\"def\\ghi\"\"\"", args, params);
+    assert.isNull(result);
+    assert.equal(args.length, 1);
+    assert.equal(args[0], "abc\"\"def\\ghi");
+    assert.equal(Object.keys(params).length, 0);
+
+    // an unclosed string (no end quotes)
+    args = [];
+    params = {};
+    result = ParseCommandLine.parseCommandLine("\"\"\"string", args, params);
+    assert.equal(result, "No valid triple-quoted-string found");
+
+    // an unclosed string (too few endquotes)
+    args = [];
+    params = {};
+    result = ParseCommandLine.parseCommandLine("\"\"\"string\"\"", args, params);
+    assert.equal(result, "No valid triple-quoted-string found");
+
     // SINGLE-QUOTED-STRINGS (never supported!)
 
     // a single-quoted string is not supported

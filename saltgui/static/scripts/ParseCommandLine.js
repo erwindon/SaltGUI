@@ -63,16 +63,24 @@ export class ParseCommandLine {
 
       // Determine whether the JSON string starts with a known
       // character for a JSON type
+      let beginChar = undefined;
       let endChar = undefined;
       let objType = undefined;
       if (pToRun[0] === "{") {
+        beginChar = "{";
         endChar = "}";
         objType = "dictionary";
       } else if (pToRun[0] === "[") {
+        beginChar = "[";
         endChar = "]";
         objType = "array";
+      } else if (pToRun.startsWith("\"\"\"")) {
+        beginChar = "\"\"\"";
+        endChar = "\"\"\"";
+        objType = "triple-quoted-string";
       } else if (pToRun[0] === "\"") {
         // note that json does not support single-quoted strings
+        beginChar = "\"";
         endChar = "\"";
         objType = "double-quoted-string";
       }
@@ -80,7 +88,7 @@ export class ParseCommandLine {
       let value;
       if (endChar && objType) {
         // The string starts with a character for a known JSON type
-        let charPos = 1;
+        let charPos = beginChar.length;
         for (;;) {
           // Try until the next closing character
           let endCharPos = pToRun.indexOf(endChar, charPos);
@@ -91,9 +99,13 @@ export class ParseCommandLine {
           // parse what we have found so far
           // the string ends with a closing character
           // but that may not be enough, e.g. "{a:{}"
-          const fndStr = pToRun.substring(0, endCharPos + 1);
           try {
-            value = JSON.parse(fndStr);
+            if (objType === "triple-quoted-string") {
+              value = pToRun.substring(beginChar.length, endCharPos);
+            } else {
+              const fndStr = pToRun.substring(0, endCharPos + endChar.length);
+              value = JSON.parse(fndStr);
+            }
           } catch (err) {
             // the string that we tried to parse is not valid json
             // continue to add more text from the input
@@ -102,7 +114,7 @@ export class ParseCommandLine {
           }
 
           // the first part of the string is valid JSON
-          endCharPos += 1;
+          endCharPos += endChar.length;
           if (endCharPos < pToRun.length && pToRun[endCharPos] !== " ") {
             return "Valid " + objType + ", but followed by text:" + pToRun.substring(endCharPos) + "...";
           }
