@@ -23,8 +23,8 @@ div.search-box .menu-dropdown {
 }
 
 /* Links inside the menu-dropdown */
-.dropdown .dropdown-content div,
-.run-command-button .menu-dropdown-content div {
+.dropdown .dropdown-content div:not(.menu-item-hidden),
+.run-command-button .menu-dropdown-content div:not(.menu-item-hidden) {
   display: block;
   float: left;
   clear: both;

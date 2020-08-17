@@ -52,9 +52,9 @@ export class Router {
     const templatesText = Utils.getStorageItem("session", "templates", "");
     if (templatesText) {
       const item1 = document.getElementById("button-templates1");
-      item1.style.display = "inline-block";
+      item1.classList.remove("menu-item-hidden");
       const item2 = document.getElementById("button-templates2");
-      item2.style.display = "inline-block";
+      item2.classList.remove("menu-item-hidden");
     }
 
     this._registerRouterEventListeners();
