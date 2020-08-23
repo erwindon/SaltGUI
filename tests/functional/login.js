@@ -61,7 +61,7 @@ describe("Funtional tests", function () {
         wait(500).
         insert("#password", "sald").
         wait(500).
-        click("#login-submit").
+        click("#login-button").
         wait(500).
         wait("#notice-wrapper div.notice_auth_failed").
         wait(1000).
@@ -80,7 +80,7 @@ describe("Funtional tests", function () {
         wait(500).
         insert("#password", "salt").
         wait(500).
-        click("#login-submit").
+        click("#login-button").
         wait(500).
         wait(() => {
           // we wait here for the loginpage to be hidden
@@ -103,7 +103,7 @@ describe("Funtional tests", function () {
         wait(500).
         insert("#password", "salt").
         wait(500).
-        click("#login-submit").
+        click("#login-button").
         wait(500).
         wait("#notice-wrapper div.notice_please_wait").
         wait(5000).

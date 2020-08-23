@@ -8,7 +8,7 @@
   top: 0;
 }
 
-#login-form {
+#login-panel {
   align-self: center;
   background-color: white;
   padding: 0 50px;
@@ -16,7 +16,7 @@
   border-radius: 2px;
 }
 
-#login-form h1 {
+#login-panel h1 {
   text-align: center;
   margin: 38px 0;
   margin-bottom: 23px;
@@ -26,27 +26,27 @@
   color: #505050;
 }
 
-#login-form input {
+#login-panel input {
   width: 100%;
   display: block;
   font-size: 18px;
 }
 
-#login-form select {
+#login-panel select {
   color: black;
   width: 100%;
   font-size: 14px;
 }
 
-#login-form select option#eauth-default {
+#login-panel select option#eauth-default {
   color: gray;
 }
 
-#login-form select option {
+#login-panel select option {
   color: black;
 }
 
-#login-form select optgroup {
+#login-panel select optgroup {
   color: black;
 }
 

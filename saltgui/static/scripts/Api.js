@@ -350,7 +350,6 @@ export class API {
       }
 
       pRouter.eventsRoute.handleAnyEvent(tag, data);
-
     };
   }
 }

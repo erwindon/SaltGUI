@@ -236,7 +236,7 @@ export class OutputDocumentation {
           const words = reference.split(": ");
           if (words.length !== 2) {
             /* istanbul ignore next */
-            console.log("words", words);
+            console.warn("words", words);
             /* istanbul ignore next */
             break;
           }

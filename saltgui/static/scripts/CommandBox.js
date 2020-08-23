@@ -91,7 +91,7 @@ export class CommandBox {
       addEventListener("click", this._hideManualRun);
     document.getElementById("button-manual-run").
       addEventListener("click", this.showManualRun);
-    document.getElementById("button-close-cmd").
+    document.getElementById("cmd-close-button").
       addEventListener("click", this._hideManualRun);
 
     document.querySelector(".run-command input[type='submit']").

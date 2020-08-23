@@ -1,0 +1,139 @@
+/* global document */
+
+import {DropDownMenu} from "../DropDown.js";
+import {Output} from "../output/Output.js";
+import {Panel} from "./Panel.js";
+import {Utils} from "../Utils.js";
+
+export class GrainsMinionPanel extends Panel {
+
+  constructor () {
+    super("grains-minion");
+
+    this.addTitle("Grains on ...");
+    this.addPanelMenu();
+    this.addSearchButton();
+    this.addCloseButton();
+    this.addTable(["Name", "-menu-", "Value"]);
+    this.setTableSortable("Name", "asc");
+    this.setTableClickable();
+    this.addMsg();
+  }
+
+  onShow () {
+    const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
+
+    const titleElement = document.getElementById("grains-minion-title");
+    titleElement.innerText = "Grains on " + minionId;
+
+    const localGrainsItemsPromise = this.api.getLocalGrainsItems(minionId);
+
+    localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
+      this._handleLocalGrainsItems(pLocalGrainsItemsData, minionId);
+    }, (pLocalGrainsItemsMsg) => {
+      this._handleLocalGrainsItems(JSON.stringify(pLocalGrainsItemsMsg), minionId);
+    });
+  }
+
+  _handleLocalGrainsItems (pLocalGrainsItemsData, pMinionId) {
+    const panel = document.getElementById("grains-minion-panel");
+    const minionMenu = new DropDownMenu(panel);
+    this._addMenuItemGrainsSetValAdd(minionMenu, pMinionId);
+    this._addMenuItemSaltUtilRefreshGrains(minionMenu, pMinionId);
+
+    // new menus are always added at the bottom of the div
+    // fix that by re-adding it to its proper place
+    const titleElement = document.getElementById("grains-minion-title");
+    panel.insertBefore(minionMenu.menuDropdown, titleElement.nextSibling);
+
+    if (this.showErrorRowInstead(pLocalGrainsItemsData)) {
+      return;
+    }
+
+    const grains = pLocalGrainsItemsData.return[0][pMinionId];
+
+    const msgDiv = this.div.querySelector(".msg");
+    if (grains === undefined) {
+      msgDiv.innerText = "Unknown minion '" + pMinionId + "'";
+      return;
+    }
+    if (grains === false) {
+      msgDiv.innerText = "Minion '" + pMinionId + "' did not answer";
+      return;
+    }
+
+    const grainNames = Object.keys(grains).sort();
+    for (const grainName of grainNames) {
+      const grainTr = document.createElement("tr");
+
+      const grainNameTd = Utils.createTd("grain-name", grainName);
+      grainTr.appendChild(grainNameTd);
+
+      const grainValue = Output.formatObject(grains[grainName]);
+
+      const grainMenu = new DropDownMenu(grainTr);
+      this._addMenuItemGrainsSetValUpdate(grainMenu, pMinionId, grainName, grains);
+      this._addMenuItemGrainsAppendWhenNeeded(grainMenu, pMinionId, grainName, grainValue);
+      this._addMenuItemGrainsDelKey(grainMenu, pMinionId, grainName, grains[grainName]);
+      this._addMenuItemGrainsDelVal(grainMenu, pMinionId, grainName, grains[grainName]);
+
+      // menu comes before this data on purpose
+      const grainValueTd = Utils.createTd("grain-value", grainValue);
+      grainTr.appendChild(grainValueTd);
+
+      const tbody = this.table.tBodies[0];
+      tbody.appendChild(grainTr);
+
+      grainTr.addEventListener("click", (pClickEvent) => {
+        this.runCommand(pClickEvent, pMinionId, "grains.setval " + JSON.stringify(grainName) + " " + JSON.stringify(grains[grainName]));
+      });
+    }
+
+    const txt = Utils.txtZeroOneMany(grainNames.length,
+      "No grains", "{0} grain", "{0} grains");
+    msgDiv.innerText = txt;
+  }
+
+  _addMenuItemGrainsSetValAdd (pMenu, pMinionId) {
+    pMenu.addMenuItem("Add&nbsp;grain...", (pClickEvent) => {
+      // use placeholders for name and value
+      this.runCommand(pClickEvent, pMinionId, "grains.setval <name> <value>");
+    });
+  }
+
+  _addMenuItemSaltUtilRefreshGrains (pMenu, pMinionId) {
+    pMenu.addMenuItem("Refresh&nbsp;grains...", (pClickEvent) => {
+      this.runCommand(pClickEvent, pMinionId, "saltutil.refresh_grains");
+    });
+  }
+
+  _addMenuItemGrainsSetValUpdate (pMenu, pMinionId, key, grains) {
+    pMenu.addMenuItem("Edit&nbsp;grain...", (pClickEvent) => {
+      this.runCommand(pClickEvent, pMinionId,
+        "grains.setval " + JSON.stringify(key) + " " + JSON.stringify(grains[key]));
+    });
+  }
+
+  _addMenuItemGrainsAppendWhenNeeded (pMenu, pMinionId, key, pGrainValue) {
+    if (!pGrainValue.startsWith("[")) {
+      return;
+    }
+    pMenu.addMenuItem("Add&nbsp;value...", (pClickEvent) => {
+      this.runCommand(pClickEvent, pMinionId, "grains.append " + JSON.stringify(key) + " <value>");
+    });
+  }
+
+  _addMenuItemGrainsDelKey (pMenu, pMinionId, pKey, pValue) {
+    const forceClause = pValue !== null && typeof pValue === "object" ? " force=true" : "";
+    pMenu.addMenuItem("Delete&nbsp;key...", (pClickEvent) => {
+      this.runCommand(pClickEvent, pMinionId, "grains.delkey" + forceClause + " " + JSON.stringify(pKey));
+    });
+  }
+
+  _addMenuItemGrainsDelVal (pMenu, pMinionId, pKey, pValue) {
+    const forceClause = pValue !== null && typeof pValue === "object" ? " force=true" : "";
+    pMenu.addMenuItem("Delete&nbsp;value...", (pClickEvent) => {
+      this.runCommand(pClickEvent, pMinionId, "grains.delval" + forceClause + " " + JSON.stringify(pKey));
+    });
+  }
+}

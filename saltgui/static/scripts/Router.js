@@ -173,10 +173,14 @@ export class Router {
 
     // don't verify for invalid sessions too often
     // this happens only when the server was reset
-    window.setInterval(this._logoutTimer, 60000);
+    window.setInterval(() => {
+      this._logoutTimer();
+    }, 60000);
 
     // verify often for an expired session that we expect
-    window.setInterval(this._updateSessionTimeoutWarning, 1000);
+    window.setInterval(() => {
+      this._updateSessionTimeoutWarning();
+    }, 1000);
   }
 
   _updateSessionTimeoutWarning () {

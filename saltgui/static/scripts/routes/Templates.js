@@ -1,121 +1,22 @@
-/* global document */
+/* global */
 
-import {DropDownMenu} from "../DropDown.js";
+import {JobsSummaryPanel} from "../panels/JobsSummary.js";
 import {PageRoute} from "./Page.js";
-import {Utils} from "../Utils.js";
+import {TemplatesPanel} from "../panels/Templates.js";
 
 export class TemplatesRoute extends PageRoute {
 
   constructor (pRouter) {
     super("templates", "Templates", "page-templates", "button-templates", pRouter);
 
-    this._handleTemplatesWheelConfigValues = this._handleTemplatesWheelConfigValues.bind(this);
-
-    Utils.makeTableSortable(this.getPageElement());
-    Utils.makeTableSearchable("templates-search-button", "templates-table");
-    Utils.makeTableSearchable("templates-search-button-jobs", "templates-jobs-table");
+    this.templates = new TemplatesPanel();
+    super.addPanel(this.templates);
+    this.jobs = new JobsSummaryPanel();
+    super.addPanel(this.jobs);
   }
 
   onShow () {
-    const wheelConfigValuesPromise = this.router.api.getWheelConfigValues();
-    const runnerJobsListJobsPromise = this.router.api.getRunnerJobsListJobs();
-    const runnerJobsActivePromise = this.router.api.getRunnerJobsActive();
-
-    wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
-      this._handleTemplatesWheelConfigValues(pWheelConfigValuesData);
-    }, (pWheelConfigValuesMsg) => {
-      this._handleTemplatesWheelConfigValues(JSON.stringify(pWheelConfigValuesMsg));
-    });
-
-    runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
-      this.handleRunnerJobsListJobs(pRunnerJobsListJobsData);
-      runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
-        this.handleRunnerJobsActive(pRunnerJobsActiveData);
-      }, (pRunnerJobsActiveMsg) => {
-        this.handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
-      });
-    }, (pRunnerJobsListJobsMsg) => {
-      this.handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
-    });
-  }
-
-  _handleTemplatesWheelConfigValues (pWheelConfigValuesData) {
-    const container = document.getElementById("templates-table");
-
-    const msgDiv = document.getElementById("templates-msg");
-    if (PageRoute.showErrorRowInstead(container, pWheelConfigValuesData, msgDiv)) {
-      return;
-    }
-
-    // should we update it or just use from cache (see commandbox) ?
-    let templates = pWheelConfigValuesData.return[0].data.return.saltgui_templates;
-    if (templates) {
-      Utils.setStorageItem("session", "templates", JSON.stringify(templates));
-    } else {
-      templates = {};
-    }
-    const keys = Object.keys(templates).sort();
-    for (const key of keys) {
-      const template = templates[key];
-      this._addTemplate(container, key, template);
-    }
-
-    const txt = Utils.txtZeroOneMany(keys.length,
-      "No templates", "{0} template", "{0} templates");
-    msgDiv.innerText = txt;
-  }
-
-  _addTemplate (pContainer, pTemplateName, template) {
-    const tr = document.createElement("tr");
-
-    tr.appendChild(Utils.createTd("name", pTemplateName));
-
-    // calculate description
-    const description = template["description"];
-    if (description) {
-      tr.appendChild(Utils.createTd("description", description));
-    } else {
-      tr.appendChild(Utils.createTd("description value-none", "(none)"));
-    }
-
-    // calculate targettype
-    const targetType = template["targettype"];
-    // calculate target
-    const target = template["target"];
-    if (!targetType && !target) {
-      tr.appendChild(Utils.createTd("target value-none", "(none)"));
-    } else if (!target) {
-      // implies: targetType is not empty
-      tr.appendChild(Utils.createTd("target", targetType));
-    } else if (targetType) {
-      // implies: both are not empty
-      tr.appendChild(Utils.createTd("target", targetType + " " + target));
-    } else {
-      // implies: target is not empty
-      tr.appendChild(Utils.createTd("target", target));
-    }
-
-    // calculate command
-    const command = template["command"];
-    if (command) {
-      tr.appendChild(Utils.createTd("command", command));
-    } else {
-      tr.appendChild(Utils.createTd("command value-none", "(none)"));
-    }
-
-    const menu = new DropDownMenu(tr);
-    this._addMenuItemApplyTemplate(menu, targetType, target, command);
-
-    pContainer.tBodies[0].appendChild(tr);
-
-    tr.addEventListener("click", (pClickEvent) => {
-      this.runFullCommand(pClickEvent, targetType, target, command);
-    });
-  }
-
-  _addMenuItemApplyTemplate (pMenu, pTargetType, target, pCommand) {
-    pMenu.addMenuItem("Apply&nbsp;template...", (pClickEvent) => {
-      this.runFullCommand(pClickEvent, pTargetType, target, pCommand);
-    });
+    this.templates.onShow();
+    this.jobs.onShow();
   }
 }

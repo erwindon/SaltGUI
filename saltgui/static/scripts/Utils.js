@@ -1,4 +1,4 @@
-/* global console document Hilitor sorttable window */
+/* global console document Hilitor window */
 
 import {DropDownMenu} from "./DropDown.js";
 
@@ -140,23 +140,6 @@ export class Utils {
     pTooltipHost.appendChild(tooltipSpan);
   }
 
-  static makeTableSortable (pStartElement, pIsReverseSort = false, pColumnNr = 0) {
-    const thArr = Array.prototype.slice.call(pStartElement.querySelectorAll("table th"));
-    // we do not expect any rows in the table at this moment
-    // but sorting is applied to show the sorting indicator
-    sorttable.innerSortFunction.apply(thArr[pColumnNr], []);
-    if (pIsReverseSort) {
-      sorttable.innerSortFunction.apply(thArr[pColumnNr], []);
-    }
-    for (const th of thArr) {
-      if (th.classList.contains("sorttable_nosort")) {
-        continue;
-      }
-      // the tooltip is too bulky to use, skip for now
-      // Utils.addToolTip(th, "Click to sort");
-    }
-  }
-
   static addErrorToTableCell (pTd, pErrorMessage) {
     const span = Utils.createSpan("", "(error)");
     Utils.addToolTip(span, pErrorMessage, "bottom-left");
@@ -205,7 +188,7 @@ export class Utils {
     return regs[0].length > 0 ? 1 : 2;
   }
 
-  static makeTableSearchable (pButtonId, pTableId, pFieldList = null) {
+  static makeSearchBox (pSearchButton, pTable, pFieldList = null) {
 
     const div = Utils.createDiv("search-box", "");
     div.style.display = "none";
@@ -229,29 +212,25 @@ export class Utils {
     errorDiv.style.display = "none";
     div.append(errorDiv);
 
-    const table = document.getElementById(pTableId);
-    table.parentElement.insertBefore(div, table);
-
-    table.parentElement.insertBefore(div, table);
-
     searchOptionsMenu.addMenuItem(
       "Case sensitive", (ev) => {
-        Utils._updateSearchOption(ev, table, searchOptionsMenu, input);
+        Utils._updateSearchOption(ev, pTable, searchOptionsMenu, input);
       });
     searchOptionsMenu.addMenuItem(
       "Regular expression", (ev) => {
-        Utils._updateSearchOption(ev, table, searchOptionsMenu, input);
+        Utils._updateSearchOption(ev, pTable, searchOptionsMenu, input);
       });
     searchOptionsMenu.addMenuItem(
       "Invert search", (ev) => {
-        Utils._updateSearchOption(ev, table, searchOptionsMenu, input);
+        Utils._updateSearchOption(ev, pTable, searchOptionsMenu, input);
       });
 
     // make the search function active
-    const searchButton = document.getElementById(pButtonId);
-    searchButton.onclick = () => {
-      Utils.hideShowTableSearchBar(div, table);
+    pSearchButton.onclick = () => {
+      Utils.hideShowTableSearchBar(div, pTable);
     };
+
+    return div;
   }
 
   static _updateSearchOption (ev, pTable, pSearchOptionsMenu, pInput) {
