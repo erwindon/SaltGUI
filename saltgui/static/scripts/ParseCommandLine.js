@@ -159,6 +159,9 @@ export class ParseCommandLine {
       if (name === null) {
         // anonymous parameter
         pArgsArray.push(value);
+      } else if (name in pArgsObject) {
+        // named parameter which already exists
+        return "Duplicate named variable '" + name + "'";
       } else {
         // named parameter
         pArgsObject[name] = value;
