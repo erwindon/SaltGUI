@@ -16,10 +16,14 @@
     "nightmare": "^3.0.2",
     "nyc": "^15.1.0",
     "stylelint": "^13.6.1",
-    "stylelint-config-standard": "^20.0.0"
+    "stylelint-config-standard": "^20.0.0",
+    "eslint-plugin-compat": "^3.8.0"
   },
   "eslintConfig": {
-    "extends": "eslint:all",
+    "extends": [
+      "eslint:all",
+      "plugin:compat/recommended"
+    ],
     "parserOptions": {
       "ecmaVersion": 6,
       "sourceType": "module"
@@ -66,6 +70,7 @@
           "allowForLoopAfterthoughts": true
         }
       ],
+      "no-redeclare": 0,
       "no-ternary": 0,
       "no-undef-init": 0,
       "no-undefined": 0,
