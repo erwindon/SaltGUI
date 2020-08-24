@@ -152,7 +152,7 @@ export class CommandBox {
     const targetType = TargetType.menuTargetType._value;
 
     const patWhitespaceAll = /\s/g;
-    const commandValueNoTabs = commandValue.replaceAll(patWhitespaceAll, " ");
+    const commandValueNoTabs = commandValue.replace(patWhitespaceAll, " ");
     if (commandValueNoTabs !== commandValue) {
       commandField.value = commandValueNoTabs;
       this._showError("The command contains unsupported whitespace characters.\nThese have now been replaced by regular space characters.\nUse 'Run command' again to run the updated command.");
