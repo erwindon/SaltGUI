@@ -230,7 +230,10 @@ export class API {
       options.body = JSON.stringify(pParams);
     }
 
+    /* eslint-disable compat/compat */
+    /* fetch is not supported in op_mini all, IE 11 */
     return window.fetch(url, options).
+    /* eslint-enable compat/compat */
       then((pResponse) => {
         if (pResponse.ok && pRoute.endsWith(".txt")) {
           return pResponse.text();
