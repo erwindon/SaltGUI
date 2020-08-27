@@ -191,7 +191,7 @@ export class Output {
   }
 
   // add the status summary
-  static _addHighStateSummary (pMinionDiv, pMinionId, pTasks) {
+  static _addHighStateSummary (pMinionRow, pMinionDiv, pMinionId, pTasks) {
 
     let nr = 0;
 
@@ -299,7 +299,7 @@ export class Output {
 
       Utils.addToolTip(span, txt);
 
-      pMinionDiv.append(span);
+      pMinionRow.append(span);
     }
   }
 
@@ -580,9 +580,11 @@ export class Output {
       const div = Utils.createDiv("", "");
       div.id = Utils.getIdFromMinionId(minionId);
 
-      div.append(minionLabel);
+      const minionRow = Utils.createSpan("", "");
 
-      div.appendChild(document.createTextNode(":"));
+      minionRow.append(minionLabel);
+
+      minionRow.appendChild(document.createTextNode(":"));
 
       // multiple line, collapsible
       let triangle = null;
@@ -601,12 +603,16 @@ export class Output {
             minionOutput.style.display = "";
           }
         });
-        div.appendChild(triangle);
+        minionRow.appendChild(triangle);
 
         if (addHighStateSummaryFlag) {
-          Output._addHighStateSummary(div, minionId, tasks);
+          Output._addHighStateSummary(minionRow, div, minionId, tasks);
         }
+      }
 
+      div.append(minionRow);
+
+      if (minionMultiLine) {
         div.appendChild(document.createElement("br"));
       }
 
@@ -615,6 +621,15 @@ export class Output {
       // or just collapse it and see the next minion
       if (isHighStateOutput) {
         minionOutput.addEventListener("click", () => {
+          // show where we are scrolling back to
+          minionRow.classList.add("highlight-task");
+          window.setTimeout(() => {
+            minionRow.classList.remove("highlight-task");
+            if (!minionRow.classList.length) {
+              minionRow.removeAttribute("class");
+            }
+          }, 1000);
+
           div.scrollIntoView({"behavior": "smooth", "block": "start"});
         });
       }
