@@ -1,6 +1,5 @@
 /* global console document */
 
-import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
 import {OutputYaml} from "../output/OutputYaml.js";
 import {Panel} from "./Panel.js";
@@ -35,14 +34,7 @@ export class PillarsMinionPanel extends Panel {
   }
 
   _handleLocalPillarItems (pLocalPillarItemsData, pMinionId) {
-    const panel = document.getElementById("pillars-minion-panel");
-    const menu = new DropDownMenu(panel);
-    this._addMenuItemSaltUtilRefreshPillar(menu, pMinionId);
-
-    // new menus are always added at the bottom of the div
-    // fix that by re-adding it to its proper place
-    const titleElement = document.getElementById("pillars-minion-title");
-    panel.insertBefore(menu.menuDropdown, titleElement.nextSibling);
+    this._addMenuItemSaltUtilRefreshPillar(pMinionId);
 
     if (this.showErrorRowInstead(pLocalPillarItemsData)) {
       return;
@@ -134,8 +126,8 @@ export class PillarsMinionPanel extends Panel {
     msgDiv.innerText = txt;
   }
 
-  _addMenuItemSaltUtilRefreshPillar (pMenu, pMinionId) {
-    pMenu.addMenuItem("Refresh&nbsp;pillar...", (pClickEvent) => {
+  _addMenuItemSaltUtilRefreshPillar (pMinionId) {
+    this.panelMenu.addMenuItem("Refresh&nbsp;pillar...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "saltutil.refresh_pillar");
     });
   }

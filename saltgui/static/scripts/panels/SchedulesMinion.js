@@ -37,8 +37,6 @@ export class SchedulesMinionPanel extends Panel {
   }
 
   _handleLocalScheduleList (pLocalScheduleList, pMinionId) {
-    const panel = document.getElementById("schedules-minion-panel");
-
     if (this.showErrorRowInstead(pLocalScheduleList)) {
       return;
     }
@@ -60,13 +58,8 @@ export class SchedulesMinionPanel extends Panel {
       return;
     }
 
-    const minionMenu = new DropDownMenu(panel);
-    this._addMenuItemScheduleEnableWhenNeeded(minionMenu, pMinionId, schedules);
-    this._addMenuItemScheduleDisableWhenNeeded(minionMenu, pMinionId, schedules);
-
-    // new menus are always added at the bottom of the div
-    // fix that by re-adding it to its proper place
-    panel.insertBefore(minionMenu.menuDropdown, this.title.nextSibling);
+    this._addMenuItemScheduleEnableWhenNeeded(pMinionId, schedules);
+    this._addMenuItemScheduleDisableWhenNeeded(pMinionId, schedules);
 
     const keys = Object.keys(schedules.schedules).sort();
     for (const scheduleName of keys) {
@@ -134,20 +127,20 @@ export class SchedulesMinionPanel extends Panel {
     msgDiv.innerText = txt;
   }
 
-  _addMenuItemScheduleEnableWhenNeeded (pMenu, pMinionId, schedules) {
+  _addMenuItemScheduleEnableWhenNeeded (pMinionId, schedules) {
     if (schedules.enabled !== false) {
       return;
     }
-    pMenu.addMenuItem("Enable&nbsp;scheduler...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Enable&nbsp;scheduler...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "schedule.enable");
     });
   }
 
-  _addMenuItemScheduleDisableWhenNeeded (pMenu, pMinionId, schedules) {
+  _addMenuItemScheduleDisableWhenNeeded (pMinionId, schedules) {
     if (schedules.enabled === false) {
       return;
     }
-    pMenu.addMenuItem("Disable&nbsp;scheduler...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Disable&nbsp;scheduler...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "schedule.disable");
     });
   }

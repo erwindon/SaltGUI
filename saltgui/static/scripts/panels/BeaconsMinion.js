@@ -38,8 +38,6 @@ export class BeaconsMinionPanel extends Panel {
   }
 
   _handleLocalBeaconsList (pLocalBeaconsListData, pMinionId) {
-    const panel = document.getElementById("beacons-minion-panel");
-
     if (this.showErrorRowInstead(pLocalBeaconsListData)) {
       return;
     }
@@ -62,16 +60,11 @@ export class BeaconsMinionPanel extends Panel {
       return;
     }
 
-    const minionMenu = new DropDownMenu(panel);
-    this._addMenuItemBeaconsDisableWhenNeeded(minionMenu, pMinionId, beacons);
-    this._addMenuItemBeaconsEnableWhenNeeded(minionMenu, pMinionId, beacons);
-    this._addMenuItemBeaconsAdd(minionMenu, pMinionId);
-    this._addMenuItemBeaconsReset(minionMenu, pMinionId);
-    this._addMenuItemBeaconsSave(minionMenu, pMinionId);
-
-    // new menus are always added at the bottom of the div
-    // fix that by re-adding it to its proper place
-    panel.insertBefore(minionMenu.menuDropdown, this.title.nextSibling);
+    this._addMenuItemBeaconsDisableWhenNeeded(pMinionId, beacons);
+    this._addMenuItemBeaconsEnableWhenNeeded(pMinionId, beacons);
+    this._addMenuItemBeaconsAdd(pMinionId);
+    this._addMenuItemBeaconsReset(pMinionId);
+    this._addMenuItemBeaconsSave(pMinionId);
 
     const keys = Object.keys(beacons.beacons).sort();
     for (const beaconName of keys) {
@@ -127,38 +120,38 @@ export class BeaconsMinionPanel extends Panel {
     msgDiv.innerText = txt;
   }
 
-  _addMenuItemBeaconsDisableWhenNeeded (pMenu, pMinionId, beacons) {
+  _addMenuItemBeaconsDisableWhenNeeded (pMinionId, beacons) {
     if (beacons.enabled === false) {
       return;
     }
-    pMenu.addMenuItem("Disable&nbsp;beacons...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Disable&nbsp;beacons...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.disable");
     });
   }
 
-  _addMenuItemBeaconsEnableWhenNeeded (pMenu, pMinionId, beacons) {
+  _addMenuItemBeaconsEnableWhenNeeded (pMinionId, beacons) {
     if (beacons.enabled !== false) {
       return;
     }
-    pMenu.addMenuItem("Enable&nbsp;beacons...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Enable&nbsp;beacons...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.enable");
     });
   }
 
-  _addMenuItemBeaconsAdd (pMenu, pMinionId) {
-    pMenu.addMenuItem("Add&nbsp;beacon...", (pClickEvent) => {
+  _addMenuItemBeaconsAdd (pMinionId) {
+    this.panelMenu.addMenuItem("Add&nbsp;beacon...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.add <name> <data>");
     });
   }
 
-  _addMenuItemBeaconsReset (pMenu, pMinionId) {
-    pMenu.addMenuItem("Reset&nbsp;beacons...", (pClickEvent) => {
+  _addMenuItemBeaconsReset (pMinionId) {
+    this.panelMenu.addMenuItem("Reset&nbsp;beacons...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.reset");
     });
   }
 
-  _addMenuItemBeaconsSave (pMenu, pMinionId) {
-    pMenu.addMenuItem("Save&nbsp;beacons...", (pClickEvent) => {
+  _addMenuItemBeaconsSave (pMinionId) {
+    this.panelMenu.addMenuItem("Save&nbsp;beacons...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.save");
     });
   }

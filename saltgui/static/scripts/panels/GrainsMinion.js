@@ -35,15 +35,8 @@ export class GrainsMinionPanel extends Panel {
   }
 
   _handleLocalGrainsItems (pLocalGrainsItemsData, pMinionId) {
-    const panel = document.getElementById("grains-minion-panel");
-    const minionMenu = new DropDownMenu(panel);
-    this._addMenuItemGrainsSetValAdd(minionMenu, pMinionId);
-    this._addMenuItemSaltUtilRefreshGrains(minionMenu, pMinionId);
-
-    // new menus are always added at the bottom of the div
-    // fix that by re-adding it to its proper place
-    const titleElement = document.getElementById("grains-minion-title");
-    panel.insertBefore(minionMenu.menuDropdown, titleElement.nextSibling);
+    this._addMenuItemGrainsSetValAdd(pMinionId);
+    this._addMenuItemSaltUtilRefreshGrains(pMinionId);
 
     if (this.showErrorRowInstead(pLocalGrainsItemsData)) {
       return;
@@ -93,15 +86,15 @@ export class GrainsMinionPanel extends Panel {
     msgDiv.innerText = txt;
   }
 
-  _addMenuItemGrainsSetValAdd (pMenu, pMinionId) {
-    pMenu.addMenuItem("Add&nbsp;grain...", (pClickEvent) => {
+  _addMenuItemGrainsSetValAdd (pMinionId) {
+    this.panelMenu.addMenuItem("Add&nbsp;grain...", (pClickEvent) => {
       // use placeholders for name and value
       this.runCommand(pClickEvent, pMinionId, "grains.setval <name> <value>");
     });
   }
 
-  _addMenuItemSaltUtilRefreshGrains (pMenu, pMinionId) {
-    pMenu.addMenuItem("Refresh&nbsp;grains...", (pClickEvent) => {
+  _addMenuItemSaltUtilRefreshGrains (pMinionId) {
+    this.panelMenu.addMenuItem("Refresh&nbsp;grains...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "saltutil.refresh_grains");
     });
   }
