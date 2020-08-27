@@ -61,11 +61,6 @@ export class JobPanel extends Panel {
   }
 
   _handleJobRunnerJobsListJob (pRunnerJobsListJobData, pJobId) {
-    const closeButton = document.getElementById("job-close-button");
-    closeButton.addEventListener("click", () => {
-      window.history.back();
-    });
-
     if (!pRunnerJobsListJobData) {
       return;
     }
