@@ -48,13 +48,12 @@ export class SchedulesMinionPanel extends Panel {
       this.updateTitle("Schedules on " + pMinionId + " (disabled)");
     }
 
-    const msgDiv = this.div.querySelector(".msg");
     if (schedules === undefined) {
-      msgDiv.innerText = "Unknown minion '" + pMinionId + "'";
+      this.setMsg("Unknown minion '" + pMinionId + "'");
       return;
     }
     if (schedules === false) {
-      msgDiv.innerText = "Minion '" + pMinionId + "' did not answer";
+      this.setMsg("Minion '" + pMinionId + "' did not answer");
       return;
     }
 
@@ -124,7 +123,7 @@ export class SchedulesMinionPanel extends Panel {
 
     const txt = Utils.txtZeroOneMany(keys.length,
       "No schedules", "{0} schedule", "{0} schedules");
-    msgDiv.innerText = txt;
+    this.setMsg(txt);
   }
 
   _addMenuItemScheduleEnableWhenNeeded (pMinionId, schedules) {

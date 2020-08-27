@@ -94,8 +94,7 @@ export class SchedulesPanel extends Panel {
 
     const txt = Utils.txtZeroOneMany(minionIds.length,
       "No minions", "{0} minion", "{0} minions");
-    const msgDiv = this.div.querySelector(".msg");
-    msgDiv.innerText = txt;
+    this.setMsg(txt);
   }
 
   updateOfflineMinion (pMinionId, pMinionsDict) {

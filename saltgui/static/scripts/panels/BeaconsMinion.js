@@ -50,13 +50,12 @@ export class BeaconsMinionPanel extends Panel {
       this.updateTitle("Beacons on " + pMinionId + " (disabled)");
     }
 
-    const msgDiv = this.div.querySelector(".msg");
     if (beacons === undefined) {
-      msgDiv.innerText = "Unknown minion '" + pMinionId + "'";
+      this.setMsg("Unknown minion '" + pMinionId + "'");
       return;
     }
     if (beacons === false) {
-      msgDiv.innerText = "Minion '" + pMinionId + "' did not answer";
+      this.setMsg("Minion '" + pMinionId + "' did not answer");
       return;
     }
 
@@ -117,7 +116,7 @@ export class BeaconsMinionPanel extends Panel {
 
     const txt = Utils.txtZeroOneMany(keys.length,
       "No beacons", "{0} beacon", "{0} beacons");
-    msgDiv.innerText = txt;
+    this.setMsg(txt);
   }
 
   _addMenuItemBeaconsDisableWhenNeeded (pMinionId, beacons) {

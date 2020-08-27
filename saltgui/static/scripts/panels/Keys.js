@@ -153,8 +153,7 @@ export class KeysPanel extends Panel {
     // capitalize the first word (can only be "no")
     summary = summary.replace(/^no/, "No");
 
-    const msgDiv = this.div.querySelector(".msg");
-    msgDiv.innerText = summary;
+    this.setMsg(summary);
   }
 
   _addAcceptedMinion (pMinionId, pMinionsDict) {

@@ -42,13 +42,12 @@ export class PillarsMinionPanel extends Panel {
 
     const pillars = pLocalPillarItemsData.return[0][pMinionId];
 
-    const msgDiv = this.div.querySelector(".msg");
     if (pillars === undefined) {
-      msgDiv.innerText = "Unknown minion '" + pMinionId + "'";
+      this.setMsg("Unknown minion '" + pMinionId + "'");
       return;
     }
     if (pillars === false) {
-      msgDiv.innerText = "Minion '" + pMinionId + "' did not answer";
+      this.setMsg("Minion '" + pMinionId + "' did not answer");
       return;
     }
 
@@ -123,7 +122,7 @@ export class PillarsMinionPanel extends Panel {
 
     const txt = Utils.txtZeroOneMany(keys.length,
       "No pillars", "{0} pillar", "{0} pillars");
-    msgDiv.innerText = txt;
+    this.setMsg(txt);
   }
 
   _addMenuItemSaltUtilRefreshPillar (pMinionId) {

@@ -185,18 +185,27 @@ export class Panel {
   }
 
   addConsole () {
-    const div = document.createElement("div");
-    div.id = this.key + "-output";
-    div.classList.add("output");
-    this.div.appendChild(div);
+    const console = document.createElement("div");
+    console.id = this.key + "-output";
+    console.classList.add("output");
+    this.div.appendChild(console);
   }
 
   addMsg () {
-    const div = document.createElement("div");
-    div.id = this.key + "-msg";
-    div.classList.add("msg");
-    div.innerText = "(loading)";
-    this.div.appendChild(div);
+    const msg = document.createElement("div");
+    msg.id = this.key + "-msg";
+    msg.classList.add("msg");
+    msg.innerText = "(loading)";
+    this.div.appendChild(msg);
+    this.msg = msg;
+  }
+
+  setMsg (pText, isHTML = false) {
+    if (isHTML) {
+      this.msg.innerHTML = pText;
+    } else {
+      this.msg.innerText = pText;
+    }
   }
 
   loadMinionsTxt () {
@@ -249,9 +258,8 @@ export class Panel {
     this.table.appendChild(tr);
 
     // hide the "(loading)" message
-    const msgDiv = this.div.querySelector(".msg");
-    if (msgDiv !== null) {
-      msgDiv.style.display = "none";
+    if (this.msg !== null) {
+      this.msg.style.display = "none";
     }
 
     return true;
@@ -520,7 +528,6 @@ export class Panel {
       }
     }
 
-    const msgDiv = this.div.querySelector(".msg");
     let txt = Utils.txtZeroOneMany(minionIds.length, "No minions", "{0} minion", "{0} minions");
     if (cntOnline !== minionIds.length) {
       txt += ", " + Utils.txtZeroOneMany(cntOnline, "none online", "{0} online", "{0} online");
@@ -528,7 +535,7 @@ export class Panel {
     if (cntOffline > 0) {
       txt += ", " + Utils.txtZeroOneMany(cntOffline, "none offline", "{0} offline", "{0} offline");
     }
-    msgDiv.innerText = txt;
+    this.setMsg(txt);
   }
 
   decodeArgumentsText (rawArguments) {

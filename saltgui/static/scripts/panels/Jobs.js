@@ -202,8 +202,7 @@ export class JobsPanel extends Panel {
       "", ", {0} job eligible", ", {0} jobs eligible");
     txt += Utils.txtZeroOneMany(numberOfJobsPresent,
       "", ", {0} job present", ", {0} jobs present");
-    const msgDiv = this.div.querySelector(".msg");
-    msgDiv.innerText = txt;
+    this.setMsg(txt);
   }
 
   _jobsToArray (jobs) {

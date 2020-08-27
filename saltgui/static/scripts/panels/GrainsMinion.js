@@ -44,13 +44,12 @@ export class GrainsMinionPanel extends Panel {
 
     const grains = pLocalGrainsItemsData.return[0][pMinionId];
 
-    const msgDiv = this.div.querySelector(".msg");
     if (grains === undefined) {
-      msgDiv.innerText = "Unknown minion '" + pMinionId + "'";
+      this.setMsg("Unknown minion '" + pMinionId + "'");
       return;
     }
     if (grains === false) {
-      msgDiv.innerText = "Minion '" + pMinionId + "' did not answer";
+      this.setMsg("Minion '" + pMinionId + "' did not answer");
       return;
     }
 
@@ -83,7 +82,7 @@ export class GrainsMinionPanel extends Panel {
 
     const txt = Utils.txtZeroOneMany(grainNames.length,
       "No grains", "{0} grain", "{0} grains");
-    msgDiv.innerText = txt;
+    this.setMsg(txt);
   }
 
   _addMenuItemGrainsSetValAdd (pMinionId) {

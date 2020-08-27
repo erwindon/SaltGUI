@@ -31,7 +31,7 @@ export class EventsPanel extends Panel {
   }
 
   onShow () {
-    // VOID
+    this._updateFooter();
   }
 
   _clickEventsPlayButton (isPlay) {
@@ -45,18 +45,24 @@ export class EventsPanel extends Panel {
 
   _updateFooter () {
     // update the footer
-    const msgDiv = this.div.querySelector(".msg");
     const tbody = this.table.tBodies[0];
     // when there are more than a screen-ful of events, the user
     // will not see the "press play" message. but ths user already
     // knows that because that cause the events to be shown...
-    // 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play)
-    // FE0E = VARIATION SELECTOR-15 (render as text)
-    msgDiv.innerHTML = Utils.txtZeroOneMany(tbody.rows.length,
-      "No events", "{0} event", "{0} events") +
-      (Utils.getStorageItem("session", "events-button") === "play"
-        ? ""
-        : ", press '&#x23F5;&#xFE0E;' to begin");
+    let txt = Utils.txtZeroOneMany(tbody.rows.length,
+      "No events", "{0} event", "{0} events");
+    if (Utils.getStorageItem("session", "events-button") === "play") {
+      txt += ", waiting for events";
+    } else if (tbody.rows.length) {
+      // 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play)
+      // FE0E = VARIATION SELECTOR-15 (render as text)
+      txt += ", press '&#x23F5;&#xFE0E;' to continue";
+    } else {
+      // 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play)
+      // FE0E = VARIATION SELECTOR-15 (render as text)
+      txt += ", press '&#x23F5;&#xFE0E;' to begin";
+    }
+    this.setMsg(txt, true);
   }
 
   handleAnyEvent (pTag, pData) {

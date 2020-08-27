@@ -47,8 +47,7 @@ export class TemplatesPanel extends Panel {
 
     const txt = Utils.txtZeroOneMany(keys.length,
       "No templates", "{0} template", "{0} templates");
-    const msgDiv = this.div.querySelector(".msg");
-    msgDiv.innerText = txt;
+    this.setMsg(txt);
   }
 
   _addTemplate (pTemplateName, template) {
