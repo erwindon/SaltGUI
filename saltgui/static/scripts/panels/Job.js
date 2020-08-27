@@ -73,17 +73,15 @@ export class JobPanel extends Panel {
     if (typeof pRunnerJobsListJobData !== "object") {
       this.output.innerText = "";
       Utils.addErrorToTableCell(this.output, pRunnerJobsListJobData);
-      const functionField = document.getElementById("job-title");
-      functionField.innerText = "ERROR";
+      this.updateTitle("ERROR");
       return;
     }
 
     const info = pRunnerJobsListJobData.return[0];
 
     if (info.Error) {
+      this.updateTitle("ERROR");
       this.output.innerText = info.Error + " (" + pJobId + ")";
-      const functionField = document.getElementById("job-title");
-      functionField.innerText = "ERROR";
       const timeField = document.getElementById("job-time");
       timeField.innerText = Output.dateTimeStr(info.StartTime);
       return;
@@ -119,8 +117,7 @@ export class JobPanel extends Panel {
 
     const functionText = commandText + " on " +
       TargetType.makeTargetText(info["Target-type"], info.Target);
-    const functionField = document.getElementById("job-title");
-    functionField.innerText = functionText;
+    this.updateTitle(functionText);
 
     const timeField = document.getElementById("job-time");
     timeField.innerText = Output.dateTimeStr(info.StartTime);

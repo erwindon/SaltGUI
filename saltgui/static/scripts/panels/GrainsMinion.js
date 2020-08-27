@@ -23,8 +23,7 @@ export class GrainsMinionPanel extends Panel {
   onShow () {
     const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
 
-    const titleElement = document.getElementById("grains-minion-title");
-    titleElement.innerText = "Grains on " + minionId;
+    this.updateTitle("Grains on " + minionId);
 
     const localGrainsItemsPromise = this.api.getLocalGrainsItems(minionId);
 

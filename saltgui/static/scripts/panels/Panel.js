@@ -41,6 +41,11 @@ export class Panel {
     h1.id = this.key + "-title";
     h1.innerText = pTitle;
     this.div.appendChild(h1);
+    this.title = h1;
+  }
+
+  updateTitle (pTitle) {
+    this.title.innerText = pTitle;
   }
 
   addPanelMenu () {

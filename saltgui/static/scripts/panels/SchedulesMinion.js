@@ -25,8 +25,7 @@ export class SchedulesMinionPanel extends Panel {
     const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
 
     // preliminary title
-    const titleElement = document.getElementById("schedules-minion-title");
-    titleElement.innerText = "Schedules on " + minionId;
+    this.updateTitle("Schedules on " + minionId);
 
     const localScheduleListPromise = this.api.getLocalScheduleList(minionId);
 
@@ -47,12 +46,9 @@ export class SchedulesMinionPanel extends Panel {
     let schedules = pLocalScheduleList.return[0][pMinionId];
     schedules = SchedulesPanel.fixSchedulesMinion(schedules);
 
-    const titleElement = document.getElementById("schedules-minion-title");
-    let txt = "Schedules on " + pMinionId;
     if (schedules && schedules.enabled === false) {
-      txt += " (disabled)";
+      this.updateTitle("Schedules on " + pMinionId + " (disabled)");
     }
-    titleElement.innerText = txt;
 
     const msgDiv = this.div.querySelector(".msg");
     if (schedules === undefined) {
@@ -70,7 +66,7 @@ export class SchedulesMinionPanel extends Panel {
 
     // new menus are always added at the bottom of the div
     // fix that by re-adding it to its proper place
-    panel.insertBefore(minionMenu.menuDropdown, titleElement.nextSibling);
+    panel.insertBefore(minionMenu.menuDropdown, this.title.nextSibling);
 
     const keys = Object.keys(schedules.schedules).sort();
     for (const scheduleName of keys) {
@@ -133,7 +129,7 @@ export class SchedulesMinionPanel extends Panel {
       });
     }
 
-    txt = Utils.txtZeroOneMany(keys.length,
+    const txt = Utils.txtZeroOneMany(keys.length,
       "No schedules", "{0} schedule", "{0} schedules");
     msgDiv.innerText = txt;
   }

@@ -25,6 +25,9 @@ export class BeaconsMinionPanel extends Panel {
   onShow () {
     const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
 
+    // preliminary title
+    this.updateTitle("Beacons on " + minionId);
+
     const localBeaconsListPromise = this.api.getLocalBeaconsList(minionId);
 
     localBeaconsListPromise.then((pLocalBeaconsListData) => {
@@ -45,12 +48,9 @@ export class BeaconsMinionPanel extends Panel {
 
     const beacons = BeaconsPanel.fixBeaconsMinion(beacons0);
 
-    const titleElement = document.getElementById("beacons-minion-title");
-    let txt = "Beacons on " + pMinionId;
     if (beacons && beacons.enabled === false) {
-      txt += " (disabled)";
+      this.updateTitle("Beacons on " + pMinionId + " (disabled)");
     }
-    titleElement.innerText = txt;
 
     const msgDiv = this.div.querySelector(".msg");
     if (beacons === undefined) {
@@ -71,7 +71,7 @@ export class BeaconsMinionPanel extends Panel {
 
     // new menus are always added at the bottom of the div
     // fix that by re-adding it to its proper place
-    panel.insertBefore(minionMenu.menuDropdown, titleElement.nextSibling);
+    panel.insertBefore(minionMenu.menuDropdown, this.title.nextSibling);
 
     const keys = Object.keys(beacons.beacons).sort();
     for (const beaconName of keys) {
@@ -122,7 +122,7 @@ export class BeaconsMinionPanel extends Panel {
       });
     }
 
-    txt = Utils.txtZeroOneMany(keys.length,
+    const txt = Utils.txtZeroOneMany(keys.length,
       "No beacons", "{0} beacon", "{0} beacons");
     msgDiv.innerText = txt;
   }

@@ -23,8 +23,7 @@ export class PillarsMinionPanel extends Panel {
   onShow () {
     const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
 
-    const titleElement = document.getElementById("pillars-minion-title");
-    titleElement.innerText = "Pillars on " + minionId;
+    this.updateTitle("Pillars on " + minionId);
 
     const localPillarItemsPromise = this.api.getLocalPillarItems(minionId);
 
