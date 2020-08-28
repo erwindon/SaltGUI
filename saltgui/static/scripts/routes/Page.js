@@ -1,4 +1,4 @@
-/* global document window */
+/* global */
 
 import {Route} from "./Route.js";
 import {Utils} from "../Utils.js";
@@ -104,31 +104,6 @@ export class PageRoute extends Route {
     }
 
     return prefixes;
-  }
-
-  _addNone (pContainer) {
-    const tr = document.createElement("tr");
-    const td = Utils.createTd("minion-id", "none");
-    td.setAttribute("colspan", pContainer.rows[0].cells.length);
-    tr.appendChild(td);
-    pContainer.appendChild(tr);
-  }
-
-  _copyAddress (pTarget) {
-    const selection = window.getSelection();
-    const range = document.createRange();
-
-    range.selectNodeContents(pTarget.firstChild);
-    selection.removeAllRanges();
-    selection.addRange(range);
-    document.execCommand("copy");
-    selection.removeAllRanges();
-
-    Utils.addToolTip(pTarget, "Copied!");
-  }
-
-  _restoreClickToCopy (pTarget) {
-    Utils.addToolTip(pTarget, "Click to copy");
   }
 
   addPanel (pPanel) {
