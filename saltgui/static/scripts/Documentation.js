@@ -106,6 +106,9 @@ export class Documentation {
     const targetType = TargetType.menuTargetType._value;
 
     const func = this.commandbox.getRunParams(targetType, target, docCommand, true);
+    if (func === null) {
+      return;
+    }
     func.then((pResponse) => {
       this.commandbox.onRunReturn(pResponse.return[0], dummyCommand);
     }, (pResponse) => {
