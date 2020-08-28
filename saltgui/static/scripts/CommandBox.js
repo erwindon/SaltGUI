@@ -26,11 +26,11 @@ export class CommandBox {
     Utils.addTableHelp(manualRun, "Click for help");
     const helpButton = manualRun.querySelector("#help");
     helpButton.addEventListener("click", () => {
-      this._showHelp();
+      CommandBox._showHelp();
     });
   }
 
-  _populateTemplateMenu () {
+  static _populateTemplateMenu () {
     const titleElement = document.getElementById("template-menu-here");
     if (titleElement.childElementCount) {
       // only build one dropdown menu. cannot be done in constructor
@@ -50,13 +50,13 @@ export class CommandBox {
       menu.addMenuItem(
         description,
         () => {
-          this._applyTemplate(template);
+          CommandBox._applyTemplate(template);
         }
       );
     }
   }
 
-  _showHelp () {
+  static _showHelp () {
     const output = document.querySelector(".run-command pre");
     let txt = "Hello World!";
     txt = "<h2>Target field</h2>";
@@ -85,9 +85,7 @@ export class CommandBox {
     document.getElementById("popup-run-command").
       addEventListener("click", CommandBox._hideManualRun);
     document.getElementById("button-manual-run").
-      addEventListener("click", (pClickEvent) => {
-        this.showManualRun(pClickEvent);
-      });
+      addEventListener("click", CommandBox.showManualRun);
     document.getElementById("cmd-close-button").
       addEventListener("click", CommandBox._hideManualRun);
 
@@ -109,7 +107,7 @@ export class CommandBox {
       });
   }
 
-  _applyTemplate (template) {
+  static _applyTemplate (template) {
 
     if (template.targettype) {
       let targetType = template.targettype;
@@ -156,7 +154,7 @@ export class CommandBox {
     const commandValueNoTabs = commandValue.replace(patWhitespaceAll, " ");
     if (commandValueNoTabs !== commandValue) {
       commandField.value = commandValueNoTabs;
-      this._showError("The command contains unsupported whitespace characters.\nThese have now been replaced by regular space characters.\nUse 'Run command' again to run the updated command.");
+      CommandBox._showError("The command contains unsupported whitespace characters.\nThese have now been replaced by regular space characters.\nUse 'Run command' again to run the updated command.");
       return;
     }
 
@@ -170,16 +168,16 @@ export class CommandBox {
 
     func.then((pResponse) => {
       if (pResponse) {
-        this.onRunReturn(pResponse.return[0], commandValue);
+        CommandBox.onRunReturn(pResponse.return[0], commandValue);
       } else {
-        this._showError("null response");
+        CommandBox._showError("null response");
       }
     }, (pResponse) => {
-      this._showError(JSON.stringify(pResponse));
+      CommandBox._showError(JSON.stringify(pResponse));
     });
   }
 
-  onRunReturn (pResponse, pCommand) {
+  static onRunReturn (pResponse, pCommand) {
     const outputContainer = document.querySelector(".run-command pre");
     let minions = Object.keys(pResponse);
     if (pCommand.startsWith("runners.")) {
@@ -193,7 +191,7 @@ export class CommandBox {
     button.disabled = false;
   }
 
-  showManualRun (pClickEvent) {
+  static showManualRun (pClickEvent) {
     const manualRun = document.getElementById("popup-run-command");
     manualRun.style.display = "block";
 
@@ -242,7 +240,7 @@ export class CommandBox {
     commandField.focus();
     targetField.focus();
 
-    this._populateTemplateMenu();
+    CommandBox._populateTemplateMenu();
 
     pClickEvent.stopPropagation();
   }
@@ -304,8 +302,8 @@ export class CommandBox {
     pEvent.stopPropagation();
   }
 
-  _showError (pMessage) {
-    this.onRunReturn("ERROR:\n\n" + pMessage, "");
+  static _showError (pMessage) {
+    CommandBox.onRunReturn("ERROR:\n\n" + pMessage, "");
   }
 
   getRunParams (pTargetType, pTarget, pToRun, pisRunTypeNormalOnly = false) {
@@ -316,7 +314,7 @@ export class CommandBox {
     }
 
     if (pToRun === "") {
-      this._showError("'Command' field cannot be empty");
+      CommandBox._showError("'Command' field cannot be empty");
       return null;
     }
 
@@ -329,19 +327,19 @@ export class CommandBox {
     const ret = ParseCommandLine.parseCommandLine(pToRun, argsArray, argsObject);
     if (ret !== null) {
       // that is an error message being returned
-      this._showError(ret);
+      CommandBox._showError(ret);
       return null;
     }
 
     if (argsArray.length === 0) {
-      this._showError("First (unnamed) parameter is the function name, it is mandatory");
+      CommandBox._showError("First (unnamed) parameter is the function name, it is mandatory");
       return null;
     }
 
     const functionToRun = argsArray.shift();
 
     if (typeof functionToRun !== "string") {
-      this._showError("First (unnamed) parameter is the function name, it must be a string, not a " + typeof functionToRun);
+      CommandBox._showError("First (unnamed) parameter is the function name, it must be a string, not a " + typeof functionToRun);
       return null;
     }
 
@@ -350,7 +348,7 @@ export class CommandBox {
     // but we use the TARGET value to form the usually required MATCH parameter
     // therefore for WHEEL commands it is still required
     if (pTarget === "" && functionToRun !== "runners" && !functionToRun.startsWith("runners.")) {
-      this._showError("'Target' field cannot be empty");
+      CommandBox._showError("'Target' field cannot be empty");
       return null;
     }
 
@@ -360,7 +358,7 @@ export class CommandBox {
       const nodeGroupsTxt = Utils.getStorageItem("session", "nodegroups", "{}");
       const nodeGroups = JSON.parse(nodeGroupsTxt);
       if (!(pTarget in nodeGroups)) {
-        this._showError("Unknown nodegroup '" + pTarget + "'");
+        CommandBox._showError("Unknown nodegroup '" + pTarget + "'");
         return null;
       }
     }

@@ -318,10 +318,10 @@ export class Router {
 
     // start the event-pipe (again)
     // it is either not started, or needs restarting
-    this.api.getEvents(this);
+    API.getEvents(this);
 
     if (this.currentRoute) {
-      this._hideRoute(this.currentRoute);
+      Router._hideRoute(this.currentRoute);
     }
 
     this.currentRoute = pRoute;
@@ -329,7 +329,7 @@ export class Router {
     this.switchingRoute = false;
   }
 
-  _hideRoute (pRoute) {
+  static _hideRoute (pRoute) {
     const page = pRoute.getPageElement();
     page.classList.remove("current");
     // 500ms matches the timeout in main.css (.route)
@@ -341,5 +341,4 @@ export class Router {
       pRoute.onHide();
     }
   }
-
 }

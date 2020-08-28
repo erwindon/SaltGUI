@@ -26,7 +26,7 @@ export class PageRoute extends Route {
     minionTr.appendChild(offlineTd);
   }
 
-  _getIpNumberPrefixes (pAllMinionsGrains) {
+  static _getIpNumberPrefixes (pAllMinionsGrains) {
     // First we gather all (resonable) prefixes
     // Only use byte-boundaries for networks
     // Must match a subnet of A, B or C network

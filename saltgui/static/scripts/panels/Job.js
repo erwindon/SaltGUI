@@ -50,7 +50,7 @@ export class JobPanel extends Panel {
     });
   }
 
-  _isResultOk (result) {
+  static _isResultOk (result) {
     if (!result.success) {
       return false;
     }
@@ -85,7 +85,7 @@ export class JobPanel extends Panel {
     this.output.innerText = "";
 
     // use same formatter as direct commands
-    const argumentsText = this.decodeArgumentsText(info.Arguments);
+    const argumentsText = Panel.decodeArgumentsText(info.Arguments);
     const commandText = info.Function + argumentsText;
     const menuSection = document.getElementById("job-menu");
     const menu = new DropDownMenu(menuSection);
@@ -213,10 +213,10 @@ export class JobPanel extends Panel {
       if (!(minionId in info.Result)) {
         has1 = true;
       }
-      if (minionId in info.Result && !this._isResultOk(info.Result[minionId])) {
+      if (minionId in info.Result && !JobPanel._isResultOk(info.Result[minionId])) {
         has2 = true;
       }
-      if (!(minionId in info.Result) || !this._isResultOk(info.Result[minionId])) {
+      if (!(minionId in info.Result) || !JobPanel._isResultOk(info.Result[minionId])) {
         minionList += "," + minionId;
       }
     }
@@ -246,7 +246,7 @@ export class JobPanel extends Panel {
 
     let minionList = "";
     for (const minionId of info.Minions) {
-      if (minionId in info.Result && !this._isResultOk(info.Result[minionId])) {
+      if (minionId in info.Result && !JobPanel._isResultOk(info.Result[minionId])) {
         minionList += "," + minionId;
       }
     }
@@ -404,7 +404,7 @@ export class JobPanel extends Panel {
     }
 
     // This element only exists when the user happens to look at the output of that jobId.
-    const span = document.getElementById("status" + jid);
+    const span = this.div.querySelector("#status" + jid);
     if (span) {
       let oldLevel = span.dataset.level;
       if (oldLevel === undefined) {

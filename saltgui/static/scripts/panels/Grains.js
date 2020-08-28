@@ -71,7 +71,7 @@ export class GrainsPanel extends Panel {
       // preliminary dropdown menu
       const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
       const menu = new DropDownMenu(minionTr);
-      this._addMenuItemShowGrains(menu, minionId);
+      GrainsPanel._addMenuItemShowGrains(menu, minionId);
 
       for (let i = 0; i < this.previewGrains.length; i++) {
         minionTr.appendChild(Utils.createTd("", ""));
@@ -120,7 +120,7 @@ export class GrainsPanel extends Panel {
     }
 
     const menu = new DropDownMenu(minionTr);
-    this._addMenuItemShowGrains(menu, pMinionId);
+    GrainsPanel._addMenuItemShowGrains(menu, pMinionId);
 
     // add the preview columns
     /* eslint-disable max-depth */
@@ -161,7 +161,7 @@ export class GrainsPanel extends Panel {
     });
   }
 
-  _addMenuItemShowGrains (pMenu, pMinionId) {
+  static _addMenuItemShowGrains (pMenu, pMinionId) {
     pMenu.addMenuItem("Show&nbsp;grains", () => {
       window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(pMinionId));
     });

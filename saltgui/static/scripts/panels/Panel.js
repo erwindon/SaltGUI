@@ -1,6 +1,7 @@
 /* global config document sorttable window */
 
 import {API} from "../Api.js";
+import {CommandBox} from "../CommandBox.js";
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
 import {ParseCommandLine} from "../ParseCommandLine.js";
@@ -312,7 +313,7 @@ export class Panel {
     return minionTr;
   }
 
-  _getBestIpNumber (pMinionData, prefixes) {
+  static _getBestIpNumber (pMinionData, prefixes) {
     if (!pMinionData) {
       return null;
     }
@@ -403,11 +404,11 @@ export class Panel {
     return ipv4[0];
   }
 
-  _restoreClickToCopy (pTarget) {
+  static _restoreClickToCopy (pTarget) {
     Utils.addToolTip(pTarget, "Click to copy");
   }
 
-  _copyAddress (pTarget) {
+  static _copyAddress (pTarget) {
     const selection = window.getSelection();
     const range = document.createRange();
 
@@ -426,7 +427,7 @@ export class Panel {
 
     minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 
-    const ipv4 = this._getBestIpNumber(pMinionData, prefixes);
+    const ipv4 = Panel._getBestIpNumber(pMinionData, prefixes);
     if (ipv4) {
       const addressTd = Utils.createTd("status", "");
       const addressSpan = Utils.createSpan("", ipv4);
@@ -444,11 +445,11 @@ export class Panel {
       addressTd.classList.add("address");
       addressTd.setAttribute("tabindex", -1);
       addressSpan.addEventListener("click", (pClickEvent) => {
-        this._copyAddress(addressSpan);
+        Panel._copyAddress(addressSpan);
         pClickEvent.stopPropagation();
       });
       addressSpan.addEventListener("mouseout", () => {
-        this._restoreClickToCopy(addressSpan);
+        Panel._restoreClickToCopy(addressSpan);
       });
       Utils.addToolTip(addressSpan, "Click to copy");
       minionTr.appendChild(addressTd);
@@ -538,7 +539,7 @@ export class Panel {
     this.setMsg(txt);
   }
 
-  decodeArgumentsText (rawArguments) {
+  static decodeArgumentsText (rawArguments) {
 
     if (rawArguments === undefined) {
       // no arguments
@@ -586,7 +587,7 @@ export class Panel {
   }
 
   runFullCommand (pClickEvent, pTargetType, pTargetString, pCommandString) {
-    this.router.commandbox.showManualRun(pClickEvent);
+    CommandBox.showManualRun(pClickEvent);
     const target = document.getElementById("target");
     const command = document.getElementById("command");
     const targetbox = document.getElementById("target-box");

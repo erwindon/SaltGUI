@@ -51,7 +51,7 @@ export class PillarsPanel extends Panel {
       // preliminary dropdown menu
       const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
       const menu = new DropDownMenu(minionTr);
-      this._addMenuItemShowPillars(menu, minionId);
+      PillarsPanel._addMenuItemShowPillars(menu, minionId);
 
       minionTr.addEventListener("click", () => {
         window.location.assign("pillars-minion?minionid=" + encodeURIComponent(minionId));
@@ -96,14 +96,14 @@ export class PillarsPanel extends Panel {
     minionTr.appendChild(pillarInfoTd);
 
     const menu = new DropDownMenu(minionTr);
-    this._addMenuItemShowPillars(menu, pMinionId);
+    PillarsPanel._addMenuItemShowPillars(menu, pMinionId);
 
     minionTr.addEventListener("click", () => {
       window.location.assign(config.NAV_URL + "/pillars-minion?minionid=" + encodeURIComponent(pMinionId));
     });
   }
 
-  _addMenuItemShowPillars (pMenu, pMinionId) {
+  static _addMenuItemShowPillars (pMenu, pMinionId) {
     pMenu.addMenuItem("Show&nbsp;pillars", () => {
       window.location.assign(config.NAV_URL + "/pillars-minion?minionid=" + encodeURIComponent(pMinionId));
     });

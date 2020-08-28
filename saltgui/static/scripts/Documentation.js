@@ -2,6 +2,7 @@
 
 // documentation utilities
 
+import {CommandBox} from "./CommandBox.js";
 import {TargetType} from "./TargetType.js";
 
 export class Documentation {
@@ -109,9 +110,9 @@ export class Documentation {
       return;
     }
     func.then((pResponse) => {
-      this.commandbox.onRunReturn(pResponse.return[0], dummyCommand);
+      CommandBox.onRunReturn(pResponse.return[0], dummyCommand);
     }, (pResponse) => {
-      this.commandbox.onRunReturn("DOCUMENTATION ERROR:\n\n" + JSON.stringify(pResponse), dummyCommand);
+      CommandBox.onRunReturn("DOCUMENTATION ERROR:\n\n" + JSON.stringify(pResponse), dummyCommand);
     });
   }
 

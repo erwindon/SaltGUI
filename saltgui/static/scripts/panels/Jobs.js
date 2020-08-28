@@ -108,8 +108,8 @@ export class JobsPanel extends Panel {
       return;
     }
 
-    const jobs = this._jobsToArray(pData.return[0]);
-    this._sortJobs(jobs);
+    const jobs = JobsPanel._jobsToArray(pData.return[0]);
+    JobsPanel._sortJobs(jobs);
 
     // collect the list of hidden minions
     const hideJobsText = Utils.getStorageItem("session", "hide_jobs", "[]");
@@ -205,7 +205,7 @@ export class JobsPanel extends Panel {
     this.setMsg(txt);
   }
 
-  _jobsToArray (jobs) {
+  static _jobsToArray (jobs) {
     const keys = Object.keys(jobs);
     const newArray = [];
 
@@ -218,7 +218,7 @@ export class JobsPanel extends Panel {
     return newArray;
   }
 
-  _sortJobs (jobs) {
+  static _sortJobs (jobs) {
     jobs.sort((aa, bb) => {
       // The id is already a string value based on the date,
       // let's use it to sort the jobs

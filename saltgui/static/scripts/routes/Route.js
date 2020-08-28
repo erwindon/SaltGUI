@@ -49,7 +49,9 @@ export class Route {
     return this.menuItemElement2;
   }
 
+  /* eslint-disable class-methods-use-this */
   onShow () {
     // VOID
   }
+  /* eslint-enable class-methods-use-this */
 }

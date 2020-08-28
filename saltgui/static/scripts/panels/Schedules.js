@@ -85,7 +85,7 @@ export class SchedulesPanel extends Panel {
       // preliminary dropdown menu
       const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
       const menu = new DropDownMenu(minionTr);
-      this._addMenuItemShowSchedules(menu, minionId);
+      SchedulesPanel._addMenuItemShowSchedules(menu, minionId);
 
       minionTr.addEventListener("click", () => {
         window.location.assign(config.NAV_URL + "/schedules-minion?minionid=" + encodeURIComponent(minionId));
@@ -144,14 +144,14 @@ export class SchedulesPanel extends Panel {
 
     // final dropdownmenu
     const menu = new DropDownMenu(minionTr);
-    this._addMenuItemShowSchedules(menu, pMinionId);
+    SchedulesPanel._addMenuItemShowSchedules(menu, pMinionId);
 
     minionTr.addEventListener("click", () => {
       window.location.assign(config.NAV_URL + "/schedules-minion?minionid=" + encodeURIComponent(pMinionId));
     });
   }
 
-  _addMenuItemShowSchedules (pMenu, pMinionId) {
+  static _addMenuItemShowSchedules (pMenu, pMinionId) {
     pMenu.addMenuItem("Show&nbsp;schedules", () => {
       window.location.assign(config.NAV_URL + "/schedules-minion?minionid=" + encodeURIComponent(pMinionId));
     });

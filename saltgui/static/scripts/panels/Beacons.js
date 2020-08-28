@@ -89,7 +89,7 @@ export class BeaconsPanel extends Panel {
       // preliminary dropdown menu
       const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
       const menu = new DropDownMenu(minionTr);
-      this._addMenuItemShowBeacons(menu, minionId);
+      BeaconsPanel._addMenuItemShowBeacons(menu, minionId);
 
       minionTr.addEventListener("click", () => {
         window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(minionId));
@@ -136,14 +136,14 @@ export class BeaconsPanel extends Panel {
     }
 
     const menu = new DropDownMenu(minionTr);
-    this._addMenuItemShowBeacons(menu, pMinionId);
+    BeaconsPanel._addMenuItemShowBeacons(menu, pMinionId);
 
     minionTr.addEventListener("click", () => {
       window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(pMinionId));
     });
   }
 
-  _addMenuItemShowBeacons (pMenu, pMinionId) {
+  static _addMenuItemShowBeacons (pMenu, pMinionId) {
     pMenu.addMenuItem("Show&nbsp;beacons", () => {
       window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(pMinionId));
     });

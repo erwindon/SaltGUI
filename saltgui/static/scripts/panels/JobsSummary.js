@@ -61,7 +61,7 @@ export class JobsSummaryPanel extends JobsPanel {
     tr.appendChild(td);
 
     const menu = new DropDownMenu(tr);
-    this._addPageMenuItemShowDetails(menu, job);
+    JobsSummaryPanel._addPageMenuItemShowDetails(menu, job);
     this._addPageMenuItemUpdateStatus(menu, statusSpan);
 
     const tbody = this.table.tBodies[0];
@@ -72,7 +72,7 @@ export class JobsSummaryPanel extends JobsPanel {
     });
   }
 
-  _addPageMenuItemShowDetails (pMenu, job) {
+  static _addPageMenuItemShowDetails (pMenu, job) {
     pMenu.addMenuItem("Show&nbsp;details", () => {
       window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
     });

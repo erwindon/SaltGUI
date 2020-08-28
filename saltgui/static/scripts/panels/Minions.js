@@ -112,7 +112,7 @@ export class MinionsPanel extends Panel {
     });
   }
 
-  _isCveAffected (version) {
+  static _isCveAffected (version) {
     // see https://community.saltstack.com/blog/critical-vulnerabilities-update-cve-2020-11651-and-cve-2020-11652/
     // and https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-11651
     // and https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-11652
@@ -155,7 +155,7 @@ export class MinionsPanel extends Panel {
 
     const versionList = pRunnerManageVersionsData.return[0];
     const masterVersion = versionList["Master"];
-    const isMasterAffected = this._isCveAffected(masterVersion);
+    const isMasterAffected = MinionsPanel._isCveAffected(masterVersion);
 
     for (const outcome in versionList) {
 

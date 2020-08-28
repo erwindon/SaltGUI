@@ -3,6 +3,7 @@
 import {DropDownMenu} from "../DropDown.js";
 import {JobsPanel} from "./Jobs.js";
 import {Output} from "../output/Output.js";
+import {Panel} from "./Panel.js";
 import {TargetType} from "../TargetType.js";
 import {Utils} from "../Utils.js";
 
@@ -208,7 +209,7 @@ export class JobsDetailsPanel extends JobsPanel {
     }
     tr.appendChild(Utils.createTd("target", targetText));
 
-    const argumentsText = this.decodeArgumentsText(job.Arguments);
+    const argumentsText = Panel.decodeArgumentsText(job.Arguments);
     let functionText = job.Function + argumentsText;
     if (functionText.length > maxTextLength) {
       // prevent column becoming too wide
@@ -220,7 +221,7 @@ export class JobsDetailsPanel extends JobsPanel {
     tr.appendChild(Utils.createTd("starttime", startTimeText));
 
     const menu = new DropDownMenu(tr);
-    this._addJobsMenuItemShowDetails(menu, job);
+    JobsDetailsPanel._addJobsMenuItemShowDetails(menu, job);
     this._addMenuItemJobsRerunJob(menu, job, argumentsText);
 
     const statusTd = Utils.createTd("", "");
@@ -266,7 +267,7 @@ export class JobsDetailsPanel extends JobsPanel {
     });
   }
 
-  _addJobsMenuItemShowDetails (pMenu, job) {
+  static _addJobsMenuItemShowDetails (pMenu, job) {
     pMenu.addMenuItem("Show&nbsp;details", () => {
       window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
     });

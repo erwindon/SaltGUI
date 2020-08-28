@@ -37,7 +37,7 @@ export class API {
       });
   }
 
-  _cleanStorage () {
+  static _cleanStorage () {
     // clear local storage except key 'eauth'
     const eauth = Utils.getStorageItem("local", "eauth");
     Utils.clearStorage("local");
@@ -53,10 +53,10 @@ export class API {
     return this.apiRequest("POST", "/logout", {}).
       then(() => {
         // we could logout, assume the session is terminated
-        this._cleanStorage();
+        API._cleanStorage();
       }, () => {
         // we could not logout, assume the session is broken
-        this._cleanStorage();
+        API._cleanStorage();
       });
   }
 
@@ -239,7 +239,7 @@ export class API {
         // so let's do it ourselves
         if (pResponse.status === 401 && pRoute === "/logout") {
           // so we can't logout?
-          this._cleanStorage();
+          API._cleanStorage();
           return null;
         }
         if (pResponse.status === 401 && pRoute !== "/login") {
@@ -274,7 +274,7 @@ export class API {
       });
   }
 
-  getEvents (pRouter) {
+  static getEvents (pRouter) {
     const tokenOnSetup = Utils.getStorageItem("session", "token");
     if (!tokenOnSetup) {
       return;
