@@ -6,9 +6,6 @@ export class DropDownMenu {
   // The visual clue for the menu is added to the given element
   constructor (pParentElement) {
 
-    this._callback = this._callback.bind(this);
-    this.verifyAll = this.verifyAll.bind(this);
-
     // allow reduced code on the caller side
     if (pParentElement.tagName === "TR") {
       const td = Utils.createTd("", "");
@@ -37,7 +34,9 @@ export class DropDownMenu {
     this.menuDropdown.appendChild(this.menuButton);
     this.menuDropdownContent = Utils.createDiv("menu-dropdown-content", "");
     this.menuDropdown.appendChild(this.menuDropdownContent);
-    this.menuDropdown.addEventListener("mouseenter", this.verifyAll);
+    this.menuDropdown.addEventListener("mouseenter", () => {
+      this.verifyAll();
+    });
     pParentElement.appendChild(this.menuDropdown);
   }
 

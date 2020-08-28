@@ -11,14 +11,13 @@ export class Documentation {
 
   constructor (pCommandBox) {
     this.commandbox = pCommandBox;
-    this._manualRunMenuSysDocRun = this._manualRunMenuSysDocRun.bind(this);
 
-    pCommandBox.cmdmenu.addMenuItem(
-      this._manualRunMenuSysDocPrepare,
-      this._manualRunMenuSysDocRun);
+    pCommandBox.cmdmenu.addMenuItem(Documentation._manualRunMenuSysDocPrepare, () => {
+      this._manualRunMenuSysDocRun();
+    });
   }
 
-  _manualRunMenuSysDocPrepare (pMenuItem) {
+  static _manualRunMenuSysDocPrepare (pMenuItem) {
     const targetField = document.getElementById("target");
     let target = targetField.value;
     target = target ? "target" : "all minions";

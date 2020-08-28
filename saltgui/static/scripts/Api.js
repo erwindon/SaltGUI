@@ -11,12 +11,6 @@ export class HTTPError extends Error {
 }
 
 export class API {
-  constructor () {
-    this.apiRequest = this.apiRequest.bind(this);
-    this.login = this.login.bind(this);
-    this.logout = this.logout.bind(this);
-  }
-
   login (pUserName, pPassWord, pEauth = "pam") {
     const params = {
       "eauth": pEauth,

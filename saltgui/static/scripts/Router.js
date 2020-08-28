@@ -23,9 +23,6 @@ import {Utils} from "./Utils.js";
 export class Router {
 
   constructor () {
-    this._logoutTimer = this._logoutTimer.bind(this);
-    this._updateSessionTimeoutWarning = this._updateSessionTimeoutWarning.bind(this);
-
     this.api = new API();
     this.commandbox = new CommandBox(this.api);
     this.currentRoute = undefined;

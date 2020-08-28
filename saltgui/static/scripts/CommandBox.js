@@ -12,11 +12,6 @@ export class CommandBox {
 
   constructor (pApi) {
     this.api = pApi;
-    this.getRunParams = this.getRunParams.bind(this);
-    this._onRun = this._onRun.bind(this);
-    this.onRunReturn = this.onRunReturn.bind(this);
-    this.showManualRun = this.showManualRun.bind(this);
-    this._hideManualRun = this._hideManualRun.bind(this);
 
     const cmdbox = document.getElementById("cmd-box");
     this.cmdmenu = new DropDownMenu(cmdbox);
@@ -88,14 +83,18 @@ export class CommandBox {
 
   _registerCommandBoxEventListeners () {
     document.getElementById("popup-run-command").
-      addEventListener("click", this._hideManualRun);
+      addEventListener("click", CommandBox._hideManualRun);
     document.getElementById("button-manual-run").
-      addEventListener("click", this.showManualRun);
+      addEventListener("click", (pClickEvent) => {
+        this.showManualRun(pClickEvent);
+      });
     document.getElementById("cmd-close-button").
-      addEventListener("click", this._hideManualRun);
+      addEventListener("click", CommandBox._hideManualRun);
 
     document.querySelector(".run-command input[type='submit']").
-      addEventListener("click", this._onRun);
+      addEventListener("click", () => {
+        this._onRun();
+      });
 
     document.getElementById("target").
       addEventListener("input", () => {
@@ -105,7 +104,9 @@ export class CommandBox {
       });
 
     document.getElementById("command").
-      addEventListener("input", this.cmdmenu.verifyAll);
+      addEventListener("input", () => {
+        this.cmdmenu.verifyAll();
+      });
   }
 
   _applyTemplate (template) {
@@ -203,14 +204,14 @@ export class CommandBox {
     TargetType.autoSelectTargetType(targetField.value);
     targetField.onkeyup = (keyUpEvent) => {
       if (keyUpEvent.key === "Escape") {
-        this._hideManualRun(keyUpEvent);
+        CommandBox._hideManualRun(keyUpEvent);
       }
     };
 
     const commandField = document.getElementById("command");
     commandField.onkeyup = (keyUpEvent) => {
       if (keyUpEvent.key === "Escape") {
-        this._hideManualRun(keyUpEvent);
+        CommandBox._hideManualRun(keyUpEvent);
       }
     };
 
@@ -249,7 +250,7 @@ export class CommandBox {
   // pEvent is:
   // a MouseEvent(type="click") or
   // a KeyEvent(type="keyup")
-  _hideManualRun (pEvent) {
+  static _hideManualRun (pEvent) {
     // Don't close if they click inside the window
     if (pEvent.type === "click" && pEvent.target.className !== "popup" && pEvent.target.className !== "nearly-visible-button") {
       return;
