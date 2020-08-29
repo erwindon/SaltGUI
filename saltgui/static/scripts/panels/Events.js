@@ -19,13 +19,10 @@ export class EventsPanel extends Panel {
     this.setTableSortable("Timestamp", "desc");
     this.addMsg();
 
-    // the elements are not added to the DOM yet
-    const eventsPlayButton = this.div.querySelector("#events-play-button");
-    eventsPlayButton.onclick = () => {
+    this.playButton.onclick = () => {
       this._clickEventsPlayButton(true);
     };
-    const eventsPauseButton = this.div.querySelector("#events-pause-button");
-    eventsPauseButton.onclick = () => {
+    this.pauseButton.onclick = () => {
       this._clickEventsPlayButton(false);
     };
   }
@@ -35,10 +32,8 @@ export class EventsPanel extends Panel {
   }
 
   _clickEventsPlayButton (isPlay) {
-    const eventsPlayButton = document.getElementById("events-play-button");
-    eventsPlayButton.style.display = isPlay ? "none" : "";
-    const eventsPauseButton = document.getElementById("events-pause-button");
-    eventsPauseButton.style.display = isPlay ? "" : "none";
+    this.playButton.style.display = isPlay ? "none" : "";
+    this.pauseButton.style.display = isPlay ? "" : "none";
     Utils.setStorageItem("session", "events-button", isPlay ? "play" : "pause");
     this._updateFooter();
   }

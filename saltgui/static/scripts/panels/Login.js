@@ -19,23 +19,25 @@ export class LoginPanel extends Panel {
     noticeWrapper.id = "notice-wrapper";
     noticeWrapper.classList.add("notice-wrapper");
     form.append(noticeWrapper);
+    this.noticeWrapperDiv = noticeWrapper;
 
     const username = document.createElement("input");
-    username.id = "username";
     username.type = "text";
+    username.id = "username";
     username.placeholder = "Username";
     username.autofocus = "";
     form.append(username);
+    this.usernameField = username;
 
     const password = document.createElement("input");
-    password.id = "password";
     password.type = "password";
+    password.id = "password";
     password.placeholder = "Password";
     form.append(password);
+    this.passwordField = password;
 
     // see https://docs.saltstack.com/en/latest/ref/auth/all/index.html
     const select = document.createElement("select");
-    select.id = "eauth";
 
     const option1 = document.createElement("option");
     option1.id = "eauth-default";
@@ -87,6 +89,7 @@ export class LoginPanel extends Panel {
     // and only while the code is on a branch
 
     form.append(select);
+    this.eauthField = select;
 
     const submit = document.createElement("input");
     submit.id = "login-button";
@@ -121,22 +124,20 @@ export class LoginPanel extends Panel {
     });
   }
 
-  static _showNoticeText (pBackgroundColour, pText, pInfoClass) {
+  _showNoticeText (pBackgroundColour, pText, pInfoClass) {
     // create a new child every time to restart the animation
     const noticeDiv = Utils.createDiv("", pText);
     noticeDiv.id = "notice";
     noticeDiv.classList.add(pInfoClass);
     noticeDiv.style.backgroundColor = pBackgroundColour;
-    const noticeWrapperDiv = document.getElementById("notice-wrapper");
-    while (noticeWrapperDiv.hasChildNodes()) {
-      noticeWrapperDiv.removeChild(noticeWrapperDiv.firstChild);
+    while (this.noticeWrapperDiv.hasChildNodes()) {
+      this.noticeWrapperDiv.removeChild(this.noticeWrapperDiv.firstChild);
     }
-    noticeWrapperDiv.appendChild(noticeDiv);
+    this.noticeWrapperDiv.appendChild(noticeDiv);
   }
 
   onShow () {
-    const eauthSelector = this.div.querySelector("#eauth");
-    eauthSelector.value = Utils.getStorageItem("local", "eauth", "pam");
+    this.eauthField.value = Utils.getStorageItem("local", "eauth", "pam");
 
     const reason = decodeURIComponent(Utils.getQueryParam("reason"));
     switch (reason) {
@@ -146,18 +147,18 @@ export class LoginPanel extends Panel {
       break;
     case "no-session":
       // gray because we cannot prove that the user was/wasnt logged in
-      LoginPanel._showNoticeText("gray", "Not logged in", "notice_not_logged_in");
+      this._showNoticeText("gray", "Not logged in", "notice_not_logged_in");
       break;
     case "expired-session":
-      LoginPanel._showNoticeText("#F44336", "Session expired", "notice_session_expired");
+      this._showNoticeText("#F44336", "Session expired", "notice_session_expired");
       break;
     case "logout":
       // gray because this is the result of a user action
-      LoginPanel._showNoticeText("gray", "Logout", "notice_logout");
+      this._showNoticeText("gray", "Logout", "notice_logout");
       break;
     default:
       // should not occur
-      LoginPanel._showNoticeText("#F44336", reason, "notice_other:" + reason);
+      this._showNoticeText("#F44336", reason, "notice_other:" + reason);
     }
   }
 
@@ -168,12 +169,9 @@ export class LoginPanel extends Panel {
       return;
     }
 
-    const userNameField = document.getElementById("username");
-    const userName = userNameField.value;
-    const passWordField = document.getElementById("password");
-    const passWord = passWordField.value;
-    const eauthField = document.getElementById("eauth");
-    const eauth = eauthField.value;
+    const username = this.usernameField.value;
+    const password = this.passwordField.value;
+    const eauth = this.eauthField.value;
 
     if (eauth === "default") {
       this._onLoginFailure("Invalid login-type");
@@ -181,7 +179,7 @@ export class LoginPanel extends Panel {
     }
 
     this._toggleForm(false);
-    this.api.login(userName, passWord, eauth).then(() => {
+    this.api.login(username, password, eauth).then(() => {
       this._onLoginSuccess();
     }, () => {
       this._onLoginFailure();
@@ -191,14 +189,11 @@ export class LoginPanel extends Panel {
   _onLoginSuccess () {
     this._toggleForm(true);
 
-    const userNameField = document.getElementById("username");
-    userNameField.disabled = true;
-    const passWordField = document.getElementById("password");
-    passWordField.disabled = true;
-    const eauthField = document.getElementById("eauth");
-    eauthField.disabled = true;
+    this.usernameField.disabled = true;
+    this.passwordField.disabled = true;
+    this.eauthField.disabled = true;
 
-    LoginPanel._showNoticeText("#4CAF50", "Please wait...", "notice_please_wait");
+    this._showNoticeText("#4CAF50", "Please wait...", "notice_please_wait");
 
     // We need these functions to populate the dropdown boxes
     const wheelConfigValuesPromise = this.api.getWheelConfigValues();
@@ -275,17 +270,17 @@ export class LoginPanel extends Panel {
 
     if (typeof error === "string") {
       // something detected before trying to login
-      LoginPanel._showNoticeText("#F44336", error, "notice_login_string_error");
+      this._showNoticeText("#F44336", error, "notice_login_string_error");
     } else if (error && error.status === 503) {
       // Service Unavailable
       // e.g. salt-api running but salt-master not running
-      LoginPanel._showNoticeText("#F44336", error.message, "notice_login_service_unavailable");
+      this._showNoticeText("#F44336", error.message, "notice_login_service_unavailable");
     } else if (error && error.status === -1) {
       // No permissions: login valid, but no api functions executable
       // e.g. PAM says OK and /etc/salt/master says NO
-      LoginPanel._showNoticeText("#F44336", error.message, "notice_login_other_error");
+      this._showNoticeText("#F44336", error.message, "notice_login_other_error");
     } else {
-      LoginPanel._showNoticeText("#F44336", "Authentication failed", "notice_auth_failed");
+      this._showNoticeText("#F44336", "Authentication failed", "notice_auth_failed");
     }
   }
 

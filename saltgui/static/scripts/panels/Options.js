@@ -114,12 +114,12 @@ export class OptionsPanel extends Panel {
     tokenTd.innerText = tokenValue;
 
     const startValue = loginResponse.start;
-    const startTd = document.getElementById("option-start-value");
+    const startTd = this.div.querySelector("#option-start-value");
     const startStr = new Date(startValue * 1000);
     startTd.innerText = startValue + "\n" + startStr;
 
     const expireValue = loginResponse.expire;
-    const expireTd = document.getElementById("option-expire-value");
+    const expireTd = this.div.querySelector("#option-expire-value");
     const expireStr = new Date(expireValue * 1000);
     const date = new Date(null);
     if (loginResponse.expire && loginResponse.start) {
@@ -140,114 +140,114 @@ export class OptionsPanel extends Panel {
     expireTd.innerText = expireValue + "\n" + expireStr + durationStr + expiresInStr;
 
     const eauthValue = loginResponse.eauth;
-    const eauthTd = document.getElementById("option-eauth-value");
+    const eauthTd = this.div.querySelector("#option-eauth-value");
     eauthTd.innerText = eauthValue;
 
     const userValue = loginResponse.user;
-    const userTd = document.getElementById("option-user-value");
+    const userTd = this.div.querySelector("#option-user-value");
     userTd.innerText = userValue;
 
     const permsValue = OutputYaml.formatYAML(loginResponse.perms);
-    const permsTd = document.getElementById("option-perms-value");
+    const permsTd = this.div.querySelector("#option-perms-value");
     permsTd.innerText = permsValue;
 
     const templatesValue = Utils.getStorageItem("session", "templates");
-    const templatesTd = document.getElementById("option-templates-value");
+    const templatesTd = this.div.querySelector("#option-templates-value");
     templatesTd.innerText = OptionsPanel._makeTemplatesValue(templatesValue);
 
     const publicPillarsValue = Utils.getStorageItem("session", "public_pillars");
-    const publicPillarsTd = document.getElementById("option-public-pillars-value");
+    const publicPillarsTd = this.div.querySelector("#option-public-pillars-value");
     publicPillarsTd.innerText = OptionsPanel._makePublicPillarsValue(publicPillarsValue);
 
     const previewGrainsValue = Utils.getStorageItem("session", "preview_grains");
-    const previewGrainsTd = document.getElementById("option-preview-grains-value");
+    const previewGrainsTd = this.div.querySelector("#option-preview-grains-value");
     previewGrainsTd.innerText = OptionsPanel._makePreviewGrainsValue(previewGrainsValue);
 
     const hideJobsValue = Utils.getStorageItem("session", "hide_jobs");
-    const hideJobsTd = document.getElementById("option-hide-jobs-value");
+    const hideJobsTd = this.div.querySelector("#option-hide-jobs-value");
     hideJobsTd.innerText = OptionsPanel._makeHideJobsValue(hideJobsValue);
 
     const showJobsValue = Utils.getStorageItem("session", "show_jobs");
-    const showJobsTd = document.getElementById("option-show-jobs-value");
+    const showJobsTd = this.div.querySelector("#option-show-jobs-value");
     showJobsTd.innerText = OptionsPanel._makeShowJobsValue(showJobsValue);
 
     const nodegroupsValue = Utils.getStorageItem("session", "nodegroups");
-    const nodegroupsTd = document.getElementById("option-nodegroups-value");
+    const nodegroupsTd = this.div.querySelector("#option-nodegroups-value");
     nodegroupsTd.innerText = OptionsPanel._makeNodegroupsValue(nodegroupsValue);
 
     const outputFormatsValue = Utils.getStorageItem("session", "output_formats");
-    const outputFormatsTd = document.getElementById("option-output-formats-value");
+    const outputFormatsTd = this.div.querySelector("#option-output-formats-value");
     outputFormatsTd.innerText = OptionsPanel._makeOutputFormatsValue(outputFormatsValue);
 
     // ordering:
     // defaults (no-doc and no-highstate) before actual choices
     // highstate before saltguihighstate because of string inclusion
     /* eslint-disable brace-style,max-statements-per-line */
-    const of1 = document.getElementById("option-output-formats-value-doc-none");
-    of1.addEventListener("change", (evt) => { OptionsPanel._newOutputFormats(evt); });
+    const of1 = this.div.querySelector("#option-output-formats-value-doc-none");
+    of1.addEventListener("change", (evt) => { this._newOutputFormats(evt); });
     of1.checked = true;
-    const of0 = document.getElementById("option-output-formats-value-doc-doc");
-    of0.addEventListener("change", (evt) => { OptionsPanel._newOutputFormats(evt); });
+    const of0 = this.div.querySelector("#option-output-formats-value-doc-doc");
+    of0.addEventListener("change", (evt) => { this._newOutputFormats(evt); });
     of0.checked = outputFormatsValue && outputFormatsValue.includes("doc");
-    const of4 = document.getElementById("option-output-formats-value-highstate-none");
-    of4.addEventListener("change", (evt) => { OptionsPanel._newOutputFormats(evt); });
+    const of4 = this.div.querySelector("#option-output-formats-value-highstate-none");
+    of4.addEventListener("change", (evt) => { this._newOutputFormats(evt); });
     of4.checked = true;
-    const of3 = document.getElementById("option-output-formats-value-highstate-normal");
-    of3.addEventListener("change", (evt) => { OptionsPanel._newOutputFormats(evt); });
+    const of3 = this.div.querySelector("#option-output-formats-value-highstate-normal");
+    of3.addEventListener("change", (evt) => { this._newOutputFormats(evt); });
     of3.checked = outputFormatsValue && outputFormatsValue.includes("highstate");
-    const of2 = document.getElementById("option-output-formats-value-highstate-saltgui");
-    of2.addEventListener("change", (evt) => { OptionsPanel._newOutputFormats(evt); });
+    const of2 = this.div.querySelector("#option-output-formats-value-highstate-saltgui");
+    of2.addEventListener("change", (evt) => { this._newOutputFormats(evt); });
     of2.checked = outputFormatsValue && outputFormatsValue.includes("saltguihighstate");
-    const of5 = document.getElementById("option-output-formats-value-output-json");
-    of5.addEventListener("change", (evt) => { OptionsPanel._newOutputFormats(evt); });
+    const of5 = this.div.querySelector("#option-output-formats-value-output-json");
+    of5.addEventListener("change", (evt) => { this._newOutputFormats(evt); });
     of5.checked = outputFormatsValue && outputFormatsValue.includes("json");
-    const of6 = document.getElementById("option-output-formats-value-output-nested");
-    of6.addEventListener("change", (evt) => { OptionsPanel._newOutputFormats(evt); });
+    const of6 = this.div.querySelector("#option-output-formats-value-output-nested");
+    of6.addEventListener("change", (evt) => { this._newOutputFormats(evt); });
     of6.checked = outputFormatsValue && outputFormatsValue.includes("nested");
-    const of7 = document.getElementById("option-output-formats-value-output-yaml");
-    of7.addEventListener("change", (evt) => { OptionsPanel._newOutputFormats(evt); });
+    const of7 = this.div.querySelector("#option-output-formats-value-output-yaml");
+    of7.addEventListener("change", (evt) => { this._newOutputFormats(evt); });
     of7.checked = outputFormatsValue && outputFormatsValue.includes("yaml");
     /* eslint-enable brace-style,max-statements-per-line */
 
     /* eslint-disable brace-style,curly,max-statements-per-line */
     const datetimeFractionDigitsValue = Utils.getStorageItem("session", "datetime_fraction_digits");
-    const datetimeFractionDigitsTd = document.getElementById("option-datetime-fraction-digits-value");
+    const datetimeFractionDigitsTd = this.div.querySelector("#option-datetime-fraction-digits-value");
     datetimeFractionDigitsTd.innerText = OptionsPanel._makeDatetimeFractionDigitsValue(datetimeFractionDigitsValue);
-    const dfd0 = document.getElementById("option-datetime-fraction-digits-value-digits-0");
-    dfd0.addEventListener("change", (evt) => { OptionsPanel._newDatetimeFractionDigits(evt); });
+    const dfd0 = this.div.querySelector("#option-datetime-fraction-digits-value-digits-0");
+    dfd0.addEventListener("change", (evt) => { this._newDatetimeFractionDigits(evt); });
     if (datetimeFractionDigitsValue === "0") dfd0.checked = true;
-    const dfd1 = document.getElementById("option-datetime-fraction-digits-value-digits-1");
-    dfd1.addEventListener("change", (evt) => { OptionsPanel._newDatetimeFractionDigits(evt); });
+    const dfd1 = this.div.querySelector("#option-datetime-fraction-digits-value-digits-1");
+    dfd1.addEventListener("change", (evt) => { this._newDatetimeFractionDigits(evt); });
     if (datetimeFractionDigitsValue === "1") dfd1.checked = true;
-    const dfd2 = document.getElementById("option-datetime-fraction-digits-value-digits-2");
-    dfd2.addEventListener("change", (evt) => { OptionsPanel._newDatetimeFractionDigits(evt); });
+    const dfd2 = this.div.querySelector("#option-datetime-fraction-digits-value-digits-2");
+    dfd2.addEventListener("change", (evt) => { this._newDatetimeFractionDigits(evt); });
     if (datetimeFractionDigitsValue === "2") dfd2.checked = true;
-    const dfd3 = document.getElementById("option-datetime-fraction-digits-value-digits-3");
-    dfd3.addEventListener("change", (evt) => { OptionsPanel._newDatetimeFractionDigits(evt); });
+    const dfd3 = this.div.querySelector("#option-datetime-fraction-digits-value-digits-3");
+    dfd3.addEventListener("change", (evt) => { this._newDatetimeFractionDigits(evt); });
     if (datetimeFractionDigitsValue === "3") dfd3.checked = true;
-    const dfd4 = document.getElementById("option-datetime-fraction-digits-value-digits-4");
-    dfd4.addEventListener("change", (evt) => { OptionsPanel._newDatetimeFractionDigits(evt); });
+    const dfd4 = this.div.querySelector("#option-datetime-fraction-digits-value-digits-4");
+    dfd4.addEventListener("change", (evt) => { this._newDatetimeFractionDigits(evt); });
     if (datetimeFractionDigitsValue === "4") dfd4.checked = true;
-    const dfd5 = document.getElementById("option-datetime-fraction-digits-value-digits-5");
-    dfd5.addEventListener("change", (evt) => { OptionsPanel._newDatetimeFractionDigits(evt); });
+    const dfd5 = this.div.querySelector("#option-datetime-fraction-digits-value-digits-5");
+    dfd5.addEventListener("change", (evt) => { this._newDatetimeFractionDigits(evt); });
     if (datetimeFractionDigitsValue === "5") dfd5.checked = true;
-    const dfd6 = document.getElementById("option-datetime-fraction-digits-value-digits-6");
-    dfd6.addEventListener("change", (evt) => { OptionsPanel._newDatetimeFractionDigits(evt); });
+    const dfd6 = this.div.querySelector("#option-datetime-fraction-digits-value-digits-6");
+    dfd6.addEventListener("change", (evt) => { this._newDatetimeFractionDigits(evt); });
     if (datetimeFractionDigitsValue === "6") dfd6.checked = true;
     /* eslint-enable brace-style,curly,max-statements-per-line */
 
     /* eslint-disable brace-style,curly,max-statements-per-line */
     const tooltipModeValue = Utils.getStorageItem("session", "tooltip_mode");
-    const tooltipModeTd = document.getElementById("option-tooltip-mode-value");
+    const tooltipModeTd = this.div.querySelector("#option-tooltip-mode-value");
     tooltipModeTd.innerText = OptionsPanel._makeTooltipModeValue(tooltipModeValue);
-    const tm0 = document.getElementById("option-tooltip-mode-value-mode-full");
-    tm0.addEventListener("change", (evt) => { OptionsPanel._newTooltipMode(evt); });
+    const tm0 = this.div.querySelector("#option-tooltip-mode-value-mode-full");
+    tm0.addEventListener("change", (evt) => { this._newTooltipMode(evt); });
     if (tooltipModeValue === "full") tm0.checked = true;
-    const tm1 = document.getElementById("option-tooltip-mode-value-mode-simple");
-    tm1.addEventListener("change", (evt) => { OptionsPanel._newTooltipMode(evt); });
+    const tm1 = this.div.querySelector("#option-tooltip-mode-value-mode-simple");
+    tm1.addEventListener("change", (evt) => { this._newTooltipMode(evt); });
     if (tooltipModeValue === "simple") tm1.checked = true;
-    const tm2 = document.getElementById("option-tooltip-mode-value-mode-none");
-    tm2.addEventListener("change", (evt) => { OptionsPanel._newTooltipMode(evt); });
+    const tm2 = this.div.querySelector("#option-tooltip-mode-value-mode-none");
+    tm2.addEventListener("change", (evt) => { this._newTooltipMode(evt); });
     if (tooltipModeValue === "none") tm2.checked = true;
     /* eslint-enable brace-style,curly,max-statements-per-line */
   }
@@ -290,24 +290,24 @@ export class OptionsPanel extends Panel {
     return OptionsPanel._parseAndFormat(value);
   }
 
-  static _newOutputFormats () {
+  _newOutputFormats () {
     let value = "";
     /* eslint-disable curly */
-    const of0 = document.getElementById("option-output-formats-value-doc-doc");
+    const of0 = this.div.querySelector("#option-output-formats-value-doc-doc");
     if (of0.checked) value += ",doc";
-    const of2 = document.getElementById("option-output-formats-value-highstate-saltgui");
+    const of2 = this.div.querySelector("#option-output-formats-value-highstate-saltgui");
     if (of2.checked) value += ",saltguihighstate";
-    const of3 = document.getElementById("option-output-formats-value-highstate-normal");
+    const of3 = this.div.querySelector("#option-output-formats-value-highstate-normal");
     if (of3.checked) value += ",highstate";
-    const of5 = document.getElementById("option-output-formats-value-output-json");
+    const of5 = this.div.querySelector("#option-output-formats-value-output-json");
     if (of5.checked) value += ",json";
-    const of6 = document.getElementById("option-output-formats-value-output-nested");
+    const of6 = this.div.querySelector("#option-output-formats-value-output-nested");
     if (of6.checked) value += ",nested";
-    const of7 = document.getElementById("option-output-formats-value-output-yaml");
+    const of7 = this.div.querySelector("#option-output-formats-value-output-yaml");
     if (of7.checked) value += ",yaml";
     /* eslint-enable curly */
     value = JSON.stringify(value.substring(1));
-    const outputFormatsTd = document.getElementById("option-output-formats-value");
+    const outputFormatsTd = this.div.querySelector("#option-output-formats-value");
     outputFormatsTd.innerText = OptionsPanel._makeOutputFormatsValue(value);
     Utils.setStorageItem("session", "output_formats", value);
   }
@@ -316,9 +316,9 @@ export class OptionsPanel extends Panel {
     return OptionsPanel._parseAndFormat(value);
   }
 
-  static _newDatetimeFractionDigits (evt) {
+  _newDatetimeFractionDigits (evt) {
     Utils.setStorageItem("session", "datetime_fraction_digits", parseInt(evt.target.value, 10));
-    const datetimeFractionDigitsTd = document.getElementById("option-datetime-fraction-digits-value");
+    const datetimeFractionDigitsTd = this.div.querySelector("#option-datetime-fraction-digits-value");
     datetimeFractionDigitsTd.innerText = evt.target.value;
   }
 
@@ -335,9 +335,9 @@ export class OptionsPanel extends Panel {
     return value;
   }
 
-  static _newTooltipMode (evt) {
+  _newTooltipMode (evt) {
     Utils.setStorageItem("session", "tooltip_mode", evt.target.value);
-    const tooltipModeTd = document.getElementById("option-tooltip-mode-value");
+    const tooltipModeTd = this.div.querySelector("#option-tooltip-mode-value");
     tooltipModeTd.innerText = evt.target.value;
   }
 }

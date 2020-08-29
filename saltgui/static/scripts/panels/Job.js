@@ -18,9 +18,9 @@ export class JobPanel extends Panel {
     this.addSearchButton();
 
     const time = document.createElement("h2");
-    time.id = "job-time";
     time.classList.add("time");
     this.div.append(time);
+    this.timeField = time;
 
     const output = document.createElement("pre");
     output.id = "job-table";
@@ -125,8 +125,7 @@ export class JobPanel extends Panel {
     if (info.Error) {
       this.updateTitle("ERROR");
       this.output.innerText = info.Error + " (" + pJobId + ")";
-      const timeField = document.getElementById("job-time");
-      timeField.innerText = Output.dateTimeStr(info.StartTime);
+      this.timeField.innerText = Output.dateTimeStr(info.StartTime);
       return;
     }
 
@@ -160,8 +159,7 @@ export class JobPanel extends Panel {
       TargetType.makeTargetText(info);
     this.updateTitle(functionText);
 
-    const timeField = document.getElementById("job-time");
-    timeField.innerText = Output.dateTimeStr(info.StartTime);
+    this.timeField.innerText = Output.dateTimeStr(info.StartTime);
 
     let minions = ["WHEEL"];
     if (info.Minions) {

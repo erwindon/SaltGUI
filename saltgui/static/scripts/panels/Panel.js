@@ -67,21 +67,21 @@ export class Panel {
   }
 
   addPlayPauseButton () {
-    const span1 = document.createElement("span");
-    span1.id = this.key + "-play-button";
+    const playButton = document.createElement("span");
     // 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play)
     // FE0E = VARIATION SELECTOR-15 (render as text)
-    span1.style = "cursor: pointer; font-size: x-large";
-    span1.innerHTML = "&#x23F5;&#xFE0E;";
-    this.div.appendChild(span1);
+    playButton.style = "cursor: pointer; font-size: x-large";
+    playButton.innerHTML = "&#x23F5;&#xFE0E;";
+    this.div.appendChild(playButton);
+    this.playButton = playButton;
 
-    const span2 = document.createElement("span");
-    span2.id = this.key + "-pause-button";
+    const pauseButton = document.createElement("span");
     // 23F8 = DOUBLE VERTICAL BAR (pause)
     // FE0E = VARIATION SELECTOR-15 (render as text)
-    span2.style = "display: none; cursor: pointer; font-size: x-large";
-    span2.innerHTML = "&#x23F8;&#xFE0E;";
-    this.div.appendChild(span2);
+    pauseButton.style = "display: none; cursor: pointer; font-size: x-large";
+    pauseButton.innerHTML = "&#x23F8;&#xFE0E;";
+    this.div.appendChild(pauseButton);
+    this.pauseButton = pauseButton;
   }
 
   addHelpButton (pHelpText) {

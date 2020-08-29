@@ -283,9 +283,6 @@ export class Router {
   _showRoute (pRoute) {
     pRoute.pageElement.style.display = "";
 
-    const minionMenuItem = document.getElementById("button-minions1");
-    const jobsMenuItem = document.getElementById("button-jobs1");
-
     const activeMenuItems = Array.from(document.querySelectorAll(".menu-item-active"));
     activeMenuItems.forEach((menuItem) => {
       menuItem.classList.remove("menu-item-active");
@@ -299,10 +296,12 @@ export class Router {
          elem1.id === "button-schedules1" ||
          elem1.id === "button-grains1" ||
          elem1.id === "button-beacons1") {
+        const minionMenuItem = document.getElementById("button-minions1");
         minionMenuItem.classList.add("menu-item-active");
       }
       if (elem1.id === "button-jobs1" ||
          elem1.id === "button-templates1") {
+        const jobsMenuItem = document.getElementById("button-jobs1");
         jobsMenuItem.classList.add("menu-item-active");
       }
     }
