@@ -70,10 +70,10 @@ export class TargetType {
 
     TargetType.menuTargetType._value = targetType;
 
-    TargetType.setMenuMarker();
+    TargetType._setMenuMarker();
   }
 
-  static setMenuMarker () {
+  static _setMenuMarker () {
     const targetType = TargetType._getTargetType();
     const menuItems = TargetType.menuTargetType.menuDropdownContent.children;
     for (let i = 0; i < menuItems.length; i++) {
