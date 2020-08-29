@@ -128,7 +128,10 @@ export class TargetType {
     return targetType;
   }
 
-  static makeTargetText (pTargetType, pTargetPattern) {
+  static makeTargetText (pObj) {
+    const targetType = pObj["Target-type"];
+    const targetPattern = pObj.Target;
+
     // note that "glob" is the most common case
     // when used from the command-line, that target-type
     // is not even specified.
@@ -139,11 +142,10 @@ export class TargetType {
     // therefore we suppress that one
 
     let returnText = "";
-    if (pTargetType !== "glob" && pTargetType !== "list") {
-      returnText = pTargetType + " ";
+    if (targetType !== "glob" && targetType !== "list") {
+      returnText = targetType + " ";
     }
-    returnText += pTargetPattern;
+    returnText += targetPattern;
     return returnText;
   }
-
 }

@@ -201,7 +201,7 @@ export class JobsDetailsPanel extends JobsPanel {
     const jobIdText = job.id;
     tr.appendChild(Utils.createTd(Utils.getIdFromJobId(job.id), jobIdText));
 
-    let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
+    let targetText = TargetType.makeTargetText(job);
     const maxTextLength = 50;
     if (targetText.length > maxTextLength) {
       // prevent column becoming too wide

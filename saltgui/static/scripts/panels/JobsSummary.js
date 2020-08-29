@@ -29,7 +29,7 @@ export class JobsSummaryPanel extends JobsPanel {
     const td = Utils.createTd("", "");
     td.id = Utils.getIdFromJobId(job.id);
 
-    let targetText = TargetType.makeTargetText(job["Target-type"], job.Target);
+    let targetText = TargetType.makeTargetText(job);
     const maxTextLength = 50;
     if (targetText.length > maxTextLength) {
       // prevent column becoming too wide

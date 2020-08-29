@@ -115,7 +115,7 @@ export class JobPanel extends Panel {
     this._addMenuItemSignalJob(menu, info, pJobId);
 
     const functionText = commandText + " on " +
-      TargetType.makeTargetText(info["Target-type"], info.Target);
+      TargetType.makeTargetText(info);
     this.updateTitle(functionText);
 
     const timeField = document.getElementById("job-time");
