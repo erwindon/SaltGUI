@@ -135,28 +135,26 @@ export class JobPanel extends Panel {
     // use same formatter as direct commands
     const argumentsText = JobPanel.decodeArgumentsText(info.Arguments);
     const commandText = info.Function + argumentsText;
-    const menuSection = document.getElementById("job-menu");
-    const menu = new DropDownMenu(menuSection);
 
     // 1: re-run with original target pattern
-    this._addMenuItemJobRerunJob(menu, info, commandText);
+    this._addMenuItemJobRerunJob(info, commandText);
 
     // 2: re-run list of minions
-    this._addMenuItemRerunJobOnAllMinionsWhenNeeded(menu, info, commandText);
+    this._addMenuItemRerunJobOnAllMinionsWhenNeeded(info, commandText);
 
     // 3: re-run all failed (error+timeout)
-    this._addMenuItemRerunJobOnUnsuccessfulMinionsWhenNeeded(menu, info, commandText);
+    this._addMenuItemRerunJobOnUnsuccessfulMinionsWhenNeeded(info, commandText);
 
     // 4: re-run all failed (error)
-    this._addMenuItemRerunJobOnFailedMinionsWhenNeeded(menu, info, commandText);
+    this._addMenuItemRerunJobOnFailedMinionsWhenNeeded(info, commandText);
 
     // 5: re-run all failed (timeout)
-    this._addMenuItemRerunJobOnNonRespondingMinionsWhenNeeded(menu, info, commandText);
+    this._addMenuItemRerunJobOnNonRespondingMinionsWhenNeeded(info, commandText);
 
     // 6: kill with original target pattern
-    this._addMenuItemTerminateJob(menu, info, pJobId);
-    this._addMenuItemKillJob(menu, info, pJobId);
-    this._addMenuItemSignalJob(menu, info, pJobId);
+    this._addMenuItemTerminateJob(info, pJobId);
+    this._addMenuItemKillJob(info, pJobId);
+    this._addMenuItemSignalJob(info, pJobId);
 
     const functionText = commandText + " on " +
       TargetType.makeTargetText(info);
@@ -215,14 +213,14 @@ export class JobPanel extends Panel {
     }
   }
 
-  _addMenuItemJobRerunJob (pMenu, info, commandText) {
+  _addMenuItemJobRerunJob (info, commandText) {
     // 2011 = NON-BREAKING HYPHEN
-    pMenu.addMenuItem("Re&#x2011;run&nbsp;job...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Re&#x2011;run&nbsp;job...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, info["Target-type"], info.Target, commandText);
     });
   }
 
-  _addMenuItemRerunJobOnAllMinionsWhenNeeded (pMenu, info, commandText) {
+  _addMenuItemRerunJobOnAllMinionsWhenNeeded (info, commandText) {
     if (!info.Minions) {
       return;
     }
@@ -244,12 +242,12 @@ export class JobPanel extends Panel {
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
-    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;all&nbsp;minions...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;all&nbsp;minions...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, "list", lst, commandText);
     });
   }
 
-  _addMenuItemRerunJobOnUnsuccessfulMinionsWhenNeeded (pMenu, info, commandText) {
+  _addMenuItemRerunJobOnUnsuccessfulMinionsWhenNeeded (info, commandText) {
     if (!info.Minions) {
       return;
     }
@@ -282,12 +280,12 @@ export class JobPanel extends Panel {
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
-    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;unsuccessful&nbsp;minions...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;unsuccessful&nbsp;minions...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, "list", lst, commandText);
     });
   }
 
-  _addMenuItemRerunJobOnFailedMinionsWhenNeeded (pMenu, info, commandText) {
+  _addMenuItemRerunJobOnFailedMinionsWhenNeeded (info, commandText) {
     if (!info.Minions) {
       return;
     }
@@ -306,12 +304,12 @@ export class JobPanel extends Panel {
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
-    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;failed&nbsp;minions...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;failed&nbsp;minions...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, "list", lst, commandText);
     });
   }
 
-  _addMenuItemRerunJobOnNonRespondingMinionsWhenNeeded (pMenu, info, commandText) {
+  _addMenuItemRerunJobOnNonRespondingMinionsWhenNeeded (info, commandText) {
     if (!info.Minions) {
       return;
     }
@@ -330,25 +328,25 @@ export class JobPanel extends Panel {
 
     const lst = minionList.substring(1);
     // 2011 = NON-BREAKING HYPHEN
-    pMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;non&nbsp;responding&nbsp;minions...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;non&nbsp;responding&nbsp;minions...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, "list", lst, commandText);
     });
   }
 
-  _addMenuItemTerminateJob (pMenu, info, pJobId) {
-    this.terminateJobMenuItem = pMenu.addMenuItem("Terminate&nbsp;job...", (pClickEvent) => {
+  _addMenuItemTerminateJob (info, pJobId) {
+    this.terminateJobMenuItem = this.panelMenu.addMenuItem("Terminate&nbsp;job...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.term_job " + pJobId);
     });
   }
 
-  _addMenuItemKillJob (pMenu, info, pJobId) {
-    this.killJobMenuItem = pMenu.addMenuItem("Kill&nbsp;job...", (pClickEvent) => {
+  _addMenuItemKillJob (info, pJobId) {
+    this.killJobMenuItem = this.panelMenu.addMenuItem("Kill&nbsp;job...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.kill_job " + pJobId);
     });
   }
 
-  _addMenuItemSignalJob (pMenu, info, pJobId) {
-    this.signalJobMenuItem = pMenu.addMenuItem("Signal&nbsp;job...", (pClickEvent) => {
+  _addMenuItemSignalJob (info, pJobId) {
+    this.signalJobMenuItem = this.panelMenu.addMenuItem("Signal&nbsp;job...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.signal_job " + pJobId + " signal=<signalnumber>");
     });
   }
