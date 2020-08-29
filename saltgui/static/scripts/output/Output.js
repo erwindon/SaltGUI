@@ -65,10 +65,6 @@ export class Output {
     return span;
   }
 
-  static getPatEmbeddedJid () {
-    return /[2-9][0-9][0-9][0-9][01][0-9][0-3][0-9][0-2][0-9][0-5][0-9][0-5][0-9][0-9][0-9][0-9][0-9][0-9][0-9]/g;
-  }
-
   // the output is only text
   // note: do not return a text-node
   static _getTextOutput (pMinionResponse) {

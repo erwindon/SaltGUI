@@ -60,6 +60,10 @@ export class JobPanel extends Panel {
     return true;
   }
 
+  static _getPatEmbeddedJid () {
+    return /\b[2-9][0-9][0-9][0-9][01][0-9][0-3][0-9][0-2][0-9][0-5][0-9][0-5][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\b/g;
+  }
+
   _handleJobRunnerJobsListJob (pRunnerJobsListJobData, pJobId) {
     if (!pRunnerJobsListJobData) {
       return;
@@ -136,8 +140,8 @@ export class JobPanel extends Panel {
 
     // replace any jobid
     // Don't do this with output.innerHTML as there are already
-    // event handlers in place, whicgh the will be removed
-    const patJid = Output.getPatEmbeddedJid();
+    // event handlers in place, which then will be removed
+    const patJid = JobPanel._getPatEmbeddedJid();
     const elements = this.output.querySelectorAll(".minion-output");
     for (const element of elements) {
       let html = element.innerHTML;
