@@ -1,6 +1,7 @@
 /* global document window */
 
 import {Panel} from "./Panel.js";
+import {Router} from "../Router.js";
 import {Utils} from "../Utils.js";
 
 export class LoginPanel extends Panel {
@@ -218,6 +219,7 @@ export class LoginPanel extends Panel {
 
     const templates = wheelConfigValuesData.saltgui_templates;
     Utils.setStorageItem("session", "templates", JSON.stringify(templates));
+    Router.updateMainMenu();
 
     const publicPillars = wheelConfigValuesData.saltgui_public_pillars;
     Utils.setStorageItem("session", "public_pillars", JSON.stringify(publicPillars));
@@ -247,22 +249,6 @@ export class LoginPanel extends Panel {
 
     const toolTipMode = wheelConfigValuesData.saltgui_tooltip_mode;
     Utils.setStorageItem("session", "tooltip_mode", toolTipMode);
-
-    // Now that we have the basic configuration
-    // Update the GUI accordingly for a few cases
-
-    LoginPanel._EnableGuiOptions();
-  }
-
-  static _EnableGuiOptions () {
-    // show template menu item if templates defined
-    const templatesText = Utils.getStorageItem("session", "templates", "");
-    if (templatesText && templatesText.length) {
-      const item1 = document.getElementById("button-templates1");
-      item1.classList.remove("menu-item-hidden");
-      const item2 = document.getElementById("button-templates2");
-      item2.classList.remove("menu-item-hidden");
-    }
   }
 
   _onLoginFailure (error) {

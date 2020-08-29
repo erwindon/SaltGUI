@@ -45,16 +45,9 @@ export class Router {
     this._registerRoute(this.eventsRoute = new EventsRoute(this));
     this._registerRoute(new OptionsRoute(this));
 
-    // show template menu item if templates defined
-    const templatesText = Utils.getStorageItem("session", "templates", "");
-    if (templatesText) {
-      const item1 = document.getElementById("button-templates1");
-      item1.classList.remove("menu-item-hidden");
-      const item2 = document.getElementById("button-templates2");
-      item2.classList.remove("menu-item-hidden");
-    }
-
     this._registerRouterEventListeners();
+
+    Router.updateMainMenu();
 
     // This URL already has its prefix added
     // therefore is must not be added again
@@ -248,6 +241,17 @@ export class Router {
     this.routes.push(pRoute);
     if (pRoute.onRegister) {
       pRoute.onRegister();
+    }
+  }
+
+  static updateMainMenu () {
+    // show template menu item if templates defined
+    const templatesText = Utils.getStorageItem("session", "templates", "");
+    if (templatesText) {
+      const item1 = document.getElementById("button-templates1");
+      item1.classList.remove("menu-item-hidden");
+      const item2 = document.getElementById("button-templates2");
+      item2.classList.remove("menu-item-hidden");
     }
   }
 
