@@ -3,6 +3,7 @@
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
+import {ParseCommandLine} from "../ParseCommandLine.js";
 import {TargetType} from "../TargetType.js";
 import {Utils} from "../Utils.js";
 
@@ -60,6 +61,49 @@ export class JobPanel extends Panel {
     return true;
   }
 
+  static decodeArgumentsText (rawArguments) {
+
+    if (rawArguments === undefined) {
+      // no arguments
+      return "";
+    }
+
+    if (typeof rawArguments !== "object") {
+      // expecting an array (which is an object)
+      // just return the representation of anything else
+      return " " + JSON.stringify(rawArguments);
+    }
+
+    if (!Array.isArray(rawArguments)) {
+      // expecting an array
+      // just return the representation of anything else
+      return " " + JSON.stringify(rawArguments);
+    }
+
+    let ret = "";
+    for (const obj of rawArguments) {
+      // all KWARGS are one entry in the parameters array
+      if (obj && typeof obj === "object" && "__kwarg__" in obj) {
+        const keys = Object.keys(obj).sort();
+        for (const key of keys) {
+          if (key === "__kwarg__") {
+            continue;
+          }
+          ret += " " + key + "=" + Output.formatObject(obj[key]);
+        }
+      } else if (typeof obj === "string" &&
+                ParseCommandLine.getPatJid().test(obj)) {
+        // prevent quotes being added on JIDs
+        ret += " " + obj;
+      } else {
+        const objAsString = Output.formatObject(obj);
+        ret += " " + objAsString.replace(/\n/g, " ");
+      }
+    }
+
+    return ret;
+  }
+
   static _getPatEmbeddedJid () {
     return /\b[2-9][0-9][0-9][0-9][01][0-9][0-3][0-9][0-2][0-9][0-5][0-9][0-5][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\b/g;
   }
@@ -89,7 +133,7 @@ export class JobPanel extends Panel {
     this.output.innerText = "";
 
     // use same formatter as direct commands
-    const argumentsText = Panel.decodeArgumentsText(info.Arguments);
+    const argumentsText = JobPanel.decodeArgumentsText(info.Arguments);
     const commandText = info.Function + argumentsText;
     const menuSection = document.getElementById("job-menu");
     const menu = new DropDownMenu(menuSection);

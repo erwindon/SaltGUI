@@ -1,9 +1,9 @@
 /* global config document window */
 
 import {DropDownMenu} from "../DropDown.js";
+import {JobPanel} from "./Job.js";
 import {JobsPanel} from "./Jobs.js";
 import {Output} from "../output/Output.js";
-import {Panel} from "./Panel.js";
 import {TargetType} from "../TargetType.js";
 import {Utils} from "../Utils.js";
 
@@ -209,7 +209,7 @@ export class JobsDetailsPanel extends JobsPanel {
     }
     tr.appendChild(Utils.createTd("target", targetText));
 
-    const argumentsText = Panel.decodeArgumentsText(job.Arguments);
+    const argumentsText = JobPanel.decodeArgumentsText(job.Arguments);
     let functionText = job.Function + argumentsText;
     if (functionText.length > maxTextLength) {
       // prevent column becoming too wide
