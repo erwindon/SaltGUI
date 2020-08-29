@@ -146,7 +146,7 @@ export class Utils {
     pTd.appendChild(span);
   }
 
-  static hasTextContent (pElement, pSearchText, pCaseSensitiveFlag) {
+  static _hasTextContent (pElement, pSearchText, pCaseSensitiveFlag) {
 
     // why?
     if (pElement.classList && pElement.classList.contains("run-command-button")) {
@@ -155,7 +155,7 @@ export class Utils {
 
     let found = false;
     for (const childNode of pElement.childNodes) {
-      const searchResult = this.hasTextContent(childNode, pSearchText, pCaseSensitiveFlag);
+      const searchResult = Utils._hasTextContent(childNode, pSearchText, pCaseSensitiveFlag);
       if (searchResult === 2) {
         return 2;
       }
@@ -362,7 +362,7 @@ export class Utils {
       for (const cell of items) {
         // do not use "innerText"
         // that one does not handle hidden text
-        const res = Utils.hasTextContent(cell, searchParam, caseSensitiveFlag);
+        const res = Utils._hasTextContent(cell, searchParam, caseSensitiveFlag);
         if (res === 1) {
           hasNonEmptyMatches = true;
         }
