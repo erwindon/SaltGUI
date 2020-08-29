@@ -28,24 +28,4 @@ export class Route {
       this.menuItemElement2 = document.getElementById(pMenuItemSelector + "2");
     }
   }
-
-  __getName () {
-    return this.name;
-  }
-
-  getPath () {
-    return this.path;
-  }
-
-  getPageElement () {
-    return this.pageElement;
-  }
-
-  getMenuItemElement1 () {
-    return this.menuItemElement1;
-  }
-
-  getMenuItemElement2 () {
-    return this.menuItemElement2;
-  }
 }

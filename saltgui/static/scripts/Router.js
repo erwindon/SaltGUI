@@ -265,7 +265,7 @@ export class Router {
     }
     const pathUrl = (hasPathPrefix ? "" : config.NAV_URL) + pPath.split("?")[0];
     for (const route of this.routes) {
-      if (!route.getPath().test(pathUrl)) {
+      if (!route.path.test(pathUrl)) {
         continue;
       }
       // push history state for login (including redirect to /)
@@ -281,7 +281,7 @@ export class Router {
   }
 
   _showRoute (pRoute) {
-    pRoute.getPageElement().style.display = "";
+    pRoute.pageElement.style.display = "";
 
     const minionMenuItem = document.getElementById("button-minions1");
     const jobsMenuItem = document.getElementById("button-jobs1");
@@ -291,7 +291,7 @@ export class Router {
       menuItem.classList.remove("menu-item-active");
     });
 
-    const elem1 = pRoute.getMenuItemElement1();
+    const elem1 = pRoute.menuItemElement1;
     if (elem1) {
       elem1.classList.add("menu-item-active");
       // activate also parent menu item if child element is selected
@@ -307,7 +307,7 @@ export class Router {
       }
     }
 
-    const elem2 = pRoute.getMenuItemElement2();
+    const elem2 = pRoute.menuItemElement2;
     if (elem2) {
       elem2.classList.add("menu-item-active");
     }
@@ -325,12 +325,12 @@ export class Router {
     }
 
     this.currentRoute = pRoute;
-    this.currentRoute.getPageElement().classList.add("current");
+    this.currentRoute.pageElement.classList.add("current");
     this.switchingRoute = false;
   }
 
   static _hideRoute (pRoute) {
-    const page = pRoute.getPageElement();
+    const page = pRoute.pageElement;
     page.classList.remove("current");
     // 500ms matches the timeout in main.css (.route)
     window.setTimeout(() => {
