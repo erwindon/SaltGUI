@@ -2,9 +2,9 @@
 
 import {BeaconsMinionPanel} from "../panels/BeaconsMinion.js";
 import {JobsSummaryPanel} from "../panels/JobsSummary.js";
-import {PageRoute} from "./Page.js";
+import {Page} from "./Page.js";
 
-export class BeaconsMinionRoute extends PageRoute {
+export class BeaconsMinionPage extends Page {
 
   constructor (pRouter) {
     super("beacons-minion", "Beacons", "page-beacons-minion", "button-beacons", pRouter);

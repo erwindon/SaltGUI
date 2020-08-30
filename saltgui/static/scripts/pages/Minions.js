@@ -2,9 +2,9 @@
 
 import {JobsSummaryPanel} from "../panels/JobsSummary.js";
 import {MinionsPanel} from "../panels/Minions.js";
-import {PageRoute} from "./Page.js";
+import {Page} from "./Page.js";
 
-export class MinionsRoute extends PageRoute {
+export class MinionsPage extends Page {
 
   constructor (pRouter) {
     super("", "Minions", "page-minions", "button-minions", pRouter);

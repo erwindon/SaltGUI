@@ -1,9 +1,9 @@
 /* global */
 
 import {LoginPanel} from "../panels/Login.js";
-import {PageRoute} from "./Page.js";
+import {Page} from "./Page.js";
 
-export class LoginRoute extends PageRoute {
+export class LoginPage extends Page {
 
   constructor (pRouter) {
     super("login", "Login", "page-login", "", pRouter);

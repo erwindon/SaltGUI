@@ -1,23 +1,23 @@
 /* global config document window */
 
 import {API} from "./Api.js";
-import {BeaconsMinionRoute} from "./routes/BeaconsMinion.js";
-import {BeaconsRoute} from "./routes/Beacons.js";
+import {BeaconsMinionPage} from "./pages/BeaconsMinion.js";
+import {BeaconsPage} from "./pages/Beacons.js";
 import {CommandBox} from "./CommandBox.js";
-import {EventsRoute} from "./routes/Events.js";
-import {GrainsMinionRoute} from "./routes/GrainsMinion.js";
-import {GrainsRoute} from "./routes/Grains.js";
-import {JobRoute} from "./routes/Job.js";
-import {JobsRoute} from "./routes/Jobs.js";
-import {KeysRoute} from "./routes/Keys.js";
-import {LoginRoute} from "./routes/Login.js";
-import {MinionsRoute} from "./routes/Minions.js";
-import {OptionsRoute} from "./routes/Options.js";
-import {PillarsMinionRoute} from "./routes/PillarsMinion.js";
-import {PillarsRoute} from "./routes/Pillars.js";
-import {SchedulesMinionRoute} from "./routes/SchedulesMinion.js";
-import {SchedulesRoute} from "./routes/Schedules.js";
-import {TemplatesRoute} from "./routes/Templates.js";
+import {EventsPage} from "./pages/Events.js";
+import {GrainsMinionPage} from "./pages/GrainsMinion.js";
+import {GrainsPage} from "./pages/Grains.js";
+import {JobPage} from "./pages/Job.js";
+import {JobsPage} from "./pages/Jobs.js";
+import {KeysPage} from "./pages/Keys.js";
+import {LoginPage} from "./pages/Login.js";
+import {MinionsPage} from "./pages/Minions.js";
+import {OptionsPage} from "./pages/Options.js";
+import {PillarsMinionPage} from "./pages/PillarsMinion.js";
+import {PillarsPage} from "./pages/Pillars.js";
+import {SchedulesMinionPage} from "./pages/SchedulesMinion.js";
+import {SchedulesPage} from "./pages/Schedules.js";
+import {TemplatesPage} from "./pages/Templates.js";
 import {Utils} from "./Utils.js";
 
 export class Router {
@@ -25,25 +25,25 @@ export class Router {
   constructor () {
     this.api = new API();
     this.commandbox = new CommandBox(this.api);
-    this.currentRoute = undefined;
-    this.routes = [];
+    this.currentPage = undefined;
+    this.pages = [];
 
-    this._registerRoute(new LoginRoute(this));
-    this._registerRoute(new MinionsRoute(this));
-    this._registerRoute(this.keysRoute = new KeysRoute(this));
-    this._registerRoute(new GrainsRoute(this));
-    this._registerRoute(new GrainsMinionRoute(this));
-    this._registerRoute(new SchedulesRoute(this));
-    this._registerRoute(new SchedulesMinionRoute(this));
-    this._registerRoute(new PillarsRoute(this));
-    this._registerRoute(new PillarsMinionRoute(this));
-    this._registerRoute(new BeaconsRoute(this));
-    this._registerRoute(this.beaconsMinionRoute = new BeaconsMinionRoute(this));
-    this._registerRoute(this.jobRoute = new JobRoute(this));
-    this._registerRoute(new JobsRoute(this));
-    this._registerRoute(new TemplatesRoute(this));
-    this._registerRoute(this.eventsRoute = new EventsRoute(this));
-    this._registerRoute(new OptionsRoute(this));
+    this._registerPage(new LoginPage(this));
+    this._registerPage(new MinionsPage(this));
+    this._registerPage(this.keysPage = new KeysPage(this));
+    this._registerPage(new GrainsPage(this));
+    this._registerPage(new GrainsMinionPage(this));
+    this._registerPage(new SchedulesPage(this));
+    this._registerPage(new SchedulesMinionPage(this));
+    this._registerPage(new PillarsPage(this));
+    this._registerPage(new PillarsMinionPage(this));
+    this._registerPage(new BeaconsPage(this));
+    this._registerPage(this.beaconsMinionPage = new BeaconsMinionPage(this));
+    this._registerPage(this.jobPage = new JobPage(this));
+    this._registerPage(new JobsPage(this));
+    this._registerPage(new TemplatesPage(this));
+    this._registerPage(this.eventsPage = new EventsPage(this));
+    this._registerPage(new OptionsPage(this));
 
     this._registerRouterEventListeners();
 
@@ -234,10 +234,10 @@ export class Router {
     });
   }
 
-  _registerRoute (pRoute) {
-    this.routes.push(pRoute);
-    if (pRoute.onRegister) {
-      pRoute.onRegister();
+  _registerPage (pPage) {
+    this.pages.push(pPage);
+    if (pPage.onRegister) {
+      pPage.onRegister();
     }
   }
 
@@ -253,10 +253,10 @@ export class Router {
   }
 
   goTo (pPath, hasPathPrefix = false) {
-    if (this.switchingRoute) {
+    if (this.switchingPage) {
       return;
     }
-    if (window.location.pathname === config.NAV_URL + pPath && this.currentRoute) {
+    if (window.location.pathname === config.NAV_URL + pPath && this.currentPage) {
       return;
     }
     if (pPath === "/" && Utils.getStorageItem("session", "login-response") === null) {
@@ -265,7 +265,7 @@ export class Router {
       pPath = "/login";
     }
     const pathUrl = (hasPathPrefix ? "" : config.NAV_URL) + pPath.split("?")[0];
-    for (const route of this.routes) {
+    for (const route of this.pages) {
       if (!route.path.test(pathUrl)) {
         continue;
       }
@@ -273,7 +273,7 @@ export class Router {
       if (pathUrl === config.NAV_URL + "/login" || pathUrl === config.NAV_URL + "/") {
         window.history.pushState({}, undefined, pPath);
       }
-      this._showRoute(route);
+      this._showPage(route);
       return;
     }
     // route could not be found
@@ -281,15 +281,15 @@ export class Router {
     this.goTo("/");
   }
 
-  _showRoute (pRoute) {
-    pRoute.pageElement.style.display = "";
+  _showPage (pPage) {
+    pPage.pageElement.style.display = "";
 
     const activeMenuItems = Array.from(document.querySelectorAll(".menu-item-active"));
     activeMenuItems.forEach((menuItem) => {
       menuItem.classList.remove("menu-item-active");
     });
 
-    const elem1 = pRoute.menuItemElement1;
+    const elem1 = pPage.menuItemElement1;
     if (elem1) {
       elem1.classList.add("menu-item-active");
       // activate also parent menu item if child element is selected
@@ -307,38 +307,38 @@ export class Router {
       }
     }
 
-    const elem2 = pRoute.menuItemElement2;
+    const elem2 = pPage.menuItemElement2;
     if (elem2) {
       elem2.classList.add("menu-item-active");
     }
 
-    this.switchingRoute = true;
+    this.switchingPage = true;
 
-    pRoute.onShow();
+    pPage.onShow();
 
     // start the event-pipe (again)
     // it is either not started, or needs restarting
     API.getEvents(this);
 
-    if (this.currentRoute) {
-      Router._hideRoute(this.currentRoute);
+    if (this.currentPage) {
+      Router._hidePage(this.currentPage);
     }
 
-    this.currentRoute = pRoute;
-    this.currentRoute.pageElement.classList.add("current");
-    this.switchingRoute = false;
+    this.currentPage = pPage;
+    this.currentPage.pageElement.classList.add("current");
+    this.switchingPage = false;
   }
 
-  static _hideRoute (pRoute) {
-    const page = pRoute.pageElement;
+  static _hidePage (pPage) {
+    const page = pPage.pageElement;
     page.classList.remove("current");
     // 500ms matches the timeout in main.css (.route)
     window.setTimeout(() => {
       // Hide element after fade, so it does not expand the body
       page.style.display = "none";
     }, 500);
-    if (pRoute.onHide) {
-      pRoute.onHide();
+    if (pPage.onHide) {
+      pPage.onHide();
     }
   }
 }

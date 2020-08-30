@@ -1,10 +1,10 @@
 /* global */
 
 import {JobsSummaryPanel} from "../panels/JobsSummary.js";
-import {PageRoute} from "./Page.js";
+import {Page} from "./Page.js";
 import {SchedulesMinionPanel} from "../panels/SchedulesMinion.js";
 
-export class SchedulesMinionRoute extends PageRoute {
+export class SchedulesMinionPage extends Page {
 
   constructor (pRouter) {
     super("schedules-minion", "Schedules", "page-schedules-minion", "button-schedules", pRouter);

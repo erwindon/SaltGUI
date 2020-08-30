@@ -2,9 +2,9 @@
 
 import {JobsSummaryPanel} from "../panels/JobsSummary.js";
 import {OptionsPanel} from "../panels/Options.js";
-import {PageRoute} from "./Page.js";
+import {Page} from "./Page.js";
 
-export class OptionsRoute extends PageRoute {
+export class OptionsPage extends Page {
 
   constructor (pRouter) {
     super("options", "Options", "page-options", "", pRouter);

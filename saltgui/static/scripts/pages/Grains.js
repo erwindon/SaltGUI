@@ -2,9 +2,9 @@
 
 import {GrainsPanel} from "../panels/Grains.js";
 import {JobsSummaryPanel} from "../panels/JobsSummary.js";
-import {PageRoute} from "./Page.js";
+import {Page} from "./Page.js";
 
-export class GrainsRoute extends PageRoute {
+export class GrainsPage extends Page {
 
   constructor (pRouter) {
     super("grains", "Grains", "page-grains", "button-grains", pRouter);

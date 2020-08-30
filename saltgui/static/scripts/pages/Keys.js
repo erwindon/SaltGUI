@@ -2,9 +2,9 @@
 
 import {JobsSummaryPanel} from "../panels/JobsSummary.js";
 import {KeysPanel} from "../panels/Keys.js";
-import {PageRoute} from "./Page.js";
+import {Page} from "./Page.js";
 
-export class KeysRoute extends PageRoute {
+export class KeysPage extends Page {
 
   constructor (pRouter) {
     super("keys", "Keys", "page-keys", "button-keys", pRouter);

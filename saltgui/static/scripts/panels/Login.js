@@ -116,10 +116,10 @@ export class LoginPanel extends Panel {
 
     this.loginPending = false;
 
-    this._registerLoginRouteEventListeners(form);
+    this._registerEventListeners(form);
   }
 
-  _registerLoginRouteEventListeners (pLoginForm) {
+  _registerEventListeners (pLoginForm) {
     pLoginForm.addEventListener("submit", (ev) => {
       this._onLogin(ev);
     });

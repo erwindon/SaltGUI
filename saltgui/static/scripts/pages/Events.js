@@ -1,9 +1,9 @@
 /* global */
 
 import {EventsPanel} from "../panels/Events.js";
-import {PageRoute} from "./Page.js";
+import {Page} from "./Page.js";
 
-export class EventsRoute extends PageRoute {
+export class EventsPage extends Page {
 
   constructor (pRouter) {
     // don't use /events for the page, that url is reserved

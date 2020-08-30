@@ -203,15 +203,15 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  apiRequest (pMethod, pRoute, pParams) {
-    const url = config.API_URL + pRoute;
+  apiRequest (pMethod, pPage, pParams) {
+    const url = config.API_URL + pPage;
     const token = Utils.getStorageItem("session", "token", "");
     const headers = {
       "Accept": "application/json",
       "Cache-Control": "no-cache",
       "X-Auth-Token": token
     };
-    if (pRoute.endsWith(".txt")) {
+    if (pPage.endsWith(".txt")) {
       headers["Accept"] = "text/plain";
     }
     const options = {
@@ -229,7 +229,7 @@ export class API {
     return window.fetch(url, options).
     /* eslint-enable compat/compat */
       then((pResponse) => {
-        if (pResponse.ok && pRoute.endsWith(".txt")) {
+        if (pResponse.ok && pPage.endsWith(".txt")) {
           return pResponse.text();
         }
         if (pResponse.ok) {
@@ -237,12 +237,12 @@ export class API {
         }
         // fetch does not reject on > 300 http status codes,
         // so let's do it ourselves
-        if (pResponse.status === 401 && pRoute === "/logout") {
+        if (pResponse.status === 401 && pPage === "/logout") {
           // so we can't logout?
           API._cleanStorage();
           return null;
         }
-        if (pResponse.status === 401 && pRoute !== "/login") {
+        if (pResponse.status === 401 && pPage !== "/login") {
           const loginResponseStr = Utils.getStorageItem("session", "login-response");
           if (!loginResponseStr) {
             this.logout().then(() => {
@@ -266,7 +266,7 @@ export class API {
             }
           }
         }
-        if (pResponse.status === 404 && pRoute.endsWith(".txt")) {
+        if (pResponse.status === 404 && pPage.endsWith(".txt")) {
           // ok
           return "";
         }
@@ -333,17 +333,17 @@ export class API {
       // salt/beacon/<minion>/<beacon>/
       if (tag.startsWith("salt/beacon/")) {
         // new beacon-value is received
-        pRouter.beaconsMinionRoute.handleSaltBeaconEvent(tag, data);
+        pRouter.beaconsMinionPage.handleSaltBeaconEvent(tag, data);
       } else if (tag === "salt/auth") {
         // new key has been received
-        pRouter.keysRoute.handleSaltAuthEvent(data);
+        pRouter.keysPage.handleSaltAuthEvent(data);
       } else if (tag === "salt/key") {
-        pRouter.keysRoute.handleSaltKeyEvent(tag, data);
+        pRouter.keysPage.handleSaltKeyEvent(tag, data);
       } else if (tag.startsWith("salt/job/") && tag.includes("/ret/")) {
-        pRouter.jobRoute.handleSaltJobRetEvent(data);
+        pRouter.jobPage.handleSaltJobRetEvent(data);
       }
 
-      pRouter.eventsRoute.handleAnyEvent(tag, data);
+      pRouter.eventsPage.handleAnyEvent(tag, data);
     };
   }
 }

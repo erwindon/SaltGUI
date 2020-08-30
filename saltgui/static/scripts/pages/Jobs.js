@@ -1,9 +1,9 @@
 /* global */
 
 import {JobsDetailsPanel} from "../panels/JobsDetails.js";
-import {PageRoute} from "./Page.js";
+import {Page} from "./Page.js";
 
-export class JobsRoute extends PageRoute {
+export class JobsPage extends Page {
 
   constructor (pRouter) {
     super("jobs", "Jobs", "page-jobs", "button-jobs", pRouter);
