@@ -57,9 +57,6 @@ export class Router {
   _registerRouterEventListeners () {
     document.getElementById("logo").
       addEventListener("click", () => {
-        if (window.location.pathname === config.NAV_URL + "/login") {
-          return;
-        }
         if (window.event.ctrlKey) {
           window.location.assign(config.NAV_URL + "/options");
         } else {
