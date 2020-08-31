@@ -100,6 +100,7 @@ function Hilitor(start, id, tag)
     if(node.nodeType == 3) { // NODE_TEXT
       // limit the number of highlighted matches to 25 otherwise the DOM grows rediculously
       // and performance drops with it. and it is still a good first indication.
+      let regs;
       if(this.nrHilites <= 25 && (nv = node.nodeValue) && (regs = matchRegExp.exec(nv)) && regs[0].length > 0) {
         if(!wordColor[regs[0].toLowerCase()]) {
           wordColor[regs[0].toLowerCase()] = colors[colorIdx++ % colors.length];
@@ -124,6 +125,7 @@ function Hilitor(start, id, tag)
   {
     //var arr = document.getElementsByTagName(hiliteTag);
     var arr = targetNode.getElementsByTagName(hiliteTag);
+    let el;
     while(arr.length && (el = arr[0])) {
       var parent = el.parentNode;
       parent.replaceChild(el.firstChild, el);
