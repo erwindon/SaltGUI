@@ -109,6 +109,10 @@ table tr td {
   color: gray;
 }
 
+.no-job-details {
+  color: gray;
+}
+
 table thead th,
 table tbody td {
   padding: 8px;

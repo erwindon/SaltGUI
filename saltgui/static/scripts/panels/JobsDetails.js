@@ -98,7 +98,7 @@ export class JobsDetailsPanel extends JobsPanel {
         continue;
       }
       const jobId = tr.querySelector("td").innerText;
-      detailsField.classList.add("no-job-status");
+      detailsField.classList.add("no-job-details");
       detailsField.innerText = "loading...";
       this._getJobDetails(jobId);
       // only update one item at a time
@@ -125,7 +125,7 @@ export class JobsDetailsPanel extends JobsPanel {
 
     if (typeof pData !== "object") {
       detailsSpan.innerText = "(error)";
-      detailsSpan.classList.remove("no-job-status");
+      detailsSpan.classList.remove("no-job-details");
       Utils.addToolTip(detailsSpan, pData);
       return;
     }
@@ -135,7 +135,7 @@ export class JobsDetailsPanel extends JobsPanel {
     if (pData.Error) {
       // typically happens for jobs that are expired from jobs-cache
       detailsSpan.innerText = "(error)";
-      detailsSpan.classList.remove("no-job-status");
+      detailsSpan.classList.remove("no-job-details");
       Utils.addToolTip(detailsSpan, pData.Error);
       return;
     }
@@ -191,7 +191,7 @@ export class JobsDetailsPanel extends JobsPanel {
     const statusSpan = Utils.createSpan("", "");
     statusSpan.innerHTML = detailsTxt;
     detailsSpan.appendChild(statusSpan);
-    detailsSpan.classList.remove("no-job-status");
+    detailsSpan.classList.remove("no-job-details");
     Utils.addToolTip(detailsSpan, "Click to refresh");
   }
 
@@ -241,9 +241,9 @@ export class JobsDetailsPanel extends JobsPanel {
 
     const detailsTd = Utils.createTd("details", "");
     const detailsSpan = Utils.createSpan("details2", "(click)");
-    detailsSpan.classList.add("no-job-status");
+    detailsSpan.classList.add("no-job-details");
     detailsSpan.addEventListener("click", (pClickEvent) => {
-      detailsSpan.classList.add("no-job-status");
+      detailsSpan.classList.add("no-job-details");
       detailsSpan.innerText = "loading...";
       this._getJobDetails(job.id);
       pClickEvent.stopPropagation();
@@ -290,7 +290,7 @@ export class JobsDetailsPanel extends JobsPanel {
 
   _addMenuItemUpdateDetails (pMenu, pDetailsSpan, job) {
     pMenu.addMenuItem("Update&nbsp;details", () => {
-      pDetailsSpan.classList.add("no-job-status");
+      pDetailsSpan.classList.add("no-job-details");
       pDetailsSpan.innerText = "loading...";
       this._getJobDetails(job.id);
     });
