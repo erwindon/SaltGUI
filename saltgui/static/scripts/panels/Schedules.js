@@ -25,15 +25,19 @@ export class SchedulesPanel extends Panel {
       this._handleSchedulesWheelKeyListAll(pWheelKeyListAllData);
       localScheduleListPromise.then((pLocalScheduleListData) => {
         this.updateMinions(pLocalScheduleListData);
+        return true;
       }, (pLocalBeaconsListMsg) => {
         const localScheduleListData = {"return": [{}]};
         for (const minionId of pWheelKeyListAllData.return[0].data.return.minions) {
           localScheduleListData.return[0][minionId] = JSON.stringify(pLocalBeaconsListMsg);
         }
         this.updateMinions(localScheduleListData);
+        return false;
       });
+      return true;
     }, (pWheelKeyListAllMsg) => {
       this._handleSchedulesWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+      return true;
     });
   }
 

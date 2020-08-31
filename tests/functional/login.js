@@ -50,6 +50,7 @@ describe("Funtional tests", function () {
         then((href) => {
           href = href.replace(/[?]reason=.*/, "");
           assert.equal(href, url + "login");
+          return true;
         }).
         then(done).
         catch(done);
@@ -69,6 +70,7 @@ describe("Funtional tests", function () {
         end().
         then((message) => {
           assert.equal(message, "Authentication failed");
+          return true;
         }).
         then(done).
         catch(done);
@@ -92,6 +94,7 @@ describe("Funtional tests", function () {
         end().
         then((href) => {
           assert.equal(href, url);
+          return true;
         }).
         then(done).
         catch(done);
@@ -126,6 +129,7 @@ describe("Funtional tests", function () {
         then((href) => {
           // and we redirected to the login page
           assert.equal(href, url + "login?reason=logout");
+          return true;
         }).
         then(done).
         catch(done);

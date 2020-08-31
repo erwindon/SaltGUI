@@ -32,8 +32,10 @@ export class BeaconsMinionPanel extends Panel {
 
     localBeaconsListPromise.then((pLocalBeaconsListData) => {
       this._handleLocalBeaconsList(pLocalBeaconsListData, minionId);
+      return true;
     }, (pLocalBeaconsListMsg) => {
       this._handleLocalBeaconsList(JSON.stringify(pLocalBeaconsListMsg), minionId);
+      return false;
     });
   }
 

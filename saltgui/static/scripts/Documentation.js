@@ -111,8 +111,10 @@ export class Documentation {
     }
     func.then((pResponse) => {
       CommandBox.onRunReturn(pResponse.return[0], dummyCommand);
+      return true;
     }, (pResponse) => {
       CommandBox.onRunReturn("DOCUMENTATION ERROR:\n\n" + JSON.stringify(pResponse), dummyCommand);
+      return false;
     });
   }
 

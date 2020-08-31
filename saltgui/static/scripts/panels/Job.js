@@ -43,11 +43,15 @@ export class JobPanel extends Panel {
       this._handleJobRunnerJobsListJob(pRunnerJobsListJobData, jobId);
       runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         this._handleRunnerJobsActive(jobId, pRunnerJobsActiveData);
+        return true;
       }, (pRunnerJobsActiveMsg) => {
         this._handleRunnerJobsActive(jobId, JSON.stringify(pRunnerJobsActiveMsg));
+        return false;
       });
+      return true;
     }, (pRunnerJobsListJobsMsg) => {
       this._handleJobRunnerJobsListJob(JSON.stringify(pRunnerJobsListJobsMsg), jobId);
+      return true;
     });
   }
 

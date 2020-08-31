@@ -25,15 +25,19 @@ export class BeaconsPanel extends Panel {
       this._handleBeaconsWheelKeyListAll(pWheelKeyListAllData);
       localBeaconsListPromise.then((pLocalBeaconsListData) => {
         this.updateMinions(pLocalBeaconsListData);
+        return true;
       }, (pLocalBeaconsListMsg) => {
         const localBeaconsListData = {"return": [{}]};
         for (const minionId of pWheelKeyListAllData.return[0].data.return.minions) {
           localBeaconsListData.return[0][minionId] = JSON.stringify(pLocalBeaconsListMsg);
         }
         this.updateMinions(localBeaconsListData);
+        return false;
       });
+      return true;
     }, (pWheelKeyListAllMsg) => {
       this._handleBeaconsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+      return true;
     });
   }
 

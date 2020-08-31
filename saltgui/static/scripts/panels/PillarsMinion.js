@@ -28,8 +28,10 @@ export class PillarsMinionPanel extends Panel {
 
     localPillarItemsPromise.then((pLocalPillarItemsData) => {
       this._handleLocalPillarItems(pLocalPillarItemsData, minionId);
+      return true;
     }, (pLocalPillarItemsMsg) => {
       this._handleLocalPillarItems(JSON.stringify(pLocalPillarItemsMsg), minionId);
+      return false;
     });
   }
 

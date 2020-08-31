@@ -45,15 +45,19 @@ export class GrainsPanel extends Panel {
       this._handleGrainsWheelKeyListAll(pWheelKeyListAllData);
       localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
         this.updateMinions(pLocalGrainsItemsData);
+        return true;
       }, (pLocalGrainsItemsMsg) => {
         const localGrainsItemsData = {"return": [{}]};
         for (const minionId of pWheelKeyListAllData.return[0].data.return.minions) {
           localGrainsItemsData.return[0][minionId] = JSON.stringify(pLocalGrainsItemsMsg);
         }
         this.updateMinions(localGrainsItemsData);
+        return false;
       });
+      return true;
     }, (pWheelKeyListAllMsg) => {
       this._handleGrainsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+      return false;
     });
   }
 

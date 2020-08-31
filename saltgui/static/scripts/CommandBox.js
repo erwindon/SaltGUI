@@ -172,8 +172,10 @@ export class CommandBox {
       } else {
         CommandBox._showError("null response");
       }
+      return true;
     }, (pResponse) => {
       CommandBox._showError(JSON.stringify(pResponse));
+      return false;
     });
   }
 

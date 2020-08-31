@@ -29,6 +29,7 @@ export class MinionsPanel extends Panel {
 
       localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
         this.updateMinions(pLocalGrainsItemsData);
+        return true;
       }, (pLocalGrainsItemsMsg) => {
         const localGrainsItemsData = {"return": [{}]};
         if (pWheelKeyListAllData) {
@@ -37,15 +38,20 @@ export class MinionsPanel extends Panel {
           }
         }
         this.updateMinions(localGrainsItemsData);
+        return false;
       });
 
       runnerManageVersionsPromise.then((pRunnerManageVersionsData) => {
         this._handleRunnerManageVersions(pRunnerManageVersionsData);
+        return true;
       }, (pRunnerManageVersionsMsg) => {
         this._handleRunnerManageVersions(JSON.stringify(pRunnerManageVersionsMsg));
+        return false;
       });
+      return true;
     }, (pWheelKeyListAllMsg) => {
       this._handleMinionsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+      return false;
     });
   }
 

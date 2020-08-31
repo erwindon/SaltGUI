@@ -34,6 +34,7 @@ export class API {
         }
         Utils.setStorageItem("session", "login-response", JSON.stringify(response));
         Utils.setStorageItem("session", "token", response.token);
+        return true;
       });
   }
 
@@ -54,9 +55,11 @@ export class API {
       then(() => {
         // we could logout, assume the session is terminated
         API._cleanStorage();
+        return true;
       }, () => {
         // we could not logout, assume the session is broken
         API._cleanStorage();
+        return false;
       });
   }
 
@@ -247,8 +250,10 @@ export class API {
           if (!loginResponseStr) {
             this.logout().then(() => {
               window.location.replace(config.NAV_URL + "/login?reason=no-session");
+              return true;
             }, () => {
               window.location.replace(config.NAV_URL + "/login?reason=no-session");
+              return false;
             });
           }
 
@@ -260,8 +265,10 @@ export class API {
             if (now > expireValue) {
               this.logout().then(() => {
                 window.location.replace(config.NAV_URL + "/login?reason=expired-session");
+                return true;
               }, () => {
                 window.location.replace(config.NAV_URL + "/login?reason=expired-session");
+                return false;
               });
             }
           }

@@ -17,11 +17,15 @@ export class JobsPanel extends Panel {
       this._handleRunnerJobsListJobs(pRunnerJobsListJobsData, cnt);
       runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         this._handleRunnerJobsActive(pRunnerJobsActiveData);
+        return true;
       }, (pRunnerJobsActiveMsg) => {
         this._handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
+        return false;
       });
+      return true;
     }, (pRunnerJobsListJobsMsg) => {
       this._handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
+      return false;
     });
   }
 
@@ -30,8 +34,10 @@ export class JobsPanel extends Panel {
 
     runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
       this._handleRunnerJobsActive(pRunnerJobsActiveData);
+      return true;
     }, (pRunnerJobsActiveMsg) => {
       this._handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
+      return false;
     });
   }
 

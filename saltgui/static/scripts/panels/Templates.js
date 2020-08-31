@@ -23,8 +23,10 @@ export class TemplatesPanel extends Panel {
 
     wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
       this._handleTemplatesWheelConfigValues(pWheelConfigValuesData);
+      return true;
     }, (pWheelConfigValuesMsg) => {
       this._handleTemplatesWheelConfigValues(JSON.stringify(pWheelConfigValuesMsg));
+      return false;
     });
   }
 

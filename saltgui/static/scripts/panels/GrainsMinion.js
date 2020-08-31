@@ -29,8 +29,10 @@ export class GrainsMinionPanel extends Panel {
 
     localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
       this._handleLocalGrainsItems(pLocalGrainsItemsData, minionId);
+      return true;
     }, (pLocalGrainsItemsMsg) => {
       this._handleLocalGrainsItems(JSON.stringify(pLocalGrainsItemsMsg), minionId);
+      return false;
     });
   }
 

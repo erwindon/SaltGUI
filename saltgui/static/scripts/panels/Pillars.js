@@ -25,15 +25,19 @@ export class PillarsPanel extends Panel {
       this._handlePillarsWheelKeyListAll(pWheelKeyListAllData);
       localPillarObfuscatePromise.then((pLocalPillarObfuscateData) => {
         this.updateMinions(pLocalPillarObfuscateData);
+        return true;
       }, (pLocalPillarObfuscateMsg) => {
         const localPillarObfuscateData = {"return": [{}]};
         for (const minionId of pWheelKeyListAllData.return[0].data.return.minions) {
           localPillarObfuscateData.return[0][minionId] = JSON.stringify(pLocalPillarObfuscateMsg);
         }
         this.updateMinions(localPillarObfuscateData);
+        return false;
       });
+      return true;
     }, (pWheelKeyListAllMsg) => {
       this._handlePillarsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+      return true;
     });
   }
 

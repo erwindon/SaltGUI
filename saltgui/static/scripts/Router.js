@@ -149,12 +149,14 @@ export class Router {
       addEventListener("click", () => {
         this.api.logout().then(() => {
           window.location.replace(config.NAV_URL + "/login?reason=logout");
+          return true;
         });
       });
     document.getElementById("button-logout2").
       addEventListener("click", () => {
         this.api.logout().then(() => {
           window.location.replace(config.NAV_URL + "/login?reason=logout");
+          return false;
         });
       });
 
@@ -190,8 +192,10 @@ export class Router {
       // logout, and redirect to login screen
       this.api.logout().then(() => {
         window.location.replace(config.NAV_URL + "/login?reason=expired-session");
+        return true;
       }, () => {
         window.location.replace(config.NAV_URL + "/login?reason=expired-session");
+        return false;
       });
       return;
     }
@@ -225,11 +229,10 @@ export class Router {
     const wheelConfigValuesPromise = this.api.getWheelConfigValues();
     // don't act in the callbacks
     // Api.apiRequest will do all the work
-    wheelConfigValuesPromise.then(() => {
-      // VOID
-    }, () => {
+    wheelConfigValuesPromise.then(() => true, () => {
       this.api.logout().then(() => {
         window.location.replace(config.NAV_URL + "/login?reason=no-session");
+        return false;
       });
     });
   }

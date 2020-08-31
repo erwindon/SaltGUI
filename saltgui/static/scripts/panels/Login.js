@@ -182,8 +182,10 @@ export class LoginPanel extends Panel {
     this._toggleForm(false);
     this.api.login(username, password, eauth).then(() => {
       this._onLoginSuccess();
+      return true;
     }, () => {
       this._onLoginFailure();
+      return false;
     });
   }
 
@@ -202,9 +204,8 @@ export class LoginPanel extends Panel {
     // We need these functions to populate the dropdown boxes
     wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
       LoginPanel._handleLoginWheelConfigValues(pWheelConfigValuesData);
-    }, () => {
-      // never mind
-    });
+      return true;
+    }, () => false);
 
     // allow the success message to be seen
     window.setTimeout(() => {

@@ -29,6 +29,7 @@ export class KeysPanel extends Panel {
       this._handleKeysWheelKeyListAll(pWheelKeyListAllData);
       wheelKeyFingerPromise.then((pWheelKeyFingerData) => {
         this._handleWheelKeyFinger(pWheelKeyFingerData);
+        return true;
       }, (pWheelKeyFingerMsg) => {
         const wheelKeyFingerData = {"return": [{"data": {"return": {"minions": {}}}}]};
         if (pWheelKeyListAllData) {
@@ -37,9 +38,12 @@ export class KeysPanel extends Panel {
           }
         }
         this._handleWheelKeyFinger(wheelKeyFingerData);
+        return true;
       });
+      return true;
     }, (pWheelKeyListAllMsg) => {
       this._handleKeysWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+      return false;
     });
   }
 
@@ -456,10 +460,12 @@ export class KeysPanel extends Panel {
       const wheelKeyFingerPromise = this.api.getWheelKeyFinger(pData.id);
       wheelKeyFingerPromise.then((pWheelKeyFingerData) => {
         this._handleWheelKeyFinger(pWheelKeyFingerData);
+        return true;
       }, (pWheelKeyFingerMsg) => {
         const wheelKeyFingerData = {"return": [{"data": {"return": {"minions": {}}}}]};
         wheelKeyFingerData.return[0]["data"]["return"]["minions"][pData.id] = JSON.stringify(pWheelKeyFingerMsg);
         this._handleWheelKeyFinger(wheelKeyFingerData);
+        return false;
       });
     }
 

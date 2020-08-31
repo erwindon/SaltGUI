@@ -229,8 +229,10 @@ export class Panel {
       } else {
         Utils.setStorageItem("session", "minions-txt", "{}");
       }
+      return true;
     }, () => {
       Utils.setStorageItem("session", "minions-txt", "{}");
+      return false;
     });
   }
 
