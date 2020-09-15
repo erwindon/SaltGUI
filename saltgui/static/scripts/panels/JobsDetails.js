@@ -42,7 +42,7 @@ export class JobsDetailsPanel extends JobsPanel {
     }
     this.panelMenu._value = cnt;
 
-    super.onShow(maxJobs);
+    super.onShow(cnt);
 
     // to update details
     // interval should be larger than the retrieval time
