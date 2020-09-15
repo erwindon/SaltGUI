@@ -83,7 +83,7 @@ export class OutputSaltGuiHighstate {
         continue;
       }
 
-      if (typeof change !== "object") {
+      if (change === null || typeof change !== "object") {
         // show all other non-objects in a simple way
         pTaskDiv.append(document.createElement("br"));
         pTaskDiv.append(document.createTextNode(
