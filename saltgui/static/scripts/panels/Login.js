@@ -97,6 +97,7 @@ export class LoginPanel extends Panel {
     submit.type = "submit";
     submit.value = "Login";
     form.append(submit);
+    this.loginButton = submit;
 
     const aa = document.createElement("a");
     aa.href = "https://github.com/erwindon/SaltGUI";
@@ -159,6 +160,8 @@ export class LoginPanel extends Panel {
       // should not occur
       this._showNoticeText("#F44336", reason, "notice_other:" + reason);
     }
+
+    this._enableLoginControls(true);
   }
 
   _onLogin (pSubmitEvent) {
@@ -173,7 +176,7 @@ export class LoginPanel extends Panel {
       return;
     }
 
-    this._toggleForm(false);
+    this._enableLoginControls(false);
     this.api.login(username, password, eauth).then(() => {
       this._onLoginSuccess();
       return true;
@@ -184,12 +187,6 @@ export class LoginPanel extends Panel {
   }
 
   _onLoginSuccess () {
-    this._toggleForm(true);
-
-    this.usernameField.disabled = true;
-    this.passwordField.disabled = true;
-    this.eauthField.disabled = true;
-
     this._showNoticeText("#4CAF50", "Please wait...", "notice_please_wait");
 
     // We need these functions to populate the dropdown boxes
@@ -247,8 +244,6 @@ export class LoginPanel extends Panel {
   }
 
   _onLoginFailure (error) {
-    this._toggleForm(true);
-
     if (typeof error === "string") {
       // something detected before trying to login
       this._showNoticeText("#F44336", error, "notice_login_string_error");
@@ -263,11 +258,14 @@ export class LoginPanel extends Panel {
     } else {
       this._showNoticeText("#F44336", "Authentication failed", "notice_auth_failed");
     }
+
+    this._enableLoginControls(true);
   }
 
-  _toggleForm (pAllowSubmit) {
-    this.loginPending = !pAllowSubmit;
-    const loginButton = this.div.querySelector("#login-button");
-    loginButton.disabled = !pAllowSubmit;
+  _enableLoginControls (pEnable) {
+    this.usernameField.disabled = !pEnable;
+    this.passwordField.disabled = !pEnable;
+    this.eauthField.disabled = !pEnable;
+    this.loginButton.disabled = !pEnable;
   }
 }
