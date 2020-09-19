@@ -114,8 +114,6 @@ export class LoginPanel extends Panel {
 
     this.div.append(form);
 
-    this.loginPending = false;
-
     this._registerEventListeners(form);
   }
 
@@ -165,10 +163,6 @@ export class LoginPanel extends Panel {
 
   _onLogin (pSubmitEvent) {
     pSubmitEvent.preventDefault();
-    if (this.loginPending) {
-      // Don't continue if waiting on a request
-      return;
-    }
 
     const username = this.usernameField.value;
     const password = this.passwordField.value;
