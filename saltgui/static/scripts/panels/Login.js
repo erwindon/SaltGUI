@@ -267,5 +267,11 @@ export class LoginPanel extends Panel {
     this.passwordField.disabled = !pEnable;
     this.eauthField.disabled = !pEnable;
     this.loginButton.disabled = !pEnable;
+    if (!pEnable) {
+      this.usernameField.blur();
+      this.passwordField.blur();
+      this.eauthField.blur();
+      this.loginButton.blur();
+    }
   }
 }

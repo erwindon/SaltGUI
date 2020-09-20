@@ -12,7 +12,7 @@
   align-self: center;
   background-color: white;
   padding: 0 50px;
-  box-shadow: 1px 1px 24px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.7);
   border-radius: 2px;
 }
 
@@ -33,21 +33,12 @@
 }
 
 #login-panel select {
-  color: black;
   width: 100%;
   font-size: 14px;
 }
 
 #login-panel select option#eauth-default {
   color: gray;
-}
-
-#login-panel select option {
-  color: black;
-}
-
-#login-panel select optgroup {
-  color: black;
 }
 
 .attribution {

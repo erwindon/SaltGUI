@@ -163,6 +163,8 @@ export class CommandBox {
       return;
     }
 
+    targetField.disabled = true;
+    commandField.disabled = true;
     button.disabled = true;
     output.innerText = "Loading...";
 
@@ -189,7 +191,11 @@ export class CommandBox {
     }
     // do not suppress the jobId (even when we can)
     Output.addResponseOutput(outputContainer, null, minions, pResponse, pCommand, "done");
+    const targetField = document.getElementById("target");
+    const commandField = document.getElementById("command");
     const button = document.querySelector(".run-command input[type='submit']");
+    targetField.disabled = false;
+    commandField.disabled = false;
     button.disabled = false;
   }
 

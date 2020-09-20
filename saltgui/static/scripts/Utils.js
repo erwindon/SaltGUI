@@ -198,6 +198,7 @@ export class Utils {
     const searchOptionsMenu = new DropDownMenu(menuAndFieldDiv);
 
     const input = document.createElement("input");
+    input.type = "text";
     input.classList.add("filter-text");
     // 1F50D = D83D DD0D = LEFT-POINTING MAGNIFYING GLASS
     input.placeholder = "\uD83D\uDD0D";
