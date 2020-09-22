@@ -58,8 +58,8 @@ export class CommandBox {
 
   static _showHelp () {
     const output = document.querySelector(".run-command pre");
-    let txt = "Hello World!";
-    txt = "<h2>Target field</h2>";
+    let txt = "";
+    txt += "<h2>Target field</h2>";
     txt += "<p>Entries that contain a @, (, ) or space are assumed to be a compound target selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/#compound-targeting' target='_blank'>Compound Targeting<img src='static/images/externallink.png' width='12px'></a>.";
     txt += "<br/>Entries that contain a COMMA are assumed to be a list target selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/globbing.html#lists' target='_blank'>List Targeting<img src='static/images/externallink.png' width='12px'></a>.";
     txt += "<br/>Entries that start with a # are assumed to be a nodegroup target selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/nodegroups.html' target='_blank'>Nodegroup Targeting<img src='static/images/externallink.png' width='12px'></a>.";
