@@ -92,36 +92,36 @@ export class OutputYaml {
     }
 
     if (Array.isArray(pValue)) {
-      let out = "";
-      let separator = "";
+      let aOut = "";
+      let aSeparator = "";
       for (const item of pValue) {
         // 00A0 = NO-BREAK SPACE
-        out += separator + "-\u00A0" + OutputYaml.formatYAML(item, pIndentLevel + 2);
-        separator = "\n" + " ".repeat(pIndentLevel);
+        aOut += aSeparator + "-\u00A0" + OutputYaml.formatYAML(item, pIndentLevel + 2);
+        aSeparator = "\n" + " ".repeat(pIndentLevel);
       }
-      return out;
+      return aOut;
     }
 
     // regular object
-    let out = "";
-    let separator = "";
+    let oOut = "";
+    let oSeparator = "";
     for (const key of Object.keys(pValue).sort()) {
       const item = pValue[key];
-      out += separator + key + ":";
+      oOut += oSeparator + key + ":";
       const systr = OutputYaml._formatSimpleYAML(item);
       if (systr !== null) {
-        out += " " + systr;
+        oOut += " " + systr;
       } else if (Array.isArray(item)) {
-        out += "\n" + " ".repeat(pIndentLevel) + OutputYaml.formatYAML(item, pIndentLevel);
+        oOut += "\n" + " ".repeat(pIndentLevel) + OutputYaml.formatYAML(item, pIndentLevel);
       } else if (typeof item === "object") {
-        out += "\n" + " ".repeat(pIndentLevel + indentStep) + OutputYaml.formatYAML(item, pIndentLevel + indentStep);
+        oOut += "\n" + " ".repeat(pIndentLevel + indentStep) + OutputYaml.formatYAML(item, pIndentLevel + indentStep);
       } else {
         /* istanbul ignore next */
-        out += "x" + OutputYaml.formatYAML(item, pIndentLevel + indentStep);
+        oOut += "x" + OutputYaml.formatYAML(item, pIndentLevel + indentStep);
       }
-      separator = "\n" + " ".repeat(pIndentLevel);
+      oSeparator = "\n" + " ".repeat(pIndentLevel);
     }
-    return out;
+    return oOut;
   }
 
 }

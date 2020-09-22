@@ -46,9 +46,10 @@ export class JobsPanel extends Panel {
       return;
     }
 
+    const tbody = this.table.tBodies[0];
+
     if (typeof pData !== "object") {
       // update all jobs (page) with the error message
-      const tbody = this.table.tBodies[0];
       for (const tr of tbody.rows) {
         const statusField = tr.querySelector("span.no-job-status");
         if (!statusField) {
@@ -95,7 +96,6 @@ export class JobsPanel extends Panel {
     }
 
     // update all finished jobs (page)
-    const tbody = this.table.tBodies[0];
     for (const tr of tbody.rows) {
       const statusField = tr.querySelector("span.no-job-status");
       if (!statusField) {

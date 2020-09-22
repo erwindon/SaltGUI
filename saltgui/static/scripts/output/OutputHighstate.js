@@ -96,32 +96,32 @@ export class OutputHighstate {
 
       const components = task.___key___.split("_|-");
 
-      let txt = "----------";
+      let tTxt = "----------";
 
       if (task.name) {
-        txt += "\n          ID: " + task.name;
+        tTxt += "\n          ID: " + task.name;
       } else {
-        txt += "\n          ID: (anonymous task)";
+        tTxt += "\n          ID: (anonymous task)";
       }
 
-      txt += "\n    Function: " + components[0] + "." + components[3];
+      tTxt += "\n    Function: " + components[0] + "." + components[3];
 
-      txt += "\n      Result: " + JSON.stringify(task.result);
+      tTxt += "\n      Result: " + JSON.stringify(task.result);
 
       if (task.comment) {
-        txt += "\n     Comment: " + task.comment;
+        tTxt += "\n     Comment: " + task.comment;
       }
 
       if (task.start_time) {
-        txt += "\n     Started: " + task.start_time;
+        tTxt += "\n     Started: " + task.start_time;
       }
 
       if (task.duration) {
-        txt += "\n    Duration: " + OutputHighstate._getDurationClauseMillis(task.duration);
+        tTxt += "\n    Duration: " + OutputHighstate._getDurationClauseMillis(task.duration);
         totalMilliSeconds += task.duration;
       }
 
-      txt += "\n     Changes:";
+      tTxt += "\n     Changes:";
 
       let hasChanges = false;
       if (task["changes"] !== undefined) {
@@ -133,12 +133,12 @@ export class OutputHighstate {
         const str = JSON.stringify(changes);
         if (str !== "{}") {
           hasChanges = true;
-          txt += "\n" + OutputNested.formatNESTED(changes, 14);
+          tTxt += "\n" + OutputNested.formatNESTED(changes, 14);
           changes += 1;
         }
       }
 
-      const taskSpan = Utils.createSpan("", txt);
+      const taskSpan = Utils.createSpan("", tTxt);
       if (!task.result) {
         taskSpan.style.color = "red";
       } else if (hasChanges) {
@@ -153,36 +153,36 @@ export class OutputHighstate {
       div.append(taskDiv);
     }
 
-    let txt = "\nSummary for " + pMinionId;
-    txt += "\n------------";
-    const summarySpan = Utils.createSpan("", txt);
+    let sTxt = "\nSummary for " + pMinionId;
+    sTxt += "\n------------";
+    const summarySpan = Utils.createSpan("", sTxt);
     summarySpan.style.color = "aqua";
     div.append(summarySpan);
 
-    txt = "\nSucceeded: " + succeeded;
-    const succeededSpan = Utils.createSpan("", txt);
+    sTxt = "\nSucceeded: " + succeeded;
+    const succeededSpan = Utils.createSpan("", sTxt);
     succeededSpan.style.color = "lime";
     div.append(succeededSpan);
 
     if (changes > 0) {
-      txt = " (";
-      const oSpan = Utils.createSpan("", txt);
+      sTxt = " (";
+      const oSpan = Utils.createSpan("", sTxt);
       oSpan.style.color = "white";
       div.append(oSpan);
 
-      txt = "changed=" + changes;
-      const changedSpan = Utils.createSpan("", txt);
+      sTxt = "changed=" + changes;
+      const changedSpan = Utils.createSpan("", sTxt);
       changedSpan.style.color = "lime";
       div.append(changedSpan);
 
-      txt = ")";
-      const cSpan = Utils.createSpan("", txt);
+      sTxt = ")";
+      const cSpan = Utils.createSpan("", sTxt);
       cSpan.style.color = "white";
       div.append(cSpan);
     }
 
-    txt = "\nFailed:    " + failed;
-    const failedSpan = Utils.createSpan("", txt);
+    sTxt = "\nFailed:    " + failed;
+    const failedSpan = Utils.createSpan("", sTxt);
     if (failed > 0) {
       failedSpan.style.color = "red";
     } else {
@@ -190,10 +190,10 @@ export class OutputHighstate {
     }
     div.append(failedSpan);
 
-    txt = "\n------------";
-    txt += "\nTotal states run: " + (succeeded + skipped + failed);
-    txt += "\nTotal run time: " + OutputHighstate._getDurationClauseSecs(totalMilliSeconds);
-    const totalsSpan = Utils.createSpan("", txt);
+    sTxt = "\n------------";
+    sTxt += "\nTotal states run: " + (succeeded + skipped + failed);
+    sTxt += "\nTotal run time: " + OutputHighstate._getDurationClauseSecs(totalMilliSeconds);
+    const totalsSpan = Utils.createSpan("", sTxt);
     totalsSpan.style.color = "aqua";
     div.append(totalsSpan);
 

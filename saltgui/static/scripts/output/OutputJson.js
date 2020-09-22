@@ -63,11 +63,11 @@ export class OutputJson {
       // an array
       // put each element on its own line
       str = "[";
-      let separator = "";
+      let aSeparator = "";
       for (const elem of pValue) {
-        str += separator + "\n" + " ".repeat(pIndentLevel + indentStep) +
+        str += aSeparator + "\n" + " ".repeat(pIndentLevel + indentStep) +
           OutputJson.formatJSON(elem, pIndentLevel + indentStep);
-        separator = ",";
+        aSeparator = ",";
       }
       str += "\n" + " ".repeat(pIndentLevel) + "]";
       return str;
@@ -76,14 +76,14 @@ export class OutputJson {
     // regular object
     // put each name+value on its own line
     str = "{";
-    let separator = "";
+    let oSeparator = "";
     // do not use Object.entries, that is not supported by the test framework
     const sortedKeys = Object.keys(pValue).sort();
     for (const key of sortedKeys) {
       const item = pValue[key];
-      str += separator + "\n" + " ".repeat(pIndentLevel + indentStep) + JSON.stringify(key) + ": " +
+      str += oSeparator + "\n" + " ".repeat(pIndentLevel + indentStep) + JSON.stringify(key) + ": " +
         OutputJson.formatJSON(item, pIndentLevel + indentStep);
-      separator = ",";
+      oSeparator = ",";
     }
     str += "\n" + " ".repeat(pIndentLevel) + "}";
     return str;
