@@ -1,7 +1,5 @@
 /* global config */
 
-import {Utils} from "../Utils.js";
-
 export class Page {
 
   constructor (pPath, pPageName, pPageSelector, pMenuItemSelector, pRouter) {
@@ -29,27 +27,6 @@ export class Page {
       this.menuItemElement1 = document.getElementById(pMenuItemSelector + "1");
       this.menuItemElement2 = document.getElementById(pMenuItemSelector + "2");
     }
-  }
-
-  updateOfflineMinion (pMinionId, pMinionsDict) {
-    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
-
-    minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
-
-    const offlineSpan = Utils.createSpan("status", "offline");
-    // add an opinion when we have one
-    if (pMinionId in pMinionsDict) {
-      if (pMinionsDict[pMinionId] === "true") {
-        Utils.addToolTip(offlineSpan, "Minion is offline\nIs the host running and is the salt-minion installed and started?\nUpdate file 'minions.txt' when needed", "bottom-left");
-        offlineSpan.style.color = "red";
-      } else {
-        Utils.addToolTip(offlineSpan, "Minion is offline\nSince it is reported as inactive in file 'minions.txt', that should be OK", "bottom-left");
-      }
-    }
-    offlineSpan.classList.add("offline");
-    const offlineTd = Utils.createTd("", "");
-    offlineTd.appendChild(offlineSpan);
-    minionTr.appendChild(offlineTd);
   }
 
   static _getIpNumberPrefixes (pAllMinionsGrains) {

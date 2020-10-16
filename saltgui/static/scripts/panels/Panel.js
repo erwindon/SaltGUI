@@ -539,6 +539,27 @@ export class Panel {
     this.setMsg(txt);
   }
 
+  updateOfflineMinion (pMinionId, pMinionsDict) {
+    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
+
+    minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
+
+    const offlineSpan = Utils.createSpan("status", "offline");
+    // add an opinion when we have one
+    if (pMinionId in pMinionsDict) {
+      if (pMinionsDict[pMinionId] === "true") {
+        Utils.addToolTip(offlineSpan, "Minion is offline\nIs the host running and is the salt-minion installed and started?\nUpdate file 'minions.txt' when needed", "bottom-left");
+        offlineSpan.style.color = "red";
+      } else {
+        Utils.addToolTip(offlineSpan, "Minion is offline\nSince it is reported as inactive in file 'minions.txt', that should be OK", "bottom-left");
+      }
+    }
+    offlineSpan.classList.add("offline");
+    const offlineTd = Utils.createTd("", "");
+    offlineTd.appendChild(offlineSpan);
+    minionTr.appendChild(offlineTd);
+  }
+
   runCommand (pClickEvent, pTargetString, pCommandString) {
     this.runFullCommand(pClickEvent, "", pTargetString, pCommandString);
   }
