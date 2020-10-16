@@ -100,8 +100,8 @@ export class JobPanel extends Panel {
         // prevent quotes being added on JIDs
         ret += " " + obj;
       } else {
-        const objAsString = Output.formatObject(obj);
-        ret += " " + objAsString.replace(/\n/g, " ");
+        const objAsString = JSON.stringify(obj);
+        ret += " " + objAsString;
       }
     }
 
