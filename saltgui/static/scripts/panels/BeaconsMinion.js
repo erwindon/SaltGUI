@@ -96,14 +96,22 @@ export class BeaconsMinionPanel extends Panel {
       // menu comes before this data on purpose
       const beaconConfig = Output.formatObject(beacon);
       const beaconConfigTd = Utils.createTd("beacon-config", beaconConfig);
+      let initialValue = "";
       if (beacons.enabled === false) {
         beaconConfigTd.classList.add("beacon-disabled");
-      } else if (beacon.enabled === false) {
+        initialValue = initialValue + "\n(beacons disabled)";
+      }
+      if (beacon.enabled === false) {
         beaconConfigTd.classList.add("beacon-disabled");
+        initialValue = initialValue + "\n(beacon disabled)";
       }
       tr.appendChild(beaconConfigTd);
 
-      const beaconValueTd = Utils.createTd("beacon-value", "(waiting)");
+      if (initialValue === "") {
+        initialValue = "(waiting)";
+      }
+      initialValue = initialValue.trim();
+      const beaconValueTd = Utils.createTd("beacon-value", initialValue);
       beaconValueTd.classList.add("beacon-waiting");
       tr.appendChild(beaconValueTd);
 
