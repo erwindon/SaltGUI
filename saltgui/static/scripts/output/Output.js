@@ -415,7 +415,7 @@ export class Output {
       // 25BD = WHITE DOWN-POINTING TRIANGLE
       masterTriangle.innerText = "\u25BD";
     }
-    masterTriangle.style = "cursor: pointer";
+    masterTriangle.style.cursor = "pointer";
     allDiv.appendChild(masterTriangle);
 
     pOutputContainer.appendChild(allDiv);
@@ -586,7 +586,7 @@ export class Output {
       let triangle = null;
       if (minionMultiLine) {
         triangle = Utils.createSpan("triangle", masterTriangle.innerText);
-        triangle.style = "cursor: pointer";
+        triangle.style.cursor = "pointer";
         triangle.addEventListener("click", () => {
           // 25BD = WHITE DOWN-POINTING TRIANGLE
           if (triangle.innerText === "\u25BD") {

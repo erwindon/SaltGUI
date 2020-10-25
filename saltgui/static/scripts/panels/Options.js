@@ -57,7 +57,7 @@ export class OptionsPanel extends Panel {
     const tr = document.createElement("tr");
     const tdName = document.createElement("td");
     tdName.id = "option-" + pNameId;
-    tdName.style = "white-space: normal";
+    tdName.style.whiteSpace = "normal";
     tdName.innerText = pNameTxt + ":";
     tr.appendChild(tdName);
     const tdValue = document.createElement("td");

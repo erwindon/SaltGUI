@@ -71,7 +71,8 @@ export class Panel {
     // 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play)
     // FE0E = VARIATION SELECTOR-15 (render as text)
     playButton.innerHTML = "&#x23F5;&#xFE0E;";
-    playButton.style = "cursor: pointer; font-size: x-large";
+    playButton.style.cursor = "pointer";
+    playButton.style.fontSize = "x-large";
     playButton.style.display = pInitialStatus === "play" ? "none" : "";
     this.div.appendChild(playButton);
     this.playButton = playButton;
@@ -80,7 +81,9 @@ export class Panel {
     // 23F8 = DOUBLE VERTICAL BAR (pause)
     // FE0E = VARIATION SELECTOR-15 (render as text)
     pauseButton.innerHTML = "&#x23F8;&#xFE0E;";
-    pauseButton.style = "display: none; cursor: pointer; font-size: x-large";
+    pauseButton.style.display = "none";
+    pauseButton.style.cursor = "pointer";
+    pauseButton.style.fontSize = "x-large";
     pauseButton.style.display = pInitialStatus === "pause" ? "none" : "";
     this.div.appendChild(pauseButton);
     this.pauseButton = pauseButton;
@@ -107,8 +110,9 @@ export class Panel {
     span.classList.add("nearly-visible-button");
     // 2753 = BLACK QUESTION MARK ORNAMENT
     // FE0E = VARIATION SELECTOR-15 (render as text)
-    span.style = "float: right; cursor: help";
     span.innerHTML = "&#x2753;&#xFE0E;";
+    span.style.cssFloat = "right";
+    span.style.cursor = "help";
     this.div.appendChild(span);
 
     Utils.addToolTip(span, pHelpText, "bottom-right");
@@ -120,8 +124,8 @@ export class Panel {
     span.classList.add("nearly-visible-button");
     // 2716 = HEAVY MULTIPLICATION X
     // FE0E = VARIATION SELECTOR-15 (render as text)
-    span.style = "float: right";
     span.innerHTML = "&#x2716;&#xFE0E;";
+    span.style.cssFloat = "right";
     this.div.appendChild(span);
 
     span.addEventListener("click", () => {
