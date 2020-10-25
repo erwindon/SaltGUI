@@ -85,10 +85,6 @@ export class BeaconsMinionPanel extends Panel {
       }
 
       const beaconMenu = new DropDownMenu(tr);
-      let cmd = "beacons.modify " + beaconName;
-      for (const key in beacon) {
-        cmd = cmd + " " + key + "=" + JSON.stringify(beacon[key]);
-      }
       this._addMenuItemBeaconsDisableBeaconWhenNeeded(beaconMenu, pMinionId, beaconName, beacon);
       this._addMenuItemBeaconsEnableBeaconWhenNeeded(beaconMenu, pMinionId, beaconName, beacon);
       this._addMenuItemBeaconsDelete(beaconMenu, pMinionId, beaconName);
@@ -99,11 +95,11 @@ export class BeaconsMinionPanel extends Panel {
       let initialValue = "";
       if (beacons.enabled === false) {
         beaconConfigTd.classList.add("beacon-disabled");
-        initialValue = initialValue + "\n(beacons disabled)";
+        initialValue += "\n(beacons disabled)";
       }
       if (beacon.enabled === false) {
         beaconConfigTd.classList.add("beacon-disabled");
-        initialValue = initialValue + "\n(beacon disabled)";
+        initialValue += "\n(beacon disabled)";
       }
       tr.appendChild(beaconConfigTd);
 

@@ -396,7 +396,7 @@ export class Output {
         "", ", {0} no response", ", {0} no responses");
 
       if (cntResponses > 0 && cntMinions !== cntResponses) {
-        txt = txt + ", " + cntMinions + " total";
+        txt += ", " + cntMinions + " total";
       }
 
       allDiv.appendChild(summaryJobsActiveSpan);

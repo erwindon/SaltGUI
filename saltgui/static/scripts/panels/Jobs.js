@@ -79,10 +79,10 @@ export class JobsPanel extends Panel {
       }
       // then add the operational statistics
       if (job.Running && job.Running.length > 0) {
-        targetText = targetText + job.Running.length + " running";
+        targetText += job.Running.length + " running";
       }
       if (job.Returned && job.Returned.length > 0) {
-        targetText = targetText + ", " + job.Returned.length + " returned";
+        targetText += ", " + job.Returned.length + " returned";
       }
 
       // the field may not (yet) be on the screen
