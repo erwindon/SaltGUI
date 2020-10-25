@@ -15,9 +15,9 @@ export class BeaconsMinionPanel extends Panel {
     this.addPanelMenu();
     this.addSearchButton();
     this.addPlayPauseButton("play");
-    this.addHelpButton("The content of column 'Value' is automatically refreshed\nNote that some beacons produce multiple values, e.g. one per disk.\nIn that case, effectively only one of the values is visible here.");
+    this.addHelpButton("The content of column 'Value' is automatically refreshed\nNote that some beacons produce multiple values, e.g. one per disk\nIn that case, effectively only one of the values is visible here");
     this.addCloseButton();
-    this.addTable(["Name", "Config", "Value", "-val-"]);
+    this.addTable(["Name", "Config", "Value", "-val-", "-help-"]);
     this.setTableSortable("Name", "asc");
     this.setTableClickable();
     this.addMsg();
@@ -135,6 +135,19 @@ export class BeaconsMinionPanel extends Panel {
         const beacon0 = beacons0[beaconName];
         this.runCommand(pClickEvent, pMinionId, "beacons.modify " + beaconName + " " + JSON.stringify(beacon0));
       });
+
+      const helpButtonTd = Utils.createTd("help-button", "");
+      const helpButtonSpan = document.createElement("span");
+      helpButtonSpan.id = this.key + "-" + beaconName + "-help-button";
+      helpButtonSpan.classList.add("nearly-visible-button");
+      // 2753 = BLACK QUESTION MARK ORNAMENT
+      // FE0E = VARIATION SELECTOR-15 (render as text)
+      helpButtonSpan.innerHTML = "&#x2753;&#xFE0E;";
+      helpButtonSpan.style.display = "none";
+      helpButtonSpan.style.cursor = "help";
+      helpButtonTd.appendChild(helpButtonSpan);
+      tr.helpButtonSpan = helpButtonSpan;
+      tr.appendChild(helpButtonTd);
     }
 
     this.updateFooter();
@@ -218,8 +231,11 @@ export class BeaconsMinionPanel extends Panel {
         continue;
       }
       let txt = "";
+      let stamp = "";
       if (pData["_stamp"]) {
-        txt += Output.dateTimeStr(pData["_stamp"]) + "\n";
+        // keep timestamp for further logic
+        stamp = pData["_stamp"];
+        txt += Output.dateTimeStr(stamp) + "\n";
         delete pData["_stamp"];
       }
       if (pTag !== prefix + beaconName + "/") {
@@ -232,6 +248,40 @@ export class BeaconsMinionPanel extends Panel {
       txt += Output.formatObject(pData);
       const td = row.getElementsByTagName("td")[3];
       td.classList.remove("beacon-waiting");
+
+      // round down to 0.1 second
+      // secondary events are close, but rarely exact on the same time
+      // original: yyyy-mm-ddThh:mm:ss.ssssss
+      stamp = stamp.substr(0, 21);
+
+      // when the warning-line has been shown, then from then on,
+      // show an empty line when there is no warning.
+      // this prevents a jumpy screen, while preserving space with
+      // tags that are never affected.
+      // See also: https://github.com/saltstack/salt/issues/57174
+      let helpText = null;
+      if (td.prevStamp && td.prevStamp !== stamp) {
+        // event has a different timestamp
+        // normal situation, no reason for panic
+      } else if (td.prevTag && td.prevTag !== pTag) {
+        helpText = "Multiple events seen with same timestamp, but different tag\nThis usually means that there is more data than can be seen here\nThere may e.g. be more than one disk or networkinterface\nBut only the most recently reported one is actually shown";
+      } else if (td.prevData && td.prevData !== pData) {
+        helpText = "Multiple events seen with same timestamp, same tag, but different data\nThis usually means that there is more data than can be seen here\nThere may e.g. be more than one disk or networkinterface\nBut only the most recently reported one is actually shown";
+      } else {
+        // duplicate of previous event, never mind for now
+      }
+
+      if (helpText) {
+        Utils.addToolTip(row.helpButtonSpan, helpText, "bottom-right");
+        row.helpButtonSpan.style.display = "";
+      } else {
+        row.helpButtonSpan.style.display = "none";
+      }
+
+      td.prevStamp = stamp;
+      td.prevTag = pTag;
+      td.prevData = pData;
+
       td.innerText = txt;
       break;
     }
