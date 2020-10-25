@@ -14,6 +14,7 @@ export class BeaconsMinionPanel extends Panel {
     this.addTitle("Beacons on ...");
     this.addPanelMenu();
     this.addSearchButton();
+    this.addPlayPauseButton("play");
     this.addHelpButton("The content of column 'Value' is automatically refreshed\nNote that some beacons produce multiple values, e.g. one per disk.\nIn that case, effectively only one of the values is visible here.");
     this.addCloseButton();
     this.addTable(["Name", "Config", "Value", "-val-"]);
@@ -37,6 +38,21 @@ export class BeaconsMinionPanel extends Panel {
       this._handleLocalBeaconsList(JSON.stringify(pLocalBeaconsListMsg), minionId);
       return false;
     });
+  }
+
+  updateFooter () {
+    // update the footer
+    const tbody = this.table.tBodies[0];
+    let txt = Utils.txtZeroOneMany(tbody.rows.length,
+      "No beacons", "{0} beacon", "{0} beacons");
+
+    if (this.playOrPause === "pause") {
+      // 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play)
+      // FE0E = VARIATION SELECTOR-15 (render as text)
+      txt += ", press '&#x23F5;&#xFE0E;' to continue";
+    }
+
+    this.setMsg(txt, true);
   }
 
   _handleLocalBeaconsList (pLocalBeaconsListData, pMinionId) {
@@ -116,13 +132,12 @@ export class BeaconsMinionPanel extends Panel {
 
       // run the command with the original beacon definition
       tr.addEventListener("click", (pClickEvent) => {
-        this.runCommand(pClickEvent, pMinionId, "beacons.modify " + beaconName + " " + JSON.stringify(beacons0[beaconName]));
+        const beacon0 = beacons0[beaconName];
+        this.runCommand(pClickEvent, pMinionId, "beacons.modify " + beaconName + " " + JSON.stringify(beacon0));
       });
     }
 
-    const txt = Utils.txtZeroOneMany(keys.length,
-      "No beacons", "{0} beacon", "{0} beacons");
-    this.setMsg(txt);
+    this.updateFooter();
   }
 
   _addMenuItemBeaconsDisableWhenNeeded (pMinionId, beacons) {
@@ -186,6 +201,11 @@ export class BeaconsMinionPanel extends Panel {
   }
 
   handleSaltBeaconEvent (pTag, pData) {
+
+    if (this.playOrPause !== "play") {
+      return;
+    }
+
     const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
     const prefix = "salt/beacon/" + minionId + "/";
     if (!pTag.startsWith(prefix)) {

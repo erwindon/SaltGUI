@@ -13,32 +13,18 @@ export class EventsPanel extends Panel {
 
     this.addTitle("Recent Events");
     this.addSearchButton();
-    this.addPlayPauseButton();
+    this.addPlayPauseButton("pause");
     this.addHelpButton("The content of this page is\nautomatically refreshed\nDisplay is limited to " + MAX_EVENTS_IN_VIEW + " events");
     this.addTable(["Timestamp", "Tag", "Data"]);
     this.setTableSortable("Timestamp", "desc");
     this.addMsg();
-
-    this.playButton.onclick = () => {
-      this._clickEventsPlayButton(true);
-    };
-    this.pauseButton.onclick = () => {
-      this._clickEventsPlayButton(false);
-    };
   }
 
   onShow () {
-    this._updateFooter();
+    this.updateFooter();
   }
 
-  _clickEventsPlayButton (isPlay) {
-    this.playButton.style.display = isPlay ? "none" : "";
-    this.pauseButton.style.display = isPlay ? "" : "none";
-    Utils.setStorageItem("session", "events-button", isPlay ? "play" : "pause");
-    this._updateFooter();
-  }
-
-  _updateFooter () {
+  updateFooter () {
     // update the footer
     const tbody = this.table.tBodies[0];
     // when there are more than a screen-ful of events, the user
@@ -46,24 +32,31 @@ export class EventsPanel extends Panel {
     // knows that because that cause the events to be shown...
     let txt = Utils.txtZeroOneMany(tbody.rows.length,
       "No events", "{0} event", "{0} events");
-    if (Utils.getStorageItem("session", "events-button") === "play") {
-      txt += ", waiting for events";
-    } else if (tbody.rows.length) {
-      // 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play)
-      // FE0E = VARIATION SELECTOR-15 (render as text)
-      txt += ", press '&#x23F5;&#xFE0E;' to continue";
+    /* eslint-disable no-lonely-if */
+    if (this.playOrPause === "play") {
+      if (tbody.rows.length) {
+        txt += ", waiting for more events";
+      } else {
+        txt += ", waiting for events";
+      }
     } else {
-      // 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play)
-      // FE0E = VARIATION SELECTOR-15 (render as text)
-      txt += ", press '&#x23F5;&#xFE0E;' to begin";
+      if (tbody.rows.length) {
+        // 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play)
+        // FE0E = VARIATION SELECTOR-15 (render as text)
+        txt += ", press '&#x23F5;&#xFE0E;' to continue";
+      } else {
+        // 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play)
+        // FE0E = VARIATION SELECTOR-15 (render as text)
+        txt += ", press '&#x23F5;&#xFE0E;' to begin";
+      }
     }
+    /* eslint-enable no-lonely-if */
     this.setMsg(txt, true);
   }
 
   handleAnyEvent (pTag, pData) {
 
-    if (Utils.getStorageItem("session", "events-button") !== "play") {
-      // includes un-set and empty
+    if (this.playOrPause !== "play") {
       return;
     }
 
@@ -109,6 +102,6 @@ export class EventsPanel extends Panel {
       tbody.deleteRow(tbody.rows.length - 1);
     }
 
-    this._updateFooter();
+    this.updateFooter();
   }
 }

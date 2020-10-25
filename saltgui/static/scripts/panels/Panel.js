@@ -66,22 +66,39 @@ export class Panel {
     this.searchButton = span;
   }
 
-  addPlayPauseButton () {
+  addPlayPauseButton (pInitialStatus) {
     const playButton = document.createElement("span");
     // 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play)
     // FE0E = VARIATION SELECTOR-15 (render as text)
-    playButton.style = "cursor: pointer; font-size: x-large";
     playButton.innerHTML = "&#x23F5;&#xFE0E;";
+    playButton.style = "cursor: pointer; font-size: x-large";
+    playButton.style.display = pInitialStatus === "play" ? "none" : "";
     this.div.appendChild(playButton);
     this.playButton = playButton;
 
     const pauseButton = document.createElement("span");
     // 23F8 = DOUBLE VERTICAL BAR (pause)
     // FE0E = VARIATION SELECTOR-15 (render as text)
-    pauseButton.style = "display: none; cursor: pointer; font-size: x-large";
     pauseButton.innerHTML = "&#x23F8;&#xFE0E;";
+    pauseButton.style = "display: none; cursor: pointer; font-size: x-large";
+    pauseButton.style.display = pInitialStatus === "pause" ? "none" : "";
     this.div.appendChild(pauseButton);
     this.pauseButton = pauseButton;
+
+    this.playButton.onclick = () => {
+      this.playButton.style.display = "none";
+      this.pauseButton.style.display = "";
+      this.playOrPause = "play";
+      this.updateFooter();
+    };
+    this.pauseButton.onclick = () => {
+      this.playButton.style.display = "";
+      this.pauseButton.style.display = "none";
+      this.playOrPause = "pause";
+      this.updateFooter();
+    };
+
+    this.playOrPause = pInitialStatus;
   }
 
   addHelpButton (pHelpText) {

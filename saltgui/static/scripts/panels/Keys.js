@@ -11,6 +11,7 @@ export class KeysPanel extends Panel {
 
     this.addTitle("Keys");
     this.addSearchButton();
+    this.addPlayPauseButton("play");
     this.addHelpButton("The content of this page is\nautomatically refreshed");
     this.addTable(["Minion", "Status", "-menu-", "Fingerprint"], "data-list-keys");
     this.setTableSortable("Status", "asc");
@@ -124,10 +125,10 @@ export class KeysPanel extends Panel {
       this._addMissingMinion(minionId);
     }
 
-    this._updateTableSummary();
+    this.updateFooter();
   }
 
-  _updateTableSummary () {
+  updateFooter () {
     const cnt = {};
     cnt["unaccepted"] = 0;
     cnt["accepted"] = 0;
@@ -144,20 +145,26 @@ export class KeysPanel extends Panel {
       cnt[statusText] += 1;
     }
 
-    let summary = "";
+    let txt = "";
     for (const key of Object.keys(cnt).sort()) {
-      summary += ", " + Utils.txtZeroOneMany(cnt[key],
+      txt += ", " + Utils.txtZeroOneMany(cnt[key],
         "no " + key + " keys",
         "{0} " + key + " key",
         "{0} " + key + " keys");
     }
 
     // remove the first comma
-    summary = summary.replace(/^, /, "");
+    txt = txt.replace(/^, /, "");
     // capitalize the first word (can only be "no")
-    summary = summary.replace(/^no/, "No");
+    txt = txt.replace(/^no/, "No");
 
-    this.setMsg(summary);
+    if (this.playOrPause === "pause") {
+      // 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play)
+      // FE0E = VARIATION SELECTOR-15 (render as text)
+      txt += ", press '&#x23F5;&#xFE0E;' to continue";
+    }
+
+    this.setMsg(txt, true);
   }
 
   _addAcceptedMinion (pMinionId, pMinionsDict) {
@@ -384,6 +391,11 @@ export class KeysPanel extends Panel {
   }
 
   handleSaltAuthEvent (pData) {
+
+    if (this.playOrPause !== "play") {
+      return;
+    }
+
     const tr = this.table.querySelector("tr#" + Utils.getIdFromMinionId(pData.id));
     const minionsDict = JSON.parse(window.sessionStorage.getItem("minions-txt"));
     if (tr) {
@@ -469,7 +481,7 @@ export class KeysPanel extends Panel {
       });
     }
 
-    this._updateTableSummary();
+    this.updateFooter();
   }
 
   handleSaltKeyEvent (pData) {
