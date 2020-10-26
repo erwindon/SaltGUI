@@ -8,6 +8,10 @@ LABEL version=1.14.0
 ENV NGINX_VERSION=1.14.0
 ENV DEBIAN_FRONTEND=noninteractive
 
+# fix ubuntu
+# see https://askubuntu.com/questions/1235914/hash-sum-mismatch-error-due-to-identical-sha1-and-md5-but-different-sha256
+RUN mkdir /etc/gcrypt && echo all >> /etc/gcrypt/hwf.deny
+
 RUN apt-get update \
   # install nginx
   && apt-get install -y nginx=${NGINX_VERSION}* --no-install-recommends \

@@ -8,6 +8,10 @@ LABEL version=3000.3
 ENV SALT_VERSION=3000.3
 ENV DEBIAN_FRONTEND=noninteractive
 
+# fix ubuntu
+# see https://askubuntu.com/questions/1235914/hash-sum-mismatch-error-due-to-identical-sha1-and-md5-but-different-sha256
+RUN mkdir /etc/gcrypt && echo all >> /etc/gcrypt/hwf.deny
+
 # add saltstack key and install dependencies
 RUN apt-get update \
   && apt-get install curl net-tools gnupg2 --yes --no-install-recommends \
