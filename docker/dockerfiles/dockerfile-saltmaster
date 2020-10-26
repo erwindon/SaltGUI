@@ -3,9 +3,9 @@ FROM ubuntu:20.04
 LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
 LABEL name=salt-master
 LABEL project="SaltGUI testing"
-LABEL version=3000.3
+LABEL version=3002
 
-ENV SALT_VERSION=3000.3
+ENV SALT_VERSION=3002
 ENV DEBIAN_FRONTEND=noninteractive
 
 # fix ubuntu

@@ -3,9 +3,9 @@ FROM centos:8.2.2004
 LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
 LABEL name=salt-minion
 LABEL project="SaltGUI testing"
-LABEL version=3000.3
+LABEL version=3002
 
-ENV SALT_VERSION=3000.3
+ENV SALT_VERSION=3002
 ENV DEBIAN_FRONTEND=noninteractive
 
 # add saltstack key and install dependencies
