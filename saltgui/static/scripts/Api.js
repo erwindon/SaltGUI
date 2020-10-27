@@ -345,7 +345,7 @@ export class API {
         // new key has been received
         pRouter.keysPage.handleSaltAuthEvent(data);
       } else if (tag === "salt/key") {
-        pRouter.keysPage.handleSaltKeyEvent(tag, data);
+        pRouter.keysPage.handleSaltKeyEvent(data);
       } else if (tag.startsWith("salt/job/") && tag.includes("/ret/")) {
         pRouter.jobPage.handleSaltJobRetEvent(data);
       }

@@ -20,8 +20,8 @@ export class KeysPage extends Page {
     this.jobs.onShow();
   }
 
-  handleSaltAuthEvent (pTag, pData) {
-    this.keys.handleSaltAuthEvent(pTag, pData);
+  handleSaltAuthEvent (pData) {
+    this.keys.handleSaltAuthEvent(pData);
   }
 
   handleSaltKeyEvent (pData) {
