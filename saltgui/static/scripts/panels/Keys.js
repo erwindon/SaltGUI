@@ -210,12 +210,12 @@ export class KeysPanel extends Panel {
     rejected.classList.add("rejected");
     minionTr.appendChild(rejected);
 
+    // drop down menu
+    this._addDropDownMenu(minionTr, pMinionId);
+
     // force same columns on all rows
     // do not use class "fingerprint" yet
     minionTr.appendChild(Utils.createTd("os", "loading..."));
-
-    // drop down menu
-    this._addDropDownMenu(minionTr, pMinionId);
 
     const tbody = this.table.tBodies[0];
     tbody.appendChild(minionTr);
@@ -238,12 +238,12 @@ export class KeysPanel extends Panel {
     denied.classList.add("denied");
     minionTr.appendChild(denied);
 
+    // drop down menu
+    this._addDropDownMenu(minionTr, pMinionId);
+
     // force same columns on all rows
     // do not use class "fingerprint" yet
     minionTr.appendChild(Utils.createTd("os", "loading..."));
-
-    // drop down menu
-    this._addDropDownMenu(minionTr, pMinionId);
 
     const tbody = this.table.tBodies[0];
     tbody.appendChild(minionTr);
@@ -269,12 +269,12 @@ export class KeysPanel extends Panel {
     pre.classList.add("unaccepted");
     minionTr.appendChild(pre);
 
+    // drop down menu
+    this._addDropDownMenu(minionTr, pMinionId);
+
     // force same columns on all rows
     // do not use class "fingerprint" yet
     minionTr.appendChild(Utils.createTd("os", "loading..."));
-
-    // drop down menu
-    this._addDropDownMenu(minionTr, pMinionId);
 
     const tbody = this.table.tBodies[0];
     if (pInsertAtTop) {
@@ -301,10 +301,10 @@ export class KeysPanel extends Panel {
     missing.classList.add("missing");
     minionTr.appendChild(missing);
 
-    minionTr.appendChild(Utils.createTd("fingerprint", ""));
-
     // drop down menu
     this._addDropDownMenu(minionTr, pMinionId);
+
+    minionTr.appendChild(Utils.createTd("fingerprint", ""));
   }
 
   _addDropDownMenu (pMinionTr, pMinionId) {
