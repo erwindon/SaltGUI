@@ -7,6 +7,12 @@ export class OutputDocumentation {
   // test whether the returned data matches the requested data
   static _isDocuKeyMatch (pKey, pFilterKey) {
 
+    // user may already have typed the "."
+    // but does not know what to type next
+    if (pFilterKey.endsWith(".")) {
+      pFilterKey = pFilterKey.replace(/[.]$/, "");
+    }
+
     // no filter is always OK
     if (!pFilterKey) {
       return true;
