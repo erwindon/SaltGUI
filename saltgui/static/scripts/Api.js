@@ -144,6 +144,15 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
+  getLocalTestProviders () {
+    const params = {
+      "client": "local",
+      "fun": "test.providers",
+      "tgt": "*"
+    };
+    return this.apiRequest("POST", "/", params);
+  }
+
   getRunnerJobsActive () {
     const params = {
       "client": "runner",
