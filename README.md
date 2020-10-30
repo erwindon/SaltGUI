@@ -22,6 +22,8 @@ The version tagged `release` is the latest released version. The version `master
 - View the values for pillars for a particular minion
 - View the beacons for a particular minion
 - View the events on the salt-event bus
+- View internal documentation for any salt command
+- View external documentation for any salt command
 - Match list of minions against reference list
 - Match status of minions against reference list
 
@@ -506,7 +508,7 @@ SaltGUI includes these libraries (with possible modifications):
 ## 1.0.1 (2018-05-16)
 - Fixed position of popup when main window has scrolled (erwindon)
 - Sort minions by hostname (erwindon)
-- Fixed OS description in minion overview (No lsb_distrib_description)(erwindon)
+- Fixed OS description in minion overview (No lsb_distrib_description) (erwindon)
 - Now sort the jobs correctly on ``StartDate`` in the overview window
 
 ## 1.0.0 (2018-03-07)
