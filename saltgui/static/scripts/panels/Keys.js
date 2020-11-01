@@ -459,6 +459,8 @@ export class KeysPanel extends Panel {
       /* eslint-enable no-lonely-if */
     }
 
+    this.updateFooter();
+
     // we do not have the fingerprint yet
     // pre-fill with a dummy value and then retrieve the actual value
     const tr2 = this.table.querySelector("tr#" + Utils.getIdFromMinionId(pData.id));
@@ -480,8 +482,6 @@ export class KeysPanel extends Panel {
         return false;
       });
     }
-
-    this.updateFooter();
   }
 
   handleSaltKeyEvent (pData) {
