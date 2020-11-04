@@ -293,6 +293,22 @@ SaltGUI includes these libraries (with possible modifications):
 
 ## Changelog
 
+## 1.22.0 (2020-11-05)
+- added alert for all known CVEs (erwindon)
+- added external documentation access (erwindon)
+- improved support for multiple message beacons (erwindon)
+- added play/pause buttons for dynamic screens (erwindon)
+- use more util functions for common tasks (erwindon)
+- reorganized code in pages and panels (erwindon)
+- improved support for very old browsers (erwindon)
+- replaceAll is not universally supported (erwindon, thx Timbus)
+- added support for """strings""" (erwindon, thx jfunnell)
+- modernized js code (erwindon)
+- fixed whitespace situations with commands (erwindon)
+- additional eslint fixes (erwindon)
+- update of tools (erwindon)
+- small documentation fixes (erwindon)
+
 ## 1.21.0 (2020-08-02)
 - added event-monitoring page (erwindon, thx mchugh19)
 - added search-options (erwindon, thx mchugh19)
