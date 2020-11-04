@@ -25,6 +25,13 @@
   transform: translate(-10%, 0);
 }
 
+.tooltip > .tooltip-text-error-bottom-left {
+  text-align: left;
+  transform: translate(-10%, 0);
+  background-color: red;
+  font-weight: bold;
+}
+
 .tooltip > .tooltip-text-bottom-center {
   text-align: center;
   transform: translate(-50%, 0);
@@ -68,6 +75,11 @@ pre.output .tooltip:hover {
 
 .tooltip > .tooltip-text-bottom-left::after {
   left: calc(10% - 2.5px);
+}
+
+.tooltip > .tooltip-text-error-bottom-left::after {
+  left: calc(10% - 2.5px);
+  border-color: red transparent transparent transparent;
 }
 
 .tooltip > .tooltip-text-bottom-center::after {

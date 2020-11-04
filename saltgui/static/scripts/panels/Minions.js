@@ -4,6 +4,13 @@ import {DropDownMenu} from "../DropDown.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
 
+// We only need to verify these 2 modules
+// additional tools like salt-api, salt-cloud, salt-proxy, salt-syndic
+// are all forced to the same version due to to the strict version
+// dependency on salt-common
+const MASTER = 1;
+const MINION = 2;
+
 export class MinionsPanel extends Panel {
 
   constructor () {
@@ -118,42 +125,266 @@ export class MinionsPanel extends Panel {
     });
   }
 
-  static _isCveAffected (version) {
-    // see https://community.saltstack.com/blog/critical-vulnerabilities-update-cve-2020-11651-and-cve-2020-11652/
-    // and https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-11651
-    // and https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-11652
-    const items = version.split(".");
-    /* eslint-disable curly */
-    if (items[0] === "0") return "yes";
-    if (items[0] === "2015") return "yes";
-    if (items[0] === "2016") return "yes";
-    if (items[0] === "2017") return "yes";
-    if (items[0] === "2018") return "yes";
+  static _getCveData () {
+    // See https://docs.saltstack.com/en/master/topics/releases/version_numbers.html
+    // See https://cve.mitre.org/cve/search_cve_list.html
+    // See e.g. https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-11652
+    // We do not distinguish between different tools like master/minion/api
+    // We compare only the master and minion version and also
+    // the master vs. minion version
+    // Version numbers are 0.x.y, 201[456789].x.y and 300[0-9](.x)
 
-    if (items[0] === "2019") {
-      // ok from 2019.2.4
-      if (items[1] < "2") return "yes";
-      if (items[2] < "4") return "yes";
-      return "no";
+    // The table below contains the patterns for version numbers that are found
+    // to be vulnerable. each version number is validated agains as many levels
+    // of conditions as there are available. Remaining parts of the actual
+    // version number do not matter.
+
+    // items are marked MASTER+MINION unless it is very clear that only one
+    // of the two is involved. feel free to request corrections here.
+    return [
+      ["CVE-2013-2228", MASTER + MINION, ["0", "1[4-5]"]],
+
+      ["CVE-2013-4435", MASTER + MINION, ["0", "1[5-7]"]],
+
+      ["CVE-2013-4436", MASTER + MINION, ["0", "17", "0"]],
+
+      ["CVE-2013-4437", MASTER + MINION, ["0", "17", "0"]],
+
+      ["CVE-2013-4438", MASTER + MINION, ["0", "[0-9]"]],
+      ["CVE-2013-4438", MASTER + MINION, ["0", "1[0-6]"]],
+      ["CVE-2013-4438", MASTER + MINION, ["0", "17", "0"]],
+
+      ["CVE-2013-4439", MASTER + MINION, ["0", "1[5-7]"]],
+
+      ["CVE-2013-6617", MASTER, ["0", "1[1-7]"]],
+
+      ["CVE-2014-3563", MASTER + MINION, ["0"]],
+      ["CVE-2014-3563", MASTER + MINION, ["2014", "0"]],
+      ["CVE-2014-3563", MASTER + MINION, ["2014", "1", "[0-9]"]],
+
+      ["CVE-2015-1838", MASTER + MINION, ["0"]],
+      ["CVE-2015-1838", MASTER + MINION, ["2014", "[0-6]"]],
+      ["CVE-2015-1838", MASTER + MINION, ["2014", "7", "[0-3]"]],
+
+      ["CVE-2015-1839", MASTER + MINION, ["0"]],
+      ["CVE-2015-1839", MASTER + MINION, ["2014", "[0-6]"]],
+      ["CVE-2015-1839", MASTER + MINION, ["2014", "7", "[0-3]"]],
+
+      ["CVE-2015-4017", MASTER + MINION, ["0"]],
+      ["CVE-2015-4017", MASTER + MINION, ["2014", "[0-6]"]],
+      ["CVE-2015-4017", MASTER + MINION, ["2014", "7", "[0-5]"]],
+
+      ["CVE-2015-6918", MASTER + MINION, ["0"]],
+      ["CVE-2015-6918", MASTER + MINION, ["2014"]],
+      ["CVE-2015-6918", MASTER + MINION, ["2015", "[0-4]"]],
+      ["CVE-2015-6918", MASTER + MINION, ["2015", "5", "[0-4]"]],
+
+      ["CVE-2015-6941", MASTER + MINION, ["0"]],
+      ["CVE-2015-6941", MASTER + MINION, ["2014"]],
+      ["CVE-2015-6941", MASTER + MINION, ["2015", "[0-4]"]],
+      ["CVE-2015-6941", MASTER + MINION, ["2015", "5", "[0-5]"]],
+      ["CVE-2015-6941", MASTER + MINION, ["2015", "8", "0"]],
+
+      ["CVE-2015-8034", MASTER + MINION, ["0"]],
+      ["CVE-2015-8034", MASTER + MINION, ["2014"]],
+      ["CVE-2015-8034", MASTER + MINION, ["2015", "[0-7]"]],
+      ["CVE-2015-8034", MASTER + MINION, ["2015", "8", "[0-2]"]],
+
+      ["CVE-2016-1866", MINION, ["0"]],
+      ["CVE-2016-1866", MINION, ["2014"]],
+      ["CVE-2016-1866", MINION, ["2015", "[0-7]"]],
+      ["CVE-2016-1866", MINION, ["2015", "8", "[0-3]"]],
+
+      ["CVE-2016-3176", MASTER + MINION, ["0"]],
+      ["CVE-2016-3176", MASTER + MINION, ["2014"]],
+      ["CVE-2016-3176", MASTER + MINION, ["2015", "[0-4]"]],
+      ["CVE-2016-3176", MASTER + MINION, ["2015", "5", "[0-9]"]],
+      ["CVE-2016-3176", MASTER + MINION, ["2015", "8", "[0-7]"]],
+
+      ["CVE-2016-9639", MASTER + MINION, ["0"]],
+      ["CVE-2016-9639", MASTER + MINION, ["2014"]],
+      ["CVE-2016-9639", MASTER + MINION, ["2015", "[0-7]"]],
+      ["CVE-2016-9639", MASTER + MINION, ["2015", "8", "[0-9]"]],
+      ["CVE-2016-9639", MASTER + MINION, ["2015", "8", "10"]],
+
+      ["CVE-2017-5192", MASTER + MINION, ["0"]],
+      ["CVE-2017-5192", MASTER + MINION, ["2014"]],
+      ["CVE-2017-5192", MASTER + MINION, ["2015", "[0-7]"]],
+      ["CVE-2017-5192", MASTER + MINION, ["2015", "8", "[0-9]"]],
+      ["CVE-2017-5192", MASTER + MINION, ["2015", "8", "1[0-2]"]],
+      ["CVE-2017-5192", MASTER + MINION, ["2016", "[0-2]"]],
+      ["CVE-2017-5192", MASTER + MINION, ["2016", "3", "[0-4]"]],
+      ["CVE-2017-5192", MASTER + MINION, ["2016", "11", "[0-1]"]],
+
+      ["CVE-2017-5200", MASTER + MINION, ["0"]],
+      ["CVE-2017-5200", MASTER + MINION, ["2014"]],
+      ["CVE-2017-5200", MASTER + MINION, ["2015", "[0-7]"]],
+      ["CVE-2017-5200", MASTER + MINION, ["2015", "8", "[0-9]"]],
+      ["CVE-2017-5200", MASTER + MINION, ["2015", "8", "1[0-2]"]],
+      ["CVE-2017-5200", MASTER + MINION, ["2016", "[0-2]"]],
+      ["CVE-2017-5200", MASTER + MINION, ["2016", "3", "[0-4]"]],
+      ["CVE-2017-5200", MASTER + MINION, ["2016", "11", "[0-1]"]],
+
+      ["CVE-2017-7893", MASTER + MINION, ["0"]],
+      ["CVE-2017-7893", MASTER + MINION, ["201[4-5]"]],
+      ["CVE-2017-7893", MASTER + MINION, ["2016", "[0-2]"]],
+      ["CVE-2017-7893", MASTER + MINION, ["2016", "3", "[0-5]"]],
+
+      ["CVE-2017-8109", MASTER + MINION, ["0"]],
+      ["CVE-2017-8109", MASTER + MINION, ["201[4-5]"]],
+      ["CVE-2017-8109", MASTER + MINION, ["2016", "11", "[0-3]"]],
+
+      ["CVE-2017-12791", MASTER + MINION, ["0"]],
+      ["CVE-2017-12791", MASTER + MINION, ["201[4-5]"]],
+      ["CVE-2017-12791", MASTER + MINION, ["2016", "11", "[0-7]"]],
+      ["CVE-2017-12791", MASTER + MINION, ["2017", "[0-6]"]],
+      ["CVE-2017-12791", MASTER + MINION, ["2017", "7", "0"]],
+
+      ["CVE-2017-14695", MASTER + MINION, ["0"]],
+      ["CVE-2017-14695", MASTER + MINION, ["201[4-5]"]],
+      ["CVE-2017-14695", MASTER + MINION, ["2016", "[0-2]"]],
+      ["CVE-2017-14695", MASTER + MINION, ["2016", "3", "[0-7]"]],
+      ["CVE-2017-14695", MASTER + MINION, ["2016", "11", "[0-7]"]],
+      ["CVE-2017-14695", MASTER + MINION, ["2017", "[0-6]"]],
+      ["CVE-2017-14695", MASTER + MINION, ["2017", "7", "[0-1]"]],
+
+      ["CVE-2017-14696", MASTER + MINION, ["0"]],
+      ["CVE-2017-14696", MASTER + MINION, ["201[4-5]"]],
+      ["CVE-2017-14696", MASTER + MINION, ["2016", "[0-2]"]],
+      ["CVE-2017-14696", MASTER + MINION, ["2016", "3", "[0-7]"]],
+      ["CVE-2017-14696", MASTER + MINION, ["2016", "11", "[0-7]"]],
+      ["CVE-2017-14696", MASTER + MINION, ["2017", "[0-6]"]],
+      ["CVE-2017-14696", MASTER + MINION, ["2017", "7", "[0-1]"]],
+
+      ["CVE-2018-15750", MASTER, ["0"]],
+      ["CVE-2018-15750", MASTER, ["201[4-6]"]],
+      ["CVE-2018-15750", MASTER, ["2017", "[0-6]"]],
+      ["CVE-2018-15750", MASTER, ["2017", "7", "[0-7]"]],
+      ["CVE-2018-15750", MASTER, ["2018", "[0-2]"]],
+      ["CVE-2018-15750", MASTER, ["2018", "3", "[0-2]"]],
+
+      ["CVE-2018-15751", MASTER, ["0"]],
+      ["CVE-2018-15751", MASTER, ["201[4-6]"]],
+      ["CVE-2018-15751", MASTER, ["2017", "[0-6]"]],
+      ["CVE-2018-15751", MASTER, ["2017", "7", "[0-7]"]],
+      ["CVE-2018-15751", MASTER, ["2018", "[0-2]"]],
+      ["CVE-2018-15751", MASTER, ["2018", "3", "[0-2]"]],
+
+      ["CVE-2019-17361", MASTER + MINION, ["0"]],
+      ["CVE-2019-17361", MASTER + MINION, ["201[4-8]"]],
+      ["CVE-2019-17361", MASTER + MINION, ["2019", "[0-1]"]],
+      ["CVE-2019-17361", MASTER + MINION, ["2019", "2", "0"]],
+
+      ["CVE-2019-1010259", MASTER + MINION, ["2018", "3", "[0-3]"]],
+      ["CVE-2019-1010259", MASTER + MINION, ["2019", "2"]],
+
+      ["CVE-2020-11651", MASTER, ["0"]],
+      ["CVE-2020-11651", MASTER, ["201[4-8]"]],
+      ["CVE-2020-11651", MASTER, ["2019", "[0-1]"]],
+      ["CVE-2020-11651", MASTER, ["2019", "2", "[0-3]"]],
+      ["CVE-2020-11651", MASTER, ["3000", null]],
+      ["CVE-2020-11651", MASTER, ["3000", "[0-1]"]],
+
+      ["CVE-2020-11652", MASTER, ["0"]],
+      ["CVE-2020-11652", MASTER, ["201[4-8]"]],
+      ["CVE-2020-11652", MASTER, ["2019", "[0-1]"]],
+      ["CVE-2020-11652", MASTER, ["2019", "2", "[0-3]"]],
+      ["CVE-2020-11652", MASTER, ["3000", null]],
+      ["CVE-2020-11652", MASTER, ["3000", "[0-1]"]],
+
+      ["CVE-2020-16846", MASTER + MINION, ["0"]],
+      ["CVE-2020-16846", MASTER + MINION, ["201[4-9]"]],
+      ["CVE-2020-16846", MASTER + MINION, ["300[0-1]"]],
+      ["CVE-2020-16846", MASTER + MINION, ["3002", null]],
+
+      ["CVE-2020-17490", MASTER + MINION, ["0"]],
+      ["CVE-2020-17490", MASTER + MINION, ["201[4-9]"]],
+      ["CVE-2020-17490", MASTER + MINION, ["300[0-1]"]],
+      ["CVE-2020-17490", MASTER + MINION, ["3002", null]],
+
+      ["CVE-2020-25592", MASTER + MINION, ["0"]],
+      ["CVE-2020-25592", MASTER + MINION, ["201[4-9]"]],
+      ["CVE-2020-25592", MASTER + MINION, ["300[0-1]"]],
+      ["CVE-2020-25592", MASTER + MINION, ["3002", null]]
+    ];
+  }
+
+  static _getCveBugs (pVersion, pNodeType) {
+    const items = pVersion.split(".");
+
+    // ["CVE-2020-25592", MASTER+MINION, ["3002", null] ],
+    const entries = MinionsPanel._getCveData();
+
+    const found = {};
+
+    for (const entry of entries) {
+      const id = entry[0];
+      const nodeType = entry[1];
+      const patterns = entry[2];
+
+      /* eslint-disable no-bitwise */
+      if ((nodeType & pNodeType) !== pNodeType) {
+        // no, this CVE not valid for this (master/minion)
+        continue;
+      }
+      /* eslint-enable no-bitwise */
+
+      let fnd = true;
+      for (let i = 0; i < patterns.length; i++) {
+        if (typeof patterns[i] === "string") {
+          patterns[i] = new RegExp("^" + patterns[i] + "$");
+        }
+        if (patterns[i] === null && items[i] === undefined) {
+          continue;
+        }
+        if (patterns[i] === null) {
+          fnd = false;
+          break;
+        }
+        if (patterns[i].test(items[i])) {
+          continue;
+        }
+        fnd = false;
+        break;
+      }
+      if (fnd) {
+        found[id] = true;
+      }
     }
 
-    if (items[0] === "3000") {
-      // ok from 3000.2
-      if (items[1] < "2") return "yes";
-      return "no";
-    }
+    return found;
+  }
 
-    if (items[0] >= "3001") {
-      return "no";
+  static _addCveList (pName, pVersion, pBugs) {
+    let txt = "";
+    if (!Object.keys(pBugs).length) {
+      return txt;
     }
-    /* eslint-enable curly */
-
-    // should be something newer than we know of
-    return "unknown";
+    txt += "\nThe " + pName + " has version " + pVersion + " and is VULNERABLE\nfor exploit";
+    const bugs = Object.keys(pBugs).sort();
+    if (bugs.length > 1) {
+      txt += "s";
+    }
+    let cnt = 0;
+    for (const bug of bugs) {
+      if (bugs.length > 1 && bug === bugs[bugs.length - 1]) {
+        txt += " and";
+      } else if (bug !== bugs[0]) {
+        txt += ",";
+      }
+      if (cnt === 5) {
+        txt += "\n";
+        cnt = 0;
+      } else {
+        txt += " ";
+      }
+      txt += bug;
+      cnt += 1;
+    }
+    return txt;
   }
 
   _handleRunnerManageVersions (pRunnerManageVersionsData) {
-
     // this is additional data
     if (this.showErrorRowInstead(pRunnerManageVersionsData)) {
       return;
@@ -161,7 +392,7 @@ export class MinionsPanel extends Panel {
 
     const versionList = pRunnerManageVersionsData.return[0];
     const masterVersion = versionList["Master"];
-    const isMasterAffected = MinionsPanel._isCveAffected(masterVersion);
+    const masterBugs = MinionsPanel._getCveBugs(masterVersion, MASTER);
 
     for (const outcome in versionList) {
 
@@ -177,34 +408,41 @@ export class MinionsPanel extends Panel {
           continue;
         }
 
-        if (isMasterAffected === "yes") {
+        const minionVersion = versionTd.innerText;
+        const minionBugs = MinionsPanel._getCveBugs(minionVersion, MINION);
+
+        if (Object.keys(masterBugs).length) {
           versionTd.style.color = "red";
-        } else if (isMasterAffected === "unknown") {
-          versionTd.style.color = "orange";
+        } else if (Object.keys(minionBugs).length) {
+          versionTd.style.color = "red";
         } else if (outcome === "Minion requires update") {
           versionTd.style.color = "orange";
         } else if (outcome === "Minion newer than master") {
           versionTd.style.color = "orange";
+        } else if (outcome === "Up to date") {
+          // VOID
         }
 
         let txt = "";
-        if (isMasterAffected === "yes") {
-          txt += "\nThe salt-master is OLD (" + masterVersion + "),\nit is vulnerable for exploits CVE-2020-11651 and CVE-2020-11652";
-        } else if (isMasterAffected === "unknown") {
-          txt += "\nThe salt-master version is unknown (" + masterVersion + "),\nit may be vulnerable for exploits CVE-2020-11651 and CVE-2020-11652";
-        }
+        txt += MinionsPanel._addCveList("salt-master", masterVersion, masterBugs);
+        txt += MinionsPanel._addCveList("salt-minion", minionVersion, minionBugs);
 
         if (outcome === "Minion requires update") {
-          txt += "\nThis salt-minion is older than the salt-master (" + masterVersion + ")";
-        } else if (outcome === "Minion newer than salt-master") {
-          txt += "\nThis salt-minion is newer than the salt-master (" + masterVersion + ")";
+          txt += "\nThis salt-minion (" + minionVersion + ") is older than the salt-master (" + masterVersion + ")";
+        } else if (outcome === "Minion newer than master") {
+          txt += "\nThis salt-minion (" + minionVersion + ") is newer than the salt-master (" + masterVersion + ")";
         }
 
         if (txt) {
-          Utils.addToolTip(versionTd, txt.trim(), "bottom-left");
+          txt += "\nUpgrade is highly recommended!";
+          versionTd.onclick = (pClickEvent) => {
+            window.open("https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=saltstack");
+            // prevent the click to open the run-dialog
+            pClickEvent.stopPropagation();
+          };
+          Utils.addToolTip(versionTd, txt.trim(), "error-bottom-left");
         }
       }
     }
-
   }
 }
