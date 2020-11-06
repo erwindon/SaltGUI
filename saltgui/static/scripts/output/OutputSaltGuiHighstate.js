@@ -274,7 +274,9 @@ export class OutputSaltGuiHighstate {
     }
 
     if (line) {
-      div.append(document.createTextNode(line.substring(2)));
+      const txtDiv = document.createElement("div");
+      txtDiv.innerText = line.substring(2);
+      div.append(txtDiv);
     }
 
     return div;
