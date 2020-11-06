@@ -187,6 +187,88 @@ export class Output {
     return pDtStr.substring(0, dotPos + dateTimeFractionDigits + 1);
   }
 
+  static _setTaskTooltip (pSpan, pTask) {
+    let txt = "";
+
+    if ("name" in pTask) {
+      txt += pTask.name;
+    }
+
+    if ("__id__" in pTask && pTask.__id__ !== pTask.name) {
+      txt += "\n" + pTask.__id__;
+    }
+
+    if ("__sls__" in pTask) {
+      txt += "\n" + pTask.__sls__.replace(/[.]/g, "/") + ".sls";
+    }
+
+    let nrChanges = 0;
+    if (!pTask.changes) {
+      // txt += "\nno changes";
+    } else if (typeof pTask.changes !== "object") {
+      nrChanges = 1;
+      txt += "\n'changes' has type " + typeof pTask.changes;
+    } else if (Array.isArray(pTask.changes)) {
+      nrChanges = pTask.changes.length;
+      txt += "\n'changes' is an array";
+      txt += Utils.txtZeroOneMany(nrChanges, "", "\n" + nrChanges + " change", "\n" + nrChanges + " changes");
+    } else {
+      nrChanges = Object.keys(pTask.changes).length;
+      txt += Utils.txtZeroOneMany(nrChanges, "", "\n" + nrChanges + " change", "\n" + nrChanges + " changes");
+    }
+
+    while (pSpan.classList.length > 0) {
+      pSpan.classList.remove(pSpan.classList.item(0));
+    }
+
+    if (pTask.result === null) {
+      pSpan.classList.add("task-skipped");
+    } else if (pTask.result) {
+      pSpan.classList.add("task-success");
+    } else {
+      pSpan.classList.add("task-failure");
+    }
+    if (nrChanges) {
+      pSpan.classList.add("task-changes");
+    }
+
+    for (const key in pTask) {
+      /* eslint-disable curly */
+      if (key === "___key___") continue;
+      if (key === "__id__") continue;
+      if (key === "__jid__") continue;
+      if (key === "__orchestration__") continue;
+      if (key === "__run_num__") continue;
+      if (key === "__sls__") continue;
+      if (key === "_stamp") continue;
+      if (key === "changes") continue;
+      if (key === "comment") continue;
+      if (key === "duration") continue;
+      if (key === "fun") continue;
+      if (key === "id") continue;
+      if (key === "jid") continue;
+      if (key === "name") continue;
+      if (key === "pchanges") continue;
+      if (key === "return") continue;
+      if (key === "skip_watch") continue;
+      if (key === "start_time") continue;
+      if (key === "success") continue;
+      /* eslint-enable curly */
+      // skip trivial info: result = true
+      if (key === "result" && pTask[key]) {
+        continue;
+      }
+      txt += "\n" + key + " = ";
+      if (typeof pTask.changes === "object") {
+        txt += JSON.stringify(pTask[key]);
+      } else {
+        txt += pTask[key];
+      }
+    }
+
+    Utils.addToolTip(pSpan, txt.trim());
+  }
+
   // add the status summary
   static _addHighStateSummary (pMinionRow, pMinionDiv, pMinionId, pTasks) {
 
@@ -199,73 +281,7 @@ export class Output {
       // 25CF = BLACK CIRCLE
       const span = Utils.createSpan("", "\u25CF");
 
-      let txt = task.name;
-      if (task.__id__ && task.__id__ !== task.name) {
-        txt += "\n" + task.__id__;
-      }
-      if (task.__sls__) {
-        txt += "\n" + task.__sls__.replace(/[.]/g, "/") + ".sls";
-      }
-
-      let nrChanges = 0;
-      if (!task.changes) {
-        // txt += "\nno changes";
-      } else if (typeof task.changes !== "object") {
-        nrChanges = 1;
-        txt += "\n'changes' has type " + typeof task.changes;
-      } else if (Array.isArray(task.changes)) {
-        nrChanges = task.changes.length;
-        txt += "\n'changes' is an array";
-        txt += Utils.txtZeroOneMany(nrChanges, "", "\n" + nrChanges + " change", "\n" + nrChanges + " changes");
-      } else {
-        nrChanges = Object.keys(task.changes).length;
-        txt += Utils.txtZeroOneMany(nrChanges, "", "\n" + nrChanges + " change", "\n" + nrChanges + " changes");
-      }
-
-      if (task.result === null) {
-        span.classList.add("task-skipped");
-      } else if (task.result) {
-        span.classList.add("task-success");
-      } else {
-        span.classList.add("task-failure");
-      }
-      if (nrChanges) {
-        span.classList.add("task-changes");
-      }
-
-      for (const key in task) {
-        /* eslint-disable curly */
-        if (key === "___key___") continue;
-        if (key === "__id__") continue;
-        if (key === "__jid__") continue;
-        if (key === "__orchestration__") continue;
-        if (key === "__run_num__") continue;
-        if (key === "__sls__") continue;
-        if (key === "_stamp") continue;
-        if (key === "changes") continue;
-        if (key === "comment") continue;
-        if (key === "duration") continue;
-        if (key === "fun") continue;
-        if (key === "id") continue;
-        if (key === "jid") continue;
-        if (key === "name") continue;
-        if (key === "pchanges") continue;
-        if (key === "return") continue;
-        if (key === "skip_watch") continue;
-        if (key === "start_time") continue;
-        if (key === "success") continue;
-        /* eslint-enable curly */
-        // skip trivial info: result = true
-        if (key === "result" && task[key]) {
-          continue;
-        }
-        txt += "\n" + key + " = ";
-        if (typeof task.changes === "object") {
-          txt += JSON.stringify(task[key]);
-        } else {
-          txt += task[key];
-        }
-      }
+      Output._setTaskTooltip(span, task);
 
       const myNr = nr;
       span.addEventListener("click", () => {
@@ -294,12 +310,45 @@ export class Output {
         taskDiv.scrollIntoView({"behavior": "smooth", "block": "nearest"});
       });
 
-      Utils.addToolTip(span, txt);
-
       pMinionRow.append(span);
     }
   }
 
+  static _getIsSuccess (pMinionResponse) {
+    if (Output._hasProperties(pMinionResponse, ["retcode", "return", "success"])) {
+      return pMinionResponse.success;
+    }
+    return true;
+  }
+
+  static _getRetCode (pMinionResponse) {
+    if (Output._hasProperties(pMinionResponse, ["retcode", "return", "success"])) {
+      return pMinionResponse.retcode;
+    }
+    return 0;
+  }
+
+  static _getMinionResponse (pCommand, pMinionResponse) {
+    if (Output._hasProperties(pMinionResponse, ["retcode", "return", "success"])) {
+      return pMinionResponse.return;
+    }
+    if (pCommand.startsWith("runner.") && pMinionResponse && pMinionResponse["return"] !== undefined) {
+      return pMinionResponse.return.return;
+    }
+    return pMinionResponse;
+  }
+
+  static getMinionLabelClass (pIsSuccess, pResponse) {
+    // the standard label is the minionId,
+    // TODO: colored based on the retcode
+    if (!pIsSuccess) {
+      return "host-failure";
+    }
+    if (pResponse === undefined) {
+      return "host-no-response";
+    }
+    return "host-success";
+  }
 
   // the orchestrator for the output
   // determines what format should be used and uses that
@@ -462,32 +511,17 @@ export class Output {
     // this is more generic and it simplifies the handlers
     for (const minionId of pMinionData.sort()) {
 
-      let isSuccess = true;
-      // let retCode = 0;
-
       let minionResponse = pResponse[minionId];
-      if (Output._hasProperties(minionResponse, ["retcode", "return", "success"])) {
-        isSuccess = minionResponse.success;
-        // retCode = minionResponse.retcode;
-        minionResponse = minionResponse.return;
-      } else if (pCommand.startsWith("runner.") && minionResponse && minionResponse["return"] !== undefined) {
-        // TODO: add isSuccess and retCode
-        minionResponse = minionResponse.return.return;
-      }
+
+      const isSuccess = Output._getIsSuccess(minionResponse);
+      // const retCode = Output._getRetCode(minionResponse);
+      minionResponse = Output._getMinionResponse(pCommand, minionResponse);
+
+      const minionClass = Output.getMinionLabelClass(isSuccess, minionResponse);
+      let minionLabel = Output.getMinionIdHtml(minionId, minionClass);
 
       let minionOutput = null;
-      let minionMultiLine = false;
       let fndRepresentation = false;
-
-      // the standard label is the minionId,
-      // TODO: colored based on the retcode
-      let minionClass = "host-success";
-      if (!isSuccess) {
-        minionClass = "host-failure";
-      } else if (pResponse[minionId] === undefined) {
-        minionClass = "host-no-response";
-      }
-      let minionLabel = Output.getMinionIdHtml(minionId, minionClass);
 
       // implicit !fndRepresentation&&
       if (pResponse[minionId] === undefined) {
@@ -495,6 +529,8 @@ export class Output {
         minionOutput.classList.add("noresponse");
         fndRepresentation = true;
       }
+
+      let minionMultiLine = false;
 
       if (!fndRepresentation && typeof minionResponse === "string") {
         minionOutput = Output._getTextOutput(minionResponse);

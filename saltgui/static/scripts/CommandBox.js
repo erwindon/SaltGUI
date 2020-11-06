@@ -95,7 +95,9 @@ export class CommandBox {
     txt += "<p>";
     txt += "The 'Run command' button starts the given command for the given minions.";
     txt += "<br/>";
-    txt += "A dropdown menu to the right of the button can be used to specify that the command must be run asynchronously. In that case the output consists only of a link to retrieve the actual output. When a command takes too long, the command window can be closed without waiting for the output. The Jobs page can then be used to find that command and watch its progress or results.";
+    txt += "A dropdown menu to the right of the button can be used to specify that the command must be run asynchronously. In that case, the output consists only of a link to retrieve the actual output and also an indication on the progress per minion, which will be updated asynchronously. When option <b>state_events</b> is set to <b>true</b> in the <b>master</b> file, then also the progress of individual states is shown.";
+    txt += "<br/>";
+    txt += "When a command takes too long, the command window can be closed without waiting for the output. The Jobs page can then be used to find that command and watch its progress or results.";
     txt += "</p>";
 
     txt += "<br/>";
@@ -202,6 +204,7 @@ export class CommandBox {
     func.then((pResponse) => {
       if (pResponse) {
         CommandBox.onRunReturn(pResponse.return[0], commandValue);
+        CommandBox._prepareForAsyncResults(pResponse);
       } else {
         CommandBox._showError("null response");
       }
@@ -451,5 +454,139 @@ export class CommandBox {
     }
 
     return this.api.apiRequest("POST", "/", params);
+  }
+
+  static handleSaltJobRetEvent (pTag, pData) {
+    // salt/job/20201105221605666661/ret/ss04
+    // {"jid": "20201105221605666661", "id": "ss04", "return": {"no_|-states_|-states_|-None": {"result": false, "comment": "No Top file or master_tops data matches found. Please see master log for details.", "name": "No States", "changes": {}, "__run_num__": 0}}, "retcode": 2, "success": false, "fun": "state.apply", "fun_args": null, "out": "highstate", "_stamp": "2020-11-05T22:16:06.377513"}
+    const part = pTag.split("/");
+    if (part.length !== 5) {
+      console.info("unkown tag", pTag);
+      return;
+    }
+
+    const eventJid = part[2];
+    const eventMinionId = part[4];
+
+    if (CommandBox.jid !== eventJid) {
+      // not the job that we are looking at
+      return;
+    }
+
+    const id = "run-" + Utils.getIdFromMinionId(eventMinionId);
+    let div = document.getElementById(id);
+    if (div === null) {
+      div = document.createElement("div");
+      div.id = "run-" + Utils.getIdFromMinionId(eventMinionId);
+      div.style.marginTop = 0;
+
+      const minionSpan1 = document.createElement("span");
+      minionSpan1.innerText = eventMinionId;
+      div.appendChild(minionSpan1);
+
+      const minionSpan2 = document.createElement("span");
+      // 23F3 = HOURGLASS WITH FLOWING SAND
+      // FE0E = VARIATION SELECTOR-15 (render as text)
+      minionSpan2.innerText = ": \u23F3\uFE0E ";
+      div.appendChild(minionSpan2);
+
+      const output = document.querySelector(".run-command pre");
+      output.appendChild(div);
+    }
+
+    const isSuccess = Output._getIsSuccess(pData);
+    const minionClass = Output.getMinionLabelClass(isSuccess, pData);
+
+    const span1 = div.children[0];
+    span1.classList.add("minion-id");
+    span1.classList.add(minionClass);
+
+    const span2 = div.children[1];
+    span2.innerText = div.children.length > 2 ? ": " : "";
+  }
+
+  static handleSaltJobProgEvent (pTag, pData) {
+    // salt/job/20201105020540728914/prog/ss01/0
+    const part = pTag.split("/");
+    if (part.length !== 6) {
+      console.info("unkown tag", pTag);
+      return;
+    }
+
+    const eventJid = part[2];
+    const eventMinionId = part[4];
+    const eventSeqNr = parseInt(part[5], 10);
+
+    if (CommandBox.jid !== eventJid) {
+      // not the job that we are looking at
+      return;
+    }
+
+    const task = pData.data.ret;
+
+    const divId = "run-" + Utils.getIdFromMinionId(eventMinionId);
+    const div = document.getElementById(divId);
+    if (div === null) {
+      console.log("div=null, minion=" + eventMinionId);
+      return;
+    }
+
+    // make sure there is a black circle for the current event
+    while (div.children.length <= eventSeqNr + 2) {
+      const span = document.createElement("span");
+      // 25CF = BLACK CIRCLE
+      span.innerText = "\u25CF";
+      div.appendChild(span);
+    }
+
+    const span = div.children[eventSeqNr + 2];
+    Output._setTaskTooltip(span, task);
+  }
+
+  static _prepareForAsyncResults (pResponse) {
+    const ret = pResponse.return[0];
+    CommandBox.jid = ret.jid;
+    CommandBox.minionIds = ret.minions;
+
+    const output = document.querySelector(".run-command pre");
+
+    // fix the JID label
+    // it is not a minion-id, so deserves no status
+    const jidId = Utils.getIdFromMinionId("jid");
+    const labelSpan = document.querySelector("div#" + jidId + " span span");
+    if (labelSpan === null) {
+      // not an asynchronous job
+      return;
+    }
+    labelSpan.classList.remove("minion-id");
+    labelSpan.classList.remove("host-success");
+
+    // remove the initial minions list
+    const minionsId = Utils.getIdFromMinionId("minions");
+    const minionsList = document.getElementById(minionsId);
+    minionsList.remove();
+
+    // leave some space
+    const spacerDiv = document.createElement("div");
+    output.appendChild(spacerDiv);
+
+    // add new minions list to track progress of this state command
+    for (const minionId of CommandBox.minionIds) {
+      const minionDiv = document.createElement("div");
+      minionDiv.id = "run-" + Utils.getIdFromMinionId(minionId);
+      minionDiv.style.marginTop = 0;
+
+      const minionSpan1 = document.createElement("span");
+      minionSpan1.innerText = minionId;
+      minionDiv.appendChild(minionSpan1);
+
+      const minionSpan2 = document.createElement("span");
+      // 23F3 = HOURGLASS WITH FLOWING SAND
+      // FE0E = VARIATION SELECTOR-15 (render as text)
+      minionSpan2.innerText = ": \u23F3\uFE0E ";
+      minionDiv.appendChild(minionSpan2);
+
+      output.appendChild(minionDiv);
+    }
   }
 }

@@ -1,5 +1,6 @@
 /* global config EventSource window */
 
+import {CommandBox} from "./CommandBox.js";
 import {Utils} from "./Utils.js";
 
 export class HTTPError extends Error {
@@ -356,7 +357,12 @@ export class API {
       } else if (tag === "salt/key") {
         pRouter.keysPage.handleSaltKeyEvent(data);
       } else if (tag.startsWith("salt/job/") && tag.includes("/ret/")) {
+        // return value
+        CommandBox.handleSaltJobRetEvent(tag, data);
         pRouter.jobPage.handleSaltJobRetEvent(data);
+      } else if (tag.startsWith("salt/job/") && tag.includes("/prog/")) {
+        // progress value (exists only for states)
+        CommandBox.handleSaltJobProgEvent(tag, data);
       }
 
       pRouter.eventsPage.handleAnyEvent(tag, data);
