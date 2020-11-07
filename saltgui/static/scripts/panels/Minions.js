@@ -313,12 +313,17 @@ export class MinionsPanel extends Panel {
   }
 
   static _getCveBugs (pVersion, pNodeType) {
+    const found = {};
+
+    if (!pVersion) {
+      // minion somehow did not report its version
+      return found;
+    }
+
     const items = pVersion.split(".");
 
     // ["CVE-2020-25592", MASTER+MINION, ["3002", null] ],
     const entries = MinionsPanel._getCveData();
-
-    const found = {};
 
     for (const entry of entries) {
       const id = entry[0];
@@ -406,22 +411,26 @@ export class MinionsPanel extends Panel {
 
       for (const minionId in versionList[outcome]) {
 
-        const versionTd = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId) + " .saltversion");
-        if (!versionTd) {
+        const versionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
+        if (!versionTr) {
+          continue;
+        }
+        const versionSpan = versionTr.querySelector(".saltversion");
+        if (!versionSpan) {
           continue;
         }
 
-        const minionVersion = versionTd.innerText;
+        const minionVersion = versionTr.dataset.saltversion;
         const minionBugs = MinionsPanel._getCveBugs(minionVersion, MINION);
 
         if (Object.keys(masterBugs).length) {
-          versionTd.style.color = "red";
+          versionSpan.style.color = "red";
         } else if (Object.keys(minionBugs).length) {
-          versionTd.style.color = "red";
+          versionSpan.style.color = "red";
         } else if (outcome === "Minion requires update") {
-          versionTd.style.color = "orange";
+          versionSpan.style.color = "orange";
         } else if (outcome === "Minion newer than master") {
-          versionTd.style.color = "orange";
+          versionSpan.style.color = "orange";
         } else if (outcome === "Up to date") {
           // VOID
         }
@@ -438,12 +447,12 @@ export class MinionsPanel extends Panel {
 
         if (txt) {
           txt += "\nUpgrade is highly recommended!";
-          versionTd.onclick = (pClickEvent) => {
+          versionSpan.onclick = (pClickEvent) => {
             window.open("https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=saltstack");
             // prevent the click to open the run-dialog
             pClickEvent.stopPropagation();
           };
-          Utils.addToolTip(versionTd, txt.trim(), "error-bottom-left");
+          Utils.addToolTip(versionSpan, txt.trim(), "error-bottom-left");
         }
       }
     }
