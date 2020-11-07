@@ -79,7 +79,8 @@ export class KeysPanel extends Panel {
         }
 
         // update td.fingerprint with fingerprint value
-        const fingerprintElement = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId) + " .fingerprint");
+        const fingerprintTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
+        const fingerprintElement = fingerprintTr.querySelector(".fingerprint");
         const fingerprint = hosts[minionId];
         if (!fingerprintElement) {
           continue;
@@ -89,6 +90,7 @@ export class KeysPanel extends Panel {
           Utils.addErrorToTableCell(fingerprintElement, fingerprint);
           continue;
         }
+        fingerprintTr.dataset.fingerprintKnown = true;
         fingerprintElement.innerText = fingerprint;
       }
     }
@@ -149,8 +151,7 @@ export class KeysPanel extends Panel {
     // cnt["missing"] = 0;
     const tbody = this.table.tBodies[0];
     for (const tr of tbody.children) {
-      const statusField = tr.querySelector("td.status");
-      const statusText = statusField.innerText;
+      const statusText = tr.dataset.status;
       if (cnt[statusText] === undefined) {
         cnt[statusText] = 0;
       }
@@ -214,11 +215,12 @@ export class KeysPanel extends Panel {
     const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
-    this._flagUnacceptedMinion(pMinionId, pMinionsDict, minionIdSpan,
+    KeysPanel._flagUnacceptedMinion(pMinionId, pMinionsDict, minionIdSpan,
       "This entry may need to be rejected!");
     minionTr.appendChild(minionIdTd);
 
     const accepted = Utils.createTd("status", "accepted");
+    minionTr.dataset.status = "accepted";
     accepted.setAttribute("sorttable_customkey", 2);
     accepted.classList.add("accepted");
     minionTr.appendChild(accepted);
@@ -242,6 +244,7 @@ export class KeysPanel extends Panel {
     minionTr.appendChild(minionIdTd);
 
     const rejected = Utils.createTd("status", "rejected");
+    minionTr.dataset.status = "rejected";
     rejected.setAttribute("sorttable_customkey", 4);
     rejected.classList.add("rejected");
     minionTr.appendChild(rejected);
@@ -268,6 +271,7 @@ export class KeysPanel extends Panel {
     minionTr.appendChild(minionIdTd);
 
     const denied = Utils.createTd("status", "denied");
+    minionTr.dataset.status = "denied";
     denied.setAttribute("sorttable_customkey", 3);
     denied.classList.add("denied");
     minionTr.appendChild(denied);
@@ -294,6 +298,7 @@ export class KeysPanel extends Panel {
     minionTr.appendChild(minionIdTd);
 
     const pre = Utils.createTd("status", "unaccepted");
+    minionTr.dataset.status = "unaccepted";
     // unaccepted comes first because user action is needed
     // all others have the same order as in 'salt-key'
     pre.setAttribute("sorttable_customkey", 1);
@@ -328,6 +333,7 @@ export class KeysPanel extends Panel {
     minionTr.appendChild(minionIdTd);
 
     const missing = Utils.createTd("status", "missing");
+    minionTr.dataset.status = "missing";
     missing.setAttribute("sorttable_customkey", 5);
     missing.classList.add("missing");
     minionTr.appendChild(missing);
@@ -350,14 +356,14 @@ export class KeysPanel extends Panel {
 
   _addMenuItemWheelKeyAccept1 (pMenu, pMinionId, pMinionTr) {
     pMenu.addMenuItem(() => {
-      const status = pMinionTr.querySelector(".status").innerText;
+      const status = pMinionTr.dataset.status;
       if (status === "denied" || status === "unaccepted") {
         return "Accept key...";
       }
       return null;
     }, (pClickEvent) => {
       let cmd = "wheel.key.accept";
-      const status = pMinionTr.querySelector(".status").innerText;
+      const status = pMinionTr.dataset.status;
       if (status === "denied") {
         cmd += " include_denied=true";
       } else if (status === "rejected") {
@@ -426,14 +432,14 @@ export class KeysPanel extends Panel {
 
   _addMenuItemWheelKeyAccept2 (pMenu, pMinionId, pMinionTr) {
     pMenu.addMenuItem(() => {
-      const status = pMinionTr.querySelector(".status").innerText;
+      const status = pMinionTr.dataset.status;
       if (status === "rejected") {
         return "Accept key...";
       }
       return null;
     }, (pClickEvent) => {
       let cmd = "wheel.key.accept";
-      const status = pMinionTr.querySelector(".status").innerText;
+      const status = pMinionTr.dataset.status;
       if (status === "denied") {
         cmd += " include_denied=true";
       } else if (status === "rejected") {
@@ -445,14 +451,14 @@ export class KeysPanel extends Panel {
 
   _addMenuItemWheelKeyReject (pMenu, pMinionId, pMinionTr) {
     pMenu.addMenuItem(() => {
-      const status = pMinionTr.querySelector(".status").innerText;
+      const status = pMinionTr.dataset.status;
       if (status === "accepted" || status === "denied" || status === "unaccepted") {
         return "Reject key...";
       }
       return null;
     }, (pClickEvent) => {
       let cmd = "wheel.key.reject";
-      const status = pMinionTr.querySelector(".status").innerText;
+      const status = pMinionTr.dataset.status;
       if (status === "accepted") {
         cmd += " include_accepted=true";
       } else if (status === "denied") {
@@ -521,7 +527,7 @@ export class KeysPanel extends Panel {
 
   _addMenuItemWheelKeyDelete (pMenu, pMinionId, pMinionTr) {
     pMenu.addMenuItem(() => {
-      const status = pMinionTr.querySelector(".status").innerText;
+      const status = pMinionTr.dataset.status;
       if (status === "accepted" || status === "rejected" || status === "unaccepted" || status === "denied") {
         return "Delete key...";
       }
@@ -559,19 +565,22 @@ export class KeysPanel extends Panel {
       if (pData.act === "accept") {
         statusTd.className = "status";
         statusTd.classList.add("accepted");
-        if (statusTd.innerText !== "accepted") {
+        if (tr.dataset.status !== "accepted") {
+          tr.dataset.status = "accepted";
           statusTd.innerText = "accepted";
         }
       } else if (pData.act === "reject") {
         statusTd.className = "status";
         statusTd.classList.add("rejected");
-        if (statusTd.innerText !== "rejected") {
+        if (tr.dataset.status !== "rejected") {
+          tr.dataset.status = "rejected";
           statusTd.innerText = "rejected";
         }
       } else if (pData.act === "pend") {
         statusTd.className = "status";
         statusTd.classList.add("unaccepted");
-        if (statusTd.innerText !== "unaccepted") {
+        if (tr.dataset.status !== "unaccepted") {
+          tr.dataset.status = "unaccepted";
           statusTd.innerText = "unaccepted";
         }
       } else if (pData.act === "delete") {
@@ -627,7 +636,7 @@ export class KeysPanel extends Panel {
     }
     // at this stage, the field is still classed "os" instead of "fingerprint"
     const fingerprintSpan = tr2.querySelector("td.os");
-    if (fingerprintSpan && (fingerprintSpan.innerText === "" || fingerprintSpan.innerText === "loading...")) {
+    if (!tr2.dataset.fingerprintKnown) {
       fingerprintSpan.innerText = "(refresh page for fingerprint)";
       const wheelKeyFingerPromise = this.api.getWheelKeyFinger(pData.id);
       wheelKeyFingerPromise.then((pWheelKeyFingerData) => {
