@@ -1,5 +1,22 @@
 import {Utils} from "./Utils.js";
 
+// each menu item has a 2 properties
+// 1: the title
+//    menu items that are always useable are just plain text
+//    but it may be a callback function which:
+//    a) sets the title using pMenuItem.innerHTML = "xyz"
+//    b) arranges the visibility using pMenuItem.style.display = true/false
+// 2: the callback function
+//    called when the menu item is selected: (pClickEvent) => { ... }
+// all menu items are re-validated when the menu pops up
+// when all menu items are invisible, the menu-button must be made invisible
+// since this can happen at any time, this cannot be done when the menu is shown
+// worse, since the menu button may be invisible, thave event may never happen
+// call (DropDownMenuInstance).verifyApp() to show/hide the menu button based
+// on the visibility of its menu items. when all menu items are hidden, so is
+// the menu. when at least one item is visible, the menu is visible
+// remember to call verifyApp() when that is potentially the case
+
 export class DropDownMenu {
 
   // Creates an empty dropdown menu

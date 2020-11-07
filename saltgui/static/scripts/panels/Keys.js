@@ -10,6 +10,16 @@ export class KeysPanel extends Panel {
     super("keys");
 
     this.addTitle("Keys");
+    this.addPanelMenu();
+    this._addMenuItemWheelKeyAcceptAllUnaccepted();
+    this._addMenuItemWheelKeyAcceptAllUnacceptedRejected();
+    this._addMenuItemWheelKeyAcceptAllUnacceptedDenied();
+    this._addMenuItemWheelKeyAcceptAllUnacceptedRejectedDenied();
+    this._addMenuItemWheelKeyRejectAllUnaccepted();
+    this._addMenuItemWheelKeyRejectAllUnacceptedAccepted();
+    this._addMenuItemWheelKeyRejectAllUnacceptedDenied();
+    this._addMenuItemWheelKeyRejectAllUnacceptedAcceptedDenied();
+    this._addMenuItemWheelKeyDeleteAllUnaccepted();
     this.addSearchButton();
     this.addPlayPauseButton("play");
     this.addHelpButton("The content of this page is\nautomatically refreshed");
@@ -126,6 +136,8 @@ export class KeysPanel extends Panel {
     }
 
     this.updateFooter();
+
+    this.panelMenu.verifyAll();
   }
 
   updateFooter () {
@@ -163,6 +175,11 @@ export class KeysPanel extends Panel {
       // FE0E = VARIATION SELECTOR-15 (render as text)
       txt += ", press '&#x23F5;&#xFE0E;' to continue";
     }
+
+    KeysPanel.cntUnaccepted = cnt["unaccepted"];
+    KeysPanel.cntAccepted = cnt["accepted"];
+    KeysPanel.cntDenied = cnt["denied"];
+    KeysPanel.cntRejected = cnt["rejected"];
 
     this.setMsg(txt, true);
   }
@@ -337,6 +354,62 @@ export class KeysPanel extends Panel {
     });
   }
 
+  _addMenuItemWheelKeyAcceptAllUnaccepted () {
+    this.panelMenu.addMenuItem((pMenuItem) => {
+      pMenuItem.innerHTML = "Accept&nbsp;all&nbsp;unaccepted&nbsp;keys...";
+      const shown = KeysPanel.cntUnaccepted > 0;
+      pMenuItem.style.display = shown ? "inline-block" : "none";
+    }, (pClickEvent) => {
+      const cmd = "wheel.key.accept";
+      this.runCommand(pClickEvent, "*", cmd);
+    });
+  }
+
+  _addMenuItemWheelKeyAcceptAllUnacceptedRejected () {
+    this.panelMenu.addMenuItem((pMenuItem) => {
+      if (KeysPanel.cntUnaccepted > 0) {
+        pMenuItem.innerHTML = "Accept&nbsp;all&nbsp;unaccepted+rejected&nbsp;keys...";
+      } else {
+        pMenuItem.innerHTML = "Accept&nbsp;all&nbsp;rejected&nbsp;keys...";
+      }
+      const shown = KeysPanel.cntRejected > 0;
+      pMenuItem.style.display = shown ? "inline-block" : "none";
+    }, (pClickEvent) => {
+      const cmd = "wheel.key.accept include_rejected=true";
+      this.runCommand(pClickEvent, "*", cmd);
+    });
+  }
+
+  _addMenuItemWheelKeyAcceptAllUnacceptedDenied () {
+    this.panelMenu.addMenuItem((pMenuItem) => {
+      if (KeysPanel.cntUnaccepted > 0) {
+        pMenuItem.innerHTML = "Accept&nbsp;all&nbsp;unaccepted+denied&nbsp;keys...";
+      } else {
+        pMenuItem.innerHTML = "Accept&nbsp;all&nbsp;denied&nbsp;keys...";
+      }
+      const shown = KeysPanel.cntDenied > 0;
+      pMenuItem.style.display = shown ? "inline-block" : "none";
+    }, (pClickEvent) => {
+      const cmd = "wheel.key.accept include_denied=true";
+      this.runCommand(pClickEvent, "*", cmd);
+    });
+  }
+
+  _addMenuItemWheelKeyAcceptAllUnacceptedRejectedDenied () {
+    this.panelMenu.addMenuItem((pMenuItem) => {
+      if (KeysPanel.cntUnaccepted > 0) {
+        pMenuItem.innerHTML = "Accept&nbsp;all&nbsp;unaccepted+denied+rejected&nbsp;keys...";
+      } else {
+        pMenuItem.innerHTML = "Accept&nbsp;all&nbsp;denied+rejected&nbsp;keys...";
+      }
+      const shown = KeysPanel.cntRejected > 0 && KeysPanel.cntDenied > 0;
+      pMenuItem.style.display = shown ? "inline-block" : "none";
+    }, (pClickEvent) => {
+      const cmd = "wheel.key.accept include_denied=true include_rejected=true";
+      this.runCommand(pClickEvent, "*", cmd);
+    });
+  }
+
   _addMenuItemWheelKeyAccept2 (pMenu, pMinionId) {
     pMenu.addMenuItem((pMenuItem) => {
       const minionTr = pMenu.menuDropdown.parentElement.parentElement;
@@ -377,6 +450,62 @@ export class KeysPanel extends Panel {
     });
   }
 
+  _addMenuItemWheelKeyRejectAllUnaccepted () {
+    this.panelMenu.addMenuItem((pMenuItem) => {
+      pMenuItem.innerHTML = "Reject&nbsp;all&nbsp;unaccepted&nbsp;keys...";
+      const shown = KeysPanel.cntUnaccepted > 0;
+      pMenuItem.style.display = shown ? "inline-block" : "none";
+    }, (pClickEvent) => {
+      const cmd = "wheel.key.reject";
+      this.runCommand(pClickEvent, "*", cmd);
+    });
+  }
+
+  _addMenuItemWheelKeyRejectAllUnacceptedAccepted () {
+    this.panelMenu.addMenuItem((pMenuItem) => {
+      if (KeysPanel.cntUnaccepted > 0) {
+        pMenuItem.innerHTML = "Reject&nbsp;all&nbsp;unaccepted+accepted&nbsp;keys...";
+      } else {
+        pMenuItem.innerHTML = "Reject&nbsp;all&nbsp;accepted&nbsp;keys...";
+      }
+      const shown = KeysPanel.cntAccepted > 0;
+      pMenuItem.style.display = shown ? "inline-block" : "none";
+    }, (pClickEvent) => {
+      const cmd = "wheel.key.reject include_accepted=true";
+      this.runCommand(pClickEvent, "*", cmd);
+    });
+  }
+
+  _addMenuItemWheelKeyRejectAllUnacceptedDenied () {
+    this.panelMenu.addMenuItem((pMenuItem) => {
+      if (KeysPanel.cntUnaccepted > 0) {
+        pMenuItem.innerHTML = "Reject&nbsp;all&nbsp;unaccepted+denied&nbsp;keys...";
+      } else {
+        pMenuItem.innerHTML = "Reject&nbsp;all&nbsp;denied&nbsp;keys...";
+      }
+      const shown = KeysPanel.cntDenied > 0;
+      pMenuItem.style.display = shown ? "inline-block" : "none";
+    }, (pClickEvent) => {
+      const cmd = "wheel.key.reject include_denied=true";
+      this.runCommand(pClickEvent, "*", cmd);
+    });
+  }
+
+  _addMenuItemWheelKeyRejectAllUnacceptedAcceptedDenied () {
+    this.panelMenu.addMenuItem((pMenuItem) => {
+      if (KeysPanel.cntUnaccepted > 0) {
+        pMenuItem.innerHTML = "Reject&nbsp;all&nbsp;unaccepted+accepted+denied&nbsp;keys...";
+      } else {
+        pMenuItem.innerHTML = "Reject&nbsp;all&nbsp;accepted+denied&nbsp;keys...";
+      }
+      const shown = KeysPanel.cntAccepted > 0 && KeysPanel.cntDenied > 0;
+      pMenuItem.style.display = shown ? "inline-block" : "none";
+    }, (pClickEvent) => {
+      const cmd = "wheel.key.reject include_accepted=true include_denied=true";
+      this.runCommand(pClickEvent, "*", cmd);
+    });
+  }
+
   _addMenuItemWheelKeyDelete (pMenu, pMinionId) {
     pMenu.addMenuItem((pMenuItem) => {
       const minionTr = pMenu.menuDropdown.parentElement.parentElement;
@@ -387,6 +516,17 @@ export class KeysPanel extends Panel {
     }, (pClickEvent) => {
       const cmd = "wheel.key.delete";
       this.runCommand(pClickEvent, pMinionId, cmd);
+    });
+  }
+
+  _addMenuItemWheelKeyDeleteAllUnaccepted () {
+    this.panelMenu.addMenuItem((pMenuItem) => {
+      pMenuItem.innerHTML = "Delete&nbsp;all&nbsp;keys...";
+      const shown = KeysPanel.cntAccepted > 0 || KeysPanel.cntUnaccepted > 0 || KeysPanel.cntRejected > 0 || KeysPanel.cntDenied > 0;
+      pMenuItem.style.display = shown ? "inline-block" : "none";
+    }, (pClickEvent) => {
+      const cmd = "wheel.key.delete";
+      this.runCommand(pClickEvent, "*", cmd);
     });
   }
 
@@ -433,6 +573,7 @@ export class KeysPanel extends Panel {
       // keep the fingerprint
       // update the menu because it may be in a hidden state
       tr.saltguidropdownmenu.verifyAll();
+      this.panelMenu.verifyAll();
     } else if (this.table.querySelector("tr") === null) {
       // only when the full list is already available
       // this prevents a random set of records from appearing
