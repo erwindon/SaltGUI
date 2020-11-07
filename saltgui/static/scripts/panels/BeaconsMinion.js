@@ -86,6 +86,7 @@ export class BeaconsMinionPanel extends Panel {
     const keys = Object.keys(beacons.beacons).sort();
     for (const beaconName of keys) {
       const tr = document.createElement("tr");
+      tr.id = "beacon-" + beaconName;
 
       const nameTd = Utils.createTd("beacon-name", beaconName);
       tr.appendChild(nameTd);
@@ -212,7 +213,6 @@ export class BeaconsMinionPanel extends Panel {
   }
 
   handleSaltBeaconEvent (pTag, pData) {
-
     if (this.playOrPause !== "play") {
       return;
     }
@@ -224,68 +224,68 @@ export class BeaconsMinionPanel extends Panel {
     }
     let beaconName = pTag.substring(prefix.length);
     beaconName = beaconName.replace(/[/].*/, "");
-    for (const row of this.table.tBodies[0].rows) {
-      if (row.getElementsByTagName("td")[0].innerText !== beaconName) {
-        continue;
-      }
-      let txt = "";
-      let stamp = "";
-      if (pData["_stamp"]) {
-        // keep timestamp for further logic
-        stamp = pData["_stamp"];
-        txt += Output.dateTimeStr(stamp) + "\n";
-        delete pData["_stamp"];
-      }
-      if (pTag !== prefix + beaconName + "/") {
-        // Show the tag when it has extra information
-        txt += pTag + "\n";
-      }
-      if (pData["id"] === minionId) {
-        delete pData["id"];
-      }
-      txt += Output.formatObject(pData);
-      const td = row.getElementsByTagName("td")[3];
-      td.classList.remove("beacon-waiting");
 
-      // round down to 0.1 second
-      // secondary events are close, but rarely exact on the same time
-      // original: yyyy-mm-ddThh:mm:ss.ssssss
-      stamp = stamp.substr(0, 21);
-
-      // when the warning-line has been shown, then from then on,
-      // show an empty line when there is no warning.
-      // this prevents a jumpy screen, while preserving space with
-      // tags that are never affected.
-      // See also: https://github.com/saltstack/salt/issues/57174
-      let helpText = null;
-      if (td.prevStamp && td.prevStamp !== stamp) {
-        // event has a different timestamp
-        // normal situation, no reason for panic
-      } else if (td.prevTag && td.prevTag !== pTag) {
-        helpText = "Multiple events seen with same timestamp, but different tag\nThis usually means that there is more data than can be seen here\nThere may e.g. be more than one disk or networkinterface\nBut only the most recently reported one is actually shown";
-      } else if (td.prevData && td.prevData !== pData) {
-        helpText = "Multiple events seen with same timestamp, same tag, but different data\nThis usually means that there is more data than can be seen here\nThere may e.g. be more than one disk or networkinterface\nBut only the most recently reported one is actually shown";
-      } else {
-        // duplicate of previous event, never mind for now
-      }
-
-      if (helpText) {
-        Utils.addToolTip(row.helpButtonSpan, helpText, "bottom-right");
-        row.helpButtonSpan.style.display = "";
-      } else {
-        row.helpButtonSpan.style.display = "none";
-      }
-
-      td.prevStamp = stamp;
-      td.prevTag = pTag;
-      td.prevData = pData;
-
-      td.innerText = txt;
-
-      const searchBlock = this.div.querySelector(".search-box");
-      Utils.hideShowTableSearchBar(searchBlock, this.table, "refresh");
-
-      break;
+    const tr = document.getElementById("beacon-" + beaconName);
+    if (tr === null) {
+      // beacon was unknown when the screen was created
+      return;
     }
+
+    let txt = "";
+    let stamp = "";
+    if (pData["_stamp"]) {
+      // keep timestamp for further logic
+      stamp = pData["_stamp"];
+      txt += Output.dateTimeStr(stamp) + "\n";
+      delete pData["_stamp"];
+    }
+    if (pTag !== prefix + beaconName + "/") {
+      // Show the tag when it has extra information
+      txt += pTag + "\n";
+    }
+    if (pData["id"] === minionId) {
+      delete pData["id"];
+    }
+    txt += Output.formatObject(pData);
+    const td = tr.getElementsByTagName("td")[3];
+    td.classList.remove("beacon-waiting");
+
+    // round down to 0.1 second
+    // secondary events are close, but rarely exact on the same time
+    // original: yyyy-mm-ddThh:mm:ss.ssssss
+    stamp = stamp.substr(0, 21);
+
+    // when the warning-line has been shown, then from then on,
+    // show an empty line when there is no warning.
+    // this prevents a jumpy screen, while preserving space with
+    // tags that are never affected.
+    // See also: https://github.com/saltstack/salt/issues/57174
+    let helpText = null;
+    if (td.prevStamp && td.prevStamp !== stamp) {
+      // event has a different timestamp
+      // normal situation, no reason for panic
+    } else if (td.prevTag && td.prevTag !== pTag) {
+      helpText = "Multiple events seen with same timestamp, but different tag\nThis usually means that there is more data than can be seen here\nThere may e.g. be more than one disk or networkinterface\nBut only the most recently reported one is actually shown";
+    } else if (td.prevData && td.prevData !== pData) {
+      helpText = "Multiple events seen with same timestamp, same tag, but different data\nThis usually means that there is more data than can be seen here\nThere may e.g. be more than one disk or networkinterface\nBut only the most recently reported one is actually shown";
+    } else {
+      // duplicate of previous event, never mind for now
+    }
+
+    const searchBlock = this.div.querySelector(".search-box");
+    Utils.hideShowTableSearchBar(searchBlock, this.table, "refresh");
+
+    if (helpText) {
+      Utils.addToolTip(tr.helpButtonSpan, helpText, "bottom-right");
+      tr.helpButtonSpan.style.display = "";
+    } else {
+      tr.helpButtonSpan.style.display = "none";
+    }
+
+    td.innerText = txt;
+
+    td.prevStamp = stamp;
+    td.prevTag = pTag;
+    td.prevData = pData;
   }
 }
