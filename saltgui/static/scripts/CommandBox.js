@@ -201,6 +201,40 @@ export class CommandBox {
     button.disabled = true;
     output.innerText = "Loading...";
 
+    const screenModifyingCommands = [
+      "beacons.add",
+      "beacons.delete",
+      "beacons.delete",
+      "beacons.disable",
+      "beacons.disable_beacon",
+      "beacons.enable",
+      "beacons.enable_beacon",
+      "beacons.modify",
+      "beacons.reset",
+      "grains.append",
+      "grains.delkey",
+      "grains.delval",
+      "grains.setval",
+      "ps.kill_pid",
+      "saltutil.kill_job",
+      "saltutil.refresh_grains",
+      "saltutil.refresh_pillar",
+      "saltutil.signal_job",
+      "saltutil.term_job",
+      "schedule.delete",
+      "schedule.disable",
+      "schedule.disable_job",
+      "schedule.enable",
+      "schedule.enable_job",
+      "schedule.modify",
+      "schedule.run_job"
+    ];
+    // test whether the command may have caused an update to the list
+    const command = commandValue.split(" ")[0];
+    if (screenModifyingCommands.includes(command)) {
+      CommandBox.refreshOnClose = true;
+    }
+
     func.then((pResponse) => {
       if (pResponse) {
         CommandBox.onRunReturn(pResponse.return[0], commandValue);
@@ -239,6 +273,7 @@ export class CommandBox {
 
     const outputField = document.querySelector(".run-command pre");
     outputField.innerText = "Waiting for command...";
+    CommandBox.refreshOnClose = false;
 
     const targetField = document.getElementById("target");
     TargetType.autoSelectTargetType(targetField.value);
@@ -311,41 +346,7 @@ export class CommandBox {
     RunType.setRunTypeDefault();
     TargetType.setTargetTypeDefault();
 
-    // test whether the command may have caused an update to the list
-    // the user may have altered the text after running the command, just ignore that
-    const commandField = document.getElementById("command");
-    const command = commandField.value.split(" ")[0];
-    const outputField = document.querySelector(".run-command pre");
-    const output = outputField.innerText;
-    const screenModifyingCommands = [
-      "beacons.add",
-      "beacons.delete",
-      "beacons.delete",
-      "beacons.disable",
-      "beacons.disable_beacon",
-      "beacons.enable",
-      "beacons.enable_beacon",
-      "beacons.modify",
-      "beacons.reset",
-      "grains.append",
-      "grains.delkey",
-      "grains.delval",
-      "grains.setval",
-      "ps.kill_pid",
-      "saltutil.kill_job",
-      "saltutil.refresh_grains",
-      "saltutil.refresh_pillar",
-      "saltutil.signal_job",
-      "saltutil.term_job",
-      "schedule.delete",
-      "schedule.disable",
-      "schedule.disable_job",
-      "schedule.enable",
-      "schedule.enable_job",
-      "schedule.modify",
-      "schedule.run_job"
-    ];
-    if (screenModifyingCommands.includes(command) && output !== "Waiting for command...") {
+    if (CommandBox.refreshOnClose) {
       window.location.reload();
     }
 

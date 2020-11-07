@@ -87,11 +87,7 @@ export class Documentation {
 
     const commandField = document.getElementById("command");
     const commandLine = commandField.value;
-
-    const argsArray = [];
-    const argsObject = {};
-    ParseCommandLine.parseCommandLine(commandLine, argsArray, argsObject);
-    const cmd = argsArray[0];
+    const cmd = ParseCommandLine.getCommandFromCommandLine(commandLine);
 
     button.disabled = true;
     output.innerText = "Loading...";
