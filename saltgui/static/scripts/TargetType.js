@@ -20,15 +20,15 @@ export class TargetType {
   // so this conclusion must be re-evaluated each time
   static _targetTypeNodeGroupPrepare (pMenuItem) {
     const nodeGroupsText = Utils.getStorageItem("session", "nodegroups");
-    if (nodeGroupsText && nodeGroupsText !== "{}") {
-      pMenuItem.innerText = "Nodegroup";
-      pMenuItem.style.display = "block";
-      // optimization as the list of nodegroups will not change until the next login
-      // but mainly to preserve the highlight marker
-      pMenuItem.verifyCallBack = null;
-    } else {
-      pMenuItem.style.display = "none";
+    if (!nodeGroupsText || nodeGroupsText === "{}") {
+      return null;
     }
+
+    // optimization as the list of nodegroups will not change until the next login
+    // but mainly to preserve the highlight marker
+    pMenuItem.verifyCallBack = null;
+
+    return "Nodegroup";
   }
 
   static _manualUpdateTargetTypeText () {

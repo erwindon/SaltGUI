@@ -63,11 +63,15 @@ export class DropDownMenu {
       for (const chld of this.menuDropdownContent.children) {
         const verifyCallBack = chld.verifyCallBack;
         if (verifyCallBack) {
-          verifyCallBack(chld);
+          const title = verifyCallBack(chld);
+          if (title === null) {
+            chld.style.display = "none";
+            continue;
+          }
+          chld.innerHTML = DropDownMenu._sanitizeMenuItemTitle(title);
+          chld.style.removeProperty("display");
         }
-        if (chld.style.display !== "none") {
-          visibleCount += 1;
-        }
+        visibleCount += 1;
       }
     }
     // hide the menu when it has no visible menu-items

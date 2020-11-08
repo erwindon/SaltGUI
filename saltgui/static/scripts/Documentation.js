@@ -44,8 +44,7 @@ export class Documentation {
 
     if (!argsArray.length) {
       // No command entered yet (or only name-value pairs)
-      pMenuItem.style.display = "none";
-      return;
+      return null;
     }
 
     const cmdFragments = Documentation.getKeywordFragments(commandLine);
@@ -59,17 +58,16 @@ export class Documentation {
     if (category === "runners") {
       // actually "command" is not passed, but we select that part of the actual result
       // because `runners.doc.runner` always returns all documentation for "runners"
-      pMenuItem.innerText = "Run 'runners.doc.runner" + arg + "'";
-      pMenuItem.style.display = "block";
-    } else if (category === "wheel") {
+      return "Run 'runners.doc.runner" + arg + "'";
+    }
+
+    if (category === "wheel") {
       // actually "command" is not passed, but we select that part of the actual result
       // because `runners.doc.wheel` always returns all documentation for "wheel"
-      pMenuItem.innerText = "Run 'runners.doc.wheel" + arg + "'";
-      pMenuItem.style.display = "block";
-    } else {
-      pMenuItem.innerText = "Run 'sys.doc " + arg + "' on " + target;
-      pMenuItem.style.display = "block";
+      return "Run 'runners.doc.wheel" + arg + "'";
     }
+
+    return "Run 'sys.doc " + arg + "' on " + target;
   }
 
   _manualRunMenuSysDocRun () {
@@ -227,7 +225,7 @@ export class Documentation {
   static _manualRunMenuHtmlDocPrepare (menuitem) {
     const commandLine = document.querySelector(".run-command #command").value;
     const cmd = Documentation.getKeywordFragments(commandLine);
-    menuitem.innerHTML = "Online reference for '" + cmd.join(".").replace(/^modules[.]/, "") + "'";
+    return "Online reference for '" + cmd.join(".").replace(/^modules[.]/, "") + "'";
   }
 
   static _manualRunMenuHtmlDocRun () {

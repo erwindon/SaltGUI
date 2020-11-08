@@ -36,6 +36,8 @@ export class JobPanel extends Panel {
   onShow () {
     const jobId = decodeURIComponent(Utils.getQueryParam("id"));
 
+    JobPanel.jobIsTerminated = false;
+
     const runnerJobsListJobPromise = this.api.getRunnerJobsListJob(jobId);
     const runnerJobsActivePromise = this.api.getRunnerJobsActive();
 
@@ -176,9 +178,7 @@ export class JobPanel extends Panel {
       // don't wait for RunnerJobsActive to also tell us that we are done
       // RunnerJobsActive remains running and will overwrite with the same
       initialStatus = "done";
-      this.terminateJobMenuItem.style.display = "none";
-      this.killJobMenuItem.style.display = "none";
-      this.signalJobMenuItem.style.display = "none";
+      this.jobIsTerminated = true;
     }
     Output.addResponseOutput(this.output, pJobId, minions, info.Result, info.Function, initialStatus);
 
@@ -331,21 +331,36 @@ export class JobPanel extends Panel {
   }
 
   _addMenuItemTerminateJob (info, pJobId) {
-    this.terminateJobMenuItem = this.panelMenu.addMenuItem("Terminate job...", (pClickEvent) => {
-      this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.term_job " + pJobId);
-    });
+    this.panelMenu.addMenuItem(
+      /* eslint-disable no-extra-parens */
+      () => (JobPanel.jobIsTerminated ? null : "Terminate job..."),
+      /* eslint-enable no-extra-parens */
+      (pClickEvent) => {
+        this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.term_job " + pJobId);
+      }
+    );
   }
 
   _addMenuItemKillJob (info, pJobId) {
-    this.killJobMenuItem = this.panelMenu.addMenuItem("Kill job...", (pClickEvent) => {
-      this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.kill_job " + pJobId);
-    });
+    this.panelMenu.addMenuItem(
+      /* eslint-disable no-extra-parens */
+      () => (JobPanel.jobIsTerminated ? null : "Kill job..."),
+      /* eslint-enable no-extra-parens */
+      (pClickEvent) => {
+        this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.kill_job " + pJobId);
+      }
+    );
   }
 
   _addMenuItemSignalJob (info, pJobId) {
-    this.signalJobMenuItem = this.panelMenu.addMenuItem("Signal job...", (pClickEvent) => {
-      this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.signal_job " + pJobId + " signal=<signalnumber>");
-    });
+    this.panelMenu.addMenuItem(
+      /* eslint-disable no-extra-parens */
+      () => (JobPanel.jobIsTerminated ? null : "Signal job..."),
+      /* eslint-enable no-extra-parens */
+      (pClickEvent) => {
+        this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.signal_job " + pJobId + " signal=<signalnumber>");
+      }
+    );
   }
 
   _handleRunnerJobsActive (pJobId, pData) {
@@ -365,18 +380,7 @@ export class JobPanel extends Panel {
     // when the job is already completely done, nothing is returned
     if (!info) {
       summaryJobsActiveSpan.innerText = "done";
-      if (this.terminateJobMenuItem) {
-        // nothing left to terminate
-        this.terminateJobMenuItem.style.display = "none";
-      }
-      if (this.killJobMenuItem) {
-        // nothing left to kill
-        this.killJobMenuItem.style.display = "none";
-      }
-      if (this.signalJobMenuItem) {
-        // nothing left to signal
-        this.signalJobMenuItem.style.display = "none";
-      }
+      JobPanel.jobIsTerminated = true;
       return;
     }
 
