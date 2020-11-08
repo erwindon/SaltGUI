@@ -335,7 +335,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMenuItemWheelKeyAccept1 (pMenu, pMinionId) {
-    pMenu.addMenuItem((pMenuItem) => {
+    pMenu.addMenuItem(() => {
       const minionTr = pMenu.menuDropdown.parentElement.parentElement;
       const status = minionTr.querySelector(".status").innerText;
       if (status === "denied" || status === "unaccepted") {
@@ -356,7 +356,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMenuItemWheelKeyAcceptAllUnaccepted () {
-    this.panelMenu.addMenuItem((pMenuItem) => {
+    this.panelMenu.addMenuItem(() => {
       if (KeysPanel.cntUnaccepted > 0) {
         return "Accept all unaccepted keys...";
       }
@@ -368,7 +368,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMenuItemWheelKeyAcceptAllUnacceptedRejected () {
-    this.panelMenu.addMenuItem((pMenuItem) => {
+    this.panelMenu.addMenuItem(() => {
       if (KeysPanel.cntRejected === 0) {
         return null;
       }
@@ -383,7 +383,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMenuItemWheelKeyAcceptAllUnacceptedDenied () {
-    this.panelMenu.addMenuItem((pMenuItem) => {
+    this.panelMenu.addMenuItem(() => {
       if (KeysPanel.cntDenied === 0) {
         return null;
       }
@@ -398,7 +398,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMenuItemWheelKeyAcceptAllUnacceptedRejectedDenied () {
-    this.panelMenu.addMenuItem((pMenuItem) => {
+    this.panelMenu.addMenuItem(() => {
       if (KeysPanel.cntRejected === 0 || KeysPanel.cntDenied === 0) {
         return null;
       }
@@ -413,7 +413,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMenuItemWheelKeyAccept2 (pMenu, pMinionId) {
-    pMenu.addMenuItem((pMenuItem) => {
+    pMenu.addMenuItem(() => {
       const minionTr = pMenu.menuDropdown.parentElement.parentElement;
       const status = minionTr.querySelector(".status").innerText;
       if (status === "rejected") {
@@ -434,7 +434,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMenuItemWheelKeyReject (pMenu, pMinionId) {
-    pMenu.addMenuItem((pMenuItem) => {
+    pMenu.addMenuItem(() => {
       const minionTr = pMenu.menuDropdown.parentElement.parentElement;
       const status = minionTr.querySelector(".status").innerText;
       if (status === "accepted" || status === "denied" || status === "unaccepted") {
@@ -455,7 +455,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMenuItemWheelKeyRejectAllUnaccepted () {
-    this.panelMenu.addMenuItem((pMenuItem) => {
+    this.panelMenu.addMenuItem(() => {
       if (KeysPanel.cntUnaccepted > 0) {
         return "Reject all unaccepted keys...";
       }
@@ -467,7 +467,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMenuItemWheelKeyRejectAllUnacceptedAccepted () {
-    this.panelMenu.addMenuItem((pMenuItem) => {
+    this.panelMenu.addMenuItem(() => {
       if (KeysPanel.cntAccepted === 0) {
         return null;
       }
@@ -482,7 +482,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMenuItemWheelKeyRejectAllUnacceptedDenied () {
-    this.panelMenu.addMenuItem((pMenuItem) => {
+    this.panelMenu.addMenuItem(() => {
       if (KeysPanel.cntDenied === 0) {
         return null;
       }
@@ -497,7 +497,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMenuItemWheelKeyRejectAllUnacceptedAcceptedDenied () {
-    this.panelMenu.addMenuItem((pMenuItem) => {
+    this.panelMenu.addMenuItem(() => {
       if (KeysPanel.cntAccepted === 0 || KeysPanel.cntDenied === 0) {
         return null;
       }
@@ -512,7 +512,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMenuItemWheelKeyDelete (pMenu, pMinionId) {
-    pMenu.addMenuItem((pMenuItem) => {
+    pMenu.addMenuItem(() => {
       const minionTr = pMenu.menuDropdown.parentElement.parentElement;
       const status = minionTr.querySelector(".status").innerText;
       if (status === "accepted" || status === "rejected" || status === "unaccepted" || status === "denied") {
@@ -526,7 +526,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMenuItemWheelKeyDeleteAllUnaccepted () {
-    this.panelMenu.addMenuItem((pMenuItem) => {
+    this.panelMenu.addMenuItem(() => {
       if (KeysPanel.cntAccepted > 0 || KeysPanel.cntUnaccepted > 0 || KeysPanel.cntRejected > 0 || KeysPanel.cntDenied > 0) {
         return "Delete all keys...";
       }

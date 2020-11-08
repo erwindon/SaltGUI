@@ -16,10 +16,10 @@ export class Documentation {
     this.commandbox = pCommandBox;
 
     pCommandBox.cmdmenu.addMenuItem(
-      (pMenuItem) => Documentation._manualRunMenuSysDocPrepare(pMenuItem),
+      () => Documentation._manualRunMenuSysDocPrepare(),
       () => this._manualRunMenuSysDocRun());
     pCommandBox.cmdmenu.addMenuItem(
-      (pMenuItem) => Documentation._manualRunMenuHtmlDocPrepare(pMenuItem),
+      () => Documentation._manualRunMenuHtmlDocPrepare(),
       () => Documentation._manualRunMenuHtmlDocRun());
 
     Documentation.DOCUMENTATION_URL = "https://docs.saltstack.com/en/latest/ref/";
@@ -30,7 +30,7 @@ export class Documentation {
 
   // INTERNAL DOCUMENTATION
 
-  static _manualRunMenuSysDocPrepare (pMenuItem) {
+  static _manualRunMenuSysDocPrepare () {
     const targetField = document.getElementById("target");
     let target = targetField.value;
     target = target ? "target" : "all minions";
@@ -222,7 +222,7 @@ export class Documentation {
     return cmd;
   }
 
-  static _manualRunMenuHtmlDocPrepare (menuitem) {
+  static _manualRunMenuHtmlDocPrepare () {
     const commandLine = document.querySelector(".run-command #command").value;
     const cmd = Documentation.getKeywordFragments(commandLine);
     return "Online reference for '" + cmd.join(".").replace(/^modules[.]/, "") + "'";
