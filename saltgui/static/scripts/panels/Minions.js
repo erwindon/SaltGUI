@@ -117,13 +117,13 @@ export class MinionsPanel extends Panel {
   }
 
   _addMenuItemStateApply (pMenu, pMinionId) {
-    pMenu.addMenuItem("Apply&nbsp;state...", (pClickEvent) => {
+    pMenu.addMenuItem("Apply state...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "state.apply");
     });
   }
 
   _addMenuItemStateApplyTest (pMenu, pMinionId) {
-    pMenu.addMenuItem("Test&nbsp;state...", (pClickEvent) => {
+    pMenu.addMenuItem("Test state...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "state.apply test=True");
     });
   }

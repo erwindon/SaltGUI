@@ -54,7 +54,7 @@ export class JobsDetailsPanel extends JobsPanel {
 
   _addMenuItemShowSome () {
     const maxJobs = 50;
-    let title = "Show&nbsp;first&nbsp;" + maxJobs + "&nbsp;jobs";
+    let title = "Show first " + maxJobs + " jobs";
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     if (cnt === "undefined" || cnt === String(maxJobs)) {
       // 25CF = BLACK CIRCLE
@@ -67,7 +67,7 @@ export class JobsDetailsPanel extends JobsPanel {
 
   _addMenuItemShowEligible () {
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
-    let title = "Show&nbsp;eligible&nbsp;jobs";
+    let title = "Show eligible jobs";
     if (cnt === "eligible") {
       // 25CF = BLACK CIRCLE
       title = "\u25CF " + title;
@@ -79,7 +79,7 @@ export class JobsDetailsPanel extends JobsPanel {
 
   _addMenuItemShowAll () {
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
-    let title = "Show&nbsp;all&nbsp;jobs";
+    let title = "Show all jobs";
     if (cnt === "all") {
       // 25CF = BLACK CIRCLE
       title = "\u25CF " + title;
@@ -270,20 +270,19 @@ export class JobsDetailsPanel extends JobsPanel {
   }
 
   static _addJobsMenuItemShowDetails (pMenu, job) {
-    pMenu.addMenuItem("Show&nbsp;details", () => {
+    pMenu.addMenuItem("Show details", () => {
       window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
     });
   }
 
   _addMenuItemJobsRerunJob (pMenu, job, argumentsText) {
-    // 2011 = NON-BREAKING HYPHEN
-    pMenu.addMenuItem("Re&#x2011;run&nbsp;job...", (pClickEvent) => {
+    pMenu.addMenuItem("Re-run job...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, job["Target-type"], job.Target, job.Function + argumentsText);
     });
   }
 
   _addJobsMenuItemUpdateStatus (pMenu, pStatusSpan) {
-    pMenu.addMenuItem("Update&nbsp;status", () => {
+    pMenu.addMenuItem("Update status", () => {
       pStatusSpan.classList.add("no-job-status");
       pStatusSpan.innerText = "loading...";
       this.startRunningJobs();
@@ -291,7 +290,7 @@ export class JobsDetailsPanel extends JobsPanel {
   }
 
   _addMenuItemUpdateDetails (pMenu, pDetailsSpan, job) {
-    pMenu.addMenuItem("Update&nbsp;details", () => {
+    pMenu.addMenuItem("Update details", () => {
       pDetailsSpan.classList.add("no-job-details");
       pDetailsSpan.innerText = "loading...";
       this._getJobDetails(job.id);

@@ -76,6 +76,15 @@ export class DropDownMenu {
     this.menuDropdown.style.display = visibleCount > 0 ? displayVisible : displayInvisible;
   }
 
+  static _sanitizeMenuItemTitle (pTitle) {
+    // 2011 = NON-BREAKING HYPHEN
+    // 2026 = HORIZONTAL ELLIPSIS
+    return pTitle.
+      replace(" ", "&nbsp;").
+      replace("-", "&#x2011;").
+      replace("...", "&#x2026;");
+  }
+
   // Add a menu item at the end of this dropdown menu
   // Runs the given callback function when selected
   // When the title is actually a function then this
@@ -88,7 +97,7 @@ export class DropDownMenu {
       button._value = pValue;
     }
     if (typeof pTitle === "string") {
-      button.innerHTML = pTitle;
+      button.innerHTML = DropDownMenu._sanitizeMenuItemTitle(pTitle);
     } else {
       button.verifyCallBack = pTitle;
     }
@@ -111,7 +120,7 @@ export class DropDownMenu {
     // in the menu values, rather than their actions.
     // Use a slightly different clue for that.
     // 25BC = BLACK DOWN-POINTING TRIANGLE
-    this.menuButton.innerHTML = pTitle + "&nbsp;\u25BC";
+    this.menuButton.innerHTML = DropDownMenu._sanitizeMenuItemTitle(pTitle + " \u25BC");
   }
 
   __showMenu () {

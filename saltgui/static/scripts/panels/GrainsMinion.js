@@ -88,20 +88,20 @@ export class GrainsMinionPanel extends Panel {
   }
 
   _addMenuItemGrainsSetValAdd (pMinionId) {
-    this.panelMenu.addMenuItem("Add&nbsp;grain...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Add grain...", (pClickEvent) => {
       // use placeholders for name and value
       this.runCommand(pClickEvent, pMinionId, "grains.setval <name> <value>");
     });
   }
 
   _addMenuItemSaltUtilRefreshGrains (pMinionId) {
-    this.panelMenu.addMenuItem("Refresh&nbsp;grains...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Refresh grains...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "saltutil.refresh_grains");
     });
   }
 
   _addMenuItemGrainsSetValUpdate (pMenu, pMinionId, key, grains) {
-    pMenu.addMenuItem("Edit&nbsp;grain...", (pClickEvent) => {
+    pMenu.addMenuItem("Edit grain...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId,
         "grains.setval " + JSON.stringify(key) + " " + JSON.stringify(grains[key]));
     });
@@ -111,21 +111,21 @@ export class GrainsMinionPanel extends Panel {
     if (!pGrainValue.startsWith("[")) {
       return;
     }
-    pMenu.addMenuItem("Add&nbsp;value...", (pClickEvent) => {
+    pMenu.addMenuItem("Add value...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "grains.append " + JSON.stringify(key) + " <value>");
     });
   }
 
   _addMenuItemGrainsDelKey (pMenu, pMinionId, pKey, pValue) {
     const forceClause = pValue !== null && typeof pValue === "object" ? " force=true" : "";
-    pMenu.addMenuItem("Delete&nbsp;key...", (pClickEvent) => {
+    pMenu.addMenuItem("Delete key...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "grains.delkey" + forceClause + " " + JSON.stringify(pKey));
     });
   }
 
   _addMenuItemGrainsDelVal (pMenu, pMinionId, pKey, pValue) {
     const forceClause = pValue !== null && typeof pValue === "object" ? " force=true" : "";
-    pMenu.addMenuItem("Delete&nbsp;value...", (pClickEvent) => {
+    pMenu.addMenuItem("Delete value...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "grains.delval" + forceClause + " " + JSON.stringify(pKey));
     });
   }

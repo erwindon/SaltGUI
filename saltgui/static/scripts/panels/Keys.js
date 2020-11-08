@@ -339,7 +339,7 @@ export class KeysPanel extends Panel {
       const minionTr = pMenu.menuDropdown.parentElement.parentElement;
       const status = minionTr.querySelector(".status").innerText;
       const shown = status === "denied" || status === "unaccepted";
-      pMenuItem.innerHTML = "Accept&nbsp;key...";
+      pMenuItem.innerHTML = "Accept key...";
       pMenuItem.style.display = shown ? "inline-block" : "none";
     }, (pClickEvent) => {
       let cmd = "wheel.key.accept";
@@ -356,7 +356,7 @@ export class KeysPanel extends Panel {
 
   _addMenuItemWheelKeyAcceptAllUnaccepted () {
     this.panelMenu.addMenuItem((pMenuItem) => {
-      pMenuItem.innerHTML = "Accept&nbsp;all&nbsp;unaccepted&nbsp;keys...";
+      pMenuItem.innerHTML = "Accept all unaccepted keys...";
       const shown = KeysPanel.cntUnaccepted > 0;
       pMenuItem.style.display = shown ? "inline-block" : "none";
     }, (pClickEvent) => {
@@ -368,9 +368,9 @@ export class KeysPanel extends Panel {
   _addMenuItemWheelKeyAcceptAllUnacceptedRejected () {
     this.panelMenu.addMenuItem((pMenuItem) => {
       if (KeysPanel.cntUnaccepted > 0) {
-        pMenuItem.innerHTML = "Accept&nbsp;all&nbsp;unaccepted+rejected&nbsp;keys...";
+        pMenuItem.innerHTML = "Accept all unaccepted+rejected keys...";
       } else {
-        pMenuItem.innerHTML = "Accept&nbsp;all&nbsp;rejected&nbsp;keys...";
+        pMenuItem.innerHTML = "Accept all rejected keys...";
       }
       const shown = KeysPanel.cntRejected > 0;
       pMenuItem.style.display = shown ? "inline-block" : "none";
@@ -383,9 +383,9 @@ export class KeysPanel extends Panel {
   _addMenuItemWheelKeyAcceptAllUnacceptedDenied () {
     this.panelMenu.addMenuItem((pMenuItem) => {
       if (KeysPanel.cntUnaccepted > 0) {
-        pMenuItem.innerHTML = "Accept&nbsp;all&nbsp;unaccepted+denied&nbsp;keys...";
+        pMenuItem.innerHTML = "Accept all unaccepted+denied keys...";
       } else {
-        pMenuItem.innerHTML = "Accept&nbsp;all&nbsp;denied&nbsp;keys...";
+        pMenuItem.innerHTML = "Accept all denied keys...";
       }
       const shown = KeysPanel.cntDenied > 0;
       pMenuItem.style.display = shown ? "inline-block" : "none";
@@ -398,9 +398,9 @@ export class KeysPanel extends Panel {
   _addMenuItemWheelKeyAcceptAllUnacceptedRejectedDenied () {
     this.panelMenu.addMenuItem((pMenuItem) => {
       if (KeysPanel.cntUnaccepted > 0) {
-        pMenuItem.innerHTML = "Accept&nbsp;all&nbsp;unaccepted+denied+rejected&nbsp;keys...";
+        pMenuItem.innerHTML = "Accept all unaccepted+denied+rejected keys...";
       } else {
-        pMenuItem.innerHTML = "Accept&nbsp;all&nbsp;denied+rejected&nbsp;keys...";
+        pMenuItem.innerHTML = "Accept all denied+rejected keys...";
       }
       const shown = KeysPanel.cntRejected > 0 && KeysPanel.cntDenied > 0;
       pMenuItem.style.display = shown ? "inline-block" : "none";
@@ -415,7 +415,7 @@ export class KeysPanel extends Panel {
       const minionTr = pMenu.menuDropdown.parentElement.parentElement;
       const status = minionTr.querySelector(".status").innerText;
       const shown = status === "rejected";
-      pMenuItem.innerHTML = "Accept&nbsp;key...";
+      pMenuItem.innerHTML = "Accept key...";
       pMenuItem.style.display = shown ? "inline-block" : "none";
     }, (pClickEvent) => {
       let cmd = "wheel.key.accept";
@@ -435,7 +435,7 @@ export class KeysPanel extends Panel {
       const minionTr = pMenu.menuDropdown.parentElement.parentElement;
       const status = minionTr.querySelector(".status").innerText;
       const shown = status === "accepted" || status === "denied" || status === "unaccepted";
-      pMenuItem.innerHTML = "Reject&nbsp;key...";
+      pMenuItem.innerHTML = "Reject key...";
       pMenuItem.style.display = shown ? "inline-block" : "none";
     }, (pClickEvent) => {
       let cmd = "wheel.key.reject";
@@ -452,7 +452,7 @@ export class KeysPanel extends Panel {
 
   _addMenuItemWheelKeyRejectAllUnaccepted () {
     this.panelMenu.addMenuItem((pMenuItem) => {
-      pMenuItem.innerHTML = "Reject&nbsp;all&nbsp;unaccepted&nbsp;keys...";
+      pMenuItem.innerHTML = "Reject all unaccepted keys...";
       const shown = KeysPanel.cntUnaccepted > 0;
       pMenuItem.style.display = shown ? "inline-block" : "none";
     }, (pClickEvent) => {
@@ -464,9 +464,9 @@ export class KeysPanel extends Panel {
   _addMenuItemWheelKeyRejectAllUnacceptedAccepted () {
     this.panelMenu.addMenuItem((pMenuItem) => {
       if (KeysPanel.cntUnaccepted > 0) {
-        pMenuItem.innerHTML = "Reject&nbsp;all&nbsp;unaccepted+accepted&nbsp;keys...";
+        pMenuItem.innerHTML = "Reject all unaccepted+accepted keys...";
       } else {
-        pMenuItem.innerHTML = "Reject&nbsp;all&nbsp;accepted&nbsp;keys...";
+        pMenuItem.innerHTML = "Reject all accepted keys...";
       }
       const shown = KeysPanel.cntAccepted > 0;
       pMenuItem.style.display = shown ? "inline-block" : "none";
@@ -479,9 +479,9 @@ export class KeysPanel extends Panel {
   _addMenuItemWheelKeyRejectAllUnacceptedDenied () {
     this.panelMenu.addMenuItem((pMenuItem) => {
       if (KeysPanel.cntUnaccepted > 0) {
-        pMenuItem.innerHTML = "Reject&nbsp;all&nbsp;unaccepted+denied&nbsp;keys...";
+        pMenuItem.innerHTML = "Reject all unaccepted+denied keys...";
       } else {
-        pMenuItem.innerHTML = "Reject&nbsp;all&nbsp;denied&nbsp;keys...";
+        pMenuItem.innerHTML = "Reject all denied keys...";
       }
       const shown = KeysPanel.cntDenied > 0;
       pMenuItem.style.display = shown ? "inline-block" : "none";
@@ -494,9 +494,9 @@ export class KeysPanel extends Panel {
   _addMenuItemWheelKeyRejectAllUnacceptedAcceptedDenied () {
     this.panelMenu.addMenuItem((pMenuItem) => {
       if (KeysPanel.cntUnaccepted > 0) {
-        pMenuItem.innerHTML = "Reject&nbsp;all&nbsp;unaccepted+accepted+denied&nbsp;keys...";
+        pMenuItem.innerHTML = "Reject all unaccepted+accepted+denied keys...";
       } else {
-        pMenuItem.innerHTML = "Reject&nbsp;all&nbsp;accepted+denied&nbsp;keys...";
+        pMenuItem.innerHTML = "Reject all accepted+denied keys...";
       }
       const shown = KeysPanel.cntAccepted > 0 && KeysPanel.cntDenied > 0;
       pMenuItem.style.display = shown ? "inline-block" : "none";
@@ -511,7 +511,7 @@ export class KeysPanel extends Panel {
       const minionTr = pMenu.menuDropdown.parentElement.parentElement;
       const status = minionTr.querySelector(".status").innerText;
       const shown = status === "accepted" || status === "rejected" || status === "unaccepted" || status === "denied";
-      pMenuItem.innerHTML = "Delete&nbsp;key...";
+      pMenuItem.innerHTML = "Delete key...";
       pMenuItem.style.display = shown ? "inline-block" : "none";
     }, (pClickEvent) => {
       const cmd = "wheel.key.delete";
@@ -521,7 +521,7 @@ export class KeysPanel extends Panel {
 
   _addMenuItemWheelKeyDeleteAllUnaccepted () {
     this.panelMenu.addMenuItem((pMenuItem) => {
-      pMenuItem.innerHTML = "Delete&nbsp;all&nbsp;keys...";
+      pMenuItem.innerHTML = "Delete all keys...";
       const shown = KeysPanel.cntAccepted > 0 || KeysPanel.cntUnaccepted > 0 || KeysPanel.cntRejected > 0 || KeysPanel.cntDenied > 0;
       pMenuItem.style.display = shown ? "inline-block" : "none";
     }, (pClickEvent) => {

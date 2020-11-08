@@ -132,7 +132,7 @@ export class SchedulesMinionPanel extends Panel {
     if (schedules.enabled !== false) {
       return;
     }
-    this.panelMenu.addMenuItem("Enable&nbsp;scheduler...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Enable scheduler...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "schedule.enable");
     });
   }
@@ -141,13 +141,13 @@ export class SchedulesMinionPanel extends Panel {
     if (schedules.enabled === false) {
       return;
     }
-    this.panelMenu.addMenuItem("Disable&nbsp;scheduler...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Disable scheduler...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "schedule.disable");
     });
   }
 
   _addMenuItemModifyJob (pMenu, pMinionId, scheduleModifyCmd) {
-    pMenu.addMenuItem("Modify&nbsp;job...", (pClickEvent) => {
+    pMenu.addMenuItem("Modify job...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, scheduleModifyCmd);
     });
   }
@@ -156,7 +156,7 @@ export class SchedulesMinionPanel extends Panel {
     if (schedule.enabled !== false) {
       return;
     }
-    pMenu.addMenuItem("Enable&nbsp;job...", (pClickEvent) => {
+    pMenu.addMenuItem("Enable job...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "schedule.enable_job " + pJobName);
     });
   }
@@ -165,19 +165,19 @@ export class SchedulesMinionPanel extends Panel {
     if (schedule.enabled === false) {
       return;
     }
-    pMenu.addMenuItem("Disable&nbsp;job...", (pClickEvent) => {
+    pMenu.addMenuItem("Disable job...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "schedule.disable_job " + pJobName);
     });
   }
 
   _addMenuItemScheduleDeleteJob (pMenu, pMinionId, pJobName) {
-    pMenu.addMenuItem("Delete&nbsp;job...", (pClickEvent) => {
+    pMenu.addMenuItem("Delete job...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "schedule.delete " + pJobName);
     });
   }
 
   _addMenuItemScheduleRunJob (pMenu, pMinionId, pJobName, schedule) {
-    pMenu.addMenuItem("Run&nbsp;job...", (pClickEvent) => {
+    pMenu.addMenuItem("Run job...", (pClickEvent) => {
       let scheduleRunJobCmd = "schedule.run_job";
       if (schedule.enabled === false) {
         scheduleRunJobCmd += " force=true";

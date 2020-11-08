@@ -157,7 +157,7 @@ export class BeaconsMinionPanel extends Panel {
     if (beacons.enabled === false) {
       return;
     }
-    this.panelMenu.addMenuItem("Disable&nbsp;beacons...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Disable beacons...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.disable");
     });
   }
@@ -166,25 +166,25 @@ export class BeaconsMinionPanel extends Panel {
     if (beacons.enabled !== false) {
       return;
     }
-    this.panelMenu.addMenuItem("Enable&nbsp;beacons...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Enable beacons...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.enable");
     });
   }
 
   _addMenuItemBeaconsAdd (pMinionId) {
-    this.panelMenu.addMenuItem("Add&nbsp;beacon...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Add beacon...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.add <name> <data>");
     });
   }
 
   _addMenuItemBeaconsReset (pMinionId) {
-    this.panelMenu.addMenuItem("Reset&nbsp;beacons...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Reset beacons...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.reset");
     });
   }
 
   _addMenuItemBeaconsSave (pMinionId) {
-    this.panelMenu.addMenuItem("Save&nbsp;beacons...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Save beacons...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.save");
     });
   }
@@ -193,7 +193,7 @@ export class BeaconsMinionPanel extends Panel {
     if (beacon.enabled === false) {
       return;
     }
-    pMenu.addMenuItem("Disable&nbsp;beacon...", (pClickEvent) => {
+    pMenu.addMenuItem("Disable beacon...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.disable_beacon " + key);
     });
   }
@@ -202,13 +202,13 @@ export class BeaconsMinionPanel extends Panel {
     if (beacon.enabled !== false) {
       return;
     }
-    pMenu.addMenuItem("Enable&nbsp;beacon...", (pClickEvent) => {
+    pMenu.addMenuItem("Enable beacon...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.enable_beacon " + key);
     });
   }
 
   _addMenuItemBeaconsDelete (pMenu, pMinionId, key) {
-    pMenu.addMenuItem("Delete&nbsp;beacon...", (pClickEvent) => {
+    pMenu.addMenuItem("Delete beacon...", (pClickEvent) => {
       this.runCommand(pClickEvent, pMinionId, "beacons.delete " + key);
     });
   }

@@ -216,8 +216,7 @@ export class JobPanel extends Panel {
   }
 
   _addMenuItemJobRerunJob (info, commandText) {
-    // 2011 = NON-BREAKING HYPHEN
-    this.panelMenu.addMenuItem("Re&#x2011;run&nbsp;job...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Re-run job...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, info["Target-type"], info.Target, commandText);
     });
   }
@@ -243,8 +242,7 @@ export class JobPanel extends Panel {
     }
 
     const lst = minionList.substring(1);
-    // 2011 = NON-BREAKING HYPHEN
-    this.panelMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;all&nbsp;minions...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Re-run job on all minions...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, "list", lst, commandText);
     });
   }
@@ -281,8 +279,7 @@ export class JobPanel extends Panel {
     }
 
     const lst = minionList.substring(1);
-    // 2011 = NON-BREAKING HYPHEN
-    this.panelMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;unsuccessful&nbsp;minions...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Re-run job on unsuccessful minions...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, "list", lst, commandText);
     });
   }
@@ -305,8 +302,7 @@ export class JobPanel extends Panel {
     }
 
     const lst = minionList.substring(1);
-    // 2011 = NON-BREAKING HYPHEN
-    this.panelMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;failed&nbsp;minions...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Re-run job on failed minions...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, "list", lst, commandText);
     });
   }
@@ -329,26 +325,25 @@ export class JobPanel extends Panel {
     }
 
     const lst = minionList.substring(1);
-    // 2011 = NON-BREAKING HYPHEN
-    this.panelMenu.addMenuItem("Re&#x2011;run&nbsp;job&nbsp;on&nbsp;non&nbsp;responding&nbsp;minions...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Re-run job on non responding minions...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, "list", lst, commandText);
     });
   }
 
   _addMenuItemTerminateJob (info, pJobId) {
-    this.terminateJobMenuItem = this.panelMenu.addMenuItem("Terminate&nbsp;job...", (pClickEvent) => {
+    this.terminateJobMenuItem = this.panelMenu.addMenuItem("Terminate job...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.term_job " + pJobId);
     });
   }
 
   _addMenuItemKillJob (info, pJobId) {
-    this.killJobMenuItem = this.panelMenu.addMenuItem("Kill&nbsp;job...", (pClickEvent) => {
+    this.killJobMenuItem = this.panelMenu.addMenuItem("Kill job...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.kill_job " + pJobId);
     });
   }
 
   _addMenuItemSignalJob (info, pJobId) {
-    this.signalJobMenuItem = this.panelMenu.addMenuItem("Signal&nbsp;job...", (pClickEvent) => {
+    this.signalJobMenuItem = this.panelMenu.addMenuItem("Signal job...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.signal_job " + pJobId + " signal=<signalnumber>");
     });
   }
@@ -407,16 +402,16 @@ export class JobPanel extends Panel {
         noResponseSpan.innerText = "(active) ";
 
         const menu = new DropDownMenu(noResponseSpan);
-        menu.addMenuItem("Show&nbsp;process&nbsp;info...", (pClickEvent) => {
+        menu.addMenuItem("Show process info...", (pClickEvent) => {
           this.runFullCommand(pClickEvent, "list", minionId, "ps.proc_info " + pid);
         });
-        menu.addMenuItem("Terminate&nbsp;process...", (pClickEvent) => {
+        menu.addMenuItem("Terminate process...", (pClickEvent) => {
           this.runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=15");
         });
-        menu.addMenuItem("Kill&nbsp;process...", (pClickEvent) => {
+        menu.addMenuItem("Kill process...", (pClickEvent) => {
           this.runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=9");
         });
-        menu.addMenuItem("Signal&nbsp;process...", (pClickEvent) => {
+        menu.addMenuItem("Signal process...", (pClickEvent) => {
           this.runFullCommand(pClickEvent, "list", minionId, "ps.kill_pid " + pid + " signal=<signalnumber>");
         });
 

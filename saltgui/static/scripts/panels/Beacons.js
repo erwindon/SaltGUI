@@ -148,7 +148,7 @@ export class BeaconsPanel extends Panel {
   }
 
   static _addMenuItemShowBeacons (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show&nbsp;beacons", () => {
+    pMenu.addMenuItem("Show beacons", () => {
       window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(pMinionId));
     });
   }

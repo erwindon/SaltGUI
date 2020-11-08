@@ -156,7 +156,7 @@ export class SchedulesPanel extends Panel {
   }
 
   static _addMenuItemShowSchedules (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show&nbsp;schedules", () => {
+    pMenu.addMenuItem("Show schedules", () => {
       window.location.assign(config.NAV_URL + "/schedules-minion?minionid=" + encodeURIComponent(pMinionId));
     });
   }

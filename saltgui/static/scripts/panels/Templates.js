@@ -104,7 +104,7 @@ export class TemplatesPanel extends Panel {
   }
 
   _addMenuItemApplyTemplate (pMenu, pTargetType, target, pCommand) {
-    pMenu.addMenuItem("Apply&nbsp;template...", (pClickEvent) => {
+    pMenu.addMenuItem("Apply template...", (pClickEvent) => {
       this.runFullCommand(pClickEvent, pTargetType, target, pCommand);
     });
   }

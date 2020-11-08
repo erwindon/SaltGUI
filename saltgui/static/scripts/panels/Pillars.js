@@ -108,7 +108,7 @@ export class PillarsPanel extends Panel {
   }
 
   static _addMenuItemShowPillars (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show&nbsp;pillars", () => {
+    pMenu.addMenuItem("Show pillars", () => {
       window.location.assign(config.NAV_URL + "/pillars-minion?minionid=" + encodeURIComponent(pMinionId));
     });
   }

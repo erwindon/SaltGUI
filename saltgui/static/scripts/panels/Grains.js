@@ -166,7 +166,7 @@ export class GrainsPanel extends Panel {
   }
 
   static _addMenuItemShowGrains (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show&nbsp;grains", () => {
+    pMenu.addMenuItem("Show grains", () => {
       window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(pMinionId));
     });
   }

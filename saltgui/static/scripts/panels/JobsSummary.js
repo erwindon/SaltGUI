@@ -73,13 +73,13 @@ export class JobsSummaryPanel extends JobsPanel {
   }
 
   static _addPageMenuItemShowDetails (pMenu, job) {
-    pMenu.addMenuItem("Show&nbsp;details", () => {
+    pMenu.addMenuItem("Show details", () => {
       window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
     });
   }
 
   _addPageMenuItemUpdateStatus (pMenu, statusSpan) {
-    pMenu.addMenuItem("Update&nbsp;status", () => {
+    pMenu.addMenuItem("Update status", () => {
       statusSpan.classList.add("no-job-status");
       statusSpan.innerText = "loading...";
       this.startRunningJobs();

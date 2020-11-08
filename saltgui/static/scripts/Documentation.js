@@ -227,7 +227,7 @@ export class Documentation {
   static _manualRunMenuHtmlDocPrepare (menuitem) {
     const commandLine = document.querySelector(".run-command #command").value;
     const cmd = Documentation.getKeywordFragments(commandLine);
-    menuitem.innerHTML = "Online&nbsp;reference for '" + cmd.join(".").replace(/^modules[.]/, "") + "'";
+    menuitem.innerHTML = "Online reference for '" + cmd.join(".").replace(/^modules[.]/, "") + "'";
   }
 
   static _manualRunMenuHtmlDocRun () {
