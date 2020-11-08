@@ -441,13 +441,13 @@ export class JobPanel extends Panel {
       return;
     }
 
-    let newLevel = -1;
+    let newLevel = 0;
     if (pData.success === true && pData.retcode === 0) {
-      newLevel = 0;
-    } else if (pData.success === true) {
       newLevel = 1;
-    } else {
+    } else if (pData.success === true) {
       newLevel = 2;
+    } else {
+      newLevel = 3;
     }
 
     // This element only exists when the user happens to look at the output of that jobId.
@@ -455,16 +455,16 @@ export class JobPanel extends Panel {
     if (span) {
       let oldLevel = span.dataset.level;
       if (oldLevel === undefined) {
-        oldLevel = -1;
+        oldLevel = 0;
       }
       if (newLevel > oldLevel) {
         span.dataset.level = newLevel;
-        if (newLevel === 0) {
+        if (newLevel === 1) {
           span.style.color = "green";
-        } else if (newLevel === 1) {
+        } else if (newLevel === 2) {
           // orange instead of yellow due to readability on white background
           span.style.color = "orange";
-        } else if (newLevel === 2) {
+        } else if (newLevel === 3) {
           span.style.color = "red";
         }
       }
