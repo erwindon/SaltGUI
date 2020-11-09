@@ -341,12 +341,10 @@ export class Output {
       // Do not produce a #response line for async-start confirmation
 
       // for the result of jobs.active
-      const summaryJobsActiveSpan = Utils.createSpan("", pInitialStatus);
-      summaryJobsActiveSpan.id = "summary-jobs-active";
+      const summaryJobsActiveSpan = Utils.createSpan("", pInitialStatus, "summary-jobs-active");
 
       // for the result of jobs.list_job
-      const summaryJobsListJobSpan = Utils.createSpan("", "");
-      summaryJobsListJobSpan.id = "summary-list-job";
+      const summaryJobsListJobSpan = Utils.createSpan("", "", "summary-list-job");
 
       const cntResponses = Object.keys(pResponse).length;
 
@@ -574,8 +572,7 @@ export class Output {
       }
 
       // compose the actual output
-      const div = Utils.createDiv("", "");
-      div.id = Utils.getIdFromMinionId(minionId);
+      const div = Utils.createDiv("", "", Utils.getIdFromMinionId(minionId));
 
       const minionRow = Utils.createSpan();
 

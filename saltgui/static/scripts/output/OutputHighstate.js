@@ -146,8 +146,7 @@ export class OutputHighstate {
       } else {
         taskSpan.style.color = "lime";
       }
-      const taskDiv = Utils.createDiv("", "");
-      taskDiv.id = Utils.getIdFromMinionId(pMinionId + "." + nr);
+      const taskDiv = Utils.createDiv("", "", Utils.getIdFromMinionId(pMinionId + "." + nr));
       taskDiv.append(taskSpan);
 
       div.append(taskDiv);

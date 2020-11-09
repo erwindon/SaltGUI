@@ -13,8 +13,7 @@ export class Panel {
     this.key = pKey;
     this.contextInfo = pContextInfo;
 
-    const div = Utils.createDiv("panel", null);
-    div.id = pKey + "-panel";
+    const div = Utils.createDiv("panel", "", pKey + "-panel");
     this.div = div;
 
     // Each panel consists of:

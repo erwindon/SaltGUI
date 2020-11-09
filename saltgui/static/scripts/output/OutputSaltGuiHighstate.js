@@ -140,8 +140,7 @@ export class OutputSaltGuiHighstate {
 
       nr += 1;
 
-      const taskDiv = Utils.createDiv("", "");
-      taskDiv.id = Utils.getIdFromMinionId(pMinionId + "." + nr);
+      const taskDiv = Utils.createDiv("", "", Utils.getIdFromMinionId(pMinionId + "." + nr));
 
       const span = Utils.createSpan("task-icon");
       if (task.result === null) {

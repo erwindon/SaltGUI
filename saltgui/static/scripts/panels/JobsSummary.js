@@ -26,8 +26,7 @@ export class JobsSummaryPanel extends JobsPanel {
   addJob (job) {
     const tr = document.createElement("tr");
 
-    const td = Utils.createTd("", "");
-    td.id = Utils.getIdFromJobId(job.id);
+    const td = Utils.createTd("", "", Utils.getIdFromJobId(job.id));
 
     let targetText = TargetType.makeTargetText(job);
     const maxTextLength = 50;

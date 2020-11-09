@@ -124,8 +124,7 @@ export class LoginPanel extends Panel {
 
   _showNoticeText (pBackgroundColour, pText, pInfoClass) {
     // create a new child every time to restart the animation
-    const noticeDiv = Utils.createDiv("", pText);
-    noticeDiv.id = "notice";
+    const noticeDiv = Utils.createDiv("", pText, "notice");
     noticeDiv.classList.add(pInfoClass);
     noticeDiv.style.backgroundColor = pBackgroundColour;
     while (this.noticeWrapperDiv.hasChildNodes()) {

@@ -454,10 +454,9 @@ export class Utils {
   }
 
   static createJobStatusSpan (pJobId) {
-    const span = Utils.createSpan("", "");
+    const span = Utils.createSpan("", "", "status" + pJobId);
     // 21BB = CLOCKWISE OPEN CIRCLE ARROW
     span.innerHTML = "&#x21BB;&nbsp;";
-    span.id = "status" + pJobId;
     span.style.display = "none";
     span.style.fontWeight = "bold";
     return span;
