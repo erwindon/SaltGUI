@@ -463,8 +463,11 @@ export class Utils {
     return span;
   }
 
-  static createTd (pClassName, pInnerText) {
+  static createTd (pClassName, pInnerText, pId) {
     const td = document.createElement("td");
+    if (pId) {
+      td.id = pId;
+    }
     if (pClassName) {
       td.className = pClassName;
     }
@@ -474,8 +477,11 @@ export class Utils {
     return td;
   }
 
-  static createDiv (pClassName, pInnerText) {
+  static createDiv (pClassName, pInnerText, pId) {
     const div = document.createElement("div");
+    if (pId) {
+      div.id = pId;
+    }
     if (pClassName) {
       div.className = pClassName;
     }
@@ -485,8 +491,11 @@ export class Utils {
     return div;
   }
 
-  static createSpan (pClassName, pInnerText) {
+  static createSpan (pClassName, pInnerText, pId) {
     const span = document.createElement("span");
+    if (pId) {
+      span.id = pId;
+    }
     if (pClassName) {
       span.className = pClassName;
     }
