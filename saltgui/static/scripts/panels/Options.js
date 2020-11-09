@@ -55,17 +55,14 @@ export class OptionsPanel extends Panel {
 
   _addOptionRow (pNameId, pNameTxt, pValueId, pValues = null) {
     const tr = document.createElement("tr");
-    const tdName = document.createElement("td");
-    tdName.id = "option-" + pNameId;
+    const tdName = Utils.createTd("", pNameTxt + ":", "option-" + pNameId);
     tdName.style.whiteSpace = "normal";
-    tdName.innerText = pNameTxt + ":";
     tr.appendChild(tdName);
-    const tdValue = document.createElement("td");
+    const tdValue = Utils.createTd();
     if (pValues === null) {
       tdValue.id = "option-" + pValueId;
     } else {
-      const span = document.createElement("span");
-      span.id = "option-" + pValueId;
+      const span = Utils.createSpan("", "", "option-" + pValueId);
       tdValue.appendChild(span);
       const br1 = document.createElement("br");
       tdValue.appendChild(br1);

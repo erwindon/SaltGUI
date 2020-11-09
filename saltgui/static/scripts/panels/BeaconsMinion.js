@@ -137,9 +137,7 @@ export class BeaconsMinionPanel extends Panel {
       });
 
       const helpButtonTd = Utils.createTd("help-button");
-      const helpButtonSpan = document.createElement("span");
-      helpButtonSpan.id = this.key + "-" + beaconName + "-help-button";
-      helpButtonSpan.classList.add("nearly-visible-button");
+      const helpButtonSpan = Utils.createSpan("nearly-visible-button", "", this.key + "-" + beaconName + "-help-button");
       // 2753 = BLACK QUESTION MARK ORNAMENT
       // FE0E = VARIATION SELECTOR-15 (render as text)
       helpButtonSpan.innerHTML = "&#x2753;&#xFE0E;";

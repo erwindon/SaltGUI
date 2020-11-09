@@ -110,7 +110,8 @@ export class Output {
   // note: do not return a text-node
   static _getNormalOutput (pMinionResponse) {
     const content = Output.formatObject(pMinionResponse);
-    const element = document.createElement(Utils.isMultiLineString(content) ? "div" : "span");
+    const isMultiLineString = Utils.isMultiLineString(content);
+    const element = isMultiLineString ? Utils.createDiv() : Utils.createSpan();
     element.innerText = content;
     return element;
   }

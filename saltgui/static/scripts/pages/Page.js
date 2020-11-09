@@ -1,5 +1,7 @@
 /* global config */
 
+import {Utils} from "../Utils.js";
+
 export class Page {
 
   constructor (pPath, pPageName, pPageSelector, pMenuItemSelector, pRouter) {
@@ -11,11 +13,8 @@ export class Page {
     //     <div class='panel minion-list'>
     let div = document.getElementById(pPageSelector);
     if (div === null) {
-      const route = document.createElement("div");
-      route.id = pPageSelector;
-      route.classList.add("route");
-      const dashboard = document.createElement("div");
-      dashboard.classList.add("dashboard");
+      const route = Utils.createDiv("route", "", pPageSelector);
+      const dashboard = Utils.createDiv("dashboard");
       route.append(dashboard);
       const routeContainer = document.getElementById("route-container");
       routeContainer.append(route);

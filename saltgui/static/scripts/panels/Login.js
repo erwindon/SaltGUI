@@ -16,9 +16,7 @@ export class LoginPanel extends Panel {
     const form = document.createElement("form");
     this.div.append(form);
 
-    const noticeWrapper = document.createElement("div");
-    noticeWrapper.id = "notice-wrapper";
-    noticeWrapper.classList.add("notice-wrapper");
+    const noticeWrapper = Utils.createDiv("notice-wrapper", "", "notice-wrapper");
     form.append(noticeWrapper);
     this.noticeWrapperDiv = noticeWrapper;
 
