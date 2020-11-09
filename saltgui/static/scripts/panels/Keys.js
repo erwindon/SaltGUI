@@ -327,25 +327,23 @@ export class KeysPanel extends Panel {
   _addDropDownMenu (pMinionTr, pMinionId) {
     // final dropdownmenu
     const menu = new DropDownMenu(pMinionTr);
-    this._addMenuItemWheelKeyAccept1(menu, pMinionId);
-    this._addMenuItemWheelKeyReject(menu, pMinionId);
-    this._addMenuItemWheelKeyDelete(menu, pMinionId);
-    this._addMenuItemWheelKeyAccept2(menu, pMinionId);
+    this._addMenuItemWheelKeyAccept1(menu, pMinionId, pMinionTr);
+    this._addMenuItemWheelKeyReject(menu, pMinionId, pMinionTr);
+    this._addMenuItemWheelKeyDelete(menu, pMinionId, pMinionTr);
+    this._addMenuItemWheelKeyAccept2(menu, pMinionId, pMinionTr);
     pMinionTr.saltguidropdownmenu = menu;
   }
 
-  _addMenuItemWheelKeyAccept1 (pMenu, pMinionId) {
+  _addMenuItemWheelKeyAccept1 (pMenu, pMinionId, pMinionTr) {
     pMenu.addMenuItem(() => {
-      const minionTr = pMenu.menuDropdown.parentElement.parentElement;
-      const status = minionTr.querySelector(".status").innerText;
+      const status = pMinionTr.querySelector(".status").innerText;
       if (status === "denied" || status === "unaccepted") {
         return "Accept key...";
       }
       return null;
     }, (pClickEvent) => {
       let cmd = "wheel.key.accept";
-      const minionTr = pMenu.menuDropdown.parentElement.parentElement;
-      const status = minionTr.querySelector(".status").innerText;
+      const status = pMinionTr.querySelector(".status").innerText;
       if (status === "denied") {
         cmd += " include_denied=true";
       } else if (status === "rejected") {
@@ -412,18 +410,16 @@ export class KeysPanel extends Panel {
     });
   }
 
-  _addMenuItemWheelKeyAccept2 (pMenu, pMinionId) {
+  _addMenuItemWheelKeyAccept2 (pMenu, pMinionId, pMinionTr) {
     pMenu.addMenuItem(() => {
-      const minionTr = pMenu.menuDropdown.parentElement.parentElement;
-      const status = minionTr.querySelector(".status").innerText;
+      const status = pMinionTr.querySelector(".status").innerText;
       if (status === "rejected") {
         return "Accept key...";
       }
       return null;
     }, (pClickEvent) => {
       let cmd = "wheel.key.accept";
-      const minionTr = pMenu.menuDropdown.parentElement.parentElement;
-      const status = minionTr.querySelector(".status").innerText;
+      const status = pMinionTr.querySelector(".status").innerText;
       if (status === "denied") {
         cmd += " include_denied=true";
       } else if (status === "rejected") {
@@ -433,18 +429,16 @@ export class KeysPanel extends Panel {
     });
   }
 
-  _addMenuItemWheelKeyReject (pMenu, pMinionId) {
+  _addMenuItemWheelKeyReject (pMenu, pMinionId, pMinionTr) {
     pMenu.addMenuItem(() => {
-      const minionTr = pMenu.menuDropdown.parentElement.parentElement;
-      const status = minionTr.querySelector(".status").innerText;
+      const status = pMinionTr.querySelector(".status").innerText;
       if (status === "accepted" || status === "denied" || status === "unaccepted") {
         return "Reject key...";
       }
       return null;
     }, (pClickEvent) => {
       let cmd = "wheel.key.reject";
-      const minionTr = pMenu.menuDropdown.parentElement.parentElement;
-      const status = minionTr.querySelector(".status").innerText;
+      const status = pMinionTr.querySelector(".status").innerText;
       if (status === "accepted") {
         cmd += " include_accepted=true";
       } else if (status === "denied") {
@@ -511,10 +505,9 @@ export class KeysPanel extends Panel {
     });
   }
 
-  _addMenuItemWheelKeyDelete (pMenu, pMinionId) {
+  _addMenuItemWheelKeyDelete (pMenu, pMinionId, pMinionTr) {
     pMenu.addMenuItem(() => {
-      const minionTr = pMenu.menuDropdown.parentElement.parentElement;
-      const status = minionTr.querySelector(".status").innerText;
+      const status = pMinionTr.querySelector(".status").innerText;
       if (status === "accepted" || status === "rejected" || status === "unaccepted" || status === "denied") {
         return "Delete key...";
       }
