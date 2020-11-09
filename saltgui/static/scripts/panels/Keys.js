@@ -607,6 +607,9 @@ export class KeysPanel extends Panel {
       /* eslint-enable no-lonely-if */
     }
 
+    const searchBlock = this.div.querySelector(".search-box");
+    Utils.hideShowTableSearchBar(searchBlock, this.table, "refresh");
+
     this.updateFooter();
 
     // we do not have the fingerprint yet

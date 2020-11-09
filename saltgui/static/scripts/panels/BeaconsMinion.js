@@ -281,6 +281,10 @@ export class BeaconsMinionPanel extends Panel {
       td.prevData = pData;
 
       td.innerText = txt;
+
+      const searchBlock = this.div.querySelector(".search-box");
+      Utils.hideShowTableSearchBar(searchBlock, this.table, "refresh");
+
       break;
     }
   }
