@@ -128,7 +128,7 @@ export class OutputSaltGuiHighstate {
 
     const indent = "    ";
 
-    const div = Utils.createDiv("", "");
+    const div = Utils.createDiv();
 
     let succeeded = 0;
     let failed = 0;
@@ -143,7 +143,7 @@ export class OutputSaltGuiHighstate {
       const taskDiv = Utils.createDiv("", "");
       taskDiv.id = Utils.getIdFromMinionId(pMinionId + "." + nr);
 
-      const span = Utils.createSpan("task-icon", "");
+      const span = Utils.createSpan("task-icon");
       if (task.result === null) {
         // 2714 = HEAVY CHECK MARK
         span.innerText = "\u2714";

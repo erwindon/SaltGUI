@@ -111,8 +111,8 @@ export class BeaconsPanel extends Panel {
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
     // force same columns on all rows
-    minionTr.appendChild(Utils.createTd("beaconinfo", ""));
-    minionTr.appendChild(Utils.createTd("run-command-button", ""));
+    minionTr.appendChild(Utils.createTd("beaconinfo"));
+    minionTr.appendChild(Utils.createTd("run-command-button"));
   }
 
   updateMinion (pMinionData, pMinionId, pAllMinionsGrains) {
@@ -134,7 +134,7 @@ export class BeaconsPanel extends Panel {
       beaconInfoTd.setAttribute("sorttable_customkey", cnt);
       minionTr.appendChild(beaconInfoTd);
     } else {
-      const beaconInfoTd = Utils.createTd("", "");
+      const beaconInfoTd = Utils.createTd();
       Utils.addErrorToTableCell(beaconInfoTd, pMinionData);
       minionTr.appendChild(beaconInfoTd);
     }

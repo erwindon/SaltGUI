@@ -64,7 +64,7 @@ export class EventsPanel extends Panel {
     const tr = document.createElement("tr");
 
     // add timestamp value
-    const stampTd = Utils.createTd("", "");
+    const stampTd = Utils.createTd();
     let stampTxt = pData["_stamp"];
     if (!stampTxt) {
       stampTxt = new Date().toISOString();
@@ -85,7 +85,7 @@ export class EventsPanel extends Panel {
     tr.append(tagTd);
 
     // add data value
-    const dataTd = Utils.createTd("event-data", "");
+    const dataTd = Utils.createTd("event-data");
     const pDataObj = {};
     Object.assign(pDataObj, pData);
     delete pDataObj._stamp;

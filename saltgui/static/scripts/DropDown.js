@@ -25,12 +25,12 @@ export class DropDownMenu {
 
     // allow reduced code on the caller side
     if (pParentElement.tagName === "TR") {
-      const td = Utils.createTd("", "");
+      const td = Utils.createTd();
       pParentElement.appendChild(td);
       pParentElement = td;
     }
 
-    this.menuDropdown = Utils.createDiv("run-command-button", "");
+    this.menuDropdown = Utils.createDiv("run-command-button");
     this.menuDropdown.classList.add("no-search");
 
     if (pParentElement.id === "cmd-box") {
@@ -49,7 +49,7 @@ export class DropDownMenu {
     this.verifyAll();
 
     this.menuDropdown.appendChild(this.menuButton);
-    this.menuDropdownContent = Utils.createDiv("menu-dropdown-content", "");
+    this.menuDropdownContent = Utils.createDiv("menu-dropdown-content");
     this.menuDropdown.appendChild(this.menuDropdownContent);
     this.menuDropdown.addEventListener("mouseenter", () => {
       this.verifyAll();

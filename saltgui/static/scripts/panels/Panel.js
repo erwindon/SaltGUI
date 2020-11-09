@@ -268,7 +268,7 @@ export class Panel {
       return false;
     }
 
-    const td = Utils.createTd("", "");
+    const td = Utils.createTd();
     td.colSpan = 99;
     const span = Utils.createSpan("", "(error)");
     Utils.addToolTip(span, pData, "bottom-left");
@@ -308,7 +308,7 @@ export class Panel {
 
     // fill out the number of columns to that of the header
     while (minionTr.cells.length < this.table.tHead.rows[0].cells.length - freeColumns) {
-      minionTr.appendChild(Utils.createTd("", ""));
+      minionTr.appendChild(Utils.createTd());
     }
 
     const tbody = this.table.tBodies[0];
@@ -450,7 +450,7 @@ export class Panel {
 
     const ipv4 = Panel._getBestIpNumber(pMinionData, prefixes);
     if (ipv4) {
-      const addressTd = Utils.createTd("status", "");
+      const addressTd = Utils.createTd("status");
       const addressSpan = Utils.createSpan("", ipv4);
       addressTd.appendChild(addressSpan);
       // ipnumbers do not sort well, reformat into something sortable
@@ -487,7 +487,7 @@ export class Panel {
       saltversion = pMinionData.saltversion;
     }
     if (pMinionData) {
-      const td = Utils.createTd("", "");
+      const td = Utils.createTd();
       const span = Utils.createSpan("saltversion", saltversion);
       td.appendChild(span);
       if (typeof pMinionData === "string") {
@@ -576,7 +576,7 @@ export class Panel {
       }
     }
     offlineSpan.classList.add("offline");
-    const offlineTd = Utils.createTd("", "");
+    const offlineTd = Utils.createTd();
     offlineTd.appendChild(offlineSpan);
     minionTr.appendChild(offlineTd);
   }

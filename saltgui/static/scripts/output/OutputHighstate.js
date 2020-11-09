@@ -75,7 +75,7 @@ export class OutputHighstate {
 
   static getHighStateOutput (pMinionId, pTasks) {
 
-    const div = Utils.createDiv("", "");
+    const div = Utils.createDiv();
 
     let succeeded = 0;
     let failed = 0;

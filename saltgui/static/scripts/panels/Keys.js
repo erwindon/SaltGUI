@@ -187,7 +187,7 @@ export class KeysPanel extends Panel {
   _addAcceptedMinion (pMinionId, pMinionsDict) {
     const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
 
-    const minionIdTd = Utils.createTd("", "");
+    const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
     if (Object.keys(pMinionsDict).length && !Object.keys(pMinionsDict).includes(pMinionId)) {
@@ -213,7 +213,7 @@ export class KeysPanel extends Panel {
   _addRejectedMinion (pMinionId, pMinionsDict) {
     const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
 
-    const minionIdTd = Utils.createTd("", "");
+    const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
     if (Object.keys(pMinionsDict).length && !Object.keys(pMinionsDict).includes(pMinionId)) {
@@ -241,7 +241,7 @@ export class KeysPanel extends Panel {
   _addDeniedMinion (pMinionId, pMinionsDict) {
     const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
 
-    const minionIdTd = Utils.createTd("", "");
+    const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
     if (Object.keys(pMinionsDict).length && !Object.keys(pMinionsDict).includes(pMinionId)) {
@@ -269,7 +269,7 @@ export class KeysPanel extends Panel {
   _addPreMinion (pMinionId, pMinionsDict, pInsertAtTop = false) {
     const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
 
-    const minionIdTd = Utils.createTd("", "");
+    const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
     if (Object.keys(pMinionsDict).length && !Object.keys(pMinionsDict).includes(pMinionId)) {
@@ -306,7 +306,7 @@ export class KeysPanel extends Panel {
   _addMissingMinion (pMinionId) {
     const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), "UNKNOWN");
 
-    const minionIdTd = Utils.createTd("", "");
+    const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
     Utils.addToolTip(minionIdSpan, "Entry is missing\nIs the host running and is the salt-minion installed and started?\nUpdate file 'minions.txt' when needed", "bottom-left");

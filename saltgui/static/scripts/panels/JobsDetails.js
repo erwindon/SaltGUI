@@ -190,7 +190,7 @@ export class JobsDetailsPanel extends JobsPanel {
 
     detailsSpan.innerText = "";
     detailsSpan.appendChild(Utils.createJobStatusSpan(pJobId));
-    const statusSpan = Utils.createSpan("", "");
+    const statusSpan = Utils.createSpan();
     statusSpan.innerHTML = detailsTxt;
     detailsSpan.appendChild(statusSpan);
     detailsSpan.classList.remove("no-job-details");
@@ -226,7 +226,7 @@ export class JobsDetailsPanel extends JobsPanel {
     JobsDetailsPanel._addJobsMenuItemShowDetails(menu, job);
     this._addMenuItemJobsRerunJob(menu, job, argumentsText);
 
-    const statusTd = Utils.createTd("", "");
+    const statusTd = Utils.createTd();
     const statusSpan = Utils.createSpan("job-status", "loading...");
     statusSpan.classList.add("no-job-status");
     statusSpan.addEventListener("click", (pClickEvent) => {
@@ -241,7 +241,7 @@ export class JobsDetailsPanel extends JobsPanel {
 
     this._addJobsMenuItemUpdateStatus(menu, statusSpan);
 
-    const detailsTd = Utils.createTd("details", "");
+    const detailsTd = Utils.createTd("details");
     const detailsSpan = Utils.createSpan("details2", "(click)");
     detailsSpan.classList.add("no-job-details");
     detailsSpan.addEventListener("click", (pClickEvent) => {
@@ -258,7 +258,7 @@ export class JobsDetailsPanel extends JobsPanel {
 
     // fill out the number of columns to that of the header
     while (tr.cells.length < this.table.tHead.rows[0].cells.length) {
-      tr.appendChild(Utils.createTd("", ""));
+      tr.appendChild(Utils.createTd());
     }
 
     const tbody = this.table.tBodies[0];

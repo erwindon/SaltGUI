@@ -78,7 +78,7 @@ export class GrainsPanel extends Panel {
       GrainsPanel._addMenuItemShowGrains(menu, minionId);
 
       for (let i = 0; i < this.previewGrains.length; i++) {
-        minionTr.appendChild(Utils.createTd("", ""));
+        minionTr.appendChild(Utils.createTd());
       }
 
       minionTr.addEventListener("click", () => {
@@ -97,12 +97,12 @@ export class GrainsPanel extends Panel {
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
     // force same columns on all rows
-    minionTr.appendChild(Utils.createTd("saltversion", ""));
-    minionTr.appendChild(Utils.createTd("os", ""));
-    minionTr.appendChild(Utils.createTd("graininfo", ""));
-    minionTr.appendChild(Utils.createTd("run-command-button", ""));
+    minionTr.appendChild(Utils.createTd("saltversion"));
+    minionTr.appendChild(Utils.createTd("os"));
+    minionTr.appendChild(Utils.createTd("graininfo"));
+    minionTr.appendChild(Utils.createTd("run-command-button"));
     for (let i = 0; i < this.previewGrains.length; i++) {
-      minionTr.appendChild(Utils.createTd("", ""));
+      minionTr.appendChild(Utils.createTd());
     }
   }
 
@@ -118,7 +118,7 @@ export class GrainsPanel extends Panel {
       grainInfoTd.setAttribute("sorttable_customkey", cnt);
       minionTr.appendChild(grainInfoTd);
     } else {
-      const grainInfoTd = Utils.createTd("", "");
+      const grainInfoTd = Utils.createTd();
       Utils.addErrorToTableCell(grainInfoTd, pMinionData);
       minionTr.appendChild(grainInfoTd);
     }
@@ -129,7 +129,7 @@ export class GrainsPanel extends Panel {
     // add the preview columns
     /* eslint-disable max-depth */
     for (let i = 0; i < this.previewGrains.length; i++) {
-      const td = Utils.createTd("", "");
+      const td = Utils.createTd();
       const grainName = this.previewGrains[i];
       if (typeof pMinionData === "object") {
         if (grainName.startsWith("$")) {

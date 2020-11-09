@@ -330,7 +330,7 @@ export class Output {
       return;
     }
 
-    const allDiv = Utils.createDiv("no-search", "");
+    const allDiv = Utils.createDiv("no-search");
     const cntMinions = pMinionData.length;
 
     if (!pCommand.startsWith("runners.") &&
@@ -405,7 +405,7 @@ export class Output {
       allDiv.appendChild(summaryJobsListJobSpan);
     }
 
-    const masterTriangle = Utils.createSpan("", "");
+    const masterTriangle = Utils.createSpan();
     // use cntMinions instead of cntResponses to be predictable
     // hide details when there are many minions to show
     if (cntMinions > 50) {
@@ -576,7 +576,7 @@ export class Output {
       const div = Utils.createDiv("", "");
       div.id = Utils.getIdFromMinionId(minionId);
 
-      const minionRow = Utils.createSpan("", "");
+      const minionRow = Utils.createSpan();
 
       minionRow.append(minionLabel);
 

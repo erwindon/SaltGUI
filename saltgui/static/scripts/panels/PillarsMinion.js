@@ -78,7 +78,7 @@ export class PillarsMinionPanel extends Panel {
 
       // menu comes before this data if there was any
 
-      const pillarValueTd = Utils.createTd("", "");
+      const pillarValueTd = Utils.createTd();
 
       // 25CF = BLACK CIRCLE, 8 of these
       const pillarValueHidden = "\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF";

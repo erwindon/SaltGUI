@@ -107,8 +107,8 @@ export class SchedulesPanel extends Panel {
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
     // force same columns on all rows
-    minionTr.appendChild(Utils.createTd("scheduleinfo", ""));
-    minionTr.appendChild(Utils.createTd("run-command-button", ""));
+    minionTr.appendChild(Utils.createTd("scheduleinfo"));
+    minionTr.appendChild(Utils.createTd("run-command-button"));
   }
 
   updateMinion (pMinionData, pMinionId, pAllMinionsGrains) {

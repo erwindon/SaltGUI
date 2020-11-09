@@ -136,7 +136,7 @@ export class BeaconsMinionPanel extends Panel {
         this.runCommand(pClickEvent, pMinionId, "beacons.modify " + beaconName + " " + JSON.stringify(beacon0));
       });
 
-      const helpButtonTd = Utils.createTd("help-button", "");
+      const helpButtonTd = Utils.createTd("help-button");
       const helpButtonSpan = document.createElement("span");
       helpButtonSpan.id = this.key + "-" + beaconName + "-help-button";
       helpButtonSpan.classList.add("nearly-visible-button");
