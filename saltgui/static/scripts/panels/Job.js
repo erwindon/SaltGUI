@@ -172,7 +172,7 @@ export class JobPanel extends Panel {
       minions = info.Minions;
     }
     let initialStatus = "(loading)";
-    if (Object.keys(info.Result).length === info.Minions.length) {
+    if (info.Minions === undefined || Object.keys(info.Result).length >= info.Minions.length) {
       // we have all the results
       // that means we are done
       // don't wait for RunnerJobsActive to also tell us that we are done

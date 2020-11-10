@@ -142,6 +142,11 @@ export class JobsDetailsPanel extends JobsPanel {
       return;
     }
 
+    if (!pData.Minions) {
+      // We've seen cases where this part is missing
+      pData.Minions = [];
+    }
+
     let detailsTxt = Utils.txtZeroOneMany(pData.Minions.length,
       "no minions", "{0} minion", "{0} minions");
 
