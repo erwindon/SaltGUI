@@ -92,9 +92,23 @@ export class JobsDetailsPanel extends JobsPanel {
   _updateNextJob () {
     const tbody = this.table.tBodies[0];
     // find an item still marked as "(click)"
+    // but when we find 3 "loading..." items, the system is
+    // probably overloaded and we skip a cycle
+    let cntLoading = 0;
     for (const tr of tbody.rows) {
       const detailsField = tr.querySelector("td.details span");
-      if (!detailsField || detailsField.innerText !== "(click)") {
+      if (!detailsField) {
+        continue;
+      }
+      if (detailsField.innerText === "loading...") {
+        cntLoading = cntLoading + 1;
+        if (cntLoading >= 3) {
+          // too many already running
+          break;
+        }
+        continue;
+      }
+      if (detailsField.innerText !== "(click)") {
         continue;
       }
       const jobId = tr.querySelector("td").innerText;
