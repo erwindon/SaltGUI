@@ -431,7 +431,7 @@ describe("Unittests for Output.js", () => {
     OutputDocumentation.addDocumentationOutput(container, output);
     assert.isTrue(
       container.innerHTML.includes(
-        "<a href='https://www.freedesktop.org/software/systemd/man/systemd-run.html' target='_blank'><span style='color: yellow'>systemd-run(1)</span></a>"));
+        "<a href='https://www.freedesktop.org/software/systemd/man/systemd-run.html' target='_blank' rel='noopener'><span style='color: yellow'>systemd-run(1)</span></a>"));
 
     done();
   });

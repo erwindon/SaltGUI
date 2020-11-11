@@ -100,6 +100,7 @@ export class LoginPanel extends Panel {
     const aa = document.createElement("a");
     aa.href = "https://github.com/erwindon/SaltGUI";
     aa.target = "_blank";
+    aa.rel = "noopener";
     aa.classList.add("attribution");
 
     const img = document.createElement("img");

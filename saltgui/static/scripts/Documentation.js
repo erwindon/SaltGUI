@@ -237,7 +237,7 @@ export class Documentation {
     html += "<h3>Documentation for '" + cmd.join(".").replace(/^modules[.]/, "") + "':</h3>";
 
     // level 0
-    html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "' target='_blank'>Salt Module Reference</a>" + Documentation.EXTERNAL_LINK + "</p>";
+    html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "' target='_blank' rel='noopener'>Salt Module Reference</a>" + Documentation.EXTERNAL_LINK + "</p>";
 
     // level 1
     // Function getKeywordFragments makes sure that
@@ -249,7 +249,7 @@ export class Documentation {
       // the link to the page must use the same title
       pageTitle = "All 'execution' modules";
     }
-    html += "<p><a href='" + Documentation.DOCUMENTATION_URL + cmd[0] + "/all/index.html' target='_blank'>" + pageTitle + "</a>" + Documentation.EXTERNAL_LINK + "</p>";
+    html += "<p><a href='" + Documentation.DOCUMENTATION_URL + cmd[0] + "/all/index.html' target='_blank' rel='noopener'>" + pageTitle + "</a>" + Documentation.EXTERNAL_LINK + "</p>";
 
     // When the module is a virtual module, we want
     // to show all relevant concrete modules
@@ -318,26 +318,26 @@ export class Documentation {
 
       // level 2
       if (cmd.length >= 2) {
-        html += "<p><a href='" + Documentation.DOCUMENTATION_URL + cmd[0] + "/all/salt." + cmd[0] + "." + concreteModule + ".html' target='_blank'>Module '" + (cmd[0] + "." + concreteModule).replace(/^modules[.]/, "") + "'</a>" + Documentation.EXTERNAL_LINK + "</p>";
+        html += "<p><a href='" + Documentation.DOCUMENTATION_URL + cmd[0] + "/all/salt." + cmd[0] + "." + concreteModule + ".html' target='_blank' rel='noopener'>Module '" + (cmd[0] + "." + concreteModule).replace(/^modules[.]/, "") + "'</a>" + Documentation.EXTERNAL_LINK + "</p>";
       }
 
       // level 3
       if (cmd.length >= 3) {
         html += "<p>Function-name '" + cmd[2] + "' cannot be verified here. We'll just assume it actually exists. The link below might not work.</p>";
-        html += "<p>" + indent + "<a href='" + Documentation.DOCUMENTATION_URL + cmd[0] + "/all/salt." + cmd[0] + "." + concreteModule + ".html#salt." + cmd[0] + "." + concreteModule + "." + cmd[2] + "' target='_blank'>Function '" + (cmd[0] + "." + concreteModule + "." + cmd[2]).replace(/^modules[.]/, "") + "'</a>" + Documentation.EXTERNAL_LINK + "</p>";
+        html += "<p>" + indent + "<a href='" + Documentation.DOCUMENTATION_URL + cmd[0] + "/all/salt." + cmd[0] + "." + concreteModule + ".html#salt." + cmd[0] + "." + concreteModule + "." + cmd[2] + "' target='_blank' rel='noopener'>Function '" + (cmd[0] + "." + concreteModule + "." + cmd[2]).replace(/^modules[.]/, "") + "'</a>" + Documentation.EXTERNAL_LINK + "</p>";
       }
     }
 
     if (cmd.length >= 2 && cmd[0] === "modules" && knownVirtualModules.indexOf(cmd[1]) >= 0) {
       html += "<p>The link below is the overview page of all related virtual package modules.</p>";
-      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + cmd[0] + "/all/salt." + cmd[0] + "." + cmd[1] + ".html' target='_blank'>'" + cmd[0] + "." + cmd[1] + "' modules</a>" + Documentation.EXTERNAL_LINK + "</p>";
+      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + cmd[0] + "/all/salt." + cmd[0] + "." + cmd[1] + ".html' target='_blank' rel='noopener'>'" + cmd[0] + "." + cmd[1] + "' modules</a>" + Documentation.EXTERNAL_LINK + "</p>";
     }
 
     // grains?
 
     if (cmd.length >= 2 && cmd[0] === "modules" && cmd[1] === "grains") {
       html += "<p>It looks you are using grains. The link below gives the overview of the grains modules. </p>";
-      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "grains/all/index.html' target='_blank'>Grains Modules</a>" + Documentation.EXTERNAL_LINK + "</p>";
+      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "grains/all/index.html' target='_blank' rel='noopener'>Grains Modules</a>" + Documentation.EXTERNAL_LINK + "</p>";
     }
     // no action for first parameter
     // there are extra pages for grains-functions,
@@ -348,7 +348,7 @@ export class Documentation {
 
     if (cmd.length >= 2 && cmd[0] === "modules" && cmd[1] === "pillar") {
       html += "<p>It looks you are using pillars. The link below gives the overview of the pillar modules. </p>";
-      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "pillar/all/index.html' target='_blank'>Pillar Modules</a>" + Documentation.EXTERNAL_LINK + "</p>";
+      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "pillar/all/index.html' target='_blank' rel='noopener'>Pillar Modules</a>" + Documentation.EXTERNAL_LINK + "</p>";
     }
     // no action for first parameter
     // there are extra pages for pillar-functions,
@@ -359,7 +359,7 @@ export class Documentation {
 
     if (cmd.length >= 2 && cmd[0] === "modules" && cmd[1] === "state") {
       html += "<p>It looks you are using states. The link below gives the overview of the state modules. </p>";
-      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "states/all/index.html' target='_blank'>State Modules</a>" + Documentation.EXTERNAL_LINK + "</p>";
+      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "states/all/index.html' target='_blank' rel='noopener'>State Modules</a>" + Documentation.EXTERNAL_LINK + "</p>";
     }
     // no action for first parameter
     // there are extra pages for state-functions,
@@ -370,7 +370,7 @@ export class Documentation {
 
     if (cmd.length >= 2 && cmd[0] === "modules" && cmd[1] === "cloud") {
       html += "<p>It looks you are using cloud. The link below gives the overview of the cloud modules. </p>";
-      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "clouds/all/index.html' target='_blank'>Cloud Modules</a>" + Documentation.EXTERNAL_LINK + "</p>";
+      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "clouds/all/index.html' target='_blank' rel='noopener'>Cloud Modules</a>" + Documentation.EXTERNAL_LINK + "</p>";
     }
     // no action for first parameter
     // there are extra pages for cloud-functions,
@@ -381,7 +381,7 @@ export class Documentation {
 
     if (cmd.length >= 2 && cmd[0] === "modules" && cmd[1] === "beacons") {
       html += "<p>It looks you are using beacons. The link below gives the overview of the beacons modules. </p>";
-      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "beacons/all/index.html' target='_blank'>Beacon Modules</a>" + Documentation.EXTERNAL_LINK + "</p>";
+      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "beacons/all/index.html' target='_blank' rel='noopener'>Beacon Modules</a>" + Documentation.EXTERNAL_LINK + "</p>";
     }
 
     // also provide information about individual beacons
@@ -393,7 +393,7 @@ export class Documentation {
     if (cmd.length >= 3 && cmd[0] === "modules" && cmd[1] === "beacons" && ["add", "modify"].indexOf(cmd[2]) >= 0 && argsArray.length >= 2 && typeof argsArray[1] === "string") {
       const beaconName = argsArray[1];
       html += "<p>Beacon-name '" + beaconName + "' cannot be verified. We'll just assume it actually exists. The link below might not work.</p>";
-      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "beacons/all/salt.beacons." + beaconName + ".html' target='_blank'>Beacon Module '" + beaconName + "'</a>" + Documentation.EXTERNAL_LINK + "</p>";
+      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "beacons/all/salt.beacons." + beaconName + ".html' target='_blank' rel='noopener'>Beacon Module '" + beaconName + "'</a>" + Documentation.EXTERNAL_LINK + "</p>";
     }
 
     const output = document.querySelector(".run-command pre");

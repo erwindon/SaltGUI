@@ -252,7 +252,7 @@ export class OutputDocumentation {
           while (out.includes(link + "_")) {
             out = out.replace(
               link + "_",
-              "<a href='" + target + "' target='_blank'>" + link + "</a>");
+              "<a href='" + target + "' target='_blank' rel='noopener'>" + link + "</a>");
           }
           // remove the item from the link table
           out = out.replace(".. _" + reference, "");
