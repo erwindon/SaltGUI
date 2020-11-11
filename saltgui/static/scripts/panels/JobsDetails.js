@@ -89,6 +89,23 @@ export class JobsDetailsPanel extends JobsPanel {
     });
   }
 
+  static _isInsideViewPort (pElement) {
+    const rect = pElement.getBoundingClientRect();
+    if (rect.bottom < 0) {
+      return false;
+    }
+    if (rect.right < 0) {
+      return false;
+    }
+    if (rect.top >= (window.innerHeight || document.documentElement.clientHeight)) {
+      return false;
+    }
+    if (rect.left >= (window.innerWidth || document.documentElement.clientWidth)) {
+      return false;
+    }
+    return true;
+  }
+
   _updateNextJob () {
     const tbody = this.table.tBodies[0];
     // find an item still marked as "(click)"
@@ -101,14 +118,17 @@ export class JobsDetailsPanel extends JobsPanel {
         continue;
       }
       if (detailsField.innerText === "loading...") {
-        cntLoading = cntLoading + 1;
+        cntLoading += 1;
         if (cntLoading >= 3) {
           // too many already running
-          break;
+          return;
         }
         continue;
       }
       if (detailsField.innerText !== "(click)") {
+        continue;
+      }
+      if (!JobsDetailsPanel._isInsideViewPort(tr)) {
         continue;
       }
       const jobId = tr.querySelector("td").innerText;
