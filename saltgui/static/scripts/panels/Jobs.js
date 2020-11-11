@@ -203,12 +203,37 @@ export class JobsPanel extends Panel {
       numberOfJobsShown += 1;
     }
 
-    let txt = Utils.txtZeroOneMany(numberOfJobsShown,
+    this.numberOfJobsShown = numberOfJobsShown;
+    this.numberOfJobsEligible = numberOfJobsEligible;
+    this.numberOfJobsPresent = numberOfJobsPresent;
+
+    // an intermediate timer event may have caused
+    // the button to be hidden
+    if (this.playButton) {
+      this.playButton.style.display = "none";
+    }
+    if (this.pauseButton) {
+      this.pauseButton.style.display = "";
+    }
+    this.playOrPause = "play";
+
+    this.updateFooter();
+  }
+
+  updateFooter () {
+    let txt = Utils.txtZeroOneMany(this.numberOfJobsShown,
       "No jobs shown", "{0} job shown", "{0} jobs shown");
-    txt += Utils.txtZeroOneMany(numberOfJobsEligible,
+    txt += Utils.txtZeroOneMany(this.numberOfJobsEligible,
       "", ", {0} job eligible", ", {0} jobs eligible");
-    txt += Utils.txtZeroOneMany(numberOfJobsPresent,
+    txt += Utils.txtZeroOneMany(this.numberOfJobsPresent,
       "", ", {0} job present", ", {0} jobs present");
+
+    if (this.playOrPause === "pause") {
+      // 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play)
+      // FE0E = VARIATION SELECTOR-15 (render as text)
+      txt += ", press '\u23F5\uFE0E' to continue";
+    }
+
     this.setMsg(txt);
   }
 

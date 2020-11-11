@@ -18,6 +18,7 @@ export class JobsDetailsPanel extends JobsPanel {
     this._addMenuItemShowEligible();
     this._addMenuItemShowAll();
     this.addSearchButton();
+    this.addPlayPauseButton("play");
     this.addTable(["JID", "Target", "Function", "Start Time", "-menu-", "Status", "Details"], "data-list-jobs");
     this.setTableSortable("JID", "desc");
     this.setTableClickable();
@@ -107,11 +108,19 @@ export class JobsDetailsPanel extends JobsPanel {
   }
 
   _updateNextJob () {
+
+    // user can decide
+    // system can decide to remove the play/pause button
+    if (this.playOrPause !== "play") {
+      return;
+    }
+
     const tbody = this.table.tBodies[0];
     // find an item still marked as "(click)"
     // but when we find 3 "loading..." items, the system is
     // probably overloaded and we skip a cycle
     let cntLoading = 0;
+    let workLeft = false;
     for (const tr of tbody.rows) {
       const detailsField = tr.querySelector("td.details span");
       if (!detailsField) {
@@ -129,6 +138,7 @@ export class JobsDetailsPanel extends JobsPanel {
         continue;
       }
       if (!JobsDetailsPanel._isInsideViewPort(tr)) {
+        workLeft = true;
         continue;
       }
       const jobId = tr.querySelector("td").innerText;
@@ -137,6 +147,12 @@ export class JobsDetailsPanel extends JobsPanel {
       this._getJobDetails(jobId);
       // only update one item at a time
       return;
+    }
+    if (!workLeft) {
+      this.playOrPause = "";
+      this.playButton.style.display = "none";
+      this.pauseButton.style.display = "none";
+      this.updateFooter();
     }
   }
 

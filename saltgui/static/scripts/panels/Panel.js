@@ -83,7 +83,7 @@ export class Panel {
     pauseButton.style.display = "none";
     pauseButton.style.cursor = "pointer";
     pauseButton.style.fontSize = "x-large";
-    pauseButton.style.display = pInitialStatus === "pause" ? "none" : "";
+    pauseButton.style.display = pInitialStatus === "play" ? "" : "none";
     this.div.appendChild(pauseButton);
     this.pauseButton = pauseButton;
 
