@@ -250,7 +250,6 @@ sorttable = {
           }
         case 4:
           return node.nodeValue.replace(/^\s+|\s+$/g, '');
-          break;
         case 1:
         case 11:
           var innerText = '';
@@ -258,7 +257,6 @@ sorttable = {
             innerText += sorttable.getInnerText(node.childNodes[i]);
           }
           return innerText.replace(/^\s+|\s+$/g, '');
-          break;
         default:
           return '';
       }
