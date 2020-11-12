@@ -533,10 +533,10 @@ export class CommandBox {
 
     // make sure there is a black circle for the current event
     while (div.children.length <= eventSeqNr + 2) {
-      const span = document.createElement("span");
+      const newSpan = document.createElement("span");
       // 25CF = BLACK CIRCLE
-      span.innerText = "\u25CF";
-      div.appendChild(span);
+      newSpan.innerText = "\u25CF";
+      div.appendChild(newSpan);
     }
 
     const span = div.children[eventSeqNr + 2];
