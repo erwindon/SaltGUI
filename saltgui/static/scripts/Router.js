@@ -63,6 +63,17 @@ export class Router {
     this.goTo(window.location.pathname + window.location.search, true);
   }
 
+  static _registerMenuItem (pButtonId, pUrl) {
+    document.getElementById("button-" + pButtonId + "1").
+      addEventListener("click", () => {
+        window.location.replace(config.NAV_URL + pUrl);
+      });
+    document.getElementById("button-" + pButtonId + "2").
+      addEventListener("click", () => {
+        window.location.replace(config.NAV_URL + pUrl);
+      });
+  }
+
   _registerRouterEventListeners () {
     document.getElementById("logo").
       addEventListener("click", () => {
@@ -73,86 +84,15 @@ export class Router {
         }
       });
 
-    document.getElementById("button-minions1").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + "/");
-      });
-    document.getElementById("button-minions2").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + "/");
-      });
-
-    document.getElementById("button-grains1").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + "/grains");
-      });
-    document.getElementById("button-grains2").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + "/grains");
-      });
-
-    document.getElementById("button-schedules1").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + "/schedules");
-      });
-    document.getElementById("button-schedules2").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + "/schedules");
-      });
-
-    document.getElementById("button-pillars1").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + "/pillars");
-      });
-    document.getElementById("button-pillars2").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + "/pillars");
-      });
-
-    document.getElementById("button-beacons1").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + "/beacons");
-      });
-    document.getElementById("button-beacons2").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + "/beacons");
-      });
-
-    document.getElementById("button-keys1").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + "/keys");
-      });
-    document.getElementById("button-keys2").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + "/keys");
-      });
-
-    document.getElementById("button-jobs1").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + "/jobs");
-      });
-    document.getElementById("button-jobs2").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + "/jobs");
-      });
-
-    document.getElementById("button-templates1").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + "/templates");
-      });
-    document.getElementById("button-templates2").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + "/templates");
-      });
-
-    document.getElementById("button-events1").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + "/eventsview");
-      });
-    document.getElementById("button-events2").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + "/eventsview");
-      });
+    Router._registerMenuItem("minions", "/");
+    Router._registerMenuItem("grains", "/grains");
+    Router._registerMenuItem("schedules", "/schedules");
+    Router._registerMenuItem("pillars", "/pillars");
+    Router._registerMenuItem("beacons", "/beacons");
+    Router._registerMenuItem("keys", "/keys");
+    Router._registerMenuItem("jobs", "/jobs");
+    Router._registerMenuItem("templates", "/templates");
+    Router._registerMenuItem("events", "/eventsview");
 
     document.getElementById("button-logout1").
       addEventListener("click", () => {
