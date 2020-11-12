@@ -484,6 +484,7 @@ export class Panel {
       saltversion = "";
     } else if (pMinionData && pMinionData.saltversion) {
       saltversion = pMinionData.saltversion;
+      minionTr.dataset.saltversion = saltversion;
     }
     if (pMinionData) {
       const td = Utils.createTd();

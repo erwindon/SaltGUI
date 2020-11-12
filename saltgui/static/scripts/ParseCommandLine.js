@@ -21,6 +21,13 @@ export class ParseCommandLine {
     return /^[2-9][0-9][0-9][0-9][01][0-9][0-3][0-9][0-2][0-9][0-5][0-9][0-5][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$/;
   }
 
+  static getCommandFromCommandLine (pCommandLine) {
+    const argsArray = [];
+    const argsObject = {};
+    ParseCommandLine.parseCommandLine(pCommandLine, argsArray, argsObject);
+    return argsArray[0];
+  }
+
   static parseCommandLine (pToRun, pArgsArray, pArgsObject) {
 
     const patPlaceHolder = /^<[a-z]+>/;
