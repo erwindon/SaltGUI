@@ -184,17 +184,38 @@ export class KeysPanel extends Panel {
     this.setMsg(txt, true);
   }
 
+  static _flagUnacceptedMinion (pMinionId, pMinionsDict, pMinionIdSpan, pTxt, pIsBold) {
+    if (!Object.keys(pMinionsDict).length) {
+      // list of well-known minion is empty
+      // assume we actually don't known
+      return;
+    }
+
+    if (Object.keys(pMinionsDict).includes(pMinionId)) {
+      // this is a known minion
+      return;
+    }
+
+    Utils.addToolTip(
+      pMinionIdSpan,
+      "Unexpected entry\n" + pTxt + "\nUpdate file 'minions.txt' when needed",
+      "bottom-left");
+
+    pMinionIdSpan.style.color = "red";
+
+    if (pIsBold) {
+      pMinionIdSpan.style.fontWeight = "bold";
+    }
+  }
+
   _addAcceptedMinion (pMinionId, pMinionsDict) {
     const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
 
     const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
-    if (Object.keys(pMinionsDict).length && !Object.keys(pMinionsDict).includes(pMinionId)) {
-      Utils.addToolTip(minionIdSpan, "Unexpected entry\nThis entry may need to be rejected!\nUpdate file 'minions.txt' when needed", "bottom-left");
-      minionIdTd.style.color = "red";
-      minionIdTd.style.fontWeight = "bold";
-    }
+    this._flagUnacceptedMinion(pMinionId, pMinionsDict, minionIdSpan,
+      "This entry may need to be rejected!");
     minionTr.appendChild(minionIdTd);
 
     const accepted = Utils.createTd("status", "accepted");
@@ -216,10 +237,8 @@ export class KeysPanel extends Panel {
     const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
-    if (Object.keys(pMinionsDict).length && !Object.keys(pMinionsDict).includes(pMinionId)) {
-      Utils.addToolTip(minionIdSpan, "Unexpected entry\nBut it is already rejected\nUpdate file 'minions.txt' when needed", "bottom-left");
-      minionIdTd.style.color = "red";
-    }
+    KeysPanel._flagUnacceptedMinion(pMinionId, pMinionsDict, minionIdSpan,
+      "But it is already rejected");
     minionTr.appendChild(minionIdTd);
 
     const rejected = Utils.createTd("status", "rejected");
@@ -244,10 +263,8 @@ export class KeysPanel extends Panel {
     const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
-    if (Object.keys(pMinionsDict).length && !Object.keys(pMinionsDict).includes(pMinionId)) {
-      Utils.addToolTip(minionIdSpan, "Unexpected entry\nBut it is already denied\nUpdate file 'minions.txt' when needed", "bottom-left");
-      minionIdTd.style.color = "red";
-    }
+    KeysPanel._flagUnacceptedMinion(pMinionId, pMinionsDict, minionIdSpan,
+      "But it is already denied");
     minionTr.appendChild(minionIdTd);
 
     const denied = Utils.createTd("status", "denied");
@@ -272,11 +289,8 @@ export class KeysPanel extends Panel {
     const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
-    if (Object.keys(pMinionsDict).length && !Object.keys(pMinionsDict).includes(pMinionId)) {
-      Utils.addToolTip(minionIdSpan, "Unexpected entry\nDo not accept this entry without proper verification!\nUpdate file 'minions.txt' when needed", "bottom-left");
-      minionIdTd.style.color = "red";
-      minionIdTd.style.fontWeight = "bold";
-    }
+    KeysPanel._flagUnacceptedMinion(pMinionId, pMinionsDict,
+      "Do not accept this entry without proper verification!", true);
     minionTr.appendChild(minionIdTd);
 
     const pre = Utils.createTd("status", "unaccepted");
