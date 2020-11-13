@@ -17,7 +17,7 @@ export class BeaconsMinionPanel extends Panel {
     this.addPlayPauseButton("play");
     this.addHelpButton("The content of column 'Value' is automatically refreshed\nNote that some beacons produce multiple values, e.g. one per disk\nIn that case, effectively only one of the values is visible here");
     this.addCloseButton();
-    this.addTable(["Name", "Config", "Value", "-val-", "-help-"]);
+    this.addTable(["Name", "-menu-", "Config", "Value", "-help-"]);
     this.setTableSortable("Name", "asc");
     this.setTableClickable();
     this.addMsg();
