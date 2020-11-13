@@ -150,6 +150,10 @@ export class OptionsPanel extends Panel {
     const permsTd = this.div.querySelector("#option-perms-value");
     permsTd.innerText = permsValue;
 
+    const nodegroupsValue = Utils.getStorageItem("session", "nodegroups");
+    const nodegroupsTd = this.div.querySelector("#option-nodegroups-value");
+    nodegroupsTd.innerText = this._makeNodegroupsValue("nodegroups", nodegroupsValue);
+
     const templatesValue = Utils.getStorageItem("session", "templates");
     const templatesTd = this.div.querySelector("#option-templates-value");
     templatesTd.innerText = this._makeTemplatesValue("templates", templatesValue);
@@ -169,10 +173,6 @@ export class OptionsPanel extends Panel {
     const showJobsValue = Utils.getStorageItem("session", "show_jobs");
     const showJobsTd = this.div.querySelector("#option-show-jobs-value");
     showJobsTd.innerText = this._makeShowJobsValue("show-jobs", showJobsValue);
-
-    const nodegroupsValue = Utils.getStorageItem("session", "nodegroups");
-    const nodegroupsTd = this.div.querySelector("#option-nodegroups-value");
-    nodegroupsTd.innerText = this._makeNodegroupsValue("nodegroups", nodegroupsValue);
 
     const outputFormatsValue = Utils.getStorageItem("session", "output_formats");
     const outputFormatsTd = this.div.querySelector("#option-output-formats-value");
@@ -270,6 +270,10 @@ export class OptionsPanel extends Panel {
     return OutputYaml.formatYAML(value);
   }
 
+  _makeNodegroupsValue (id, value) {
+    return this._parseAndFormat(id, value);
+  }
+
   _makeTemplatesValue (id, value) {
     return this._parseAndFormat(id, value);
   }
@@ -290,11 +294,15 @@ export class OptionsPanel extends Panel {
     return this._parseAndFormat(id, value);
   }
 
-  _makeNodegroupsValue (id, value) {
+  _makeOutputFormatsValue (id, value) {
     return this._parseAndFormat(id, value);
   }
 
-  _makeOutputFormatsValue (id, value) {
+  _makeDatetimeFractionDigitsValue (id, value) {
+    return this._parseAndFormat(id, value);
+  }
+
+  _makeTooltipModeValue (id, value) {
     return this._parseAndFormat(id, value);
   }
 
@@ -320,18 +328,10 @@ export class OptionsPanel extends Panel {
     Utils.setStorageItem("session", "output_formats", value);
   }
 
-  _makeDatetimeFractionDigitsValue (id, value) {
-    return this._parseAndFormat(id, value);
-  }
-
   _newDatetimeFractionDigits (evt) {
     Utils.setStorageItem("session", "datetime_fraction_digits", parseInt(evt.target.value, 10));
     const datetimeFractionDigitsTd = this.div.querySelector("#option-datetime-fraction-digits-value");
     datetimeFractionDigitsTd.innerText = evt.target.value;
-  }
-
-  _makeTooltipModeValue (id, value) {
-    return this._parseAndFormat(id, value);
   }
 
   _newTooltipMode (evt) {
