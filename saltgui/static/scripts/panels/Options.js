@@ -27,35 +27,36 @@ export class OptionsPanel extends Panel {
     this._addOptionRow(
       "perms", "session_perms");
     this._addOptionRow(
-      "nodegroups", "nodegroups");
+      "nodegroups", "nodegroups", "(none)");
     this._addOptionRow(
-      "templates", "saltgui_templates");
+      "templates", "saltgui_templates", "(none)");
     this._addOptionRow(
-      "public-pillars", "saltgui_public_pillars");
+      "public-pillars", "saltgui_public_pillars", "(none)");
     this._addOptionRow(
-      "preview-grains", "saltgui_preview_grains");
+      "preview-grains", "saltgui_preview_grains", "(none)");
     this._addOptionRow(
-      "hide-jobs", "saltgui_hide_jobs");
+      "hide-jobs", "saltgui_hide_jobs", "(none)");
     this._addOptionRow(
-      "show-jobs", "saltgui_show_jobs");
+      "show-jobs", "saltgui_show_jobs", "(all)");
     this._addOptionRow(
-      "output-formats", "saltgui_output_formats",
+      "output-formats", "saltgui_output_formats", "'doc,saltguihighstate,json'",
       [
         ["doc", "doc", "none:no doc"],
         ["highstate", "saltgui:SaltGUI highstate", "normal:Normal highstate", "none:No highstate"],
         ["output", "json", "nested", "yaml"]
       ]);
     this._addOptionRow(
-      "datetime-fraction-digits", "saltgui_datetime_fraction_digits",
+      "datetime-fraction-digits", "saltgui_datetime_fraction_digits", "6",
       [["digits", "0", "1", "2", "3", "4", "5", "6"]]);
     this._addOptionRow(
-      "tooltip-mode", "saltgui_tooltip_mode",
+      "tooltip-mode", "saltgui_tooltip_mode", "'full'",
       [["mode", "full", "simple", "none"]]);
   }
 
-  _addOptionRow (pId, pNameTxt, pValues = null) {
+  _addOptionRow (pId, pNameTxt, pDefaultValue, pValues = null) {
     const tr = document.createElement("tr");
     tr.id = "option-" + pId;
+    tr.dataset.defaultValue = pDefaultValue;
     const tdName = Utils.createTd("", pNameTxt + ":", "option-" + pId + "-name");
     tdName.style.whiteSpace = "normal";
     tr.appendChild(tdName);
@@ -151,31 +152,31 @@ export class OptionsPanel extends Panel {
 
     const templatesValue = Utils.getStorageItem("session", "templates");
     const templatesTd = this.div.querySelector("#option-templates-value");
-    templatesTd.innerText = OptionsPanel._makeTemplatesValue(templatesValue);
+    templatesTd.innerText = this._makeTemplatesValue("templates", templatesValue);
 
     const publicPillarsValue = Utils.getStorageItem("session", "public_pillars");
     const publicPillarsTd = this.div.querySelector("#option-public-pillars-value");
-    publicPillarsTd.innerText = OptionsPanel._makePublicPillarsValue(publicPillarsValue);
+    publicPillarsTd.innerText = this._makePublicPillarsValue("public-pillars", publicPillarsValue);
 
     const previewGrainsValue = Utils.getStorageItem("session", "preview_grains");
     const previewGrainsTd = this.div.querySelector("#option-preview-grains-value");
-    previewGrainsTd.innerText = OptionsPanel._makePreviewGrainsValue(previewGrainsValue);
+    previewGrainsTd.innerText = this._makePreviewGrainsValue("preview-grains", previewGrainsValue);
 
     const hideJobsValue = Utils.getStorageItem("session", "hide_jobs");
     const hideJobsTd = this.div.querySelector("#option-hide-jobs-value");
-    hideJobsTd.innerText = OptionsPanel._makeHideJobsValue(hideJobsValue);
+    hideJobsTd.innerText = this._makeHideJobsValue("hide-jobs", hideJobsValue);
 
     const showJobsValue = Utils.getStorageItem("session", "show_jobs");
     const showJobsTd = this.div.querySelector("#option-show-jobs-value");
-    showJobsTd.innerText = OptionsPanel._makeShowJobsValue(showJobsValue);
+    showJobsTd.innerText = this._makeShowJobsValue("show-jobs", showJobsValue);
 
     const nodegroupsValue = Utils.getStorageItem("session", "nodegroups");
     const nodegroupsTd = this.div.querySelector("#option-nodegroups-value");
-    nodegroupsTd.innerText = OptionsPanel._makeNodegroupsValue(nodegroupsValue);
+    nodegroupsTd.innerText = this._makeNodegroupsValue("nodegroups", nodegroupsValue);
 
     const outputFormatsValue = Utils.getStorageItem("session", "output_formats");
     const outputFormatsTd = this.div.querySelector("#option-output-formats-value");
-    outputFormatsTd.innerText = OptionsPanel._makeOutputFormatsValue(outputFormatsValue);
+    outputFormatsTd.innerText = this._makeOutputFormatsValue("output-formats", outputFormatsValue);
 
     // ordering:
     // defaults (no-doc and no-highstate) before actual choices
@@ -212,10 +213,10 @@ export class OptionsPanel extends Panel {
     /* eslint-disable brace-style,curly,max-statements-per-line */
     const datetimeFractionDigitsValue = Utils.getStorageItem("session", "datetime_fraction_digits");
     const datetimeFractionDigitsTd = this.div.querySelector("#option-datetime-fraction-digits-value");
-    datetimeFractionDigitsTd.innerText = OptionsPanel._makeDatetimeFractionDigitsValue(datetimeFractionDigitsValue);
+    datetimeFractionDigitsTd.innerText = this._makeDatetimeFractionDigitsValue("datetime-fraction-digits", datetimeFractionDigitsValue);
     const dfd0 = this.div.querySelector("#option-datetime-fraction-digits-value-digits-0");
     dfd0.addEventListener("change", (evt) => { this._newDatetimeFractionDigits(evt); });
-    if (datetimeFractionDigitsValue === null || datetimeFractionDigitsValue === "0") dfd0.checked = true;
+    if (datetimeFractionDigitsValue === "0") dfd0.checked = true;
     const dfd1 = this.div.querySelector("#option-datetime-fraction-digits-value-digits-1");
     dfd1.addEventListener("change", (evt) => { this._newDatetimeFractionDigits(evt); });
     if (datetimeFractionDigitsValue === "1") dfd1.checked = true;
@@ -233,13 +234,13 @@ export class OptionsPanel extends Panel {
     if (datetimeFractionDigitsValue === "5") dfd5.checked = true;
     const dfd6 = this.div.querySelector("#option-datetime-fraction-digits-value-digits-6");
     dfd6.addEventListener("change", (evt) => { this._newDatetimeFractionDigits(evt); });
-    if (datetimeFractionDigitsValue === "6") dfd6.checked = true;
+    if (datetimeFractionDigitsValue === null || datetimeFractionDigitsValue === "6") dfd6.checked = true;
     /* eslint-enable brace-style,curly,max-statements-per-line */
 
     /* eslint-disable brace-style,curly,max-statements-per-line */
     const tooltipModeValue = Utils.getStorageItem("session", "tooltip_mode");
     const tooltipModeTd = this.div.querySelector("#option-tooltip-mode-value");
-    tooltipModeTd.innerText = OptionsPanel._makeTooltipModeValue(tooltipModeValue);
+    tooltipModeTd.innerText = this._makeTooltipModeValue("tooltip-mode", tooltipModeValue);
     const tm0 = this.div.querySelector("#option-tooltip-mode-value-mode-full");
     tm0.addEventListener("change", (evt) => { this._newTooltipMode(evt); });
     if (!tooltipModeValue || tooltipModeValue === "full") tm0.checked = true;
@@ -252,42 +253,49 @@ export class OptionsPanel extends Panel {
     /* eslint-enable brace-style,curly,max-statements-per-line */
   }
 
-  static _parseAndFormat (valueStr) {
+  _parseAndFormat (id, valueStr) {
     /* eslint-disable curly */
-    if (valueStr === undefined) return "(undefined)";
-    if (valueStr === null) return "(undefined)";
-    if (valueStr === "undefined") return "(undefined)";
+    if (valueStr === null) valueStr = undefined;
+    if (valueStr === "undefined") valueStr = undefined;
     /* eslint-enable curly */
+    if (valueStr === undefined) {
+      const tr = this.div.querySelector("#option-" + id);
+      if (tr.dataset.defaultValue) {
+        // 2192 = RIGHTWARDS ARROW
+        return "(undefined) \u2192 " + tr.dataset.defaultValue;
+      }
+      return "(undefined)";
+    }
     const value = JSON.parse(valueStr);
     return OutputYaml.formatYAML(value);
   }
 
-  static _makeTemplatesValue (value) {
-    return OptionsPanel._parseAndFormat(value);
+  _makeTemplatesValue (id, value) {
+    return this._parseAndFormat(id, value);
   }
 
-  static _makePublicPillarsValue (value) {
-    return OptionsPanel._parseAndFormat(value);
+  _makePublicPillarsValue (id, value) {
+    return this._parseAndFormat(id, value);
   }
 
-  static _makePreviewGrainsValue (value) {
-    return OptionsPanel._parseAndFormat(value);
+  _makePreviewGrainsValue (id, value) {
+    return this._parseAndFormat(id, value);
   }
 
-  static _makeHideJobsValue (value) {
-    return OptionsPanel._parseAndFormat(value);
+  _makeHideJobsValue (id, value) {
+    return this._parseAndFormat(id, value);
   }
 
-  static _makeShowJobsValue (value) {
-    return OptionsPanel._parseAndFormat(value);
+  _makeShowJobsValue (id, value) {
+    return this._parseAndFormat(id, value);
   }
 
-  static _makeNodegroupsValue (value) {
-    return OptionsPanel._parseAndFormat(value);
+  _makeNodegroupsValue (id, value) {
+    return this._parseAndFormat(id, value);
   }
 
-  static _makeOutputFormatsValue (value) {
-    return OptionsPanel._parseAndFormat(value);
+  _makeOutputFormatsValue (id, value) {
+    return this._parseAndFormat(id, value);
   }
 
   _newOutputFormats () {
@@ -308,12 +316,12 @@ export class OptionsPanel extends Panel {
     /* eslint-enable curly */
     value = JSON.stringify(value.substring(1));
     const outputFormatsTd = this.div.querySelector("#option-output-formats-value");
-    outputFormatsTd.innerText = OptionsPanel._makeOutputFormatsValue(value);
+    outputFormatsTd.innerText = this._makeOutputFormatsValue("output-formats", value);
     Utils.setStorageItem("session", "output_formats", value);
   }
 
-  static _makeDatetimeFractionDigitsValue (value) {
-    return OptionsPanel._parseAndFormat(value);
+  _makeDatetimeFractionDigitsValue (id, value) {
+    return this._parseAndFormat(id, value);
   }
 
   _newDatetimeFractionDigits (evt) {
@@ -322,17 +330,8 @@ export class OptionsPanel extends Panel {
     datetimeFractionDigitsTd.innerText = evt.target.value;
   }
 
-  static _makeTooltipModeValue (value) {
-    if (value === undefined) {
-      return "(undefined)";
-    }
-    if (value === null) {
-      return "(undefined)";
-    }
-    if (value === "undefined") {
-      return "(undefined)";
-    }
-    return value;
+  _makeTooltipModeValue (id, value) {
+    return this._parseAndFormat(id, value);
   }
 
   _newTooltipMode (evt) {
