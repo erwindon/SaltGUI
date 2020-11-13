@@ -180,24 +180,26 @@ export class OptionsPanel extends Panel {
     // defaults (no-doc and no-highstate) before actual choices
     // highstate before saltguihighstate because of string inclusion
     /* eslint-disable brace-style,max-statements-per-line */
-    const of1 = this.div.querySelector("#option-output-formats-value-doc-none");
-    of1.addEventListener("change", (evt) => { this._newOutputFormats(evt); });
-    of1.checked = true;
     const of0 = this.div.querySelector("#option-output-formats-value-doc-doc");
     of0.addEventListener("change", (evt) => { this._newOutputFormats(evt); });
-    of0.checked = outputFormatsValue && outputFormatsValue.includes("doc");
-    const of4 = this.div.querySelector("#option-output-formats-value-highstate-none");
-    of4.addEventListener("change", (evt) => { this._newOutputFormats(evt); });
-    of4.checked = true;
+    of0.checked = !outputFormatsValue || outputFormatsValue.includes("doc");
+    const of1 = this.div.querySelector("#option-output-formats-value-doc-none");
+    of1.addEventListener("change", (evt) => { this._newOutputFormats(evt); });
+    of1.checked = outputFormatsValue && !outputFormatsValue.includes("doc");
+
     const of3 = this.div.querySelector("#option-output-formats-value-highstate-normal");
     of3.addEventListener("change", (evt) => { this._newOutputFormats(evt); });
     of3.checked = outputFormatsValue && outputFormatsValue.includes("highstate");
     const of2 = this.div.querySelector("#option-output-formats-value-highstate-saltgui");
     of2.addEventListener("change", (evt) => { this._newOutputFormats(evt); });
-    of2.checked = outputFormatsValue && outputFormatsValue.includes("saltguihighstate");
+    of2.checked = !outputFormatsValue || outputFormatsValue.includes("saltguihighstate");
+    const of4 = this.div.querySelector("#option-output-formats-value-highstate-none");
+    of4.addEventListener("change", (evt) => { this._newOutputFormats(evt); });
+    of4.checked = outputFormatsValue && !outputFormatsValue.includes("highstate");
+
     const of5 = this.div.querySelector("#option-output-formats-value-output-json");
     of5.addEventListener("change", (evt) => { this._newOutputFormats(evt); });
-    of5.checked = outputFormatsValue && outputFormatsValue.includes("json");
+    of5.checked = !outputFormatsValue || outputFormatsValue.includes("json");
     const of6 = this.div.querySelector("#option-output-formats-value-output-nested");
     of6.addEventListener("change", (evt) => { this._newOutputFormats(evt); });
     of6.checked = outputFormatsValue && outputFormatsValue.includes("nested");
@@ -212,7 +214,7 @@ export class OptionsPanel extends Panel {
     datetimeFractionDigitsTd.innerText = OptionsPanel._makeDatetimeFractionDigitsValue(datetimeFractionDigitsValue);
     const dfd0 = this.div.querySelector("#option-datetime-fraction-digits-value-digits-0");
     dfd0.addEventListener("change", (evt) => { this._newDatetimeFractionDigits(evt); });
-    if (datetimeFractionDigitsValue === "0") dfd0.checked = true;
+    if (datetimeFractionDigitsValue === null || datetimeFractionDigitsValue === "0") dfd0.checked = true;
     const dfd1 = this.div.querySelector("#option-datetime-fraction-digits-value-digits-1");
     dfd1.addEventListener("change", (evt) => { this._newDatetimeFractionDigits(evt); });
     if (datetimeFractionDigitsValue === "1") dfd1.checked = true;
@@ -239,7 +241,7 @@ export class OptionsPanel extends Panel {
     tooltipModeTd.innerText = OptionsPanel._makeTooltipModeValue(tooltipModeValue);
     const tm0 = this.div.querySelector("#option-tooltip-mode-value-mode-full");
     tm0.addEventListener("change", (evt) => { this._newTooltipMode(evt); });
-    if (tooltipModeValue === "full") tm0.checked = true;
+    if (!tooltipModeValue || tooltipModeValue === "full") tm0.checked = true;
     const tm1 = this.div.querySelector("#option-tooltip-mode-value-mode-simple");
     tm1.addEventListener("change", (evt) => { this._newTooltipMode(evt); });
     if (tooltipModeValue === "simple") tm1.checked = true;
