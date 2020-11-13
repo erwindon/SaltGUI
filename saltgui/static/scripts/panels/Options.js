@@ -15,54 +15,55 @@ export class OptionsPanel extends Panel {
     this.addTable(["Name", "Value"]);
 
     this._addOptionRow(
-      "token-name", "session_token", "token-value");
+      "token", "session_token");
     this._addOptionRow(
-      "start-name", "session_start", "start-value");
+      "start", "session_start");
     this._addOptionRow(
-      "expire-name", "session_expire", "expire-value");
+      "expire", "session_expire");
     this._addOptionRow(
-      "eauth-name", "session_eauth", "eauth-value");
+      "eauth", "session_eauth");
     this._addOptionRow(
-      "user-name", "session_user", "user-value");
+      "user", "session_user");
     this._addOptionRow(
-      "perms-name", "session_perms", "perms-value");
+      "perms", "session_perms");
     this._addOptionRow(
-      "nodegroups-name", "nodegroups", "nodegroups-value");
+      "nodegroups", "nodegroups");
     this._addOptionRow(
-      "templates-name", "saltgui_templates", "templates-value");
+      "templates", "saltgui_templates");
     this._addOptionRow(
-      "public-pillars-name", "saltgui_public_pillars", "public-pillars-value");
+      "public-pillars", "saltgui_public_pillars");
     this._addOptionRow(
-      "preview-grains-name", "saltgui_preview_grains", "preview-grains-value");
+      "preview-grains", "saltgui_preview_grains");
     this._addOptionRow(
-      "hide-jobs-name", "saltgui_hide_jobs", "hide-jobs-value");
+      "hide-jobs", "saltgui_hide_jobs");
     this._addOptionRow(
-      "show-jobs-name", "saltgui_show_jobs", "show-jobs-value");
+      "show-jobs", "saltgui_show_jobs");
     this._addOptionRow(
-      "output-formats-name", "saltgui_output_formats", "output-formats-value",
+      "output-formats", "saltgui_output_formats",
       [
         ["doc", "doc", "none:no doc"],
         ["highstate", "saltgui:SaltGUI highstate", "normal:Normal highstate", "none:No highstate"],
         ["output", "json", "nested", "yaml"]
       ]);
     this._addOptionRow(
-      "datetime-fraction-digits-name", "saltgui_datetime_fraction_digits", "datetime-fraction-digits-value",
+      "datetime-fraction-digits", "saltgui_datetime_fraction_digits",
       [["digits", "0", "1", "2", "3", "4", "5", "6"]]);
     this._addOptionRow(
-      "tooltip-mode-name", "saltgui_tooltip_mode", "tooltip-mode-value",
+      "tooltip-mode", "saltgui_tooltip_mode",
       [["mode", "full", "simple", "none"]]);
   }
 
-  _addOptionRow (pNameId, pNameTxt, pValueId, pValues = null) {
+  _addOptionRow (pId, pNameTxt, pValues = null) {
     const tr = document.createElement("tr");
-    const tdName = Utils.createTd("", pNameTxt + ":", "option-" + pNameId);
+    tr.id = "option-" + pId;
+    const tdName = Utils.createTd("", pNameTxt + ":", "option-" + pId + "-name");
     tdName.style.whiteSpace = "normal";
     tr.appendChild(tdName);
     const tdValue = Utils.createTd();
     if (pValues === null) {
-      tdValue.id = "option-" + pValueId;
+      tdValue.id = "option-" + pId + "-value";
     } else {
-      const span = Utils.createSpan("", "", "option-" + pValueId);
+      const span = Utils.createSpan("", "", "option-" + pId + "-value");
       tdValue.appendChild(span);
       const br1 = document.createElement("br");
       tdValue.appendChild(br1);
@@ -84,9 +85,9 @@ export class OptionsPanel extends Panel {
             itemText = row[i].substring(colonPos + 1);
           }
           const radio = document.createElement("input");
-          radio.id = "option-" + pValueId + "-" + row[0] + "-" + itemValue;
+          radio.id = "option-" + pId + "-value-" + row[0] + "-" + itemValue;
           radio.type = "radio";
-          radio.name = "option-" + pValueId + "-" + row[0];
+          radio.name = "option-" + pId + "-value-" + row[0];
           radio.value = itemValue;
           tdValue.appendChild(radio);
           const label = document.createElement("label");
