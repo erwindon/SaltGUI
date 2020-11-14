@@ -419,7 +419,7 @@ export class Utils {
 
   static txtZeroOneMany (pCnt, pZeroText, pOneText, pManyText) {
     let txt = pManyText;
-    if (pCnt === 0) {
+    if (pCnt === 0 || pCnt === undefined) {
       txt = pZeroText;
     } else if (pCnt === 1) {
       txt = pOneText;
