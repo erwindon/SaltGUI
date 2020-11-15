@@ -82,10 +82,17 @@ export class OutputHighstate {
     let skipped = 0;
     let totalMilliSeconds = 0;
     let changes = 0;
+    let hidden = 0;
     let nr = 0;
     for (const task of pTasks) {
 
       nr += 1;
+
+      if (Output.isHiddenTask(task)) {
+        hidden += 1;
+        continue;
+      }
+
       if (task.result === null) {
         skipped += 1;
       } else if (task.result) {
@@ -158,7 +165,7 @@ export class OutputHighstate {
     summarySpan.style.color = "aqua";
     div.append(summarySpan);
 
-    sTxt = "\nSucceeded: " + succeeded;
+    sTxt = "\nSucceeded: " + (succeeded + hidden);
     const succeededSpan = Utils.createSpan("", sTxt);
     succeededSpan.style.color = "lime";
     div.append(succeededSpan);
@@ -190,7 +197,7 @@ export class OutputHighstate {
     div.append(failedSpan);
 
     sTxt = "\n------------";
-    sTxt += "\nTotal states run: " + (succeeded + skipped + failed);
+    sTxt += "\nTotal states run: " + (succeeded + skipped + failed + hidden);
     sTxt += "\nTotal run time: " + OutputHighstate._getDurationClauseSecs(totalMilliSeconds);
     const totalsSpan = Utils.createSpan("", sTxt);
     totalsSpan.style.color = "aqua";

@@ -187,6 +187,19 @@ export class Output {
     return pDtStr.substring(0, dotPos + dateTimeFractionDigits + 1);
   }
 
+  static isHiddenTask (pTask) {
+    const isStateVerbose = Utils.getStorageItem("session", "state_verbose", "true");
+    /* eslint-disable curly */
+    if (isStateVerbose !== "false") return false;
+    if (pTask.result !== true) return false;
+    if (!pTask.changes) return true;
+    if (typeof pTask.changes !== "object") return false;
+    if (Array.isArray(pTask.changes) && pTask.changes.length === 0) return true;
+    if (Object.keys(pTask.changes).length === 0) return true;
+    /* eslint-enable curly */
+    return false;
+  }
+
   static _setTaskTooltip (pSpan, pTask) {
     let txt = "";
 
@@ -215,6 +228,10 @@ export class Output {
     } else {
       nrChanges = Object.keys(pTask.changes).length;
       txt += Utils.txtZeroOneMany(nrChanges, "", "\n" + nrChanges + " change", "\n" + nrChanges + " changes");
+    }
+
+    if (Output.isHiddenTask(pTask)) {
+      txt += "\nhidden";
     }
 
     while (pSpan.classList.length > 0) {
@@ -295,6 +312,11 @@ export class Output {
 
         const showId = Utils.getIdFromMinionId(pMinionId + "." + myNr);
         const taskDiv = pMinionDiv.querySelector("#" + showId);
+
+        if (taskDiv === null) {
+          // probably hidden due to state_hidden
+          return;
+        }
 
         // show where the information is
         taskDiv.classList.add("highlight-task");

@@ -136,9 +136,15 @@ export class OutputSaltGuiHighstate {
     let totalMilliSeconds = 0;
     let changes = 0;
     let nr = 0;
+    let hidden = 0;
     for (const task of pTasks) {
 
       nr += 1;
+
+      if (Output.isHiddenTask(task)) {
+        hidden += 1;
+        continue;
+      }
 
       const taskDiv = Utils.createDiv("", "", Utils.getIdFromMinionId(pMinionId + "." + nr));
 
@@ -257,9 +263,13 @@ export class OutputSaltGuiHighstate {
     if (failed) {
       line += ", " + failed + " failed";
     }
-    const total = succeeded + skipped + failed;
-    if (total !== succeeded && total !== skipped && total !== failed) {
-      line += ", " + (succeeded + skipped + failed) + " total";
+    if (hidden) {
+      line += ", " + hidden + " hidden";
+    }
+    const total = succeeded + skipped + failed + hidden;
+    if (total !== succeeded && total !== skipped && total !== failed && total !== hidden) {
+      // not a trivial total
+      line += ", " + total + " total";
     }
 
     // note that the number of changes may be higher or lower
