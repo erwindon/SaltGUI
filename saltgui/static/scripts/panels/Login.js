@@ -231,6 +231,9 @@ export class LoginPanel extends Panel {
     }
     Utils.setStorageItem("session", "nodegroups", JSON.stringify(nodeGroups));
 
+    const stateVerbose = wheelConfigValuesData.saltgui_state_verbose;
+    Utils.setStorageItem("session", "state_verbose", JSON.stringify(stateVerbose));
+
     const outputFormats = wheelConfigValuesData.saltgui_output_formats;
     Utils.setStorageItem("session", "output_formats", JSON.stringify(outputFormats));
 

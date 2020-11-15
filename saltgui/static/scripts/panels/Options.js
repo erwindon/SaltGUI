@@ -22,6 +22,10 @@ export class OptionsPanel extends Panel {
       ["user", "session"],
       ["perms", "session"],
       ["nodegroups", null, "(none)"],
+      [
+        "state-verbose", null, "true",
+        [["verbose", "false", "true"]]
+      ],
       ["templates", null, "(none)"],
       ["public-pillars", "saltgui", "(none)"],
       ["preview-grains", "saltgui", "(none)"],
@@ -99,7 +103,11 @@ export class OptionsPanel extends Panel {
           radio.type = "radio";
           radio.name = "option-" + pName + "-value-" + row[0];
           radio.value = itemValue;
-          if (pName === "output-formats") {
+          if (pName === "state-verbose") {
+            radio.addEventListener("change", () => {
+              this._newStateVerbose();
+            });
+          } else if (pName === "output-formats") {
             radio.addEventListener("change", () => {
               this._newOutputFormats();
             });
@@ -248,6 +256,17 @@ export class OptionsPanel extends Panel {
     const radioButtonId = "option-" + pCategory + "-value-" + pRow + "-" + pName;
     const radioButton = this.div.querySelector("#" + radioButtonId);
     return radioButton.checked;
+  }
+
+  _newStateVerbose () {
+    let value = "";
+    /* eslint-disable curly */
+    if (this._isSelected("state-verbose", "verbose", "false")) value = "false";
+    if (this._isSelected("state-verbose", "verbose", "true")) value = "true";
+    /* eslint-enable curly */
+    const stateVerboseTd = this.div.querySelector("#option-state-verbose-value");
+    stateVerboseTd.innerText = value;
+    Utils.setStorageItem("session", "state_verbose", value);
   }
 
   _newOutputFormats () {
