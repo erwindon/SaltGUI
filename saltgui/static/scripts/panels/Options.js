@@ -26,6 +26,10 @@ export class OptionsPanel extends Panel {
         "state-verbose", null, "true",
         [["verbose", "false", "true"]]
       ],
+      [
+        "state-output", null, "full",
+        [["output", "full", "terse", "mixed", "changes", "full_id", "terse_id", "mixed_id", "changes_id"]]
+      ],
       ["templates", null, "(none)"],
       ["public-pillars", "saltgui", "(none)"],
       ["preview-grains", "saltgui", "(none)"],
@@ -106,6 +110,10 @@ export class OptionsPanel extends Panel {
           if (pName === "state-verbose") {
             radio.addEventListener("change", () => {
               this._newStateVerbose();
+            });
+          } else if (pName === "state-output") {
+            radio.addEventListener("change", () => {
+              this._newStateOutput();
             });
           } else if (pName === "output-formats") {
             radio.addEventListener("change", () => {
@@ -267,6 +275,23 @@ export class OptionsPanel extends Panel {
     const stateVerboseTd = this.div.querySelector("#option-state-verbose-value");
     stateVerboseTd.innerText = value;
     Utils.setStorageItem("session", "state_verbose", value);
+  }
+
+  _newStateOutput () {
+    let value = "";
+    /* eslint-disable curly */
+    if (this._isSelected("state-output", "output", "full")) value = "full";
+    if (this._isSelected("state-output", "output", "terse")) value = "terse";
+    if (this._isSelected("state-output", "output", "mixed")) value = "mixed";
+    if (this._isSelected("state-output", "output", "changes")) value = "changes";
+    if (this._isSelected("state-output", "output", "full_id")) value = "full_id";
+    if (this._isSelected("state-output", "output", "terse_id")) value = "terse_id";
+    if (this._isSelected("state-output", "output", "mixed_id")) value = "mixed_id";
+    if (this._isSelected("state-output", "output", "changes_id")) value = "changes_id";
+    /* eslint-enable curly */
+    const stateOutputeTd = this.div.querySelector("#option-state-output-value");
+    stateOutputeTd.innerText = value;
+    Utils.setStorageItem("session", "state_output", "\"" + value + "\"");
   }
 
   _newOutputFormats () {
