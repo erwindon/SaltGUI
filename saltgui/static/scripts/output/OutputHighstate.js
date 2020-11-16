@@ -88,9 +88,8 @@ export class OutputHighstate {
 
       nr += 1;
 
-      if (Output.isHiddenTask(task)) {
-        hidden += 1;
-        continue;
+      if (task.duration) {
+        totalMilliSeconds += task.duration;
       }
 
       if (task.result === null) {
@@ -101,47 +100,85 @@ export class OutputHighstate {
         failed += 1;
       }
 
+      if (Output.isHiddenTask(task)) {
+        hidden += 1;
+        continue;
+      }
+
+      let taskName;
+      if (task.name) {
+        taskName = task.name;
+      } else {
+        taskName = "(anonymous task)";
+      }
+
       const components = task.___key___.split("_|-");
 
-      let tTxt = "----------";
-
-      if (task.name) {
-        tTxt += "\n          ID: " + task.name;
-      } else {
-        tTxt += "\n          ID: (anonymous task)";
-      }
-
-      tTxt += "\n    Function: " + components[0] + "." + components[3];
-
-      tTxt += "\n      Result: " + JSON.stringify(task.result);
-
-      if (task.comment) {
-        tTxt += "\n     Comment: " + task.comment;
-      }
-
-      if (task.start_time) {
-        tTxt += "\n     Started: " + task.start_time;
-      }
-
-      if (task.duration) {
-        tTxt += "\n    Duration: " + OutputHighstate._getDurationClauseMillis(task.duration);
-        totalMilliSeconds += task.duration;
-      }
-
-      tTxt += "\n     Changes:";
+      const functionName = components[0] + "." + components[3];
 
       let hasChanges = false;
+      let chgs = null;
       if (task["changes"] !== undefined) {
-        changes = task.changes;
-        const keys = Object.keys(changes);
+        chgs = task.changes;
+        const keys = Object.keys(chgs);
         if (keys.length === 2 && keys[0] === "out" && keys[1] === "ret") {
-          changes = changes["ret"];
+          chgs = chgs["ret"];
         }
-        const str = JSON.stringify(changes);
+        const str = JSON.stringify(chgs);
         if (str !== "{}") {
           hasChanges = true;
-          tTxt += "\n" + OutputNested.formatNESTED(changes, 14);
           changes += 1;
+        }
+      }
+
+      let tTxt;
+
+      if (Utils.getStorageItem("session", "state_output") === "\"terse\"") {
+        // Name: cmd.run - Function: salt.function - Result: Changed Started: - 15:29:46.300385 Duration: 120.375 ms
+
+        tTxt = "Name: " + taskName;
+        tTxt += " - Function: " + functionName;
+        tTxt += " - Result: ";
+        if (JSON.stringify(task["changes"]) !== "{}") {
+          tTxt += "Changed";
+        } else if (task["result"] === false) {
+          tTxt += "Failed";
+        } else if (task["result"] === undefined) {
+          tTxt += "Differs";
+        } else {
+          tTxt += "Clean";
+        }
+        if (task.start_time) {
+          tTxt += " - Started: " + task.start_time;
+        }
+        if (task.duration) {
+          tTxt += " - Duration: " + OutputHighstate._getDurationClauseMillis(task.duration);
+        }
+      } else {
+        tTxt = "----------";
+
+        tTxt += "\n          ID: " + taskName;
+
+        tTxt += "\n    Function: " + functionName;
+
+        tTxt += "\n      Result: " + JSON.stringify(task.result);
+
+        if (task.comment) {
+          tTxt += "\n     Comment: " + task.comment;
+        }
+
+        if (task.start_time) {
+          tTxt += "\n     Started: " + task.start_time;
+        }
+
+        if (task.duration) {
+          tTxt += "\n    Duration: " + OutputHighstate._getDurationClauseMillis(task.duration);
+        }
+
+        tTxt += "\n     Changes:";
+
+        if (hasChanges) {
+          tTxt += "\n" + OutputNested.formatNESTED(chgs, 14);
         }
       }
 
@@ -165,7 +202,7 @@ export class OutputHighstate {
     summarySpan.style.color = "aqua";
     div.append(summarySpan);
 
-    sTxt = "\nSucceeded: " + (succeeded + hidden);
+    sTxt = "\nSucceeded: " + succeeded;
     const succeededSpan = Utils.createSpan("", sTxt);
     succeededSpan.style.color = "lime";
     div.append(succeededSpan);
@@ -197,7 +234,7 @@ export class OutputHighstate {
     div.append(failedSpan);
 
     sTxt = "\n------------";
-    sTxt += "\nTotal states run: " + (succeeded + skipped + failed + hidden);
+    sTxt += "\nTotal states run: " + (succeeded + skipped + failed);
     sTxt += "\nTotal run time: " + OutputHighstate._getDurationClauseSecs(totalMilliSeconds);
     const totalsSpan = Utils.createSpan("", sTxt);
     totalsSpan.style.color = "aqua";
