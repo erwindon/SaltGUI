@@ -19,4 +19,8 @@ export class GrainsPage extends Page {
     this.grains.onShow();
     this.jobs.onShow();
   }
+
+  handleSaltJobRetEvent (pData) {
+    this.jobs.handleSaltJobRetEvent(pData);
+  }
 }

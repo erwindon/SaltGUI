@@ -19,4 +19,8 @@ export class TemplatesPage extends Page {
     this.templates.onShow();
     this.jobs.onShow();
   }
+
+  handleSaltJobRetEvent (pData) {
+    this.jobs.handleSaltJobRetEvent(pData);
+  }
 }

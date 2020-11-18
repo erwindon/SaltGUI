@@ -42,6 +42,10 @@ pre.output div:first-of-type {
   margin-top: 0;
 }
 
+pre .minion-id.host-success {
+  color: lime;
+}
+
 pre .minion-id.host-failure {
   color: red;
 }
@@ -67,7 +71,7 @@ pre .minion-id {
 
 pre .task-success {
   cursor: pointer;
-  color: #4caf50;
+  color: lime;
 }
 
 pre .task-changes {

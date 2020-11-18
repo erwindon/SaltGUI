@@ -19,4 +19,8 @@ export class SchedulesPage extends Page {
     this.schedules.onShow();
     this.jobs.onShow();
   }
+
+  handleSaltJobRetEvent (pData) {
+    this.jobs.handleSaltJobRetEvent(pData);
+  }
 }

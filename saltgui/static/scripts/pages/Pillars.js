@@ -19,4 +19,8 @@ export class PillarsPage extends Page {
     this.pillars.onShow();
     this.jobs.onShow();
   }
+
+  handleSaltJobRetEvent (pData) {
+    this.jobs.handleSaltJobRetEvent(pData);
+  }
 }

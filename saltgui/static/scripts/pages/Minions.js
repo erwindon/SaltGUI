@@ -19,4 +19,8 @@ export class MinionsPage extends Page {
     this.minions.onShow();
     this.jobs.onShow();
   }
+
+  handleSaltJobRetEvent (pData) {
+    this.jobs.handleSaltJobRetEvent(pData);
+  }
 }

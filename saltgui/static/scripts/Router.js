@@ -29,21 +29,21 @@ export class Router {
     this.pages = [];
 
     this._registerPage(new LoginPage(this));
-    this._registerPage(new MinionsPage(this));
+    this._registerPage(this.minionsPage = new MinionsPage(this));
     this._registerPage(this.keysPage = new KeysPage(this));
-    this._registerPage(new GrainsPage(this));
-    this._registerPage(new GrainsMinionPage(this));
-    this._registerPage(new SchedulesPage(this));
-    this._registerPage(new SchedulesMinionPage(this));
-    this._registerPage(new PillarsPage(this));
-    this._registerPage(new PillarsMinionPage(this));
-    this._registerPage(new BeaconsPage(this));
+    this._registerPage(this.grainsPage = new GrainsPage(this));
+    this._registerPage(this.grainsMinionPage = new GrainsMinionPage(this));
+    this._registerPage(this.schedulesPage = new SchedulesPage(this));
+    this._registerPage(this.schedulesMinionPage = new SchedulesMinionPage(this));
+    this._registerPage(this.pillarsPage = new PillarsPage(this));
+    this._registerPage(this.pillarsMinionPage = new PillarsMinionPage(this));
+    this._registerPage(this.beaconsPage = new BeaconsPage(this));
     this._registerPage(this.beaconsMinionPage = new BeaconsMinionPage(this));
     this._registerPage(this.jobPage = new JobPage(this));
-    this._registerPage(new JobsPage(this));
-    this._registerPage(new TemplatesPage(this));
+    this._registerPage(this.jobsPage = new JobsPage(this));
+    this._registerPage(this.templatesPage = new TemplatesPage(this));
     this._registerPage(this.eventsPage = new EventsPage(this));
-    this._registerPage(new OptionsPage(this));
+    this._registerPage(this.optionsPage = new OptionsPage(this));
 
     // show template menu item if templates defined
     const templatesText = Utils.getStorageItem("session", "templates", "");

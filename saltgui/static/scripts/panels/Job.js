@@ -460,10 +460,9 @@ export class JobPanel extends Panel {
       if (newLevel > oldLevel) {
         span.dataset.level = newLevel;
         if (newLevel === 1) {
-          span.style.color = "green";
+          span.style.color = "lime";
         } else if (newLevel === 2) {
-          // orange instead of yellow due to readability on white background
-          span.style.color = "orange";
+          span.style.color = "yellow";
         } else if (newLevel === 3) {
           span.style.color = "red";
         }

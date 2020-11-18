@@ -19,4 +19,8 @@ export class GrainsMinionPage extends Page {
     this.grainsminion.onShow();
     this.jobs.onShow();
   }
+
+  handleSaltJobRetEvent (pData) {
+    this.jobs.handleSaltJobRetEvent(pData);
+  }
 }

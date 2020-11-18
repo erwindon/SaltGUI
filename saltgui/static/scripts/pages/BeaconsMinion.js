@@ -23,4 +23,8 @@ export class BeaconsMinionPage extends Page {
   handleSaltBeaconEvent (pTag, pData) {
     this.beaconsminion.handleSaltBeaconEvent(pTag, pData);
   }
+
+  handleSaltJobRetEvent (pData) {
+    this.jobs.handleSaltJobRetEvent(pData);
+  }
 }

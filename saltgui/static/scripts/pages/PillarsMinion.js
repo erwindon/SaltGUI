@@ -19,4 +19,8 @@ export class PillarsMinionPage extends Page {
     this.pillarsminion.onShow();
     this.jobs.onShow();
   }
+
+  handleSaltJobRetEvent (pData) {
+    this.jobs.handleSaltJobRetEvent(pData);
+  }
 }

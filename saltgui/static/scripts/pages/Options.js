@@ -19,4 +19,8 @@ export class OptionsPage extends Page {
     this.options.onShow();
     this.jobs.onShow();
   }
+
+  handleSaltJobRetEvent (pData) {
+    this.jobs.handleSaltJobRetEvent(pData);
+  }
 }

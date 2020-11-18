@@ -27,4 +27,8 @@ export class KeysPage extends Page {
   handleSaltKeyEvent (pData) {
     this.keys.handleSaltKeyEvent(pData);
   }
+
+  handleSaltJobRetEvent (pData) {
+    this.jobs.handleSaltJobRetEvent(pData);
+  }
 }

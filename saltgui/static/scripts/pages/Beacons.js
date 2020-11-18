@@ -19,4 +19,8 @@ export class BeaconsPage extends Page {
     this.beacons.onShow();
     this.jobs.onShow();
   }
+
+  handleSaltJobRetEvent (pData) {
+    this.jobs.handleSaltJobRetEvent(pData);
+  }
 }

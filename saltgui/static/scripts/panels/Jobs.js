@@ -69,7 +69,7 @@ export class JobsPanel extends Panel {
       const job = jobs[jobId];
 
       let targetText = "";
-      const targetField = this.table.querySelector(".jobs tr#" + Utils.getIdFromJobId(jobId) + " span.job-status");
+      const targetField = this.table.querySelector("tr#" + Utils.getIdFromJobId(jobId) + " span.job-status");
       const maxTextLength = 50;
       if (targetText.length > maxTextLength) {
         // prevent column becoming too wide
@@ -260,5 +260,51 @@ export class JobsPanel extends Panel {
       /* eslint-enable curly */
       return 0;
     });
+  }
+
+  handleSaltJobRetEvent (pData) {
+
+    // ignore the most common events until someone complains
+    if (pData.fun === "saltutil.find_job") {
+      return;
+    }
+    if (pData.fun === "saltutil.running") {
+      return;
+    }
+
+    // { fun_args: […], jid: "20190704194624366796", return: true, retcode: 0, success: true, cmd: "_return", fun: "test.rand_sleep", id: "autobuild-it-4092", _stamp: "2019-07-04T17:46:28.448689" }
+    const jid = pData.jid;
+    if (!jid) {
+      return;
+    }
+
+    let newLevel = 0;
+    if (pData.success === true && pData.retcode === 0) {
+      newLevel = 1;
+    } else if (pData.success === true) {
+      newLevel = 2;
+    } else {
+      newLevel = 3;
+    }
+
+    // This element only exists when the user happens to look at the output of that jobId.
+    const spans = this.div.querySelectorAll("#status" + jid);
+    for (const span of spans) {
+      let oldLevel = span.dataset.level;
+      if (oldLevel === undefined) {
+        oldLevel = 0;
+      }
+      if (newLevel > oldLevel) {
+        span.dataset.level = newLevel;
+        if (newLevel === 1) {
+          span.style.color = "green";
+        } else if (newLevel === 2) {
+          span.style.color = "orange";
+        } else if (newLevel === 3) {
+          span.style.color = "red";
+        }
+      }
+      span.style.removeProperty("display");
+    }
   }
 }

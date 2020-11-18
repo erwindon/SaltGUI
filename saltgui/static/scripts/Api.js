@@ -360,6 +360,18 @@ export class API {
         // return value
         CommandBox.handleSaltJobRetEvent(tag, data);
         pRouter.jobPage.handleSaltJobRetEvent(data);
+        pRouter.minionsPage.handleSaltJobRetEvent(data);
+        pRouter.grainsPage.handleSaltJobRetEvent(data);
+        pRouter.grainsMinionPage.handleSaltJobRetEvent(data);
+        pRouter.schedulesPage.handleSaltJobRetEvent(data);
+        pRouter.schedulesMinionPage.handleSaltJobRetEvent(data);
+        pRouter.pillarsPage.handleSaltJobRetEvent(data);
+        pRouter.pillarsMinionPage.handleSaltJobRetEvent(data);
+        pRouter.beaconsPage.handleSaltJobRetEvent(data);
+        pRouter.beaconsMinionPage.handleSaltJobRetEvent(data);
+        pRouter.jobsPage.handleSaltJobRetEvent(data);
+        pRouter.templatesPage.handleSaltJobRetEvent(data);
+        pRouter.optionsPage.handleSaltJobRetEvent(data);
       } else if (tag.startsWith("salt/job/") && tag.includes("/prog/")) {
         // progress value (exists only for states)
         CommandBox.handleSaltJobProgEvent(tag, data);
