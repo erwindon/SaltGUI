@@ -11,7 +11,7 @@ export class OptionsPanel extends Panel {
 
     this.addTitle("Options");
     // this.addSearchButton();
-    this.addHelpButton("Names 'session_*' show the values from the login session\nNames 'saltgui_*' show the values from the master file '/etc/salt/master'\nChanges made in this screen are valid for this session ONLY");
+    this.addHelpButton("Names 'session_*' show the values from the login session\nNames 'saltgui_*' show the values from the master file '/etc/salt/master'\nOther names are regular variables from the master file\nChanges made in this screen are valid for this session ONLY");
     this.addTable(["Name", "Value"]);
 
     this.options = [

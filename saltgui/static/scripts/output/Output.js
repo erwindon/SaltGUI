@@ -4,7 +4,6 @@ import {OutputDocumentation} from "./OutputDocumentation.js";
 import {OutputHighstate} from "./OutputHighstate.js";
 import {OutputJson} from "./OutputJson.js";
 import {OutputNested} from "./OutputNested.js";
-import {OutputSaltGuiHighstate} from "./OutputSaltGuiHighstate.js";
 import {OutputYaml} from "./OutputYaml.js";
 import {ParseCommandLine} from "../ParseCommandLine.js";
 import {Utils} from "../Utils.js";
@@ -35,6 +34,11 @@ export class Output {
   static isOutputFormatAllowed (pRequestedOutputFormat) {
     const supportedOutputFormats = Utils.getStorageItem("session", "output_formats", "doc,saltguihighstate,json");
     return supportedOutputFormats.includes(pRequestedOutputFormat);
+  }
+
+  static isStateOutputSelected (pRequestedStateOutput) {
+    const stateOutput = Utils.getStorageItem("session", "state_output", "full");
+    return stateOutput.includes(pRequestedStateOutput);
   }
 
   // Re-organize the output to let it appear as if the output comes
@@ -185,6 +189,14 @@ export class Output {
     }
 
     return pDtStr.substring(0, dotPos + dateTimeFractionDigits + 1);
+  }
+
+  static getDuration (pMilliSeconds) {
+    if (pMilliSeconds < 1000) {
+      return Utils.txtZeroOneMany(Math.round(pMilliSeconds),
+        "{0} ms", "{0} ms", "{0} ms");
+    }
+    return Utils.txtZeroOneMany(Math.round(pMilliSeconds) / 1000, "", "{0} s", "{0} s");
   }
 
   static isHiddenTask (pTask) {
@@ -598,8 +610,8 @@ export class Output {
       let addHighStateSummaryFlag = false;
       // enhanced highstate display
       if (!fndRepresentation && isHighStateOutput && Output.isOutputFormatAllowed("saltguihighstate")) {
-        minionLabel = OutputSaltGuiHighstate.getHighStateLabel(minionId, minionResponse);
-        minionOutput = OutputSaltGuiHighstate.getHighStateOutput(minionId, pJobId, tasks);
+        minionLabel = OutputHighstate.getHighStateLabel(minionId, minionResponse);
+        minionOutput = OutputHighstate.getHighStateOutput(minionId, tasks, pJobId);
         minionMultiLine = true;
         fndRepresentation = true;
         addHighStateSummaryFlag = true;
@@ -607,7 +619,7 @@ export class Output {
       // regular highstate display
       if (!fndRepresentation && isHighStateOutput && Output.isOutputFormatAllowed("highstate")) {
         minionLabel = OutputHighstate.getHighStateLabel(minionId, minionResponse);
-        minionOutput = OutputHighstate.getHighStateOutput(minionId, tasks);
+        minionOutput = OutputHighstate.getHighStateOutput(minionId, tasks, pJobId);
         minionMultiLine = true;
         fndRepresentation = true;
         addHighStateSummaryFlag = true;
