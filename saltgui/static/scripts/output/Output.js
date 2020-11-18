@@ -397,10 +397,8 @@ export class Output {
 
       const cntResponses = Object.keys(pResponse).length;
 
-      let txt = ", ";
-
-      txt += Utils.txtZeroOneMany(cntResponses,
-        "no responses", "{0} response", "{0} responses");
+      let txt = Utils.txtZeroOneMany(cntResponses,
+        "", ", {0} response", ", {0} responses");
 
       const summary = {};
       for (const minionId in pResponse) {
