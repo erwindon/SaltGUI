@@ -4,7 +4,6 @@ import {OutputDocumentation} from "./OutputDocumentation.js";
 import {OutputHighstate} from "./OutputHighstate.js";
 import {OutputJson} from "./OutputJson.js";
 import {OutputNested} from "./OutputNested.js";
-import {OutputSaltGuiHighstate} from "./OutputSaltGuiHighstate.js";
 import {OutputYaml} from "./OutputYaml.js";
 import {ParseCommandLine} from "../ParseCommandLine.js";
 import {Utils} from "../Utils.js";
@@ -35,6 +34,11 @@ export class Output {
   static isOutputFormatAllowed (pRequestedOutputFormat) {
     const supportedOutputFormats = Utils.getStorageItem("session", "output_formats", "doc,saltguihighstate,json");
     return supportedOutputFormats.includes(pRequestedOutputFormat);
+  }
+
+  static isStateOutputSelected (pRequestedStateOutput) {
+    const stateOutput = Utils.getStorageItem("session", "state_output", "full");
+    return stateOutput.includes(pRequestedStateOutput);
   }
 
   // Re-organize the output to let it appear as if the output comes
@@ -187,6 +191,27 @@ export class Output {
     return pDtStr.substring(0, dotPos + dateTimeFractionDigits + 1);
   }
 
+  static getDuration (pMilliSeconds) {
+    if (pMilliSeconds < 1000) {
+      return Utils.txtZeroOneMany(Math.round(pMilliSeconds),
+        "{0} ms", "{0} ms", "{0} ms");
+    }
+    return Utils.txtZeroOneMany(Math.round(pMilliSeconds) / 1000, "", "{0} s", "{0} s");
+  }
+
+  static isHiddenTask (pTask) {
+    const isStateVerbose = Utils.getStorageItem("session", "state_verbose", "true");
+    /* eslint-disable curly */
+    if (isStateVerbose !== "false") return false;
+    if (pTask.result !== true) return false;
+    if (!pTask.changes) return true;
+    if (typeof pTask.changes !== "object") return false;
+    if (Array.isArray(pTask.changes) && pTask.changes.length === 0) return true;
+    if (Object.keys(pTask.changes).length === 0) return true;
+    /* eslint-enable curly */
+    return false;
+  }
+
   static _setTaskTooltip (pSpan, pTask) {
     let txt = "";
 
@@ -215,6 +240,10 @@ export class Output {
     } else {
       nrChanges = Object.keys(pTask.changes).length;
       txt += Utils.txtZeroOneMany(nrChanges, "", "\n" + nrChanges + " change", "\n" + nrChanges + " changes");
+    }
+
+    if (Output.isHiddenTask(pTask)) {
+      txt += "\nhidden";
     }
 
     while (pSpan.classList.length > 0) {
@@ -295,6 +324,11 @@ export class Output {
 
         const showId = Utils.getIdFromMinionId(pMinionId + "." + myNr);
         const taskDiv = pMinionDiv.querySelector("#" + showId);
+
+        if (taskDiv === null) {
+          // probably hidden due to state_hidden
+          return;
+        }
 
         // show where the information is
         taskDiv.classList.add("highlight-task");
@@ -576,8 +610,8 @@ export class Output {
       let addHighStateSummaryFlag = false;
       // enhanced highstate display
       if (!fndRepresentation && isHighStateOutput && Output.isOutputFormatAllowed("saltguihighstate")) {
-        minionLabel = OutputSaltGuiHighstate.getHighStateLabel(minionId, minionResponse);
-        minionOutput = OutputSaltGuiHighstate.getHighStateOutput(minionId, pJobId, tasks);
+        minionLabel = OutputHighstate.getHighStateLabel(minionId, minionResponse);
+        minionOutput = OutputHighstate.getHighStateOutput(minionId, tasks, pJobId);
         minionMultiLine = true;
         fndRepresentation = true;
         addHighStateSummaryFlag = true;
@@ -585,7 +619,7 @@ export class Output {
       // regular highstate display
       if (!fndRepresentation && isHighStateOutput && Output.isOutputFormatAllowed("highstate")) {
         minionLabel = OutputHighstate.getHighStateLabel(minionId, minionResponse);
-        minionOutput = OutputHighstate.getHighStateOutput(minionId, tasks);
+        minionOutput = OutputHighstate.getHighStateOutput(minionId, tasks, pJobId);
         minionMultiLine = true;
         fndRepresentation = true;
         addHighStateSummaryFlag = true;

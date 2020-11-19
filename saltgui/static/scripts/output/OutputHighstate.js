@@ -1,5 +1,9 @@
 import {Output} from "./Output.js";
-import {OutputNested} from "./OutputNested.js";
+import {OutputHighstateSummaryOriginal} from "./OutputHighstateSummaryOriginal.js";
+import {OutputHighstateSummarySaltGui} from "./OutputHighstateSummarySaltGui.js";
+import {OutputHighstateTaskFull} from "./OutputHighstateTaskFull.js";
+import {OutputHighstateTaskSaltGui} from "./OutputHighstateTaskSaltGui.js";
+import {OutputHighstateTaskTerse} from "./OutputHighstateTaskTerse.js";
 import {Utils} from "../Utils.js";
 
 export class OutputHighstate {
@@ -40,17 +44,6 @@ export class OutputHighstate {
     return true;
   }
 
-  static _getDurationClauseMillis (pMilliSeconds) {
-    // discard the microseconds
-    const nrMilliSeconds = Math.round(pMilliSeconds * 1000) / 1000;
-    return `${nrMilliSeconds} ms`;
-  }
-
-  static _getDurationClauseSecs (pMilliSeconds) {
-    const nrSeconds = Math.round(pMilliSeconds) / 1000;
-    return `${nrSeconds} s`;
-  }
-
   static getHighStateLabel (pMinionId, pMinionResponse) {
     let anyFailures = false;
     let anySkips = false;
@@ -73,7 +66,7 @@ export class OutputHighstate {
     return Output.getMinionIdHtml(pMinionId, "host-success");
   }
 
-  static getHighStateOutput (pMinionId, pTasks) {
+  static getHighStateOutput (pMinionId, pTasks, pJobId) {
 
     const div = Utils.createDiv();
 
@@ -82,10 +75,16 @@ export class OutputHighstate {
     let skipped = 0;
     let totalMilliSeconds = 0;
     let changes = 0;
+    let hidden = 0;
     let nr = 0;
     for (const task of pTasks) {
 
       nr += 1;
+
+      if (task.duration) {
+        totalMilliSeconds += task.duration;
+      }
+
       if (task.result === null) {
         skipped += 1;
       } else if (task.result) {
@@ -94,51 +93,49 @@ export class OutputHighstate {
         failed += 1;
       }
 
+      if (Output.isHiddenTask(task)) {
+        hidden += 1;
+        continue;
+      }
+
       const components = task.___key___.split("_|-");
 
-      let tTxt = "----------";
-
-      if (task.name) {
-        tTxt += "\n          ID: " + task.name;
-      } else {
-        tTxt += "\n          ID: (anonymous task)";
-      }
-
-      tTxt += "\n    Function: " + components[0] + "." + components[3];
-
-      tTxt += "\n      Result: " + JSON.stringify(task.result);
-
-      if (task.comment) {
-        tTxt += "\n     Comment: " + task.comment;
-      }
-
-      if (task.start_time) {
-        tTxt += "\n     Started: " + task.start_time;
-      }
-
-      if (task.duration) {
-        tTxt += "\n    Duration: " + OutputHighstate._getDurationClauseMillis(task.duration);
-        totalMilliSeconds += task.duration;
-      }
-
-      tTxt += "\n     Changes:";
+      const functionName = components[0] + "." + components[3];
 
       let hasChanges = false;
+      let chgs = null;
       if (task["changes"] !== undefined) {
-        changes = task.changes;
-        const keys = Object.keys(changes);
+        chgs = task.changes;
+        const keys = Object.keys(chgs);
         if (keys.length === 2 && keys[0] === "out" && keys[1] === "ret") {
-          changes = changes["ret"];
+          chgs = chgs["ret"];
         }
-        const str = JSON.stringify(changes);
+        const str = JSON.stringify(chgs);
         if (str !== "{}") {
           hasChanges = true;
-          tTxt += "\n" + OutputNested.formatNESTED(changes, 14);
-          changes += 1;
         }
+        changes += Object.keys(chgs).length;
       }
 
-      const taskSpan = Utils.createSpan("", tTxt);
+      const taskId = components[1];
+      let taskName = components[2];
+      if (Output.isStateOutputSelected("_id")) {
+        taskName = taskId;
+      }
+
+      let taskSpan;
+      if (Output.isStateOutputSelected("terse")) {
+        taskSpan = OutputHighstateTaskTerse.getStateOutput(task, taskName, functionName);
+      } else if (Output.isStateOutputSelected("mixed") && task.result) {
+        taskSpan = OutputHighstateTaskTerse.getStateOutput(task, taskName, functionName);
+      } else if (Output.isStateOutputSelected("changes") && task.result && hasChanges) {
+        taskSpan = OutputHighstateTaskTerse.getStateOutput(task, taskName, functionName);
+      } else if (Output.isOutputFormatAllowed("saltguihighstate")) {
+        taskSpan = OutputHighstateTaskSaltGui.getStateOutput(task, taskId, taskName, functionName, pMinionId, pJobId);
+      } else {
+        taskSpan = OutputHighstateTaskFull.getStateOutput(task, taskId, taskName, functionName);
+      }
+
       if (!task.result) {
         taskSpan.style.color = "red";
       } else if (hasChanges) {
@@ -152,51 +149,12 @@ export class OutputHighstate {
       div.append(taskDiv);
     }
 
-    let sTxt = "\nSummary for " + pMinionId;
-    sTxt += "\n------------";
-    const summarySpan = Utils.createSpan("", sTxt);
-    summarySpan.style.color = "aqua";
-    div.append(summarySpan);
-
-    sTxt = "\nSucceeded: " + succeeded;
-    const succeededSpan = Utils.createSpan("", sTxt);
-    succeededSpan.style.color = "lime";
-    div.append(succeededSpan);
-
-    if (changes > 0) {
-      sTxt = " (";
-      const oSpan = Utils.createSpan("", sTxt);
-      oSpan.style.color = "white";
-      div.append(oSpan);
-
-      sTxt = "changed=" + changes;
-      const changedSpan = Utils.createSpan("", sTxt);
-      changedSpan.style.color = "lime";
-      div.append(changedSpan);
-
-      sTxt = ")";
-      const cSpan = Utils.createSpan("", sTxt);
-      cSpan.style.color = "white";
-      div.append(cSpan);
-    }
-
-    sTxt = "\nFailed:    " + failed;
-    const failedSpan = Utils.createSpan("", sTxt);
-    if (failed > 0) {
-      failedSpan.style.color = "red";
+    if (Output.isOutputFormatAllowed("saltguihighstate")) {
+      OutputHighstateSummarySaltGui.addSummarySpan(div, succeeded, failed, skipped, totalMilliSeconds, changes, hidden);
     } else {
-      failedSpan.style.color = "aqua";
+      OutputHighstateSummaryOriginal.addSummarySpan(div, pMinionId, succeeded, failed, skipped, totalMilliSeconds, changes);
     }
-    div.append(failedSpan);
-
-    sTxt = "\n------------";
-    sTxt += "\nTotal states run: " + (succeeded + skipped + failed);
-    sTxt += "\nTotal run time: " + OutputHighstate._getDurationClauseSecs(totalMilliSeconds);
-    const totalsSpan = Utils.createSpan("", sTxt);
-    totalsSpan.style.color = "aqua";
-    div.append(totalsSpan);
 
     return div;
   }
-
 }
