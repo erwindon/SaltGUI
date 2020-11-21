@@ -178,8 +178,8 @@ export class LoginPanel extends Panel {
     this.api.login(username, password, eauth).then(() => {
       this._onLoginSuccess();
       return true;
-    }, () => {
-      this._onLoginFailure();
+    }, (err) => {
+      this._onLoginFailure(err);
       return false;
     });
   }
