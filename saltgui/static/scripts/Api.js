@@ -216,6 +216,12 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
+  getStats () {
+    const params = {
+    };
+    return this.apiRequest("GET", "/stats", params);
+  }
+
   apiRequest (pMethod, pPage, pParams) {
     const url = config.API_URL + pPage;
     const token = Utils.getStorageItem("session", "token", "");

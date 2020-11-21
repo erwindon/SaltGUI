@@ -175,10 +175,13 @@ export class Router {
     }
 
     // just a random lightweight api call
-    const wheelConfigValuesPromise = this.api.getWheelConfigValues();
+    // that is not bound by the api permissions
+    // very old versions of /stats did not properly
+    // detect invalid sessions, but that was fixed
+    const statsPromise = this.api.getStats();
     // don't act in the callbacks
     // Api.apiRequest will do all the work
-    wheelConfigValuesPromise.then(() => true, () => {
+    statsPromise.then(() => true, () => {
       this.api.logout().then(() => {
         window.location.replace(config.NAV_URL + "/login?reason=no-session");
         return false;
