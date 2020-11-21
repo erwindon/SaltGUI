@@ -387,7 +387,7 @@ export class KeysPanel extends Panel {
 
   _addMenuItemWheelKeyAcceptAllUnacceptedRejected () {
     this.panelMenu.addMenuItem(() => {
-      if (KeysPanel.cntRejected === 0) {
+      if (!KeysPanel.cntRejected) {
         return null;
       }
       if (KeysPanel.cntUnaccepted > 0) {
@@ -402,7 +402,7 @@ export class KeysPanel extends Panel {
 
   _addMenuItemWheelKeyAcceptAllUnacceptedDenied () {
     this.panelMenu.addMenuItem(() => {
-      if (KeysPanel.cntDenied === 0) {
+      if (!KeysPanel.cntDenied) {
         return null;
       }
       if (KeysPanel.cntUnaccepted > 0) {
@@ -417,7 +417,7 @@ export class KeysPanel extends Panel {
 
   _addMenuItemWheelKeyAcceptAllUnacceptedRejectedDenied () {
     this.panelMenu.addMenuItem(() => {
-      if (KeysPanel.cntRejected === 0 || KeysPanel.cntDenied === 0) {
+      if (!KeysPanel.cntRejected || !KeysPanel.cntDenied) {
         return null;
       }
       if (KeysPanel.cntUnaccepted > 0) {
@@ -482,7 +482,7 @@ export class KeysPanel extends Panel {
 
   _addMenuItemWheelKeyRejectAllUnacceptedAccepted () {
     this.panelMenu.addMenuItem(() => {
-      if (KeysPanel.cntAccepted === 0) {
+      if (!KeysPanel.cntAccepted) {
         return null;
       }
       if (KeysPanel.cntUnaccepted > 0) {
@@ -497,7 +497,7 @@ export class KeysPanel extends Panel {
 
   _addMenuItemWheelKeyRejectAllUnacceptedDenied () {
     this.panelMenu.addMenuItem(() => {
-      if (KeysPanel.cntDenied === 0) {
+      if (!KeysPanel.cntDenied) {
         return null;
       }
       if (KeysPanel.cntUnaccepted > 0) {
@@ -512,7 +512,7 @@ export class KeysPanel extends Panel {
 
   _addMenuItemWheelKeyRejectAllUnacceptedAcceptedDenied () {
     this.panelMenu.addMenuItem(() => {
-      if (KeysPanel.cntAccepted === 0 || KeysPanel.cntDenied === 0) {
+      if (!KeysPanel.cntAccepted || !KeysPanel.cntDenied) {
         return null;
       }
       if (KeysPanel.cntUnaccepted > 0) {

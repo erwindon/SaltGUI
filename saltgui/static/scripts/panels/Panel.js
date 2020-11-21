@@ -276,7 +276,10 @@ export class Panel {
     const tr = document.createElement("tr");
     tr.appendChild(td);
 
-    this.table.appendChild(tr);
+    if (!this.table.tFoot) {
+      this.table.createTFoot();
+    }
+    this.table.tFoot.appendChild(tr);
 
     // hide the "(loading)" message
     if (this.msg !== null) {
