@@ -24,7 +24,7 @@ export class OptionsPanel extends Panel {
       ["nodegroups", null, "(none)"],
       [
         "state-verbose", null, "true",
-        [["verbose", "false", "true"]]
+        [["verbose", "true", "false"]]
       ],
       [
         "state-output", null, "full",
