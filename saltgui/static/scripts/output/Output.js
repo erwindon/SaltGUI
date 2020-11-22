@@ -466,8 +466,8 @@ export class Output {
           txt += Utils.txtZeroOneMany(summary[key],
             "", "{0} failure", "{0} failures");
         }
-        if (key !== "0-0") {
-          // don't show the retcode for real success
+        if (key !== "0-0" && key !== "1-1") {
+          // don't show the retcode for expected combinations
           txt += "(" + key.substr(2) + ")";
         }
       }

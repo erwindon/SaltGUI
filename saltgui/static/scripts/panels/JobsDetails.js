@@ -245,8 +245,8 @@ export class JobsDetailsPanel extends JobsPanel {
         detailsHTML += "<span style='color: red'>";
         detailsHTML += Utils.txtZeroOneMany(summary[key], "", "{0} failure", "{0} failures");
       }
-      if (key !== "0-0") {
-        // don't show the retcode for real success
+      if (key !== "0-0" && key !== "1-1") {
+        // don't show the retcode for expected combinations
         detailsHTML += "(" + key.substr(2) + ")";
       }
       detailsHTML += "</span>";
