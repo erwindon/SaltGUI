@@ -15,3 +15,7 @@ label {
   white-space: pre-wrap;
   vertical-align: top;
 }
+
+#stats-table tr td {
+  white-space: pre-wrap;
+}

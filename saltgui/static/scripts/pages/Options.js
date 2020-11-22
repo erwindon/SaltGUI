@@ -1,8 +1,8 @@
 /* global */
 
-import {JobsSummaryPanel} from "../panels/JobsSummary.js";
 import {OptionsPanel} from "../panels/Options.js";
 import {Page} from "./Page.js";
+import {StatsPanel} from "../panels/Stats.js";
 
 export class OptionsPage extends Page {
 
@@ -11,16 +11,12 @@ export class OptionsPage extends Page {
 
     this.options = new OptionsPanel();
     super.addPanel(this.options);
-    this.jobs = new JobsSummaryPanel();
-    super.addPanel(this.jobs);
+    this.stats = new StatsPanel();
+    super.addPanel(this.stats);
   }
 
   onShow () {
     this.options.onShow();
-    this.jobs.onShow();
-  }
-
-  handleSaltJobRetEvent (pData) {
-    this.jobs.handleSaltJobRetEvent(pData);
+    this.stats.onShow();
   }
 }
