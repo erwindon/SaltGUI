@@ -433,6 +433,10 @@ export class CommandBox {
       // use only the part after "wheel." (6 chars)
       params.fun = functionToRun.substring(6);
       params.match = pTarget;
+      if (argsArray.length > 0) {
+        CommandBox._showError("Wheel commands can only take named parameters");
+        return null;
+      }
     } else {
       params.client = "local";
       params.fun = functionToRun;
