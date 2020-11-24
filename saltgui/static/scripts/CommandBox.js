@@ -221,6 +221,7 @@ export class CommandBox {
       "saltutil.refresh_pillar",
       "saltutil.signal_job",
       "saltutil.term_job",
+      "schedule.add",
       "schedule.delete",
       "schedule.disable",
       "schedule.disable_job",

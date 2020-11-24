@@ -163,6 +163,7 @@ export class JobsPanel extends Panel {
     this._hideJobs.push("saltutil.running");
     this._hideJobs.push("saltutil.signal_job");
     this._hideJobs.push("saltutil.term_job");
+    this._hideJobs.push("schedule.add");
     this._hideJobs.push("schedule.delete");
     this._hideJobs.push("schedule.disable");
     this._hideJobs.push("schedule.disable_job");
