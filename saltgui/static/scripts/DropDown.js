@@ -44,6 +44,11 @@ export class DropDownMenu {
       // 2261 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
       this.menuButton = Utils.createDiv("menu-dropdown", "\u2261");
     }
+    this.menuButton.addEventListener("click", (pClickEvent) => {
+      // better support for touch screens where user touch
+      // the menu button instead of hovering over it
+      pClickEvent.stopPropagation();
+    });
 
     // hide the menu until it receives menu-items
     this.verifyAll();
