@@ -377,6 +377,7 @@ export class API {
         pRouter.beaconsMinionPage.handleSaltJobRetEvent(data);
         pRouter.jobsPage.handleSaltJobRetEvent(data);
         pRouter.templatesPage.handleSaltJobRetEvent(data);
+        pRouter.reactorsPage.handleSaltJobRetEvent(data);
       } else if (tag.startsWith("salt/job/") && tag.includes("/prog/")) {
         // progress value (exists only for states)
         CommandBox.handleSaltJobProgEvent(tag, data);

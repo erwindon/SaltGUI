@@ -15,6 +15,7 @@ import {MinionsPage} from "./pages/Minions.js";
 import {OptionsPage} from "./pages/Options.js";
 import {PillarsMinionPage} from "./pages/PillarsMinion.js";
 import {PillarsPage} from "./pages/Pillars.js";
+import {ReactorsPage} from "./pages/Reactors.js";
 import {SchedulesMinionPage} from "./pages/SchedulesMinion.js";
 import {SchedulesPage} from "./pages/Schedules.js";
 import {TemplatesPage} from "./pages/Templates.js";
@@ -43,16 +44,8 @@ export class Router {
     this._registerPage(this.jobsPage = new JobsPage(this));
     this._registerPage(this.templatesPage = new TemplatesPage(this));
     this._registerPage(this.eventsPage = new EventsPage(this));
+    this._registerPage(this.reactorsPage = new ReactorsPage(this));
     this._registerPage(this.optionsPage = new OptionsPage(this));
-
-    // show template menu item if templates defined
-    const templatesText = Utils.getStorageItem("session", "templates", "");
-    if (templatesText) {
-      const item1 = document.getElementById("button-templates1");
-      item1.classList.remove("menu-item-hidden");
-      const item2 = document.getElementById("button-templates2");
-      item2.classList.remove("menu-item-hidden");
-    }
 
     this._registerRouterEventListeners();
 
@@ -93,6 +86,7 @@ export class Router {
     Router._registerMenuItem("jobs", "/jobs");
     Router._registerMenuItem("templates", "/templates");
     Router._registerMenuItem("events", "/eventsview");
+    Router._registerMenuItem("reactors", "/reactors");
 
     document.getElementById("button-logout1").
       addEventListener("click", () => {
@@ -205,6 +199,15 @@ export class Router {
       const item2 = document.getElementById("button-templates2");
       item2.classList.remove("menu-item-hidden");
     }
+
+    // show reactor menu item if reactors defined
+    const reactorsText = Utils.getStorageItem("session", "reactors", "");
+    if (reactorsText) {
+      const item1 = document.getElementById("button-reactors1");
+      item1.classList.remove("menu-item-hidden");
+      const item2 = document.getElementById("button-reactors2");
+      item2.classList.remove("menu-item-hidden");
+    }
   }
 
   goTo (pPath, hasPathPrefix = false) {
@@ -259,6 +262,11 @@ export class Router {
          elem1.id === "button-templates1") {
         const jobsMenuItem = document.getElementById("button-jobs1");
         jobsMenuItem.classList.add("menu-item-active");
+      }
+      if (elem1.id === "button-events1" ||
+         elem1.id === "button-reactors1") {
+        const eventsMenuItem = document.getElementById("button-events1");
+        eventsMenuItem.classList.add("menu-item-active");
       }
     }
 
