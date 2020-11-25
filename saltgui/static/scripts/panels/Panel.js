@@ -67,9 +67,9 @@ export class Panel {
 
   addPlayPauseButton (pInitialStatus) {
     const playButton = document.createElement("span");
-    // 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play)
+    // 25B6 = BLACK RIGHT-POINTING TRIANGLE (play)
     // FE0E = VARIATION SELECTOR-15 (render as text)
-    playButton.innerHTML = "&#x23F5;&#xFE0E;";
+    playButton.innerHTML = "&#x25B6;&#xFE0E;";
     playButton.style.cursor = "pointer";
     playButton.style.fontSize = "x-large";
     playButton.style.display = pInitialStatus === "play" ? "none" : "";

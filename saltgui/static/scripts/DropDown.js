@@ -34,7 +34,7 @@ export class DropDownMenu {
     this.menuDropdown.classList.add("no-search");
 
     if (pParentElement.id === "cmd-box") {
-      // D83D+DCD6 = 1F4D6 = A BOOK
+      // D83D DCD6 = 1F4D6 = A BOOK
       this.menuButton = Utils.createDiv("menu-dropdown", "\uD83D\uDCD6");
     } else if (pParentElement.classList && pParentElement.classList.contains("minion-output")) {
       // 2261 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")

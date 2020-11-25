@@ -200,7 +200,7 @@ export class Utils {
     const input = document.createElement("input");
     input.type = "text";
     input.classList.add("filter-text");
-    // 1F50D = D83D DD0D = LEFT-POINTING MAGNIFYING GLASS
+    // D83D DD0D = 1F50D = LEFT-POINTING MAGNIFYING GLASS
     input.placeholder = "\uD83D\uDD0D";
     if (pFieldList) {
       input.setAttribute("list", pFieldList);

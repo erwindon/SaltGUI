@@ -172,9 +172,9 @@ export class KeysPanel extends Panel {
     txt = txt.replace(/^no/, "No");
 
     if (this.playOrPause === "pause") {
-      // 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play)
+      // 25B6 = BLACK RIGHT-POINTING TRIANGLE (play)
       // FE0E = VARIATION SELECTOR-15 (render as text)
-      txt += ", press '&#x23F5;&#xFE0E;' to continue";
+      txt += ", press '&#x25B6;&#xFE0E;' to continue";
     }
 
     KeysPanel.cntUnaccepted = cnt["unaccepted"];

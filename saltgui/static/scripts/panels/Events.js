@@ -41,13 +41,13 @@ export class EventsPanel extends Panel {
       }
     } else {
       if (tbody.rows.length) {
-        // 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play)
+        // 25B6 = BLACK RIGHT-POINTING TRIANGLE (play)
         // FE0E = VARIATION SELECTOR-15 (render as text)
-        txt += ", press '&#x23F5;&#xFE0E;' to continue";
+        txt += ", press '&#x25B6;&#xFE0E;' to continue";
       } else {
-        // 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play)
+        // 25B6 = BLACK RIGHT-POINTING TRIANGLE (play)
         // FE0E = VARIATION SELECTOR-15 (render as text)
-        txt += ", press '&#x23F5;&#xFE0E;' to begin";
+        txt += ", press '&#x25B6;&#xFE0E;' to begin";
       }
     }
     /* eslint-enable no-lonely-if */

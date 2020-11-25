@@ -230,9 +230,9 @@ export class JobsPanel extends Panel {
       "", ", {0} job present", ", {0} jobs present");
 
     if (this.playOrPause === "pause") {
-      // 23F5 = BLACK MEDIUM RIGHT-POINTING TRIANGLE (play)
+      // 25B6 = BLACK RIGHT-POINTING TRIANGLE (play)
       // FE0E = VARIATION SELECTOR-15 (render as text)
-      txt += ", press '\u23F5\uFE0E' to continue";
+      txt += ", press '\u25B6\uFE0E' to continue";
     }
 
     this.setMsg(txt);
