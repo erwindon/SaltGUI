@@ -215,6 +215,9 @@ export class LoginPanel extends Panel {
     const reactors = wheelConfigValuesData.reactor;
     Utils.setStorageItem("session", "reactors", JSON.stringify(reactors));
 
+    const pages = wheelConfigValuesData.saltgui_pages;
+    Utils.setStorageItem("session", "pages", JSON.stringify(pages));
+
     const publicPillars = wheelConfigValuesData.saltgui_public_pillars;
     Utils.setStorageItem("session", "public_pillars", JSON.stringify(publicPillars));
 
