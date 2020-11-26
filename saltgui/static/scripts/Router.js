@@ -153,6 +153,11 @@ export class Router {
       pQuery = {"reason": "no-session"};
     }
 
+    if (pPath === "/") {
+      // go to the concrete default page
+      pPath = "/minions";
+    }
+
     // save the details from the parent
     const parentHash = document.location.hash.replace(/^#/, "");
     const search = window.location.search;
@@ -201,6 +206,7 @@ export class Router {
       this._showPage(route);
       return;
     }
+
     // route could not be found
     // just go to the main page
     if (pHash === "") {
