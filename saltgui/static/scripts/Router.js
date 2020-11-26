@@ -210,17 +210,21 @@ export class Router {
     if (pPages.length && !pPages.includes(pName)) {
       pVisible = false;
     }
+
     // still show a menu item when a child is visible
+    let hasVisibleChild = false;
     for (const page of pChildren) {
       if (pPages.includes(page)) {
-        pVisible = true;
+        hasVisibleChild = true;
         break;
       }
     }
+
     // perform the hiding/showing
     for (let nr = 1; nr <= 2; nr++) {
       const item = document.getElementById("button-" + pName + nr);
-      if (pVisible) {
+      item.style.color = !pVisible && hasVisibleChild ? "lightgray" : "black";
+      if (pVisible || hasVisibleChild) {
         item.classList.remove("menu-item-hidden");
       } else {
         item.classList.add("menu-item-hidden");
