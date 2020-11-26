@@ -66,21 +66,46 @@ export class Router {
     /* eslint-enable compat/compat */
   }
 
-  _registerMenuItem (pButtonId, pHash) {
+  _registerMenuItem (pParentId, pButtonId, pUrl) {
+
+    // full menu
+
+    const fullMenuDiv = document.querySelector(".fullmenu");
+
+    const dropDownName = pParentId || pButtonId;
+    let dropDownDiv = document.getElementById("dropdown-" + dropDownName);
+    if (!dropDownDiv) {
+      dropDownDiv = Utils.createDiv("dropdown", "", "dropdown-" + dropDownName);
+      fullMenuDiv.append(dropDownDiv);
+    }
+
+    if (pParentId) {
+      let dropdownContent = document.getElementById("dropdown-content-" + pParentId);
+      if (!dropdownContent) {
+        dropdownContent = Utils.createDiv("dropdown-content", "", "dropdown-content-" + pParentId);
+        dropDownDiv.append(dropdownContent);
+      }
+      const itemDiv = Utils.createDiv("run-command-button menu-item", pButtonId, "button-" + pButtonId + "1");
+      dropdownContent.append(itemDiv);
+    } else {
+      const topItemDiv = Utils.createDiv("menu-item", pButtonId, "button-" + pButtonId + "1");
+      dropDownDiv.append(topItemDiv);
+    }
+
+    // mini menu
+
+    const miniMenuDiv = document.querySelector(".minimenu");
+    const dropdownContent2 = miniMenuDiv.querySelector(".dropdown-content");
+    // 00A0 = NO-BREAK SPACE
+    const menuItemDiv = Utils.createDiv("run-command-button menu-item", (pParentId ? "-\u00A0" : "") + pButtonId, "button-" + pButtonId + "2");
+    dropdownContent2.append(menuItemDiv);
+
+    // activate the menu items as needed
+
     for (const nr of ["1", "2"]) {
       document.getElementById("button-" + pButtonId + nr).
-        addEventListener("click", (pClickEvent) => {
-          const panel = pClickEvent.target.parentElement;
-          if (panel.classList.contains("dropdown-content")) {
-            // temporarily hide the panel, won't be visible again
-            // after 500ms because the mouseover caused it to show
-            // also clicking toplevel button cannot do the same
-            panel.style.display = "none";
-            setTimeout(() => {
-              panel.style.display = "";
-            }, 500);
-          }
-          this.goTo(pHash);
+        addEventListener("click", () => {
+          window.location.replace(config.NAV_URL + pUrl);
         });
     }
   }
@@ -105,17 +130,17 @@ export class Router {
       /* eslint-enable compat/compat */
     });
 
-    this._registerMenuItem("minions", "");
-    this._registerMenuItem("grains", "grains");
-    this._registerMenuItem("schedules", "schedules");
-    this._registerMenuItem("pillars", "pillars");
-    this._registerMenuItem("beacons", "beacons");
-    this._registerMenuItem("keys", "keys");
-    this._registerMenuItem("jobs", "jobs");
-    this._registerMenuItem("templates", "templates");
-    this._registerMenuItem("events", "eventsview");
-    this._registerMenuItem("reactors", "reactors");
-    this._registerMenuItem("logout", "logout");
+    this._registerMenuItem(null, "minions", "");
+    this._registerMenuItem("minions", "grains", "grains");
+    this._registerMenuItem("minions", "schedules", "schedules");
+    this._registerMenuItem("minions", "pillars", "pillars");
+    this._registerMenuItem("minions", "beacons", "beacons");
+    this._registerMenuItem(null, "keys", "keys");
+    this._registerMenuItem(null, "jobs", "jobs");
+    this._registerMenuItem("jobs", "templates", "templates");
+    this._registerMenuItem(null, "events", "eventsview");
+    this._registerMenuItem("events", "reactors", "reactors");
+    this._registerMenuItem(null, "logout", "logout");
   }
 
   _registerPage (pPage) {
@@ -170,6 +195,51 @@ export class Router {
       return [];
     }
     return ret;
+  }
+
+  static _showMenuItem (pPages, pName, pChildren = [], pVisible = true) {
+    // do not show unwanted menu items
+    if (pPages.length && !pPages.includes(pName)) {
+      pVisible = false;
+    }
+    // still show a menu item when a child is visible
+    for (const page of pChildren) {
+      if (pPages.includes(page)) {
+        pVisible = true;
+        break;
+      }
+    }
+    // perform the hiding/showing
+    for (let nr = 1; nr <= 2; nr++) {
+      const item = document.getElementById("button-" + pName + nr);
+      if (pVisible) {
+        item.classList.remove("menu-item-hidden");
+      } else {
+        item.classList.add("menu-item-hidden");
+      }
+    }
+  }
+
+  static updateMainMenu () {
+
+    // show template menu item if templates defined
+    const templatesText = Utils.getStorageItem("session", "templates", "");
+
+    // show reactor menu item if reactors defined
+    const reactorsText = Utils.getStorageItem("session", "reactors", "");
+
+    const pages = Router._getPagesList();
+
+    Router._showMenuItem(pages, "minions", ["grains", "schedules", "pillars", "beacons"]);
+    Router._showMenuItem(pages, "grains");
+    Router._showMenuItem(pages, "schedules");
+    Router._showMenuItem(pages, "pillars");
+    Router._showMenuItem(pages, "beacons");
+    Router._showMenuItem(pages, "keys");
+    Router._showMenuItem(pages, "jobs", ["templates"], templatesText);
+    Router._showMenuItem(pages, "templates", [], templatesText);
+    Router._showMenuItem(pages, "events", ["reactors"], reactorsText);
+    Router._showMenuItem(pages, "reactors", [], reactorsText);
   }
 
   // pForward = 0 --> normal navigation
@@ -257,34 +327,24 @@ export class Router {
 
     pPage.pageElement.style.display = "";
 
+    // de-activate all menu items
     const activeMenuItems = Array.from(document.querySelectorAll(".menu-item-active"));
     activeMenuItems.forEach((menuItem) => {
       menuItem.classList.remove("menu-item-active");
     });
 
+    // highlight the fullmenu item
     const elem1 = document.getElementById(pPage.menuItemElement1);
     if (elem1) {
       elem1.classList.add("menu-item-active");
+      const parentItem = elem1.parentElement.parentElement.firstChild;
       // activate also parent menu item if child element is selected
-      if (elem1.id === "button-pillars1" ||
-         elem1.id === "button-schedules1" ||
-         elem1.id === "button-grains1" ||
-         elem1.id === "button-beacons1") {
-        const minionMenuItem = document.getElementById("button-minions1");
-        minionMenuItem.classList.add("menu-item-active");
-      }
-      if (elem1.id === "button-jobs1" ||
-         elem1.id === "button-templates1") {
-        const jobsMenuItem = document.getElementById("button-jobs1");
-        jobsMenuItem.classList.add("menu-item-active");
-      }
-      if (elem1.id === "button-events1" ||
-         elem1.id === "button-reactors1") {
-        const eventsMenuItem = document.getElementById("button-events1");
-        eventsMenuItem.classList.add("menu-item-active");
+      if (parentItem.id.startsWith("button-")) {
+        parentItem.classList.add("menu-item-active");
       }
     }
 
+    // highlight the minimenu item
     const elem2 = document.getElementById(pPage.menuItemElement2);
     if (elem2) {
       elem2.classList.add("menu-item-active");
