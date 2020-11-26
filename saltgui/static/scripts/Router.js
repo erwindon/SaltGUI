@@ -220,7 +220,7 @@ export class Router {
       menuItem.classList.remove("menu-item-active");
     });
 
-    const elem1 = pPage.menuItemElement1;
+    const elem1 = document.getElementById(pPage.menuItemElement1);
     if (elem1) {
       elem1.classList.add("menu-item-active");
       // activate also parent menu item if child element is selected
@@ -243,7 +243,7 @@ export class Router {
       }
     }
 
-    const elem2 = pPage.menuItemElement2;
+    const elem2 = document.getElementById(pPage.menuItemElement2);
     if (elem2) {
       elem2.classList.add("menu-item-active");
     }
