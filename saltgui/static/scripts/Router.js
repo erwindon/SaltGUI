@@ -102,14 +102,16 @@ export class Router {
 
     // activate the menu items as needed
 
+    // conditions go inside the handler because the pages
+    // data may still being retrieved at this point
     for (const nr of ["1", "2"]) {
-      const button = document.getElementById("button-" + pButtonId + nr);
-      if (!button) {
-        continue;
-      }
-      button.addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + pUrl);
-      });
+      document.getElementById("button-" + pButtonId + nr).
+        addEventListener("click", () => {
+          const pages = Router._getPagesList();
+          if (pUrl && (pages.length === 0 || pages.includes(pButtonId))) {
+            window.location.replace(config.NAV_URL + pUrl);
+          }
+        });
     }
   }
 
