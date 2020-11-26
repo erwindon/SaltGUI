@@ -103,10 +103,13 @@ export class Router {
     // activate the menu items as needed
 
     for (const nr of ["1", "2"]) {
-      document.getElementById("button-" + pButtonId + nr).
-        addEventListener("click", () => {
-          window.location.replace(config.NAV_URL + pUrl);
-        });
+      const button = document.getElementById("button-" + pButtonId + nr);
+      if (!button) {
+        continue;
+      }
+      button.addEventListener("click", () => {
+        window.location.replace(config.NAV_URL + pUrl);
+      });
     }
   }
 
