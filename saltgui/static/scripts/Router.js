@@ -141,6 +141,37 @@ export class Router {
     }
   }
 
+  static _getUserName () {
+    const loginResponseStr = Utils.getStorageItem("session", "login-response", "{}");
+    try {
+      const loginResponse = JSON.parse(loginResponseStr);
+      return loginResponse.user;
+    } catch (err) {
+      console.error("error in object login-response=" + loginResponseStr + " --> " + err.name + ": " + err.message);
+      return null;
+    }
+  }
+
+  static _getPagesList () {
+    const pagesText = Utils.getStorageItem("session", "pages", "{}");
+    let pages;
+    try {
+      pages = JSON.parse(pagesText);
+    } catch (err) {
+      console.error("error in object saltgui_pages=" + pagesText + " --> " + err.name + ": " + err.message);
+      return {};
+    }
+    const userName = Router._getUserName();
+    if (!userName || typeof pages !== "object" || !(userName in pages)) {
+      return [];
+    }
+    const ret = pages[userName];
+    if (!ret || ret[0] === "*") {
+      return [];
+    }
+    return ret;
+  }
+
   // pForward = 0 --> normal navigation
   // pForward = 1 --> back navigation using regular gui
   // pForward = 2 --> back navigation using browser
@@ -153,9 +184,14 @@ export class Router {
       pQuery = {"reason": "no-session"};
     }
 
+    const pages = Router._getPagesList();
     if (pPath === "/") {
       // go to the concrete default page
-      pPath = "/minions";
+      if (pages.length) {
+        pPath = "/" + pages[0];
+      } else {
+        pPath = "/minions";
+      }
     }
 
     // save the details from the parent
