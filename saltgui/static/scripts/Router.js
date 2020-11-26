@@ -119,7 +119,10 @@ export class Router {
     document.getElementById("logo").
       addEventListener("click", () => {
         if (window.event.ctrlKey) {
-          this.goTo("options");
+          const pages = Router._getPagesList();
+          if (pages.length === 0 || pages.includes("options")) {
+            window.location.assign(config.NAV_URL + "/options");
+          }
         } else {
           this.goTo("");
         }
