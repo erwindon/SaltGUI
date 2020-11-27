@@ -4,10 +4,12 @@ import {Character} from "./Character.js";
 import {Documentation} from "./Documentation.js";
 import {DropDownMenu} from "./DropDown.js";
 import {Output} from "./output/Output.js";
+import {Panel} from "./panels/Panel.js";
 import {ParseCommandLine} from "./ParseCommandLine.js";
 import {Router} from "./Router.js";
 import {RunType} from "./RunType.js";
 import {TargetType} from "./TargetType.js";
+import {TemplatesPanel} from "./panels/Templates.js";
 import {Utils} from "./Utils.js";
 
 export class CommandBox {
@@ -17,9 +19,9 @@ export class CommandBox {
     this.api = pApi;
 
     const cmdbox = document.getElementById("cmd-box");
-    this.cmdmenu = new DropDownMenu(cmdbox);
+    CommandBox.cmdmenu = new DropDownMenu(cmdbox);
 
-    this.documentation = new Documentation(this.router, this);
+    this.documentation = new Documentation(this.router);
     this._registerCommandBoxEventListeners();
 
     RunType.createMenu();
@@ -36,27 +38,59 @@ export class CommandBox {
 
   static _populateTemplateMenu () {
     const titleElement = document.getElementById("template-menu-here");
+
     if (titleElement.childElementCount) {
       // only build one dropdown menu. cannot be done in constructor
       // since the storage-item is then not populated yet.
       return;
     }
+
     const menu = new DropDownMenu(titleElement);
-    const templatesText = Utils.getStorageItem("session", "templates", "{}");
-    const templates = JSON.parse(templatesText);
-    const keys = Object.keys(templates).sort();
-    for (const key of keys) {
-      const template = templates[key];
-      let description = template["description"];
-      if (!description) {
-        description = "(" + key + ")";
-      }
-      menu.addMenuItem(
-        description,
-        () => {
-          CommandBox._applyTemplate(template);
+
+    menu.addMenuItem(
+      () => {
+        const command = document.getElementById("command").value;
+        const cmd = ParseCommandLine.getCommandFromCommandLine(command);
+        if (cmd && typeof cmd === "string" && cmd.startsWith("#")) {
+          // do not allow internal commands to be saved as template
+          return null;
         }
-      );
+        return "Save as template";
+      }, () => {
+        const cmdArr = [
+          "#template.save",
+          "name=", "<name>",
+          "description=", "<description>",
+          "targettype=", TargetType.menuTargetType._value,
+          "target=", document.getElementById("target").value,
+          "command=", document.getElementById("command").value
+        ];
+
+        document.getElementById("target").value = "";
+        document.getElementById("command").value = Panel.makeCommandString(cmdArr);
+        TargetType.setTargetTypeDefault();
+        CommandBox.cmdmenu.verifyAll();
+      }
+    );
+
+    for (const loc of ["session", "local"]) {
+      const templatesText = Utils.getStorageItem(loc, "templates", "{}");
+      const templates = JSON.parse(templatesText);
+      const keys = Object.keys(templates).sort();
+      for (const key of keys) {
+        const template = templates[key];
+        const label = loc === "session" ? "master" : "local";
+        let description = label + ": " + template["description"];
+        if (!description) {
+          description = "(" + key + ")";
+        }
+        menu.addMenuItem(
+          description,
+          () => {
+            CommandBox._applyTemplate(template);
+          }
+        );
+      }
     }
   }
 
@@ -170,7 +204,7 @@ export class CommandBox {
 
     document.getElementById("command").
       addEventListener("input", () => {
-        this.cmdmenu.verifyAll();
+        CommandBox.cmdmenu.verifyAll();
       });
   }
 
@@ -201,6 +235,8 @@ export class CommandBox {
       const commandField = document.getElementById("command");
       commandField.value = template.command;
     }
+
+    CommandBox.cmdmenu.verifyAll();
   }
 
   static getScreenModifyingCommands () {
@@ -461,7 +497,8 @@ export class CommandBox {
     // WHEEL commands also do not have a target
     // but we use the TARGET value to form the usually required MATCH parameter
     // therefore for WHEEL commands it is still required
-    if (pTarget === "" && functionToRun !== "runners" && !functionToRun.startsWith("runners.")) {
+    // internal commands also do not need a target
+    if (pTarget === "" && functionToRun !== "runners" && !functionToRun.startsWith("runners.") && !functionToRun.startsWith("#")) {
       CommandBox._showError("'Target' field cannot be empty");
       return null;
     }
@@ -475,6 +512,27 @@ export class CommandBox {
         CommandBox._showError("Unknown nodegroup '" + pTarget + "'");
         return null;
       }
+    }
+
+    if (functionToRun.startsWith("#")) {
+      if (pTarget) {
+        CommandBox._showError("Internal commands cannot use a target value");
+        return null;
+      }
+      if (argsArray.length > 0) {
+        CommandBox._showError("Internal commands cannot use unnamed parameters");
+        return null;
+      }
+      if (functionToRun === "#template.delete") {
+        TemplatesPanel.runDelete(argsObject);
+        return null;
+      }
+      if (functionToRun === "#template.save") {
+        TemplatesPanel.runSave(argsObject);
+        return null;
+      }
+      CommandBox._showError("Unknown internal command '" + functionToRun + "'");
+      return null;
     }
 
     let params = {};

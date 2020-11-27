@@ -688,7 +688,7 @@ export class Panel {
         commandString += cmd;
         continue;
       }
-      if (cmd.match(/^[a-z_][a-z0-9_]*(?:[.][a-z0-9_]+)*$/i)) {
+      if (cmd.match(/^#*[a-z_][a-z0-9_]*(?:[.][a-z0-9_]+)*$/i)) {
         // It's a simple string or a command
         commandString += cmd;
         continue;
@@ -749,7 +749,7 @@ export class Panel {
     target.value = pTargetString;
     command.value = pCommandString;
     // the menu may become (in)visible due to content of command field
-    this.router.commandbox.cmdmenu.verifyAll();
+    CommandBox.cmdmenu.verifyAll();
   }
 
   clearPanel () {

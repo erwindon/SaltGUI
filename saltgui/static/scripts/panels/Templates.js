@@ -1,5 +1,6 @@
 /* global document */
 
+import {CommandBox} from "../CommandBox.js";
 import {DropDownMenu} from "../DropDown.js";
 import {Panel} from "./Panel.js";
 import {Router} from "../Router.js";
@@ -102,6 +103,10 @@ export class TemplatesPanel extends Panel {
 
     const menu = new DropDownMenu(tr, true);
     this._addMenuItemApplyTemplate(menu, targetType, target, command);
+    if (pLocation === "local") {
+      this._addMenuItemEditTemplate(menu, pTemplateName, description, targetType, target, command);
+      this._addMenuItemDeleteTemplate(menu, pTemplateName);
+    }
 
     const tbody = this.table.tBodies[0];
     tbody.appendChild(tr);
@@ -112,9 +117,64 @@ export class TemplatesPanel extends Panel {
     });
   }
 
-  _addMenuItemApplyTemplate (pMenu, pTargetType, target, pCommand) {
+  _addMenuItemApplyTemplate (pMenu, pTargetType, pTarget, pCommand) {
     pMenu.addMenuItem("Apply template...", () => {
-      this.runCommand(pTargetType, target, pCommand);
+      this.runCommand(pTargetType, pTarget, pCommand);
     });
+  }
+
+  _addMenuItemEditTemplate (pMenu, pName, pDescription, pTargetType, pTarget, pCommand) {
+    pMenu.addMenuItem("Edit template...", () => {
+      const cmdArr = ["#template.save", "name=", pName, "targettype=", pTargetType, "target=", pTarget, "command=", pCommand, "description=", pDescription];
+      this.runCommand(null, null, cmdArr);
+    });
+  }
+
+  _addMenuItemDeleteTemplate (pMenu, pName) {
+    pMenu.addMenuItem("Delete template...", () => {
+      const cmdArr = ["#template.delete", "name=", pName];
+      this.runCommand(null, null, cmdArr);
+    });
+  }
+
+  static runDelete (pArgs) {
+    const localTemplatesText = Utils.getStorageItem("local", "templates", "{}");
+    const localTemplates = JSON.parse(localTemplatesText);
+    const name = pArgs.name;
+    if (name === undefined) {
+      CommandBox._showError("Missing parameter 'name=...'");
+      return;
+    }
+    if (!(name in localTemplates)) {
+      CommandBox._showError("Unknown local template '" + name + "'");
+      return;
+    }
+    delete localTemplates[name];
+    Utils.setStorageItem("local", "templates", JSON.stringify(localTemplates));
+    CommandBox.refreshOnClose = true;
+    CommandBox.onRunReturn("Deleted local template '" + name + "'", "");
+  }
+
+  static runSave (pArgs) {
+    const localTemplatesText = Utils.getStorageItem("local", "templates", "{}");
+    const localTemplates = JSON.parse(localTemplatesText);
+    const name = pArgs.name;
+    if (name === undefined) {
+      CommandBox._showError("Missing parameter 'name=...'");
+      return;
+    }
+    const template = {};
+    for (const key of ["targettype", "target", "command", "description"]) {
+      if (key in pArgs) {
+        template[key] = pArgs[key];
+      }
+    }
+    localTemplates[name] = template;
+    Utils.setStorageItem("local", "templates", JSON.stringify(localTemplates));
+    CommandBox.refreshOnClose = true;
+    CommandBox.onRunReturn("Saved local template '" + name + "'", "");
+
+    // revert to the command that the user was saving
+    CommandBox._applyTemplate(template);
   }
 }
