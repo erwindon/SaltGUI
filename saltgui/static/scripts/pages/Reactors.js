@@ -25,7 +25,7 @@ export class ReactorsPage extends Page {
     this.jobs.handleSaltJobRetEvent(pData);
   }
 
-  isVisible () {
+  static isVisible () {
     // show reactor menu item if reactors defined
     const reactorsText = Utils.getStorageItem("session", "reactors", "");
     return reactorsText;

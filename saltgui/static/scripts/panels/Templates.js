@@ -2,7 +2,6 @@
 
 import {DropDownMenu} from "../DropDown.js";
 import {Panel} from "./Panel.js";
-import {Router} from "../Router.js";
 import {Utils} from "../Utils.js";
 
 export class TemplatesPanel extends Panel {

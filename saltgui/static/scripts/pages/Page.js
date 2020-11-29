@@ -115,7 +115,7 @@ export class Page {
     dashboard.append(pPanel.div);
   }
 
-  isVisible () {
+  static isVisible () {
     // a page is visible, unless the page decides otherwise
     return true;
   }

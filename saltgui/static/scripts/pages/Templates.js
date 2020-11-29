@@ -25,7 +25,7 @@ export class TemplatesPage extends Page {
     this.jobs.handleSaltJobRetEvent(pData);
   }
 
-  isVisible () {
+  static isVisible () {
     // show template menu item if templates defined
     const templatesText = Utils.getStorageItem("session", "templates", "");
     return templatesText;

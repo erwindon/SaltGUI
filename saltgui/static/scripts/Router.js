@@ -192,7 +192,7 @@ export class Router {
 
   updateMainMenu () {
     for (const page of this.pages) {
-      const visible = page.isVisible();
+      const visible = page.constructor.isVisible();
       for (const item of [page.menuItemElement1, page.menuItemElement2]) {
         if (!item) {
           // This page does not have a menu item
