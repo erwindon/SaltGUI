@@ -114,4 +114,9 @@ export class Page {
     const dashboard = this.pageElement.querySelector(".dashboard");
     dashboard.append(pPanel.div);
   }
+
+  isVisible () {
+    // a page is visible, unless the page decides otherwise
+    return true;
+  }
 }

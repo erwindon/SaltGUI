@@ -39,7 +39,7 @@ export class ReactorsPanel extends Panel {
     let reactors = pWheelConfigValuesData.return[0].data.return.reactor;
     if (reactors) {
       Utils.setStorageItem("session", "reactors", JSON.stringify(reactors));
-      Router.updateMainMenu();
+      this.router.updateMainMenu();
     } else {
       reactors = {};
     }

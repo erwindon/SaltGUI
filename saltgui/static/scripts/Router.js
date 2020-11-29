@@ -49,7 +49,7 @@ export class Router {
 
     this._registerRouterEventListeners();
 
-    Router.updateMainMenu();
+    this.updateMainMenu();
 
     // This URL already has its prefix added
     // therefore is must not be added again
@@ -190,23 +190,19 @@ export class Router {
     }
   }
 
-  static updateMainMenu () {
-    // show template menu item if templates defined
-    const templatesText = Utils.getStorageItem("session", "templates", "");
-    if (templatesText) {
-      const item1 = document.getElementById("button-templates1");
-      item1.classList.remove("menu-item-hidden");
-      const item2 = document.getElementById("button-templates2");
-      item2.classList.remove("menu-item-hidden");
-    }
-
-    // show reactor menu item if reactors defined
-    const reactorsText = Utils.getStorageItem("session", "reactors", "");
-    if (reactorsText) {
-      const item1 = document.getElementById("button-reactors1");
-      item1.classList.remove("menu-item-hidden");
-      const item2 = document.getElementById("button-reactors2");
-      item2.classList.remove("menu-item-hidden");
+  updateMainMenu () {
+    for (const page of this.pages) {
+      const visible = page.isVisible();
+      for (const item of [page.menuItemElement1, page.menuItemElement2]) {
+        if (!item) {
+          // This page does not have a menu item
+          // e.g. login-page or grains-minion page
+        } else if (visible) {
+          item.classList.remove("menu-item-hidden");
+        } else {
+          item.classList.add("menu-item-hidden");
+        }
+      }
     }
   }
 

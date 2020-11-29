@@ -39,7 +39,7 @@ export class TemplatesPanel extends Panel {
     let templates = pWheelConfigValuesData.return[0].data.return.saltgui_templates;
     if (templates) {
       Utils.setStorageItem("session", "templates", JSON.stringify(templates));
-      Router.updateMainMenu();
+      this.router.updateMainMenu();
     } else {
       templates = {};
     }
