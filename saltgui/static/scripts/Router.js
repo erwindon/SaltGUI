@@ -11,6 +11,7 @@ import {JobPage} from "./pages/Job.js";
 import {JobsPage} from "./pages/Jobs.js";
 import {KeysPage} from "./pages/Keys.js";
 import {LoginPage} from "./pages/Login.js";
+import {LogoutPage} from "./pages/Logout.js";
 import {MinionsPage} from "./pages/Minions.js";
 import {OptionsPage} from "./pages/Options.js";
 import {PillarsMinionPage} from "./pages/PillarsMinion.js";
@@ -46,8 +47,9 @@ export class Router {
     this._registerPage(this.eventsPage = new EventsPage(this));
     this._registerPage(this.reactorsPage = new ReactorsPage(this));
     this._registerPage(this.optionsPage = new OptionsPage(this));
+    this._registerPage(new LogoutPage(this));
 
-    this._registerRouterEventListeners();
+    Router._registerRouterEventListeners();
 
     this.updateMainMenu();
 
@@ -67,7 +69,7 @@ export class Router {
       });
   }
 
-  _registerRouterEventListeners () {
+  static _registerRouterEventListeners () {
     document.getElementById("logo").
       addEventListener("click", () => {
         if (window.event.ctrlKey) {
@@ -87,100 +89,7 @@ export class Router {
     Router._registerMenuItem("templates", "/templates");
     Router._registerMenuItem("events", "/eventsview");
     Router._registerMenuItem("reactors", "/reactors");
-
-    document.getElementById("button-logout1").
-      addEventListener("click", () => {
-        this.api.logout().then(() => {
-          window.location.replace(config.NAV_URL + "/login?reason=logout");
-          return true;
-        });
-      });
-    document.getElementById("button-logout2").
-      addEventListener("click", () => {
-        this.api.logout().then(() => {
-          window.location.replace(config.NAV_URL + "/login?reason=logout");
-          return false;
-        });
-      });
-
-    // don't verify for invalid sessions too often
-    // this happens only when the server was reset
-    window.setInterval(() => {
-      this._logoutTimer();
-    }, 60000);
-
-    // verify often for an expired session that we expect
-    window.setInterval(() => {
-      this._updateSessionTimeoutWarning();
-    }, 1000);
-  }
-
-  _updateSessionTimeoutWarning () {
-    const warning = document.getElementById("warning");
-
-    const loginResponseStr = Utils.getStorageItem("session", "login-response", "{}");
-    const loginResponse = JSON.parse(loginResponseStr);
-
-    const expireValue = loginResponse.expire;
-    if (!expireValue) {
-      warning.style.display = "none";
-      return;
-    }
-
-    const leftMillis = expireValue * 1000 - Date.now();
-
-    if (leftMillis <= 0) {
-      warning.style.display = "";
-      warning.innerText = "Logout";
-      // logout, and redirect to login screen
-      this.api.logout().then(() => {
-        window.location.replace(config.NAV_URL + "/login?reason=expired-session");
-        return true;
-      }, () => {
-        window.location.replace(config.NAV_URL + "/login?reason=expired-session");
-        return false;
-      });
-      return;
-    }
-
-    if (leftMillis > 60000) {
-      // warn in the last minute
-      warning.style.display = "none";
-      warning.innerText = "";
-      return;
-    }
-
-    warning.style.display = "";
-    const left = new Date(leftMillis).toISOString();
-    if (left.startsWith("1970-01-01T")) {
-      // remove the date prefix and the millisecond suffix
-      warning.innerText = "Session expires in " + left.substr(11, 8);
-    } else {
-      // stupid fallback
-      warning.innerText = "Session expires in " + leftMillis + " milliseconds";
-    }
-  }
-
-  _logoutTimer () {
-    // are we logged in?
-    const token = Utils.getStorageItem("session", "token");
-    if (!token) {
-      return;
-    }
-
-    // just a random lightweight api call
-    // that is not bound by the api permissions
-    // very old versions of /stats did not properly
-    // detect invalid sessions, but that was fixed
-    const statsPromise = this.api.getStats();
-    // don't act in the callbacks
-    // Api.apiRequest will do all the work
-    statsPromise.then(() => true, () => {
-      this.api.logout().then(() => {
-        window.location.replace(config.NAV_URL + "/login?reason=no-session");
-        return false;
-      });
-    });
+    Router._registerMenuItem("logout", "/logout");
   }
 
   _registerPage (pPage) {
