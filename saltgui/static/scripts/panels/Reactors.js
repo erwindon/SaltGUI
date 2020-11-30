@@ -13,7 +13,6 @@ export class ReactorsPanel extends Panel {
     this.addSearchButton();
     this.addTable(["Event", "Reactors"]);
     this.setTableSortable("Event", "asc");
-    this.setTableClickable();
     this.addMsg();
   }
 
