@@ -111,6 +111,10 @@ export class DropDownMenu {
       button.verifyCallBack = pTitle;
     }
     button.addEventListener("click", (pClickEvent) => {
+      pClickEvent.target.parentElement.style.display = "none";
+      setTimeout(() => {
+        pClickEvent.target.parentElement.style.display = "";
+      }, 500);
       this._callback(pClickEvent, pCallBack, pValue);
     });
     this.menuDropdownContent.appendChild(button);

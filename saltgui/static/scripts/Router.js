@@ -59,14 +59,22 @@ export class Router {
   }
 
   static _registerMenuItem (pButtonId, pUrl) {
-    document.getElementById("button-" + pButtonId + "1").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + pUrl);
-      });
-    document.getElementById("button-" + pButtonId + "2").
-      addEventListener("click", () => {
-        window.location.replace(config.NAV_URL + pUrl);
-      });
+    for (const nr of ["1", "2"]) {
+      document.getElementById("button-" + pButtonId + nr).
+        addEventListener("click", (pClickEvent) => {
+          const panel = pClickEvent.target.parentElement;
+          if (panel.classList.contains("dropdown-content")) {
+            // temporarily hide the panel, won't be visible again
+            // after 500ms because the mouseover caused it to show
+            // also clicking toplevel button cannot do the same
+            panel.style.display = "none";
+            setTimeout(() => {
+              panel.style.display = "";
+            }, 500);
+          }
+          window.location.replace(config.NAV_URL + pUrl);
+        });
+    }
   }
 
   static _registerRouterEventListeners () {
