@@ -19,6 +19,7 @@
   z-index: 10;
   bottom: calc(100% + 8px);
 
+  /* shorten the text when it is too much */
   max-width: 500px;
   overflow: hidden;
   text-overflow: ellipsis;
