@@ -52,15 +52,6 @@ export class OptionsPanel extends Panel {
         [["mode", "full", "simple", "none"]]
       ]
     ];
-
-    // build the controls for all options
-    for (const option of this.options) {
-      const name = option[0];
-      const category = option[1];
-      const defaultValue = option[2];
-      const valuesArr = option[3];
-      this._addOptionRow(name, category, defaultValue, valuesArr);
-    }
   }
 
   _addOptionRow (pName, pCategory, pDefaultValue, pValues = null) {
@@ -171,6 +162,15 @@ export class OptionsPanel extends Panel {
   }
 
   onShow () {
+    // build the controls for all options
+    for (const option of this.options) {
+      const name = option[0];
+      const category = option[1];
+      const defaultValue = option[2];
+      const valuesArr = option[3];
+      this._addOptionRow(name, category, defaultValue, valuesArr);
+    }
+
     const loginResponseStr = Utils.getStorageItem("session", "login-response", "{}");
     const loginResponse = JSON.parse(loginResponseStr);
     const sessionStart = loginResponse.start;
