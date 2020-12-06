@@ -1,6 +1,7 @@
 /* global config document sorttable window */
 
 import {API} from "../Api.js";
+import {Character} from "../Character.js";
 import {CommandBox} from "../CommandBox.js";
 import {DropDownMenu} from "../DropDown.js";
 import {TargetType} from "../TargetType.js";
@@ -58,18 +59,14 @@ export class Panel {
     const span = document.createElement("span");
     span.id = this.key + "-search-button";
     span.classList.add("search-button");
-    // 1F50D = LEFT-POINTING MAGNIFYING GLASS
-    // FE0E = VARIATION SELECTOR-15 (render as text)
-    span.innerHTML = "&#x1F50D;&#xFE0E;";
+    span.innerHTML = Character.LEFT_POINTING_MAGNIFYING_GLASS_MONO;
     this.div.appendChild(span);
     this.searchButton = span;
   }
 
   addPlayPauseButton (pInitialStatus) {
     const playButton = document.createElement("span");
-    // 25B6 = BLACK RIGHT-POINTING TRIANGLE (play)
-    // FE0E = VARIATION SELECTOR-15 (render as text)
-    playButton.innerHTML = "&#x25B6;&#xFE0E;";
+    playButton.innerHTML = Character.CH_PLAY_MONO;
     playButton.style.cursor = "pointer";
     playButton.style.fontSize = "x-large";
     playButton.style.display = pInitialStatus === "play" ? "none" : "";
@@ -77,9 +74,7 @@ export class Panel {
     this.playButton = playButton;
 
     const pauseButton = document.createElement("span");
-    // 23F8 = DOUBLE VERTICAL BAR (pause)
-    // FE0E = VARIATION SELECTOR-15 (render as text)
-    pauseButton.innerHTML = "&#x23F8;&#xFE0E;";
+    pauseButton.innerHTML = Character.CH_PAUSE_MONO;
     pauseButton.style.display = "none";
     pauseButton.style.cursor = "pointer";
     pauseButton.style.fontSize = "x-large";
@@ -107,9 +102,7 @@ export class Panel {
     const span = document.createElement("span");
     span.id = this.key + "-help-button";
     span.classList.add("nearly-visible-button");
-    // 2753 = BLACK QUESTION MARK ORNAMENT
-    // FE0E = VARIATION SELECTOR-15 (render as text)
-    span.innerHTML = "&#x2753;&#xFE0E;";
+    span.innerHTML = Character.BLACK_QUESTION_MARK_ORNAMENT_MONO;
     span.style.cssFloat = "right";
     span.style.cursor = "help";
     this.div.appendChild(span);
@@ -121,9 +114,7 @@ export class Panel {
     const span = document.createElement("span");
     span.id = this.key + "-close-button";
     span.classList.add("nearly-visible-button");
-    // 2716 = HEAVY MULTIPLICATION X
-    // FE0E = VARIATION SELECTOR-15 (render as text)
-    span.innerHTML = "&#x2716;&#xFE0E;";
+    span.innerHTML = Character.HEAVY_MULTIPLICATION_X_MONO;
     span.style.cssFloat = "right";
     this.div.appendChild(span);
 

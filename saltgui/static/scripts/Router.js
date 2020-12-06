@@ -3,6 +3,7 @@
 import {API} from "./Api.js";
 import {BeaconsMinionPage} from "./pages/BeaconsMinion.js";
 import {BeaconsPage} from "./pages/Beacons.js";
+import {Character} from "./Character.js";
 import {CommandBox} from "./CommandBox.js";
 import {EventsPage} from "./pages/Events.js";
 import {GrainsMinionPage} from "./pages/GrainsMinion.js";
@@ -25,6 +26,8 @@ import {Utils} from "./Utils.js";
 export class Router {
 
   constructor () {
+    Character.init();
+
     this.api = new API();
     this.commandbox = new CommandBox(this, this.api);
     this.currentPage = undefined;

@@ -1,5 +1,6 @@
 /* global console document */
 
+import {Character} from "./Character.js";
 import {DropDownMenu} from "./DropDown.js";
 import {Utils} from "./Utils.js";
 
@@ -80,8 +81,7 @@ export class TargetType {
       let menuItemText = menuItems[i].innerText;
       menuItemText = menuItemText.replace(/^. /, "");
       if (menuItems[i]._value === targetType) {
-        // 25CF = BLACK CIRCLE
-        menuItemText = "\u25CF " + menuItemText;
+        menuItemText = Character.BLACK_CIRCLE + " " + menuItemText;
       }
       menuItems[i].innerText = menuItemText;
     }

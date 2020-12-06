@@ -1,6 +1,7 @@
 /* global document */
 
 import {BeaconsPanel} from "./Beacons.js";
+import {Character} from "../Character.js";
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
@@ -47,9 +48,7 @@ export class BeaconsMinionPanel extends Panel {
       "No beacons", "{0} beacon", "{0} beacons");
 
     if (this.playOrPause === "pause") {
-      // 25B6 = BLACK RIGHT-POINTING TRIANGLE (play)
-      // FE0E = VARIATION SELECTOR-15 (render as text)
-      txt += ", press '&#x25B6;&#xFE0E;' to continue";
+      txt += ", press '" + Character.CH_PLAY_MONO + "' to continue";
     }
 
     this.setMsg(txt, true);
@@ -139,9 +138,7 @@ export class BeaconsMinionPanel extends Panel {
 
       const helpButtonTd = Utils.createTd("help-button");
       const helpButtonSpan = Utils.createSpan("nearly-visible-button", "", this.key + "-" + beaconName + "-help-button");
-      // 2753 = BLACK QUESTION MARK ORNAMENT
-      // FE0E = VARIATION SELECTOR-15 (render as text)
-      helpButtonSpan.innerHTML = "&#x2753;&#xFE0E;";
+      helpButtonSpan.innerHTML = Character.BLACK_QUESTION_MARK_ORNAMENT_MONO;
       helpButtonSpan.style.display = "none";
       helpButtonSpan.style.cursor = "help";
       helpButtonTd.appendChild(helpButtonSpan);

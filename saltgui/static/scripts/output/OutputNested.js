@@ -1,3 +1,5 @@
+import {Character} from "../Character.js";
+
 export class OutputNested {
 
   // heavily inspired by the implementation for NESTED output
@@ -32,15 +34,13 @@ export class OutputNested {
           pOutArray.push(OutputNested._ustring(pIndent, "|_"));
           let prefix;
           if (Array.isArray(ind)) {
-            // 00A0 = NO-BREAK SPACE
-            prefix = "-\u00A0";
+            prefix = "-" + Character.NO_BREAK_SPACE;
           } else {
             prefix = "";
           }
           OutputNested.display(ind, pIndent + 2, prefix, pOutArray);
         } else {
-          // 00A0 = NO-BREAK SPACE
-          OutputNested.display(ind, pIndent, "-\u00A0", pOutArray);
+          OutputNested.display(ind, pIndent, "-" + Character.NO_BREAK_SPACE, pOutArray);
         }
       }
     } else if (typeof pValue === "object") {

@@ -2,6 +2,7 @@
 
 // documentation utilities
 
+import {Character} from "./Character.js";
 import {CommandBox} from "./CommandBox.js";
 import {ParseCommandLine} from "./ParseCommandLine.js";
 import {TargetType} from "./TargetType.js";
@@ -23,7 +24,7 @@ export class Documentation {
       () => Documentation._manualRunMenuHtmlDocRun());
 
     Documentation.DOCUMENTATION_URL = "https://docs.saltstack.com/en/latest/ref/";
-    Documentation.EXTERNAL_LINK = "&nbsp;<img src='static/images/externallink.png' style='width:12px'>";
+    Documentation.EXTERNAL_LINK = "&nbsp;" + Character.EXTERNAL_LINK_IMG;
 
     Documentation.PROVIDERS = { };
   }

@@ -1,5 +1,6 @@
 /* global */
 
+import {Character} from "../Character.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
 
@@ -230,9 +231,7 @@ export class JobsPanel extends Panel {
       "", ", {0} job present", ", {0} jobs present");
 
     if (this.playOrPause === "pause") {
-      // 25B6 = BLACK RIGHT-POINTING TRIANGLE (play)
-      // FE0E = VARIATION SELECTOR-15 (render as text)
-      txt += ", press '\u25B6\uFE0E' to continue";
+      txt += ", press '" + Character.CH_PLAY_MONO + "' to continue";
     }
 
     this.setMsg(txt);

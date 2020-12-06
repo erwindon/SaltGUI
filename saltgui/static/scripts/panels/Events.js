@@ -1,5 +1,6 @@
 /* global document */
 
+import {Character} from "../Character.js";
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
@@ -41,13 +42,9 @@ export class EventsPanel extends Panel {
       }
     } else {
       if (tbody.rows.length) {
-        // 25B6 = BLACK RIGHT-POINTING TRIANGLE (play)
-        // FE0E = VARIATION SELECTOR-15 (render as text)
-        txt += ", press '&#x25B6;&#xFE0E;' to continue";
+        txt += ", press '" + Character.CH_PLAY_MONO + "' to continue";
       } else {
-        // 25B6 = BLACK RIGHT-POINTING TRIANGLE (play)
-        // FE0E = VARIATION SELECTOR-15 (render as text)
-        txt += ", press '&#x25B6;&#xFE0E;' to begin";
+        txt += ", press '" + Character.CH_PLAY_MONO + "' to begin";
       }
     }
     /* eslint-enable no-lonely-if */

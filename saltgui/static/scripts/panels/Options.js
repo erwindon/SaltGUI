@@ -1,5 +1,6 @@
 /* global document */
 
+import {Character} from "../Character.js";
 import {OutputYaml} from "../output/OutputYaml.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
@@ -251,8 +252,7 @@ export class OptionsPanel extends Panel {
     if (valueStr === undefined) {
       const tr = this.div.querySelector("#option-" + id);
       if (tr.dataset.defaultValue) {
-        // 2192 = RIGHTWARDS ARROW
-        return "(undefined) \u2192 " + tr.dataset.defaultValue;
+        return "(undefined) " + Character.RIGHTWARDS_ARROW + " " + tr.dataset.defaultValue;
       }
       return "(undefined)";
     }

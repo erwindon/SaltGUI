@@ -1,3 +1,5 @@
+import {Character} from "../Character.js";
+
 export class OutputYaml {
 
   // format an object as YAML
@@ -95,8 +97,7 @@ export class OutputYaml {
       let aOut = "";
       let aSeparator = "";
       for (const item of pValue) {
-        // 00A0 = NO-BREAK SPACE
-        aOut += aSeparator + "-\u00A0" + OutputYaml.formatYAML(item, pIndentLevel + 2);
+        aOut += aSeparator + "-" + Character.NO_BREAK_SPACE + OutputYaml.formatYAML(item, pIndentLevel + 2);
         aSeparator = "\n" + " ".repeat(pIndentLevel);
       }
       return aOut;
