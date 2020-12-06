@@ -12,10 +12,6 @@ export class JobPage extends Page {
     super.addPanel(this.job);
   }
 
-  onShow () {
-    this.job.onShow();
-  }
-
   handleSaltJobRetEvent (pData) {
     this.job.handleSaltJobRetEvent(pData);
   }

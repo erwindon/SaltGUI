@@ -15,11 +15,6 @@ export class BeaconsPage extends Page {
     super.addPanel(this.jobs);
   }
 
-  onShow () {
-    this.beacons.onShow();
-    this.jobs.onShow();
-  }
-
   handleSaltJobRetEvent (pData) {
     this.jobs.handleSaltJobRetEvent(pData);
   }

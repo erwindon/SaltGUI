@@ -26,6 +26,9 @@ export class Page {
       this.menuItemElement1 = document.getElementById(pMenuItemSelector + "1");
       this.menuItemElement2 = document.getElementById(pMenuItemSelector + "2");
     }
+
+    this.panels = [];
+    this.api = pRouter.api;
   }
 
   static _getIpNumberPrefixes (pAllMinionsGrains) {
@@ -113,10 +116,18 @@ export class Page {
     pPanel.router = this.router;
     const dashboard = this.pageElement.querySelector(".dashboard");
     dashboard.append(pPanel.div);
+    pPanel.api = this.api;
+    this.panels.push(pPanel);
   }
 
   static isVisible () {
     // a page is visible, unless the page decides otherwise
     return true;
+  }
+
+  onShow () {
+    for (const panel of this.panels) {
+      panel.onShow();
+    }
   }
 }

@@ -12,8 +12,4 @@ export class LoginPage extends Page {
     this.login.router = pRouter;
     super.addPanel(this.login);
   }
-
-  onShow () {
-    this.login.onShow();
-  }
 }

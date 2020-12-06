@@ -16,11 +16,6 @@ export class TemplatesPage extends Page {
     super.addPanel(this.jobs);
   }
 
-  onShow () {
-    this.templates.onShow();
-    this.jobs.onShow();
-  }
-
   handleSaltJobRetEvent (pData) {
     this.jobs.handleSaltJobRetEvent(pData);
   }

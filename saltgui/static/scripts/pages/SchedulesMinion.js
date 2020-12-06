@@ -15,11 +15,6 @@ export class SchedulesMinionPage extends Page {
     super.addPanel(this.jobs);
   }
 
-  onShow () {
-    this.schedulesminion.onShow();
-    this.jobs.onShow();
-  }
-
   handleSaltJobRetEvent (pData) {
     this.jobs.handleSaltJobRetEvent(pData);
   }

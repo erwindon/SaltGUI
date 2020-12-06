@@ -13,10 +13,6 @@ export class EventsPage extends Page {
     super.addPanel(this.events);
   }
 
-  onShow () {
-    this.events.onShow();
-  }
-
   handleAnyEvent (tag, data) {
     this.events.handleAnyEvent(tag, data);
   }

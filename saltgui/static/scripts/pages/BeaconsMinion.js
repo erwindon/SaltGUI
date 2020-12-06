@@ -15,11 +15,6 @@ export class BeaconsMinionPage extends Page {
     super.addPanel(this.jobs);
   }
 
-  onShow () {
-    this.beaconsminion.onShow();
-    this.jobs.onShow();
-  }
-
   handleSaltBeaconEvent (pTag, pData) {
     this.beaconsminion.handleSaltBeaconEvent(pTag, pData);
   }

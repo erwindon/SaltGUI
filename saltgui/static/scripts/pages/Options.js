@@ -14,9 +14,4 @@ export class OptionsPage extends Page {
     this.stats = new StatsPanel();
     super.addPanel(this.stats);
   }
-
-  onShow () {
-    this.options.onShow();
-    this.stats.onShow();
-  }
 }

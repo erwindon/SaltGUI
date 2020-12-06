@@ -15,11 +15,6 @@ export class KeysPage extends Page {
     super.addPanel(this.jobs);
   }
 
-  onShow () {
-    this.keys.onShow();
-    this.jobs.onShow();
-  }
-
   handleSaltAuthEvent (pData) {
     this.keys.handleSaltAuthEvent(pData);
   }

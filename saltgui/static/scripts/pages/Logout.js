@@ -23,7 +23,7 @@ export class LogoutPage extends Page {
   }
 
   onShow () {
-    this.router.api.logout().then(() => {
+    this.api.logout().then(() => {
       window.location.replace(config.NAV_URL + "/login?reason=logout");
     });
   }
@@ -39,11 +39,11 @@ export class LogoutPage extends Page {
     // that is not bound by the api permissions
     // very old versions of /stats did not properly
     // detect invalid sessions, but that was fixed
-    const statsPromise = this.router.api.getStats();
+    const statsPromise = this.api.getStats();
     // don't act in the callbacks
     // Api.apiRequest will do all the work
     statsPromise.then(() => true, () => {
-      this.router.api.logout().then(() => {
+      this.api.logout().then(() => {
         window.location.replace(config.NAV_URL + "/login?reason=no-session");
         return false;
       });
@@ -68,7 +68,7 @@ export class LogoutPage extends Page {
       warning.style.display = "";
       warning.innerText = "Logout";
       // logout, and redirect to login screen
-      this.router.api.logout().then(() => {
+      this.api.logout().then(() => {
         window.location.replace(config.NAV_URL + "/login?reason=expired-session");
         return true;
       }, () => {
