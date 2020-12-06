@@ -181,5 +181,4 @@ export class ParseCommandLine {
     // succesfull (no error message return)
     return null;
   }
-
 }

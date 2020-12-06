@@ -56,5 +56,4 @@ export class RunType {
     }
     return runType;
   }
-
 }

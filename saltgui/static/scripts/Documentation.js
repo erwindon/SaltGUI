@@ -395,5 +395,4 @@ export class Documentation {
     const output = document.querySelector(".run-command pre");
     output.innerHTML = html;
   }
-
 }
