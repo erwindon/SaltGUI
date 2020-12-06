@@ -110,10 +110,6 @@ export class MinionsPanel extends Panel {
     const menu = new DropDownMenu(minionTr);
     this._addMenuItemStateApply(menu, pMinionId);
     this._addMenuItemStateApplyTest(menu, pMinionId);
-
-    minionTr.addEventListener("click", (pClickEvent) => {
-      this.runCommand(pClickEvent, pMinionId, "state.apply");
-    });
   }
 
   _addMenuItemStateApply (pMenu, pMinionId) {
