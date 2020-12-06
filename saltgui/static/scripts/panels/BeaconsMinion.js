@@ -111,11 +111,11 @@ export class BeaconsMinionPanel extends Panel {
       let initialValue = "";
       if (beacons.enabled === false) {
         beaconConfigTd.classList.add("beacon-disabled");
-        initialValue += "\n(beacons disabled)";
+        initialValue += "\n(beacons" + Character.NO_BREAK_SPACE + "disabled)";
       }
       if (beacon.enabled === false) {
         beaconConfigTd.classList.add("beacon-disabled");
-        initialValue += "\n(beacon disabled)";
+        initialValue += "\n(beacon" + Character.NO_BREAK_SPACE + "disabled)";
       }
       tr.appendChild(beaconConfigTd);
 
