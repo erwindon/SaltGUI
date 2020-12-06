@@ -8,9 +8,9 @@ export class Character {
     Character.NO_BREAK_SPACE = "\u00A0";
     Character.NON_BREAKING_HYPHEN = "\u2011";
     Character.HORIZONTAL_ELLIPSIS = "\u2026";
-    Character.UPWARDS_ARROW = "\u2191";
+    Character._UPWARDS_ARROW = "\u2191";
     Character.RIGHTWARDS_ARROW = "\u2192";
-    Character.DOWNWARDS_ARROW = "\u2193";
+    Character._DOWNWARDS_ARROW = "\u2193";
     Character.CLOCKWISE_OPEN_CIRCLE_ARROW = "\u21BB";
     Character._MATHEMATICAL_OPERATOR_IDENTICAL_TO = "\u2261";
     Character.HOURGLASS_WITH_FLOWING_SAND_MONO =
@@ -47,6 +47,9 @@ export class Character {
     // Character.PLAY = Character._BLACK_RIGHT_POINTING_TRIANGLE_MONO;
     // slightly smaller glyph
     Character.CH_PLAY_MONO = Character._BLACK_MEDIUM_RIGHT_POINTING_TRIANGLE;
+
+    Character.CH_SORT_NORMAL = Character._DOWNWARDS_ARROW;
+    Character.CH_SORT_REVERSE = Character._UPWARDS_ARROW;
 
     // Images
     Character.EXTERNAL_LINK_IMG = "<img src='static/images/externallink.png' width='12px'>";

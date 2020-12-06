@@ -75,13 +75,13 @@ export class SortTable {
       clickElement.classList.add("sorttable_sorted_reverse");
       sortrevind = document.createElement('span');
       sortrevind.id = "sorttable_sortrevind";
-      sortrevind.innerHTML = '&nbsp;' + Character.UPWARDS_ARROW;
+      sortrevind.innerHTML = '&nbsp;' + Character.CH_SORT_REVERSE;
       clickElement.appendChild(sortrevind);
     } else {
       clickElement.classList.add("sorttable_sorted");
       sortfwdind = document.createElement('span');
       sortfwdind.id = "sorttable_sortfwdind";
-      sortfwdind.innerHTML = '&nbsp;' + Character.DOWNWARDS_ARROW;
+      sortfwdind.innerHTML = '&nbsp;' + Character.CH_SORT_NORMAL;
       clickElement.appendChild(sortfwdind);
     }
 
