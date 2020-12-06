@@ -1,9 +1,10 @@
-/* global config document sorttable window */
+/* global config document window */
 
 import {API} from "../Api.js";
 import {Character} from "../Character.js";
 import {CommandBox} from "../CommandBox.js";
 import {DropDownMenu} from "../DropDown.js";
+import {SortTable} from "../../sorttable/sorttable.js";
 import {TargetType} from "../TargetType.js";
 import {Utils} from "../Utils.js";
 
@@ -170,7 +171,7 @@ export class Panel {
   }
 
   setTableSortable (pColumnName, pDirection = "asc") {
-    sorttable.makeSortable(this.table);
+    SortTable.makeSortable(this.table);
 
     const thArr = this.table.querySelectorAll("thead tr th");
     // const thArr = Array.prototype.slice.call(pStartElement.querySelectorAll("thead th"));
@@ -183,9 +184,9 @@ export class Panel {
       if (th.innerText === pColumnName) {
         // we do not expect any rows in the table at this moment
         // but sorting is applied to show the sorting indicator
-        sorttable.innerSortFunction.apply(th, []);
+        SortTable.innerSortFunction(th);
         if (pDirection === "desc") {
-          sorttable.innerSortFunction.apply(th, []);
+          SortTable.innerSortFunction(th);
         }
       }
 
