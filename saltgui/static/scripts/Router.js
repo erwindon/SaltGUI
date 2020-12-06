@@ -127,9 +127,6 @@ export class Router {
   }
 
   goTo (pPath, hasPathPrefix = false) {
-    if (this.switchingPage) {
-      return;
-    }
     if (window.location.pathname === config.NAV_URL + pPath && this.currentPage) {
       return;
     }
@@ -191,8 +188,6 @@ export class Router {
       elem2.classList.add("menu-item-active");
     }
 
-    this.switchingPage = true;
-
     pPage.onShow();
 
     // start the event-pipe (again)
@@ -205,7 +200,6 @@ export class Router {
 
     this.currentPage = pPage;
     this.currentPage.pageElement.classList.add("current");
-    this.switchingPage = false;
   }
 
   static _hidePage (pPage) {
