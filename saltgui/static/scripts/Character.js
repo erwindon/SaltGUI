@@ -44,7 +44,7 @@ export class Character {
     Character.CH_HAMBURGER = Character._MATHEMATICAL_OPERATOR_IDENTICAL_TO;
     Character.CH_PAUSE_MONO = Character._DOUBLE_VERTICAL_BAR_MONO;
     // 'official' play-button
-    // Character.PLAY = Character._BLACK_RIGHT_POINTING_TRIANGLE_MONO;
+    // Character.CH_PLAY_MONO = Character._BLACK_RIGHT_POINTING_TRIANGLE_MONO;
     // slightly smaller glyph
     Character.CH_PLAY_MONO = Character._BLACK_MEDIUM_RIGHT_POINTING_TRIANGLE;
 
