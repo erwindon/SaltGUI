@@ -138,7 +138,7 @@ export class BeaconsMinionPanel extends Panel {
 
       const helpButtonTd = Utils.createTd("help-button");
       const helpButtonSpan = Utils.createSpan("nearly-visible-button", "", this.key + "-" + beaconName + "-help-button");
-      helpButtonSpan.innerHTML = Character.BLACK_QUESTION_MARK_ORNAMENT_MONO;
+      helpButtonSpan.innerText = Character.BLACK_QUESTION_MARK_ORNAMENT_MONO;
       helpButtonSpan.style.display = "none";
       helpButtonSpan.style.cursor = "help";
       helpButtonTd.appendChild(helpButtonSpan);

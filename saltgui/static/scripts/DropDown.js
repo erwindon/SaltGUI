@@ -5,7 +5,7 @@ import {Utils} from "./Utils.js";
 // 1: the title
 //    menu items that are always useable are just plain text
 //    but it may be a callback function which:
-//    a) sets the title using pMenuItem.innerHTML = "xyz"
+//    a) sets the title using pMenuItem.innerText = "xyz"
 //    b) arranges the visibility using pMenuItem.style.display = true/false
 // 2: the callback function
 //    called when the menu item is selected: (pClickEvent) => { ... }
@@ -71,7 +71,7 @@ export class DropDownMenu {
             chld.style.display = "none";
             continue;
           }
-          chld.innerHTML = DropDownMenu._sanitizeMenuItemTitle(title);
+          chld.innerText = DropDownMenu._sanitizeMenuItemTitle(title);
           chld.style.removeProperty("display");
         }
         visibleCount += 1;
@@ -94,7 +94,7 @@ export class DropDownMenu {
   // Runs the given callback function when selected
   // When the title is actually a function then this
   // function is called each time the menu opens
-  // This allows dynamic menuitem titles (use menuitem.innerText/innerHTML)
+  // This allows dynamic menuitem titles (use menuitem.innerText)
   // or visibility (use menuitem.style.display = "none"/"inline-block")
   addMenuItem (pTitle, pCallBack, pValue) {
     const button = Utils.createDiv("run-command-button", "...");
@@ -102,7 +102,7 @@ export class DropDownMenu {
       button._value = pValue;
     }
     if (typeof pTitle === "string") {
-      button.innerHTML = DropDownMenu._sanitizeMenuItemTitle(pTitle);
+      button.innerText = DropDownMenu._sanitizeMenuItemTitle(pTitle);
     } else {
       button.verifyCallBack = pTitle;
     }
@@ -128,7 +128,7 @@ export class DropDownMenu {
     // Setting the title implies that we are interested
     // in the menu values, rather than their actions.
     // Use a slightly different clue for that.
-    this.menuButton.innerHTML = DropDownMenu._sanitizeMenuItemTitle(pTitle + " " + Character.BLACK_DOWN_POINTING_TRIANGLE);
+    this.menuButton.innerText = DropDownMenu._sanitizeMenuItemTitle(pTitle + " " + Character.BLACK_DOWN_POINTING_TRIANGLE);
   }
 
   __showMenu () {

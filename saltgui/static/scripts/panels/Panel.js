@@ -60,14 +60,14 @@ export class Panel {
     const span = document.createElement("span");
     span.id = this.key + "-search-button";
     span.classList.add("search-button");
-    span.innerHTML = Character.LEFT_POINTING_MAGNIFYING_GLASS_MONO;
+    span.innerText = Character.LEFT_POINTING_MAGNIFYING_GLASS_MONO;
     this.div.appendChild(span);
     this.searchButton = span;
   }
 
   addPlayPauseButton (pInitialStatus) {
     const playButton = document.createElement("span");
-    playButton.innerHTML = Character.CH_PLAY_MONO;
+    playButton.innerText = Character.CH_PLAY_MONO;
     playButton.style.cursor = "pointer";
     playButton.style.fontSize = "x-large";
     playButton.style.display = pInitialStatus === "play" ? "none" : "";
@@ -75,7 +75,7 @@ export class Panel {
     this.playButton = playButton;
 
     const pauseButton = document.createElement("span");
-    pauseButton.innerHTML = Character.CH_PAUSE_MONO;
+    pauseButton.innerText = Character.CH_PAUSE_MONO;
     pauseButton.style.display = "none";
     pauseButton.style.cursor = "pointer";
     pauseButton.style.fontSize = "x-large";
@@ -103,7 +103,7 @@ export class Panel {
     const span = document.createElement("span");
     span.id = this.key + "-help-button";
     span.classList.add("nearly-visible-button");
-    span.innerHTML = Character.BLACK_QUESTION_MARK_ORNAMENT_MONO;
+    span.innerText = Character.BLACK_QUESTION_MARK_ORNAMENT_MONO;
     span.style.cssFloat = "right";
     span.style.cursor = "help";
     this.div.appendChild(span);
@@ -115,7 +115,7 @@ export class Panel {
     const span = document.createElement("span");
     span.id = this.key + "-close-button";
     span.classList.add("nearly-visible-button");
-    span.innerHTML = Character.HEAVY_MULTIPLICATION_X_MONO;
+    span.innerText = Character.HEAVY_MULTIPLICATION_X_MONO;
     span.style.cssFloat = "right";
     this.div.appendChild(span);
 
@@ -138,7 +138,7 @@ export class Panel {
       for (const columnName of pColumnNames) {
         const th = document.createElement("th");
         if (columnName && !columnName.startsWith("-")) {
-          th.innerHTML = columnName;
+          th.innerText = columnName;
         } else {
           th.classList.add("sorttable_nosort");
         }
