@@ -85,7 +85,7 @@ export class DropDownMenu {
 
   static _sanitizeMenuItemTitle (pTitle) {
     return pTitle.
-      replace(" ", "&nbsp;").
+      replace(" ", Character.NO_BREAK_SPACE).
       replace("-", Character.NON_BREAKING_HYPHEN).
       replace("...", Character.HORIZONTAL_ELLIPSIS);
   }

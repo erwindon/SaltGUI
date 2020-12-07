@@ -24,7 +24,7 @@ export class Documentation {
       () => Documentation._manualRunMenuHtmlDocRun());
 
     Documentation.DOCUMENTATION_URL = "https://docs.saltstack.com/en/latest/ref/";
-    Documentation.EXTERNAL_LINK = "&nbsp;" + Character.EXTERNAL_LINK_IMG;
+    Documentation.EXTERNAL_LINK = Character.NO_BREAK_SPACE + Character.EXTERNAL_LINK_IMG;
 
     Documentation.PROVIDERS = { };
   }
@@ -308,7 +308,7 @@ export class Documentation {
     if (concreteModules.length > 1) {
       // only useful to indent level 3 information
       // when there are multiple instances available
-      indent = "&nbsp;&nbsp;";
+      indent = Character.NO_BREAK_SPACE + Character.NO_BREAK_SPACE;
     }
 
     for (const concreteModule of concreteModules) {

@@ -453,7 +453,7 @@ export class Utils {
 
   static createJobStatusSpan (pJobId) {
     const span = Utils.createSpan("", "", "status" + pJobId);
-    span.innerHTML = Character.CLOCKWISE_OPEN_CIRCLE_ARROW + "&nbsp;";
+    span.innerText = Character.CLOCKWISE_OPEN_CIRCLE_ARROW + Character.NO_BREAK_SPACE;
     span.style.display = "none";
     span.style.fontWeight = "bold";
     return span;
