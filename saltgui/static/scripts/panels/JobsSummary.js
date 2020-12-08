@@ -1,4 +1,4 @@
-/* global config document window */
+/* global document */
 
 import {DropDownMenu} from "../DropDown.js";
 import {JobsPanel} from "./Jobs.js";
@@ -61,20 +61,20 @@ export class JobsSummaryPanel extends JobsPanel {
     tr.appendChild(td);
 
     const menu = new DropDownMenu(tr);
-    JobsSummaryPanel._addPageMenuItemShowDetails(menu, job);
+    this._addPageMenuItemShowDetails(menu, job);
     this._addPageMenuItemUpdateStatus(menu, statusSpan);
 
     const tbody = this.table.tBodies[0];
     tbody.appendChild(tr);
 
     tr.addEventListener("click", () => {
-      window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
+      this.router.goTo("job", {"id": job.id});
     });
   }
 
-  static _addPageMenuItemShowDetails (pMenu, job) {
+  _addPageMenuItemShowDetails (pMenu, job) {
     pMenu.addMenuItem("Show details", () => {
-      window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
+      this.router.goTo("job", {"id": job.id});
     });
   }
 

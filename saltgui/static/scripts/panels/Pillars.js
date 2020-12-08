@@ -1,4 +1,4 @@
-/* global config window */
+/* global */
 
 import {DropDownMenu} from "../DropDown.js";
 import {Panel} from "./Panel.js";
@@ -58,7 +58,7 @@ export class PillarsPanel extends Panel {
       PillarsPanel._addMenuItemShowPillars(menu, minionId);
 
       minionTr.addEventListener("click", () => {
-        window.location.assign("pillars-minion?minionid=" + encodeURIComponent(minionId));
+        this.router.goTo("pillars-minion", {"minionid": minionId});
       });
     }
 
@@ -101,15 +101,11 @@ export class PillarsPanel extends Panel {
 
     const menu = new DropDownMenu(minionTr);
     PillarsPanel._addMenuItemShowPillars(menu, pMinionId);
-
-    minionTr.addEventListener("click", () => {
-      window.location.assign(config.NAV_URL + "/pillars-minion?minionid=" + encodeURIComponent(pMinionId));
-    });
   }
 
   static _addMenuItemShowPillars (pMenu, pMinionId) {
     pMenu.addMenuItem("Show pillars", () => {
-      window.location.assign(config.NAV_URL + "/pillars-minion?minionid=" + encodeURIComponent(pMinionId));
+      this.router.goTo("pillars-minion", {"minionid": pMinionId});
     });
   }
 }

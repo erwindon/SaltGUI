@@ -39,7 +39,7 @@ export class SchedulesMinionPanel extends Panel {
   }
 
   _handleLocalScheduleList (pLocalScheduleList, pMinionId) {
-    if (this.showErrorRowInstead(pLocalScheduleList)) {
+    if (this.showErrorRowInstead(pLocalScheduleList, pMinionId)) {
       return;
     }
 

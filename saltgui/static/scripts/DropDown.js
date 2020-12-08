@@ -139,4 +139,9 @@ export class DropDownMenu {
     this.menuDropdown.style.display = "none";
   }
 
+  clearMenu () {
+    while (this.menuDropdownContent.firstChild) {
+      this.menuDropdownContent.removeChild(this.menuDropdownContent.firstChild);
+    }
+  }
 }

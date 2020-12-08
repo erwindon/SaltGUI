@@ -39,7 +39,7 @@ export class PillarsMinionPanel extends Panel {
   _handleLocalPillarItems (pLocalPillarItemsData, pMinionId) {
     this._addMenuItemSaltUtilRefreshPillar(pMinionId);
 
-    if (this.showErrorRowInstead(pLocalPillarItemsData)) {
+    if (this.showErrorRowInstead(pLocalPillarItemsData, pMinionId)) {
       return;
     }
 

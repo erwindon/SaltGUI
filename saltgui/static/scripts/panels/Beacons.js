@@ -1,4 +1,4 @@
-/* global config window */
+/* global */
 
 import {DropDownMenu} from "../DropDown.js";
 import {Panel} from "./Panel.js";
@@ -96,7 +96,7 @@ export class BeaconsPanel extends Panel {
       BeaconsPanel._addMenuItemShowBeacons(menu, minionId);
 
       minionTr.addEventListener("click", () => {
-        window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(minionId));
+        this.router.goTo("beacons-minion", {"minionid": minionId});
       });
     }
 
@@ -141,15 +141,11 @@ export class BeaconsPanel extends Panel {
 
     const menu = new DropDownMenu(minionTr);
     BeaconsPanel._addMenuItemShowBeacons(menu, pMinionId);
-
-    minionTr.addEventListener("click", () => {
-      window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(pMinionId));
-    });
   }
 
   static _addMenuItemShowBeacons (pMenu, pMinionId) {
     pMenu.addMenuItem("Show beacons", () => {
-      window.location.assign(config.NAV_URL + "/beacons-minion?minionid=" + encodeURIComponent(pMinionId));
+      this.router.goTo("beacons-minion", {"minionid": pMinionId});
     });
   }
 }

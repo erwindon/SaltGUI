@@ -1,4 +1,4 @@
-/* global config document window */
+/* global document window */
 
 import {API} from "./Api.js";
 import {BeaconsMinionPage} from "./pages/BeaconsMinion.js";
@@ -29,6 +29,7 @@ export class Router {
     Character.init();
 
     this.api = new API();
+    this.api.router = this;
     this.commandbox = new CommandBox(this, this.api);
     this.currentPage = undefined;
     this.pages = [];
@@ -52,16 +53,20 @@ export class Router {
     this._registerPage(this.optionsPage = new OptionsPage(this));
     this._registerPage(new LogoutPage(this));
 
-    Router._registerRouterEventListeners();
+    this._registerRouterEventListeners();
 
     this.updateMainMenu();
 
-    // This URL already has its prefix added
-    // therefore is must not be added again
-    this.goTo(window.location.pathname + window.location.search, true);
+    const hash = window.location.hash.replace(/^#/, "");
+    const search = window.location.search;
+    /* eslint-disable compat/compat */
+    /* URLSearchParams.entries() is not supported in IE 11 */
+    /* URLSearchParams is not supported in op_mini all, IE 11, Baidu 7.12 */
+    this.goTo(hash, Object.fromEntries(new URLSearchParams(search)));
+    /* eslint-enable compat/compat */
   }
 
-  static _registerMenuItem (pButtonId, pUrl) {
+  _registerMenuItem (pButtonId, pHash) {
     for (const nr of ["1", "2"]) {
       document.getElementById("button-" + pButtonId + nr).
         addEventListener("click", (pClickEvent) => {
@@ -75,32 +80,42 @@ export class Router {
               panel.style.display = "";
             }, 500);
           }
-          window.location.replace(config.NAV_URL + pUrl);
+          this.goTo(pHash);
         });
     }
   }
 
-  static _registerRouterEventListeners () {
+  _registerRouterEventListeners () {
     document.getElementById("logo").
       addEventListener("click", () => {
         if (window.event.ctrlKey) {
-          window.location.assign(config.NAV_URL + "/options");
+          this.goTo("options");
         } else {
-          window.location.assign(config.NAV_URL + "/");
+          this.goTo("");
         }
       });
 
-    Router._registerMenuItem("minions", "/");
-    Router._registerMenuItem("grains", "/grains");
-    Router._registerMenuItem("schedules", "/schedules");
-    Router._registerMenuItem("pillars", "/pillars");
-    Router._registerMenuItem("beacons", "/beacons");
-    Router._registerMenuItem("keys", "/keys");
-    Router._registerMenuItem("jobs", "/jobs");
-    Router._registerMenuItem("templates", "/templates");
-    Router._registerMenuItem("events", "/eventsview");
-    Router._registerMenuItem("reactors", "/reactors");
-    Router._registerMenuItem("logout", "/logout");
+    addEventListener("popstate", (popstate) => {
+      const hash = popstate.target.location.hash.replace(/^#/, "");
+      const search = popstate.target.location.search;
+      /* eslint-disable compat/compat */
+      /* URLSearchParams.entries() is not supported in IE 11 */
+      /* URLSearchParams is not supported in op_mini all, IE 11, Baidu 7.12 */
+      this.goTo(hash, Object.fromEntries(new URLSearchParams(search)), 2);
+      /* eslint-enable compat/compat */
+    });
+
+    this._registerMenuItem("minions", "");
+    this._registerMenuItem("grains", "grains");
+    this._registerMenuItem("schedules", "schedules");
+    this._registerMenuItem("pillars", "pillars");
+    this._registerMenuItem("beacons", "beacons");
+    this._registerMenuItem("keys", "keys");
+    this._registerMenuItem("jobs", "jobs");
+    this._registerMenuItem("templates", "templates");
+    this._registerMenuItem("events", "eventsview");
+    this._registerMenuItem("reactors", "reactors");
+    this._registerMenuItem("logout", "logout");
   }
 
   _registerPage (pPage) {
@@ -126,33 +141,66 @@ export class Router {
     }
   }
 
-  goTo (pPath, hasPathPrefix = false) {
-    if (window.location.pathname === config.NAV_URL + pPath && this.currentPage) {
-      return;
-    }
-    if (pPath === "/" && Utils.getStorageItem("session", "login-response") === null) {
+  // pForward = 0 --> normal navigation
+  // pForward = 1 --> back navigation using regular gui
+  // pForward = 2 --> back navigation using browser
+  goTo (pHash, pQuery = {}, pForward = 0) {
+
+    if (Utils.getStorageItem("session", "login-response") === null) {
       // the fact that we don't have a session will be caught later
       // but this was shows less error messages on the console
-      pPath = "/login";
+      pHash = "login";
+      pQuery = {"reason": "no-session"};
     }
-    const pathUrl = (hasPathPrefix ? "" : config.NAV_URL) + pPath.split("?")[0];
+
+    // save the details from the parent
+    const parentHash = document.location.hash.replace(/^#/, "");
+    const search = window.location.search;
+    /* eslint-disable compat/compat */
+    /* URLSearchParams.entries() is not supported in IE 11 */
+    /* URLSearchParams is not supported in op_mini all, IE 11, Baidu 7.12 */
+    const parentQuery = Object.fromEntries(new URLSearchParams(search));
+    /* eslint-enable compat/compat */
+
     for (const route of this.pages) {
-      if (!route.path.test(pathUrl)) {
+      if (route.path !== pHash) {
         continue;
       }
-      // push history state for login (including redirect to /)
-      if (pathUrl === config.NAV_URL + "/login" || pathUrl === config.NAV_URL + "/") {
-        window.history.pushState({}, undefined, pPath);
+      // push history state, so that the address bar holds the correct
+      // deep-link; and so that we can use the back-button
+      let url = "/";
+      let sep = "?";
+      for (const key in pQuery) {
+        const value = pQuery[key];
+        if (!value || value === "undefined") {
+          continue;
+        }
+        url += sep + key + "=" + encodeURIComponent(value);
+        sep = "&";
+      }
+      url += "#" + pHash;
+      if (pForward === 0) {
+        window.history.pushState({}, undefined, url);
+        // do not save when a close button
+        // or other backward navigation was used
+        route.parentHash = parentHash;
+        route.parentQuery = parentQuery;
       }
       this._showPage(route);
       return;
     }
     // route could not be found
     // just go to the main page
-    this.goTo("/");
+    if (pHash === "") {
+      console.log("cannot find default page");
+      return;
+    }
+    this.goTo("");
   }
 
   _showPage (pPage) {
+    pPage.clearPage();
+
     pPage.pageElement.style.display = "";
 
     const activeMenuItems = Array.from(document.querySelectorAll(".menu-item-active"));
@@ -194,11 +242,11 @@ export class Router {
     // it is either not started, or needs restarting
     API.getEvents(this);
 
-    if (this.currentPage) {
+    if (this.currentPage && this.currentPage !== pPage) {
       Router._hidePage(this.currentPage);
     }
-
     this.currentPage = pPage;
+
     this.currentPage.pageElement.classList.add("current");
   }
 

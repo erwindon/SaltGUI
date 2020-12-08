@@ -1,4 +1,4 @@
-/* global config document window */
+/* global document window */
 
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
@@ -205,7 +205,7 @@ export class JobPanel extends Panel {
         Utils.addToolTip(link, "this job");
       } else {
         link.addEventListener("click", () => {
-          window.location.assign(config.NAV_URL + "/job?id=" + linkToJid);
+          this.router.goTo("job", {"id": linkToJid});
         });
       }
 

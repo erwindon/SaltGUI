@@ -1,4 +1,4 @@
-/* global config document window */
+/* global document window */
 
 import {Character} from "../Character.js";
 import {DropDownMenu} from "../DropDown.js";
@@ -62,7 +62,7 @@ export class JobsDetailsPanel extends JobsPanel {
       title = Character.BLACK_CIRCLE + " " + title;
     }
     this.panelMenu.addMenuItem(title, () => {
-      window.location.assign(config.NAV_URL + "/jobs?cnt=" + maxJobs);
+      this.router.goTo("jobs", {"cnt": maxJobs});
     });
   }
 
@@ -73,7 +73,7 @@ export class JobsDetailsPanel extends JobsPanel {
       title = Character.BLACK_CIRCLE + " " + title;
     }
     this.panelMenu.addMenuItem(title, () => {
-      window.location.assign(config.NAV_URL + "/jobs?cnt=eligible");
+      this.router.goTo("jobs", {"cnt": "eligible"});
     });
   }
 
@@ -84,7 +84,7 @@ export class JobsDetailsPanel extends JobsPanel {
       title = Character.BLACK_CIRCLE + " " + title;
     }
     this.panelMenu.addMenuItem(title, () => {
-      window.location.assign(config.NAV_URL + "/jobs?cnt=all");
+      this.router.goTo("jobs", {"cnt": "all"});
     });
   }
 
@@ -328,13 +328,13 @@ export class JobsDetailsPanel extends JobsPanel {
     tbody.appendChild(tr);
 
     tr.addEventListener("click", () => {
-      window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
+      this.router.goTo("job", {"id": job.id});
     });
   }
 
   static _addJobsMenuItemShowDetails (pMenu, job) {
     pMenu.addMenuItem("Show details", () => {
-      window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
+      this.router.goTo("job", {"id": job.id});
     });
   }
 

@@ -40,7 +40,7 @@ export class GrainsMinionPanel extends Panel {
     this._addMenuItemGrainsSetValAdd(pMinionId);
     this._addMenuItemSaltUtilRefreshGrains(pMinionId);
 
-    if (this.showErrorRowInstead(pLocalGrainsItemsData)) {
+    if (this.showErrorRowInstead(pLocalGrainsItemsData, pMinionId)) {
       return;
     }
 

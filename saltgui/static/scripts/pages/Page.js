@@ -1,11 +1,11 @@
-/* global config */
+/* global */
 
 import {Utils} from "../Utils.js";
 
 export class Page {
 
   constructor (pPath, pPageName, pPageSelector, pMenuItemSelector, pRouter) {
-    this.path = new RegExp("^" + config.NAV_URL.replace(/\//, "[/]") + "[/]" + pPath + "$");
+    this.path = pPath;
     this.name = pPageName;
 
     // <div class='route' id='page-keys'>
@@ -128,6 +128,12 @@ export class Page {
   onShow () {
     for (const panel of this.panels) {
       panel.onShow();
+    }
+  }
+
+  clearPage () {
+    for (const panel of this.panels) {
+      panel.clearPanel();
     }
   }
 }

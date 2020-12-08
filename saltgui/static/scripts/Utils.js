@@ -8,11 +8,14 @@ export class Utils {
   // functions for URL parameters
 
   static _getQueryParam2 (pUrl, pName) {
-    const questionmarkPos = pUrl.indexOf("?");
+    if (!pUrl) {
+      return undefined;
+    }
+    const questionmarkPos = pUrl.search.indexOf("?");
     if (questionmarkPos < 0) {
       return undefined;
     }
-    const parameters = pUrl.slice(questionmarkPos + 1).split("&");
+    const parameters = pUrl.search.slice(questionmarkPos + 1).split("&");
     for (const parameter of parameters) {
       const namevalue = parameter.split("=");
       if (namevalue.length !== 2) {
@@ -36,7 +39,7 @@ export class Utils {
       return undefined;
     }
     /* istanbul ignore next */
-    return Utils._getQueryParam2(theWindow.location.href, pName);
+    return Utils._getQueryParam2(theWindow.location, pName);
   }
 
   // functions for storage handling

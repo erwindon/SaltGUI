@@ -265,10 +265,10 @@ export class API {
           const loginResponseStr = Utils.getStorageItem("session", "login-response");
           if (!loginResponseStr) {
             this.logout().then(() => {
-              window.location.replace(config.NAV_URL + "/login?reason=no-session");
+              this.router.goTo("login", {"reason": "no-session"});
               return true;
             }, () => {
-              window.location.replace(config.NAV_URL + "/login?reason=no-session");
+              this.router.goTo("login", {"reason": "no-session"});
               return false;
             });
           }
@@ -280,10 +280,10 @@ export class API {
             const expireValue = loginResponse.expire;
             if (now > expireValue) {
               this.logout().then(() => {
-                window.location.replace(config.NAV_URL + "/login?reason=expired-session");
+                this.router.goTo("login", {"reason": "expired-session"});
                 return true;
               }, () => {
-                window.location.replace(config.NAV_URL + "/login?reason=expired-session");
+                this.router.goTo("login", {"reason": "expired-session"});
                 return false;
               });
             }
@@ -302,6 +302,12 @@ export class API {
     if (!tokenOnSetup) {
       return;
     }
+
+    // allow only one event-stream
+    if (API.eventsOK) {
+      return;
+    }
+    API.eventsOK = true;
 
     let source;
     try {

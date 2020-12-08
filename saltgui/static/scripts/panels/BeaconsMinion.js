@@ -55,7 +55,7 @@ export class BeaconsMinionPanel extends Panel {
   }
 
   _handleLocalBeaconsList (pLocalBeaconsListData, pMinionId) {
-    if (this.showErrorRowInstead(pLocalBeaconsListData)) {
+    if (this.showErrorRowInstead(pLocalBeaconsListData, pMinionId)) {
       return;
     }
 
