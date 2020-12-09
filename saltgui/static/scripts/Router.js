@@ -179,7 +179,11 @@ export class Router {
         sep = "&";
       }
       url += "#" + pHash;
-      if (pForward === 0) {
+      if (parentHash === route.path) {
+        // page refresh
+        // prevents being detected as "forward navigation"
+        // do nothing
+      } else if (pForward === 0) {
         // forward navigation
         window.history.pushState({}, undefined, url);
         route.parentHash = parentHash;
