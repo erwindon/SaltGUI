@@ -180,11 +180,18 @@ export class Router {
       }
       url += "#" + pHash;
       if (pForward === 0) {
+        // forward navigation
         window.history.pushState({}, undefined, url);
-        // do not save when a close button
-        // or other backward navigation was used
         route.parentHash = parentHash;
         route.parentQuery = parentQuery;
+      } else if (pForward === 1) {
+        // close-icon on a panel
+        // do not save parent details
+        // these were already registered on the way forward
+        window.history.pushState({}, undefined, url);
+      } else if (pForward === 2) {
+        // backward navigation from browser
+        // do nothing extra
       }
       this._showPage(route);
       return;
