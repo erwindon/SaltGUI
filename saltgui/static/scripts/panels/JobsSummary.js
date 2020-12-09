@@ -61,8 +61,8 @@ export class JobsSummaryPanel extends JobsPanel {
     tr.appendChild(td);
 
     const menu = new DropDownMenu(tr);
-    this._addPageMenuItemShowDetails(menu, job);
-    this._addPageMenuItemUpdateStatus(menu, statusSpan);
+    this._addMenuItemShowDetails(menu, job);
+    this._addMenuItemUpdateStatus(menu, statusSpan);
 
     const tbody = this.table.tBodies[0];
     tbody.appendChild(tr);
@@ -72,13 +72,13 @@ export class JobsSummaryPanel extends JobsPanel {
     });
   }
 
-  _addPageMenuItemShowDetails (pMenu, job) {
+  _addMenuItemShowDetails (pMenu, job) {
     pMenu.addMenuItem("Show details", () => {
       this.router.goTo("job", {"id": job.id});
     });
   }
 
-  _addPageMenuItemUpdateStatus (pMenu, statusSpan) {
+  _addMenuItemUpdateStatus (pMenu, statusSpan) {
     pMenu.addMenuItem("Update status", () => {
       statusSpan.classList.add("no-job-status");
       statusSpan.innerText = "loading...";

@@ -14,11 +14,11 @@ export class BeaconsMinionPanel extends Panel {
 
     this.addTitle("Beacons on ...");
     this.addPanelMenu();
-    this._addMenuItemBeaconsDisableWhenNeeded();
-    this._addMenuItemBeaconsEnableWhenNeeded();
-    this._addMenuItemBeaconsAdd();
-    this._addMenuItemBeaconsReset();
-    this._addMenuItemBeaconsSave();
+    this._addPanelMenuItemBeaconsDisableWhenNeeded();
+    this._addPanelMenuItemBeaconsEnableWhenNeeded();
+    this._addPanelMenuItemBeaconsAdd();
+    this._addPanelMenuItemBeaconsReset();
+    this._addPanelMenuItemBeaconsSave();
     this.addSearchButton();
     this.addPlayPauseButton("play");
     this.addHelpButton("The content of column 'Value' is automatically refreshed\nNote that some beacons produce multiple values, e.g. one per disk\nIn that case, effectively only one of the values is visible here");
@@ -150,7 +150,7 @@ export class BeaconsMinionPanel extends Panel {
     this.updateFooter();
   }
 
-  _addMenuItemBeaconsDisableWhenNeeded () {
+  _addPanelMenuItemBeaconsDisableWhenNeeded () {
     this.panelMenu.addMenuItem(() => {
       if (!this.beaconsEnabled) {
         return null;
@@ -162,7 +162,7 @@ export class BeaconsMinionPanel extends Panel {
     });
   }
 
-  _addMenuItemBeaconsEnableWhenNeeded () {
+  _addPanelMenuItemBeaconsEnableWhenNeeded () {
     this.panelMenu.addMenuItem(() => {
       if (this.beaconsEnabled) {
         return null;
@@ -174,21 +174,21 @@ export class BeaconsMinionPanel extends Panel {
     });
   }
 
-  _addMenuItemBeaconsAdd () {
+  _addPanelMenuItemBeaconsAdd () {
     this.panelMenu.addMenuItem("Add beacon...", (pClickEvent) => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
       this.runCommand(pClickEvent, minionId, "beacons.add <name> <data>");
     });
   }
 
-  _addMenuItemBeaconsReset () {
+  _addPanelMenuItemBeaconsReset () {
     this.panelMenu.addMenuItem("Reset beacons...", (pClickEvent) => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
       this.runCommand(pClickEvent, minionId, "beacons.reset");
     });
   }
 
-  _addMenuItemBeaconsSave () {
+  _addPanelMenuItemBeaconsSave () {
     this.panelMenu.addMenuItem("Save beacons...", (pClickEvent) => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
       this.runCommand(pClickEvent, minionId, "beacons.save");

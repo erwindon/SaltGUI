@@ -13,11 +13,11 @@ export class SchedulesMinionPanel extends Panel {
 
     this.addTitle("Schedules on ...");
     this.addPanelMenu();
-    this._addMenuItemScheduleEnableWhenNeeded();
-    this._addMenuItemScheduleDisableWhenNeeded();
-    this._addMenuItemScheduleAddInterval();
-    this._addMenuItemScheduleAddCron();
-    this._addMenuItemScheduleAddOnce();
+    this._addPanelMenuItemScheduleEnableWhenNeeded();
+    this._addPanelMenuItemScheduleDisableWhenNeeded();
+    this._addPanelMenuItemScheduleAddInterval();
+    this._addPanelMenuItemScheduleAddCron();
+    this._addPanelMenuItemScheduleAddOnce();
     this.addSearchButton();
     this.addCloseButton();
     this.addTable(["Name", "-menu-", "Details"]);
@@ -132,7 +132,7 @@ export class SchedulesMinionPanel extends Panel {
     this.setMsg(txt);
   }
 
-  _addMenuItemScheduleEnableWhenNeeded () {
+  _addPanelMenuItemScheduleEnableWhenNeeded () {
     this.panelMenu.addMenuItem(() => {
       if (this.schedulesEnabled) {
         return null;
@@ -144,7 +144,7 @@ export class SchedulesMinionPanel extends Panel {
     });
   }
 
-  _addMenuItemScheduleDisableWhenNeeded () {
+  _addPanelMenuItemScheduleDisableWhenNeeded () {
     this.panelMenu.addMenuItem(() => {
       if (!this.schedulesEnabled) {
         return null;
@@ -156,21 +156,21 @@ export class SchedulesMinionPanel extends Panel {
     });
   }
 
-  _addMenuItemScheduleAddInterval () {
+  _addPanelMenuItemScheduleAddInterval () {
     this.panelMenu.addMenuItem("Add interval schedule...", (pClickEvent) => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
       this.runCommand(pClickEvent, minionId, "schedule.add <name> function=<function> seconds=<seconds> minutes=<minutes> hours=<hours> days=<days>");
     });
   }
 
-  _addMenuItemScheduleAddCron () {
+  _addPanelMenuItemScheduleAddCron () {
     this.panelMenu.addMenuItem("Add cron schedule...", (pClickEvent) => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
       this.runCommand(pClickEvent, minionId, "schedule.add <name> function=<function> cron=<cron>");
     });
   }
 
-  _addMenuItemScheduleAddOnce () {
+  _addPanelMenuItemScheduleAddOnce () {
     this.panelMenu.addMenuItem("Add once schedule...", (pClickEvent) => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
       this.runCommand(pClickEvent, minionId,

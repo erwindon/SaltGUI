@@ -12,15 +12,15 @@ export class KeysPanel extends Panel {
 
     this.addTitle("Keys");
     this.addPanelMenu();
-    this._addMenuItemWheelKeyAcceptAllUnaccepted();
-    this._addMenuItemWheelKeyAcceptAllUnacceptedRejected();
-    this._addMenuItemWheelKeyAcceptAllUnacceptedDenied();
-    this._addMenuItemWheelKeyAcceptAllUnacceptedRejectedDenied();
-    this._addMenuItemWheelKeyRejectAllUnaccepted();
-    this._addMenuItemWheelKeyRejectAllUnacceptedAccepted();
-    this._addMenuItemWheelKeyRejectAllUnacceptedDenied();
-    this._addMenuItemWheelKeyRejectAllUnacceptedAcceptedDenied();
-    this._addMenuItemWheelKeyDeleteAllUnaccepted();
+    this._addPanelMenuItemWheelKeyAcceptAllUnaccepted();
+    this._addPanelMenuItemWheelKeyAcceptAllUnacceptedRejected();
+    this._addPanelMenuItemWheelKeyAcceptAllUnacceptedDenied();
+    this._addPanelMenuItemWheelKeyAcceptAllUnacceptedRejectedDenied();
+    this._addPanelMenuItemWheelKeyRejectAllUnaccepted();
+    this._addPanelMenuItemWheelKeyRejectAllUnacceptedAccepted();
+    this._addPanelMenuItemWheelKeyRejectAllUnacceptedDenied();
+    this._addPanelMenuItemWheelKeyRejectAllUnacceptedAcceptedDenied();
+    this._addPanelMenuItemWheelKeyDeleteAllUnaccepted();
     this.addSearchButton();
     this.addPlayPauseButton("play");
     this.addHelpButton("The content of this page is\nautomatically refreshed");
@@ -372,7 +372,7 @@ export class KeysPanel extends Panel {
     });
   }
 
-  _addMenuItemWheelKeyAcceptAllUnaccepted () {
+  _addPanelMenuItemWheelKeyAcceptAllUnaccepted () {
     this.panelMenu.addMenuItem(() => {
       if (KeysPanel.cntUnaccepted > 0) {
         return "Accept all unaccepted keys...";
@@ -384,7 +384,7 @@ export class KeysPanel extends Panel {
     });
   }
 
-  _addMenuItemWheelKeyAcceptAllUnacceptedRejected () {
+  _addPanelMenuItemWheelKeyAcceptAllUnacceptedRejected () {
     this.panelMenu.addMenuItem(() => {
       if (!KeysPanel.cntRejected) {
         return null;
@@ -399,7 +399,7 @@ export class KeysPanel extends Panel {
     });
   }
 
-  _addMenuItemWheelKeyAcceptAllUnacceptedDenied () {
+  _addPanelMenuItemWheelKeyAcceptAllUnacceptedDenied () {
     this.panelMenu.addMenuItem(() => {
       if (!KeysPanel.cntDenied) {
         return null;
@@ -414,7 +414,7 @@ export class KeysPanel extends Panel {
     });
   }
 
-  _addMenuItemWheelKeyAcceptAllUnacceptedRejectedDenied () {
+  _addPanelMenuItemWheelKeyAcceptAllUnacceptedRejectedDenied () {
     this.panelMenu.addMenuItem(() => {
       if (!KeysPanel.cntRejected || !KeysPanel.cntDenied) {
         return null;
@@ -467,7 +467,7 @@ export class KeysPanel extends Panel {
     });
   }
 
-  _addMenuItemWheelKeyRejectAllUnaccepted () {
+  _addPanelMenuItemWheelKeyRejectAllUnaccepted () {
     this.panelMenu.addMenuItem(() => {
       if (KeysPanel.cntUnaccepted > 0) {
         return "Reject all unaccepted keys...";
@@ -479,7 +479,7 @@ export class KeysPanel extends Panel {
     });
   }
 
-  _addMenuItemWheelKeyRejectAllUnacceptedAccepted () {
+  _addPanelMenuItemWheelKeyRejectAllUnacceptedAccepted () {
     this.panelMenu.addMenuItem(() => {
       if (!KeysPanel.cntAccepted) {
         return null;
@@ -494,7 +494,7 @@ export class KeysPanel extends Panel {
     });
   }
 
-  _addMenuItemWheelKeyRejectAllUnacceptedDenied () {
+  _addPanelMenuItemWheelKeyRejectAllUnacceptedDenied () {
     this.panelMenu.addMenuItem(() => {
       if (!KeysPanel.cntDenied) {
         return null;
@@ -509,7 +509,7 @@ export class KeysPanel extends Panel {
     });
   }
 
-  _addMenuItemWheelKeyRejectAllUnacceptedAcceptedDenied () {
+  _addPanelMenuItemWheelKeyRejectAllUnacceptedAcceptedDenied () {
     this.panelMenu.addMenuItem(() => {
       if (!KeysPanel.cntAccepted || !KeysPanel.cntDenied) {
         return null;
@@ -537,7 +537,7 @@ export class KeysPanel extends Panel {
     });
   }
 
-  _addMenuItemWheelKeyDeleteAllUnaccepted () {
+  _addPanelMenuItemWheelKeyDeleteAllUnaccepted () {
     this.panelMenu.addMenuItem(() => {
       if (KeysPanel.cntAccepted > 0 || KeysPanel.cntUnaccepted > 0 || KeysPanel.cntRejected > 0 || KeysPanel.cntDenied > 0) {
         return "Delete all keys...";

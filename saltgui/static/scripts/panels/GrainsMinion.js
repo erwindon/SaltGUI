@@ -12,8 +12,8 @@ export class GrainsMinionPanel extends Panel {
 
     this.addTitle("Grains on ...");
     this.addPanelMenu();
-    this._addMenuItemGrainsSetValAdd();
-    this._addMenuItemSaltUtilRefreshGrains();
+    this._addPanelMenuItemGrainsSetValAdd();
+    this._addPanelMenuItemSaltUtilRefreshGrains();
 
     this.addSearchButton();
     this.addCloseButton();
@@ -87,7 +87,7 @@ export class GrainsMinionPanel extends Panel {
     this.setMsg(txt);
   }
 
-  _addMenuItemGrainsSetValAdd () {
+  _addPanelMenuItemGrainsSetValAdd () {
     this.panelMenu.addMenuItem("Add grain...", (pClickEvent) => {
       // use placeholders for name and value
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
@@ -95,7 +95,7 @@ export class GrainsMinionPanel extends Panel {
     });
   }
 
-  _addMenuItemSaltUtilRefreshGrains () {
+  _addPanelMenuItemSaltUtilRefreshGrains () {
     this.panelMenu.addMenuItem("Refresh grains...", (pClickEvent) => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
       this.runCommand(pClickEvent, minionId, "saltutil.refresh_grains");

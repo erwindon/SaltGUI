@@ -13,7 +13,7 @@ export class PillarsMinionPanel extends Panel {
 
     this.addTitle("Pillars on ...");
     this.addPanelMenu();
-    this._addMenuItemSaltUtilRefreshPillar();
+    this._addPanelMenuItemSaltUtilRefreshPillar();
     this.addSearchButton();
     this.addCloseButton();
     this.addTable(["Name", "Value"]);
@@ -126,7 +126,7 @@ export class PillarsMinionPanel extends Panel {
     this.setMsg(txt);
   }
 
-  _addMenuItemSaltUtilRefreshPillar () {
+  _addPanelMenuItemSaltUtilRefreshPillar () {
     this.panelMenu.addMenuItem("Refresh pillar...", (pClickEvent) => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
       this.runCommand(pClickEvent, minionId, "saltutil.refresh_pillar");

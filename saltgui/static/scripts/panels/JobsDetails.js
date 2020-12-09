@@ -15,9 +15,9 @@ export class JobsDetailsPanel extends JobsPanel {
 
     this.addTitle("Recent Jobs");
     this.addPanelMenu();
-    this._addMenuItemShowSome();
-    this._addMenuItemShowEligible();
-    this._addMenuItemShowAll();
+    this._addPanelMenuItemShowSome();
+    this._addPanelMenuItemShowEligible();
+    this._addPanelMenuItemShowAll();
     this.addSearchButton();
     this.addPlayPauseButton("play");
     this.addTable(["JID", "Target", "Function", "Start Time", "-menu-", "Status", "Details"], "data-list-jobs");
@@ -54,7 +54,7 @@ export class JobsDetailsPanel extends JobsPanel {
     }, 1000);
   }
 
-  _addMenuItemShowSome () {
+  _addPanelMenuItemShowSome () {
     const maxJobs = 50;
     this.panelMenu.addMenuItem(() => {
       let title = "Show first " + maxJobs + " jobs";
@@ -68,7 +68,7 @@ export class JobsDetailsPanel extends JobsPanel {
     });
   }
 
-  _addMenuItemShowEligible () {
+  _addPanelMenuItemShowEligible () {
     this.panelMenu.addMenuItem(() => {
       const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
       let title = "Show eligible jobs";
@@ -81,7 +81,7 @@ export class JobsDetailsPanel extends JobsPanel {
     });
   }
 
-  _addMenuItemShowAll () {
+  _addPanelMenuItemShowAll () {
     this.panelMenu.addMenuItem(() => {
       const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
       let title = "Show all jobs";
