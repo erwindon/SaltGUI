@@ -641,7 +641,7 @@ export class Panel {
 
   clearPanel () {
     if (this.title && this.originalTitle.includes("...")) {
-      this.title.innerText = "...";
+      this.title.innerText = this.originalTitle;
     }
     if (this.table) {
       this.clearTable();
