@@ -56,34 +56,40 @@ export class JobsDetailsPanel extends JobsPanel {
 
   _addMenuItemShowSome () {
     const maxJobs = 50;
-    let title = "Show first " + maxJobs + " jobs";
-    const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
-    if (cnt === "undefined" || cnt === String(maxJobs)) {
-      title = Character.BLACK_CIRCLE + " " + title;
-    }
-    this.panelMenu.addMenuItem(title, () => {
+    this.panelMenu.addMenuItem(() => {
+      let title = "Show first " + maxJobs + " jobs";
+      const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
+      if (cnt === "undefined" || cnt === String(maxJobs)) {
+        title = Character.BLACK_CIRCLE + " " + title;
+      }
+      return title;
+    }, () => {
       this.router.goTo("jobs", {"cnt": maxJobs});
     });
   }
 
   _addMenuItemShowEligible () {
-    const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
-    let title = "Show eligible jobs";
-    if (cnt === "eligible") {
-      title = Character.BLACK_CIRCLE + " " + title;
-    }
-    this.panelMenu.addMenuItem(title, () => {
+    this.panelMenu.addMenuItem(() => {
+      const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
+      let title = "Show eligible jobs";
+      if (cnt === "eligible") {
+        title = Character.BLACK_CIRCLE + " " + title;
+      }
+      return title;
+    }, () => {
       this.router.goTo("jobs", {"cnt": "eligible"});
     });
   }
 
   _addMenuItemShowAll () {
-    const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
-    let title = "Show all jobs";
-    if (cnt === "all") {
-      title = Character.BLACK_CIRCLE + " " + title;
-    }
-    this.panelMenu.addMenuItem(title, () => {
+    this.panelMenu.addMenuItem(() => {
+      const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
+      let title = "Show all jobs";
+      if (cnt === "all") {
+        title = Character.BLACK_CIRCLE + " " + title;
+      }
+      return title;
+    }, () => {
       this.router.goTo("jobs", {"cnt": "all"});
     });
   }
