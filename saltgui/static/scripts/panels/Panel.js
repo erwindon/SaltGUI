@@ -275,6 +275,7 @@ export class Panel {
     td.appendChild(span);
 
     const tr = document.createElement("tr");
+    tr.id = "error-row";
     tr.appendChild(td);
 
     if (!this.table.tFoot) {
@@ -642,9 +643,6 @@ export class Panel {
     if (this.title && this.originalTitle.includes("...")) {
       this.title.innerText = "...";
     }
-    if (this.panelMenu) {
-      this.panelMenu.clearMenu();
-    }
     if (this.table) {
       this.clearTable();
     }
@@ -659,6 +657,9 @@ export class Panel {
     }
     if (this.output) {
       this.output.innerText = "";
+    }
+    for (const tr of document.querySelectorAll("#error-row")) {
+      tr.parentElement.remove(tr);
     }
   }
 }

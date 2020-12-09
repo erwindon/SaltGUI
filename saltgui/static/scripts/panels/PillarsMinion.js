@@ -13,6 +13,7 @@ export class PillarsMinionPanel extends Panel {
 
     this.addTitle("Pillars on ...");
     this.addPanelMenu();
+    this._addMenuItemSaltUtilRefreshPillar();
     this.addSearchButton();
     this.addCloseButton();
     this.addTable(["Name", "Value"]);
@@ -37,8 +38,6 @@ export class PillarsMinionPanel extends Panel {
   }
 
   _handleLocalPillarItems (pLocalPillarItemsData, pMinionId) {
-    this._addMenuItemSaltUtilRefreshPillar(pMinionId);
-
     if (this.showErrorRowInstead(pLocalPillarItemsData, pMinionId)) {
       return;
     }
@@ -127,9 +126,10 @@ export class PillarsMinionPanel extends Panel {
     this.setMsg(txt);
   }
 
-  _addMenuItemSaltUtilRefreshPillar (pMinionId) {
+  _addMenuItemSaltUtilRefreshPillar () {
     this.panelMenu.addMenuItem("Refresh pillar...", (pClickEvent) => {
-      this.runCommand(pClickEvent, pMinionId, "saltutil.refresh_pillar");
+      const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
+      this.runCommand(pClickEvent, minionId, "saltutil.refresh_pillar");
     });
   }
 }
