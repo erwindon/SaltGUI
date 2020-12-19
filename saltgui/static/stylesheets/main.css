@@ -75,14 +75,14 @@ h1 {
 
 .fab {
   display: block;
-  cursor: pointer;
   float: right;
   margin-top: 8px;
   margin-right: 8px;
 }
 
-.fab:hover {
+#button-manual-run {
   opacity: 0.8;
+  cursor: pointer;
 }
 
 .search-button {
