@@ -29,6 +29,7 @@ export class MinionsPanel extends Panel {
 
   onShow () {
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
+    const wheelMinionsConnectedPromise = this.api.getWheelMinionsConnected();
     const localGrainsItemsPromise = this.api.getLocalGrainsItems(null);
     const runnerManageVersionsPromise = this.api.getRunnerManageVersions();
 
@@ -36,6 +37,14 @@ export class MinionsPanel extends Panel {
 
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       this._handleMinionsWheelKeyListAll(pWheelKeyListAllData);
+
+      wheelMinionsConnectedPromise.then((pWheelMinionsConnectedData) => {
+        this._handlewheelMinionsConnected(pWheelMinionsConnectedData);
+        return true;
+      }, (getWheelMinionsConnectedMsg) => {
+        console.log("pWheelMinionsConnectedMsg", pWheelMinionsConnectedMsg);
+        return false;
+      });
 
       localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
         this.updateMinions(pLocalGrainsItemsData);
@@ -90,6 +99,27 @@ export class MinionsPanel extends Panel {
     const txt = Utils.txtZeroOneMany(minionIds.length,
       "No minions", "{0} minion", "{0} minions");
     this.setMsg(txt);
+  }
+
+  _handlewheelMinionsConnected(pWheelMinionsConnectedData) {
+    if (this.showErrorRowInstead(pWheelMinionsConnectedData)) {
+      return;
+    }
+
+    const minionIds = pWheelMinionsConnectedData.return[0].data.return;
+
+    for (const tr of this.table.tBodies[0].childNodes) {
+      if (minionIds.indexOf(tr.dataset.minionId) >= 0) {
+        continue;
+      }
+      const statusTd = tr.querySelector("td.status");
+      if(!statusTd) continue;
+      // this is the initial warning only
+      // it will be replaced by a less aggressive warning
+      // when the grains information is returned
+      statusTd.innerText = "offline";
+      statusTd.style.color = "red";
+    }
   }
 
   updateOfflineMinion (pMinionId, pMinionsDict) {

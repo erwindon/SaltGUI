@@ -301,6 +301,7 @@ export class Panel {
 
     minionTr = document.createElement("tr");
     minionTr.id = Utils.getIdFromMinionId(pMinionId);
+    minionTr.dataset.minionId = pMinionId;
 
     minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 
