@@ -714,5 +714,9 @@ export class Output {
       masterTriangle.style.display = "none";
     }
 
+    // no minions in the result
+    if (!Object.keys(pMinionData).length) {
+      pOutputContainer.innerText = "No minions matched the target. No command was sent, no jid was assigned.\nERROR: No return received";
+    }
   }
 }
