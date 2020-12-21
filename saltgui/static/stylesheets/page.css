@@ -194,6 +194,7 @@ table tr td:last-of-type {
   max-height: 18px;
   padding-right: 5px;
   box-sizing: content-box;
+  vertical-align: middle;
 }
 
 #popup-run-command {
