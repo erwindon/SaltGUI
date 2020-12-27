@@ -2,6 +2,7 @@
 
 // documentation utilities
 
+import {Character} from "./Character.js";
 import {CommandBox} from "./CommandBox.js";
 import {ParseCommandLine} from "./ParseCommandLine.js";
 import {TargetType} from "./TargetType.js";
@@ -23,7 +24,7 @@ export class Documentation {
       () => Documentation._manualRunMenuHtmlDocRun());
 
     Documentation.DOCUMENTATION_URL = "https://docs.saltstack.com/en/latest/ref/";
-    Documentation.EXTERNAL_LINK = "&nbsp;<img src='static/images/externallink.png' style='width:12px'>";
+    Documentation.EXTERNAL_LINK = Character.NO_BREAK_SPACE + Character.EXTERNAL_LINK_IMG;
 
     Documentation.PROVIDERS = { };
   }
@@ -307,7 +308,7 @@ export class Documentation {
     if (concreteModules.length > 1) {
       // only useful to indent level 3 information
       // when there are multiple instances available
-      indent = "&nbsp;&nbsp;";
+      indent = Character.NO_BREAK_SPACE + Character.NO_BREAK_SPACE;
     }
 
     for (const concreteModule of concreteModules) {

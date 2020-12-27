@@ -1,5 +1,6 @@
 /* global console document Hilitor window */
 
+import {Character} from "./Character.js";
 import {DropDownMenu} from "./DropDown.js";
 
 export class Utils {
@@ -200,8 +201,7 @@ export class Utils {
     const input = document.createElement("input");
     input.type = "text";
     input.classList.add("filter-text");
-    // D83D DD0D = 1F50D = LEFT-POINTING MAGNIFYING GLASS
-    input.placeholder = "\uD83D\uDD0D";
+    input.placeholder = Character.LEFT_POINTING_MAGNIFYING_GLASS_COLOUR;
     if (pFieldList) {
       input.setAttribute("list", pFieldList);
     }
@@ -240,8 +240,7 @@ export class Utils {
     let menuItemText = ev.target.innerText;
     menuItemText = menuItemText.replace(/^. /, "");
     if (ev.target._value === true) {
-      // 2714 = HEAVY CHECK MARK
-      menuItemText = "\u2714 " + menuItemText;
+      menuItemText = Character.HEAVY_CHECK_MARK + " " + menuItemText;
     }
     ev.target.innerText = menuItemText;
 
@@ -250,8 +249,7 @@ export class Utils {
       pInput.value,
       pSearchOptionsMenu.menuDropdownContent);
 
-    // D83D DD0D = 1F50D = LEFT-POINTING MAGNIFYING GLASS
-    let placeholder = "\uD83D\uDD0D";
+    let placeholder = Character.LEFT_POINTING_MAGNIFYING_GLASS_COLOUR;
     if (pSearchOptionsMenu.menuDropdownContent.childNodes[0]._value === true) {
       placeholder += " caseSensitive";
     }
@@ -455,8 +453,7 @@ export class Utils {
 
   static createJobStatusSpan (pJobId) {
     const span = Utils.createSpan("", "", "status" + pJobId);
-    // 21BB = CLOCKWISE OPEN CIRCLE ARROW
-    span.innerHTML = "&#x21BB;&nbsp;";
+    span.innerText = Character.CLOCKWISE_OPEN_CIRCLE_ARROW + Character.NO_BREAK_SPACE;
     span.style.display = "none";
     span.style.fontWeight = "bold";
     return span;

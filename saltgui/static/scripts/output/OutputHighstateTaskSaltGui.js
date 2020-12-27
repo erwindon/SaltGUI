@@ -1,5 +1,6 @@
 /* global document */
 
+import {Character} from "../Character.js";
 import {Output} from "./Output.js";
 import {Utils} from "../Utils.js";
 
@@ -62,10 +63,10 @@ export class OutputHighstateTaskSaltGui {
         // place changes on one line
         // don't use arrows here, these are higher than a regular
         // text-line and disturb the text-flow
-        // 25BA = BLACK RIGHT-POINTING POINTER
         pTaskDiv.append(document.createTextNode(
           pIndent + key + ": " +
-          JSON.stringify(change.old) + " \u25BA " +
+          JSON.stringify(change.old) + " " +
+          Character.BLACK_RIGHT_POINTING_POINTER + " " +
           JSON.stringify(change.new)));
       }
       // then show whatever remains
@@ -92,16 +93,13 @@ export class OutputHighstateTaskSaltGui {
 
     const span = Utils.createSpan("task-icon");
     if (pTask.result === null) {
-      // 2714 = HEAVY CHECK MARK
-      span.innerText = "\u2714";
+      span.innerText = Character.HEAVY_CHECK_MARK;
       span.style.color = "yellow";
     } else if (pTask.result) {
-      // 2714 = HEAVY CHECK MARK
-      span.innerText = "\u2714";
+      span.innerText = Character.HEAVY_CHECK_MARK;
       span.style.color = "lime";
     } else {
-      // 2718 = HEAVY BALLOT X
-      span.innerText = "\u2718";
+      span.innerText = Character.HEAVY_BALLOT_X;
       span.style.color = "red";
     }
     taskDiv.append(span);

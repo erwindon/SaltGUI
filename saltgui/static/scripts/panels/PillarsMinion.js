@@ -1,5 +1,6 @@
 /* global console document */
 
+import {Character} from "../Character.js";
 import {Output} from "../output/Output.js";
 import {OutputYaml} from "../output/OutputYaml.js";
 import {Panel} from "./Panel.js";
@@ -80,8 +81,7 @@ export class PillarsMinionPanel extends Panel {
 
       const pillarValueTd = Utils.createTd();
 
-      // 25CF = BLACK CIRCLE, 8 of these
-      const pillarValueHidden = "\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF";
+      const pillarValueHidden = Character.BLACK_CIRCLE.repeat(8);
       const pillarHiddenDiv = Utils.createDiv("pillar-hidden", pillarValueHidden);
       pillarHiddenDiv.style.display = "inline-block";
       Utils.addToolTip(pillarHiddenDiv, "Click to show");

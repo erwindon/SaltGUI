@@ -1,10 +1,11 @@
+import {Character} from "./Character.js";
 import {Utils} from "./Utils.js";
 
 // each menu item has a 2 properties
 // 1: the title
 //    menu items that are always useable are just plain text
 //    but it may be a callback function which:
-//    a) sets the title using pMenuItem.innerHTML = "xyz"
+//    a) sets the title using pMenuItem.innerText = "xyz"
 //    b) arranges the visibility using pMenuItem.style.display = true/false
 // 2: the callback function
 //    called when the menu item is selected: (pClickEvent) => { ... }
@@ -34,15 +35,12 @@ export class DropDownMenu {
     this.menuDropdown.classList.add("no-search");
 
     if (pParentElement.id === "cmd-box") {
-      // D83D DCD6 = 1F4D6 = A BOOK
-      this.menuButton = Utils.createDiv("menu-dropdown", "\uD83D\uDCD6");
+      this.menuButton = Utils.createDiv("menu-dropdown", Character.A_BOOK);
     } else if (pParentElement.classList && pParentElement.classList.contains("minion-output")) {
-      // 2261 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
-      this.menuButton = Utils.createSpan("menu-dropdown", "\u2261");
+      this.menuButton = Utils.createSpan("menu-dropdown", Character.CH_HAMBURGER);
     } else {
       // assume it will be a command menu
-      // 2261 = MATHEMATICAL OPERATOR IDENTICAL TO (aka "hamburger")
-      this.menuButton = Utils.createDiv("menu-dropdown", "\u2261");
+      this.menuButton = Utils.createDiv("menu-dropdown", Character.CH_HAMBURGER);
     }
     this.menuButton.addEventListener("click", (pClickEvent) => {
       // better support for touch screens where user touch
@@ -73,7 +71,7 @@ export class DropDownMenu {
             chld.style.display = "none";
             continue;
           }
-          chld.innerHTML = DropDownMenu._sanitizeMenuItemTitle(title);
+          chld.innerText = DropDownMenu._sanitizeMenuItemTitle(title);
           chld.style.removeProperty("display");
         }
         visibleCount += 1;
@@ -86,19 +84,17 @@ export class DropDownMenu {
   }
 
   static _sanitizeMenuItemTitle (pTitle) {
-    // 2011 = NON-BREAKING HYPHEN
-    // 2026 = HORIZONTAL ELLIPSIS
     return pTitle.
-      replace(" ", "&nbsp;").
-      replace("-", "&#x2011;").
-      replace("...", "&#x2026;");
+      replace(" ", Character.NO_BREAK_SPACE).
+      replace("-", Character.NON_BREAKING_HYPHEN).
+      replace("...", Character.HORIZONTAL_ELLIPSIS);
   }
 
   // Add a menu item at the end of this dropdown menu
   // Runs the given callback function when selected
   // When the title is actually a function then this
   // function is called each time the menu opens
-  // This allows dynamic menuitem titles (use menuitem.innerText/innerHTML)
+  // This allows dynamic menuitem titles (use menuitem.innerText)
   // or visibility (use menuitem.style.display = "none"/"inline-block")
   addMenuItem (pTitle, pCallBack, pValue) {
     const button = Utils.createDiv("run-command-button", "...");
@@ -106,7 +102,7 @@ export class DropDownMenu {
       button._value = pValue;
     }
     if (typeof pTitle === "string") {
-      button.innerHTML = DropDownMenu._sanitizeMenuItemTitle(pTitle);
+      button.innerText = DropDownMenu._sanitizeMenuItemTitle(pTitle);
     } else {
       button.verifyCallBack = pTitle;
     }
@@ -132,8 +128,7 @@ export class DropDownMenu {
     // Setting the title implies that we are interested
     // in the menu values, rather than their actions.
     // Use a slightly different clue for that.
-    // 25BC = BLACK DOWN-POINTING TRIANGLE
-    this.menuButton.innerHTML = DropDownMenu._sanitizeMenuItemTitle(pTitle + " \u25BC");
+    this.menuButton.innerText = DropDownMenu._sanitizeMenuItemTitle(pTitle + " " + Character.BLACK_DOWN_POINTING_TRIANGLE);
   }
 
   __showMenu () {

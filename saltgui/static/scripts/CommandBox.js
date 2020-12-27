@@ -1,5 +1,6 @@
 /* global document window */
 
+import {Character} from "./Character.js";
 import {Documentation} from "./Documentation.js";
 import {DropDownMenu} from "./DropDown.js";
 import {Output} from "./output/Output.js";
@@ -63,13 +64,13 @@ export class CommandBox {
 
     txt += "<h2>Target field</h2>";
     txt += "<p>";
-    txt += "Entries that contain a @, (, ) or space are assumed to be a compound target selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/#compound-targeting' target='_blank' rel='noopener'>Compound Targeting<img src='static/images/externallink.png' width='12px'></a>.";
+    txt += "Entries that contain a @, (, ) or space are assumed to be a compound target selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/#compound-targeting' target='_blank' rel='noopener'>Compound Targeting" + Documentation.EXTERNAL_LINK + "</a>.";
     txt += "<br/>";
-    txt += "Entries that contain a COMMA are assumed to be a list target selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/globbing.html#lists' target='_blank' rel='noopener'>List Targeting<img src='static/images/externallink.png' width='12px'></a>.";
+    txt += "Entries that contain a COMMA are assumed to be a list target selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/globbing.html#lists' target='_blank' rel='noopener'>List Targeting" + Documentation.EXTERNAL_LINK + "</a>.";
     txt += "<br/>";
-    txt += "Entries that start with a # are assumed to be a nodegroup target selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/nodegroups.html' target='_blank' rel='noopener'>Nodegroup Targeting<img src='static/images/externallink.png' width='12px'></a>.";
+    txt += "Entries that start with a # are assumed to be a nodegroup target selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/nodegroups.html' target='_blank' rel='noopener'>Nodegroup Targeting" + Documentation.EXTERNAL_LINK + "</a>.";
     txt += "<br/>";
-    txt += "Otherwise, the target is assumed to be a regular glob selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/globbing.html#globbing' target='_blank' rel='noopener'>Globbing Targeting<img src='static/images/externallink.png' width='12px'></a>.";
+    txt += "Otherwise, the target is assumed to be a regular glob selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/globbing.html#globbing' target='_blank' rel='noopener'>Globbing Targeting" + Documentation.EXTERNAL_LINK + "</a>.";
     txt += "<br/>";
     txt += "The dropdown-box to the right of the field is automatically updated with the assumed target type. When you do not agree, it is possible to manually select a value. That value will then be left alone by the system. Note that the dropdown-box only contains the choice 'Nodegroup' when nodegroups are configured in the <b>master</b> file.";
     txt += "<br/>";
@@ -82,7 +83,7 @@ export class CommandBox {
 
     txt += "<h2>Command field</h2>";
     txt += "<p>";
-    txt += "The command field is used to enter the command and its parameters. Double quotes (\") are needed around each item that contains spaces, or when it is otherwise mistaken for a number, boolean, list or object according to the <a href='https://tools.ietf.org/html/rfc7159' target='_blank' rel='noopener'>JSON<img src='static/images/externallink.png' width='12px'></a> notation. Additionally, strings in the form \"\"\"string\"\"\" are recognized. This is a notation from the <a href='https://docs.python.org/3/tutorial/introduction.html#strings' target='_blank' rel='noopener'>Python<img src='static/images/externallink.png' width='12px'></a> language, which is very useful for the construction of strings that need to contain double-quote characters. This form does not handle any escape characters.";
+    txt += "The command field is used to enter the command and its parameters. Double quotes (\") are needed around each item that contains spaces, or when it is otherwise mistaken for a number, boolean, list or object according to the <a href='https://tools.ietf.org/html/rfc7159' target='_blank' rel='noopener'>JSON" + Documentation.EXTERNAL_LINK + "</a> notation. Additionally, strings in the form \"\"\"string\"\"\" are recognized. This is a notation from the <a href='https://docs.python.org/3/tutorial/introduction.html#strings' target='_blank' rel='noopener'>Python" + Documentation.EXTERNAL_LINK + "</a> language, which is very useful for the construction of strings that need to contain double-quote characters. This form does not handle any escape characters.";
     txt += "<br/>";
     txt += "Parameters in the form name=value are used to pass named variables. The same quoting rules apply to the value. The named parameters are used from left-to-right. Their actual position within the line is otherwise not important.";
     txt += "<br/>";
@@ -491,9 +492,7 @@ export class CommandBox {
       div.appendChild(minionSpan1);
 
       const minionSpan2 = document.createElement("span");
-      // 23F3 = HOURGLASS WITH FLOWING SAND
-      // FE0E = VARIATION SELECTOR-15 (render as text)
-      minionSpan2.innerText = ": \u23F3\uFE0E ";
+      minionSpan2.innerText = ": " + Character.HOURGLASS_WITH_FLOWING_SAND_MONO + " ";
       div.appendChild(minionSpan2);
 
       const output = document.querySelector(".run-command pre");
@@ -540,8 +539,7 @@ export class CommandBox {
     // make sure there is a black circle for the current event
     while (div.children.length <= eventSeqNr + 2) {
       const newSpan = document.createElement("span");
-      // 25CF = BLACK CIRCLE
-      newSpan.innerText = "\u25CF";
+      newSpan.innerText = Character.BLACK_CIRCLE;
       div.appendChild(newSpan);
     }
 
@@ -587,9 +585,7 @@ export class CommandBox {
       minionDiv.appendChild(minionSpan1);
 
       const minionSpan2 = document.createElement("span");
-      // 23F3 = HOURGLASS WITH FLOWING SAND
-      // FE0E = VARIATION SELECTOR-15 (render as text)
-      minionSpan2.innerText = ": \u23F3\uFE0E ";
+      minionSpan2.innerText = ": " + Character.HOURGLASS_WITH_FLOWING_SAND_MONO + " ";
       minionDiv.appendChild(minionSpan2);
 
       output.appendChild(minionDiv);

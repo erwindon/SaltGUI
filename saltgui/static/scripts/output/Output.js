@@ -1,5 +1,6 @@
 /* global config document MouseEvent window */
 
+import {Character} from "../Character.js";
 import {OutputDocumentation} from "./OutputDocumentation.js";
 import {OutputHighstate} from "./OutputHighstate.js";
 import {OutputJson} from "./OutputJson.js";
@@ -307,8 +308,7 @@ export class Output {
 
       nr += 1;
 
-      // 25CF = BLACK CIRCLE
-      const span = Utils.createSpan("", "\u25CF");
+      const span = Utils.createSpan("", Character.BLACK_CIRCLE);
 
       Output._setTaskTooltip(span, task);
 
@@ -317,8 +317,7 @@ export class Output {
 
         // show the output, it might be hidden
         const triangle = pMinionDiv.querySelector("span.triangle");
-        // 25BD = WHITE DOWN-POINTING TRIANGLE
-        triangle.innerText = "\u25BD";
+        triangle.innerText = Character.WHITE_DOWN_POINTING_TRIANGLE;
         const outputDiv = pMinionDiv.querySelector("div");
         outputDiv.style.display = "";
 
@@ -489,11 +488,9 @@ export class Output {
     // use cntMinions instead of cntResponses to be predictable
     // hide details when there are many minions to show
     if (cntMinions > 50) {
-      // 25B7 = WHITE RIGHT-POINTING TRIANGLE
-      masterTriangle.innerText = "\u25B7";
+      masterTriangle.innerText = Character.WHITE_RIGHT_POINTING_TRIANGLE;
     } else {
-      // 25BD = WHITE DOWN-POINTING TRIANGLE
-      masterTriangle.innerText = "\u25BD";
+      masterTriangle.innerText = Character.WHITE_DOWN_POINTING_TRIANGLE;
     }
     masterTriangle.style.cursor = "pointer";
     allDiv.appendChild(masterTriangle);
@@ -501,13 +498,10 @@ export class Output {
     pOutputContainer.appendChild(allDiv);
 
     masterTriangle.addEventListener("click", () => {
-      // 25BD = WHITE DOWN-POINTING TRIANGLE
-      if (masterTriangle.innerText === "\u25BD") {
-        // 25B7 = WHITE RIGHT-POINTING TRIANGLE
-        masterTriangle.innerText = "\u25B7";
+      if (masterTriangle.innerText === Character.WHITE_DOWN_POINTING_TRIANGLE) {
+        masterTriangle.innerText = Character.WHITE_RIGHT_POINTING_TRIANGLE;
       } else {
-        // 25BD = WHITE DOWN-POINTING TRIANGLE
-        masterTriangle.innerText = "\u25BD";
+        masterTriangle.innerText = Character.WHITE_DOWN_POINTING_TRIANGLE;
       }
 
       for (const div of pOutputContainer.childNodes) {
@@ -654,14 +648,11 @@ export class Output {
         triangle = Utils.createSpan("triangle", masterTriangle.innerText);
         triangle.style.cursor = "pointer";
         triangle.addEventListener("click", () => {
-          // 25BD = WHITE DOWN-POINTING TRIANGLE
-          if (triangle.innerText === "\u25BD") {
-            // 25B7 = WHITE RIGHT-POINTING TRIANGLE
-            triangle.innerText = "\u25B7";
+          if (triangle.innerText === Character.WHITE_DOWN_POINTING_TRIANGLE) {
+            triangle.innerText = Character.WHITE_RIGHT_POINTING_TRIANGLE;
             minionOutput.style.display = "none";
           } else {
-            // 25BD = WHITE DOWN-POINTING TRIANGLE
-            triangle.innerText = "\u25BD";
+            triangle.innerText = Character.WHITE_DOWN_POINTING_TRIANGLE;
             minionOutput.style.display = "";
           }
         });
@@ -699,8 +690,7 @@ export class Output {
       minionOutput.classList.add("minion-output");
       minionOutput.classList.add(minionMultiLine ? "minion-output-multiple" : "minion-output-single");
       // hide the per-minion details when we have so many minions
-      // 25B7 = WHITE RIGHT-POINTING TRIANGLE
-      if (triangle && triangle.innerText === "\u25B7") {
+      if (triangle && triangle.innerText === Character.WHITE_RIGHT_POINTING_TRIANGLE) {
         minionOutput.style.display = "none";
       }
       div.append(minionOutput);

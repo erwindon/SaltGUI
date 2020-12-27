@@ -1,5 +1,6 @@
 /* global document */
 
+import {Character} from "../Character.js";
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
 
@@ -58,8 +59,7 @@ export class StatsPanel extends Panel {
           }
         }
         // thread has all-zero statistics, remove that part
-        // 2026 = HORIZONTAL ELLIPSIS
-        workerThreads[threadName] = "\u2026";
+        workerThreads[threadName] = Character.HORIZONTAL_ELLIPSIS;
       }
       /* eslint-enable no-labels */
     }

@@ -1,5 +1,6 @@
 /* global config document window */
 
+import {Character} from "../Character.js";
 import {DropDownMenu} from "../DropDown.js";
 import {JobPanel} from "./Job.js";
 import {JobsPanel} from "./Jobs.js";
@@ -58,8 +59,7 @@ export class JobsDetailsPanel extends JobsPanel {
     let title = "Show first " + maxJobs + " jobs";
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     if (cnt === "undefined" || cnt === String(maxJobs)) {
-      // 25CF = BLACK CIRCLE
-      title = "\u25CF " + title;
+      title = Character.BLACK_CIRCLE + " " + title;
     }
     this.panelMenu.addMenuItem(title, () => {
       window.location.assign(config.NAV_URL + "/jobs?cnt=" + maxJobs);
@@ -70,8 +70,7 @@ export class JobsDetailsPanel extends JobsPanel {
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     let title = "Show eligible jobs";
     if (cnt === "eligible") {
-      // 25CF = BLACK CIRCLE
-      title = "\u25CF " + title;
+      title = Character.BLACK_CIRCLE + " " + title;
     }
     this.panelMenu.addMenuItem(title, () => {
       window.location.assign(config.NAV_URL + "/jobs?cnt=eligible");
@@ -82,8 +81,7 @@ export class JobsDetailsPanel extends JobsPanel {
     const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
     let title = "Show all jobs";
     if (cnt === "all") {
-      // 25CF = BLACK CIRCLE
-      title = "\u25CF " + title;
+      title = Character.BLACK_CIRCLE + " " + title;
     }
     this.panelMenu.addMenuItem(title, () => {
       window.location.assign(config.NAV_URL + "/jobs?cnt=all");

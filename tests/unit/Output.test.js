@@ -2,10 +2,13 @@
 
 const assert = require("chai").assert;
 
+import {Character} from "../../saltgui/static/scripts/Character.js";
 import {OutputDocumentation} from "../../saltgui/static/scripts/output/OutputDocumentation.js";
 import {OutputJson} from "../../saltgui/static/scripts/output/OutputJson.js";
 import {OutputNested} from "../../saltgui/static/scripts/output/OutputNested.js";
 import {OutputYaml} from "../../saltgui/static/scripts/output/OutputYaml.js";
+
+Character.init();
 
 describe("Unittests for Output.js", () => {
 
