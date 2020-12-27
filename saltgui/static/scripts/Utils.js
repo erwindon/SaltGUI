@@ -455,10 +455,12 @@ export class Utils {
     return false;
   }
 
-  static createJobStatusSpan (pJobId) {
+  static createJobStatusSpan (pJobId, pInitialDisplay) {
     const span = Utils.createSpan("", "", "status" + pJobId);
     span.innerText = Character.CLOCKWISE_OPEN_CIRCLE_ARROW + Character.NO_BREAK_SPACE;
-    span.style.display = "none";
+    if (!pInitialDisplay) {
+      span.style.display = "none";
+    }
     span.style.fontWeight = "bold";
     return span;
   }

@@ -257,7 +257,8 @@ export class JobsDetailsPanel extends JobsPanel {
     }
 
     detailsSpan.innerText = "";
-    detailsSpan.appendChild(Utils.createJobStatusSpan(pJobId));
+    const span = Utils.createJobStatusSpan(pJobId, keyCount !== pData.Minions.length);
+    detailsSpan.appendChild(span);
     const statusSpan = Utils.createSpan();
     statusSpan.innerHTML = detailsHTML;
     detailsSpan.appendChild(statusSpan);

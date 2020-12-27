@@ -438,7 +438,7 @@ export class JobPanel extends Panel {
     this.jobIsTerminated = false;
 
     summaryJobsActiveSpan.innerText = info.Running.length + " active";
-    summaryJobsActiveSpan.insertBefore(Utils.createJobStatusSpan(pJobId), summaryJobsActiveSpan.firstChild);
+    summaryJobsActiveSpan.insertBefore(Utils.createJobStatusSpan(pJobId, true), summaryJobsActiveSpan.firstChild);
     summaryJobsActiveSpan.addEventListener("click", () => {
       window.location.reload();
     });

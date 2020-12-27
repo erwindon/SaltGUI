@@ -92,7 +92,7 @@ export class JobsPanel extends Panel {
       }
       targetField.classList.remove("no-job-status");
       targetField.innerText = targetText;
-      targetField.insertBefore(Utils.createJobStatusSpan(jobId), targetField.firstChild);
+      targetField.insertBefore(Utils.createJobStatusSpan(jobId, true), targetField.firstChild);
       Utils.addToolTip(targetField, "Click to refresh column");
     }
 
