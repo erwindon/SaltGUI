@@ -505,22 +505,24 @@ export class JobPanel extends Panel {
 
     // This element only exists when the user happens to look at the output of that jobId.
     const span = this.div.querySelector("#status" + jid);
-    if (span) {
-      let oldLevel = span.dataset.level;
-      if (oldLevel === undefined) {
-        oldLevel = 0;
-      }
-      if (newLevel > oldLevel) {
-        span.dataset.level = newLevel;
-        if (newLevel === 1) {
-          span.style.color = "lime";
-        } else if (newLevel === 2) {
-          span.style.color = "yellow";
-        } else if (newLevel === 3) {
-          span.style.color = "red";
-        }
-      }
-      span.style.removeProperty("display");
+    if (!span) {
+      return;
     }
+
+    let oldLevel = span.dataset.level;
+    if (oldLevel === undefined) {
+      oldLevel = 0;
+    }
+    if (newLevel > oldLevel) {
+      span.dataset.level = newLevel;
+      if (newLevel === 1) {
+        span.style.color = "lime";
+      } else if (newLevel === 2) {
+        span.style.color = "yellow";
+      } else if (newLevel === 3) {
+        span.style.color = "red";
+      }
+    }
+    span.style.removeProperty("display");
   }
 }
