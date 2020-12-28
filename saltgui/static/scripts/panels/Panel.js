@@ -1,6 +1,5 @@
 /* global config document window */
 
-import {API} from "../Api.js";
 import {Character} from "../Character.js";
 import {CommandBox} from "../CommandBox.js";
 import {DropDownMenu} from "../DropDown.js";
@@ -32,8 +31,6 @@ export class Panel {
     // (but so far not both)
     //
     // Status line (optional)
-
-    this.api = new API();
   }
 
   addTitle (pTitle) {
@@ -42,6 +39,7 @@ export class Panel {
     h1.innerText = pTitle;
     this.div.appendChild(h1);
     this.title = h1;
+    this.originalTitle = pTitle;
   }
 
   updateTitle (pTitle) {
@@ -120,7 +118,7 @@ export class Panel {
     this.div.appendChild(span);
 
     span.addEventListener("click", () => {
-      window.history.back();
+      this.router.goTo(this.route.parentHash, this.route.parentQuery, 1);
     });
   }
 
@@ -165,6 +163,12 @@ export class Panel {
     this.table = table;
   }
 
+  clearTable () {
+    while (this.table.tBodies[0].children.length) {
+      this.table.tBodies[0].deleteRow(0);
+    }
+  }
+
   setTableClickable () {
     // this function is only called when the table is clickable
     this.table.classList.add("highlight-rows");
@@ -200,6 +204,7 @@ export class Panel {
     console.id = this.key + "-output";
     console.classList.add("output");
     this.div.appendChild(console);
+    this.console = console;
   }
 
   addMsg () {
@@ -248,10 +253,14 @@ export class Panel {
     });
   }
 
-  showErrorRowInstead (pData) {
+  showErrorRowInstead (pData, pMinionId = null) {
     if (pData === null) {
       // not an error, but also nothing to show
       return true;
+    }
+
+    if (pMinionId) {
+      pData = pData.return[0][pMinionId];
     }
 
     if (typeof pData === "object") {
@@ -266,6 +275,7 @@ export class Panel {
     td.appendChild(span);
 
     const tr = document.createElement("tr");
+    tr.id = "error-row";
     tr.appendChild(td);
 
     if (!this.table.tFoot) {
@@ -301,7 +311,7 @@ export class Panel {
     minionTr.appendChild(Utils.createTd("os", "loading..."));
 
     // fill out the number of columns to that of the header
-    while (minionTr.cells.length < this.table.tHead.rows[0].cells.length - freeColumns) {
+    while (this.table.tHead.rows[0] && minionTr.cells.length < this.table.tHead.rows[0].cells.length - freeColumns) {
       minionTr.appendChild(Utils.createTd());
     }
 
@@ -627,5 +637,29 @@ export class Panel {
     command.value = pCommandString;
     // the menu may become (in)visible due to content of command field
     this.router.commandbox.cmdmenu.verifyAll();
+  }
+
+  clearPanel () {
+    if (this.title && this.originalTitle.includes("...")) {
+      this.title.innerText = this.originalTitle;
+    }
+    if (this.table) {
+      this.clearTable();
+    }
+    if (this.msg) {
+      this.msg.innerText = "(loading)";
+    }
+    if (this.timeField) {
+      this.timeField.innerHTML = "&nbsp;";
+    }
+    if (this.console) {
+      this.console.innerText = "";
+    }
+    if (this.output) {
+      this.output.innerText = "";
+    }
+    for (const tr of document.querySelectorAll("#error-row")) {
+      tr.parentElement.remove(tr);
+    }
   }
 }

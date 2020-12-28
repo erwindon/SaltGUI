@@ -1,4 +1,4 @@
-/* global config */
+/* global window */
 
 import {Page} from "./Page.js";
 import {Utils} from "../Utils.js";
@@ -24,7 +24,7 @@ export class LogoutPage extends Page {
 
   onShow () {
     this.api.logout().then(() => {
-      window.location.replace(config.NAV_URL + "/login?reason=logout");
+      this.router.goTo("login", {"reason": "logout"});
     });
   }
 
@@ -44,7 +44,7 @@ export class LogoutPage extends Page {
     // Api.apiRequest will do all the work
     statsPromise.then(() => true, () => {
       this.api.logout().then(() => {
-        window.location.replace(config.NAV_URL + "/login?reason=no-session");
+        this.router.goTo("login", {"reason": "no-session"});
         return false;
       });
     });
@@ -69,10 +69,10 @@ export class LogoutPage extends Page {
       warning.innerText = "Logout";
       // logout, and redirect to login screen
       this.api.logout().then(() => {
-        window.location.replace(config.NAV_URL + "/login?reason=expired-session");
+        this.router.goTo("login", {"reason": "expired-session"});
         return true;
       }, () => {
-        window.location.replace(config.NAV_URL + "/login?reason=expired-session");
+        this.router.goTo("login", {"reason": "expired-session"});
         return false;
       });
       return;

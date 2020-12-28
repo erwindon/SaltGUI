@@ -1,4 +1,4 @@
-/* global config document jsonPath window */
+/* global document jsonPath */
 
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
@@ -82,7 +82,7 @@ export class GrainsPanel extends Panel {
       }
 
       minionTr.addEventListener("click", () => {
-        window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(minionId));
+        this.router.goTo("grains-minion", {"minionid": minionId});
       });
     }
 
@@ -159,15 +159,11 @@ export class GrainsPanel extends Panel {
       minionTr.appendChild(td);
     }
     /* eslint-enable max-depth */
-
-    minionTr.addEventListener("click", () => {
-      window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(pMinionId));
-    });
   }
 
   static _addMenuItemShowGrains (pMenu, pMinionId) {
     pMenu.addMenuItem("Show grains", () => {
-      window.location.assign(config.NAV_URL + "/grains-minion?minionid=" + encodeURIComponent(pMinionId));
+      this.router.goTo("grains-minion", {"minionid": pMinionId});
     });
   }
 }

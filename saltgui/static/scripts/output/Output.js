@@ -1,4 +1,4 @@
-/* global config document MouseEvent window */
+/* global document MouseEvent window */
 
 import {Character} from "../Character.js";
 import {OutputDocumentation} from "./OutputDocumentation.js";
@@ -80,7 +80,7 @@ export class Output {
     // typically found in the output of an async job
     if (pMinionResponse.match(ParseCommandLine.getPatJid())) {
       const link = document.createElement("a");
-      link.href = config.NAV_URL + "/job?id=" + encodeURIComponent(pMinionResponse);
+      link.href = "#job?id=" + encodeURIComponent(pMinionResponse);
       link.innerText = pMinionResponse;
       return link;
     }

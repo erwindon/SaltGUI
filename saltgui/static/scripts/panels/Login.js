@@ -197,7 +197,10 @@ export class LoginPanel extends Panel {
 
     // allow the success message to be seen
     window.setTimeout(() => {
-      this.router.goTo("/");
+      // erase credentials since we don't do page-refresh
+      this.usernameField.value = "";
+      this.passwordField.value = "";
+      this.router.goTo("");
     }, 1000);
   }
 

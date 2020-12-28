@@ -1,4 +1,4 @@
-/* global config document window */
+/* global document window */
 
 import {Character} from "../Character.js";
 import {DropDownMenu} from "../DropDown.js";
@@ -15,9 +15,9 @@ export class JobsDetailsPanel extends JobsPanel {
 
     this.addTitle("Recent Jobs");
     this.addPanelMenu();
-    this._addMenuItemShowSome();
-    this._addMenuItemShowEligible();
-    this._addMenuItemShowAll();
+    this._addPanelMenuItemShowSome();
+    this._addPanelMenuItemShowEligible();
+    this._addPanelMenuItemShowAll();
     this.addSearchButton();
     this.addPlayPauseButton("play");
     this.addTable(["JID", "Target", "Function", "Start Time", "-menu-", "Status", "Details"], "data-list-jobs");
@@ -54,37 +54,43 @@ export class JobsDetailsPanel extends JobsPanel {
     }, 1000);
   }
 
-  _addMenuItemShowSome () {
+  _addPanelMenuItemShowSome () {
     const maxJobs = 50;
-    let title = "Show first " + maxJobs + " jobs";
-    const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
-    if (cnt === "undefined" || cnt === String(maxJobs)) {
-      title = Character.BLACK_CIRCLE + " " + title;
-    }
-    this.panelMenu.addMenuItem(title, () => {
-      window.location.assign(config.NAV_URL + "/jobs?cnt=" + maxJobs);
+    this.panelMenu.addMenuItem(() => {
+      let title = "Show first " + maxJobs + " jobs";
+      const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
+      if (cnt === "undefined" || cnt === String(maxJobs)) {
+        title = Character.BLACK_CIRCLE + " " + title;
+      }
+      return title;
+    }, () => {
+      this.router.goTo("jobs", {"cnt": maxJobs});
     });
   }
 
-  _addMenuItemShowEligible () {
-    const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
-    let title = "Show eligible jobs";
-    if (cnt === "eligible") {
-      title = Character.BLACK_CIRCLE + " " + title;
-    }
-    this.panelMenu.addMenuItem(title, () => {
-      window.location.assign(config.NAV_URL + "/jobs?cnt=eligible");
+  _addPanelMenuItemShowEligible () {
+    this.panelMenu.addMenuItem(() => {
+      const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
+      let title = "Show eligible jobs";
+      if (cnt === "eligible") {
+        title = Character.BLACK_CIRCLE + " " + title;
+      }
+      return title;
+    }, () => {
+      this.router.goTo("jobs", {"cnt": "eligible"});
     });
   }
 
-  _addMenuItemShowAll () {
-    const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
-    let title = "Show all jobs";
-    if (cnt === "all") {
-      title = Character.BLACK_CIRCLE + " " + title;
-    }
-    this.panelMenu.addMenuItem(title, () => {
-      window.location.assign(config.NAV_URL + "/jobs?cnt=all");
+  _addPanelMenuItemShowAll () {
+    this.panelMenu.addMenuItem(() => {
+      const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
+      let title = "Show all jobs";
+      if (cnt === "all") {
+        title = Character.BLACK_CIRCLE + " " + title;
+      }
+      return title;
+    }, () => {
+      this.router.goTo("jobs", {"cnt": "all"});
     });
   }
 
@@ -328,13 +334,13 @@ export class JobsDetailsPanel extends JobsPanel {
     tbody.appendChild(tr);
 
     tr.addEventListener("click", () => {
-      window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
+      this.router.goTo("job", {"id": job.id});
     });
   }
 
   static _addJobsMenuItemShowDetails (pMenu, job) {
     pMenu.addMenuItem("Show details", () => {
-      window.location.assign(config.NAV_URL + "/job?id=" + encodeURIComponent(job.id));
+      this.router.goTo("job", {"id": job.id});
     });
   }
 

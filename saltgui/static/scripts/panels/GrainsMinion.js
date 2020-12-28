@@ -12,6 +12,9 @@ export class GrainsMinionPanel extends Panel {
 
     this.addTitle("Grains on ...");
     this.addPanelMenu();
+    this._addPanelMenuItemGrainsSetValAdd();
+    this._addPanelMenuItemSaltUtilRefreshGrains();
+
     this.addSearchButton();
     this.addCloseButton();
     this.addTable(["Name", "-menu-", "Value"]);
@@ -37,10 +40,7 @@ export class GrainsMinionPanel extends Panel {
   }
 
   _handleLocalGrainsItems (pLocalGrainsItemsData, pMinionId) {
-    this._addMenuItemGrainsSetValAdd(pMinionId);
-    this._addMenuItemSaltUtilRefreshGrains(pMinionId);
-
-    if (this.showErrorRowInstead(pLocalGrainsItemsData)) {
+    if (this.showErrorRowInstead(pLocalGrainsItemsData, pMinionId)) {
       return;
     }
 
@@ -87,16 +87,18 @@ export class GrainsMinionPanel extends Panel {
     this.setMsg(txt);
   }
 
-  _addMenuItemGrainsSetValAdd (pMinionId) {
+  _addPanelMenuItemGrainsSetValAdd () {
     this.panelMenu.addMenuItem("Add grain...", (pClickEvent) => {
       // use placeholders for name and value
-      this.runCommand(pClickEvent, pMinionId, "grains.setval <name> <value>");
+      const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
+      this.runCommand(pClickEvent, minionId, "grains.setval <name> <value>");
     });
   }
 
-  _addMenuItemSaltUtilRefreshGrains (pMinionId) {
+  _addPanelMenuItemSaltUtilRefreshGrains () {
     this.panelMenu.addMenuItem("Refresh grains...", (pClickEvent) => {
-      this.runCommand(pClickEvent, pMinionId, "saltutil.refresh_grains");
+      const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
+      this.runCommand(pClickEvent, minionId, "saltutil.refresh_grains");
     });
   }
 

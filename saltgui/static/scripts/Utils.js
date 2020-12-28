@@ -8,6 +8,10 @@ export class Utils {
   // functions for URL parameters
 
   static _getQueryParam2 (pUrl, pName) {
+    const hashPos = pUrl.indexOf("#");
+    if (hashPos > 0) {
+      pUrl = pUrl.substring(0, hashPos);
+    }
     const questionmarkPos = pUrl.indexOf("?");
     if (questionmarkPos < 0) {
       return undefined;

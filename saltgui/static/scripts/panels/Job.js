@@ -1,4 +1,4 @@
-/* global config document window */
+/* global document window */
 
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
@@ -16,6 +16,26 @@ export class JobPanel extends Panel {
     this.addCloseButton();
     this.addPanelMenu();
     this.addSearchButton();
+
+    // 1: re-run with original target pattern
+    this._addPanelMenuItemJobRerunJob();
+
+    // 2: re-run list of minions
+    this._addPanelMenuItemRerunJobOnAllMinionsWhenNeeded();
+
+    // 3: re-run all failed (error+timeout)
+    this._addPanelMenuItemRerunJobOnUnsuccessfulMinionsWhenNeeded();
+
+    // 4: re-run all failed (error)
+    this._addPanelMenuItemRerunJobOnFailedMinionsWhenNeeded();
+
+    // 5: re-run all failed (timeout)
+    this._addPanelMenuItemRerunJobOnNonRespondingMinionsWhenNeeded();
+
+    // 6: kill with original target pattern
+    this._addPanelMenuItemTerminateJob();
+    this._addPanelMenuItemKillJob();
+    this._addPanelMenuItemSignalJob();
 
     const time = document.createElement("h2");
     time.classList.add("time");
@@ -36,7 +56,7 @@ export class JobPanel extends Panel {
   onShow () {
     const jobId = decodeURIComponent(Utils.getQueryParam("id"));
 
-    JobPanel.jobIsTerminated = undefined;
+    this.jobIsTerminated = undefined;
 
     const runnerJobsListJobPromise = this.api.getRunnerJobsListJob(jobId);
     const runnerJobsActivePromise = this.api.getRunnerJobsActive();
@@ -141,25 +161,14 @@ export class JobPanel extends Panel {
     const argumentsText = JobPanel.decodeArgumentsText(info.Arguments);
     const commandText = info.Function + argumentsText;
 
-    // 1: re-run with original target pattern
-    this._addMenuItemJobRerunJob(info, commandText);
+    this.targettype = info["Target-type"];
+    this.target = info.Target;
+    this.commandtext = commandText;
+    this.jobid = pJobId;
+    this.minions = info.Minions;
+    this.result = info.Result;
 
-    // 2: re-run list of minions
-    this._addMenuItemRerunJobOnAllMinionsWhenNeeded(info, commandText);
-
-    // 3: re-run all failed (error+timeout)
-    this._addMenuItemRerunJobOnUnsuccessfulMinionsWhenNeeded(info, commandText);
-
-    // 4: re-run all failed (error)
-    this._addMenuItemRerunJobOnFailedMinionsWhenNeeded(info, commandText);
-
-    // 5: re-run all failed (timeout)
-    this._addMenuItemRerunJobOnNonRespondingMinionsWhenNeeded(info, commandText);
-
-    // 6: kill with original target pattern
-    this._addMenuItemTerminateJob(info, pJobId);
-    this._addMenuItemKillJob(info, pJobId);
-    this._addMenuItemSignalJob(info, pJobId);
+    // ============================
 
     const functionText = commandText + " on " +
       TargetType.makeTargetText(info);
@@ -205,7 +214,7 @@ export class JobPanel extends Panel {
         Utils.addToolTip(link, "this job");
       } else {
         link.addEventListener("click", () => {
-          window.location.assign(config.NAV_URL + "/job?id=" + linkToJid);
+          this.router.goTo("job", {"id": linkToJid});
         });
       }
 
@@ -218,152 +227,192 @@ export class JobPanel extends Panel {
     }
   }
 
-  _addMenuItemJobRerunJob (info, commandText) {
+  _addPanelMenuItemJobRerunJob () {
     this.panelMenu.addMenuItem("Re-run job...", (pClickEvent) => {
-      this.runFullCommand(pClickEvent, info["Target-type"], info.Target, commandText);
+      this.runFullCommand(pClickEvent, this.targettype, this.target, this.commandtext);
     });
   }
 
-  _addMenuItemRerunJobOnAllMinionsWhenNeeded (info, commandText) {
-    if (!info.Minions) {
-      return;
+  _listForRerunJobOnAllMinions () {
+    if (!this.minions) {
+      return null;
     }
 
     let minionList = "";
-    for (const minionId of info.Minions) {
+    for (const minionId of this.minions) {
       minionList += "," + minionId;
     }
 
     // suppress an empty list
     if (!minionList) {
-      return;
+      return null;
     }
 
     // suppress a trivial case
-    if (minionList === "," + info.Minions[0]) {
-      return;
+    if (minionList === "," + this.minions[0]) {
+      return null;
     }
 
-    const lst = minionList.substring(1);
-    this.panelMenu.addMenuItem("Re-run job on all minions...", (pClickEvent) => {
-      this.runFullCommand(pClickEvent, "list", lst, commandText);
+    return minionList.substring(1);
+  }
+
+  _addPanelMenuItemRerunJobOnAllMinionsWhenNeeded () {
+    this.panelMenu.addMenuItem(() => {
+      const lst = this._listForRerunJobOnAllMinions();
+      if (!lst) {
+        return null;
+      }
+      return "Re-run job on all minions...";
+    }, (pClickEvent) => {
+      const lst = this._listForRerunJobOnAllMinions();
+      this.runFullCommand(pClickEvent, "list", lst, this.commandtext);
     });
   }
 
-  _addMenuItemRerunJobOnUnsuccessfulMinionsWhenNeeded (info, commandText) {
-    if (!info.Minions) {
-      return;
+  _listForRerunJobOnUnsuccessfulMinions () {
+    if (!this.minions) {
+      return null;
     }
 
     let minionList = "";
     let has1 = false;
     let has2 = false;
-    for (const minionId of info.Minions) {
-      if (!(minionId in info.Result)) {
+    for (const minionId of this.minions) {
+      if (!(minionId in this.result)) {
         has1 = true;
       }
-      if (minionId in info.Result && !JobPanel._isResultOk(info.Result[minionId])) {
+      if (minionId in this.result && !JobPanel._isResultOk(this.result[minionId])) {
         has2 = true;
       }
-      if (!(minionId in info.Result) || !JobPanel._isResultOk(info.Result[minionId])) {
+      if (!(minionId in this.result) || !JobPanel._isResultOk(this.result[minionId])) {
         minionList += "," + minionId;
       }
     }
 
     // suppress an empty list
     if (!minionList) {
-      return;
+      return null;
     }
 
     // only when we have both types in the list
     // otherwise the #4 or #5 is sufficient
     if (!has1 || !has2) {
-      return;
+      return null;
     }
 
-    const lst = minionList.substring(1);
-    this.panelMenu.addMenuItem("Re-run job on unsuccessful minions...", (pClickEvent) => {
-      this.runFullCommand(pClickEvent, "list", lst, commandText);
+    return minionList.substring(1);
+  }
+
+  _addPanelMenuItemRerunJobOnUnsuccessfulMinionsWhenNeeded () {
+    this.panelMenu.addMenuItem(() => {
+      const lst = this._listForRerunJobOnUnsuccessfulMinions();
+      if (!lst) {
+        return null;
+      }
+      return "Re-run job on unsuccessful minions...";
+    }, (pClickEvent) => {
+      const lst = this._listForRerunJobOnUnsuccessfulMinions();
+      this.runFullCommand(pClickEvent, "list", lst, this.commandtext);
     });
   }
 
-  _addMenuItemRerunJobOnFailedMinionsWhenNeeded (info, commandText) {
-    if (!info.Minions) {
-      return;
+  _listForRerunJobOnFailedMinions () {
+    if (!this.minions) {
+      return null;
     }
 
     let minionList = "";
-    for (const minionId of info.Minions) {
-      if (minionId in info.Result && !JobPanel._isResultOk(info.Result[minionId])) {
+    for (const minionId of this.minions) {
+      if (minionId in this.result && !JobPanel._isResultOk(this.result[minionId])) {
         minionList += "," + minionId;
       }
     }
 
     // suppress an empty list
     if (!minionList) {
-      return;
+      return null;
     }
 
-    const lst = minionList.substring(1);
-    this.panelMenu.addMenuItem("Re-run job on failed minions...", (pClickEvent) => {
-      this.runFullCommand(pClickEvent, "list", lst, commandText);
+    return minionList.substring(1);
+  }
+
+  _addPanelMenuItemRerunJobOnFailedMinionsWhenNeeded () {
+    this.panelMenu.addMenuItem(() => {
+      const lst = this._listForRerunJobOnFailedMinions();
+      if (!lst) {
+        return null;
+      }
+      return "Re-run job on failed minions...";
+    }, (pClickEvent) => {
+      const lst = this._listForRerunJobOnFailedMinions();
+      this.runFullCommand(pClickEvent, "list", lst, this.commandtext);
     });
   }
 
-  _addMenuItemRerunJobOnNonRespondingMinionsWhenNeeded (info, commandText) {
-    if (!info.Minions) {
-      return;
+  _listForRerunJobOnNonRespondingMinions () {
+    if (!this.minions) {
+      return null;
     }
 
     let minionList = "";
-    for (const minionId of info.Minions) {
-      if (!(minionId in info.Result)) {
+    for (const minionId of this.minions) {
+      if (!(minionId in this.result)) {
         minionList += "," + minionId;
       }
     }
 
     // suppress an empty list
     if (!minionList) {
-      return;
+      return null;
     }
 
-    const lst = minionList.substring(1);
-    this.panelMenu.addMenuItem("Re-run job on non responding minions...", (pClickEvent) => {
-      this.runFullCommand(pClickEvent, "list", lst, commandText);
+    return minionList.substring(1);
+  }
+
+  _addPanelMenuItemRerunJobOnNonRespondingMinionsWhenNeeded () {
+    this.panelMenu.addMenuItem(() => {
+      const lst = this._listForRerunJobOnNonRespondingMinions();
+      if (!lst) {
+        return null;
+      }
+      return "Re-run job on non responding minions...";
+    }, (pClickEvent) => {
+      const lst = this._listForRerunJobOnNonRespondingMinions();
+      this.runFullCommand(pClickEvent, "list", lst, this.commandtext);
     });
   }
 
-  _addMenuItemTerminateJob (info, pJobId) {
-    this.panelMenu.addMenuItem(
-      /* eslint-disable no-extra-parens */
-      () => (JobPanel.jobIsTerminated === false ? "Terminate job..." : null),
-      /* eslint-enable no-extra-parens */
-      (pClickEvent) => {
-        this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.term_job " + pJobId);
+  _addPanelMenuItemTerminateJob () {
+    this.panelMenu.addMenuItem(() => {
+      if (this.jobIsTerminated !== false) {
+        return null;
       }
-    );
+      return "Terminate job...";
+    }, (pClickEvent) => {
+      this.runFullCommand(pClickEvent, this.targettype, this.target, "saltutil.term_job " + this.jobid);
+    });
   }
 
-  _addMenuItemKillJob (info, pJobId) {
-    this.panelMenu.addMenuItem(
-      /* eslint-disable no-extra-parens */
-      () => (JobPanel.jobIsTerminated === false ? "Kill job..." : null),
-      /* eslint-enable no-extra-parens */
-      (pClickEvent) => {
-        this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.kill_job " + pJobId);
+  _addPanelMenuItemKillJob () {
+    this.panelMenu.addMenuItem(() => {
+      if (this.jobIsTerminated !== false) {
+        return null;
       }
-    );
+      return "Kill job...";
+    }, (pClickEvent) => {
+      this.runFullCommand(pClickEvent, this.targettype, this.target, "saltutil.kill_job " + this.jobid);
+    });
   }
 
-  _addMenuItemSignalJob (info, pJobId) {
-    this.panelMenu.addMenuItem(
-      /* eslint-disable no-extra-parens */
-      () => (JobPanel.jobIsTerminated === false ? "Signal job..." : null),
-      /* eslint-enable no-extra-parens */
-      (pClickEvent) => {
-        this.runFullCommand(pClickEvent, info["Target-type"], info.Target, "saltutil.signal_job " + pJobId + " signal=<signalnumber>");
+  _addPanelMenuItemSignalJob () {
+    this.panelMenu.addMenuItem(() => {
+      if (this.jobIsTerminated !== false) {
+        return null;
       }
-    );
+      return "Signal job...";
+    }, (pClickEvent) => {
+      this.runFullCommand(pClickEvent, this.targettype, this.target, "saltutil.signal_job " + this.jobid + " signal=<signalnumber>");
+    });
   }
 
   _handleRunnerJobsActive (pJobId, pData) {
@@ -383,10 +432,10 @@ export class JobPanel extends Panel {
     // when the job is already completely done, nothing is returned
     if (!info) {
       summaryJobsActiveSpan.innerText = "done";
-      JobPanel.jobIsTerminated = true;
+      this.jobIsTerminated = true;
       return;
     }
-    JobPanel.jobIsTerminated = false;
+    this.jobIsTerminated = false;
 
     summaryJobsActiveSpan.innerText = info.Running.length + " active";
     summaryJobsActiveSpan.insertBefore(Utils.createJobStatusSpan(pJobId), summaryJobsActiveSpan.firstChild);
