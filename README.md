@@ -293,6 +293,29 @@ SaltGUI includes these libraries (with possible modifications):
 
 ## Changelog
 
+## 1.23.0 (2020-12-28)
+- warn when there are no matching targets (erwindon)
+- added basic support for reactors (erwindon)
+- added support to add all 3 schedule types (erwindon)
+- consider the state_verbose and state_output variables (erwindon)
+- async (highstate) jobs now provide feeback about progress (erwindon)
+- added support for bulk state apply (erwindon)
+- added support for bulk key management (erwindon)
+- prefer js escape codes over html escape codes (erwindon)
+- centralized special character handling (erwindon)
+- restyled the top-right cmd-button (erwindon, thx dawidmalina)
+- wheel commands can only take named parameters (erwindon)
+- let pages decide on their own visibility (erwindon)
+- better support for touchscreens (erwindon)
+- show cherrypy details on (hidden) screen (ewindon)
+- improved session timeout detection (erwindon)
+- improved (hidden) options screen (erwindon)
+- reduce update-rate of jobs overview, now interruptable (erwindon)
+- cleaned code for dropdown menus (erwindon)
+- small fixes for sonarqube results (erwindon)
+- small fixes for layout and spelling (erwindon)
+- Celebrating (almost) 250 stars on GitHub
+
 ## 1.22.0 (2020-11-05)
 - added alert for all known CVEs (erwindon)
 - added external documentation access (erwindon)

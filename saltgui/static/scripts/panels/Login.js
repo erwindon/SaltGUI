@@ -106,7 +106,7 @@ export class LoginPanel extends Panel {
     img.src = "static/images/github.png";
     aa.append(img);
 
-    const txt = document.createTextNode("SaltGUI v1.22.0");
+    const txt = document.createTextNode("SaltGUI v1.23.0");
     aa.append(txt);
 
     form.append(aa);
