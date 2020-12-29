@@ -1,6 +1,7 @@
 /* global document window */
 
 import {Panel} from "./Panel.js";
+import {Router} from "../Router.js";
 import {Utils} from "../Utils.js";
 
 export class LoginPanel extends Panel {
@@ -191,7 +192,7 @@ export class LoginPanel extends Panel {
 
     // We need these functions to populate the dropdown boxes
     wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
-      this._handleLoginWheelConfigValues(pWheelConfigValuesData);
+      LoginPanel._handleLoginWheelConfigValues(pWheelConfigValuesData);
       return true;
     }, () => false);
 
@@ -204,7 +205,7 @@ export class LoginPanel extends Panel {
     }, 1000);
   }
 
-  _handleLoginWheelConfigValues (pWheelConfigValuesData) {
+  static _handleLoginWheelConfigValues (pWheelConfigValuesData) {
     const wheelConfigValuesData = pWheelConfigValuesData.return[0].data.return;
 
     // store for later use
@@ -253,7 +254,7 @@ export class LoginPanel extends Panel {
     const toolTipMode = wheelConfigValuesData.saltgui_tooltip_mode;
     Utils.setStorageItem("session", "tooltip_mode", toolTipMode);
 
-    this.router.updateMainMenu();
+    Router.updateMainMenu();
   }
 
   _onLoginFailure (error) {

@@ -188,7 +188,7 @@ saltgui_pages:
     - keys
     - grains
 ```
-Note that this is NOT as security mechanism to reduce what a user can do.
+Note that this is NOT a security mechanism to reduce what a user can do.
 All pages are still accessible using their original deep-link.
 And also any command can still be issued using the command-box.
 For real security measures, use parameter `external_auth`.

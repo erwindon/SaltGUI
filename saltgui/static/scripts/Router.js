@@ -55,7 +55,7 @@ export class Router {
 
     this._registerRouterEventListeners();
 
-    this.updateMainMenu();
+    Router.updateMainMenu();
 
     const hash = window.location.hash.replace(/^#/, "");
     const search = window.location.search;
@@ -109,7 +109,7 @@ export class Router {
         addEventListener("click", () => {
           const pages = Router._getPagesList();
           if (pUrl && (pages.length === 0 || pages.includes(pButtonId))) {
-            window.location.replace(config.NAV_URL + pUrl);
+            this.goTo(pUrl);
           }
         });
     }
@@ -119,7 +119,7 @@ export class Router {
     document.getElementById("logo").
       addEventListener("click", () => {
         if (window.event.ctrlKey) {
-          window.location.assign(config.NAV_URL + "/options");
+          this.goTo("options");
         } else {
           this.goTo("");
         }
@@ -135,7 +135,7 @@ export class Router {
       /* eslint-enable compat/compat */
     });
 
-    this._registerMenuItem(null, "minions", "");
+    this._registerMenuItem(null, "minions", "minions");
     this._registerMenuItem("minions", "grains", "grains");
     this._registerMenuItem("minions", "schedules", "schedules");
     this._registerMenuItem("minions", "pillars", "pillars");
@@ -152,22 +152,6 @@ export class Router {
     this.pages.push(pPage);
     if (pPage.onRegister) {
       pPage.onRegister();
-    }
-  }
-
-  updateMainMenu () {
-    for (const page of this.pages) {
-      const visible = page.constructor.isVisible();
-      for (const item of [page.menuItemElement1, page.menuItemElement2]) {
-        if (!item) {
-          // This page does not have a menu item
-          // e.g. login-page or grains-minion page
-        } else if (visible) {
-          item.classList.remove("menu-item-hidden");
-        } else {
-          item.classList.add("menu-item-hidden");
-        }
-      }
     }
   }
 
@@ -202,10 +186,13 @@ export class Router {
     return ret;
   }
 
-  static _showMenuItem (pPages, pName, pChildren = [], pVisible = true) {
+  static _showMenuItem (pPages, pName, pChildren = []) {
+    // assume the best
+    let visible = true;
+
     // do not show unwanted menu items
     if (pPages.length && !pPages.includes(pName)) {
-      pVisible = false;
+      visible = false;
     }
 
     // still show a menu item when a child is visible
@@ -220,8 +207,8 @@ export class Router {
     // perform the hiding/showing
     for (let nr = 1; nr <= 2; nr++) {
       const item = document.getElementById("button-" + pName + nr);
-      item.style.color = !pVisible && hasVisibleChild ? "lightgray" : "black";
-      if (pVisible || hasVisibleChild) {
+      item.style.color = !visible && hasVisibleChild ? "lightgray" : "black";
+      if (visible || hasVisibleChild) {
         item.classList.remove("menu-item-hidden");
       } else {
         item.classList.add("menu-item-hidden");
@@ -264,12 +251,12 @@ export class Router {
     }
 
     const pages = Router._getPagesList();
-    if (pPath === "/") {
+    if (!pHash) {
       // go to the concrete default page
       if (pages.length) {
-        pPath = "/" + pages[0];
+        pHash = pages[0];
       } else {
-        pPath = "/minions";
+        pHash = "minions";
       }
     }
 

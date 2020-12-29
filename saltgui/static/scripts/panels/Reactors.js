@@ -2,6 +2,7 @@
 
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
+import {Router} from "../Router.js";
 import {Utils} from "../Utils.js";
 
 export class ReactorsPanel extends Panel {
@@ -37,7 +38,7 @@ export class ReactorsPanel extends Panel {
     let reactors = pWheelConfigValuesData.return[0].data.return.reactor;
     if (reactors) {
       Utils.setStorageItem("session", "reactors", JSON.stringify(reactors));
-      this.router.updateMainMenu();
+      Router.updateMainMenu();
     } else {
       reactors = {};
     }
