@@ -222,13 +222,6 @@ export class Router {
   }
 
   static updateMainMenu () {
-
-    // show template menu item if templates defined
-    const templatesText = Utils.getStorageItem("session", "templates", "");
-
-    // show reactor menu item if reactors defined
-    const reactorsText = Utils.getStorageItem("session", "reactors", "");
-
     const pages = Router._getPagesList();
 
     Router._showMenuItem(pages, "minions", ["grains", "schedules", "pillars", "beacons"]);
