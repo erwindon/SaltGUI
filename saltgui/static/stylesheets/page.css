@@ -193,6 +193,10 @@ table tr td:last-of-type {
   color: #00f;
 }
 
+.offline {
+  color: red;
+}
+
 .osimage {
   max-width: 18px;
   max-height: 18px;

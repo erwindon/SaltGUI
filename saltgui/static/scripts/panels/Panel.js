@@ -238,8 +238,10 @@ export class Panel {
           const fields = line.split(/[ \t]+/);
           if (fields.length === 1) {
             minions[fields[0]] = "true";
-          } else {
+          } else if (fields.length === 2) {
             minions[fields[0]] = fields[1];
+          } else {
+            console.warn("lines in 'minions.txt' must have 1 or 2 words, not " + fields.length + " like in: " + line);
           }
         }
         Utils.setStorageItem("session", "minions-txt", JSON.stringify(minions));
@@ -576,12 +578,14 @@ export class Panel {
     if (pMinionId in pMinionsDict) {
       if (pMinionsDict[pMinionId] === "true") {
         Utils.addToolTip(offlineSpan, "Minion is offline\nIs the host running and is the salt-minion installed and started?\nUpdate file 'minions.txt' when needed", "bottom-left");
-        offlineSpan.style.color = "red";
+        offlineSpan.classList.add("offline");
       } else {
         Utils.addToolTip(offlineSpan, "Minion is offline\nSince it is reported as inactive in file 'minions.txt', that should be OK", "bottom-left");
+        offlineSpan.classList.remove("offline");
       }
+    } else {
+      offlineSpan.classList.add("offline");
     }
-    offlineSpan.classList.add("offline");
     const offlineTd = Utils.createTd();
     offlineTd.appendChild(offlineSpan);
     minionTr.appendChild(offlineTd);

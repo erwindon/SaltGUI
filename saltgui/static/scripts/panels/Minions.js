@@ -110,15 +110,16 @@ export class MinionsPanel extends Panel {
 
     for (const tr of this.table.tBodies[0].childNodes) {
       if (minionIds.indexOf(tr.dataset.minionId) >= 0) {
+        // skip the connected minions
         continue;
       }
       const statusTd = tr.querySelector("td.status");
       if(!statusTd) continue;
       // this is the initial warning only
-      // it will be replaced by a less aggressive warning
+      // it will potentially be replaced by a less aggressive warning
       // when the grains information is returned
       statusTd.innerText = "offline";
-      statusTd.style.color = "red";
+      statusTd.classList.add("offline");
     }
   }
 
