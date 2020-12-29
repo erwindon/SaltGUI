@@ -232,10 +232,11 @@ export class Router {
     Router._showMenuItem(pages, "pillars");
     Router._showMenuItem(pages, "beacons");
     Router._showMenuItem(pages, "keys");
-    Router._showMenuItem(pages, "jobs", ["templates"], templatesText);
-    Router._showMenuItem(pages, "templates", [], templatesText);
-    Router._showMenuItem(pages, "events", ["reactors"], reactorsText);
-    Router._showMenuItem(pages, "reactors", [], reactorsText);
+    Router._showMenuItem(pages, "jobs", ["templates"]);
+    Router._showMenuItem(pages, "templates");
+    Router._showMenuItem(pages, "events", ["reactors"]);
+    Router._showMenuItem(pages, "reactors");
+    Router._showMenuItem(pages, "logout");
   }
 
   // pForward = 0 --> normal navigation
