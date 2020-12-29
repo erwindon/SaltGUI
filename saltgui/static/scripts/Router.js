@@ -108,7 +108,7 @@ export class Router {
       document.getElementById("button-" + pButtonId + nr).
         addEventListener("click", () => {
           const pages = Router._getPagesList();
-          if (pUrl && (pages.length === 0 || pages.includes(pButtonId))) {
+          if (pUrl && (pButtonId === "logout" || pages.length === 0 || pages.includes(pButtonId))) {
             this.goTo(pUrl);
           }
         });
@@ -193,6 +193,11 @@ export class Router {
     // do not show unwanted menu items
     if (pPages.length && !pPages.includes(pName)) {
       visible = false;
+    }
+
+    // force visibility of the logout menuitem
+    if (pName === "logout") {
+      visible = true;
     }
 
     // still show a menu item when a child is visible
