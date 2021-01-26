@@ -11,6 +11,7 @@
   border-radius: 3px;
   position: absolute;
   white-space: pre;
+  font-weight: normal;
 
   /* point the tooltip to its target */
   left: 50%;
