@@ -235,7 +235,7 @@ export class Panel {
           filter((item) => !item.startsWith("#"));
         const minions = {};
         for (const line of lines) {
-          const fields = line.split("\t");
+          const fields = line.split(/[ \t]+/);
           if (fields.length === 1) {
             minions[fields[0]] = "true";
           } else {
