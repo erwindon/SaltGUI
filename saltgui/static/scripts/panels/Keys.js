@@ -184,7 +184,7 @@ export class KeysPanel extends Panel {
     this.setMsg(txt, true);
   }
 
-  static _flagUnacceptedMinion (pMinionId, pMinionsDict, pMinionIdSpan, pTxt, pIsBold) {
+  static _flagUnacceptedMinion (pMinionId, pMinionsDict, pMinionIdSpan, pTxt, pIsBold=false) {
     if (!Object.keys(pMinionsDict).length) {
       // list of well-known minion is empty
       // assume we actually don't known
@@ -292,7 +292,7 @@ export class KeysPanel extends Panel {
     const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
     minionIdTd.appendChild(minionIdSpan);
-    KeysPanel._flagUnacceptedMinion(pMinionId, pMinionsDict,
+    KeysPanel._flagUnacceptedMinion(pMinionId, pMinionsDict, minionIdSpan,
       "Do not accept this entry without proper verification!", true);
     minionTr.appendChild(minionIdTd);
 
