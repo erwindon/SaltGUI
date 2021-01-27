@@ -182,7 +182,8 @@ export class Router {
       if (parentHash === route.path) {
         // page refresh
         // prevents being detected as "forward navigation"
-        // do nothing
+        // stay on the page, but parameters may have been updated
+        window.history.replaceState({}, undefined, url);
       } else if (pForward === 0) {
         // forward navigation
         window.history.pushState({}, undefined, url);
