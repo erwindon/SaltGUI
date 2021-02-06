@@ -184,7 +184,7 @@ export class KeysPanel extends Panel {
     this.setMsg(txt, true);
   }
 
-  static _flagUnacceptedMinion (pMinionId, pMinionsDict, pMinionIdSpan, pTxt, pIsBold=false) {
+  static _flagUnacceptedMinion (pMinionId, pMinionsDict, pMinionIdSpan, pTxt, pIsBold = false) {
     if (!Object.keys(pMinionsDict).length) {
       // list of well-known minion is empty
       // assume we actually don't known
