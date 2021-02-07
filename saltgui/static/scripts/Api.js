@@ -216,6 +216,14 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
+  getWheelMinionsConnected () {
+    const params = {
+      "client": "wheel",
+      "fun": "minions.connected"
+    };
+    return this.apiRequest("POST", "/", params);
+  }
+
   getStats () {
     const params = {
     };

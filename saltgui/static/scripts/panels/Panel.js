@@ -303,6 +303,7 @@ export class Panel {
 
     minionTr = document.createElement("tr");
     minionTr.id = Utils.getIdFromMinionId(pMinionId);
+    minionTr.dataset.minionId = pMinionId;
 
     minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 
@@ -577,12 +578,14 @@ export class Panel {
     if (pMinionId in pMinionsDict) {
       if (pMinionsDict[pMinionId] === "true") {
         Utils.addToolTip(offlineSpan, "Minion is offline\nIs the host running and is the salt-minion installed and started?\nUpdate file 'minions.txt' when needed", "bottom-left");
-        offlineSpan.style.color = "red";
+        offlineSpan.classList.add("offline");
       } else {
         Utils.addToolTip(offlineSpan, "Minion is offline\nSince it is reported as inactive in file 'minions.txt', that should be OK", "bottom-left");
+        offlineSpan.classList.remove("offline");
       }
+    } else {
+      offlineSpan.classList.add("offline");
     }
-    offlineSpan.classList.add("offline");
     const offlineTd = Utils.createTd();
     offlineTd.appendChild(offlineSpan);
     minionTr.appendChild(offlineTd);
