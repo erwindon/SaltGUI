@@ -23,8 +23,8 @@ export class Page {
     this.pageElement = div;
     this.router = pRouter;
     if (pMenuItemSelector) {
-      this.menuItemElement1 = document.getElementById(pMenuItemSelector + "1");
-      this.menuItemElement2 = document.getElementById(pMenuItemSelector + "2");
+      this.menuItemElement1 = pMenuItemSelector + "1";
+      this.menuItemElement2 = pMenuItemSelector + "2";
     }
 
     this.panels = [];

@@ -55,7 +55,7 @@ export class Router {
 
     this._registerRouterEventListeners();
 
-    this.updateMainMenu();
+    Router.updateMainMenu();
 
     const hash = window.location.hash.replace(/^#/, "");
     const search = window.location.search;
@@ -66,21 +66,51 @@ export class Router {
     /* eslint-enable compat/compat */
   }
 
-  _registerMenuItem (pButtonId, pHash) {
+  _registerMenuItem (pParentId, pButtonId, pUrl) {
+
+    // full menu
+
+    const fullMenuDiv = document.querySelector(".fullmenu");
+
+    const dropDownName = pParentId || pButtonId;
+    let dropDownDiv = document.getElementById("dropdown-" + dropDownName);
+    if (!dropDownDiv) {
+      dropDownDiv = Utils.createDiv("dropdown", "", "dropdown-" + dropDownName);
+      fullMenuDiv.append(dropDownDiv);
+    }
+
+    if (pParentId) {
+      let dropdownContent = document.getElementById("dropdown-content-" + pParentId);
+      if (!dropdownContent) {
+        dropdownContent = Utils.createDiv("dropdown-content", "", "dropdown-content-" + pParentId);
+        dropDownDiv.append(dropdownContent);
+      }
+      const itemDiv = Utils.createDiv("run-command-button menu-item", pButtonId, "button-" + pButtonId + "1");
+      dropdownContent.append(itemDiv);
+    } else {
+      const topItemDiv = Utils.createDiv("menu-item", pButtonId, "button-" + pButtonId + "1");
+      dropDownDiv.append(topItemDiv);
+    }
+
+    // mini menu
+
+    const miniMenuDiv = document.querySelector(".minimenu");
+    const dropdownContent2 = miniMenuDiv.querySelector(".dropdown-content");
+    // 00A0 = NO-BREAK SPACE
+    const menuItemDiv = Utils.createDiv("run-command-button menu-item", (pParentId ? "-\u00A0" : "") + pButtonId, "button-" + pButtonId + "2");
+    dropdownContent2.append(menuItemDiv);
+
+    // activate the menu items as needed
+
+    // conditions go inside the handler because the pages
+    // data may still being retrieved at this point
     for (const nr of ["1", "2"]) {
       document.getElementById("button-" + pButtonId + nr).
-        addEventListener("click", (pClickEvent) => {
-          const panel = pClickEvent.target.parentElement;
-          if (panel.classList.contains("dropdown-content")) {
-            // temporarily hide the panel, won't be visible again
-            // after 500ms because the mouseover caused it to show
-            // also clicking toplevel button cannot do the same
-            panel.style.display = "none";
-            setTimeout(() => {
-              panel.style.display = "";
-            }, 500);
+        addEventListener("click", () => {
+          const pages = Router._getPagesList();
+          if (pUrl && (pButtonId === "logout" || pages.length === 0 || pages.includes(pButtonId))) {
+            this.goTo(pUrl);
           }
-          this.goTo(pHash);
         });
     }
   }
@@ -105,17 +135,17 @@ export class Router {
       /* eslint-enable compat/compat */
     });
 
-    this._registerMenuItem("minions", "");
-    this._registerMenuItem("grains", "grains");
-    this._registerMenuItem("schedules", "schedules");
-    this._registerMenuItem("pillars", "pillars");
-    this._registerMenuItem("beacons", "beacons");
-    this._registerMenuItem("keys", "keys");
-    this._registerMenuItem("jobs", "jobs");
-    this._registerMenuItem("templates", "templates");
-    this._registerMenuItem("events", "eventsview");
-    this._registerMenuItem("reactors", "reactors");
-    this._registerMenuItem("logout", "logout");
+    this._registerMenuItem(null, "minions", "minions");
+    this._registerMenuItem("minions", "grains", "grains");
+    this._registerMenuItem("minions", "schedules", "schedules");
+    this._registerMenuItem("minions", "pillars", "pillars");
+    this._registerMenuItem("minions", "beacons", "beacons");
+    this._registerMenuItem(null, "keys", "keys");
+    this._registerMenuItem(null, "jobs", "jobs");
+    this._registerMenuItem("jobs", "templates", "templates");
+    this._registerMenuItem(null, "events", "eventsview");
+    this._registerMenuItem("events", "reactors", "reactors");
+    this._registerMenuItem(null, "logout", "logout");
   }
 
   _registerPage (pPage) {
@@ -125,20 +155,86 @@ export class Router {
     }
   }
 
-  updateMainMenu () {
-    for (const page of this.pages) {
-      const visible = page.constructor.isVisible();
-      for (const item of [page.menuItemElement1, page.menuItemElement2]) {
-        if (!item) {
-          // This page does not have a menu item
-          // e.g. login-page or grains-minion page
-        } else if (visible) {
-          item.classList.remove("menu-item-hidden");
-        } else {
-          item.classList.add("menu-item-hidden");
-        }
+  static _getUserName () {
+    const loginResponseStr = Utils.getStorageItem("session", "login-response", "{}");
+    try {
+      const loginResponse = JSON.parse(loginResponseStr);
+      return loginResponse.user;
+    } catch (err) {
+      console.error("error in object login-response=" + loginResponseStr + " --> " + err.name + ": " + err.message);
+      return null;
+    }
+  }
+
+  static _getPagesList () {
+    const pagesText = Utils.getStorageItem("session", "pages", "{}");
+    let pages;
+    try {
+      pages = JSON.parse(pagesText);
+    } catch (err) {
+      console.error("error in object saltgui_pages=" + pagesText + " --> " + err.name + ": " + err.message);
+      return {};
+    }
+    const userName = Router._getUserName();
+    if (!userName || typeof pages !== "object" || !(userName in pages)) {
+      return [];
+    }
+    const ret = pages[userName];
+    if (!ret || ret[0] === "*") {
+      return [];
+    }
+    return ret;
+  }
+
+  static _showMenuItem (pPages, pName, pChildren = []) {
+    // assume the best
+    let visible = true;
+
+    // do not show unwanted menu items
+    if (pPages.length && !pPages.includes(pName)) {
+      visible = false;
+    }
+
+    // force visibility of the logout menuitem
+    if (pName === "logout") {
+      visible = true;
+    }
+
+    // still show a menu item when a child is visible
+    let hasVisibleChild = false;
+    for (const page of pChildren) {
+      if (pPages.includes(page)) {
+        hasVisibleChild = true;
+        break;
       }
     }
+
+    // perform the hiding/showing
+    for (let nr = 1; nr <= 2; nr++) {
+      const item = document.getElementById("button-" + pName + nr);
+      item.style.color = !visible && hasVisibleChild ? "lightgray" : "black";
+      if (visible || hasVisibleChild) {
+        item.classList.remove("menu-item-hidden");
+      } else {
+        item.classList.add("menu-item-hidden");
+      }
+    }
+  }
+
+  static updateMainMenu () {
+    const pages = Router._getPagesList();
+
+    Router._showMenuItem(pages, "minions", ["grains", "schedules", "pillars", "beacons"]);
+    Router._showMenuItem(pages, "grains");
+    Router._showMenuItem(pages, "schedules");
+    Router._showMenuItem(pages, "pillars");
+    Router._showMenuItem(pages, "beacons");
+    Router._showMenuItem(pages, "keys");
+    Router._showMenuItem(pages, "jobs", ["templates"]);
+    Router._showMenuItem(pages, "templates");
+    Router._showMenuItem(pages, "events", ["reactors"]);
+    Router._showMenuItem(pages, "reactors");
+    Router._showMenuItem(pages, "logout");
   }
 
   // pForward = 0 --> normal navigation
@@ -151,6 +247,16 @@ export class Router {
       // but this was shows less error messages on the console
       pHash = "login";
       pQuery = {"reason": "no-session"};
+    }
+
+    const pages = Router._getPagesList();
+    if (!pHash) {
+      // go to the concrete default page
+      if (pages.length) {
+        pHash = pages[0];
+      } else {
+        pHash = "minions";
+      }
     }
 
     // save the details from the parent
@@ -201,6 +307,7 @@ export class Router {
       this._showPage(route);
       return;
     }
+
     // route could not be found
     // just go to the main page
     if (pHash === "") {
@@ -215,35 +322,25 @@ export class Router {
 
     pPage.pageElement.style.display = "";
 
+    // de-activate all menu items
     const activeMenuItems = Array.from(document.querySelectorAll(".menu-item-active"));
     activeMenuItems.forEach((menuItem) => {
       menuItem.classList.remove("menu-item-active");
     });
 
-    const elem1 = pPage.menuItemElement1;
+    // highlight the fullmenu item
+    const elem1 = document.getElementById(pPage.menuItemElement1);
     if (elem1) {
       elem1.classList.add("menu-item-active");
+      const parentItem = elem1.parentElement.parentElement.firstChild;
       // activate also parent menu item if child element is selected
-      if (elem1.id === "button-pillars1" ||
-         elem1.id === "button-schedules1" ||
-         elem1.id === "button-grains1" ||
-         elem1.id === "button-beacons1") {
-        const minionMenuItem = document.getElementById("button-minions1");
-        minionMenuItem.classList.add("menu-item-active");
-      }
-      if (elem1.id === "button-jobs1" ||
-         elem1.id === "button-templates1") {
-        const jobsMenuItem = document.getElementById("button-jobs1");
-        jobsMenuItem.classList.add("menu-item-active");
-      }
-      if (elem1.id === "button-events1" ||
-         elem1.id === "button-reactors1") {
-        const eventsMenuItem = document.getElementById("button-events1");
-        eventsMenuItem.classList.add("menu-item-active");
+      if (parentItem.id.startsWith("button-")) {
+        parentItem.classList.add("menu-item-active");
       }
     }
 
-    const elem2 = pPage.menuItemElement2;
+    // highlight the minimenu item
+    const elem2 = document.getElementById(pPage.menuItemElement2);
     if (elem2) {
       elem2.classList.add("menu-item-active");
     }
