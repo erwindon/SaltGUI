@@ -42,7 +42,7 @@ export class MinionsPanel extends Panel {
         this._handlewheelMinionsConnected(pWheelMinionsConnectedData);
         return true;
       }, (getWheelMinionsConnectedMsg) => {
-        console.log("pWheelMinionsConnectedMsg", pWheelMinionsConnectedMsg);
+        console.log("getWheelMinionsConnectedMsg", getWheelMinionsConnectedMsg);
         return false;
       });
 
@@ -101,7 +101,7 @@ export class MinionsPanel extends Panel {
     this.setMsg(txt);
   }
 
-  _handlewheelMinionsConnected(pWheelMinionsConnectedData) {
+  _handlewheelMinionsConnected (pWheelMinionsConnectedData) {
     if (this.showErrorRowInstead(pWheelMinionsConnectedData)) {
       return;
     }
@@ -114,7 +114,9 @@ export class MinionsPanel extends Panel {
         continue;
       }
       const statusTd = tr.querySelector("td.status");
-      if(!statusTd) continue;
+      if (!statusTd) {
+        continue;
+      }
       // this is the initial warning only
       // it will potentially be replaced by a less aggressive warning
       // when the grains information is returned
