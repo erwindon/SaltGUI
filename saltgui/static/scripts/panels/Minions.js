@@ -41,8 +41,8 @@ export class MinionsPanel extends Panel {
       wheelMinionsConnectedPromise.then((pWheelMinionsConnectedData) => {
         this._handlewheelMinionsConnected(pWheelMinionsConnectedData);
         return true;
-      }, (getWheelMinionsConnectedMsg) => {
-        console.log("getWheelMinionsConnectedMsg", getWheelMinionsConnectedMsg);
+      }, (pWheelMinionsConnectedMsg) => {
+        console.log("pWheelMinionsConnectedMsg", pWheelMinionsConnectedMsg);
         return false;
       });
 
