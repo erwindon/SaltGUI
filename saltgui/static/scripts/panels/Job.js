@@ -1,4 +1,4 @@
-/* global document window */
+/* global document */
 
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
@@ -438,9 +438,11 @@ export class JobPanel extends Panel {
     this.jobIsTerminated = false;
 
     summaryJobsActiveSpan.innerText = info.Running.length + " active";
-    summaryJobsActiveSpan.insertBefore(Utils.createJobStatusSpan(pJobId), summaryJobsActiveSpan.firstChild);
+    summaryJobsActiveSpan.insertBefore(Utils.createJobStatusSpan(pJobId, true), summaryJobsActiveSpan.firstChild);
     summaryJobsActiveSpan.addEventListener("click", () => {
-      window.location.reload();
+      this.output.innerText = "loading...";
+      this.onShow();
+      this.panelMenu.verifyAll();
     });
     summaryJobsActiveSpan.style.cursor = "pointer";
     Utils.addToolTip(summaryJobsActiveSpan, "Click to refresh", "bottom-left");
