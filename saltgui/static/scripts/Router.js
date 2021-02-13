@@ -31,8 +31,8 @@ export class Router {
     this.api = new API();
     this.api.router = this;
     this.commandbox = new CommandBox(this, this.api);
-    this.currentPage = undefined;
     this.pages = [];
+    Router.currentPage = undefined;
 
     this._registerPage(new LoginPage(this));
     this._registerPage(this.minionsPage = new MinionsPage(this));
@@ -351,12 +351,12 @@ export class Router {
     // it is either not started, or needs restarting
     API.getEvents(this);
 
-    if (this.currentPage && this.currentPage !== pPage) {
-      Router._hidePage(this.currentPage);
+    if (Router.currentPage && Router.currentPage !== pPage) {
+      Router._hidePage(Router.currentPage);
     }
-    this.currentPage = pPage;
+    Router.currentPage = pPage;
 
-    this.currentPage.pageElement.classList.add("current");
+    Router.currentPage.pageElement.classList.add("current");
   }
 
   static _hidePage (pPage) {

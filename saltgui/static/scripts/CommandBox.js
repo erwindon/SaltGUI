@@ -1,10 +1,11 @@
-/* global document window */
+/* global document */
 
 import {Character} from "./Character.js";
 import {Documentation} from "./Documentation.js";
 import {DropDownMenu} from "./DropDown.js";
 import {Output} from "./output/Output.js";
 import {ParseCommandLine} from "./ParseCommandLine.js";
+import {Router} from "./Router.js";
 import {RunType} from "./RunType.js";
 import {TargetType} from "./TargetType.js";
 import {Utils} from "./Utils.js";
@@ -349,7 +350,8 @@ export class CommandBox {
     TargetType.setTargetTypeDefault();
 
     if (CommandBox.refreshOnClose) {
-      window.location.reload();
+      Router.currentPage.clearPage();
+      Router.currentPage.onShow();
     }
 
     pEvent.stopPropagation();
