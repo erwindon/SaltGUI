@@ -203,39 +203,59 @@ export class CommandBox {
     button.disabled = true;
     output.innerText = "loading...";
 
-    const screenModifyingCommands = [
-      "beacons.add",
-      "beacons.delete",
-      "beacons.delete",
-      "beacons.disable",
-      "beacons.disable_beacon",
-      "beacons.enable",
-      "beacons.enable_beacon",
-      "beacons.modify",
-      "beacons.reset",
-      "grains.append",
-      "grains.delkey",
-      "grains.delval",
-      "grains.setval",
-      "ps.kill_pid",
-      "saltutil.kill_job",
-      "saltutil.refresh_grains",
-      "saltutil.refresh_pillar",
-      "saltutil.signal_job",
-      "saltutil.term_job",
-      "schedule.add",
-      "schedule.delete",
-      "schedule.disable",
-      "schedule.disable_job",
-      "schedule.enable",
-      "schedule.enable_job",
-      "schedule.modify",
-      "schedule.run_job"
-    ];
+    const screenModifyingCommands = {
+      "beacons.add": ["beacons", "beacons-minion"],
+      "beacons.delete": ["beacons", "beacons-minion"],
+      "beacons.disable": ["beacons", "beacons-minion"],
+      "beacons.disable_beacon": ["beacons-minion"],
+      "beacons.enable": ["beacons", "beacons-minion"],
+      "beacons.enable_beacon": ["beacons-minion"],
+      "beacons.modify": ["beacons-minion"],
+      "beacons.reset": ["beacons", "beacons-minion"],
+      "grains.append": ["minions", "grains", "grains-minion"],
+      "grains.delkey": ["minions", "grains", "grains-minion"],
+      "grains.delval": ["minions", "grains", "grains-minion"],
+      "grains.setval": ["minions", "grains", "grains-minion"],
+      "ps.kill_pid": ["job", "jobs"],
+      "saltutil.kill_job": ["job", "jobs"],
+      "saltutil.refresh_grains": ["minions", "grains", "grains-minion"],
+      "saltutil.refresh_pillar": ["pillars", "pillars-minion"],
+      "saltutil.signal_job": ["job", "jobs"],
+      "saltutil.term_job": ["job", "jobs"],
+      "schedule.add": ["schedules", "schedules-minion"],
+      "schedule.delete": ["schedules", "schedules-minion"],
+      "schedule.disable": ["schedules", "schedules-minion"],
+      "schedule.disable_job": ["schedules-minion"],
+      "schedule.enable": ["schedules", "schedules-minion"],
+      "schedule.enable_job": ["schedules-minion"],
+      "schedule.modify": ["schedules", "schedules-minion"],
+      "schedule.run_job": ["*"]
+    };
     // test whether the command may have caused an update to the list
     const command = commandValue.split(" ")[0];
-    if (screenModifyingCommands.includes(command)) {
-      CommandBox.refreshOnClose = true;
+    if (command in screenModifyingCommands) {
+      // update panel when it may have changed
+      for (const panel of Router.currentPage.panels) {
+        if (screenModifyingCommands[command].includes(panel.key)) {
+          // the command may have changed a specific panel
+          panel.needsRefresh = true;
+        } else if (screenModifyingCommands[command].includes("*")) {
+          // the command may have changed any panel
+          panel.needsRefresh = true;
+        }
+      }
+    }
+    // update panels that show job-statusses
+    for (const panel of Router.currentPage.panels) {
+      if (panel.key !== "job" && panel.key !== "jobs") {
+        // panel does not show jobs (or a job)
+      } else if (command.startsWith("wheel.")) {
+        // wheel commands do not end up in the jobs list
+      } else if (command.startsWith("runners.")) {
+        // runners commands do not end up in the jobs list
+      } else {
+        panel.needsRefresh = true;
+      }
     }
 
     func.then((pResponse) => {
@@ -276,7 +296,6 @@ export class CommandBox {
 
     const outputField = document.querySelector(".run-command pre");
     outputField.innerText = "Waiting for command...";
-    CommandBox.refreshOnClose = false;
 
     const targetField = document.getElementById("target");
     TargetType.autoSelectTargetType(targetField.value);
@@ -349,10 +368,7 @@ export class CommandBox {
     RunType.setRunTypeDefault();
     TargetType.setTargetTypeDefault();
 
-    if (CommandBox.refreshOnClose) {
-      Router.currentPage.clearPage();
-      Router.currentPage.onShow();
-    }
+    Router.currentPage.refreshPage();
 
     pEvent.stopPropagation();
   }

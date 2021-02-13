@@ -136,4 +136,15 @@ export class Page {
       panel.clearPanel();
     }
   }
+
+  refreshPage () {
+    for (const panel of this.panels) {
+      if (!panel.needsRefresh) {
+        continue;
+      }
+      panel.needsRefresh = false;
+      panel.clearPanel();
+      panel.onShow();
+    }
+  }
 }
