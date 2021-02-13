@@ -91,7 +91,7 @@ export class Documentation {
     const cmd = ParseCommandLine.getCommandFromCommandLine(commandLine);
 
     button.disabled = true;
-    output.innerText = "Loading...";
+    output.innerText = "loading...";
 
     let docCommand;
     let dummyCommand;

@@ -200,7 +200,7 @@ export class CommandBox {
     targetField.disabled = true;
     commandField.disabled = true;
     button.disabled = true;
-    output.innerText = "Loading...";
+    output.innerText = "loading...";
 
     const screenModifyingCommands = [
       "beacons.add",
