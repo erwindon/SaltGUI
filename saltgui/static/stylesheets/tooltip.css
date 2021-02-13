@@ -20,9 +20,9 @@
   z-index: 10;
   bottom: calc(100% + 8px);
 
-  /* shorten the text when it is too much */
-  /* do not clip, as it also clips the arrow */
-  /* overflow: hidden; */
+  /* shorten the text when it is too much
+     do not clip, as it also clips the arrow
+     overflow: hidden; */
   max-width: 500px;
   text-overflow: ellipsis;
 }
