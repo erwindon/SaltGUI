@@ -25,7 +25,7 @@ export class CommandBox {
     TargetType.createMenu();
 
     const manualRun = document.getElementById("popup-run-command");
-    Utils.addTableHelp(manualRun, "Click for help");
+    Utils.addTableHelp(manualRun, "Click for help", "bottom-center");
     const helpButton = manualRun.querySelector("#help");
     helpButton.addEventListener("click", () => {
       CommandBox._showHelp();
