@@ -14,14 +14,14 @@ The version tagged `release` is the latest released version. The version `master
 ## Features
 - Login via PAM or any other supported authentication by Salt
 - View minions and easily copy IPs
-- Run state.highstate for a particular minion
+- Run state.highstate for a particular minion or all
 - View the seven most recent jobs run on Salt
 - Manually run any Salt function and see the output
 - View the values for grains for a particular minion
 - View the schedules for a particular minion
 - View the values for pillars for a particular minion
 - View the beacons for a particular minion
-- View the events on the salt-event bus
+- View the live events on the salt-event bus
 - View internal documentation for any salt command
 - View external documentation for any salt command
 - Match list of minions against reference list
@@ -70,7 +70,7 @@ SaltGUI supports the following authentication methods supported by salt:
 - mysql
 - yubico
 
-See the [EAUTH documentation](https://docs.saltstack.com/en/latest/topics/eauth/index.html) and the [Salt auth source code](https://github.com/saltstack/salt/tree/2018.3/salt/auth) for more information.
+See the [EAUTH documentation](https://docs.saltstack.com/en/latest/topics/eauth/index.html) and the [Salt auth source code](https://github.com/saltstack/salt/tree/master/salt/auth) for more information.
 
 ## Command Box
 SaltGUI supports entry of commands using the "command-box". Click on `>_` in the top right corner to open it.
@@ -81,7 +81,7 @@ Enter `salt-call` commands with the prefix `wheel.`. e.g. `wheel.key.finger`. Th
 
 Enter regular commands without special prefix. e.g. `test.ping`. The command is sent to the minions specified in the target field.
 
-Commands can be run normally, in which case the command runs to completion and shows the results. Alternatively, it can be started asynchronously, in which case only a small conformation is shown. Batch commands are not supported.
+Commands can be run normally, in which case the command runs to completion and shows the results. Alternatively, it can be started asynchronously, in which case only a bit of progress information is shown. When variable `state_events` is set to `true`, then the progress is shown per state when applicable. Batch commands are not supported at this time.
 
 ## Output
 SaltGUI shows the data that is returned by the Salt API.
