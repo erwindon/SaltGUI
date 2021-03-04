@@ -314,6 +314,14 @@ SaltGUI includes these libraries (with possible modifications):
 
 ## Changelog
 
+## 1.24.0 (2021-03-04)
+- SaltGUI is now a single page application (erwindon)
+- allow reduced number of pages (erwindon, thx bbinet)
+- show unconnected minions even before api timeout (erwindon)
+- job output refresh without page reload (erwindon)
+- cmd panel close refresh page without reload and smarter (erwindon)
+- updated list of CVEs that we must warn for (erwindon)
+
 ## 1.23.0 (2020-12-28)
 - warn when there are no matching targets (erwindon)
 - added basic support for reactors (erwindon)
