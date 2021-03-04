@@ -337,7 +337,57 @@ export class MinionsPanel extends Panel {
       ["CVE-2020-25592", MASTER + MINION, ["0"]],
       ["CVE-2020-25592", MASTER + MINION, ["201[4-9]"]],
       ["CVE-2020-25592", MASTER + MINION, ["300[0-1]"]],
-      ["CVE-2020-25592", MASTER + MINION, ["3002", null]]
+      ["CVE-2020-25592", MASTER + MINION, ["3002", null]],
+
+      ["CVE-2020-28243", MINION, ["0"]],
+      ["CVE-2020-28243", MINION, ["201[4-9]"]],
+      ["CVE-2020-28243", MINION, ["300[0-1]"]],
+      ["CVE-2020-28243", MINION, ["3002", "[0-4]"]],
+
+      ["CVE-2020-28972", MASTER + MINION, ["0"]],
+      ["CVE-2020-28972", MASTER + MINION, ["201[4-9]"]],
+      ["CVE-2020-28972", MASTER + MINION, ["300[0-1]"]],
+      ["CVE-2020-28972", MASTER + MINION, ["3002", "[0-4]"]],
+
+      ["CVE-2020-35662", MASTER + MINION, ["0"]],
+      ["CVE-2020-35662", MASTER + MINION, ["201[4-9]"]],
+      ["CVE-2020-35662", MASTER + MINION, ["300[0-1]"]],
+      ["CVE-2020-35662", MASTER + MINION, ["3002", "[0-4]"]],
+
+      ["CVE-2021-3144", MASTER, ["0"]],
+      ["CVE-2021-3144", MASTER, ["201[4-9]"]],
+      ["CVE-2021-3144", MASTER, ["300[0-1]"]],
+      ["CVE-2021-3144", MASTER, ["3002", "[0-4]"]],
+
+      ["CVE-2021-3148", MASTER, ["0"]],
+      ["CVE-2021-3148", MASTER, ["201[4-9]"]],
+      ["CVE-2021-3148", MASTER, ["300[0-1]"]],
+      ["CVE-2021-3148", MASTER, ["3002", "[0-4]"]],
+
+      ["CVE-2021-3197", MASTER + MINION, ["0"]],
+      ["CVE-2021-3197", MASTER + MINION, ["201[4-9]"]],
+      ["CVE-2021-3197", MASTER + MINION, ["300[0-1]"]],
+      ["CVE-2021-3197", MASTER + MINION, ["3002", "[0-4]"]],
+
+      ["CVE-2021-25281", MASTER, ["0"]],
+      ["CVE-2021-25281", MASTER, ["201[4-9]"]],
+      ["CVE-2021-25281", MASTER, ["300[0-1]"]],
+      ["CVE-2021-25281", MASTER, ["3002", "[0-4]"]],
+
+      ["CVE-2021-25282", MASTER + MINION, ["0"]],
+      ["CVE-2021-25282", MASTER + MINION, ["201[4-9]"]],
+      ["CVE-2021-25282", MASTER + MINION, ["300[0-1]"]],
+      ["CVE-2021-25282", MASTER + MINION, ["3002", "[0-4]"]],
+
+      ["CVE-2021-25283", MASTER + MINION, ["0"]],
+      ["CVE-2021-25283", MASTER + MINION, ["201[4-9]"]],
+      ["CVE-2021-25283", MASTER + MINION, ["300[0-1]"]],
+      ["CVE-2021-25283", MASTER + MINION, ["3002", "[0-4]"]],
+
+      ["CVE-2021-25284", MASTER + MINION, ["0"]],
+      ["CVE-2021-25284", MASTER + MINION, ["201[4-9]"]],
+      ["CVE-2021-25284", MASTER + MINION, ["300[0-1]"]],
+      ["CVE-2021-25284", MASTER + MINION, ["3002", "[0-4]"]]
     ];
   }
 
@@ -402,21 +452,21 @@ export class MinionsPanel extends Panel {
     if (bugs.length > 1) {
       txt += "s";
     }
-    let cnt = 0;
+    let cnt = 3;
     for (const bug of bugs) {
       if (bugs.length > 1 && bug === bugs[bugs.length - 1]) {
         txt += " and";
       } else if (bug !== bugs[0]) {
         txt += ",";
       }
-      if (cnt === 5) {
+      if (cnt <= 0) {
         txt += "\n";
-        cnt = 0;
+        cnt = 4;
       } else {
         txt += " ";
       }
       txt += bug;
-      cnt += 1;
+      cnt -= 1;
     }
     return txt;
   }
