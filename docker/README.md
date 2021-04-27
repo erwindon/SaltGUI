@@ -10,7 +10,7 @@ They use the following repositories to install saltstack:
 - https://repo.saltstack.com/apt/debian/10/amd64/archive/${SALT_VERSION}
 - http://repo.saltstack.com/py3/ubuntu/18.04/amd64/archive/${SALT_VERSION}
 
-Version of all salt packages installed: *SALT_VERSION=3002*
+Version of all salt packages installed: *SALT_VERSION=3003*
 
 Docker images
 -------------
@@ -18,22 +18,22 @@ Commands used to build these docker images (you must be inside `dockerfiles` fol
 
 ## salt master based on ubuntu
 ```
-docker build -f dockerfile-saltmaster --tag erwindon/saltgui-saltmaster:3002 .
+docker build -f dockerfile-saltmaster --tag erwindon/saltgui-saltmaster:3003 .
 ```
 
 ## salt minion based on centos
 ```
-docker build -f dockerfile-saltminion-centos --tag erwindon/saltgui-saltminion-centos:3002 .
+docker build -f dockerfile-saltminion-centos --tag erwindon/saltgui-saltminion-centos:3003 .
 ```
 
 ## salt minion based on debian
 ```
-docker build -f dockerfile-saltminion-debian --tag erwindon/saltgui-saltminion-debian:3002 .
+docker build -f dockerfile-saltminion-debian --tag erwindon/saltgui-saltminion-debian:3003 .
 ```
 
 ## salt minion based on ubuntu
 ```
-docker build -f dockerfile-saltminion-ubuntu --tag erwindon/saltgui-saltminion-ubuntu:3002 .
+docker build -f dockerfile-saltminion-ubuntu --tag erwindon/saltgui-saltminion-ubuntu:3003 .
 ```
 
 ## saltgui-nginx (separated) based on ubuntu
