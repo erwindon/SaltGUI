@@ -342,7 +342,8 @@ export class MinionsPanel extends Panel {
       ["CVE-2020-28243", MINION, ["0"]],
       ["CVE-2020-28243", MINION, ["201[4-9]"]],
       ["CVE-2020-28243", MINION, ["300[0-1]"]],
-      ["CVE-2020-28243", MINION, ["3002", "[0-4]"]],
+      // CVE mentions "before 3002.5", but the fix was hardened in 3002.6
+      ["CVE-2020-28243", MINION, ["3002", "[0-5]"]],
 
       ["CVE-2020-28972", MASTER + MINION, ["0"]],
       ["CVE-2020-28972", MASTER + MINION, ["201[4-9]"]],
@@ -387,7 +388,19 @@ export class MinionsPanel extends Panel {
       ["CVE-2021-25284", MASTER + MINION, ["0"]],
       ["CVE-2021-25284", MASTER + MINION, ["201[4-9]"]],
       ["CVE-2021-25284", MASTER + MINION, ["300[0-1]"]],
-      ["CVE-2021-25284", MASTER + MINION, ["3002", "[0-4]"]]
+      ["CVE-2021-25284", MASTER + MINION, ["3002", "[0-4]"]],
+
+      // only for SUSE + openSUSE
+      // unclear whether 20xx versions are also affected
+      // never mind, there are enough other warnings for those
+      ["CVE-2021-25315", MASTER + MINION, ["300[01]"]],
+      ["CVE-2021-25315", MASTER + MINION, ["3002", "[0-2]"]],
+
+      ["CVE-2021-31607", MASTER + MINION, ["2016", "9"]],
+      ["CVE-2021-31607", MASTER + MINION, ["2016", "1[0-9]"]],
+      ["CVE-2021-31607", MASTER + MINION, ["201[789]"]],
+      ["CVE-2021-31607", MASTER + MINION, ["300[01]"]],
+      ["CVE-2021-31607", MASTER + MINION, ["3002", "[0-6]"]]
     ];
   }
 
