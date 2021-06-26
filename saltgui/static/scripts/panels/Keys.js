@@ -20,7 +20,7 @@ export class KeysPanel extends Panel {
     this._addPanelMenuItemWheelKeyRejectAllUnacceptedAccepted();
     this._addPanelMenuItemWheelKeyRejectAllUnacceptedDenied();
     this._addPanelMenuItemWheelKeyRejectAllUnacceptedAcceptedDenied();
-    this._addPanelMenuItemWheelKeyDeleteAllUnaccepted();
+    this._addPanelMenuItemWheelKeyDeleteAll();
     this.addSearchButton();
     this.addPlayPauseButton("play");
     this.addHelpButton("The content of this page is\nautomatically refreshed");
@@ -537,7 +537,7 @@ export class KeysPanel extends Panel {
     });
   }
 
-  _addPanelMenuItemWheelKeyDeleteAllUnaccepted () {
+  _addPanelMenuItemWheelKeyDeleteAll () {
     this.panelMenu.addMenuItem(() => {
       if (KeysPanel.cntAccepted > 0 || KeysPanel.cntUnaccepted > 0 || KeysPanel.cntRejected > 0 || KeysPanel.cntDenied > 0) {
         return "Delete all keys...";
