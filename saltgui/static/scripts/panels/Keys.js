@@ -633,8 +633,11 @@ export class KeysPanel extends Panel {
     if (!tr2) {
       return;
     }
-    // at this stage, the field is still classed "os" instead of "fingerprint"
-    const fingerprintSpan = tr2.querySelector("td.os");
+    let fingerprintSpan = tr2.querySelector("td.fingerprint");
+    if (!fingerprintSpan) {
+      // on startup, the field is still classed "os" instead of "fingerprint"
+      fingerprintSpan = tr2.querySelector("td.os");
+    }
     if (!tr2.dataset.fingerprintKnown) {
       fingerprintSpan.innerText = "(refresh page for fingerprint)";
       const wheelKeyFingerPromise = this.api.getWheelKeyFinger(pData.id);
