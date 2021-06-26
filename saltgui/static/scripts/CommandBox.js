@@ -113,6 +113,13 @@ export class CommandBox {
     txt += "When a minion has multiple lines of output, it can be collapsed.";
     txt += "</p>";
 
+    txt += "<br/>";
+
+    txt += "<h2>Templates</h2>";
+    txt += "<p>";
+    txt += "The server-side configuration file can define common used values for the target and command fields, or combinations of these. The command menu to use these templates becomes visible on this screen when there is at least one template defined in the configuration file. See README.md for more details.";
+    txt += "</p>";
+
     output.innerHTML = txt;
   }
 

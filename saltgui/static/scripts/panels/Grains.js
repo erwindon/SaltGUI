@@ -13,6 +13,7 @@ export class GrainsPanel extends Panel {
     this.addTitle("Grains");
     this.addSearchButton();
     // TODO extra columns
+    this.addHelpButton("The content of specific well-known grains can be made visible in\ncolumns by configuring their name in the server-side configuration file.\nSee README.md for more details.");
     this.addTable(["Minion", "Status", "Salt version", "OS version", "Grains", "-menu-"]);
     this.setTableClickable();
 
