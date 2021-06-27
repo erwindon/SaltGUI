@@ -3,6 +3,7 @@
 import {Character} from "../Character.js";
 import {OutputYaml} from "../output/OutputYaml.js";
 import {Panel} from "./Panel.js";
+import {Router} from "../Router.js";
 import {Utils} from "../Utils.js";
 
 export class OptionsPanel extends Panel {
@@ -308,6 +309,9 @@ export class OptionsPanel extends Panel {
     const outputFormatsTd = this.div.querySelector("#option-output-formats-value");
     outputFormatsTd.innerText = value;
     Utils.setStorageItem("session", "output_formats", "\"" + value + "\"");
+    // refresh the right-hand panel based on the new option value
+    Router.currentPage.stats.clearTable();
+    Router.currentPage.stats.onShow();
   }
 
   _newDatetimeFractionDigits () {
