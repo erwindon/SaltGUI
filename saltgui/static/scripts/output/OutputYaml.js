@@ -106,7 +106,8 @@ export class OutputYaml {
     // regular object
     let oOut = "";
     let oSeparator = "";
-    for (const key of Object.keys(pValue).sort()) {
+    const sortedKeys = Object.keys(pValue).sort((aa, bb) => aa.localeCompare(bb, "en", {"numeric": true}));
+    for (const key of sortedKeys) {
       const item = pValue[key];
       oOut += oSeparator + key + ":";
       const systr = OutputYaml._formatSimpleYAML(item);

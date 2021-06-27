@@ -44,7 +44,7 @@ export class StatsPanel extends Panel {
 
       let first = true;
       /* eslint-disable no-labels */
-      nextThread: for (const threadName of Object.keys(workerThreads).sort()) {
+      nextThread: for (const threadName of Object.keys(workerThreads).sort((aa, bb) => aa.localeCompare(bb, "en", {"numeric": true}))) {
         if (first) {
           // always show the first item
           // so that the structure is known even when all threads show zeroes

@@ -78,7 +78,7 @@ export class OutputJson {
     str = "{";
     let oSeparator = "";
     // do not use Object.entries, that is not supported by the test framework
-    const sortedKeys = Object.keys(pValue).sort();
+    const sortedKeys = Object.keys(pValue).sort((aa, bb) => aa.localeCompare(bb, "en", {"numeric": true}));
     for (const key of sortedKeys) {
       const item = pValue[key];
       str += oSeparator + "\n" + " ".repeat(pIndentLevel + indentStep) + JSON.stringify(key) + ": " +

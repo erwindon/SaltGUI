@@ -47,7 +47,8 @@ export class OutputNested {
       if (pIndent) {
         pOutArray.push(OutputNested._ustring(pIndent, "----------"));
       }
-      for (const key of Object.keys(pValue).sort()) {
+      const sortedKeys = Object.keys(pValue).sort((aa, bb) => aa.localeCompare(bb, "en", {"numeric": true}));
+      for (const key of sortedKeys) {
         const val = pValue[key];
         pOutArray.push(OutputNested._ustring(pIndent, key, pPrefix, ":"));
         if (val === null) {
