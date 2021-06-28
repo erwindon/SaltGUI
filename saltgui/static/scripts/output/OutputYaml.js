@@ -48,6 +48,9 @@ export class OutputYaml {
       if (pValue.match(/^`/)) {
         needQuotes = true;
       }
+      if (pValue.match(/'/)) {
+        needQuotes = true;
+      }
       if (pValue.match(/^%/)) {
         needQuotes = true;
       }
@@ -59,7 +62,7 @@ export class OutputYaml {
       if (!needQuotes) {
         return pValue;
       }
-      return "'" + pValue + "'";
+      return "'" + pValue.replaceAll("'", "\\'") + "'";
     }
 
     if (typeof pValue !== "object") {
