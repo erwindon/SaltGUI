@@ -127,11 +127,7 @@ export class Utils {
       return;
     }
 
-    // null or "full" (or anything else)
-    const tooltipSpan = Utils.createSpan("", pTooltipText);
-    tooltipSpan.classList.add("tooltip-text");
-    tooltipSpan.classList.add("tooltip-text-" + pStyle);
-    pTooltipHost.classList.add("tooltip");
+    // toolTipMode is null or "full" (or anything else)
 
     // remove the old tooltip...
     for (let i = pTooltipHost.children.length - 1; i >= 0; i--) {
@@ -141,8 +137,15 @@ export class Utils {
       }
     }
 
-    // ...then add the new tooltip
-    pTooltipHost.appendChild(tooltipSpan);
+    if (pTooltipText) {
+      const tooltipSpan = Utils.createSpan("", pTooltipText);
+      tooltipSpan.classList.add("tooltip-text");
+      tooltipSpan.classList.add("tooltip-text-" + pStyle);
+      pTooltipHost.classList.add("tooltip");
+
+      // ...then add the new tooltip
+      pTooltipHost.appendChild(tooltipSpan);
+    }
   }
 
   static addErrorToTableCell (pTd, pErrorMessage) {
