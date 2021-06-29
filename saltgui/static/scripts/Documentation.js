@@ -191,7 +191,13 @@ export class Documentation {
     const argsObject = {};
     ParseCommandLine.parseCommandLine(pCommandLine, argsArray, argsObject);
 
+    // empty commandline
     if (!argsArray.length) {
+      return ["modules"];
+    }
+
+    // first argument is not a string
+    if (typeof argsArray[0] !== "string") {
       return ["modules"];
     }
 
