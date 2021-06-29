@@ -48,6 +48,10 @@ export class Documentation {
       return null;
     }
 
+    if (typeof argsArray[0] !== "string") {
+      return null;
+    }
+
     const cmdFragments = Documentation.getKeywordFragments(commandLine);
 
     const category = cmdFragments.shift();
