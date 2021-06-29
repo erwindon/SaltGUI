@@ -100,6 +100,8 @@ export class BeaconsPanel extends Panel {
       });
     }
 
+    Utils.setStorageItem("session", "minions_pre_length", keys.minions_pre.length);
+
     const txt = Utils.txtZeroOneMany(minionIds.length,
       "No minions", "{0} minion", "{0} minions");
     this.setMsg(txt);

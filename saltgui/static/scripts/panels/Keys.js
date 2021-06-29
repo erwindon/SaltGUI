@@ -138,6 +138,8 @@ export class KeysPanel extends Panel {
       this._addMissingMinion(minionId);
     }
 
+    Utils.setStorageItem("session", "minions_pre_length", allKeys.minions_pre.length);
+
     this.updateFooter();
 
     this.panelMenu.verifyAll();

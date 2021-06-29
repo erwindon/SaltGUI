@@ -565,6 +565,12 @@ export class Panel {
     if (cntOffline > 0) {
       txt += ", " + Utils.txtZeroOneMany(cntOffline, "none offline", "{0} offline", "{0} offline");
     }
+
+    const cntMinionsPre = Utils.getStorageItem("session", "minions_pre_length");
+    if (cntMinionsPre && cntMinionsPre !== "0") {
+      txt += ", " + Utils.txtZeroOneMany(cntMinionsPre, "", "{0} unaccepted key", "{0} unaccepted keys");
+    }
+
     this.setMsg(txt);
   }
 
