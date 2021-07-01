@@ -97,7 +97,7 @@ export class Panel {
     this.playOrPause = pInitialStatus;
   }
 
-  addHelpButton (pHelpText) {
+  addHelpButton (pHelpTextArr) {
     const span = document.createElement("span");
     span.id = this.key + "-help-button";
     span.classList.add("nearly-visible-button");
@@ -106,7 +106,7 @@ export class Panel {
     span.style.cursor = "help";
     this.div.appendChild(span);
 
-    Utils.addToolTip(span, pHelpText, "bottom-right");
+    Utils.addToolTip(span, pHelpTextArr.join("\n"), "bottom-right");
   }
 
   addCloseButton () {

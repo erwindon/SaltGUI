@@ -20,7 +20,11 @@ export class JobsDetailsPanel extends JobsPanel {
     this._addPanelMenuItemShowAll();
     this.addSearchButton();
     this.addPlayPauseButton("play");
-    this.addHelpButton("Entries for jobs that are primarily used by SaltGUI are normally hidden.\nIt is possible to define exceptions on that, and also to define additions to that.\nSee README.md for more details.");
+    this.addHelpButton([
+      "Entries for jobs that are primarily used by SaltGUI are normally hidden.",
+      "It is possible to define exceptions on that, and also to define additions to that.",
+      "See README.md for more details."
+    ]);
     this.addTable(["JID", "Target", "Function", "Start Time", "-menu-", "Status", "Details"], "data-list-jobs");
     this.setTableSortable("JID", "desc");
     this.setTableClickable();
