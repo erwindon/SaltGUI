@@ -84,6 +84,22 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
+  getLocalBeaconsListAvailable (pMinionId) {
+    const params = {
+      "client": "local",
+      "fun": "beacons.list_available",
+      "kwarg": {"return_yaml": false}
+    };
+    if (pMinionId) {
+      params["tgt_type"] = "list";
+      params.tgt = pMinionId;
+    } else {
+      params["tgt_type"] = "glob";
+      params.tgt = "*";
+    }
+    return this.apiRequest("POST", "/", params);
+  }
+
   getLocalGrainsItems (pMinionId) {
     const params = {
       "client": "local",

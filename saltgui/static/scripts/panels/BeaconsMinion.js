@@ -49,6 +49,35 @@ export class BeaconsMinionPanel extends Panel {
       this._handleLocalBeaconsList(JSON.stringify(pLocalBeaconsListMsg), minionId);
       return false;
     });
+
+    const beaconsListAvailable = Utils.getStorageItem("session", "beacons_list_available");
+    if (!beaconsListAvailable) {
+      // yes, we want the list from *all* minions
+      const localBeaconsListAvailablePromise = this.api.getLocalBeaconsListAvailable(null);
+
+      localBeaconsListAvailablePromise.then((pLocalBeaconsListAvailableData) => {
+        BeaconsMinionPanel._handleBeaconsListAvailable(pLocalBeaconsListAvailableData);
+        return true;
+      }, (pLocalBeaconsListAvailableMsg) => {
+        // pretend nothing is available
+        console.log("cannot retrieve beacons.list_available:", pLocalBeaconsListAvailableMsg);
+        Utils.setStorageItem("session", "beacons_list_available", "[]");
+        return false;
+      });
+    }
+  }
+
+  static _handleBeaconsListAvailable (pLocalBeaconsListAvailableData) {
+    const allBeacons = {};
+    const localBeaconsListAvailableData = pLocalBeaconsListAvailableData.return[0];
+    // pretend that there is only one list of known beacons
+    for (const minionId in localBeaconsListAvailableData) {
+      for (const beaconId of localBeaconsListAvailableData[minionId]) {
+        allBeacons[beaconId] = true;
+      }
+    }
+    const allBeaconsStr = JSON.stringify(Object.keys(allBeacons));
+    Utils.setStorageItem("session", "beacons_list_available", allBeaconsStr);
   }
 
   updateFooter () {
