@@ -364,7 +364,7 @@ export class CommandBox {
   // a KeyEvent(type="keyup")
   static _hideManualRun (pEvent) {
     // Don't close if they click inside the window
-    if (pEvent.type === "click" && pEvent.target.className !== "popup" && pEvent.target.className !== "nearly-visible-button") {
+    if (pEvent.type === "click" && !pEvent.target.classList.contains("popup") && !pEvent.target.classList.contains("nearly-visible-button")) {
       return;
     }
 
