@@ -61,22 +61,27 @@ export class BeaconsMinionPanel extends Panel {
       }, (pLocalBeaconsListAvailableMsg) => {
         // pretend nothing is available
         console.log("cannot retrieve beacons.list_available:", pLocalBeaconsListAvailableMsg);
-        Utils.setStorageItem("session", "beacons_list_available", "[]");
+        Utils.setStorageItem("session", "beacons_list_available", "{cnt: 0}");
         return false;
       });
     }
   }
 
   static _handleBeaconsListAvailable (pLocalBeaconsListAvailableData) {
-    const allBeacons = {};
+    const allBeacons = {"cnt": 0};
     const localBeaconsListAvailableData = pLocalBeaconsListAvailableData.return[0];
     // pretend that there is only one list of known beacons
     for (const minionId in localBeaconsListAvailableData) {
+      allBeacons["cnt"] += 1;
       for (const beaconId of localBeaconsListAvailableData[minionId]) {
-        allBeacons[beaconId] = true;
+        if (beaconId in allBeacons) {
+          allBeacons[beaconId] += 1;
+        } else {
+          allBeacons[beaconId] = 1;
+        }
       }
     }
-    const allBeaconsStr = JSON.stringify(Object.keys(allBeacons));
+    const allBeaconsStr = JSON.stringify(allBeacons);
     Utils.setStorageItem("session", "beacons_list_available", allBeaconsStr);
   }
 

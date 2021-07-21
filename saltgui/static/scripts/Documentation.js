@@ -6,6 +6,7 @@ import {Character} from "./Character.js";
 import {CommandBox} from "./CommandBox.js";
 import {ParseCommandLine} from "./ParseCommandLine.js";
 import {TargetType} from "./TargetType.js";
+import {Utils} from "./Utils.js";
 
 export class Documentation {
 
@@ -22,6 +23,9 @@ export class Documentation {
     pCommandBox.cmdmenu.addMenuItem(
       () => Documentation._manualRunMenuHtmlDocPrepare(),
       () => Documentation._manualRunMenuHtmlDocRun());
+    pCommandBox.cmdmenu.addMenuItem(
+      () => Documentation._manualRunMenuBeaconNamePrepare(),
+      () => Documentation._manualRunMenuBeaconNameRun());
 
     Documentation.DOCUMENTATION_URL = "https://docs.saltstack.com/en/latest/ref/";
     Documentation.EXTERNAL_LINK = Character.NO_BREAK_SPACE + Character.EXTERNAL_LINK_IMG;
@@ -405,5 +409,484 @@ export class Documentation {
 
     const output = document.querySelector(".run-command pre");
     output.innerHTML = html;
+  }
+
+  static _manualRunMenuBeaconNamePrepare () {
+    const commandLine = document.querySelector(".run-command #command").value;
+    if (!commandLine.startsWith("beacons.add ")) {
+      return null;
+    }
+    return "List standard beacon names";
+  }
+
+  static _manualRunMenuBeaconNameRun () {
+    const beaconsList = {
+      "adb": `
+                {
+                  "states": [
+                    "offline",
+                    "unauthorized",
+                    "missing"
+                  ],
+                  "no_devices_event": "True",
+                  "battery_low": 25,
+                  "interval": 3600
+                }`,
+      "aix_account": `
+                {
+                  "user": "ALL",
+                  "interval": 3600
+                }`,
+      "avahi_announce": `
+                {
+                  "run_once": "True",
+                  "interval": 3600
+                }`,
+      "bonjour_announce": `
+                {
+                  "run_once": "True",
+                  "interval": 3600
+                }`,
+      "btmp": `
+                {
+                  "users": {
+                    "gareth": null
+                  },
+                  "defaults": {
+                    "time_range": {
+                      "start": "8am",
+                      "end": "4pm"
+                    }
+                  },
+                  "users": {
+                    "gareth": {
+                      "time_range": {
+                        "start": "8am",
+                        "end": "4pm"
+                      }
+                    }
+                  },
+                  "defaults": {
+                    "time_range": {
+                      "start": "8am",
+                      "end": "4pm"
+                    }
+                  },
+                  "groups": {
+                    "users": {
+                      "time_range": {
+                        "start": "8am",
+                        "end": "4pm"
+                      }
+                    }
+                  },
+                  "defaults": {
+                    "time_range": {
+                      "start": "8am",
+                      "end": "4pm"
+                    }
+                  },
+                  "interval": 3600
+                }`,
+      "cert_info": `
+                {
+                  "files": [
+                    "/etc/pki/tls/certs/mycert.pem",
+                    {
+                      "/etc/pki/tls/certs/yourcert.pem": {
+                        "notify_days": 15
+                      }
+                    },
+                    "/etc/pki/tls/certs/ourcert.pem"
+                  ]
+                  "notify_days": 45,
+                  "interval": 86400
+                }`,
+      "diskusage": `
+                {
+                  "interval": 120
+                }`,
+      "glxinfo": `
+                {
+                  "user": "frank",
+                  "interval": 3600
+                }`,
+      "haproxy": `
+                {
+                  "backends": {
+                    "www-backend": {
+                      "threshold": 45,
+                      "servers": [
+                        "web1",
+                        "web2"
+                      ]
+                    }
+                  },
+                  "interval": 120
+                }`,
+      "imgadm": `
+                {
+                  "interval": 60
+                }`,
+      "inotify": `
+                {
+                  "files": {
+                    "/path/to/file/or/dir": {
+                      "mask": [
+                        "open",
+                        "create",
+                        "close_write"
+                      ],
+                      "recurse": "True",
+                      "auto_add": "True",
+                      "exclude": [
+                        "/path/to/file/or/dir/exclude1",
+                        "/path/to/file/or/dir/exclude2",
+                        {
+                          "/path/to/file/or/dir/regex[a-m]*$": {
+                            "regex": "True"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "coalesce": "True",
+                  "interval": 3600
+                }`,
+      "journald": `
+                {
+                  "services": {
+                    "sshd": {
+                      "SYSLOG_IDENTIFIER": "sshd",
+                      "PRIORITY": 6
+                    }
+                  },
+                  "interval": 3600
+                }`,
+      "junos_rre_keys": `
+                {
+                  "interval": 43200
+                }`,
+      "load": `
+                {
+                  "averages": {
+                    "1m": [
+                      0,
+                      2
+                    ],
+                    "5m": [
+                      0,
+                      1.5
+                    ],
+                    "15m": [
+                      0.1,
+                      1
+                    ]
+                  },
+                  "emitatstartup": true,
+                  "onchangeonly": false,
+                  "interval": 3600
+                }`,
+      "log": `
+                {
+                  "file": "/var/log/messages",
+                  "tags": {
+                    "goodbye/world": {
+                      "regex": ".*good-bye.*"
+                    }
+                  },
+                  "interval": 3600
+                }`,
+      "memusage": `
+                {
+                  "percent": "63%",
+                  "interval": 60
+                }`,
+      "napalm": `
+                {
+                  "net.interfaces": {
+                    "*": {
+                      "is_up": false
+                    }
+                  },
+                  "net.interfaces": {
+                    "xe-0/0/0": {
+                      "is_up": false
+                    }
+                  },
+                  "ntp.stats": {
+                    "synchronized": false
+                  },
+                  "ntp.stats": {
+                    "_args": [
+                      "172.17.17.2"
+                    ],
+                    "synchronized": false
+                  },
+                  "ntp.stats": {
+                    "stratum": "> 5"
+                  },
+                  "interval": 3600
+                }`,
+      "network_info": `
+                {
+                  "interfaces": {
+                    "eth0": {
+                      "type": "greater",
+                      "bytes_sent": 100000,
+                      "bytes_recv": 100000,
+                      "packets_sent": 100000,
+                      "packets_recv": 100000,
+                      "errin": 100,
+                      "errout": 100,
+                      "dropin": 100,
+                      "dropout": 100
+                    }
+                  },
+                  "interval": 3600
+                }`,
+      "network_settings": `
+                {
+                  "coalesce": "True",
+                  "interval": 3600
+                }`,
+      "pkg": `
+                {
+                  "pkgs": [
+                    "zsh",
+                    "apache2"
+                  ],
+                  "refresh": "True",
+                  "interval": 3600
+                }`,
+      "proxy_example": `
+                {
+                  "endpoint": "beacon",
+                  "interval": 3600
+                }`,
+      "ps": `
+                {
+                  "processes": {
+                    "salt-master": "running",
+                    "mysql": "stopped"
+                  },
+                  "interval": 3600
+                }`,
+      "salt_monitor": `
+                {
+                  "salt_fun": "test.ping",
+                  "slsutil.renderer": {
+                    "args": [
+                      "salt://states/apache.sls"
+                    ],
+                    "kwargs": [
+                      {
+                        "default_renderer": "jinja"
+                      }
+                    ]
+                  },
+                  "interval": 3600
+                }`,
+      "salt_proxy": `
+                {
+                  "proxies": {
+                    "p8000": {},
+                    "p8001": {}
+                  },
+                  "interval": 3600
+                }`,
+      "sensehat": `
+                {
+                  "sensors": {
+                    "humidity": "70%",
+                    "temperature": [
+                      20,
+                      40
+                    ],
+                    "temperature_from_pressure": 40,
+                    "pressure": 1500
+                  },
+                  "interval": 3600
+                }`,
+      "service": `
+                {
+                  "services": {
+                    "salt-master": {},
+                    "mysql": {}
+                  },
+                  "interval": 3600
+                }`,
+      "sh": `
+                {
+                  "interval": 3600
+                }`,
+      "status": `
+                {
+                  "interval": 3600
+                }`,
+      "swapusage": `
+                {
+                  "percent": "13%",
+                  "interval": 60
+                }`,
+      "telegram_bot_msg": `
+                {
+                  "token": "<bot access token>",
+                  "interval": 3600
+                }`,
+      "twilio_txt_msg": `
+                {
+                  "account_sid": "<account sid>",
+                  "interval": 3600
+                }`,
+      "vmadm": `
+                {
+                  "interval": 60
+                }`,
+      "watchdog": `
+                {
+                  "directories": {
+                    "/path/to/dir": {
+                      "mask": [
+                        "create",
+                        "modify",
+                        "delete",
+                        "move"
+                      ]
+                    }
+                  },
+                  "interval": 3600
+                }`,
+      "wtmp": `
+                {
+                  "users": {
+                    "gareth": null
+                  },
+                  "defaults": {
+                    "time_range": {
+                      "start": "8am",
+                      "end": "4pm"
+                    }
+                  },
+                  "users": {
+                    "gareth": {
+                      "time_range": {
+                        "start": "7am",
+                        "end": "3pm"
+                      }
+                    }
+                  },
+                  "defaults": {
+                    "time_range": {
+                      "start": "8am",
+                      "end": "4pm"
+                    }
+                  },
+                  "groups": {
+                    "users": {
+                      "time_range": {
+                        "start": "7am",
+                        "end": "3pm"
+                      }
+                    }
+                  },
+                  "defaults": {
+                    "time_range": {
+                      "start": "8am",
+                      "end": "4pm"
+                    }
+                  },
+                  "interval": 3600
+                }`
+    };
+
+    const beaconsListAvailableStr = Utils.getStorageItem("session", "beacons_list_available", "[]");
+    const beaconsListAvailable = JSON.parse(beaconsListAvailableStr);
+
+    // show the beacon names
+    let html = "<p>Choose a template for 'beacons.add'</p>";
+    html += "<p>Using a template will completely replace the command</p>";
+
+    let headerShown1 = false;
+    for (const beaconName in beaconsList) {
+      if (beaconName === "cnt") {
+        continue;
+      }
+      if (beaconName in beaconsListAvailable && beaconsListAvailable[beaconName] === beaconsListAvailable["cnt"]) {
+        if (!headerShown1) {
+          html += "<p>&nbsp;</p>";
+          html += "<p>beacons available on all minions:</p>";
+          headerShown1 = true;
+        }
+        html += "<p>&nbsp;&nbsp;<a id='beaconname'>" + beaconName + "</a></p>";
+      }
+    }
+
+    let headerShown2 = false;
+    for (const beaconName in beaconsList) {
+      if (beaconName === "cnt") {
+        continue;
+      }
+      if (beaconName in beaconsListAvailable && beaconsListAvailable[beaconName] !== beaconsListAvailable["cnt"]) {
+        if (!headerShown2) {
+          html += "<p>&nbsp;</p>";
+          html += "<p>beacons available on some minions:</p>";
+          headerShown2 = true;
+        }
+        html += "<p>&nbsp;&nbsp;<a id='beaconname'>" + beaconName + "</a> (" + beaconsListAvailable[beaconName] + " of " + beaconsListAvailable["cnt"] + ")</p>";
+      }
+    }
+
+    let headerShown3 = false;
+    for (const beaconName in beaconsListAvailable) {
+      if (beaconName === "cnt") {
+        continue;
+      }
+      if (!(beaconName in beaconsList)) {
+        if (!headerShown3) {
+          html += "<p>&nbsp;</p>";
+          html += "<p>beacons available on one or more minions, but no template available:</p>";
+          headerShown3 = true;
+        }
+        html += "<p>&nbsp;&nbsp;" + beaconName;
+        if (beaconsListAvailable[beaconName] !== beaconsListAvailable["cnt"]) {
+          html += " (" + beaconsListAvailable[beaconName] + " of " + beaconsListAvailable["cnt"] + ")";
+        }
+        html += "</p>";
+      }
+    }
+
+    let headerShown4 = false;
+    for (const beaconName in beaconsList) {
+      if (beaconName === "cnt") {
+        continue;
+      }
+      if (!(beaconName in beaconsListAvailable)) {
+        if (!headerShown4) {
+          html += "<p>&nbsp;</p>";
+          html += "<p>beacons not available on any minion:</p>";
+          headerShown4 = true;
+        }
+        html += "<p>&nbsp;&nbsp;<a id='beaconname'>" + beaconName + "</a></p>";
+      }
+    }
+
+    const output = document.querySelector(".run-command pre");
+    output.innerHTML = html;
+
+    // activate the links
+    for (const atag of output.querySelectorAll("a")) {
+      atag.addEventListener("click", () => {
+        const commandLine = document.querySelector(".run-command #command");
+        const beaconName = atag.innerText;
+        const beaconValue = [JSON.parse(beaconsList[beaconName])];
+        if ("interval" in beaconValue[0]) {
+          const interval = beaconValue[0]["interval"];
+          delete beaconValue[0]["interval"];
+          beaconValue.push({"interval": interval});
+        }
+        commandLine.value = "beacons.add " + beaconName + " " + JSON.stringify(beaconValue);
+      });
+    }
   }
 }
