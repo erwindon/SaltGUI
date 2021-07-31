@@ -78,7 +78,7 @@ export class GrainsMinionPanel extends Panel {
       tbody.appendChild(grainTr);
 
       grainTr.addEventListener("click", (pClickEvent) => {
-        this.runCommand(pClickEvent, pMinionId, "grains.setval " + JSON.stringify(grainName) + " " + JSON.stringify(grains[grainName]));
+        this.runCommand(pClickEvent, pMinionId, ["grains.setval", grainName, grains[grainName]]);
       });
     }
 
@@ -91,21 +91,20 @@ export class GrainsMinionPanel extends Panel {
     this.panelMenu.addMenuItem("Add grain...", (pClickEvent) => {
       // use placeholders for name and value
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(pClickEvent, minionId, "grains.setval <name> <value>");
+      this.runCommand(pClickEvent, minionId, ["grains.setval", "<name>", "<value>"]);
     });
   }
 
   _addPanelMenuItemSaltUtilRefreshGrains () {
     this.panelMenu.addMenuItem("Refresh grains...", (pClickEvent) => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(pClickEvent, minionId, "saltutil.refresh_grains");
+      this.runCommand(pClickEvent, minionId, ["saltutil.refresh_grains"]);
     });
   }
 
   _addMenuItemGrainsSetValUpdate (pMenu, pMinionId, key, grains) {
     pMenu.addMenuItem("Edit grain...", (pClickEvent) => {
-      this.runCommand(pClickEvent, pMinionId,
-        "grains.setval " + JSON.stringify(key) + " " + JSON.stringify(grains[key]));
+      this.runCommand(pClickEvent, pMinionId, ["grains.setval", key, grains[key]]);
     });
   }
 
@@ -114,21 +113,29 @@ export class GrainsMinionPanel extends Panel {
       return;
     }
     pMenu.addMenuItem("Add value...", (pClickEvent) => {
-      this.runCommand(pClickEvent, pMinionId, "grains.append " + JSON.stringify(key) + " <value>");
+      this.runCommand(pClickEvent, pMinionId, ["grains.append", key, "<value>"]);
     });
   }
 
   _addMenuItemGrainsDelKey (pMenu, pMinionId, pKey, pValue) {
-    const forceClause = pValue !== null && typeof pValue === "object" ? " force=true" : "";
+    const cmdArr = ["grains.delkey"];
+    if (typeof pValue === "object") {
+      cmdArr.push("force=", true);
+    }
+    cmdArr.push(pKey);
     pMenu.addMenuItem("Delete key...", (pClickEvent) => {
-      this.runCommand(pClickEvent, pMinionId, "grains.delkey" + forceClause + " " + JSON.stringify(pKey));
+      this.runCommand(pClickEvent, pMinionId, cmdArr);
     });
   }
 
   _addMenuItemGrainsDelVal (pMenu, pMinionId, pKey, pValue) {
-    const forceClause = pValue !== null && typeof pValue === "object" ? " force=true" : "";
+    const cmdArr = ["grains.delval"];
+    if (typeof pValue === "object") {
+      cmdArr.push("force=", true);
+    }
+    cmdArr.push(pKey);
     pMenu.addMenuItem("Delete value...", (pClickEvent) => {
-      this.runCommand(pClickEvent, pMinionId, "grains.delval" + forceClause + " " + JSON.stringify(pKey));
+      this.runCommand(pClickEvent, pMinionId, cmdArr);
     });
   }
 }

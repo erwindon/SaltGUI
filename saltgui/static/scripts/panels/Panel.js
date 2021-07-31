@@ -597,8 +597,37 @@ export class Panel {
     minionTr.appendChild(offlineTd);
   }
 
-  runCommand (pClickEvent, pTargetString, pCommandString) {
-    this.runFullCommand(pClickEvent, "", pTargetString, pCommandString);
+  runCommand (pClickEvent, pTargetString, pCommandStringArray) {
+    let commandString = "";
+    let separator = "";
+    for (const cmd of pCommandStringArray) {
+      commandString += separator;
+      separator = " ";
+      if (typeof cmd !== "string") {
+        commandString += JSON.stringify(cmd);
+        continue;
+      }
+      if (cmd.match(/^[a-z_]+=$/)) {
+        // handle key-value pairs
+        const pos = cmd.indexOf("=");
+        commandString += cmd.substr(0, pos + 1);
+        // value comes in a separate element
+        separator = "";
+        continue;
+      }
+      if (cmd.match(/^<[a-z]*>$/)) {
+        // It's a placeholder
+        commandString += cmd;
+        continue;
+      }
+      if (cmd.match(/^[a-z_][a-z0-9_]*(?:[.][a-z0-9_]+)*$/)) {
+        // It's a simple string or a command
+        commandString += cmd;
+        continue;
+      }
+      commandString += JSON.stringify(cmd);
+    }
+    this.runFullCommand(pClickEvent, "", pTargetString, commandString);
   }
 
   runFullCommand (pClickEvent, pTargetType, pTargetString, pCommandString) {
