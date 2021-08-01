@@ -134,7 +134,7 @@ export class PillarsMinionPanel extends Panel {
   _addPanelMenuItemSaltUtilRefreshPillar () {
     this.panelMenu.addMenuItem("Refresh pillar...", (pClickEvent) => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(pClickEvent, minionId, "saltutil.refresh_pillar");
+      this.runCommand(pClickEvent, minionId, ["saltutil.refresh_pillar"]);
     });
   }
 }
