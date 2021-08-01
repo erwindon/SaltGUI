@@ -314,6 +314,15 @@ SaltGUI includes these libraries (with possible modifications):
 
 ## Changelog
 
+## 1.25.0 (2021-08-01)
+- fixed generating commands without proper quoting (erwindon, thx xzenor)
+- added extended help for beacon configuration (erwindon)
+- fixed sticky key status (erwindon)
+- updated CVE info to include recent disclosures (erwindon)
+- several small improvements and fixes (erwindon)
+- updated several dependencies reported by dependabot
+- celebrating 300 stars on GitHub
+
 ## 1.24.0 (2021-03-04)
 - SaltGUI is now a single page application (erwindon)
 - allow reduced number of pages (erwindon, thx bbinet)
