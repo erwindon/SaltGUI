@@ -52,6 +52,11 @@ export class LoginPanel extends Panel {
     option2a.value = "pam";
     option2a.innerText = "pam";
     option2.append(option2a);
+    
+    const option2a1 = document.createElement("option");
+    option2a1.value = "sharedsecret";
+    option2a1.innerText = "sharedsecret";
+    option2.append(option2a1);
 
     // move items to this optgroup only when at least
     // one user reports a succesful use
