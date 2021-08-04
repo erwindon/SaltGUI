@@ -68,6 +68,10 @@ export class API {
     return this.apiRequest("GET", "/static/minions.txt");
   }
 
+  getStaticSaltAuthTxt () {
+    return this.apiRequest("GET", "/static/salt-auth.txt");
+  }
+
   getLocalBeaconsList (pMinionId) {
     const params = {
       "client": "local",
