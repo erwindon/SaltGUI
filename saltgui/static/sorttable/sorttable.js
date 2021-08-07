@@ -34,7 +34,7 @@ export class SortTable {
 
     // work through each column and calculate its type
     const headrow = table.tHead.rows[0].cells;
-    for (var i=0; i<headrow.length; i++) {
+    for (let i=0; i<headrow.length; i++) {
       // manually override the type with a sorttable_type attribute
       if (!headrow[i].classList.contains("sorttable_nosort")) { // skip this col
         const mtch = headrow[i].className.match(/\bsorttable_([a-z0-9]+)\b/);
@@ -92,7 +92,7 @@ export class SortTable {
     const row_array = [];
     const col = clickElement.sorttable_columnindex;
     const rows = clickElement.sorttable_tbody.rows;
-    for (var j=0; j<rows.length; j++) {
+    for (let j=0; j<rows.length; j++) {
       row_array[row_array.length] = [SortTable.getInnerText(rows[j].cells[col]), rows[j]];
     }
     /* If you want a stable sort, uncomment the following line */
@@ -102,7 +102,7 @@ export class SortTable {
     if(reverse) row_array.reverse();
 
     const tb = clickElement.sorttable_tbody;
-    for (var j=0; j<row_array.length; j++) {
+    for (let j=0; j<row_array.length; j++) {
       tb.appendChild(row_array[j][1]);
     }
   }
@@ -142,7 +142,7 @@ export class SortTable {
         case 1:
         case 11:
           var innerText = '';
-          for (var i = 0; i < node.childNodes.length; i++) {
+          for (let i = 0; i < node.childNodes.length; i++) {
             innerText += SortTable.getInnerText(node.childNodes[i]);
           }
           return innerText.replace(/^\s+|\s+$/g, '');
@@ -155,10 +155,10 @@ export class SortTable {
   static reverse (tbody) {
     // reverse the rows in a tbody
     const newrows = [];
-    for (var i=0; i<tbody.rows.length; i++) {
+    for (let i=0; i<tbody.rows.length; i++) {
       newrows[newrows.length] = tbody.rows[i];
     }
-    for (var i=newrows.length-1; i>=0; i--) {
+    for (let i=newrows.length-1; i>=0; i--) {
       tbody.appendChild(newrows[i]);
     }
   }
@@ -182,9 +182,9 @@ export class SortTable {
 
     while(swap) {
         swap = false;
-        for(var i = b; i < t; ++i) {
+        for(let i = b; i < t; ++i) {
             if ( comp_func(list[i], list[i+1]) > 0 ) {
-                var q = list[i]; list[i] = list[i+1]; list[i+1] = q;
+                const q = list[i]; list[i] = list[i+1]; list[i+1] = q;
                 swap = true;
             }
         } // for
@@ -192,9 +192,9 @@ export class SortTable {
 
         if (!swap) break;
 
-        for(var i = t; i > b; --i) {
+        for(let i = t; i > b; --i) {
             if ( comp_func(list[i], list[i-1]) < 0 ) {
-                var q = list[i]; list[i] = list[i-1]; list[i-1] = q;
+                const q = list[i]; list[i] = list[i-1]; list[i-1] = q;
                 swap = true;
             }
         } // for
