@@ -178,6 +178,37 @@ export class CommandBox {
     }
   }
 
+  static getScreenModifyingCommands () {
+    return {
+      "beacons.add": ["beacons", "beacons-minion"],
+      "beacons.delete": ["beacons", "beacons-minion"],
+      "beacons.disable": ["beacons", "beacons-minion"],
+      "beacons.disable_beacon": ["beacons-minion"],
+      "beacons.enable": ["beacons", "beacons-minion"],
+      "beacons.enable_beacon": ["beacons-minion"],
+      "beacons.modify": ["beacons-minion"],
+      "beacons.reset": ["beacons", "beacons-minion"],
+      "grains.append": ["minions", "grains", "grains-minion"],
+      "grains.delkey": ["minions", "grains", "grains-minion"],
+      "grains.delval": ["minions", "grains", "grains-minion"],
+      "grains.setval": ["minions", "grains", "grains-minion"],
+      "ps.kill_pid": ["job", "jobs"],
+      "saltutil.kill_job": ["job", "jobs"],
+      "saltutil.refresh_grains": ["minions", "grains", "grains-minion"],
+      "saltutil.refresh_pillar": ["pillars", "pillars-minion"],
+      "saltutil.signal_job": ["job", "jobs"],
+      "saltutil.term_job": ["job", "jobs"],
+      "schedule.add": ["schedules", "schedules-minion"],
+      "schedule.delete": ["schedules", "schedules-minion"],
+      "schedule.disable": ["schedules", "schedules-minion"],
+      "schedule.disable_job": ["schedules-minion"],
+      "schedule.enable": ["schedules", "schedules-minion"],
+      "schedule.enable_job": ["schedules-minion"],
+      "schedule.modify": ["schedules", "schedules-minion"],
+      "schedule.run_job": ["*"]
+    };
+  }
+
   _onRun () {
     const button = document.querySelector(".run-command input[type='submit']");
     if (button.disabled) {
@@ -210,34 +241,7 @@ export class CommandBox {
     button.disabled = true;
     output.innerText = "loading...";
 
-    const screenModifyingCommands = {
-      "beacons.add": ["beacons", "beacons-minion"],
-      "beacons.delete": ["beacons", "beacons-minion"],
-      "beacons.disable": ["beacons", "beacons-minion"],
-      "beacons.disable_beacon": ["beacons-minion"],
-      "beacons.enable": ["beacons", "beacons-minion"],
-      "beacons.enable_beacon": ["beacons-minion"],
-      "beacons.modify": ["beacons-minion"],
-      "beacons.reset": ["beacons", "beacons-minion"],
-      "grains.append": ["minions", "grains", "grains-minion"],
-      "grains.delkey": ["minions", "grains", "grains-minion"],
-      "grains.delval": ["minions", "grains", "grains-minion"],
-      "grains.setval": ["minions", "grains", "grains-minion"],
-      "ps.kill_pid": ["job", "jobs"],
-      "saltutil.kill_job": ["job", "jobs"],
-      "saltutil.refresh_grains": ["minions", "grains", "grains-minion"],
-      "saltutil.refresh_pillar": ["pillars", "pillars-minion"],
-      "saltutil.signal_job": ["job", "jobs"],
-      "saltutil.term_job": ["job", "jobs"],
-      "schedule.add": ["schedules", "schedules-minion"],
-      "schedule.delete": ["schedules", "schedules-minion"],
-      "schedule.disable": ["schedules", "schedules-minion"],
-      "schedule.disable_job": ["schedules-minion"],
-      "schedule.enable": ["schedules", "schedules-minion"],
-      "schedule.enable_job": ["schedules-minion"],
-      "schedule.modify": ["schedules", "schedules-minion"],
-      "schedule.run_job": ["*"]
-    };
+    const screenModifyingCommands = CommandBox.getScreenModifyingCommands();
     // test whether the command may have caused an update to the list
     const command = commandValue.split(" ")[0];
     if (command in screenModifyingCommands) {
