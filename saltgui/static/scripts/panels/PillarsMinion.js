@@ -1,4 +1,4 @@
-/* global console document */
+/* global document */
 
 import {Character} from "../Character.js";
 import {Output} from "../output/Output.js";
@@ -69,7 +69,7 @@ export class PillarsMinionPanel extends Panel {
         publicPillars[i] = new RegExp(publicPillars[i]);
       } catch (err) {
         // most likely a syntax error in the RE
-        console.error("error in regexp saltgui_public_pillars[" + i + "]=" + OutputYaml.formatYAML(publicPillars[i]) + " --> " + err.name + ": " + err.message);
+        Utils.error("error in regexp saltgui_public_pillars[" + i + "]=" + OutputYaml.formatYAML(publicPillars[i]) + " --> " + err.name + ": " + err.message);
         publicPillars[i] = null;
       }
     }

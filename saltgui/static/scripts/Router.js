@@ -161,7 +161,7 @@ export class Router {
       const loginResponse = JSON.parse(loginResponseStr);
       return loginResponse.user;
     } catch (err) {
-      console.error("error in object login-response=" + loginResponseStr + " --> " + err.name + ": " + err.message);
+      Utils.error("error in object login-response=" + loginResponseStr + " --> " + err.name + ": " + err.message);
       return null;
     }
   }
@@ -172,7 +172,7 @@ export class Router {
     try {
       pages = JSON.parse(pagesText);
     } catch (err) {
-      console.error("error in object saltgui_pages=" + pagesText + " --> " + err.name + ": " + err.message);
+      Utils.error("error in object saltgui_pages=" + pagesText + " --> " + err.name + ": " + err.message);
       return {};
     }
     const userName = Router._getUserName();
@@ -311,7 +311,7 @@ export class Router {
     // route could not be found
     // just go to the main page
     if (pHash === "") {
-      console.log("cannot find default page");
+      Utils.log("cannot find default page");
       return;
     }
     this.goTo("");

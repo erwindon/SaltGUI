@@ -241,7 +241,7 @@ export class Panel {
           } else if (fields.length === 2) {
             minions[fields[0]] = fields[1];
           } else {
-            console.warn("lines in 'minions.txt' must have 1 or 2 words, not " + fields.length + " like in: " + line);
+            Utils.warn("lines in 'minions.txt' must have 1 or 2 words, not " + fields.length + " like in: " + line);
           }
         }
         Utils.setStorageItem("session", "minions-txt", JSON.stringify(minions));

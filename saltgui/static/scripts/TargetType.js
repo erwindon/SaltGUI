@@ -1,4 +1,4 @@
-/* global console document */
+/* global document */
 
 import {Character} from "./Character.js";
 import {DropDownMenu} from "./DropDown.js";
@@ -66,7 +66,7 @@ export class TargetType {
       TargetType.menuTargetType.setTitle("Nodegroup");
       break;
     default:
-      console.error("targetType", targetType);
+      Utils.error("targetType", targetType);
     }
 
     TargetType.menuTargetType._value = targetType;

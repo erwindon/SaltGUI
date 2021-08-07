@@ -1,7 +1,8 @@
-/* global console document */
+/* global document */
 
 import {Character} from "./Character.js";
 import {DropDownMenu} from "./DropDown.js";
+import {Utils} from "./Utils.js";
 
 export class RunType {
 
@@ -27,7 +28,7 @@ export class RunType {
       RunType.menuRunType.setTitle("Async");
       break;
     default:
-      console.error("runType", runType);
+      Utils.error("runType", runType);
     }
 
     const menuItems = RunType.menuRunType.menuDropdownContent.children;

@@ -63,7 +63,7 @@ export class Utils {
       return window.sessionStorage;
     }
     /* istanbul ignore next */
-    console.error("UNKNOWN STORAGE TYPE", pStorage);
+    Utils.error("UNKNOWN STORAGE TYPE", pStorage);
     /* istanbul ignore next */
     return null;
   }
@@ -71,12 +71,12 @@ export class Utils {
   static getStorageItem (pStorage, pKeyName, pDefaultValue = null) {
     const storage = Utils._getStorage(pStorage);
     if (!storage) {
-      console.log("getStorageItem", pStorage, pKeyName);
+      Utils.log("getStorageItem", pStorage, pKeyName);
       return pDefaultValue;
     }
     /* istanbul ignore next */
     const value = storage.getItem(pKeyName);
-    // console.log("getStorageItem", pStorage, pKeyName, pDefaultValue, "-->", typeof value, value);
+    // Utils.log("getStorageItem", pStorage, pKeyName, pDefaultValue, "-->", typeof value, value);
     /* istanbul ignore next */
     if (value === null) {
       return pDefaultValue;
@@ -92,10 +92,10 @@ export class Utils {
   static setStorageItem (pStorage, pKeyName, pValue) {
     const storage = Utils._getStorage(pStorage);
     if (!storage) {
-      console.log("setStorageItem", pStorage, pKeyName, pValue);
+      Utils.log("setStorageItem", pStorage, pKeyName, pValue);
       return;
     }
-    // console.log("setStorageItem", pStorage, pKeyName, pValue);
+    // Utils.log("setStorageItem", pStorage, pKeyName, pValue);
     /* istanbul ignore next */
     storage.setItem(pKeyName, pValue);
   }
@@ -103,10 +103,10 @@ export class Utils {
   static clearStorage (pStorage) {
     const storage = Utils._getStorage(pStorage);
     if (!storage) {
-      console.log("clearStorage", pStorage);
+      Utils.log("clearStorage", pStorage);
       return;
     }
-    // console.log("clearStorage", pStorage);
+    // Utils.log("clearStorage", pStorage);
     /* istanbul ignore next */
     storage.clear();
   }
@@ -508,5 +508,29 @@ export class Utils {
       span.innerText = pInnerText;
     }
     return span;
+  }
+
+  static log (...pStr) {
+    /* eslint-disable no-console */
+    console.log(...pStr);
+    /* eslint-enable no-console */
+  }
+
+  static info (...pStr) {
+    /* eslint-disable no-console */
+    console.info(...pStr);
+    /* eslint-enable no-console */
+  }
+
+  static warn (...pStr) {
+    /* eslint-disable no-console */
+    console.warn(...pStr);
+    /* eslint-enable no-console */
+  }
+
+  static error (...pStr) {
+    /* eslint-disable no-console */
+    console.error(...pStr);
+    /* eslint-enable no-console */
   }
 }

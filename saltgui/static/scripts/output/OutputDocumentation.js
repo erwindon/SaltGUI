@@ -1,6 +1,7 @@
-/* global console */
+/* global */
 
 import {Output} from "./Output.js";
+import {Utils} from "../Utils.js";
 
 export class OutputDocumentation {
 
@@ -242,7 +243,7 @@ export class OutputDocumentation {
           const words = reference.split(": ");
           if (words.length !== 2) {
             /* istanbul ignore next */
-            console.warn("words", words);
+            Utils.warn("words", words);
             /* istanbul ignore next */
             break;
           }

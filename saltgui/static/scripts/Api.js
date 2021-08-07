@@ -339,11 +339,11 @@ export class API {
       source = new EventSource(config.API_URL + "/events?token=" + tokenOnSetup);
       /* eslint-enable compat/compat */
     } catch (err) {
-      console.error("Cannot read the Salt-EventBus with this browser version, browser upgrade recommended");
+      Utils.error("Cannot read the Salt-EventBus with this browser version, browser upgrade recommended");
       return;
     }
     source.onopen = () => {
-      // console.info("Listening for events...");
+      // Utils.info("Listening for events...");
     };
     source.onerror = () => {
       // Don't show the error

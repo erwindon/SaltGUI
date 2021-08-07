@@ -493,7 +493,7 @@ export class CommandBox {
     // {"jid": "20201105221605666661", "id": "ss04", "return": {"no_|-states_|-states_|-None": {"result": false, "comment": "No Top file or master_tops data matches found. Please see master log for details.", "name": "No States", "changes": {}, "__run_num__": 0}}, "retcode": 2, "success": false, "fun": "state.apply", "fun_args": null, "out": "highstate", "_stamp": "2020-11-05T22:16:06.377513"}
     const part = pTag.split("/");
     if (part.length !== 5) {
-      console.info("unkown tag", pTag);
+      Utils.info("unkown tag", pTag);
       return;
     }
 
@@ -539,7 +539,7 @@ export class CommandBox {
     // salt/job/20201105020540728914/prog/ss01/0
     const part = pTag.split("/");
     if (part.length !== 6) {
-      console.info("unkown tag", pTag);
+      Utils.info("unkown tag", pTag);
       return;
     }
 
@@ -557,7 +557,7 @@ export class CommandBox {
     const divId = "run-" + Utils.getIdFromMinionId(eventMinionId);
     const div = document.getElementById(divId);
     if (div === null) {
-      console.log("div=null, minion=" + eventMinionId);
+      Utils.log("div=null, minion=" + eventMinionId);
       return;
     }
 

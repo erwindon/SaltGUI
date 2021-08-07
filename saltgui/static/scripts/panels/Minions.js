@@ -42,7 +42,7 @@ export class MinionsPanel extends Panel {
         this._handlewheelMinionsConnected(pWheelMinionsConnectedData);
         return true;
       }, (pWheelMinionsConnectedMsg) => {
-        console.log("pWheelMinionsConnectedMsg", pWheelMinionsConnectedMsg);
+        Utils.log("pWheelMinionsConnectedMsg", pWheelMinionsConnectedMsg);
         return false;
       });
 
