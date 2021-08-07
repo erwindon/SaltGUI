@@ -97,7 +97,7 @@ function Hilitor(start, id, tag)
       for(var i=0; i < node.childNodes.length; i++)
         this.hiliteWords(node.childNodes[i]);
     }
-    if(node.nodeType == 3) { // NODE_TEXT
+    if(node.nodeType === 3) { // NODE_TEXT
       // limit the number of highlighted matches to 25 otherwise the DOM grows rediculously
       // and performance drops with it. and it is still a good first indication.
       let nv, regs;
