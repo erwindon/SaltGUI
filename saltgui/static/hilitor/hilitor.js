@@ -138,7 +138,7 @@ function Hilitor(start, id, tag)
   this.apply = function(input, isCaseSensitive=false)
   {
     this.remove();
-    if(input === undefined || !input) return;
+    if(input === undefined || !input) return undefined;
     if(this.setRegex(input, isCaseSensitive)) {
       this.hiliteWords(targetNode);
     }
