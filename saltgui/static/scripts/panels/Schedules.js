@@ -26,10 +26,10 @@ export class SchedulesPanel extends Panel {
       localScheduleListPromise.then((pLocalScheduleListData) => {
         this.updateMinions(pLocalScheduleListData);
         return true;
-      }, (pLocalBeaconsListMsg) => {
+      }, (pLocalScheduleListMsg) => {
         const localScheduleListData = {"return": [{}]};
         for (const minionId of pWheelKeyListAllData.return[0].data.return.minions) {
-          localScheduleListData.return[0][minionId] = JSON.stringify(pLocalBeaconsListMsg);
+          localScheduleListData.return[0][minionId] = JSON.stringify(pLocalScheduleListMsg);
         }
         this.updateMinions(localScheduleListData);
         return false;
