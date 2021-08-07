@@ -858,13 +858,17 @@ export class Documentation {
 
     let headerShown4 = false;
     for (const beaconName in beaconsList) {
-      if (beaconName === "cnt") {
+      if (beaconName === "_cnt") {
         continue;
       }
       if (!(beaconName in beaconsListAvailable)) {
         if (!headerShown4) {
           html += "<p>&nbsp;</p>";
-          html += "<p>beacons not available on any minion:</p>";
+          if (beaconsListAvailable.length === 0) {
+            html += "<p>all known standard beacons:</p>";
+          } else {
+            html += "<p>beacons not available on any minion:</p>";
+          }
           headerShown4 = true;
         }
         html += "<p>&nbsp;&nbsp;<a id='beaconname'>" + beaconName + "</a></p>";
