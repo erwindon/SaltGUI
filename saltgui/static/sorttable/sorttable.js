@@ -137,6 +137,7 @@ export class SortTable {
           if (node.nodeName.toLowerCase() === 'input') {
             return node.value.replace(/^\s+|\s+$/g, '');
           }
+          return node.nodeValue.replace(/^\s+|\s+$/g, '');
         case 4:
           return node.nodeValue.replace(/^\s+|\s+$/g, '');
         case 1:
