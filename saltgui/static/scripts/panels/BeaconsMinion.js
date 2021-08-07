@@ -68,11 +68,16 @@ export class BeaconsMinionPanel extends Panel {
   }
 
   static _handleBeaconsListAvailable (pLocalBeaconsListAvailableData) {
-    const allBeacons = {"cnt": 0};
+    const allBeacons = {"_cnt": 0, "_offline": 0};
     const localBeaconsListAvailableData = pLocalBeaconsListAvailableData.return[0];
     // pretend that there is only one list of known beacons
     for (const minionId in localBeaconsListAvailableData) {
-      allBeacons["cnt"] += 1;
+      if (typeof localBeaconsListAvailableData[minionId] !== "object") {
+        // unavailable minions result in "false"
+        allBeacons["_offline"] += 1;
+        continue;
+      }
+      allBeacons["_cnt"] += 1;
       for (const beaconId of localBeaconsListAvailableData[minionId]) {
         if (beaconId in allBeacons) {
           allBeacons[beaconId] += 1;

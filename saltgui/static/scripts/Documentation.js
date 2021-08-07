@@ -809,10 +809,10 @@ export class Documentation {
 
     let headerShown1 = false;
     for (const beaconName in beaconsList) {
-      if (beaconName === "cnt") {
+      if (beaconName.startsWith("_")) {
         continue;
       }
-      if (beaconName in beaconsListAvailable && beaconsListAvailable[beaconName] === beaconsListAvailable["cnt"]) {
+      if (beaconName in beaconsListAvailable && beaconsListAvailable[beaconName] === beaconsListAvailable["_cnt"]) {
         if (!headerShown1) {
           html += "<p>&nbsp;</p>";
           html += "<p>beacons available on all minions:</p>";
@@ -824,22 +824,22 @@ export class Documentation {
 
     let headerShown2 = false;
     for (const beaconName in beaconsList) {
-      if (beaconName === "cnt") {
+      if (beaconName === "_cnt") {
         continue;
       }
-      if (beaconName in beaconsListAvailable && beaconsListAvailable[beaconName] !== beaconsListAvailable["cnt"]) {
+      if (beaconName in beaconsListAvailable && beaconsListAvailable[beaconName] !== beaconsListAvailable["_cnt"]) {
         if (!headerShown2) {
           html += "<p>&nbsp;</p>";
           html += "<p>beacons available on some minions:</p>";
           headerShown2 = true;
         }
-        html += "<p>&nbsp;&nbsp;<a id='beaconname'>" + beaconName + "</a> (" + beaconsListAvailable[beaconName] + " of " + beaconsListAvailable["cnt"] + ")</p>";
+        html += "<p>&nbsp;&nbsp;<a id='beaconname'>" + beaconName + "</a> (" + beaconsListAvailable[beaconName] + " of " + beaconsListAvailable["_cnt"] + ")</p>";
       }
     }
 
     let headerShown3 = false;
     for (const beaconName in beaconsListAvailable) {
-      if (beaconName === "cnt") {
+      if (beaconName.startsWith("_")) {
         continue;
       }
       if (!(beaconName in beaconsList)) {
@@ -849,8 +849,8 @@ export class Documentation {
           headerShown3 = true;
         }
         html += "<p>&nbsp;&nbsp;" + beaconName;
-        if (beaconsListAvailable[beaconName] !== beaconsListAvailable["cnt"]) {
-          html += " (" + beaconsListAvailable[beaconName] + " of " + beaconsListAvailable["cnt"] + ")";
+        if (beaconsListAvailable[beaconName] !== beaconsListAvailable["_cnt"]) {
+          html += " (" + beaconsListAvailable[beaconName] + " of " + beaconsListAvailable["_cnt"] + ")";
         }
         html += "</p>";
       }
@@ -873,6 +873,14 @@ export class Documentation {
         }
         html += "<p>&nbsp;&nbsp;<a id='beaconname'>" + beaconName + "</a></p>";
       }
+    }
+
+    if (beaconsListAvailable.length === 0) {
+      html += "<p>&nbsp;</p>";
+      html += "<p>no information is available on the availability of the beacon types on the minions, that information is still being loaded in the background</p>";
+    } else if (beaconsListAvailable["_offline"] > 0) {
+      html += "<p>&nbsp;</p>";
+      html += "<p>some minions are offline and therefore did not provide information about available beacon types</p>";
     }
 
     const output = document.querySelector(".run-command pre");
