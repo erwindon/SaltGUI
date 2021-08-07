@@ -23,7 +23,7 @@ export class SortTable {
     if (table.getElementsByTagName('thead').length == 0) {
       // table doesn't have a tHead. Since it should have, create one and
       // put the first table row in it.
-      the = document.createElement('thead');
+      const the = document.createElement('thead');
       the.appendChild(table.rows[0]);
       table.insertBefore(the,table.firstChild);
     }
@@ -38,7 +38,7 @@ export class SortTable {
       // manually override the type with a sorttable_type attribute
       if (!headrow[i].classList.contains("sorttable_nosort")) { // skip this col
         const mtch = headrow[i].className.match(/\bsorttable_([a-z0-9]+)\b/);
-        if (mtch) { override = mtch[1]; }
+        if (mtch) { const override = mtch[1]; }
 	      headrow[i].sorttable_sortfunction = SortTable.sort_alpha;
 	      // make it clickable to sort
 	      headrow[i].sorttable_columnindex = i;
