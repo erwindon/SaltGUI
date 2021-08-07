@@ -498,7 +498,7 @@ export class Documentation {
                       }
                     },
                     "/etc/pki/tls/certs/ourcert.pem"
-                  ]
+                  ],
                   "notify_days": 45,
                   "interval": 86400
                 }`,
