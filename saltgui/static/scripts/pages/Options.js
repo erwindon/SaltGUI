@@ -17,5 +17,6 @@ export class OptionsPage extends Page {
 
   onHide () {
     this.options.onHide();
+    this.stats.onHide();
   }
 }

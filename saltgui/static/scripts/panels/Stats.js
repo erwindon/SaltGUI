@@ -14,6 +14,24 @@ export class StatsPanel extends Panel {
   }
 
   onShow () {
+    if (this.table.tBodies[0].children.length === 0) {
+      // cannot do this in the constructor
+      // since the framework removes all rows
+      const tr = document.createElement("tr");
+      this.table.tBodies[0].appendChild(tr);
+      const td = document.createElement("td");
+      tr.appendChild(td);
+      this.statsTd = td;
+    }
+
+    this.onShowNow();
+
+    this.updateStatsTimer = setInterval(() => {
+      this.onShowNow();
+    }, 3000);
+  }
+
+  onShowNow () {
     const statsPromise = this.api.getStats();
 
     statsPromise.then((pStatsData) => {
@@ -25,9 +43,15 @@ export class StatsPanel extends Panel {
     });
   }
 
+  onHide () {
+    if (this.updateStatsTimer) {
+      // stop the timer when noone is looking
+      clearInterval(this.updateStatsTimer);
+      this.updateStatsTimer = null;
+    }
+  }
+
   _handleStats (pStatsData) {
-    const tr = document.createElement("tr");
-    const td = document.createElement("td");
 
     for (const topKey in pStatsData) {
 
@@ -64,8 +88,6 @@ export class StatsPanel extends Panel {
       /* eslint-enable no-labels */
     }
 
-    td.innerText = Output.formatObject(pStatsData);
-    tr.appendChild(td);
-    this.table.tBodies[0].appendChild(tr);
+    this.statsTd.innerText = Output.formatObject(pStatsData);
   }
 }
