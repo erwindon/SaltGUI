@@ -22,6 +22,9 @@
     "stylelint-scss": "^4.0.0"
   },
   "eslintConfig": {
+    "env": {
+      "es6": true
+    },
     "extends": [
       "eslint:all",
       "plugin:compat/recommended"

@@ -9,6 +9,7 @@ import {EventsPage} from "./pages/Events.js";
 import {GrainsMinionPage} from "./pages/GrainsMinion.js";
 import {GrainsPage} from "./pages/Grains.js";
 import {HighStatePage} from "./pages/HighState.js";
+import {IssuesPage} from "./pages/Issues.js";
 import {JobPage} from "./pages/Job.js";
 import {JobsPage} from "./pages/Jobs.js";
 import {KeysPage} from "./pages/Keys.js";
@@ -53,6 +54,7 @@ export class Router {
     this._registerPage(this.eventsPage = new EventsPage(this));
     this._registerPage(this.reactorsPage = new ReactorsPage(this));
     this._registerPage(this.optionsPage = new OptionsPage(this));
+    this._registerPage(this.issuesPage = new IssuesPage(this));
     this._registerPage(new LogoutPage(this));
 
     this._registerRouterEventListeners();
@@ -151,6 +153,7 @@ export class Router {
     this._registerMenuItem("jobs", "templates", "templates");
     this._registerMenuItem(null, "events", "eventsview");
     this._registerMenuItem("events", "reactors", "reactors");
+    this._registerMenuItem(null, "issues", "issues");
     this._registerMenuItem(null, "logout", "logout");
   }
 
