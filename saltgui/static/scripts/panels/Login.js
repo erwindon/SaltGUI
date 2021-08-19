@@ -145,16 +145,16 @@ export class LoginPanel extends Panel {
           trim().
           split(/\r?\n/).
           filter((item) => !item.startsWith("#"));
-        const saltAauth = [];
+        const saltAuth = [];
         for (const line of lines) {
           const fields = line.split(/[ \t]+/);
           if (fields.length === 1) {
-            saltAauth.push(fields[0]);
+            saltAuth.push(fields[0]);
           } else {
             console.warn("lines in 'salt-auth.txt' must have 1 word, not " + fields.length + " like in: " + line);
           }
         }
-        Utils.setStorageItem("local", "salt-auth-txt", JSON.stringify(saltAauth));
+        Utils.setStorageItem("local", "salt-auth-txt", JSON.stringify(saltAuth));
         this._updateEauthField();
       } else {
         Utils.setStorageItem("local", "salt-auth-txt", "[]");
