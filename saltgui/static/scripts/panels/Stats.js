@@ -88,6 +88,31 @@ export class StatsPanel extends Panel {
       /* eslint-enable no-labels */
     }
 
+    const appData = pStatsData["CherryPy Applications"];
+    if (appData) {
+      // annotate 3 fields that have a huge integer value
+      // this turns the fields into strings (was number)
+      // we'll ignore that now
+
+      const ct = appData["Current Time"];
+      const ct2 = new Date(ct * 1000);
+      appData["Current Time"] = ct + " (=" + ct2 + ")";
+
+      const st = appData["Start Time"];
+      const st2 = new Date(st * 1000);
+      appData["Start Time"] = st + " (=" + st2 + ")";
+
+      const ut = appData["Uptime"];
+      // remove the date prefix and the millisecond suffix
+      const utstr = new Date(ut * 1000).toISOString();
+      let ut2 = utstr.substr(11, 8);
+      if (ut >= 86400) {
+        // add the number of days (when there are any)
+        ut2 = Math.floor(ut / 86400) + "d " + ut2;
+      }
+      appData["Uptime"] = ut + " (=" + ut2 + ")";
+    }
+
     this.statsTd.innerText = Output.formatObject(pStatsData);
   }
 }
