@@ -312,12 +312,12 @@ export class BeaconsMinionPanel extends Panel {
     // tags that are never affected.
     // See also: https://github.com/saltstack/salt/issues/57174
     let helpText = null;
-    if (td.prevStamp && td.prevStamp !== stamp) {
+    if (tr.prevStamp && tr.prevStamp !== stamp) {
       // event has a different timestamp
       // normal situation, no reason for panic
-    } else if (td.prevTag && td.prevTag !== pTag) {
+    } else if (tr.prevTag && tr.prevTag !== pTag) {
       helpText = "Multiple events seen with same timestamp, but different tag\nThis usually means that there is more data than can be seen here\nThere may e.g. be more than one disk or networkinterface\nBut only the most recently reported one is actually shown";
-    } else if (td.prevData && td.prevData !== pData) {
+    } else if (tr.prevData && tr.prevData !== pData) {
       helpText = "Multiple events seen with same timestamp, same tag, but different data\nThis usually means that there is more data than can be seen here\nThere may e.g. be more than one disk or networkinterface\nBut only the most recently reported one is actually shown";
     } else {
       // duplicate of previous event, never mind for now
@@ -335,8 +335,8 @@ export class BeaconsMinionPanel extends Panel {
 
     td.innerText = txt;
 
-    td.prevStamp = stamp;
-    td.prevTag = pTag;
-    td.prevData = pData;
+    tr.prevStamp = stamp;
+    tr.prevTag = pTag;
+    tr.prevData = pData;
   }
 }
