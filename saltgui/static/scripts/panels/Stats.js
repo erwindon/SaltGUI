@@ -51,6 +51,15 @@ export class StatsPanel extends Panel {
     }
   }
 
+  // provide a shortened date format for cases
+  // where we see the timezone multiple times on one screen
+  _shortenedDate (dateInMs) {
+    // get the regular data fomat
+    const str = new Date(dateInMs * 1000) + "";
+    // remove the named timezone part
+    return str.replace(/ *[(].*[)]/, "");
+  }
+
   _handleStats (pStatsData) {
 
     for (const topKey in pStatsData) {
@@ -95,17 +104,14 @@ export class StatsPanel extends Panel {
       // we'll ignore that now
 
       const ct = appData["Current Time"];
-      const ct2 = new Date(ct * 1000);
-      appData["Current Time"] = ct + " (=" + ct2 + ")";
+      appData["Current Time"] = ct + " (=" + this._shortenedDate(ct) + ")";
 
       const st = appData["Start Time"];
-      const st2 = new Date(st * 1000);
-      appData["Start Time"] = st + " (=" + st2 + ")";
+      appData["Start Time"] = st + " (=" + this._shortenedDate(ct) + ")";
 
       const ut = appData["Uptime"];
       // remove the date prefix and the millisecond suffix
-      const utstr = new Date(ut * 1000).toISOString();
-      let ut2 = utstr.substr(11, 8);
+      let ut2 = new Date(ut).toISOString().substr(11, 8);
       if (ut >= 86400) {
         // add the number of days (when there are any)
         ut2 = Math.floor(ut / 86400) + "d " + ut2;
