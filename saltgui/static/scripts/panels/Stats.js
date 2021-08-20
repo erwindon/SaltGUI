@@ -14,6 +14,24 @@ export class StatsPanel extends Panel {
   }
 
   onShow () {
+    if (this.table.tBodies[0].children.length === 0) {
+      // cannot do this in the constructor
+      // since the framework removes all rows
+      const tr = document.createElement("tr");
+      this.table.tBodies[0].appendChild(tr);
+      const td = document.createElement("td");
+      tr.appendChild(td);
+      this.statsTd = td;
+    }
+
+    this.onShowNow();
+
+    this.updateStatsTimer = setInterval(() => {
+      this.onShowNow();
+    }, 3000);
+  }
+
+  onShowNow () {
     const statsPromise = this.api.getStats();
 
     statsPromise.then((pStatsData) => {
@@ -25,9 +43,24 @@ export class StatsPanel extends Panel {
     });
   }
 
+  onHide () {
+    if (this.updateStatsTimer) {
+      // stop the timer when noone is looking
+      clearInterval(this.updateStatsTimer);
+      this.updateStatsTimer = null;
+    }
+  }
+
+  // provide a shortened date format for cases
+  // where we see the timezone multiple times on one screen
+  _shortenedDate (dateInMs) {
+    // get the regular data fomat
+    const str = new Date(dateInMs * 1000) + "";
+    // remove the named timezone part
+    return str.replace(/ *[(].*[)]/, "");
+  }
+
   _handleStats (pStatsData) {
-    const tr = document.createElement("tr");
-    const td = document.createElement("td");
 
     for (const topKey in pStatsData) {
 
@@ -64,8 +97,28 @@ export class StatsPanel extends Panel {
       /* eslint-enable no-labels */
     }
 
-    td.innerText = Output.formatObject(pStatsData);
-    tr.appendChild(td);
-    this.table.tBodies[0].appendChild(tr);
+    const appData = pStatsData["CherryPy Applications"];
+    if (appData) {
+      // annotate 3 fields that have a huge integer value
+      // this turns the fields into strings (was number)
+      // we'll ignore that now
+
+      const ct = appData["Current Time"];
+      appData["Current Time"] = ct + " (=" + this._shortenedDate(ct) + ")";
+
+      const st = appData["Start Time"];
+      appData["Start Time"] = st + " (=" + this._shortenedDate(ct) + ")";
+
+      const ut = appData["Uptime"];
+      // remove the date prefix and the millisecond suffix
+      let ut2 = new Date(ut).toISOString().substr(11, 8);
+      if (ut >= 86400) {
+        // add the number of days (when there are any)
+        ut2 = Math.floor(ut / 86400) + "d " + ut2;
+      }
+      appData["Uptime"] = ut + " (=" + ut2 + ")";
+    }
+
+    this.statsTd.innerText = Output.formatObject(pStatsData);
   }
 }
