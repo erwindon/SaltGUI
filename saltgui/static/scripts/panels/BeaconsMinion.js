@@ -182,7 +182,7 @@ export class BeaconsMinionPanel extends Panel {
       });
 
       const helpButtonTd = Utils.createTd("help-button");
-      const helpButtonSpan = Utils.createSpan("nearly-visible-button", "", this.key + "-" + beaconName + "-help-button");
+      const helpButtonSpan = Utils.createSpan("warning-button", "", this.key + "-" + beaconName + "-help-button");
       helpButtonSpan.innerText = Character.WARNING_SIGN;
       helpButtonSpan.style.display = "none";
       helpButtonSpan.style.cursor = "help";
@@ -325,6 +325,11 @@ export class BeaconsMinionPanel extends Panel {
 
     const searchBlock = this.div.querySelector(".search-box");
     Utils.hideShowTableSearchBar(searchBlock, this.table, "refresh");
+
+    if (pData["error"]) {
+      // we might be replacing a "multiple-events" warning here
+      helpText = "The beacon reported an error";
+    }
 
     if (helpText) {
       Utils.addToolTip(tr.helpButtonSpan, helpText, "bottom-right");

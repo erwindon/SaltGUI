@@ -4,6 +4,7 @@ export class Character {
 
   static init () {
     Character._VARIATION_SELECTOR_15 = "\uFE0E";
+    Character._VARIATION_SELECTOR_16 = "\uFE0F";
 
     Character.NO_BREAK_SPACE = "\u00A0";
     Character.NON_BREAKING_HYPHEN = "\u2011";
@@ -24,7 +25,8 @@ export class Character {
     Character.BLACK_DOWN_POINTING_TRIANGLE = "\u25BC";
     Character.WHITE_DOWN_POINTING_TRIANGLE = "\u25BD";
     Character.BLACK_CIRCLE = "\u25CF";
-    Character.WARNING_SIGN = "\u26A0";
+    Character.WARNING_SIGN =
+      "\u26A0" + Character._VARIATION_SELECTOR_16;
     Character.HEAVY_CHECK_MARK = "\u2714";
     Character.HEAVY_MULTIPLICATION_X_MONO =
       "\u2716" + Character._VARIATION_SELECTOR_15;

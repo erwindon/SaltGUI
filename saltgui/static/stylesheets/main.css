@@ -236,3 +236,15 @@ pre.output {
   margin-bottom: 10px;
   flex: 1;
 }
+
+.warning-button {
+  display: block;
+  float: right;
+  font-size: 18px;
+  font-weight: lighter;
+}
+
+.warning-button:hover {
+  color: #4caf50;
+  cursor: pointer;
+}
