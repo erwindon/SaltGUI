@@ -39,12 +39,14 @@ export class SortTable {
       if (!headrow[i].classList.contains("sorttable_nosort")) { // skip this col
         const mtch = headrow[i].className.match(/\bsorttable_([a-z0-9]+)\b/);
         if (mtch) { const override = mtch[1]; }
-	      headrow[i].sorttable_sortfunction = SortTable.sort_alpha;
-	      // make it clickable to sort
-	      headrow[i].sorttable_columnindex = i;
-	      headrow[i].sorttable_tbody = table.tBodies[0];
-	      headrow[i].addEventListener("click", (clickEvent) => SortTable.innerSortFunction(clickEvent.target));
-	    }
+        headrow[i].sorttable_sortfunction = SortTable.sort_alpha;
+        // make it clickable to sort
+        headrow[i].sorttable_columnindex = i;
+        headrow[i].sorttable_tbody = table.tBodies[0];
+        headrow[i].addEventListener("click", (clickEvent) =>
+          SortTable.innerSortFunction(headrow[i])
+        );
+      }
     }
   }
 
