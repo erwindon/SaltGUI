@@ -309,7 +309,7 @@ export class JobsDetailsPanel extends JobsPanel {
     tr.appendChild(Utils.createTd("starttime", startTimeText));
 
     const menu = new DropDownMenu(tr);
-    JobsDetailsPanel._addJobsMenuItemShowDetails(menu, job);
+    this._addJobsMenuItemShowDetails(menu, job);
     this._addMenuItemJobsRerunJob(menu, job, argumentsText);
 
     const statusTd = Utils.createTd();
@@ -356,7 +356,7 @@ export class JobsDetailsPanel extends JobsPanel {
     });
   }
 
-  static _addJobsMenuItemShowDetails (pMenu, job) {
+  _addJobsMenuItemShowDetails (pMenu, job) {
     pMenu.addMenuItem("Show details", () => {
       this.router.goTo("job", {"id": job.id});
     });
