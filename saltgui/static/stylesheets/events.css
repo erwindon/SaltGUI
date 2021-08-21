@@ -2,11 +2,6 @@ td.event-data {
   white-space: pre-wrap;
 }
 
-#events-play-button:hover,
-#events-pause-button:hover {
-  color: #4caf50;
-}
-
 #page-events {
   width: 100%;
 }

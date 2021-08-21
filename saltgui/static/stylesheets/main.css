@@ -40,7 +40,7 @@ h1 {
   color: #4caf50;
   font-weight: lighter;
   font-size: 20px;
-  margin: 0;
+  margin: 0 10px 0 0;
   display: inline-block;
 }
 
@@ -85,16 +85,46 @@ h1 {
   cursor: pointer;
 }
 
-.search-button {
-  font-weight: bold;
-  font-size: 18px;
-  color: #888;
+.small-button {
+  display: inline-block;
+  min-width: 50px;
+  text-align: center;
+  background-color: #eee;
+  margin: 0 0 0 0;
   cursor: pointer;
-  margin-left: 8px;
+  font-size: 18px;
+  color: #666;
+  height: 24px;
+  vertical-align: middle;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
-.search-button:hover {
+.small-button-left {
+  margin-right: 10px;
+}
+
+.small-button-right {
+  margin-left: 10px;
+  float: right;
+}
+
+.small-button:hover {
   color: #4caf50;
+}
+
+.small-button-for-hover {
+  cursor: default;
+}
+
+.small-button-for-click {
+  cursor: pointer;
+}
+
+.search-box .small-button {
+  padding-left: 5px;
+  padding-right: 5px;
+  min-width: 0;
 }
 
 .search-box {
@@ -113,20 +143,6 @@ h1 {
   color: red;
   margin-bottom: 10px;
   margin-left: 10px;
-}
-
-.nearly-visible-button {
-  display: block;
-  float: right;
-  opacity: 0.3;
-  font-size: 18px;
-  font-weight: lighter;
-}
-
-.nearly-visible-button:hover {
-  color: #4caf50;
-  opacity: 1;
-  cursor: pointer;
 }
 
 .menu-item {
@@ -198,8 +214,7 @@ h1 {
 .popup h1 {
   font-weight: normal;
   font-size: 30px;
-  margin: 0;
-  margin-bottom: 20px;
+  margin: 0 10px 20px 0;
 }
 
 .run-command {
@@ -241,7 +256,6 @@ pre.output {
   display: block;
   float: right;
   font-size: 18px;
-  font-weight: lighter;
 }
 
 .warning-button:hover {
