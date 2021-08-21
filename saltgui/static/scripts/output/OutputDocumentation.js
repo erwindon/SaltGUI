@@ -261,15 +261,11 @@ export class OutputDocumentation {
 
         // replace ``......``
         // e.g. in "sys.doc state.apply"
-        /* eslint-disable prefer-named-capture-group */
         out = out.replace(/``([^`]*)``/g, "<span style='background-color: #575757'>$1</span>");
-        /* eslint-enable prefer-named-capture-group */
 
         // replace `......`
         // e.g. in "sys.doc state.apply"
-        /* eslint-disable prefer-named-capture-group */
         out = out.replace(/`([^`]*)`/g, "<span style='color: yellow'>$1</span>");
-        /* eslint-enable prefer-named-capture-group */
 
         // remove whitespace at end of lines
         out = out.replace(/  *\n/gm, "");
