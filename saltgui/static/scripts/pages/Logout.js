@@ -44,7 +44,7 @@ export class LogoutPage extends Page {
     // Api.apiRequest will do all the work
     statsPromise.then(() => true, () => {
       this.api.logout().then(() => {
-        this.router.goTo("login", {"reason": "no-session"});
+        this.router.goTo("login", {"reason": "cancelled-session"});
         return false;
       });
     });

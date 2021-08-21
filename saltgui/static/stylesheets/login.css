@@ -93,14 +93,15 @@
   }
 }
 
-#notice.notice_session_expired {
-  /* keep this one visible because user is likely not present when this happens */
-  animation-name: show-notice-session-expired;
+#notice.notice_expired_session,
+#notice.notice_cancelled_session {
+  /* keep these visible because user is likely not present when this happens */
+  animation-name: show-notice-stay;
   height: 38px;
   padding: 9px 0;
 }
 
-@keyframes show-notice-session-expire {
+@keyframes show-notice-stay {
   0% {
     height: 0;
     padding: 0;

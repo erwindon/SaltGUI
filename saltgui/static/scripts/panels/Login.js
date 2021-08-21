@@ -147,8 +147,11 @@ export class LoginPanel extends Panel {
       // gray because we cannot prove that the user was/wasnt logged in
       this._showNoticeText("gray", "Not logged in", "notice_not_logged_in");
       break;
+    case "cancelled-session":
+      this._showNoticeText("#F44336", "Session cancelled", "notice_cancelled_session");
+      break;
     case "expired-session":
-      this._showNoticeText("#F44336", "Session expired", "notice_session_expired");
+      this._showNoticeText("#F44336", "Session expired", "notice_expired_session");
       break;
     case "logout":
       // gray because this is the result of a user action
