@@ -128,7 +128,11 @@ export class DropDownMenu {
     // Setting the title implies that we are interested
     // in the menu values, rather than their actions.
     // Use a slightly different clue for that.
-    this.menuButton.innerText = DropDownMenu._sanitizeMenuItemTitle(pTitle + " " + Character.BLACK_DOWN_POINTING_TRIANGLE);
+    if (pTitle) {
+      pTitle += Character.NO_BREAK_SPACE;
+    }
+    pTitle += Character.BLACK_DOWN_POINTING_TRIANGLE;
+    this.menuButton.innerText = DropDownMenu._sanitizeMenuItemTitle(pTitle);
   }
 
   __showMenu () {
