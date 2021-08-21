@@ -121,6 +121,13 @@ h1 {
   cursor: pointer;
 }
 
+.search-box .small-button,
+tr .small-button {
+  padding-left: 5px;
+  padding-right: 5px;
+  min-width: 0;
+}
+
 .search-box .small-button {
   padding-left: 5px;
   padding-right: 5px;
