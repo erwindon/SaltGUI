@@ -10,10 +10,10 @@ export class TargetType {
     const targetbox = document.getElementById("target-box");
     TargetType.menuTargetType = new DropDownMenu(targetbox);
     // do not show the menu title at first
-    TargetType.menuTargetType.addMenuItem("Normal", this._manualUpdateTargetTypeText, "glob");
-    TargetType.menuTargetType.addMenuItem("List", this._manualUpdateTargetTypeText, "list");
-    TargetType.menuTargetType.addMenuItem(TargetType._targetTypeNodeGroupPrepare, this._manualUpdateTargetTypeText, "nodegroup");
-    TargetType.menuTargetType.addMenuItem("Compound", this._manualUpdateTargetTypeText, "compound");
+    TargetType.menuTargetType.addMenuItem("Normal", TargetType._manualUpdateTargetTypeText, "glob");
+    TargetType.menuTargetType.addMenuItem("List", TargetType._manualUpdateTargetTypeText, "list");
+    TargetType.menuTargetType.addMenuItem(TargetType._targetTypeNodeGroupPrepare, TargetType._manualUpdateTargetTypeText, "nodegroup");
+    TargetType.menuTargetType.addMenuItem("Compound", TargetType._manualUpdateTargetTypeText, "compound");
     TargetType.setTargetTypeDefault();
   }
 

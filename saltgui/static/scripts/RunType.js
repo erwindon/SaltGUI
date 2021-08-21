@@ -11,8 +11,8 @@ export class RunType {
     RunType.menuRunType = new DropDownMenu(runblock);
     // do not show the menu title at first
     RunType.menuRunType.setTitle("");
-    RunType.menuRunType.addMenuItem("Normal", this._updateRunTypeText, "normal");
-    RunType.menuRunType.addMenuItem("Async", this._updateRunTypeText, "async");
+    RunType.menuRunType.addMenuItem("Normal", RunType._updateRunTypeText, "normal");
+    RunType.menuRunType.addMenuItem("Async", RunType._updateRunTypeText, "async");
     RunType._updateRunTypeText();
   }
 
