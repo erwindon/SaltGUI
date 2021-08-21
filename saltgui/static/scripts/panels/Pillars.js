@@ -55,7 +55,7 @@ export class PillarsPanel extends Panel {
       // preliminary dropdown menu
       const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
       const menu = new DropDownMenu(minionTr);
-      PillarsPanel._addMenuItemShowPillars(menu, minionId);
+      this._addMenuItemShowPillars(menu, minionId);
 
       minionTr.addEventListener("click", () => {
         this.router.goTo("pillars-minion", {"minionid": minionId});
@@ -100,10 +100,10 @@ export class PillarsPanel extends Panel {
     minionTr.appendChild(pillarInfoTd);
 
     const menu = new DropDownMenu(minionTr);
-    PillarsPanel._addMenuItemShowPillars(menu, pMinionId);
+    this._addMenuItemShowPillars(menu, pMinionId);
   }
 
-  static _addMenuItemShowPillars (pMenu, pMinionId) {
+  _addMenuItemShowPillars (pMenu, pMinionId) {
     pMenu.addMenuItem("Show pillars", () => {
       this.router.goTo("pillars-minion", {"minionid": pMinionId});
     });
