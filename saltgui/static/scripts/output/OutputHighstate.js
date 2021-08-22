@@ -47,7 +47,7 @@ export class OutputHighstate {
   static getHighStateLabel (pMinionId, pMinionResponse) {
     let anyFailures = false;
     let anySkips = false;
-    // do not use Object.entries, that is not supported by the test framework
+    // do not use Object.entries, that is not supported by the test framework as it is ES8/2017
     for (const taskKey of Object.keys(pMinionResponse)) {
       const task = pMinionResponse[taskKey];
       if (task.result === null) {

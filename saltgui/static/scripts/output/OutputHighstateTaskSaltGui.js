@@ -153,7 +153,7 @@ export class OutputHighstateTaskSaltGui {
     }
 
     // show any unknown attribute of a task
-    // do not use Object.entries, that is not supported by the test framework
+    // do not use Object.entries, that is not supported by the test framework as it is ES8/2017
     for (const key of Object.keys(pTask)) {
       const item = pTask[key];
       /* eslint-disable line-comment-position,no-inline-comments,curly */

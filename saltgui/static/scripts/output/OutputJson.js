@@ -38,7 +38,7 @@ export class OutputJson {
       return "{ }";
     }
 
-    // do not use Object.values as eslint does understand that
+    // do not use Object.values as eslint does understand that because it is ES8/2017
     if (!Array.isArray(pValue) && Object.keys(pValue).length === 1 && typeof pValue[Object.keys(pValue)[0]] !== "object") {
       // show the brackets for a simple object a bit wider apart
       return "{ " + JSON.stringify(Object.keys(pValue)[0]) + ": " + JSON.stringify(pValue[Object.keys(pValue)[0]]) + " }";
@@ -77,7 +77,7 @@ export class OutputJson {
     // put each name+value on its own line
     str = "{";
     let oSeparator = "";
-    // do not use Object.entries, that is not supported by the test framework
+    // do not use Object.entries, that is not supported by the test framework as it is ES8/2017
     const sortedKeys = Object.keys(pValue).sort((aa, bb) => aa.localeCompare(bb, "en", {"numeric": true}));
     for (const key of sortedKeys) {
       const item = pValue[key];
