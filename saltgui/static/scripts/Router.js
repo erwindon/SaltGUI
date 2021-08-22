@@ -108,7 +108,8 @@ export class Router {
       document.getElementById("button-" + pButtonId + nr).
         addEventListener("click", () => {
           const pages = Router._getPagesList();
-          if (pUrl && (pButtonId === "logout" || pages.length === 0 || pages.includes(pButtonId))) {
+          // Arrays.includes() is only available from ES7/2016
+          if (pUrl && (pButtonId === "logout" || pages.length === 0 || pages.indexOf(pButtonId) >= 0)) {
             this.goTo(pUrl);
           }
         });
@@ -191,7 +192,8 @@ export class Router {
     let visible = true;
 
     // do not show unwanted menu items
-    if (pPages.length && !pPages.includes(pName)) {
+    // Arrays.includes() is only available from ES7/2016
+    if (pPages.length && pPages.indexOf(pName) < 0) {
       visible = false;
     }
 
@@ -203,7 +205,8 @@ export class Router {
     // still show a menu item when a child is visible
     let hasVisibleChild = false;
     for (const page of pChildren) {
-      if (pPages.includes(page)) {
+      // Arrays.includes() is only available from ES7/2016
+      if (pPages.indexOf(page) >= 0) {
         hasVisibleChild = true;
         break;
       }

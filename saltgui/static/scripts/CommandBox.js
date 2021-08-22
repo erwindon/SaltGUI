@@ -248,10 +248,12 @@ export class CommandBox {
     if (command in screenModifyingCommands) {
       // update panel when it may have changed
       for (const panel of Router.currentPage.panels) {
-        if (screenModifyingCommands[command].includes(panel.key)) {
+        if (screenModifyingCommands[command].indexOf(panel.key) >= 0) {
+          // Arrays.includes() is only available from ES7/2016
           // the command may have changed a specific panel
           panel.needsRefresh = true;
-        } else if (screenModifyingCommands[command].includes("*")) {
+        } else if (screenModifyingCommands[command].indexOf("*") >= 0) {
+          // Arrays.includes() is only available from ES7/2016
           // the command may have changed any panel
           panel.needsRefresh = true;
         }

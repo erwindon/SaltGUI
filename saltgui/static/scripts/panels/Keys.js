@@ -197,7 +197,8 @@ export class KeysPanel extends Panel {
     if (!Object.keys(pMinionsDict).length) {
       // list of well-known minion is empty
       // assume we actually don't known
-    } else if (Object.keys(pMinionsDict).includes(pMinionId)) {
+      // Arrays.includes() is only available from ES7/2016
+    } else if (Object.keys(pMinionsDict).indexOf(pMinionId) >= 0) {
       // this is a known minion
     } else {
       const status = pMinionTr.dataset.status;

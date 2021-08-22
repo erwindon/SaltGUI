@@ -259,7 +259,8 @@ export class OptionsPanel extends Panel {
           }
           const id = "option-" + name + "-value-" + valueArr[0] + "-" + label;
           const thisElement = document.getElementById(id);
-          if (value && varr.includes(label)) {
+          // Arrays.includes() is only available from ES7/2016
+          if (value && varr.indexOf(label) >= 0) {
             thisElement.checked = true;
           }
         }
