@@ -107,7 +107,7 @@ export class StatsPanel extends Panel {
       appData["Current Time"] = ct + " (=" + StatsPanel._shortenedDate(ct) + ")";
 
       const st = appData["Start Time"];
-      appData["Start Time"] = st + " (=" + StatsPanel._shortenedDate(ct) + ")";
+      appData["Start Time"] = st + " (=" + StatsPanel._shortenedDate(st) + ")";
 
       const ut = appData["Uptime"];
       // remove the date prefix and the millisecond suffix
