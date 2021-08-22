@@ -111,7 +111,7 @@ export class StatsPanel extends Panel {
 
       const ut = appData["Uptime"];
       // remove the date prefix and the millisecond suffix
-      let ut2 = new Date(ut).toISOString().
+      let ut2 = new Date(ut * 1000).toISOString().
         substr(11, 8);
       if (ut >= 86400) {
         // add the number of days (when there are any)
