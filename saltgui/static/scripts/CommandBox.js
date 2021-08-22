@@ -126,11 +126,11 @@ export class CommandBox {
 
   _registerCommandBoxEventListeners () {
     document.getElementById("popup-run-command").
-      addEventListener("click", (pClickEvent) => CommandBox._hideManualRun(pClickEvent));
+      addEventListener("click", (pClickEvent) => CommandBox.hideManualRun(pClickEvent));
     document.getElementById("button-manual-run").
       addEventListener("click", (pClickEvent) => CommandBox.showManualRun(pClickEvent, this.api));
     document.getElementById("cmd-close-button").
-      addEventListener("click", (pClickEvent) => CommandBox._hideManualRun(pClickEvent));
+      addEventListener("click", (pClickEvent) => CommandBox.hideManualRun(pClickEvent));
 
     document.querySelector(".run-command input[type='submit']").
       addEventListener("click", () => {
@@ -315,14 +315,14 @@ export class CommandBox {
     TargetType.autoSelectTargetType(targetField.value);
     targetField.onkeyup = (keyUpEvent) => {
       if (keyUpEvent.key === "Escape") {
-        CommandBox._hideManualRun(keyUpEvent);
+        CommandBox.hideManualRun(keyUpEvent);
       }
     };
 
     const commandField = document.getElementById("command");
     commandField.onkeyup = (keyUpEvent) => {
       if (keyUpEvent.key === "Escape") {
-        CommandBox._hideManualRun(keyUpEvent);
+        CommandBox.hideManualRun(keyUpEvent);
       }
     };
 
@@ -369,9 +369,9 @@ export class CommandBox {
   // pEvent is:
   // a MouseEvent(type="click") or
   // a KeyEvent(type="keyup")
-  static _hideManualRun (pEvent) {
+  static hideManualRun (pEvent) {
     // Don't close if they click inside the window
-    if (pEvent.type === "click" && !pEvent.target.classList.contains("popup") && !pEvent.target.classList.contains("nearly-visible-button")) {
+    if (pEvent && pEvent.type === "click" && !pEvent.target.classList.contains("popup") && !pEvent.target.classList.contains("nearly-visible-button")) {
       return;
     }
 
@@ -382,9 +382,13 @@ export class CommandBox {
     RunType.setRunTypeDefault();
     TargetType.setTargetTypeDefault();
 
-    Router.currentPage.refreshPage();
+    if (Router.currentPage) {
+      Router.currentPage.refreshPage();
+    }
 
-    pEvent.stopPropagation();
+    if (pEvent) {
+      pEvent.stopPropagation();
+    }
   }
 
   static _showError (pMessage) {
