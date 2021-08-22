@@ -3,7 +3,10 @@
 export class Character {
 
   static init () {
+    // VS15 = request text representation
     Character._VARIATION_SELECTOR_15 = "\uFE0E";
+
+    // VS16 = request emoji representation
     Character._VARIATION_SELECTOR_16 = "\uFE0F";
 
     Character.NO_BREAK_SPACE = "\u00A0";
@@ -36,7 +39,8 @@ export class Character {
     Character._BLACK_MEDIUM_RIGHT_POINTING_TRIANGLE = "\u2BC8";
 
     // D83D DCD6 = 1F4D6 = A BOOK
-    Character.A_BOOK = "\uD83D\uDCD6";
+    Character.A_BOOK =
+      "\uD83D\uDCD6" + Character._VARIATION_SELECTOR_15;
 
     // D83D DD0D = 1F50D = LEFT-POINTING MAGNIFYING GLASS
     Character.LEFT_POINTING_MAGNIFYING_GLASS_MONO =

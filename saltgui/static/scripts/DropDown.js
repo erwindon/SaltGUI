@@ -35,13 +35,16 @@ export class DropDownMenu {
     this.menuDropdown.classList.add("no-search");
 
     if (pParentElement.id === "cmd-box") {
-      this.menuButton = Utils.createDiv("menu-dropdown", Character.A_BOOK);
+      this.menuButton = Utils.createDiv("", Character.A_BOOK);
     } else if (pParentElement.classList && pParentElement.classList.contains("minion-output")) {
-      this.menuButton = Utils.createSpan("menu-dropdown", Character.CH_HAMBURGER);
+      this.menuButton = Utils.createSpan("", Character.CH_HAMBURGER);
     } else {
       // assume it will be a command menu
-      this.menuButton = Utils.createDiv("menu-dropdown", Character.CH_HAMBURGER);
+      this.menuButton = Utils.createDiv("", Character.CH_HAMBURGER);
     }
+    this.menuButton.classList.add("small-button");
+    this.menuButton.classList.add("small-button-for-hover");
+    this.menuButton.classList.add("menu-dropdown");
     this.menuButton.addEventListener("click", (pClickEvent) => {
       // better support for touch screens where user touch
       // the menu button instead of hovering over it
