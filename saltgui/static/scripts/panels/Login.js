@@ -37,58 +37,9 @@ export class LoginPanel extends Panel {
 
     // see https://docs.saltstack.com/en/latest/ref/auth/all/index.html
     const select = document.createElement("select");
-
-    const option1 = document.createElement("option");
-    option1.id = "eauth-default";
-    option1.value = "default";
-    option1.innerText = "Type";
-    select.append(option1);
-
-    const option2 = document.createElement("optgroup");
-    option2.label = "standard";
-    select.append(option2);
-
-    const option2a = document.createElement("option");
-    option2a.value = "pam";
-    option2a.innerText = "pam";
-    option2.append(option2a);
-
-    // move items to this optgroup only when at least
-    // one user reports a succesful use
-    // see https://github.com/saltstack/salt/tree/master/salt/auth
-    // for information and configuration
-    const option3 = document.createElement("optgroup");
-    option3.label = "other";
-    select.append(option3);
-
-    const option3a = document.createElement("option");
-    option3a.value = "file";
-    option3a.innerText = "file";
-    option3.append(option3a);
-
-    const option3b = document.createElement("option");
-    option3b.value = "ldap";
-    option3b.innerText = "ldap";
-    option3.append(option3b);
-
-    const option3c = document.createElement("option");
-    option3c.value = "mysql";
-    option3c.innerText = "mysql";
-    option3.append(option3c);
-
-    const option3d = document.createElement("option");
-    option3d.value = "yubico";
-    option3d.innerText = "yubico";
-    option3.append(option3d);
-
-    // auto and sharedsecret already tested but not suitable for general use
-    // other values are: django, keystone, pki, rest
-    // these can be added after testing to optgroup 'other'
-    // add untested values to (new) optgroup 'experimental' on explicit user request
-    // and only while the code is on a branch
-
     form.append(select);
     this.eauthField = select;
+    this._updateEauthField();
 
     const submit = document.createElement("input");
     submit.id = "login-button";
@@ -117,6 +68,57 @@ export class LoginPanel extends Panel {
     this._registerEventListeners(form);
   }
 
+  _addEauthSection (sectionName, optionValues) {
+    if (optionValues.length === 0) {
+      // no optionValues --> no section
+      return;
+    }
+
+    const optgroup = document.createElement("optgroup");
+    optgroup.label = sectionName;
+    this.eauthField.append(optgroup);
+
+    for (const optionValue of optionValues) {
+      const option = document.createElement("option");
+      option.value = optionValue;
+      option.innerText = optionValue;
+      optgroup.append(option);
+    }
+  }
+
+  _updateEauthField () {
+    // start fresh
+    this.eauthField.innerHTML = "";
+
+    const option1 = document.createElement("option");
+    option1.id = "eauth-default";
+    option1.value = "default";
+    option1.innerText = "Type";
+    this.eauthField.append(option1);
+
+    this._addEauthSection("standard", ["pam"]);
+
+    // move items to this optgroup only when at least
+    // one user reports a succesful use
+    // see https://github.com/saltstack/salt/tree/master/salt/auth
+    // for information and configuration
+    this._addEauthSection("other", ["file", "ldap", "mysql", "yubico"]);
+
+    // auto and sharedsecret already tested but not suitable for general use
+    // other values are: django, keystone, pki, rest
+    // these can be added after testing to optgroup 'other'
+    // add untested values to (new) optgroup 'experimental' on explicit user request
+    // and only while the code is on a branch
+
+    // allow user to add any value they want
+    const saltAuthText = Utils.getStorageItem("local", "salt-auth-txt", "[]");
+    const saltAuth = JSON.parse(saltAuthText);
+    this._addEauthSection("salt-auth.txt", saltAuth);
+
+    this.eauthField.value = Utils.getStorageItem("local", "eauth", "pam");
+
+  }
+
   _registerEventListeners (pLoginForm) {
     pLoginForm.addEventListener("submit", (ev) => {
       this._onLogin(ev);
@@ -134,8 +136,40 @@ export class LoginPanel extends Panel {
     this.noticeWrapperDiv.appendChild(noticeDiv);
   }
 
+  _loadSaltAuthTxt () {
+    const staticSaltAuthTxtPromise = this.api.getStaticSaltAuthTxt();
+
+    staticSaltAuthTxtPromise.then((pStaticSaltAuthTxt) => {
+      if (pStaticSaltAuthTxt) {
+        const lines = pStaticSaltAuthTxt.
+          trim().
+          split(/\r?\n/).
+          filter((item) => !item.startsWith("#"));
+        const saltAuth = [];
+        for (const line of lines) {
+          const fields = line.split(/[ \t]+/);
+          if (fields.length === 1) {
+            saltAuth.push(fields[0]);
+          } else {
+            console.warn("lines in 'salt-auth.txt' must have 1 word, not " + fields.length + " like in: " + line);
+          }
+        }
+        Utils.setStorageItem("local", "salt-auth-txt", JSON.stringify(saltAuth));
+        this._updateEauthField();
+      } else {
+        Utils.setStorageItem("local", "salt-auth-txt", "[]");
+        this._updateEauthField();
+      }
+      return true;
+    }, () => {
+      Utils.setStorageItem("local", "salt-auth-txt", "[]");
+      this._updateEauthField();
+      return false;
+    });
+  }
+
   onShow () {
-    this.eauthField.value = Utils.getStorageItem("local", "eauth", "pam");
+    this._loadSaltAuthTxt();
 
     const reason = decodeURIComponent(Utils.getQueryParam("reason"));
     switch (reason) {
