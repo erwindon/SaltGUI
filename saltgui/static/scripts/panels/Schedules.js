@@ -88,7 +88,7 @@ export class SchedulesPanel extends Panel {
 
       // preliminary dropdown menu
       const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
-      const menu = new DropDownMenu(minionTr);
+      const menu = new DropDownMenu(minionTr, true);
       this._addMenuItemShowSchedules(menu, minionId);
 
       minionTr.addEventListener("click", () => {
@@ -149,7 +149,7 @@ export class SchedulesPanel extends Panel {
     minionTr.appendChild(td);
 
     // final dropdownmenu
-    const menu = new DropDownMenu(minionTr);
+    const menu = new DropDownMenu(minionTr, true);
     this._addMenuItemShowSchedules(menu, pMinionId);
   }
 

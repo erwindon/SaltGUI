@@ -79,7 +79,7 @@ export class GrainsPanel extends Panel {
 
       // preliminary dropdown menu
       const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
-      const menu = new DropDownMenu(minionTr);
+      const menu = new DropDownMenu(minionTr, true);
       this._addMenuItemShowGrains(menu, minionId);
 
       for (let i = 0; i < this.previewGrains.length; i++) {
@@ -130,7 +130,7 @@ export class GrainsPanel extends Panel {
       minionTr.appendChild(grainInfoTd);
     }
 
-    const menu = new DropDownMenu(minionTr);
+    const menu = new DropDownMenu(minionTr, true);
     this._addMenuItemShowGrains(menu, pMinionId);
 
     // add the preview columns

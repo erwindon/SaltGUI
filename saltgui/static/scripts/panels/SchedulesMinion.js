@@ -90,7 +90,7 @@ export class SchedulesMinionPanel extends Panel {
       const nameTd = Utils.createTd("schedule-name", scheduleName);
       tr.appendChild(nameTd);
 
-      const scheduleMenu = new DropDownMenu(tr);
+      const scheduleMenu = new DropDownMenu(tr, true);
       const scheduleModifyCmdArr = ["schedule.modify", scheduleName];
       for (let key in schedule) {
         const value = schedule[key];

@@ -145,7 +145,7 @@ export class BeaconsMinionPanel extends Panel {
         delete beacon.enabled;
       }
 
-      const beaconMenu = new DropDownMenu(tr);
+      const beaconMenu = new DropDownMenu(tr, true);
       this._addMenuItemBeaconsDisableBeaconWhenNeeded(beaconMenu, pMinionId, beaconName, beacon);
       this._addMenuItemBeaconsEnableBeaconWhenNeeded(beaconMenu, pMinionId, beaconName, beacon);
       this._addMenuItemBeaconsDelete(beaconMenu, pMinionId, beaconName);

@@ -379,7 +379,7 @@ export class KeysPanel extends Panel {
 
   _addDropDownMenu (pMinionTr, pMinionId) {
     // final dropdownmenu
-    const menu = new DropDownMenu(pMinionTr);
+    const menu = new DropDownMenu(pMinionTr, true);
     this._addMenuItemWheelKeyAccept1(menu, pMinionId, pMinionTr);
     this._addMenuItemWheelKeyReject(menu, pMinionId, pMinionTr);
     this._addMenuItemWheelKeyDelete(menu, pMinionId, pMinionTr);

@@ -60,7 +60,7 @@ export class JobsSummaryPanel extends JobsPanel {
 
     tr.appendChild(td);
 
-    const menu = new DropDownMenu(tr);
+    const menu = new DropDownMenu(tr, true);
     this._addMenuItemShowDetails(menu, job);
     this._addMenuItemUpdateStatus(menu, statusSpan);
 

@@ -92,7 +92,7 @@ export class TemplatesPanel extends Panel {
       tr.appendChild(Utils.createTd("command value-none", "(none)"));
     }
 
-    const menu = new DropDownMenu(tr);
+    const menu = new DropDownMenu(tr, true);
     this._addMenuItemApplyTemplate(menu, targetType, target, command);
 
     const tbody = this.table.tBodies[0];

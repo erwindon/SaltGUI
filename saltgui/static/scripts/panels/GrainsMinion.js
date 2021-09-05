@@ -64,7 +64,7 @@ export class GrainsMinionPanel extends Panel {
 
       const grainValue = Output.formatObject(grains[grainName]);
 
-      const grainMenu = new DropDownMenu(grainTr);
+      const grainMenu = new DropDownMenu(grainTr, true);
       this._addMenuItemGrainsSetValUpdate(grainMenu, pMinionId, grainName, grains);
       this._addMenuItemGrainsAppendWhenNeeded(grainMenu, pMinionId, grainName, grainValue);
       this._addMenuItemGrainsDelKey(grainMenu, pMinionId, grainName, grains[grainName]);

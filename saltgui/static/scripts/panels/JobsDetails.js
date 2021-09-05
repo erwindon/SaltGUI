@@ -308,7 +308,7 @@ export class JobsDetailsPanel extends JobsPanel {
     const startTimeText = Output.dateTimeStr(job.StartTime);
     tr.appendChild(Utils.createTd("starttime", startTimeText));
 
-    const menu = new DropDownMenu(tr);
+    const menu = new DropDownMenu(tr, true);
     this._addJobsMenuItemShowDetails(menu, job);
     this._addMenuItemJobsRerunJob(menu, job, argumentsText);
 

@@ -92,7 +92,7 @@ export class BeaconsPanel extends Panel {
 
       // preliminary dropdown menu
       const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
-      const menu = new DropDownMenu(minionTr);
+      const menu = new DropDownMenu(minionTr, true);
       this._addMenuItemShowBeacons(menu, minionId);
 
       minionTr.addEventListener("click", () => {
@@ -141,7 +141,7 @@ export class BeaconsPanel extends Panel {
       minionTr.appendChild(beaconInfoTd);
     }
 
-    const menu = new DropDownMenu(minionTr);
+    const menu = new DropDownMenu(minionTr, true);
     this._addMenuItemShowBeacons(menu, pMinionId);
   }
 

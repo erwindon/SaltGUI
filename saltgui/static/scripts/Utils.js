@@ -203,7 +203,7 @@ export class Utils {
 
     const menuAndFieldDiv = Utils.createDiv("search-menu-and-field", "");
 
-    const searchOptionsMenu = new DropDownMenu(menuAndFieldDiv);
+    const searchOptionsMenu = new DropDownMenu(menuAndFieldDiv, true);
 
     const input = document.createElement("input");
     input.type = "text";

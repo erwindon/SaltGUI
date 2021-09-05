@@ -460,7 +460,7 @@ export class JobPanel extends Panel {
         // show that this minion is still active on the request
         noResponseSpan.innerText = "(active) ";
 
-        const menu = new DropDownMenu(noResponseSpan);
+        const menu = new DropDownMenu(noResponseSpan, true);
         menu.addMenuItem("Show process info...", (pClickEvent) => {
           this.runFullCommand(pClickEvent, "list", minionId, "ps.proc_info " + pid);
         });

@@ -54,7 +54,7 @@ export class PillarsPanel extends Panel {
 
       // preliminary dropdown menu
       const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
-      const menu = new DropDownMenu(minionTr);
+      const menu = new DropDownMenu(minionTr, true);
       this._addMenuItemShowPillars(menu, minionId);
 
       minionTr.addEventListener("click", () => {
@@ -99,7 +99,7 @@ export class PillarsPanel extends Panel {
     }
     minionTr.appendChild(pillarInfoTd);
 
-    const menu = new DropDownMenu(minionTr);
+    const menu = new DropDownMenu(minionTr, true);
     this._addMenuItemShowPillars(menu, pMinionId);
   }
 
