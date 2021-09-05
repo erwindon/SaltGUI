@@ -135,32 +135,46 @@ export class Page {
       return;
     }
 
-    const saltMotdTxt = Utils.getStorageItem("local", "salt-motd-txt", "");
-    const motdTxtDiv = document.getElementById("motdtxt");
-    motdTxtDiv.innerText = saltMotdTxt;
-    motdTxtDiv.style.display = saltMotdTxt ? "" : "none";
+    const saltMotd1Txt = Utils.getStorageItem("local", "salt-motd-txt", "");
+    const motd1TxtDiv = document.getElementById("motd1txt");
+    motd1TxtDiv.innerText = saltMotd1Txt;
+    motd1TxtDiv.style.display = saltMotd1Txt ? "" : "none";
 
-    const saltMotdHtml = Utils.getStorageItem("local", "salt-motd-html", "");
-    const motdHtmlDiv = document.getElementById("motdhtml");
-    motdHtmlDiv.innerHTML = saltMotdHtml;
-    motdHtmlDiv.style.display = saltMotdHtml ? "" : "none";
+    const saltMotd1Html = Utils.getStorageItem("local", "salt-motd-html", "");
+    const motd1HtmlDiv = document.getElementById("motd1html");
+    motd1HtmlDiv.innerHTML = saltMotd1Html;
+    motd1HtmlDiv.style.display = saltMotd1Html ? "" : "none";
 
-    if (!saltMotdTxt && !saltMotdHtml) {
+    const saltMotd2Txt = Utils.getStorageItem("session", "motd_txt", "");
+    const motd2TxtDiv = document.getElementById("motd2txt");
+    motd2TxtDiv.innerText = saltMotd2Txt;
+    motd2TxtDiv.style.display = saltMotd2Txt ? "" : "none";
+
+    const saltMotd2Html = Utils.getStorageItem("session", "motd_html", "");
+    const motd2HtmlDiv = document.getElementById("motd2html");
+    motd2HtmlDiv.innerHTML = saltMotd2Html;
+    motd2HtmlDiv.style.display = saltMotd2Html ? "" : "none";
+
+    const motdCLoseButton1  = document.getElementById("close-motd");
+    // remove all event-handlers (yes, this is otherwise a silly assignment)
+    // that makes it a different object!
+    motdCLoseButton1.outerHTML = motdCLoseButton1.outerHTML;
+
+    if (!saltMotd1Txt && !saltMotd1Html && !saltMotd2Txt && !saltMotd2Html) {
+      // nothing to see, don't bother
       motd.style.display = "none";
       return;
     }
 
     motd.style.display = "";
 
-    const motdCLoseButton1  = document.getElementById("close-motd");
-    // remove all event-handlers (yes, this is otherwise a silly assignment)
-    motdCLoseButton1.outerHTML = motdCLoseButton1.outerHTML;
-    // that made it a different object
     const motdCLoseButton2  = document.getElementById("close-motd");
     // add the event-handler
     motdCLoseButton2.addEventListener("click", () => {
       Utils.setStorageItem("local", "salt-motd-txt", "");
       Utils.setStorageItem("local", "salt-motd-html", "");
+      Utils.setStorageItem("session", "motd_txt", "");
+      Utils.setStorageItem("session", "motd_html", "");
       motd.style.display = "none";
     });
   }

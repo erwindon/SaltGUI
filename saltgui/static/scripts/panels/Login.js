@@ -351,6 +351,12 @@ export class LoginPanel extends Panel {
     const toolTipMode = wheelConfigValuesData.saltgui_tooltip_mode;
     Utils.setStorageItem("session", "tooltip_mode", toolTipMode);
 
+    const motdTxt = wheelConfigValuesData.saltgui_motd_txt;
+    Utils.setStorageItem("session", "motd_txt", motdTxt);
+
+    const motdHtml = wheelConfigValuesData.saltgui_motd_html;
+    Utils.setStorageItem("session", "motd_html", motdHtml);
+
     Router.updateMainMenu();
   }
 
