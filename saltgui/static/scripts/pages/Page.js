@@ -125,7 +125,7 @@ export class Page {
     return true;
   }
 
-  _updateMotd() {
+  static _updateMotd () {
 
     const motd = document.getElementById("motd");
 
@@ -155,10 +155,12 @@ export class Page {
     motd2HtmlDiv.innerHTML = saltMotd2Html;
     motd2HtmlDiv.style.display = saltMotd2Html ? "" : "none";
 
-    const motdCLoseButton1  = document.getElementById("close-motd");
+    const motdCLoseButton1 = document.getElementById("close-motd");
     // remove all event-handlers (yes, this is otherwise a silly assignment)
     // that makes it a different object!
+    /* eslint-disable no-self-assign */
     motdCLoseButton1.outerHTML = motdCLoseButton1.outerHTML;
+    /* eslint-enable no-self-assign */
 
     if (!saltMotd1Txt && !saltMotd1Html && !saltMotd2Txt && !saltMotd2Html) {
       // nothing to see, don't bother
@@ -168,7 +170,7 @@ export class Page {
 
     motd.style.display = "";
 
-    const motdCLoseButton2  = document.getElementById("close-motd");
+    const motdCLoseButton2 = document.getElementById("close-motd");
     // add the event-handler
     motdCLoseButton2.addEventListener("click", () => {
       Utils.setStorageItem("local", "salt-motd-txt", "");
@@ -183,7 +185,7 @@ export class Page {
     for (const panel of this.panels) {
       panel.onShow();
     }
-    this._updateMotd();
+    Page._updateMotd();
   }
 
   clearPage () {
