@@ -284,6 +284,9 @@ export class LoginPanel extends Panel {
   _onLoginSuccess () {
     this._showNoticeText("#4CAF50", "Please wait...", "notice_please_wait");
 
+    Utils.setStorageItem("local", "salt-motd-txt", "");
+    Utils.setStorageItem("local", "salt-motd-html", "");
+
     // We need these functions to populate the dropdown boxes
     const wheelConfigValuesPromise = this.api.getWheelConfigValues();
 
