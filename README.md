@@ -12,6 +12,7 @@ The version tagged `release` is the latest released version. The version `master
 
 
 ## Features
+- Simple setup without the need to add a database
 - Login via PAM or any other supported authentication by Salt
 - View minions and easily copy IPs
 - Run state.highstate for a particular minion or all
@@ -53,7 +54,9 @@ rest_cherrypy:
   static: /srv/saltgui/static
   static_path: /static
 ```
-- Replace `/srv/saltgui` in the above config with the directory containing the saltgui html/js source files.
+- Note that the cherrypi server is part of the salt-api package and has no separate installation. It is configured using the master configuration file. When configured using the above configurations, both the api calls and the html/js files are served by the cherrypy server. Therefore no additional web application server is needed.
+- Note that from the SaltGUI GIT repository, only the directory `saltgui` forms the actual SaltGUI web application.
+- Replace each of the `/srv/saltgui` in the above config with the actual 'saltgui' directory from the GIT repository. Alternatively, you can create a soft-link /src/saltgui that points to the actual saltgui directory.
 - Restart everything with ``pkill salt-master && pkill salt-api && salt-master -d && salt-api -d``
 - You should be good to go. If you have any problems, open a GitHub issue. As always, SSL is recommended wherever possible but setup is beyond the scope of this guide.
 
