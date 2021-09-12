@@ -44,7 +44,7 @@ external_auth:
 ```
 - See `docs/PERMISSIONS.md` for more restricted security configurations.
 - `saltuser` is a unix (PAM) user, make sure it exists or create a new one.
-- At the bottom of this file, also setup the rest_cherrypi server:
+- At the bottom of this file, also setup the rest_cherrypi server to access SaltGUI from "http://localhost:3333" (or on any of the hostnames that the server has):
 ```
 rest_cherrypy:
   port: 3333
