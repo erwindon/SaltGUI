@@ -54,10 +54,6 @@
   width: 25px;
 }
 
-#notice-wrapper {
-  margin-bottom: 15px;
-}
-
 #notice {
   height: 0;
   overflow-y: hidden;
@@ -75,21 +71,25 @@
   0% {
     height: 0;
     padding: 0;
+    margin-bottom: 15px;
   }
 
   20% {
     height: 38px;
     padding: 9px 0;
+    margin-bottom: 15px;
   }
 
   80% {
     height: 38px;
     padding: 9px 0;
+    margin-bottom: 15px;
   }
 
   100% {
     height: 0;
     padding: 0;
+    margin-bottom: 0;
   }
 }
 
@@ -111,4 +111,8 @@
     height: 38px;
     padding: 9px 0;
   }
+}
+
+.motd {
+  margin-bottom: 15px;
 }

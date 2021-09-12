@@ -125,10 +125,55 @@ export class Page {
     return true;
   }
 
+  static _updateMotd () {
+
+    const motd = document.getElementById("motd");
+
+    const motdStatus = Utils.getStorageItem("session", "motd-status", "");
+    if (motdStatus === "hidden") {
+      motd.style.display = "none";
+      return;
+    }
+
+    const saltMotdTxt = Utils.getStorageItem("session", "motd_txt", "");
+    const motdTxtDiv = document.getElementById("motdtxt");
+    motdTxtDiv.innerText = saltMotdTxt;
+    motdTxtDiv.style.display = saltMotdTxt ? "" : "none";
+
+    const saltMotdHtml = Utils.getStorageItem("session", "motd_html", "");
+    const motdHtmlDiv = document.getElementById("motdhtml");
+    motdHtmlDiv.innerHTML = saltMotdHtml;
+    motdHtmlDiv.style.display = saltMotdHtml ? "" : "none";
+
+    const motdCLoseButton1 = document.getElementById("close-motd");
+    // remove all event-handlers (yes, this is otherwise a silly assignment)
+    // that makes it a different object!
+    /* eslint-disable no-self-assign */
+    motdCLoseButton1.outerHTML = motdCLoseButton1.outerHTML;
+    /* eslint-enable no-self-assign */
+
+    if (!saltMotdTxt && !saltMotdHtml) {
+      // nothing to see, don't bother
+      motd.style.display = "none";
+      return;
+    }
+
+    motd.style.display = "";
+
+    const motdCLoseButton2 = document.getElementById("close-motd");
+    // add the event-handler
+    motdCLoseButton2.addEventListener("click", () => {
+      Utils.setStorageItem("session", "motd_txt", "");
+      Utils.setStorageItem("session", "motd_html", "");
+      motd.style.display = "none";
+    });
+  }
+
   onShow () {
     for (const panel of this.panels) {
       panel.onShow();
     }
+    Page._updateMotd();
   }
 
   clearPage () {

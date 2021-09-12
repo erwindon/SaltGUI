@@ -16,6 +16,14 @@ export class LoginPanel extends Panel {
     const form = document.createElement("form");
     this.div.append(form);
 
+    const motdTxt = Utils.createDiv("motd");
+    form.append(motdTxt);
+    this.motdTxtDiv = motdTxt;
+
+    const motdHtml = Utils.createDiv("motd");
+    form.append(motdHtml);
+    this.motdHtmlDiv = motdHtml;
+
     const noticeWrapper = Utils.createDiv("notice-wrapper", "", "notice-wrapper");
     form.append(noticeWrapper);
     this.noticeWrapperDiv = noticeWrapper;
@@ -116,7 +124,16 @@ export class LoginPanel extends Panel {
     this._addEauthSection("salt-auth.txt", saltAuth);
 
     this.eauthField.value = Utils.getStorageItem("local", "eauth", "pam");
+  }
 
+  _updateMotdField () {
+    const saltMotdTxt = Utils.getStorageItem("local", "salt-motd-txt", "");
+    this.motdTxtDiv.innerText = saltMotdTxt;
+    this.motdTxtDiv.style.display = saltMotdTxt ? "" : "none";
+
+    const saltMotdHtml = Utils.getStorageItem("local", "salt-motd-html", "");
+    this.motdHtmlDiv.innerHTML = saltMotdHtml;
+    this.motdHtmlDiv.style.display = saltMotdHtml ? "" : "none";
   }
 
   _registerEventListeners (pLoginForm) {
@@ -168,8 +185,51 @@ export class LoginPanel extends Panel {
     });
   }
 
+  _loadSaltMotdTxt () {
+    const staticSaltMotdTxtPromise = this.api.getStaticSaltMotdTxt();
+
+    staticSaltMotdTxtPromise.then((pStaticSaltMotdTxt) => {
+      if (pStaticSaltMotdTxt) {
+        const lines = pStaticSaltMotdTxt.trim();
+        Utils.setStorageItem("local", "salt-motd-txt", lines);
+        this._updateMotdField();
+      } else {
+        Utils.setStorageItem("local", "salt-motd-txt", "");
+        this._updateMotdField();
+      }
+      return true;
+    }, () => {
+      Utils.setStorageItem("local", "salt-motd-txt", "");
+      this._updateMotdField();
+      return false;
+    });
+  }
+
+  _loadSaltMotdHtml () {
+    const staticSaltMotdHtmlPromise = this.api.getStaticSaltMotdHtml();
+
+    staticSaltMotdHtmlPromise.then((pStaticSaltMotdHtml) => {
+      if (pStaticSaltMotdHtml) {
+        const lines = pStaticSaltMotdHtml.trim();
+        Utils.setStorageItem("local", "salt-motd-html", lines);
+        this._updateMotdField();
+      } else {
+        Utils.setStorageItem("local", "salt-motd-html", "");
+        this._updateMotdField();
+      }
+      return true;
+    }, () => {
+      Utils.setStorageItem("local", "salt-motd-html", "");
+      this._updateMotdField();
+      return false;
+    });
+  }
+
   onShow () {
     this._loadSaltAuthTxt();
+
+    this._loadSaltMotdTxt();
+    this._loadSaltMotdHtml();
 
     const reason = decodeURIComponent(Utils.getQueryParam("reason"));
     switch (reason) {
@@ -223,6 +283,9 @@ export class LoginPanel extends Panel {
 
   _onLoginSuccess () {
     this._showNoticeText("#4CAF50", "Please wait...", "notice_please_wait");
+
+    Utils.setStorageItem("local", "salt-motd-txt", "");
+    Utils.setStorageItem("local", "salt-motd-html", "");
 
     // We need these functions to populate the dropdown boxes
     const wheelConfigValuesPromise = this.api.getWheelConfigValues();
@@ -290,6 +353,12 @@ export class LoginPanel extends Panel {
 
     const toolTipMode = wheelConfigValuesData.saltgui_tooltip_mode;
     Utils.setStorageItem("session", "tooltip_mode", toolTipMode);
+
+    const motdTxt = wheelConfigValuesData.saltgui_motd_txt;
+    Utils.setStorageItem("session", "motd_txt", motdTxt);
+
+    const motdHtml = wheelConfigValuesData.saltgui_motd_html;
+    Utils.setStorageItem("session", "motd_html", motdHtml);
 
     Router.updateMainMenu();
   }

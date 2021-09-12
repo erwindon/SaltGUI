@@ -10,4 +10,6 @@ package-lock.json
 saltgui/static/minions.txt
 saltgui/static/mkMinions.sh
 saltgui/static/salt-auth.txt
+saltgui/static/salt-motd.txt
+saltgui/static/salt-motd.html
 *.swp

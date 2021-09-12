@@ -72,6 +72,14 @@ export class API {
     return this.apiRequest("GET", "/static/salt-auth.txt");
   }
 
+  getStaticSaltMotdTxt () {
+    return this.apiRequest("GET", "/static/salt-motd.txt");
+  }
+
+  getStaticSaltMotdHtml () {
+    return this.apiRequest("GET", "/static/salt-motd.html");
+  }
+
   getLocalBeaconsList (pMinionId) {
     const params = {
       "client": "local",
@@ -260,6 +268,8 @@ export class API {
     };
     if (pPage.endsWith(".txt")) {
       headers["Accept"] = "text/plain";
+    } else if (pPage.endsWith(".html")) {
+      headers["Accept"] = "text/html";
     }
     const options = {
       "headers": headers,
@@ -277,6 +287,9 @@ export class API {
     /* eslint-enable compat/compat */
       then((pResponse) => {
         if (pResponse.ok && pPage.endsWith(".txt")) {
+          return pResponse.text();
+        }
+        if (pResponse.ok && pPage.endsWith(".html")) {
           return pResponse.text();
         }
         if (pResponse.ok) {
