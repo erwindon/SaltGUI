@@ -99,6 +99,7 @@
   animation-name: show-notice-stay;
   height: 38px;
   padding: 9px 0;
+  margin-bottom: 15px;
 }
 
 @keyframes show-notice-stay {
