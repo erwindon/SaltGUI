@@ -137,11 +137,11 @@ export class OutputHighstate {
       }
 
       if (!task.result) {
-        taskSpan.style.color = "red";
+        taskSpan.classList.add("task-failure");
       } else if (hasChanges) {
-        taskSpan.style.color = "aqua";
+        taskSpan.classList.add("task-changes");
       } else {
-        taskSpan.style.color = "lime";
+        taskSpan.classList.add("task-success");
       }
       const taskDiv = Utils.createDiv("", "", Utils.getIdFromMinionId(pMinionId + "." + nr));
       taskDiv.append(taskSpan);

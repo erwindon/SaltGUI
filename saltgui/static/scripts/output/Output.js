@@ -303,6 +303,7 @@ export class Output {
   static _addHighStateSummary (pMinionRow, pMinionDiv, pMinionId, pTasks) {
 
     let nr = 0;
+    const summarySpan = Utils.createSpan("task-summary", "");
 
     for (const task of pTasks) {
 
@@ -343,8 +344,10 @@ export class Output {
         taskDiv.scrollIntoView({"behavior": "smooth", "block": "nearest"});
       });
 
-      pMinionRow.append(span);
+      summarySpan.append(span);
     }
+
+    pMinionRow.append(summarySpan);
   }
 
   static _getIsSuccess (pMinionResponse) {
