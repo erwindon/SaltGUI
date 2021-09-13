@@ -3,7 +3,7 @@ import {Utils} from "../Utils.js";
 
 export class OutputHighstateSummaryOriginal {
 
-  static addSummarySpan (pDiv, pMinionId, pSucceeded, pFailed, pSkipped, pTotalMilliSeconds, pChanges) {
+  static addSummarySpan (pDiv, pMinionId, pSucceeded, pFailed, pSkipped, pTotalMilliSeconds, pChangesSummary) {
 
     let txt = "\nSummary for " + pMinionId;
     txt += "\n------------";
@@ -15,7 +15,7 @@ export class OutputHighstateSummaryOriginal {
     const succeededSpan = Utils.createSpan("task-success", txt);
     pDiv.append(succeededSpan);
 
-    if (pChanges > 0) {
+    if (pChangesSummary > 0) {
       txt = " (";
       const oSpan = Utils.createSpan("", txt);
       oSpan.style.color = "white";

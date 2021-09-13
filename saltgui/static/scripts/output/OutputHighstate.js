@@ -74,7 +74,8 @@ export class OutputHighstate {
     let failed = 0;
     let skipped = 0;
     let totalMilliSeconds = 0;
-    let changes = 0;
+    let changesSummary = 0;
+    let changesDetail = 0;
     let hidden = 0;
     let nr = 0;
     for (const task of pTasks) {
@@ -114,7 +115,7 @@ export class OutputHighstate {
         if (str !== "{}") {
           hasChanges = true;
         }
-        changes += Object.keys(chgs).length;
+        changesDetail += Object.keys(chgs).length;
       }
 
       const taskId = components[1];
@@ -140,6 +141,7 @@ export class OutputHighstate {
         taskSpan.classList.add("task-failure");
       } else if (hasChanges) {
         taskSpan.classList.add("task-changes");
+        changesSummary += 1;
       } else {
         taskSpan.classList.add("task-success");
       }
@@ -150,9 +152,9 @@ export class OutputHighstate {
     }
 
     if (Output.isOutputFormatAllowed("saltguihighstate")) {
-      OutputHighstateSummarySaltGui.addSummarySpan(div, succeeded, failed, skipped, totalMilliSeconds, changes, hidden);
+      OutputHighstateSummarySaltGui.addSummarySpan(div, succeeded, failed, skipped, totalMilliSeconds, changesDetail, hidden);
     } else {
-      OutputHighstateSummaryOriginal.addSummarySpan(div, pMinionId, succeeded, failed, skipped, totalMilliSeconds, changes);
+      OutputHighstateSummaryOriginal.addSummarySpan(div, pMinionId, succeeded, failed, skipped, totalMilliSeconds, changesSummary);
     }
 
     return div;
