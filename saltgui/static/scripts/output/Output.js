@@ -238,8 +238,8 @@ export class Output {
       nrChanges = pTask.changes.length;
       txt += "\n'changes' is an array";
       txt += Utils.txtZeroOneMany(nrChanges, "", "\n" + nrChanges + " change", "\n" + nrChanges + " changes");
-    } else {
-      nrChanges = Object.keys(pTask.changes).length;
+    } else if (typeof pTask.changes.ret === "object") {
+      nrChanges = Object.keys(pTask.changes.ret).length;
       txt += Utils.txtZeroOneMany(nrChanges, "", "\n" + nrChanges + " change", "\n" + nrChanges + " changes");
     }
 
