@@ -805,7 +805,7 @@ export class Documentation {
 
     // show the beacon names
     let html = "<p>Choose a template for 'beacons.add'</p>";
-    html += "<p>Using a template will completely replace the command</p>";
+    html += "<p>Using a template will completely replace the current command</p>";
 
     let headerShown1 = false;
     for (const beaconName in beaconsList) {
