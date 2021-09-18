@@ -44,7 +44,7 @@ export class LogoutPage extends Page {
     // Api.apiRequest will do all the work
     statsPromise.then(() => true, () => {
       this.api.logout().then(() => {
-        this.router.goTo("login", {"reason": "cancelled-session"});
+        this.router.goTo("login", {"reason": "session-cancelled"});
         return false;
       });
     });
@@ -69,10 +69,10 @@ export class LogoutPage extends Page {
       warning.innerText = "Logout";
       // logout, and redirect to login screen
       this.api.logout().then(() => {
-        this.router.goTo("login", {"reason": "expired-session"});
+        this.router.goTo("login", {"reason": "session-expired"});
         return true;
       }, () => {
-        this.router.goTo("login", {"reason": "expired-session"});
+        this.router.goTo("login", {"reason": "session-expired"});
         return false;
       });
       return;

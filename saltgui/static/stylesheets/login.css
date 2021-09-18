@@ -61,7 +61,6 @@
   padding: 0;
   border-radius: 2px;
   text-align: center;
-  font-size: 15px;
   animation-name: show-notice;
   animation-iteration-count: 1;
   animation-duration: 5s;
@@ -93,8 +92,8 @@
   }
 }
 
-#notice.notice_expired_session,
-#notice.notice_cancelled_session {
+#notice.notice_session_expired,
+#notice.notice_session_cancelled {
   /* keep these visible because user is likely not present when this happens */
   animation-name: show-notice-stay;
   height: 38px;
