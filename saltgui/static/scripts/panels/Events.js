@@ -21,7 +21,6 @@ export class EventsPanel extends Panel {
       "Display is limited to " + MAX_EVENTS_IN_VIEW + " events"
     ]);
     this.addTable(["Timestamp", "Tag", "Data"]);
-    this.setTableSortable("Timestamp", "desc");
     this.addMsg();
   }
 
