@@ -61,4 +61,8 @@ export class Character {
     // Images
     Character.EXTERNAL_LINK_IMG = "<img src='static/images/externallink.png' width='12px'>";
   }
+
+  static buttonInText (txt) {
+    return "<span style=\"background-color:#eee\">&nbsp;" + txt + "&nbsp;</span>";
+  }
 }

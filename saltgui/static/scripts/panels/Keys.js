@@ -178,7 +178,7 @@ export class KeysPanel extends Panel {
     txt = txt.replace(/^no/, "No");
 
     if (this.playOrPause === "pause") {
-      txt += ", press '" + Character.CH_PLAY_MONO + "' to continue";
+      txt += ", press " + Character.buttonInText(Character.CH_PLAY_MONO) + " to continue";
     }
 
     KeysPanel.cntUnaccepted = cnt["unaccepted"];
