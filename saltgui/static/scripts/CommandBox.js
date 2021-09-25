@@ -127,7 +127,11 @@ export class CommandBox {
   _registerCommandBoxEventListeners () {
     document.getElementById("popup-run-command").addEventListener(
       "click", (pClickEvent) => {
-        CommandBox.hideManualRun(pClickEvent);
+        // only close if click is really outside the window
+        // and not from any child element
+        if (pClickEvent.target.id === "popup-run-command") {
+          CommandBox.hideManualRun(pClickEvent);
+        }
         pClickEvent.stopPropagation();
       });
     document.getElementById("button-manual-run").addEventListener(
@@ -374,15 +378,7 @@ export class CommandBox {
     });
   }
 
-  // pEvent is:
-  // a MouseEvent(type="click") or
-  // a KeyEvent(type="keyup")
   static hideManualRun (pEvent) {
-    // Don't close if they click inside the window
-    if (pEvent && pEvent.type === "click" && !pEvent.target.classList.contains("popup") && !pEvent.target.classList.contains("small-button")) {
-      return;
-    }
-
     const manualRun = document.getElementById("popup-run-command");
     manualRun.style.display = "none";
 
