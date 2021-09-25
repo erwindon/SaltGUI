@@ -351,8 +351,9 @@ export class JobsDetailsPanel extends JobsPanel {
     const tbody = this.table.tBodies[0];
     tbody.appendChild(tr);
 
-    tr.addEventListener("click", () => {
+    tr.addEventListener("click", (pClickEvent) => {
       this.router.goTo("job", {"id": job.id});
+      pClickEvent.stopPropagation();
     });
   }
 

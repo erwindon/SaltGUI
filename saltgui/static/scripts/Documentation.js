@@ -888,7 +888,7 @@ export class Documentation {
 
     // activate the links
     for (const atag of output.querySelectorAll("a")) {
-      atag.addEventListener("click", () => {
+      atag.addEventListener("click", (pClickEvent) => {
         const commandLine = document.querySelector(".run-command #command");
         const beaconName = atag.innerText;
         const beaconValue = [JSON.parse(beaconsList[beaconName])];
@@ -898,6 +898,7 @@ export class Documentation {
           beaconValue.push({"interval": interval});
         }
         commandLine.value = "beacons.add " + beaconName + " " + JSON.stringify(beaconValue);
+        pClickEvent.stopPropagation();
       });
     }
   }

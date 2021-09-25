@@ -86,8 +86,9 @@ export class GrainsPanel extends Panel {
         minionTr.appendChild(Utils.createTd());
       }
 
-      minionTr.addEventListener("click", () => {
+      minionTr.addEventListener("click", (pClickEvent) => {
         this.router.goTo("grains-minion", {"minionid": minionId});
+        pClickEvent.stopPropagation();
       });
     }
 

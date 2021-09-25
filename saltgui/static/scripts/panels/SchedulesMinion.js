@@ -123,6 +123,7 @@ export class SchedulesMinionPanel extends Panel {
 
       tr.addEventListener("click", (pClickEvent) => {
         this.runCommand(pClickEvent, pMinionId, scheduleModifyCmdArr);
+        pClickEvent.stopPropagation();
       });
     }
 

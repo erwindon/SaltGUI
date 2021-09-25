@@ -314,7 +314,7 @@ export class Output {
       Output._setTaskTooltip(span, task);
 
       const myNr = nr;
-      span.addEventListener("click", () => {
+      span.addEventListener("click", (pClickEvent) => {
 
         // show the output, it might be hidden
         const triangle = pMinionDiv.querySelector("span.triangle");
@@ -342,6 +342,8 @@ export class Output {
         // behavior: smooth is ok, the destination is nearby
         // block: since block is below our summary, nearest is equivalent to end
         taskDiv.scrollIntoView({"behavior": "smooth", "block": "nearest"});
+
+        pClickEvent.stopPropagation();
       });
 
       summarySpan.append(span);
@@ -500,7 +502,7 @@ export class Output {
 
     pOutputContainer.appendChild(allDiv);
 
-    masterTriangle.addEventListener("click", () => {
+    masterTriangle.addEventListener("click", (pClickEvent) => {
       if (masterTriangle.innerText === Character.WHITE_DOWN_POINTING_TRIANGLE) {
         masterTriangle.innerText = Character.WHITE_RIGHT_POINTING_TRIANGLE;
       } else {
@@ -526,6 +528,7 @@ export class Output {
         const clickEvent = new MouseEvent("click", {});
         tr.dispatchEvent(clickEvent);
       }
+      pClickEvent.stopPropagation();
     });
 
     let nrMultiLineBlocks = 0;
@@ -650,7 +653,7 @@ export class Output {
       if (minionMultiLine) {
         triangle = Utils.createSpan("triangle", masterTriangle.innerText);
         triangle.style.cursor = "pointer";
-        triangle.addEventListener("click", () => {
+        triangle.addEventListener("click", (pClickEvent) => {
           if (triangle.innerText === Character.WHITE_DOWN_POINTING_TRIANGLE) {
             triangle.innerText = Character.WHITE_RIGHT_POINTING_TRIANGLE;
             minionOutput.style.display = "none";
@@ -658,6 +661,7 @@ export class Output {
             triangle.innerText = Character.WHITE_DOWN_POINTING_TRIANGLE;
             minionOutput.style.display = "";
           }
+          pClickEvent.stopPropagation();
         });
         minionRow.appendChild(triangle);
 
@@ -676,7 +680,7 @@ export class Output {
       // it easier to select the next highstate part
       // or just collapse it and see the next minion
       if (isHighStateOutput) {
-        minionOutput.addEventListener("click", () => {
+        minionOutput.addEventListener("click", (pClickEvent) => {
           // show where we are scrolling back to
           minionRow.classList.add("highlight-task");
           window.setTimeout(() => {
@@ -687,6 +691,7 @@ export class Output {
           }, 1000);
 
           div.scrollIntoView({"behavior": "smooth", "block": "start"});
+          pClickEvent.stopPropagation();
         });
       }
 

@@ -118,6 +118,7 @@ export class DropDownMenu {
         pClickEvent.target.parentElement.style.display = "";
       }, 500);
       this._callback(pClickEvent, pCallBack, pValue);
+      pClickEvent.stopPropagation();
     });
     this.menuDropdownContent.appendChild(button);
     this.verifyAll();

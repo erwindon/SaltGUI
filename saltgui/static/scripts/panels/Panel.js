@@ -127,8 +127,9 @@ export class Panel {
     span.innerText = Character.HEAVY_MULTIPLICATION_X_MONO;
     this.div.appendChild(span);
 
-    span.addEventListener("click", () => {
+    span.addEventListener("click", (pClickEvent) => {
       this.router.goTo(this.route.parentHash, this.route.parentQuery, 1);
+      pClickEvent.stopPropagation();
     });
   }
 

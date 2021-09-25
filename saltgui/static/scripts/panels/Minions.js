@@ -93,6 +93,7 @@ export class MinionsPanel extends Panel {
 
       minionTr.addEventListener("click", (pClickEvent) => {
         this.runCommand(pClickEvent, minionId, ["state.apply"]);
+        pClickEvent.stopPropagation();
       });
     }
 

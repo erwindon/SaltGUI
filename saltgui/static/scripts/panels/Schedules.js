@@ -91,8 +91,9 @@ export class SchedulesPanel extends Panel {
       const menu = new DropDownMenu(minionTr, true);
       this._addMenuItemShowSchedules(menu, minionId);
 
-      minionTr.addEventListener("click", () => {
+      minionTr.addEventListener("click", (pClickEvent) => {
         this.router.goTo("schedules-minion", {"minionid": minionId});
+        pClickEvent.stopPropagation();
       });
     }
 

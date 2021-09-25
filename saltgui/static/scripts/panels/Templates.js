@@ -100,6 +100,7 @@ export class TemplatesPanel extends Panel {
 
     tr.addEventListener("click", (pClickEvent) => {
       this.runFullCommand(pClickEvent, targetType, target, command);
+      pClickEvent.stopPropagation();
     });
   }
 

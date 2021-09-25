@@ -162,10 +162,11 @@ export class Page {
 
     const motdCLoseButton2 = document.getElementById("close-motd");
     // add the event-handler
-    motdCLoseButton2.addEventListener("click", () => {
+    motdCLoseButton2.addEventListener("click", (pClickEvent) => {
       Utils.setStorageItem("session", "motd_txt", "");
       Utils.setStorageItem("session", "motd_html", "");
       motd.style.display = "none";
+      pClickEvent.stopPropagation();
     });
   }
 

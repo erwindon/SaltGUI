@@ -179,6 +179,7 @@ export class BeaconsMinionPanel extends Panel {
       tr.addEventListener("click", (pClickEvent) => {
         const beacon0 = beacons0[beaconName];
         this.runCommand(pClickEvent, pMinionId, ["beacons.modify", beaconName, beacon0]);
+        pClickEvent.stopPropagation();
       });
 
       const helpButtonTd = Utils.createTd("help-button");

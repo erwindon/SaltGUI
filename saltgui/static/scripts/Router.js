@@ -106,24 +106,26 @@ export class Router {
     // data may still being retrieved at this point
     for (const nr of ["1", "2"]) {
       document.getElementById("button-" + pButtonId + nr).
-        addEventListener("click", () => {
+        addEventListener("click", (pClickEvent) => {
           const pages = Router._getPagesList();
           // Arrays.includes() is only available from ES7/2016
           if (pUrl && (pButtonId === "logout" || pages.length === 0 || pages.indexOf(pButtonId) >= 0)) {
             this.goTo(pUrl);
           }
+          pClickEvent.stopPropagation();
         });
     }
   }
 
   _registerRouterEventListeners () {
     document.getElementById("logo").
-      addEventListener("click", () => {
+      addEventListener("click", (pClickEvent) => {
         if (window.event.ctrlKey) {
           this.goTo("options");
         } else {
           this.goTo("");
         }
+        pClickEvent.stopPropagation();
       });
 
     addEventListener("popstate", (popstate) => {

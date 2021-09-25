@@ -112,14 +112,16 @@ export class PillarsMinionPanel extends Panel {
 
       pillar.appendChild(pillarValueTd);
 
-      pillarHiddenDiv.addEventListener("click", () => {
+      pillarHiddenDiv.addEventListener("click", (pClickEvent) => {
         pillarHiddenDiv.style.display = "none";
         pillarShownDiv.style.display = "inline-block";
+        pClickEvent.stopPropagation();
       });
 
-      pillarShownDiv.addEventListener("click", () => {
+      pillarShownDiv.addEventListener("click", (pClickEvent) => {
         pillarShownDiv.style.display = "none";
         pillarHiddenDiv.style.display = "inline-block";
+        pClickEvent.stopPropagation();
       });
 
       const tbody = this.table.tBodies[0];

@@ -213,8 +213,9 @@ export class JobPanel extends Panel {
         link.classList.add("disabled");
         Utils.addToolTip(link, "this job");
       } else {
-        link.addEventListener("click", () => {
+        link.addEventListener("click", (pClickEvent) => {
           this.router.goTo("job", {"id": linkToJid});
+          pClickEvent.stopPropagation();
         });
       }
 
@@ -439,10 +440,11 @@ export class JobPanel extends Panel {
 
     summaryJobsActiveSpan.innerText = info.Running.length + " active";
     summaryJobsActiveSpan.insertBefore(Utils.createJobStatusSpan(pJobId, true), summaryJobsActiveSpan.firstChild);
-    summaryJobsActiveSpan.addEventListener("click", () => {
+    summaryJobsActiveSpan.addEventListener("click", (pClickEvent) => {
       this.output.innerText = "loading...";
       this.onShow();
       this.panelMenu.verifyAll();
+      pClickEvent.stopPropagation();
     });
     summaryJobsActiveSpan.style.cursor = "pointer";
     Utils.addToolTip(summaryJobsActiveSpan, "Click to refresh", "bottom-left");

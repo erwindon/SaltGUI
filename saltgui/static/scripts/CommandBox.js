@@ -125,16 +125,26 @@ export class CommandBox {
   }
 
   _registerCommandBoxEventListeners () {
-    document.getElementById("popup-run-command").
-      addEventListener("click", (pClickEvent) => CommandBox.hideManualRun(pClickEvent));
-    document.getElementById("button-manual-run").
-      addEventListener("click", (pClickEvent) => CommandBox.showManualRun(pClickEvent, this.api));
-    document.getElementById("cmd-close-button").
-      addEventListener("click", (pClickEvent) => CommandBox.hideManualRun(pClickEvent));
+    document.getElementById("popup-run-command").addEventListener(
+      "click", (pClickEvent) => {
+        CommandBox.hideManualRun(pClickEvent);
+        pClickEvent.stopPropagation();
+      });
+    document.getElementById("button-manual-run").addEventListener(
+      "click", (pClickEvent) => {
+        CommandBox.showManualRun(pClickEvent, this.api);
+        pClickEvent.stopPropagation();
+      });
+    document.getElementById("cmd-close-button").addEventListener(
+      "click", (pClickEvent) => {
+        CommandBox.hideManualRun(pClickEvent);
+        pClickEvent.stopPropagation();
+      });
 
     document.querySelector(".run-command input[type='submit']").
-      addEventListener("click", () => {
+      addEventListener("click", (pClickEvent) => {
         this._onRun();
+        pClickEvent.stopPropagation();
       });
 
     document.getElementById("target").

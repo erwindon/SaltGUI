@@ -79,6 +79,7 @@ export class GrainsMinionPanel extends Panel {
 
       grainTr.addEventListener("click", (pClickEvent) => {
         this.runCommand(pClickEvent, pMinionId, ["grains.setval", grainName, grains[grainName]]);
+        pClickEvent.stopPropagation();
       });
     }
 
