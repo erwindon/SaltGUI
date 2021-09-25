@@ -128,7 +128,6 @@ export class DropDownMenu {
   _callback (pClickEvent, pCallBack, pValue) {
     this._value = pValue;
     pCallBack(pClickEvent);
-    pClickEvent.stopPropagation();
   }
 
   setTitle (pTitle) {

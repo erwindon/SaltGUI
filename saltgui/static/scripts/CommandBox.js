@@ -365,8 +365,6 @@ export class CommandBox {
 
     CommandBox._populateTemplateMenu();
 
-    pClickEvent.stopPropagation();
-
     const localTestProviders = pApi.getLocalTestProviders();
 
     localTestProviders.then((pData) => {
@@ -394,10 +392,6 @@ export class CommandBox {
 
     if (Router.currentPage) {
       Router.currentPage.refreshPage();
-    }
-
-    if (pEvent) {
-      pEvent.stopPropagation();
     }
   }
 
