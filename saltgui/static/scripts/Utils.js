@@ -234,9 +234,10 @@ export class Utils {
       });
 
     // make the search function active
-    pSearchButton.onclick = () => {
+    pSearchButton.addEventListener("click", (pClickEvent) => {
       Utils.hideShowTableSearchBar(div, pTable);
-    };
+      pClickEvent.stopPropagation();
+    });
 
     return div;
   }

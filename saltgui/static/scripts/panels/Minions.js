@@ -542,11 +542,11 @@ export class MinionsPanel extends Panel {
 
         if (txt) {
           txt += "\nUpgrade is highly recommended!";
-          versionSpan.onclick = (pClickEvent) => {
+          versionSpan.addEventListener("click", (pClickEvent) => {
             window.open("https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=saltstack");
             // prevent the click to open the run-dialog
             pClickEvent.stopPropagation();
-          };
+          });
           Utils.addToolTip(versionSpan, txt.trim(), "error-bottom-left");
         }
       }

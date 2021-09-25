@@ -89,18 +89,20 @@ export class Panel {
     this.div.appendChild(pauseButton);
     this.pauseButton = pauseButton;
 
-    this.playButton.onclick = () => {
+    this.playButton.addEventListener("click", (pClickEvent) => {
       this.playButton.style.display = "none";
       this.pauseButton.style.display = "";
       this.playOrPause = "play";
       this.updateFooter();
-    };
-    this.pauseButton.onclick = () => {
+      pClickEvent.stopPropagation();
+    });
+    this.pauseButton.addEventListener("click", (pClickEvent) => {
       this.playButton.style.display = "";
       this.pauseButton.style.display = "none";
       this.playOrPause = "pause";
       this.updateFooter();
-    };
+      pClickEvent.stopPropagation();
+    });
 
     this.playOrPause = pInitialStatus;
   }
