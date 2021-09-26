@@ -178,7 +178,7 @@ export class BeaconsMinionPanel extends Panel {
       // run the command with the original beacon definition
       tr.addEventListener("click", (pClickEvent) => {
         const beacon0 = beacons0[beaconName];
-        this.runCommand(pClickEvent, pMinionId, ["beacons.modify", beaconName, beacon0]);
+        this.runCommand(pMinionId, ["beacons.modify", beaconName, beacon0]);
         pClickEvent.stopPropagation();
       });
 
@@ -201,9 +201,9 @@ export class BeaconsMinionPanel extends Panel {
         return null;
       }
       return "Disable beacons...";
-    }, (pClickEvent) => {
+    }, () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(pClickEvent, minionId, ["beacons.disable"]);
+      this.runCommand(minionId, ["beacons.disable"]);
     });
   }
 
@@ -213,30 +213,30 @@ export class BeaconsMinionPanel extends Panel {
         return null;
       }
       return "Enable beacons...";
-    }, (pClickEvent) => {
+    }, () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(pClickEvent, minionId, ["beacons.enable"]);
+      this.runCommand(minionId, ["beacons.enable"]);
     });
   }
 
   _addPanelMenuItemBeaconsAdd () {
-    this.panelMenu.addMenuItem("Add beacon...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Add beacon...", () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(pClickEvent, minionId, ["beacons.add", "<name>", "<data>"]);
+      this.runCommand(minionId, ["beacons.add", "<name>", "<data>"]);
     });
   }
 
   _addPanelMenuItemBeaconsReset () {
-    this.panelMenu.addMenuItem("Reset beacons...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Reset beacons...", () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(pClickEvent, minionId, ["beacons.reset"]);
+      this.runCommand(minionId, ["beacons.reset"]);
     });
   }
 
   _addPanelMenuItemBeaconsSave () {
-    this.panelMenu.addMenuItem("Save beacons...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Save beacons...", () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(pClickEvent, minionId, ["beacons.save"]);
+      this.runCommand(minionId, ["beacons.save"]);
     });
   }
 
@@ -244,8 +244,8 @@ export class BeaconsMinionPanel extends Panel {
     if (beacon.enabled === false) {
       return;
     }
-    pMenu.addMenuItem("Disable beacon...", (pClickEvent) => {
-      this.runCommand(pClickEvent, pMinionId, ["beacons.disable_beacon", key]);
+    pMenu.addMenuItem("Disable beacon...", () => {
+      this.runCommand(pMinionId, ["beacons.disable_beacon", key]);
     });
   }
 
@@ -253,14 +253,14 @@ export class BeaconsMinionPanel extends Panel {
     if (beacon.enabled !== false) {
       return;
     }
-    pMenu.addMenuItem("Enable beacon...", (pClickEvent) => {
-      this.runCommand(pClickEvent, pMinionId, ["beacons.enable_beacon", key]);
+    pMenu.addMenuItem("Enable beacon...", () => {
+      this.runCommand(pMinionId, ["beacons.enable_beacon", key]);
     });
   }
 
   _addMenuItemBeaconsDelete (pMenu, pMinionId, key) {
-    pMenu.addMenuItem("Delete beacon...", (pClickEvent) => {
-      this.runCommand(pClickEvent, pMinionId, ["beacons.delete", key]);
+    pMenu.addMenuItem("Delete beacon...", () => {
+      this.runCommand(pMinionId, ["beacons.delete", key]);
     });
   }
 

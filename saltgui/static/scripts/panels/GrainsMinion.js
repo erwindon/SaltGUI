@@ -78,7 +78,7 @@ export class GrainsMinionPanel extends Panel {
       tbody.appendChild(grainTr);
 
       grainTr.addEventListener("click", (pClickEvent) => {
-        this.runCommand(pClickEvent, pMinionId, ["grains.setval", grainName, grains[grainName]]);
+        this.runCommand(pMinionId, ["grains.setval", grainName, grains[grainName]]);
         pClickEvent.stopPropagation();
       });
     }
@@ -89,23 +89,23 @@ export class GrainsMinionPanel extends Panel {
   }
 
   _addPanelMenuItemGrainsSetValAdd () {
-    this.panelMenu.addMenuItem("Add grain...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Add grain...", () => {
       // use placeholders for name and value
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(pClickEvent, minionId, ["grains.setval", "<name>", "<value>"]);
+      this.runCommand(minionId, ["grains.setval", "<name>", "<value>"]);
     });
   }
 
   _addPanelMenuItemSaltUtilRefreshGrains () {
-    this.panelMenu.addMenuItem("Refresh grains...", (pClickEvent) => {
+    this.panelMenu.addMenuItem("Refresh grains...", () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(pClickEvent, minionId, ["saltutil.refresh_grains"]);
+      this.runCommand(minionId, ["saltutil.refresh_grains"]);
     });
   }
 
   _addMenuItemGrainsSetValUpdate (pMenu, pMinionId, key, grains) {
-    pMenu.addMenuItem("Edit grain...", (pClickEvent) => {
-      this.runCommand(pClickEvent, pMinionId, ["grains.setval", key, grains[key]]);
+    pMenu.addMenuItem("Edit grain...", () => {
+      this.runCommand(pMinionId, ["grains.setval", key, grains[key]]);
     });
   }
 
@@ -113,8 +113,8 @@ export class GrainsMinionPanel extends Panel {
     if (!pGrainValue.startsWith("[")) {
       return;
     }
-    pMenu.addMenuItem("Add value...", (pClickEvent) => {
-      this.runCommand(pClickEvent, pMinionId, ["grains.append", key, "<value>"]);
+    pMenu.addMenuItem("Add value...", () => {
+      this.runCommand(pMinionId, ["grains.append", key, "<value>"]);
     });
   }
 
@@ -124,8 +124,8 @@ export class GrainsMinionPanel extends Panel {
       cmdArr.push("force=", true);
     }
     cmdArr.push(pKey);
-    pMenu.addMenuItem("Delete key...", (pClickEvent) => {
-      this.runCommand(pClickEvent, pMinionId, cmdArr);
+    pMenu.addMenuItem("Delete key...", () => {
+      this.runCommand(pMinionId, cmdArr);
     });
   }
 
@@ -135,8 +135,8 @@ export class GrainsMinionPanel extends Panel {
       cmdArr.push("force=", true);
     }
     cmdArr.push(pKey);
-    pMenu.addMenuItem("Delete value...", (pClickEvent) => {
-      this.runCommand(pClickEvent, pMinionId, cmdArr);
+    pMenu.addMenuItem("Delete value...", () => {
+      this.runCommand(pMinionId, cmdArr);
     });
   }
 }

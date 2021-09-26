@@ -99,14 +99,14 @@ export class TemplatesPanel extends Panel {
     tbody.appendChild(tr);
 
     tr.addEventListener("click", (pClickEvent) => {
-      this.runFullCommand(pClickEvent, targetType, target, command);
+      this.runFullCommand(targetType, target, command);
       pClickEvent.stopPropagation();
     });
   }
 
   _addMenuItemApplyTemplate (pMenu, pTargetType, target, pCommand) {
-    pMenu.addMenuItem("Apply template...", (pClickEvent) => {
-      this.runFullCommand(pClickEvent, pTargetType, target, pCommand);
+    pMenu.addMenuItem("Apply template...", () => {
+      this.runFullCommand(pTargetType, target, pCommand);
     });
   }
 }

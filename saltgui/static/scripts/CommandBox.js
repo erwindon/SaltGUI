@@ -130,18 +130,18 @@ export class CommandBox {
         // only close if click is really outside the window
         // and not from any child element
         if (pClickEvent.target.id === "popup-run-command") {
-          CommandBox.hideManualRun(pClickEvent);
+          CommandBox.hideManualRun();
         }
         pClickEvent.stopPropagation();
       });
     document.getElementById("button-manual-run").addEventListener(
       "click", (pClickEvent) => {
-        CommandBox.showManualRun(pClickEvent, this.api);
+        CommandBox.showManualRun(this.api);
         pClickEvent.stopPropagation();
       });
     document.getElementById("cmd-close-button").addEventListener(
       "click", (pClickEvent) => {
-        CommandBox.hideManualRun(pClickEvent);
+        CommandBox.hideManualRun();
         pClickEvent.stopPropagation();
       });
 
@@ -318,7 +318,7 @@ export class CommandBox {
     button.disabled = false;
   }
 
-  static showManualRun (pClickEvent, pApi) {
+  static showManualRun (pApi) {
     const manualRun = document.getElementById("popup-run-command");
     manualRun.style.display = "block";
 
@@ -329,14 +329,14 @@ export class CommandBox {
     TargetType.autoSelectTargetType(targetField.value);
     targetField.onkeyup = (keyUpEvent) => {
       if (keyUpEvent.key === "Escape") {
-        CommandBox.hideManualRun(keyUpEvent);
+        CommandBox.hideManualRun();
       }
     };
 
     const commandField = document.getElementById("command");
     commandField.onkeyup = (keyUpEvent) => {
       if (keyUpEvent.key === "Escape") {
-        CommandBox.hideManualRun(keyUpEvent);
+        CommandBox.hideManualRun();
       }
     };
 
@@ -378,7 +378,7 @@ export class CommandBox {
     });
   }
 
-  static hideManualRun (pEvent) {
+  static hideManualRun () {
     const manualRun = document.getElementById("popup-run-command");
     manualRun.style.display = "none";
 

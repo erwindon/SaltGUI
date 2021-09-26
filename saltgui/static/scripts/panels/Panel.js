@@ -610,7 +610,7 @@ export class Panel {
     minionTr.appendChild(offlineTd);
   }
 
-  runCommand (pClickEvent, pTargetString, pCommandStringArray) {
+  runCommand (pTargetString, pCommandStringArray) {
     let commandString = "";
     let separator = "";
     for (const cmd of pCommandStringArray) {
@@ -640,11 +640,11 @@ export class Panel {
       }
       commandString += JSON.stringify(cmd);
     }
-    this.runFullCommand(pClickEvent, "", pTargetString, commandString);
+    this.runFullCommand("", pTargetString, commandString);
   }
 
-  runFullCommand (pClickEvent, pTargetType, pTargetString, pCommandString) {
-    CommandBox.showManualRun(pClickEvent, this.api);
+  runFullCommand (pTargetType, pTargetString, pCommandString) {
+    CommandBox.showManualRun(this.api);
     const target = document.getElementById("target");
     const command = document.getElementById("command");
     const targetbox = document.getElementById("target-box");
