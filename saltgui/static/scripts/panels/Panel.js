@@ -150,8 +150,6 @@ export class Panel {
         const th = document.createElement("th");
         if (columnName && !columnName.startsWith("-")) {
           th.innerText = columnName;
-        } else {
-          th.classList.add("sorttable_nosort");
         }
         tr.appendChild(th);
       }
@@ -188,23 +186,29 @@ export class Panel {
   }
 
   setTableSortable (pColumnName, pDirection = "asc") {
-    SortTable.makeSortable(this.table);
 
     const thArr = this.table.querySelectorAll("thead tr th");
     // const thArr = Array.prototype.slice.call(pStartElement.querySelectorAll("thead th"));
 
+    // mark columns as click-able
     for (const th of thArr) {
-      if (th.classList.contains("sorttable_nosort")) {
+      if (th.innerText !== "") {
+        th.classList.add("sorttable_sortable");
+      }
+    }
+
+    SortTable.makeSortable(this.table);
+
+    // apply the initial sort
+    for (const th of thArr) {
+      if (th.innerText !== pColumnName) {
         continue;
       }
-
-      if (th.innerText === pColumnName) {
-        // we do not expect any rows in the table at this moment
-        // but sorting is applied to show the sorting indicator
+      // we do not expect any rows in the table at this moment
+      // but sorting is applied to show the sorting indicator
+      SortTable.innerSortFunction(th);
+      if (pDirection === "desc") {
         SortTable.innerSortFunction(th);
-        if (pDirection === "desc") {
-          SortTable.innerSortFunction(th);
-        }
       }
 
       // the tooltip is too bulky to use, skip for now

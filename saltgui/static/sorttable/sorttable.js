@@ -36,7 +36,7 @@ export class SortTable {
     const headrow = table.tHead.rows[0].cells;
     for (let i=0; i<headrow.length; i++) {
       // manually override the type with a sorttable_type attribute
-      if (!headrow[i].classList.contains("sorttable_nosort")) { // skip this col
+      if (headrow[i].classList.contains("sorttable_sortable")) {
         const mtch = headrow[i].className.match(/\bsorttable_([a-z0-9]+)\b/);
         if (mtch) { const override = mtch[1]; }
         headrow[i].sorttable_sortfunction = SortTable.sort_alpha;
