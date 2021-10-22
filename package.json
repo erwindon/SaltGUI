@@ -19,7 +19,7 @@
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0",
     "stylelint-csstree-validator": "^1.9.0",
-    "stylelint-scss": "^3.20.1"
+    "stylelint-scss": "^4.0.0"
   },
   "eslintConfig": {
     "extends": [
