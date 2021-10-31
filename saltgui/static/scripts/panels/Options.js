@@ -280,7 +280,18 @@ export class OptionsPanel extends Panel {
       }
       return "(undefined)";
     }
-    const value = JSON.parse(valueStr);
+    if (valueStr.length === 0) {
+      return "(empty string)";
+    }
+    if (valueStr[0] !== "{" && valueStr[0] !== "[") {
+      return valueStr;
+    }
+    let value;
+    try {
+      value = JSON.parse(valueStr);
+    } catch (err) {
+      value = err + " in \"" + valueStr + "\"";
+    }
     return OutputYaml.formatYAML(value);
   }
 
