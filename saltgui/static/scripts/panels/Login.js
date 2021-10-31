@@ -343,10 +343,10 @@ export class LoginPanel extends Panel {
     Utils.setStorageItem("session", "state_verbose", JSON.stringify(stateVerbose));
 
     const stateOutput = wheelConfigValuesData.saltgui_state_output;
-    Utils.setStorageItem("session", "state_output", JSON.stringify(stateOutput));
+    Utils.setStorageItem("session", "state_output", stateOutput);
 
     const outputFormats = wheelConfigValuesData.saltgui_output_formats;
-    Utils.setStorageItem("session", "output_formats", JSON.stringify(outputFormats));
+    Utils.setStorageItem("session", "output_formats", outputFormats);
 
     const dateTimeFractionDigits = wheelConfigValuesData.saltgui_datetime_fraction_digits;
     Utils.setStorageItem("session", "datetime_fraction_digits", JSON.stringify(dateTimeFractionDigits));

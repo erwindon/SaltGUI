@@ -326,7 +326,7 @@ export class OptionsPanel extends Panel {
     /* eslint-enable curly */
     const stateOutputeTd = this.div.querySelector("#option-state-output-value");
     stateOutputeTd.innerText = value;
-    Utils.setStorageItem("session", "state_output", "\"" + value + "\"");
+    Utils.setStorageItem("session", "state_output", value);
   }
 
   _newOutputFormats () {
@@ -342,7 +342,7 @@ export class OptionsPanel extends Panel {
     /* eslint-enable curly */
     const outputFormatsTd = this.div.querySelector("#option-output-formats-value");
     outputFormatsTd.innerText = value;
-    Utils.setStorageItem("session", "output_formats", "\"" + value + "\"");
+    Utils.setStorageItem("session", "output_formats", value);
     // refresh the right-hand panel based on the new option value
     Router.currentPage.stats.clearTable();
     Router.currentPage.stats.onShow();
@@ -373,6 +373,6 @@ export class OptionsPanel extends Panel {
     /* eslint-enable curly */
     const tooltipModeTd = this.div.querySelector("#option-tooltip-mode-value");
     tooltipModeTd.innerText = value;
-    Utils.setStorageItem("session", "tooltip_mode", "\"" + value + "\"");
+    Utils.setStorageItem("session", "tooltip_mode", value);
   }
 }
