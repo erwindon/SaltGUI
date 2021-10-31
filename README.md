@@ -336,6 +336,23 @@ SaltGUI includes these libraries (with possible modifications):
 
 ## Changelog
 
+## 1.26.0 (2021-10-31)
+- applied review comments on documentation (thx achimmihca)
+- prevent use of null when a task reported changes as such (thx xzenor)
+- add support for additional salt.auth types (thx hoaivan)
+- added a message-of-the-day (motd) facility, before and/or after login
+- various gui (code) improvements and tweaks
+- fixed highstate tooltip content
+- use uniform buttons, but smaller when in a table
+- hide the commandbox on automatic logout
+- fixed beacon template for cert_info
+- bump stylelint+eslint versions
+- fixed several codebeat reported issues
+- added a few more CVEs to test for
+- fixed several constructions that needed higher ES versions
+- display warning sign for error information in beacon data
+- inform when no, or less, beacon-type info is available
+
 ## 1.25.0 (2021-08-01)
 - fixed generating commands without proper quoting (erwindon, thx xzenor)
 - added extended help for beacon configuration (erwindon)
