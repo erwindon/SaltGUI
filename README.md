@@ -56,7 +56,7 @@ rest_cherrypy:
 ```
 - Note that the cherrypi server is part of the salt-api package and has no separate installation. It is configured using the master configuration file. When configured using the above configurations, both the api calls and the html/js files are served by the cherrypy server. Therefore no additional web application server is needed.
 - Note that from the SaltGUI GIT repository, only the directory `saltgui` forms the actual SaltGUI web application.
-- Replace each of the `/srv/saltgui` in the above config with the actual 'saltgui' directory from the GIT repository. Alternatively, you can create a soft-link /src/saltgui that points to the actual saltgui directory.
+- Replace each of the `/srv/saltgui` in the above config with the actual `saltgui` directory from the GIT repository. Alternatively, you can create a soft-link /src/saltgui that points to the actual saltgui directory.
 - Restart everything with ``pkill salt-master && pkill salt-api && salt-master -d && salt-api -d``
 - You should be good to go. If you have any problems, open a GitHub issue. As always, SSL is recommended wherever possible but setup is beyond the scope of this guide.
 
@@ -164,8 +164,8 @@ saltgui_preview_grains:
     - "osrelease_info"
 ```
 The names can be specified as simple names like the example above.
-Alternatively, the [grains.get](https://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.grains.html#salt.modules.grains.get) notation can be used to get more detailed information. The separator is always ':'. e.g. "locale_info:timezone".
-Alternatively, the [jsonpath](https://www.w3resource.com/JSON/JSONPath-with-JavaScript.php) notation can be used to allow even more freedom. Jsonpath is used when the text starts with a '$'. e.g. "$.ip4_interfaces.eth0[0]".
+Alternatively, the [grains.get](https://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.grains.html#salt.modules.grains.get) notation can be used to get more detailed information. The separator is always `:`. e.g. `locale_info:timezone`.
+Alternatively, the [jsonpath](https://www.w3resource.com/JSON/JSONPath-with-JavaScript.php) notation can be used to allow even more freedom. Jsonpath is used when the text starts with a `$`. e.g. `$.ip4_interfaces.eth0[0]`.
 
 ## Pillars
 Pillars potentially contain security senstitive information.
@@ -195,7 +195,7 @@ The text is stored in file `saltgui/static/salt-motd.txt` or `saltgui/static/sal
 Alternatively, or additionally, the text can be retrieved from the `master` file entries `saltgui_motd_txt` and `saltgui_motd_html`. These entries can contain sensitive information because its content can only be retrieved after login. But it is still recommended to not let the text contain any sensitive data.
 
 ## Reduced menus
-When api's are disabled using the native `external_auth` mechanism,
+When apis are disabled using the native `external_auth` mechanism,
 SaltGUI may show menu-items that have become unuseable.
 In that case, it may be useful to reduce the menu-bar to less items.
 Variable `saltgui_pages` is read 
@@ -235,10 +235,10 @@ But Salt remembers the key status from both.
 SaltGUI can compare the list of keys against a reference list.
 The reference list is maintained as a text file, one minion per line.
 First column is the minion name.
-Second column is 'false' when the minion is known to be absent due to machine shutdown.
-It should be 'true' otherwise.
+Second column is `false` when the minion is known to be absent due to machine shutdown.
+It should be `true` otherwise.
 When the second column is missing, this validation is not performed.
-Lines starting with '#' are comment lines.
+Lines starting with `#` are comment lines.
 The filename is `saltgui/static/minions.txt`.
 Differences with this file are highlighted on the Keys page.
 Minions that are unexpectedly down are highlighted on the Minions page.
@@ -286,7 +286,7 @@ const config = {
   NAV_URL: '/app'
 };
 ```
-Note that the main page of SaltGUI is then located at '/app/'. When you want '/app' to work as well, you should instruct an intermediate proxy server to translate '/app' into '/app/'.
+Note that the main page of SaltGUI is then located at `/app/`. When you want `/app` to work as well, you should instruct an intermediate proxy server to translate `/app` into `/app/`.
 
 > Currently you can't use totally independent salt-api without proxy as support for CORS preflight request is not properly support.
 
@@ -322,7 +322,7 @@ You'll need at least:
 
 
 ## Contributing
-Open a PR! Try to use no dependencies where possible, as vanilla JS is the aim. Any libraries will need to be heavily considered first. Please see the section above as PR's won't be reviewed if they don't pass the tests.
+Open a PR! Try to use no dependencies where possible, as vanilla JS is the aim. Any libraries will need to be heavily considered first. Please see the section above as PRs won't be reviewed if they don't pass the tests.
 
 
 ## Credits
@@ -528,7 +528,7 @@ SaltGUI includes these libraries (with possible modifications):
 - Added separate Jobs page (dawidmalina)
 - Fixed some OS-icons (erwindon)
 - Support more compact time notation (erwindon)
-- Show popup menu's as early as possible (erwindon)
+- Show popup menus as early as possible (erwindon)
 - Added separate Job Templates page (dawidmalina)
 - Show which jobs are still running (erwindon)
 - Added re-run functionality for jobs (erwindon/dawidmalina)
