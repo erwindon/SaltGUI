@@ -94,11 +94,6 @@ export class SchedulesMinionPanel extends Panel {
       const scheduleModifyCmdArr = ["schedule.modify", scheduleName];
       for (let key in schedule) {
         const value = schedule[key];
-        if (key === "args") {
-          key = "job_args";
-        } else if (key === "kwargs") {
-          key = "job_kwargs";
-        }
         scheduleModifyCmdArr.push(key + "=", value);
       }
       this._addMenuItemModifyJob(scheduleMenu, pMinionId, scheduleModifyCmdArr);
