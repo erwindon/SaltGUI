@@ -360,7 +360,7 @@ export class API {
       return;
     }
     source.onopen = () => {
-      // Utils.info("Listening for events...");
+      // Utils info "Listening for events..."
     };
     source.onerror = () => {
       // Don't show the error

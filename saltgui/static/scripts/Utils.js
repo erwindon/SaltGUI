@@ -76,7 +76,6 @@ export class Utils {
     }
     /* istanbul ignore next */
     const value = storage.getItem(pKeyName);
-    // Utils.log("getStorageItem", pStorage, pKeyName, pDefaultValue, "-->", typeof value, value);
     /* istanbul ignore next */
     if (value === null) {
       return pDefaultValue;
@@ -95,7 +94,6 @@ export class Utils {
       Utils.log("setStorageItem", pStorage, pKeyName, pValue);
       return;
     }
-    // Utils.log("setStorageItem", pStorage, pKeyName, pValue);
     /* istanbul ignore next */
     storage.setItem(pKeyName, pValue);
   }
@@ -106,7 +104,6 @@ export class Utils {
       Utils.log("clearStorage", pStorage);
       return;
     }
-    // Utils.log("clearStorage", pStorage);
     /* istanbul ignore next */
     storage.clear();
   }
@@ -158,7 +155,7 @@ export class Utils {
 
     // why?
     if (pElement.classList && pElement.classList.contains("run-command-button")) {
-      return false;
+      return 0;
     }
 
     let found = false;

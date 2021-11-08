@@ -18,7 +18,7 @@
 export class ParseCommandLine {
 
   static getPatJid () {
-    return /^[2-9][0-9][0-9][0-9][01][0-9][0-3][0-9][0-2][0-9][0-5][0-9][0-5][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$/;
+    return /^[2-9]\d\d\d[01]\d[0-3]\d[0-2]\d[0-5]\d[0-5]\d\d\d\d\d\d\d$/;
   }
 
   static getCommandFromCommandLine (pCommandLine) {
@@ -38,9 +38,9 @@ export class ParseCommandLine {
     const patBooleanFalse = /^(?:false|False|FALSE)$/;
     const patBooleanTrue = /^(?:true|True|TRUE)$/;
 
-    const patInteger = /^(?:(?:0)|(?:[-+]?[1-9][0-9]*))$/;
+    const patInteger = /^(?:(?:0)|(?:[-+]?[1-9]\d*))$/;
 
-    const patFloat = /^(?:[-+]?(?:(?:[0-9]+)|(?:[0-9]+[.][0-9]*)|(?:[0-9]*[.][0-9]+))(?:[eE][-+]?[0-9]+)?)$/;
+    const patFloat = /^(?:[-+]?(?:(?:\d+)|(?:\d+[.]\d*)|(?:\d*[.]\d+))(?:[eE][-+]?\d+)?)$/;
 
     // just in case the user typed some extra whitespace
     // at the start of the line

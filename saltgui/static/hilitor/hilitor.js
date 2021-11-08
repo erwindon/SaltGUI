@@ -21,10 +21,10 @@ function Hilitor(start, id, tag)
   var nrHilites = 0;
 
   // characters to strip from start and end of the input string
-  var endRegExp = new RegExp('^[^\\w]+|[^\\w]+$', "g");
+  var endRegExp = /^[^\\w]+|[^\\w]+$/g;
 
   // characters used to break up the input string into words
-  var breakRegExp = new RegExp('[^\\w\'-]+', "g");
+  var breakRegExp = /[^\\w\'-]+/g;
 
   this.setEndRegExp = function(regex) {
     endRegExp = regex;
@@ -94,8 +94,8 @@ function Hilitor(start, id, tag)
     if(node.classList && node.classList.contains("no-search")) return;
 
     if(node.hasChildNodes()) {
-      for(var i=0; i < node.childNodes.length; i++)
-        this.hiliteWords(node.childNodes[i]);
+      for(const childNode of node.childNodes)
+        this.hiliteWords(childNode);
     }
     if(node.nodeType === 3) { // NODE_TEXT
       // limit the number of highlighted matches to 25 otherwise the DOM grows rediculously
@@ -123,7 +123,6 @@ function Hilitor(start, id, tag)
   // remove highlighting
   this.remove = function()
   {
-    //var arr = document.getElementsByTagName(hiliteTag);
     var arr = targetNode.getElementsByTagName(hiliteTag);
     let el;
     while(arr.length && (el = arr[0])) {

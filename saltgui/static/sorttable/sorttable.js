@@ -37,8 +37,6 @@ export class SortTable {
     for (let i=0; i<headrow.length; i++) {
       // manually override the type with a sorttable_type attribute
       if (headrow[i].classList.contains("sorttable_sortable")) {
-        const mtch = headrow[i].className.match(/\bsorttable_([a-z0-9]+)\b/);
-        if (mtch) { const override = mtch[1]; }
         headrow[i].sorttable_sortfunction = SortTable.sort_alpha;
         // make it clickable to sort
         headrow[i].sorttable_columnindex = i;
@@ -94,18 +92,18 @@ export class SortTable {
     const row_array = [];
     const col = clickElement.sorttable_columnindex;
     const rows = clickElement.sorttable_tbody.rows;
-    for (let j=0; j<rows.length; j++) {
-      row_array[row_array.length] = [SortTable.getInnerText(rows[j].cells[col]), rows[j]];
+    for (const row of rows) {
+      row_array[row_array.length] = [SortTable.getInnerText(row.cells[col]), row];
     }
     /* If you want a stable sort, uncomment the following line */
-    //SortTable.shaker_sort(row_array, clickElement.sorttable_sortfunction);
+    //SortTable.shaker_sort row_array, clickElement.sorttable_sortfunction
     /* and comment out clickElement one */
     row_array.sort(clickElement.sorttable_sortfunction);
     if(reverse) row_array.reverse();
 
     const tb = clickElement.sorttable_tbody;
-    for (let j=0; j<row_array.length; j++) {
-      tb.appendChild(row_array[j][1]);
+    for (const row of row_array) {
+      tb.appendChild(row[1]);
     }
   }
 
@@ -145,8 +143,8 @@ export class SortTable {
         case 1:
         case 11:
           var innerText = '';
-          for (let i = 0; i < node.childNodes.length; i++) {
-            innerText += SortTable.getInnerText(node.childNodes[i]);
+          for (const childNode of node.childNodes) {
+            innerText += SortTable.getInnerText(childNode);
           }
           return innerText.replace(/^\s+|\s+$/g, '');
         default:

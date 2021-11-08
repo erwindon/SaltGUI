@@ -188,7 +188,6 @@ export class Panel {
   setTableSortable (pColumnName, pDirection = "asc") {
 
     const thArr = this.table.querySelectorAll("thead tr th");
-    // const thArr = Array.prototype.slice.call(pStartElement.querySelectorAll("thead th"));
 
     // mark columns as click-able
     for (const th of thArr) {

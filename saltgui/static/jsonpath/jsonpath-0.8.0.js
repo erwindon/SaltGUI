@@ -13,12 +13,12 @@ function jsonPath(obj, expr, arg) {
                     .replace(/'?\.'?|\['?/g, ";")
                     .replace(/;;;|;;/g, ";..;")
                     .replace(/;$|'?\]|'$/g, "")
-                    .replace(/#([0-9]+)/g, function($0,$1){return subx[$1];});
+                    .replace(/#(\d+)/g, function($0,$1){return subx[$1];});
       },
       asPath: function(path) {
          var x = path.split(";"), p = "$";
          for (var i=1,n=x.length; i<n; i++)
-            p += /^[0-9*]+$/.test(x[i]) ? ("["+x[i]+"]") : ("['"+x[i]+"']");
+            p += /^[\d*]+$/.test(x[i]) ? ("["+x[i]+"]") : ("['"+x[i]+"']");
          return p;
       },
       store: function(p, v) {
@@ -45,7 +45,7 @@ function jsonPath(obj, expr, arg) {
                P.trace(P.eval(loc, val, path.substr(path.lastIndexOf(";")+1))+";"+x, val, path);
             else if (/^\?\(.*?\)$/.test(loc)) // [?(expr)]
                P.walk(loc, x, val, path, function(m,l,x,v,p) { if (P.eval(l.replace(/^\?\((.*?)\)$/,"$1"),v[m],m)) P.trace(m+";"+x,v,p); });
-            else if (/^(-?[0-9]*):(-?[0-9]*):?([0-9]*)$/.test(loc)) // [start:end:step]  phyton slice syntax
+            else if (/^(-?\d*):(-?\d*):?(\d*)$/.test(loc)) // [start:end:step]  phyton slice syntax
                P.slice(loc, x, val, path);
          }
          else
@@ -66,7 +66,7 @@ function jsonPath(obj, expr, arg) {
       slice: function(loc, expr, val, path) {
          if (val instanceof Array) {
             var len=val.length, start=0, end=len, step=1;
-            loc.replace(/^(-?[0-9]*):(-?[0-9]*):?(-?[0-9]*)$/g, function($0,$1,$2,$3){start=parseInt($1||start);end=parseInt($2||end);step=parseInt($3||step);});
+            loc.replace(/^(-?\d*):(-?\d*):?(-?\d*)$/g, function($0,$1,$2,$3){start=parseInt($1||start);end=parseInt($2||end);step=parseInt($3||step);});
             start = (start < 0) ? Math.max(0,start+len) : Math.min(len,start);
             end   = (end < 0)   ? Math.max(0,end+len)   : Math.min(len,end);
             for (var i=start; i<end; i+=step)

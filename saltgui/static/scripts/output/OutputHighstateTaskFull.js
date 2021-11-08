@@ -50,7 +50,6 @@ export class OutputHighstateTaskFull {
       txt += "\n" + OutputNested.formatNESTED(chgs, 14);
     }
 
-    const span = Utils.createSpan("", txt);
-    return span;
+    return Utils.createSpan("", txt);
   }
 }

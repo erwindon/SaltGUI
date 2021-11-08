@@ -142,7 +142,6 @@ export class OutputHighstateTaskSaltGui {
 
     if (pTask["duration"] !== undefined) {
       const milliSeconds = Math.round(pTask.duration);
-      // TODO totalMilliSeconds += milliSeconds;
       if (milliSeconds >= 10) {
         // anything below 10ms is not worth reporting
         // report only the "slow" jobs

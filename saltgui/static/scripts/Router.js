@@ -120,7 +120,7 @@ export class Router {
   _registerRouterEventListeners () {
     document.getElementById("logo").
       addEventListener("click", (pClickEvent) => {
-        if (window.event.ctrlKey) {
+        if (pClickEvent.ctrlKey) {
           this.goTo("options");
         } else {
           this.goTo("");

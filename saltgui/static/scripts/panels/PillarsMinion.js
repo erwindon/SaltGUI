@@ -101,8 +101,8 @@ export class PillarsMinionPanel extends Panel {
       pillarValueTd.appendChild(pillarShownDiv);
 
       // show public pillars immediatelly
-      for (let i = 0; i < publicPillars.length; i++) {
-        if (publicPillars[i] && publicPillars[i].test(pillarName)) {
+      for (const publicPillar of publicPillars) {
+        if (publicPillar && publicPillar.test(pillarName)) {
           // same code as when clicking the hidden value
           pillarHiddenDiv.style.display = "none";
           pillarShownDiv.style.display = "inline-block";

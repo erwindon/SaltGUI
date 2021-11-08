@@ -86,8 +86,7 @@ export class Output {
     }
 
     // all regular text
-    const span = Utils.createSpan("", pMinionResponse);
-    return span;
+    return Utils.createSpan("", pMinionResponse);
   }
 
 
@@ -230,7 +229,7 @@ export class Output {
 
     let nrChanges = 0;
     if (!pTask.changes) {
-      // txt += "\nno changes";
+      // no changes
     } else if (typeof pTask.changes !== "object") {
       nrChanges = 1;
       txt += "\n'changes' has type " + typeof pTask.changes;

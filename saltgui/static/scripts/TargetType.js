@@ -77,13 +77,13 @@ export class TargetType {
   static _setMenuMarker () {
     const targetType = TargetType._getTargetType();
     const menuItems = TargetType.menuTargetType.menuDropdownContent.children;
-    for (let i = 0; i < menuItems.length; i++) {
-      let menuItemText = menuItems[i].innerText;
+    for (const menuItem of menuItems) {
+      let menuItemText = menuItem.innerText;
       menuItemText = menuItemText.replace(/^. /, "");
-      if (menuItems[i]._value === targetType) {
+      if (menuItem._value === targetType) {
         menuItemText = Character.BLACK_CIRCLE + " " + menuItemText;
       }
-      menuItems[i].innerText = menuItemText;
+      menuItem.innerText = menuItemText;
     }
   }
 
