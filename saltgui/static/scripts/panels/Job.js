@@ -42,6 +42,11 @@ export class JobPanel extends Panel {
     this.div.append(time);
     this.timeField = time;
 
+    const warning = document.createElement("h2");
+    warning.classList.add("warning");
+    this.div.append(warning);
+    this.warningField = warning;
+
     const output = document.createElement("pre");
     output.id = "job-table";
     output.classList.add("output");
@@ -179,6 +184,20 @@ export class JobPanel extends Panel {
     let minions = ["WHEEL"];
     if (info.Minions) {
       minions = info.Minions;
+      this.warningField.innerText = "";
+      this.warningField.style.color = "";
+    } else if (info.Function.startsWith("wheel.")) {
+      minions = ["WHEEL"];
+      this.warningField.innerText = "WHEEL jobs are not associated with minions";
+      this.warningField.style.color = "";
+    } else if (info.Function.startsWith("runners.")) {
+      minions = ["RUNNER"];
+      this.warningField.innerText = "RUNNER jobs are not associated with minions";
+      this.warningField.style.color = "";
+    } else {
+      minions = Object.keys(this.result);
+      this.warningField.innerText = "minion list is missing in the result, cannot determine missing output";
+      this.warningField.style.color = "red";
     }
     let initialStatus;
     if (info.Minions === undefined || Object.keys(info.Result).length >= info.Minions.length) {
