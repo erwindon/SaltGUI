@@ -92,7 +92,7 @@ export class SchedulesMinionPanel extends Panel {
 
       const scheduleMenu = new DropDownMenu(tr, true);
       const scheduleModifyCmdArr = ["schedule.modify", scheduleName];
-      for (let key in schedule) {
+      for (const key in schedule) {
         const value = schedule[key];
         scheduleModifyCmdArr.push(key + "=", value);
       }
