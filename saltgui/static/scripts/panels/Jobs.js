@@ -213,13 +213,7 @@ export class JobsPanel extends Panel {
 
     // an intermediate timer event may have caused
     // the button to be hidden
-    if (this.playButton) {
-      this.playButton.style.display = "none";
-    }
-    if (this.pauseButton) {
-      this.pauseButton.style.display = "";
-    }
-    this.playOrPause = "play";
+    this.setPlayPauseButton("play");
 
     this.updateFooter();
   }

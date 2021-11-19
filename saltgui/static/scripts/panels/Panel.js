@@ -74,7 +74,6 @@ export class Panel {
     playButton.classList.add("small-button-left");
     playButton.classList.add("small-button-for-click");
     playButton.style.cursor = "pointer";
-    playButton.style.display = pInitialStatus === "play" ? "none" : "";
     this.div.appendChild(playButton);
     this.playButton = playButton;
 
@@ -85,7 +84,6 @@ export class Panel {
     pauseButton.classList.add("small-button-for-click");
     pauseButton.style.display = "none";
     pauseButton.style.cursor = "pointer";
-    pauseButton.style.display = pInitialStatus === "play" ? "" : "none";
     this.div.appendChild(pauseButton);
     this.pauseButton = pauseButton;
 
@@ -104,7 +102,13 @@ export class Panel {
       pClickEvent.stopPropagation();
     });
 
-    this.playOrPause = pInitialStatus;
+    this.setPlayPauseButton(pInitialStatus);
+  }
+
+  setPlayPauseButton (pStatus) {
+    this.playOrPause = pStatus;
+    this.playButton.style.display = pStatus === "pause" ? "" : "none";
+    this.pauseButton.style.display = pStatus === "play" ? "" : "none";
   }
 
   addHelpButton (pHelpTextArr) {

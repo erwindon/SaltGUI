@@ -159,9 +159,7 @@ export class JobsDetailsPanel extends JobsPanel {
       return;
     }
     if (!workLeft) {
-      this.playOrPause = "";
-      this.playButton.style.display = "none";
-      this.pauseButton.style.display = "none";
+      this.setPlayPauseButton("none");
       this.updateFooter();
     }
   }
