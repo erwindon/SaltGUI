@@ -8,6 +8,7 @@ import {CommandBox} from "./CommandBox.js";
 import {EventsPage} from "./pages/Events.js";
 import {GrainsMinionPage} from "./pages/GrainsMinion.js";
 import {GrainsPage} from "./pages/Grains.js";
+import {HighStatePage} from "./pages/HighState.js";
 import {JobPage} from "./pages/Job.js";
 import {JobsPage} from "./pages/Jobs.js";
 import {KeysPage} from "./pages/Keys.js";
@@ -47,6 +48,7 @@ export class Router {
     this._registerPage(this.beaconsMinionPage = new BeaconsMinionPage(this));
     this._registerPage(this.jobPage = new JobPage(this));
     this._registerPage(this.jobsPage = new JobsPage(this));
+    this._registerPage(this.highStatePage = new HighStatePage(this));
     this._registerPage(this.templatesPage = new TemplatesPage(this));
     this._registerPage(this.eventsPage = new EventsPage(this));
     this._registerPage(this.reactorsPage = new ReactorsPage(this));
@@ -145,6 +147,7 @@ export class Router {
     this._registerMenuItem("minions", "beacons", "beacons");
     this._registerMenuItem(null, "keys", "keys");
     this._registerMenuItem(null, "jobs", "jobs");
+    this._registerMenuItem("jobs", "highstate", "highstate");
     this._registerMenuItem("jobs", "templates", "templates");
     this._registerMenuItem(null, "events", "eventsview");
     this._registerMenuItem("events", "reactors", "reactors");

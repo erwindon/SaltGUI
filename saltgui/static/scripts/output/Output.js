@@ -299,7 +299,7 @@ export class Output {
   }
 
   // add the status summary
-  static _addHighStateSummary (pMinionRow, pMinionDiv, pMinionId, pTasks) {
+  static addHighStateSummary (pMinionRow, pMinionDiv, pMinionId, pTasks) {
 
     let nr = 0;
     const summarySpan = Utils.createSpan("task-summary", "");
@@ -665,7 +665,7 @@ export class Output {
         minionRow.appendChild(triangle);
 
         if (addHighStateSummaryFlag) {
-          Output._addHighStateSummary(minionRow, div, minionId, tasks);
+          Output.addHighStateSummary(minionRow, div, minionId, tasks);
         }
       }
 
