@@ -199,11 +199,14 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getRunnerJobsListJobs () {
+  getRunnerJobsListJobs (pCmd = null) {
     const params = {
       "client": "runner",
       "fun": "jobs.list_jobs"
     };
+    if (pCmd) {
+      params["search_function"] = pCmd;
+    }
     return this.apiRequest("POST", "/", params);
   }
 
