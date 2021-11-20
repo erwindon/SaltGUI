@@ -107,8 +107,12 @@ export class Panel {
 
   setPlayPauseButton (pStatus) {
     this.playOrPause = pStatus;
-    this.playButton.style.display = pStatus === "pause" ? "" : "none";
-    this.pauseButton.style.display = pStatus === "play" ? "" : "none";
+    if (this.playButton) {
+      this.playButton.style.display = pStatus === "pause" ? "" : "none";
+    }
+    if (this.pauseButton) {
+      this.pauseButton.style.display = pStatus === "play" ? "" : "none";
+    }
   }
 
   addHelpButton (pHelpTextArr) {
