@@ -650,7 +650,12 @@ export class Output {
       // multiple line, collapsible
       let triangle = null;
       if (minionMultiLine) {
-        triangle = Utils.createSpan("triangle", masterTriangle.innerText);
+        if (minionId === pHighlightMinionId) {
+          // when we chose this minion
+          triangle = Utils.createSpan("triangle", Character.WHITE_DOWN_POINTING_TRIANGLE);
+        } else {
+          triangle = Utils.createSpan("triangle", masterTriangle.innerText);
+        }
         triangle.style.cursor = "pointer";
         triangle.addEventListener("click", (pClickEvent) => {
           if (triangle.innerText === Character.WHITE_DOWN_POINTING_TRIANGLE) {
