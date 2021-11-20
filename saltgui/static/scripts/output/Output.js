@@ -389,7 +389,7 @@ export class Output {
 
   // the orchestrator for the output
   // determines what format should be used and uses that
-  static addResponseOutput (pOutputContainer, pJobId, pMinionData, pResponse, pCommand, pInitialStatus) {
+  static addResponseOutput (pOutputContainer, pJobId, pMinionData, pResponse, pCommand, pInitialStatus, pHighlightMinionId) {
 
     // remove old content
     pOutputContainer.innerText = "";
@@ -703,6 +703,23 @@ export class Output {
       div.append(minionOutput);
 
       pOutputContainer.append(div);
+    }
+
+    if (pHighlightMinionId) {
+      // scroll to this minion
+      const div = pOutputContainer.querySelector("#" + Utils.getIdFromMinionId(pHighlightMinionId));
+      if (div) {
+        const minionRow = div.querySelector("span");
+        minionRow.classList.add("highlight-task");
+        window.setTimeout(() => {
+          minionRow.classList.remove("highlight-task");
+          if (!minionRow.classList.length) {
+            minionRow.removeAttribute("class");
+          }
+        }, 1000);
+
+        div.scrollIntoView({"behavior": "smooth", "block": "start"});
+      }
     }
 
     if (nrMultiLineBlocks <= 1) {

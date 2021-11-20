@@ -224,7 +224,7 @@ export class HighStatePanel extends Panel {
       const menu = new DropDownMenu(minionTr, true);
       this._addMenuItemStateApply(menu, minionId);
       this._addMenuItemStateApplyTest(menu, minionId);
-      this._addJobsMenuItemShowDetails(menu, jobData);
+      this._addJobsMenuItemShowDetails(menu, jobData, minionId);
 
       const tasksTd = Utils.createTd("tasks", "");
       const minionResult = jobData.Result[minionId];
@@ -277,9 +277,9 @@ export class HighStatePanel extends Panel {
     }
   }
 
-  _addJobsMenuItemShowDetails (pMenu, pJob) {
+  _addJobsMenuItemShowDetails (pMenu, pJob, pMinionId) {
     pMenu.addMenuItem("Show details", () => {
-      this.router.goTo("job", {"id": pJob.jid});
+      this.router.goTo("job", {"id": pJob.jid, "minionid": pMinionId});
     });
   }
 }

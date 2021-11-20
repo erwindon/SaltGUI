@@ -310,7 +310,7 @@ export class CommandBox {
       minions = ["WHEEL"];
     }
     // do not suppress the jobId (even when we can)
-    Output.addResponseOutput(outputContainer, null, minions, pResponse, pCommand, "done");
+    Output.addResponseOutput(outputContainer, null, minions, pResponse, pCommand, "done", undefined);
     const targetField = document.getElementById("target");
     const commandField = document.getElementById("command");
     const button = document.querySelector(".run-command input[type='submit']");

@@ -61,6 +61,7 @@ export class JobPanel extends Panel {
 
   onShow () {
     const jobId = decodeURIComponent(Utils.getQueryParam("id"));
+    const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
 
     this.jobIsTerminated = undefined;
 
@@ -68,7 +69,7 @@ export class JobPanel extends Panel {
     const runnerJobsActivePromise = this.api.getRunnerJobsActive();
 
     runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
-      this._handleJobRunnerJobsListJob(pRunnerJobsListJobData, jobId);
+      this._handleJobRunnerJobsListJob(pRunnerJobsListJobData, jobId, minionId);
       runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         this._handleRunnerJobsActive(jobId, pRunnerJobsActiveData);
         return true;
@@ -78,7 +79,7 @@ export class JobPanel extends Panel {
       });
       return true;
     }, (pRunnerJobsListJobsMsg) => {
-      this._handleJobRunnerJobsListJob(JSON.stringify(pRunnerJobsListJobsMsg), jobId);
+      this._handleJobRunnerJobsListJob(JSON.stringify(pRunnerJobsListJobsMsg), jobId, undefined);
       return true;
     });
   }
@@ -140,7 +141,7 @@ export class JobPanel extends Panel {
     return /\b[2-9][0-9][0-9][0-9][01][0-9][0-3][0-9][0-2][0-9][0-5][0-9][0-5][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\b/g;
   }
 
-  _handleJobRunnerJobsListJob (pRunnerJobsListJobData, pJobId) {
+  _handleJobRunnerJobsListJob (pRunnerJobsListJobData, pJobId, pMinionId) {
     if (!pRunnerJobsListJobData) {
       return;
     }
@@ -208,7 +209,7 @@ export class JobPanel extends Panel {
       initialStatus = "(loading)";
       this.jobIsTerminated = false;
     }
-    Output.addResponseOutput(this.output, pJobId, minions, info.Result, info.Function, initialStatus);
+    Output.addResponseOutput(this.output, pJobId, minions, info.Result, info.Function, initialStatus, pMinionId);
 
     // replace any jobid
     // Don't do this with output.innerHTML as there are already
