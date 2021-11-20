@@ -428,6 +428,7 @@ export class API {
         pRouter.jobsPage.handleSaltJobRetEvent(data);
         pRouter.templatesPage.handleSaltJobRetEvent(data);
         pRouter.reactorsPage.handleSaltJobRetEvent(data);
+        pRouter.highStatePage.handleSaltJobRetEvent(data);
       } else if (tag.startsWith("salt/job/") && tag.includes("/prog/")) {
         // progress value (exists only for states)
         CommandBox.handleSaltJobProgEvent(tag, data);
