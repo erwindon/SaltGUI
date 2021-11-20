@@ -122,7 +122,7 @@ export class HighStatePanel extends Panel {
       return;
     }
 
-    // user can decide
+    // user can decide to halt screen updates
     // system can decide to remove the play/pause button
     if (this.playOrPause !== "play") {
       window.setTimeout(() => {
