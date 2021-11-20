@@ -236,12 +236,13 @@ export class HighStatePanel extends Panel {
         const span = Utils.createSpan("", Character.BLACK_CIRCLE);
         span.style.backgroundColor = "black";
 
+        const data = minionResult.return[key];
         span.addEventListener("click", (pClickEvent) => {
-          this.runCommand(minionId, cmd);
+          this.runCommand(minionId, ["state.sls_id", data.__id__, "mods=", data.__sls__]);
           pClickEvent.stopPropagation();
         });
 
-        Output._setTaskTooltip(span, minionResult.return[key]);
+        Output._setTaskTooltip(span, data);
         tasksTd.append(span);
       }
 
