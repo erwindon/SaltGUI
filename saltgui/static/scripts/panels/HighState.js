@@ -95,6 +95,14 @@ export class HighStatePanel extends Panel {
 
   _handleHighstateRunnerJobsListJobs (pData) {
     if (this.showErrorRowInstead(pData)) {
+      const tbody = this.table.tBodies[0];
+      for (const tr of tbody.rows) {
+        const osField = tr.querySelector(".os");
+        const span = Utils.createSpan("", "(error)");
+        osField.innerText = "";
+        osField.append(span);
+        Utils.addToolTip(span, pData);
+      }
       return;
     }
 
@@ -153,6 +161,27 @@ export class HighStatePanel extends Panel {
   }
 
   _handleJobsRunnerJobsListJob (pJobId, pJobData) {
+
+    if (this.showErrorRowInstead(pJobData)) {
+      // when we do noty have the job data, it cannot be
+      // determined which minions were involved
+      // therefore mark all remaining minions as in-errror
+      const tbody = this.table.tBodies[0];
+      for (const tr of tbody.rows) {
+        if (tr.jid) {
+          continue;
+        }
+        const osField = tr.querySelector(".os");
+        const span = Utils.createSpan("", "(error)");
+        osField.innerText = "";
+        osField.append(span);
+        Utils.addToolTip(span, pJobData);
+        // prevent further updates
+        tr.jid = "error";
+      }
+      return;
+    }
+
     const jobData = pJobData.return[0];
 
     for (const minionId in jobData.Result) {
