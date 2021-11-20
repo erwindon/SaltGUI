@@ -1,5 +1,6 @@
 /* global document */
 
+import {Character} from "../Character.js";
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
@@ -41,6 +42,11 @@ export class JobPanel extends Panel {
     time.classList.add("time");
     this.div.append(time);
     this.timeField = time;
+
+    const warning = document.createElement("h2");
+    warning.classList.add("warning");
+    this.div.append(warning);
+    this.warningField = warning;
 
     const output = document.createElement("pre");
     output.id = "job-table";
@@ -179,6 +185,16 @@ export class JobPanel extends Panel {
     let minions = ["WHEEL"];
     if (info.Minions) {
       minions = info.Minions;
+      this.warningField.innerText = "";
+    } else if (info.Function.startsWith("wheel.")) {
+      minions = ["WHEEL"];
+      this.warningField.innerText = Character.INFORMATION_SIGN + Character.NO_BREAK_SPACE + "WHEEL jobs are not associated with minions";
+    } else if (info.Function.startsWith("runners.")) {
+      minions = ["RUNNER"];
+      this.warningField.innerText = Character.INFORMATION_SIGN + Character.NO_BREAK_SPACE + "RUNNER jobs are not associated with minions";
+    } else {
+      minions = Object.keys(this.result);
+      this.warningField.innerText = Character.WARNING_SIGN + Character.NO_BREAK_SPACE + "minion list is missing in the result, thus cannot determine missing output";
     }
     let initialStatus;
     if (info.Minions === undefined || Object.keys(info.Result).length >= info.Minions.length) {
