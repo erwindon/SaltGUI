@@ -201,7 +201,10 @@ export class HighStatePanel extends Panel {
       const functionField = Utils.createTd("function", functionText);
       minionTr.appendChild(functionField);
 
-      let cmd = [jobData.Function];
+      const cmd = [jobData.Function];
+
+      // take the parameters from the original command
+      // usually only "test=true"
       /* eslint-disable max-depth */
       for (const arg of jobData.Arguments) {
         if (typeof arg === "object") {
@@ -209,10 +212,10 @@ export class HighStatePanel extends Panel {
             if (key === "__kwarg__") {
               continue;
             }
-            cmd = cmd.concat([key + "=", arg[key]]);
+            cmd.push(key + "=", arg[key]);
           }
         } else {
-          cmd = cmd.concat(arg);
+          cmd.push(arg);
         }
       }
       /* eslint-enable max-depth */
