@@ -623,7 +623,7 @@ export class Panel {
         commandString += JSON.stringify(cmd);
         continue;
       }
-      if (cmd.match(/^[a-z_]+=$/)) {
+      if (cmd.match(/^[a-z_]+=$/i)) {
         // handle key-value pairs
         const pos = cmd.indexOf("=");
         commandString += cmd.substr(0, pos + 1);
@@ -636,7 +636,7 @@ export class Panel {
         commandString += cmd;
         continue;
       }
-      if (cmd.match(/^[a-z_][a-z0-9_]*(?:[.][a-z0-9_]+)*$/)) {
+      if (cmd.match(/^[a-z_][a-z0-9_]*(?:[.][a-z0-9_]+)*$/i)) {
         // It's a simple string or a command
         commandString += cmd;
         continue;
