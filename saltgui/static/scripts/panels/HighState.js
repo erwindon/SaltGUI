@@ -24,7 +24,7 @@ export class HighStatePanel extends Panel {
       "This panel shows the latest state.highstate or state.apply job for each minion",
       "Click on an individual state to re-apply only that state"
     ]);
-    this.addTable(["Minion", "State", "Latest JID", "Target", "Function", "Start Time", "-menu-", "Tasks"]);
+    this.addTable(["Minion", "State", "Latest JID", "Target", "Function", "Start Time", "-menu-", "States"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable();
     this.addMsg();
