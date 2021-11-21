@@ -258,21 +258,30 @@ export class HighStatePanel extends Panel {
       this._addMenuItemStateApplyTest(menu, minionId);
       this._addJobsMenuItemShowDetails(menu, jobData, minionId);
 
-      const tasksTd = Utils.createTd("tasks", "");
       const minionResult = jobData.Result[minionId];
-      const keys = Object.keys(minionResult.return);
-      for (const key of keys) {
-        const span = Utils.createSpan("", Character.BLACK_CIRCLE);
-        span.style.backgroundColor = "black";
+      const tasksTd = Utils.createTd("tasks", "");
 
-        const data = minionResult.return[key];
-        span.addEventListener("click", (pClickEvent) => {
-          this.runCommand(minionId, ["state.sls_id", data.__id__, "mods=", data.__sls__]);
-          pClickEvent.stopPropagation();
-        });
-
-        Output._setTaskTooltip(span, data);
+      if (typeof minionResult.return !== "object" || Array.isArray(minionResult.return)) {
+        const span = Utils.createSpan("", "(error)");
+        Utils.addToolTip(span, JSON.stringify(minionResult.return));
         tasksTd.append(span);
+      } else {
+        const keys = Object.keys(minionResult.return);
+        for (const key of keys) {
+          const span = Utils.createSpan("", Character.BLACK_CIRCLE);
+          span.style.backgroundColor = "black";
+
+          const data = minionResult.return[key];
+          if (typeof data !== "object") {
+            continue;
+          }
+          span.addEventListener("click", (pClickEvent) => {
+            this.runCommand(minionId, ["state.sls_id", data.__id__, "mods=", data.__sls__]);
+            pClickEvent.stopPropagation();
+          });
+          Output._setTaskTooltip(span, data);
+          tasksTd.append(span);
+        }
       }
 
       minionTr.appendChild(tasksTd);
