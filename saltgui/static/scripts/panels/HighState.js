@@ -215,7 +215,14 @@ export class HighStatePanel extends Panel {
       minionTd.classList.add("accepted");
       minionTr.appendChild(minionTd);
 
-      minionTr.appendChild(Utils.createTd("", pJobId));
+      const jobIdTd = Utils.createTd();
+      const jobIdSpan = Utils.createSpan("tooltip", pJobId);
+      jobIdSpan.addEventListener("click", (pClickEvent) => {
+        this.router.goTo("job", {"id": pJobId, "minionid": minionId});
+        pClickEvent.stopPropagation();
+      });
+      jobIdTd.appendChild(jobIdSpan);
+      minionTr.appendChild(jobIdTd);
 
       let targetText = TargetType.makeTargetText(jobData);
       const maxTextLength = 50;
