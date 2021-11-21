@@ -213,6 +213,11 @@ export class Output {
   }
 
   static _setTaskTooltip (pSpan, pTask) {
+
+    if (typeof pTask !== "object") {
+      return;
+    }
+
     let txt = "";
 
     if ("name" in pTask) {
