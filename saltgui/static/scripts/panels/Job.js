@@ -94,7 +94,23 @@ export class JobPanel extends Panel {
     return true;
   }
 
-  static decodeArgumentsText (rawArguments) {
+  static decodeArgumentsObj (pObj) {
+    if (typeof pObj !== "string") {
+      return JSON.stringify(pObj);
+    }
+    if (ParseCommandLine.getPatJid().test(pObj)) {
+      // prevent quotes being added on JIDs
+      return pObj;
+    }
+    if (pObj.match(/^[a-z_][a-z0-9_]*(?:[.][a-z0-9_]+)*$/i)) {
+      // simple string that cannot be confuses with
+      // another object type
+      return pObj;
+    }
+    return JSON.stringify(pObj);
+  }
+
+  static decodeArgumentsArray (rawArguments) {
 
     if (rawArguments === undefined) {
       // no arguments
@@ -104,13 +120,13 @@ export class JobPanel extends Panel {
     if (typeof rawArguments !== "object") {
       // expecting an array (which is an object)
       // just return the representation of anything else
-      return " " + JSON.stringify(rawArguments);
+      return " " + JobPanel.decodeArgumentsObj(rawArguments);
     }
 
     if (!Array.isArray(rawArguments)) {
       // expecting an array
       // just return the representation of anything else
-      return " " + JSON.stringify(rawArguments);
+      return " " + JobPanel.decodeArgumentsObj(rawArguments);
     }
 
     let ret = "";
@@ -122,15 +138,10 @@ export class JobPanel extends Panel {
           if (key === "__kwarg__") {
             continue;
           }
-          ret += " " + key + "=" + Output.formatObject(obj[key]);
+          ret += " " + key + "=" + JobPanel.decodeArgumentsObj(obj[key]);
         }
-      } else if (typeof obj === "string" &&
-                ParseCommandLine.getPatJid().test(obj)) {
-        // prevent quotes being added on JIDs
-        ret += " " + obj;
       } else {
-        const objAsString = JSON.stringify(obj);
-        ret += " " + objAsString;
+        ret += " " + JobPanel.decodeArgumentsObj(obj);
       }
     }
 
@@ -165,7 +176,7 @@ export class JobPanel extends Panel {
     this.output.innerText = "";
 
     // use same formatter as direct commands
-    const argumentsText = JobPanel.decodeArgumentsText(info.Arguments);
+    const argumentsText = JobPanel.decodeArgumentsArray(info.Arguments);
     const commandText = info.Function + argumentsText;
 
     this.targettype = info["Target-type"];

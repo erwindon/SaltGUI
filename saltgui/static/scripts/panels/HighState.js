@@ -83,8 +83,8 @@ export class HighStatePanel extends Panel {
 
       minionTr.addEventListener("click", (pClickEvent) => {
         const functionField = minionTr.querySelector(".function");
-        if (functionField) {
-          this.runCommand(minionId, functionField.cmd);
+        if (functionField && functionField.cmd) {
+          this.runFullCommand("", minionId, functionField.cmd);
         } else {
           this.runCommand(minionId, ["state.apply"]);
         }
@@ -225,34 +225,17 @@ export class HighStatePanel extends Panel {
       }
       minionTr.appendChild(Utils.createTd("target", targetText));
 
-      const argumentsText = JobPanel.decodeArgumentsText(jobData.Arguments);
+      const argumentsText = JobPanel.decodeArgumentsArray(jobData.Arguments);
       let functionText = jobData.Function + argumentsText;
       if (functionText.length > maxTextLength) {
         // prevent column becoming too wide
         functionText = functionText.substring(0, maxTextLength) + "...";
       }
       const functionField = Utils.createTd("function", functionText);
+      functionField.cmd = functionText;
       minionTr.appendChild(functionField);
 
-      const cmd = [jobData.Function];
-
-      // take the parameters from the original command
-      // usually only "test=true"
-      /* eslint-disable max-depth */
-      for (const arg of jobData.Arguments) {
-        if (typeof arg === "object") {
-          for (const key in arg) {
-            if (key === "__kwarg__") {
-              continue;
-            }
-            cmd.push(key + "=", arg[key]);
-          }
-        } else {
-          cmd.push(arg);
-        }
-      }
       /* eslint-enable max-depth */
-      functionField.cmd = cmd;
 
       const startTimeText = Output.dateTimeStr(jobData.StartTime);
       minionTr.appendChild(Utils.createTd("starttime", startTimeText));
