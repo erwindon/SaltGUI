@@ -221,7 +221,8 @@ export class CommandBox {
       "schedule.enable_job": ["schedules-minion"],
       "schedule.modify": ["schedules", "schedules-minion"],
       "schedule.run_job": ["*"],
-      "state.apply": ["highstate"]
+      "state.apply": ["highstate"],
+      "state.highstate": ["highstate"]
     };
   }
 

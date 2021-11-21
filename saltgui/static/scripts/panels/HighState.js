@@ -28,7 +28,7 @@ export class HighStatePanel extends Panel {
 
   onShow () {
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
-    const runnerJobsListJobsPromise = this.api.getRunnerJobsListJobs("state.apply");
+    const runnerJobsListJobsPromise = this.api.getRunnerJobsListJobs(["state.apply", "state.highstate"]);
 
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       this._handleMinionsWheelKeyListAll(pWheelKeyListAllData);
