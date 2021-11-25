@@ -134,6 +134,12 @@ export class HighStatePanel extends Panel {
       return;
     }
 
+    // we might have no relevant jobs
+    if (this.jobs.length === 0) {
+      this._afterJob();
+      return;
+    }
+
     // user can decide to halt screen updates
     // system can decide to remove the play/pause button
     if (this.playOrPause === "play") {
@@ -157,6 +163,39 @@ export class HighStatePanel extends Panel {
       this.jobs = undefined;
       return false;
     });
+  }
+
+  _afterJob () {
+    let cnt = 0;
+    const tbody = this.table.tBodies[0];
+    for (const tr of tbody.rows) {
+      if (tr.jid === undefined) {
+        cnt += 1;
+      }
+    }
+    if (cnt === 0) {
+      // all minions have a most recent job
+      this.jobs = [];
+    }
+
+    if (this.jobs.length !== 0) {
+      // more work later
+      return;
+    }
+
+    // cause timer to stop
+    this.jobs = undefined;
+    this.setPlayPauseButton("none");
+
+    for (const tr of tbody.rows) {
+      if (tr.jid) {
+        // this row already populated
+        continue;
+      }
+      const jidField = tr.querySelector(".os");
+      jidField.innerText = "(no job)";
+      jidField.classList.add("no-job-details");
+    }
   }
 
   _handleJobsRunnerJobsListJob (pJobId, pJobData) {
@@ -276,36 +315,7 @@ export class HighStatePanel extends Panel {
       minionTr.appendChild(tasksTd);
     }
 
-    let cnt = 0;
-    const tbody = this.table.tBodies[0];
-    for (const tr of tbody.rows) {
-      if (tr.jid === undefined) {
-        cnt += 1;
-      }
-    }
-    if (cnt === 0) {
-      // all minions have a most recent job
-      this.jobs = [];
-    }
-
-    if (this.jobs.length !== 0) {
-      // more work later
-      return;
-    }
-
-    // cause timer to stop
-    this.jobs = undefined;
-    this.setPlayPauseButton("none");
-
-    for (const tr of tbody.rows) {
-      if (tr.jid) {
-        // this row already populated
-        continue;
-      }
-      const jidField = tr.querySelector(".os");
-      jidField.innerText = "(no job)";
-      jidField.classList.add("no-job-details");
-    }
+    this._afterJob();
   }
 
   _addJobsMenuItemShowDetails (pMenu, pJob, pMinionId) {
