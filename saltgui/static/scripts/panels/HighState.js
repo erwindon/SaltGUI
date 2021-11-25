@@ -136,15 +136,10 @@ export class HighStatePanel extends Panel {
 
     // user can decide to halt screen updates
     // system can decide to remove the play/pause button
-    if (this.playOrPause !== "play") {
-      window.setTimeout(() => {
-        this._updateNextJob();
-      }, 1000);
-      return;
+    if (this.playOrPause === "play") {
+      const job = this.jobs.shift();
+      this._handleJob(job);
     }
-
-    const job = this.jobs.shift();
-    this._handleJob(job);
 
     window.setTimeout(() => {
       this._updateNextJob();
