@@ -536,6 +536,7 @@ export class Panel {
       if (pMinionData.os && typeof pMinionData !== "string") {
         const img = document.createElement("img");
         img.setAttribute("src", config.NAV_URL + "/static/images/os-" + pMinionData.os.replace(" ", "-").toLowerCase() + ".png");
+        img.setAttribute("onerror", "this.onerror=null; this.title='Unknown OS for image, please report to SaltGUI team'; this.src='/static/images/os-UNKNOWN.png'");
         img.classList.add("osimage");
         td.prepend(img);
       }
