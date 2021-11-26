@@ -67,6 +67,10 @@ export class KeysPanel extends Panel {
       return;
     }
 
+    if (this.showErrorRowInstead(pWheelKeyFingerData)) {
+      return;
+    }
+
     const allKeys = pWheelKeyFingerData.return[0].data.return;
 
     for (const property of Object.keys(allKeys)) {
