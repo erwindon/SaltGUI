@@ -51,6 +51,8 @@ export class JobsDetailsPanel extends JobsPanel {
 
     super.onShow(cnt);
 
+    this.nrErrors = 0;
+
     // to update details
     // interval should be larger than the retrieval time
     // to prevent many of such jobs to appear
@@ -165,12 +167,19 @@ export class JobsDetailsPanel extends JobsPanel {
   }
 
   _getJobDetails (pJobId) {
+    if (this.nrErrors >= 3) {
+      // don't bother getting more data
+      this._handleJobsRunnerJobsListJob(pJobId, "skipped");
+      return;
+    }
+
     const runnerJobsListJobPromise = this.api.getRunnerJobsListJob(pJobId);
 
     runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
       this._handleJobsRunnerJobsListJob(pJobId, pRunnerJobsListJobData);
       return true;
     }, (pRunnerJobsListJobMsg) => {
+      this.nrErrors += 1;
       this._handleJobsRunnerJobsListJob(pJobId, JSON.stringify(pRunnerJobsListJobMsg));
       return false;
     });
@@ -192,9 +201,13 @@ export class JobsDetailsPanel extends JobsPanel {
     }
 
     if (typeof pData !== "object") {
-      detailsSpan.innerText = "(error)";
+      if (pData === "skipped") {
+        detailsSpan.innerText = "(skipped)";
+      } else {
+        detailsSpan.innerText = "(error)";
+        Utils.addToolTip(detailsSpan, pData);
+      }
       detailsSpan.classList.remove("no-job-details");
-      Utils.addToolTip(detailsSpan, pData);
       return;
     }
 
