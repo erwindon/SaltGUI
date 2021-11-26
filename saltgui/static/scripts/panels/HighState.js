@@ -307,7 +307,7 @@ export class HighStatePanel extends Panel {
             this.runCommand(minionId, ["state.sls_id", data.__id__, "mods=", data.__sls__]);
             pClickEvent.stopPropagation();
           });
-          Output._setTaskTooltip(span, data);
+          Output._setTaskToolTip(span, data);
           tasksTd.append(span);
         }
       }

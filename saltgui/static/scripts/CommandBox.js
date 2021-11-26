@@ -582,7 +582,7 @@ export class CommandBox {
     }
 
     const span = div.children[eventSeqNr + 2];
-    Output._setTaskTooltip(span, task);
+    Output._setTaskToolTip(span, task);
   }
 
   static _prepareForAsyncResults (pResponse) {

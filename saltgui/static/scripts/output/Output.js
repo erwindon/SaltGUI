@@ -212,7 +212,7 @@ export class Output {
     return false;
   }
 
-  static _setTaskTooltip (pSpan, pTask) {
+  static _setTaskToolTip (pSpan, pTask) {
 
     if (typeof pTask !== "object") {
       return;
@@ -315,7 +315,7 @@ export class Output {
 
       const span = Utils.createSpan("", Character.BLACK_CIRCLE);
 
-      Output._setTaskTooltip(span, task);
+      Output._setTaskToolTip(span, task);
 
       const myNr = nr;
       span.addEventListener("click", (pClickEvent) => {

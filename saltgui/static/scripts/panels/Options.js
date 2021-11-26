@@ -123,7 +123,7 @@ export class OptionsPanel extends Panel {
             });
           } else if (pName === "tooltip-mode") {
             radio.addEventListener("change", () => {
-              this._newTooltipMode();
+              this._newToolTipMode();
             });
           }
           tdValue.appendChild(radio);
@@ -364,15 +364,15 @@ export class OptionsPanel extends Panel {
     Utils.setStorageItem("session", "datetime_fraction_digits", value);
   }
 
-  _newTooltipMode () {
+  _newToolTipMode () {
     let value = "";
     /* eslint-disable curly */
     if (this._isSelected("tooltip-mode", "mode", "full")) value = "full";
     if (this._isSelected("tooltip-mode", "mode", "simple")) value = "simple";
     if (this._isSelected("tooltip-mode", "mode", "none")) value = "none";
     /* eslint-enable curly */
-    const tooltipModeTd = this.div.querySelector("#option-tooltip-mode-value");
-    tooltipModeTd.innerText = value;
+    const toolTipModeTd = this.div.querySelector("#option-tooltip-mode-value");
+    toolTipModeTd.innerText = value;
     Utils.setStorageItem("session", "tooltip_mode", value);
   }
 }

@@ -110,7 +110,7 @@ export class Utils {
 
   // other functions
 
-  static addToolTip (pTooltipHost, pTooltipText, pStyle = "bottom-center") {
+  static addToolTip (pToolTipHost, pToolTipText, pStyle = "bottom-center") {
 
     // Users may want to switch this on to improve browser performance
     const toolTipMode = Utils.getStorageItem("session", "tooltip_mode");
@@ -120,28 +120,28 @@ export class Utils {
     }
 
     if (toolTipMode === "simple") {
-      pTooltipHost.setAttribute("title", pTooltipText);
+      pToolTipHost.setAttribute("title", pToolTipText);
       return;
     }
 
     // toolTipMode is null or "full" (or anything else)
 
     // remove the old tooltip...
-    for (let i = pTooltipHost.children.length - 1; i >= 0; i--) {
-      const child = pTooltipHost.children[i];
+    for (let i = pToolTipHost.children.length - 1; i >= 0; i--) {
+      const child = pToolTipHost.children[i];
       if (child.classList.contains("tooltip-text")) {
-        pTooltipHost.removeChild(child);
+        pToolTipHost.removeChild(child);
       }
     }
 
-    if (pTooltipText) {
-      const tooltipSpan = Utils.createSpan("", pTooltipText);
-      tooltipSpan.classList.add("tooltip-text");
-      tooltipSpan.classList.add("tooltip-text-" + pStyle);
-      pTooltipHost.classList.add("tooltip");
+    if (pToolTipText) {
+      const toolTipSpan = Utils.createSpan("", pToolTipText);
+      toolTipSpan.classList.add("tooltip-text");
+      toolTipSpan.classList.add("tooltip-text-" + pStyle);
+      pToolTipHost.classList.add("tooltip");
 
       // ...then add the new tooltip
-      pTooltipHost.appendChild(tooltipSpan);
+      pToolTipHost.appendChild(toolTipSpan);
     }
   }
 
