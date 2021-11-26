@@ -514,6 +514,12 @@ export class Utils {
     /* eslint-enable no-console */
   }
 
+  static debug (...pStr) {
+    /* eslint-disable no-console */
+    console.debug(...pStr);
+    /* eslint-enable no-console */
+  }
+
   static info (...pStr) {
     /* eslint-disable no-console */
     console.info(...pStr);
