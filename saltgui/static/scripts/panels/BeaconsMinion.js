@@ -61,7 +61,7 @@ export class BeaconsMinionPanel extends Panel {
       }, (pLocalBeaconsListAvailableMsg) => {
         // pretend nothing is available
         Utils.warn("cannot retrieve beacons.list_available:", pLocalBeaconsListAvailableMsg);
-        Utils.setStorageItem("session", "beacons_list_available", "{cnt: 0}");
+        Utils.setStorageItem("session", "beacons_list_available", "{\"_cnt\": 0}");
         return false;
       });
     }
