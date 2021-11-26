@@ -629,5 +629,9 @@ export class CommandBox {
 
       output.appendChild(minionDiv);
     }
+
+    const warnSpan = document.createElement("span");
+    warnSpan.innerText = "\nnote that unresponsive minions will not time out in this overview";
+    output.appendChild(warnSpan);
   }
 }
