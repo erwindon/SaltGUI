@@ -18,6 +18,7 @@ The version tagged `release` is the latest released version. The version `master
 - Run state.highstate for a particular minion or all
 - View the seven most recent jobs run on Salt
 - Manually run any Salt function and see the output
+- View highstate for all minions with details
 - View the values for grains for a particular minion
 - View the schedules for a particular minion
 - View the values for pillars for a particular minion

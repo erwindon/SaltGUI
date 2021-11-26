@@ -213,6 +213,11 @@ export class Output {
   }
 
   static _setTaskTooltip (pSpan, pTask) {
+
+    if (typeof pTask !== "object") {
+      return;
+    }
+
     let txt = "";
 
     if ("name" in pTask) {
@@ -299,7 +304,7 @@ export class Output {
   }
 
   // add the status summary
-  static _addHighStateSummary (pMinionRow, pMinionDiv, pMinionId, pTasks) {
+  static addHighStateSummary (pMinionRow, pMinionDiv, pMinionId, pTasks) {
 
     let nr = 0;
     const summarySpan = Utils.createSpan("task-summary", "");
@@ -389,7 +394,7 @@ export class Output {
 
   // the orchestrator for the output
   // determines what format should be used and uses that
-  static addResponseOutput (pOutputContainer, pJobId, pMinionData, pResponse, pCommand, pInitialStatus) {
+  static addResponseOutput (pOutputContainer, pJobId, pMinionData, pResponse, pCommand, pInitialStatus, pHighlightMinionId) {
 
     // remove old content
     pOutputContainer.innerText = "";
@@ -650,7 +655,12 @@ export class Output {
       // multiple line, collapsible
       let triangle = null;
       if (minionMultiLine) {
-        triangle = Utils.createSpan("triangle", masterTriangle.innerText);
+        if (minionId === pHighlightMinionId) {
+          // when we chose this minion
+          triangle = Utils.createSpan("triangle", Character.WHITE_DOWN_POINTING_TRIANGLE);
+        } else {
+          triangle = Utils.createSpan("triangle", masterTriangle.innerText);
+        }
         triangle.style.cursor = "pointer";
         triangle.addEventListener("click", (pClickEvent) => {
           if (triangle.innerText === Character.WHITE_DOWN_POINTING_TRIANGLE) {
@@ -665,7 +675,7 @@ export class Output {
         minionRow.appendChild(triangle);
 
         if (addHighStateSummaryFlag) {
-          Output._addHighStateSummary(minionRow, div, minionId, tasks);
+          Output.addHighStateSummary(minionRow, div, minionId, tasks);
         }
       }
 
@@ -703,6 +713,23 @@ export class Output {
       div.append(minionOutput);
 
       pOutputContainer.append(div);
+    }
+
+    if (pHighlightMinionId) {
+      // scroll to this minion
+      const div = pOutputContainer.querySelector("#" + Utils.getIdFromMinionId(pHighlightMinionId));
+      if (div) {
+        const minionRow = div.querySelector("span");
+        minionRow.classList.add("highlight-task");
+        window.setTimeout(() => {
+          minionRow.classList.remove("highlight-task");
+          if (!minionRow.classList.length) {
+            minionRow.removeAttribute("class");
+          }
+        }, 1000);
+
+        div.scrollIntoView({"behavior": "smooth", "block": "start"});
+      }
     }
 
     if (nrMultiLineBlocks <= 1) {

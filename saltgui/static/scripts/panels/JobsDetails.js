@@ -159,9 +159,7 @@ export class JobsDetailsPanel extends JobsPanel {
       return;
     }
     if (!workLeft) {
-      this.playOrPause = "";
-      this.playButton.style.display = "none";
-      this.pauseButton.style.display = "none";
+      this.setPlayPauseButton("none");
       this.updateFooter();
     }
   }
@@ -297,7 +295,7 @@ export class JobsDetailsPanel extends JobsPanel {
     }
     tr.appendChild(Utils.createTd("target", targetText));
 
-    const argumentsText = JobPanel.decodeArgumentsText(job.Arguments);
+    const argumentsText = JobPanel.decodeArgumentsArray(job.Arguments);
     let functionText = job.Function + argumentsText;
     if (functionText.length > maxTextLength) {
       // prevent column becoming too wide

@@ -199,11 +199,14 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getRunnerJobsListJobs () {
+  getRunnerJobsListJobs (pCmd = null) {
     const params = {
       "client": "runner",
       "fun": "jobs.list_jobs"
     };
+    if (pCmd) {
+      params["search_function"] = pCmd;
+    }
     return this.apiRequest("POST", "/", params);
   }
 
@@ -425,6 +428,7 @@ export class API {
         pRouter.jobsPage.handleSaltJobRetEvent(data);
         pRouter.templatesPage.handleSaltJobRetEvent(data);
         pRouter.reactorsPage.handleSaltJobRetEvent(data);
+        pRouter.highStatePage.handleSaltJobRetEvent(data);
       } else if (tag.startsWith("salt/job/") && tag.includes("/prog/")) {
         // progress value (exists only for states)
         CommandBox.handleSaltJobProgEvent(tag, data);

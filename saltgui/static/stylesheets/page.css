@@ -50,6 +50,23 @@ pre .minion-id.host-failure {
   color: red;
 }
 
+td.tasks span:first-child {
+  padding-left: 2px;
+}
+
+td.tasks span:last-child {
+  padding-right: 2px;
+}
+
+td.tasks span {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+td .task-failure {
+  color: red;
+}
+
 pre .task-failure {
   cursor: pointer;
   color: red;
@@ -57,6 +74,10 @@ pre .task-failure {
 
 pre .minion-id.host-skips,
 pre .minion-id.host-no-response {
+  color: yellow;
+}
+
+td .task-skipped {
   color: yellow;
 }
 
@@ -69,9 +90,19 @@ pre .minion-id {
   color: #4caf50;
 }
 
+td .task-success {
+  color: lime;
+}
+
 pre .task-success {
   cursor: pointer;
   color: lime;
+}
+
+td .task-changes {
+  color: aqua;
+  text-decoration-line: overline underline;
+  text-decoration-style: double;
 }
 
 pre .task-changes {
