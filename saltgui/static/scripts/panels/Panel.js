@@ -279,14 +279,10 @@ export class Panel {
     });
   }
 
-  showErrorRowInstead (pData, pMinionId = null) {
+  showErrorRowInstead (pData) {
     if (pData === null) {
       // not an error, but also nothing to show
       return true;
-    }
-
-    if (pMinionId) {
-      pData = pData.return[0][pMinionId];
     }
 
     if (typeof pData === "object") {

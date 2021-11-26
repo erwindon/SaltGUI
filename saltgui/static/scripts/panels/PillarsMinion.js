@@ -43,7 +43,7 @@ export class PillarsMinionPanel extends Panel {
   }
 
   _handleLocalPillarItems (pLocalPillarItemsData, pMinionId) {
-    if (this.showErrorRowInstead(pLocalPillarItemsData, pMinionId)) {
+    if (this.showErrorRowInstead(pLocalPillarItemsData)) {
       return;
     }
 

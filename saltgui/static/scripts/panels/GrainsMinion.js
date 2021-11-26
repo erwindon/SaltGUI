@@ -40,7 +40,7 @@ export class GrainsMinionPanel extends Panel {
   }
 
   _handleLocalGrainsItems (pLocalGrainsItemsData, pMinionId) {
-    if (this.showErrorRowInstead(pLocalGrainsItemsData, pMinionId)) {
+    if (this.showErrorRowInstead(pLocalGrainsItemsData)) {
       return;
     }
 
