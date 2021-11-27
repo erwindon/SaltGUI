@@ -415,6 +415,7 @@ export class API {
       } else if (tag.startsWith("salt/job/") && tag.includes("/ret/")) {
         // return value
         CommandBox.handleSaltJobRetEvent(tag, data);
+        pRouter.keysPage.handleSaltJobRetEvent(data);
         pRouter.jobPage.handleSaltJobRetEvent(data);
         pRouter.minionsPage.handleSaltJobRetEvent(data);
         pRouter.grainsPage.handleSaltJobRetEvent(data);
