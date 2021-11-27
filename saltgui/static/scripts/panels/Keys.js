@@ -63,10 +63,6 @@ export class KeysPanel extends Panel {
   }
 
   _handleWheelKeyFinger (pWheelKeyFingerData) {
-    if (!pWheelKeyFingerData) {
-      return;
-    }
-
     if (this.showErrorRowInstead(pWheelKeyFingerData)) {
       return;
     }
@@ -105,10 +101,6 @@ export class KeysPanel extends Panel {
   }
 
   _handleKeysWheelKeyListAll (pWheelKeyListAllData) {
-    if (!pWheelKeyListAllData) {
-      return;
-    }
-
     if (this.showErrorRowInstead(pWheelKeyListAllData)) {
       this.setPlayPauseButton("none");
       return;
