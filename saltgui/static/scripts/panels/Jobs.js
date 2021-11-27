@@ -56,9 +56,7 @@ export class JobsPanel extends Panel {
         if (!statusField) {
           continue;
         }
-        statusField.classList.remove("no-job-status");
-        statusField.innerText = "(error)";
-        Utils.addToolTip(statusField, pData);
+        Utils.addErrorToTableCell(statusField.parentElement, pData);
       }
       return;
     }

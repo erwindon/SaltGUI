@@ -218,9 +218,7 @@ export class JobsDetailsPanel extends JobsPanel {
 
     if (pData.Error) {
       // typically happens for jobs that are expired from jobs-cache
-      detailsSpan.innerText = "(error)";
-      detailsSpan.classList.remove("no-job-details");
-      Utils.addToolTip(detailsSpan, pData.Error);
+      Utils.addErrorToTableCell(detailsSpan.parentElement, pData.Error);
       return;
     }
 
@@ -281,7 +279,7 @@ export class JobsDetailsPanel extends JobsPanel {
       refreshVisible = false;
     }
     const statusSpan = jobTr.querySelector("td span.job-status");
-    if (statusSpan.innerText === "done") {
+    if (statusSpan && statusSpan.innerText === "done") {
       // the system said that the job was done
       // but still maybe some results are missing
       // but these are not underway

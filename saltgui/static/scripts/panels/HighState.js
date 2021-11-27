@@ -102,10 +102,7 @@ export class HighStatePanel extends Panel {
       const tbody = this.table.tBodies[0];
       for (const tr of tbody.rows) {
         const osField = tr.querySelector(".os");
-        const span = Utils.createSpan("", "(error)");
-        osField.innerText = "";
-        osField.append(span);
-        Utils.addToolTip(span, pData);
+        Utils.addErrorToTableCell(osField, pData);
       }
       return;
     }
@@ -210,10 +207,7 @@ export class HighStatePanel extends Panel {
           continue;
         }
         const osField = tr.querySelector(".os");
-        const span = Utils.createSpan("", "(error)");
-        osField.innerText = "";
-        osField.append(span);
-        Utils.addToolTip(span, pJobData);
+        Utils.addErrorToTableCell(osField, pJobData, "bottom-left");
         // prevent further updates
         tr.jid = "error";
       }
@@ -290,9 +284,7 @@ export class HighStatePanel extends Panel {
       const tasksTd = Utils.createTd("tasks", "");
 
       if (typeof minionResult.return !== "object" || Array.isArray(minionResult.return)) {
-        const span = Utils.createSpan("", "(error)");
-        Utils.addToolTip(span, JSON.stringify(minionResult.return));
-        tasksTd.append(span);
+        Utils.addErrorToTableCell(tasksTd, JSON.stringify(minionResult.return));
       } else {
         const keys = Object.keys(minionResult.return);
         for (const key of keys) {

@@ -292,9 +292,7 @@ export class Panel {
 
     const td = Utils.createTd();
     td.colSpan = 99;
-    const span = Utils.createSpan("", "(error)");
-    Utils.addToolTip(span, pData, "bottom-left");
-    td.appendChild(span);
+    Utils.addErrorToTableCell(td, pData, "bottom-left");
 
     const tr = document.createElement("tr");
     tr.id = "error-row";

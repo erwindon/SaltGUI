@@ -145,9 +145,11 @@ export class Utils {
     }
   }
 
-  static addErrorToTableCell (pTd, pErrorMessage) {
+  static addErrorToTableCell (pTd, pErrorMessage, pStyle = "bottom-center") {
+    // the TD may contain text such as "loading...", clear that first
+    pTd.innerText = "";
     const span = Utils.createSpan("", "(error)");
-    Utils.addToolTip(span, pErrorMessage, "bottom-left");
+    Utils.addToolTip(span, pErrorMessage, pStyle);
     pTd.appendChild(span);
   }
 
