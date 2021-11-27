@@ -9,6 +9,8 @@ import {Panel} from "./Panel.js";
 import {TargetType} from "../TargetType.js";
 import {Utils} from "../Utils.js";
 
+const MAX_HIGHSTATE_JOBS = 10;
+
 export class HighStatePanel extends Panel {
 
   constructor () {
@@ -22,6 +24,7 @@ export class HighStatePanel extends Panel {
     this.addPlayPauseButton("none");
     this.addHelpButton([
       "This panel shows the latest state.highstate or state.apply job for each minion",
+      "Only the latest " + MAX_HIGHSTATE_JOBS + " jobs are verified",
       "Click on an individual state to re-apply only that state"
     ]);
     this.addTable(["Minion", "State", "Latest JID", "Target", "Function", "Start Time", "-menu-", "States"]);
@@ -122,9 +125,8 @@ export class HighStatePanel extends Panel {
     let jobs = JobsPanel._jobsToArray(pData.return[0]);
     JobsPanel._sortJobs(jobs);
 
-    const maxJobs = 10;
-    if (jobs.length > maxJobs) {
-      jobs = jobs.slice(0, maxJobs);
+    if (jobs.length > MAX_HIGHSTATE_JOBS) {
+      jobs = jobs.slice(0, MAX_HIGHSTATE_JOBS);
     }
 
     this.jobs = jobs;
