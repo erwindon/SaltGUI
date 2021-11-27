@@ -110,6 +110,7 @@ export class KeysPanel extends Panel {
     }
 
     if (this.showErrorRowInstead(pWheelKeyListAllData)) {
+      this.setPlayPauseButton("none");
       return;
     }
 

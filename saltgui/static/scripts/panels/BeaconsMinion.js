@@ -105,6 +105,7 @@ export class BeaconsMinionPanel extends Panel {
 
   _handleLocalBeaconsList (pLocalBeaconsListData, pMinionId) {
     if (this.showErrorRowInstead(pLocalBeaconsListData)) {
+      this.setPlayPauseButton("none");
       return;
     }
 
