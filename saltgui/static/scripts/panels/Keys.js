@@ -94,7 +94,7 @@ export class KeysPanel extends Panel {
           continue;
         }
         if (!fingerprint.match(this.fingerprintPattern)) {
-          fingerprintElement.innerText = "";
+          item.classList.remove("fingerprint");
           Utils.addErrorToTableCell(fingerprintElement, fingerprint);
           continue;
         }
