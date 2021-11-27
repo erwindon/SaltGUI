@@ -156,6 +156,14 @@ export class JobsDetailsPanel extends JobsPanel {
       detailsField.innerText = "loading...";
       tr.dataset.isLoading = "true";
       const jobId = tr.dataset.jobid;
+
+      if (this.nrErrors >= 3) {
+        // don't bother getting more data
+        // may show more then 3 errors when some are stil in-flight
+        this._handleJobsRunnerJobsListJob(jobId, "skipped");
+        continue;
+      }
+
       this._getJobDetails(jobId);
       // only update one item at a time
       return;
@@ -167,12 +175,6 @@ export class JobsDetailsPanel extends JobsPanel {
   }
 
   _getJobDetails (pJobId) {
-    if (this.nrErrors >= 3) {
-      // don't bother getting more data
-      this._handleJobsRunnerJobsListJob(pJobId, "skipped");
-      return;
-    }
-
     const runnerJobsListJobPromise = this.api.getRunnerJobsListJob(pJobId);
 
     runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
@@ -203,6 +205,7 @@ export class JobsDetailsPanel extends JobsPanel {
     if (typeof pData !== "object") {
       if (pData === "skipped") {
         detailsSpan.innerText = "(skipped)";
+        Utils.addToolTip(detailsSpan, "skipped due to too many previous errors");
       } else {
         detailsSpan.innerText = "(error)";
         Utils.addToolTip(detailsSpan, pData);
