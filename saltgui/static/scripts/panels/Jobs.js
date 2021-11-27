@@ -26,6 +26,7 @@ export class JobsPanel extends Panel {
       return true;
     }, (pRunnerJobsListJobsMsg) => {
       this._handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
+      Utils.ignorePromise(runnerJobsActivePromise);
       return false;
     });
   }

@@ -59,6 +59,7 @@ export class GrainsPanel extends Panel {
       return true;
     }, (pWheelKeyListAllMsg) => {
       this._handleGrainsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+      Utils.ignorePromise(localGrainsItemsPromise);
       return false;
     });
   }

@@ -34,6 +34,7 @@ export class PillarsPanel extends Panel {
       return true;
     }, (pWheelKeyListAllMsg) => {
       this._handlePillarsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+      Utils.ignorePromise(localPillarObfuscatePromise);
       return false;
     });
   }

@@ -65,6 +65,9 @@ export class MinionsPanel extends Panel {
       return true;
     }, (pWheelKeyListAllMsg) => {
       this._handleMinionsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+      Utils.ignorePromise(wheelMinionsConnectedPromise);
+      Utils.ignorePromise(localGrainsItemsPromise);
+      Utils.ignorePromise(runnerManageVersionsPromise);
       return false;
     });
   }

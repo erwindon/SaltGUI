@@ -34,6 +34,7 @@ export class BeaconsPanel extends Panel {
       return true;
     }, (pWheelKeyListAllMsg) => {
       this._handleBeaconsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+      Utils.ignorePromise(localBeaconsListPromise);
       return false;
     });
   }

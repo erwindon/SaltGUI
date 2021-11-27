@@ -53,6 +53,7 @@ export class KeysPanel extends Panel {
       return true;
     }, (pWheelKeyListAllMsg) => {
       this._handleKeysWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+      Utils.ignorePromise(wheelKeyFingerPromise);
       return false;
     });
   }

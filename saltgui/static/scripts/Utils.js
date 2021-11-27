@@ -510,6 +510,13 @@ export class Utils {
     return span;
   }
 
+  static ignorePromise (pPromise) {
+    // ignore the outcome of a promise
+    // usually because an earlier promise has failed and
+    // therefore the outcome of this one is no longer relevant
+    pPromise.then(() => false, () => false);
+  }
+
   static msgPerMinion (pList, pMsg) {
     const dict = {};
     for (const item of pList) {

@@ -46,6 +46,7 @@ export class HighStatePanel extends Panel {
       return true;
     }, (pWheelKeyListAllMsg) => {
       this._handleMinionsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+      Utils.ignorePromise(runnerJobsListJobsPromise);
       return false;
     });
   }
