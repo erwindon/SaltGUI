@@ -159,7 +159,7 @@ export class JobPanel extends Panel {
 
     if (typeof pRunnerJobsListJobData !== "object") {
       this.output.innerText = "";
-      Utils.addErrorToTableCell(this.output, pRunnerJobsListJobData);
+      Utils.addErrorToTableCell(this.output, pRunnerJobsListJobData, "bottom-left");
       this.updateTitle("ERROR");
       return;
     }
