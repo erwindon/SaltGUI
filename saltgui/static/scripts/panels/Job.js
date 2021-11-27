@@ -186,6 +186,9 @@ export class JobPanel extends Panel {
     this.minions = info.Minions;
     this.result = info.Result;
 
+    // the panel menu may have been hidden
+    this.panelMenu.verifyAll();
+
     // ============================
 
     const functionText = commandText + " on " +
@@ -257,7 +260,12 @@ export class JobPanel extends Panel {
   }
 
   _addPanelMenuItemJobRerunJob () {
-    this.panelMenu.addMenuItem("Re-run job...", () => {
+    this.panelMenu.addMenuItem(() => {
+      if (!this.target && !this.commandtext) {
+        return null;
+      }
+      return "Re-run job...";
+    }, () => {
       this.runFullCommand(this.targettype, this.target, this.commandtext);
     });
   }
