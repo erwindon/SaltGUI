@@ -50,13 +50,8 @@ export class MinionsPanel extends Panel {
         this.updateMinions(pLocalGrainsItemsData);
         return true;
       }, (pLocalGrainsItemsMsg) => {
-        const localGrainsItemsData = {"return": [{}]};
-        if (pWheelKeyListAllData) {
-          for (const minionId of pWheelKeyListAllData.return[0].data.return.minions) {
-            localGrainsItemsData.return[0][minionId] = JSON.stringify(pLocalGrainsItemsMsg);
-          }
-        }
-        this.updateMinions(localGrainsItemsData);
+        const allMinionsErr = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, JSON.stringify(pLocalGrainsItemsMsg));
+        this.updateMinions({"return": [allMinionsErr]});
         return false;
       });
 

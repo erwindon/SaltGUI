@@ -27,11 +27,8 @@ export class PillarsPanel extends Panel {
         this.updateMinions(pLocalPillarObfuscateData);
         return true;
       }, (pLocalPillarObfuscateMsg) => {
-        const localPillarObfuscateData = {"return": [{}]};
-        for (const minionId of pWheelKeyListAllData.return[0].data.return.minions) {
-          localPillarObfuscateData.return[0][minionId] = JSON.stringify(pLocalPillarObfuscateMsg);
-        }
-        this.updateMinions(localPillarObfuscateData);
+        const allMinionsErr = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, JSON.stringify(pLocalPillarObfuscateMsg));
+        this.updateMinions({"return": [allMinionsErr]});
         return false;
       });
       return true;

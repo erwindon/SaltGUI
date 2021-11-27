@@ -27,11 +27,8 @@ export class BeaconsPanel extends Panel {
         this.updateMinions(pLocalBeaconsListData);
         return true;
       }, (pLocalBeaconsListMsg) => {
-        const localBeaconsListData = {"return": [{}]};
-        for (const minionId of pWheelKeyListAllData.return[0].data.return.minions) {
-          localBeaconsListData.return[0][minionId] = JSON.stringify(pLocalBeaconsListMsg);
-        }
-        this.updateMinions(localBeaconsListData);
+        const allMinionsErr = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, JSON.stringify(pLocalBeaconsListMsg));
+        this.updateMinions({"return": [allMinionsErr]});
         return false;
       });
       return true;

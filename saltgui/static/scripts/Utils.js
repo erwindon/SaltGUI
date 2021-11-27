@@ -510,6 +510,14 @@ export class Utils {
     return span;
   }
 
+  static msgPerMinion (pList, pMsg) {
+    const dict = {};
+    for (const item of pList) {
+      dict[item] = pMsg;
+    }
+    return dict;
+  }
+
   static log (...pStr) {
     /* eslint-disable no-console */
     console.log(...pStr);

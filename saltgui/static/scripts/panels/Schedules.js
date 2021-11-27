@@ -27,11 +27,8 @@ export class SchedulesPanel extends Panel {
         this.updateMinions(pLocalScheduleListData);
         return true;
       }, (pLocalScheduleListMsg) => {
-        const localScheduleListData = {"return": [{}]};
-        for (const minionId of pWheelKeyListAllData.return[0].data.return.minions) {
-          localScheduleListData.return[0][minionId] = JSON.stringify(pLocalScheduleListMsg);
-        }
-        this.updateMinions(localScheduleListData);
+        const allMinionsErr = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, JSON.stringify(pLocalScheduleListMsg));
+        this.updateMinions({"return": [allMinionsErr]});
         return false;
       });
       return true;
