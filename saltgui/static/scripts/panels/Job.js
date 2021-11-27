@@ -80,7 +80,7 @@ export class JobPanel extends Panel {
       return true;
     }, (pRunnerJobsListJobsMsg) => {
       this._handleJobRunnerJobsListJob(JSON.stringify(pRunnerJobsListJobsMsg), jobId, undefined);
-      return true;
+      return false;
     });
   }
 

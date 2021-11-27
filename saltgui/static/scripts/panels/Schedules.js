@@ -34,7 +34,7 @@ export class SchedulesPanel extends Panel {
       return true;
     }, (pWheelKeyListAllMsg) => {
       this._handleSchedulesWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
-      return true;
+      return false;
     });
   }
 

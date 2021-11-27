@@ -48,7 +48,7 @@ export class KeysPanel extends Panel {
       }, (pWheelKeyFingerMsg) => {
         const allMinionsErr = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, JSON.stringify(pWheelKeyFingerMsg));
         this._handleWheelKeyFinger({"return": [{"data": {"return": {"minions": allMinionsErr}}}]});
-        return true;
+        return false;
       });
       return true;
     }, (pWheelKeyListAllMsg) => {
