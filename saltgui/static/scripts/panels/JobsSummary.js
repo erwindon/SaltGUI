@@ -23,6 +23,12 @@ export class JobsSummaryPanel extends JobsPanel {
     super.onShow(maxJobs);
   }
 
+  /* eslint-disable class-methods-use-this */
+  jobsListIsReady () {
+    // VOID
+  }
+  /* eslint-enable class-methods-use-this */
+
   addJob (job) {
     const tr = document.createElement("tr");
     tr.id = Utils.getIdFromJobId(job.id);

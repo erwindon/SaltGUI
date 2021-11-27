@@ -215,6 +215,8 @@ export class JobsPanel extends Panel {
     this.setPlayPauseButton("play");
 
     this.updateFooter();
+
+    this.jobsListIsReady();
   }
 
   updateFooter () {

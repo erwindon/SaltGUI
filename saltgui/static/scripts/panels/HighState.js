@@ -93,9 +93,18 @@ export class HighStatePanel extends Panel {
       });
     }
 
-    const txt = Utils.txtZeroOneMany(minionIds.length,
+    this.updateFooter();
+  }
+
+  updateFooter () {
+    const tbody = this.table.tBodies[0];
+    let txt = Utils.txtZeroOneMany(tbody.rows.length,
       "No minions", "{0} minion", "{0} minions");
-    this.setMsg(txt);
+
+    if (this.playOrPause === "pause") {
+      txt += ", press " + Character.buttonInText(Character.CH_PLAY_MONO) + " to continue";
+    }
+    this.setMsg(txt, true);
   }
 
   _handleHighstateRunnerJobsListJobs (pData) {
@@ -176,7 +185,7 @@ export class HighStatePanel extends Panel {
       this.jobs = [];
     }
 
-    if (this.jobs.length !== 0) {
+    if (this.jobs && this.jobs.length !== 0) {
       // more work later
       return;
     }

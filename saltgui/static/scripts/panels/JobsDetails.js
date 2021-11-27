@@ -50,13 +50,15 @@ export class JobsDetailsPanel extends JobsPanel {
     this.panelMenu._value = cnt;
 
     super.onShow(cnt);
+  }
 
+  jobsListIsReady () {
     this.nrErrors = 0;
 
     // to update details
     // interval should be larger than the retrieval time
     // to prevent many of such jobs to appear
-    window.setInterval(() => {
+    this.updateNextJobInterval = window.setInterval(() => {
       this._updateNextJob();
     }, 1000);
   }
@@ -171,6 +173,7 @@ export class JobsDetailsPanel extends JobsPanel {
     if (!workLeft) {
       this.setPlayPauseButton("none");
       this.updateFooter();
+      clearInterval(this.updateNextJobInterval);
     }
   }
 
