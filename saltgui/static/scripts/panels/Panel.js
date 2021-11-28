@@ -616,7 +616,7 @@ export class Panel {
     minionTr.appendChild(offlineTd);
   }
 
-  runCommand (pTargetString, pCommandStringArray) {
+  static makeCommandString (pCommandStringArray) {
     let commandString = "";
     let separator = "";
     for (const cmd of pCommandStringArray) {
@@ -646,6 +646,11 @@ export class Panel {
       }
       commandString += JSON.stringify(cmd);
     }
+    return commandString;
+  }
+
+  runCommand (pTargetString, pCommandStringArray) {
+    const commandString = Panel.makeCommandString(pCommandStringArray);
     this.runFullCommand("", pTargetString, commandString);
   }
 
