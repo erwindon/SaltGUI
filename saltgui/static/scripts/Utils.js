@@ -309,6 +309,9 @@ export class Utils {
       Utils._updateTableFilter(pTable, "", menuItems);
     } else if (pAction === "refresh") {
       Utils._updateTableFilter(pTable, input.value, menuItems);
+    } else if (pAction === "hide") {
+      Utils._updateTableFilter(pTable, "", menuItems);
+      pSearchBlock.style.display = "none";
     } else if (pSearchBlock.style.display === "none") {
       Utils._updateTableFilter(pTable, input.value, menuItems);
       pSearchBlock.style.display = "";

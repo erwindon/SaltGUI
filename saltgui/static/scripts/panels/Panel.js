@@ -175,6 +175,7 @@ export class Panel {
     if (this.div.querySelector(".search-button") !== null) {
       const searchBox = Utils.makeSearchBox(this.searchButton, table, pFieldList);
       this.div.appendChild(searchBox);
+      this.searchBox = searchBox;
     }
 
     this.div.appendChild(table);
@@ -724,6 +725,10 @@ export class Panel {
     }
     for (const tr of document.querySelectorAll("#error-row")) {
       tr.parentElement.remove(tr);
+    }
+
+    if (this.searchBox && this.table) {
+      Utils.hideShowTableSearchBar(this.searchBox, this.table, "hide");
     }
   }
 }
