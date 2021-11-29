@@ -337,22 +337,34 @@ SaltGUI includes these libraries (with possible modifications):
 
 ## Changelog
 
+## 1.27.0 (2021-11-29)
+- introduced a highstate overview per minion in the jobs menu (erwindon, thx xzenor)
+- improved handling of JS promises (erwindon)
+- several small improvements on gui behaviour (erwindon)
+- fixed real-time job status on Keys page (erwindon)
+- improve pause/play button, added 'none' state (erwindon)
+- added icon for CentOS Stream (erwindon, thx xzenor)
+- automatically provide alternative for unknown icon (erwindon)
+- solution for jobs results without minions list, e.g. when using mysql (erwindon, thx xzenor)
+- Bump eslint and stylelint to latest versions (erwindon)
+- more code cleanups and various small stuff (erwindon)
+
 ## 1.26.0 (2021-10-31)
 - applied review comments on documentation (thx achimmihca)
 - prevent use of null when a task reported changes as such (thx xzenor)
 - add support for additional salt.auth types (thx hoaivan)
-- added a message-of-the-day (motd) facility, before and/or after login
-- various gui (code) improvements and tweaks
-- fixed highstate tooltip content
-- use uniform buttons, but smaller when in a table
-- hide the commandbox on automatic logout
-- fixed beacon template for cert_info
-- bump stylelint+eslint versions
-- fixed several codebeat reported issues
-- added a few more CVEs to test for
-- fixed several constructions that needed higher ES versions
-- display warning sign for error information in beacon data
-- inform when no, or less, beacon-type info is available
+- added a message-of-the-day (motd) facility, before and/or after login (erwindon)
+- various gui (code) improvements and tweaks (erwindon)
+- fixed highstate tooltip content (erwindon)
+- use uniform buttons, but smaller when in a table (erwindon)
+- hide the commandbox on automatic logout (erwindon)
+- fixed beacon template for cert_info (erwindon)
+- bump stylelint+eslint versions (erwindon)
+- fixed several codebeat reported issues (erwindon)
+- added a few more CVEs to test for (erwindon)
+- fixed several constructions that needed higher ES versions (erwindon)
+- display warning sign for error information in beacon data (erwindon)
+- inform when no, or less, beacon-type info is available (erwindon)
 
 ## 1.25.0 (2021-08-01)
 - fixed generating commands without proper quoting (erwindon, thx xzenor)
@@ -360,7 +372,7 @@ SaltGUI includes these libraries (with possible modifications):
 - fixed sticky key status (erwindon)
 - updated CVE info to include recent disclosures (erwindon)
 - several small improvements and fixes (erwindon)
-- updated several dependencies reported by dependabot
+- updated several dependencies reported by dependabot (erwindon)
 - celebrating 300 stars on GitHub
 
 ## 1.24.0 (2021-03-04)
@@ -606,7 +618,7 @@ SaltGUI includes these libraries (with possible modifications):
 ## 1.2.0 (2018-07-30)
 - Addition of menu bar; separation of minion vs keys (erwindon)
 - Added mysql as authentication method and retired auto and sharedsecret (erwindon)
-- Added some responsive improvements
+- Added some responsive improvements (erwindon)
 
 ## 1.1.1 (2018-07-23)
 - Support for several EAUTH authentication methods (erwindon)
@@ -626,10 +638,10 @@ SaltGUI includes these libraries (with possible modifications):
 - Fixed position of popup when main window has scrolled (erwindon)
 - Sort minions by hostname (erwindon)
 - Fixed OS description in minion overview (No lsb_distrib_description) (erwindon)
-- Now sort the jobs correctly on ``StartDate`` in the overview window
+- Now sort the jobs correctly on ``StartDate`` in the overview window (erwindon)
 
 ## 1.0.0 (2018-03-07)
-- Original release with some styling fixes and with enabled highstate functionality.
+- Original release with some styling fixes and with enabled highstate functionality (maerteijn)
 
 ## (2017-11-15)
 - New maintainer (maerteijn)
