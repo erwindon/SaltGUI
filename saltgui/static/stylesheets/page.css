@@ -50,17 +50,17 @@ pre .minion-id.host-failure {
   color: red;
 }
 
+td.tasks span {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
 td.tasks span:first-child {
   padding-left: 2px;
 }
 
 td.tasks span:last-child {
   padding-right: 2px;
-}
-
-td.tasks span {
-  padding-top: 3px;
-  padding-bottom: 3px;
 }
 
 td .task-failure {
