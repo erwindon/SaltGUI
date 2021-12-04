@@ -72,6 +72,8 @@ export class CommandBox {
     txt += "<br/>";
     txt += "Entries that start with a # are assumed to be a nodegroup target selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/nodegroups.html' target='_blank' rel='noopener'>Nodegroup Targeting" + Documentation.EXTERNAL_LINK + "</a>.";
     txt += "<br/>";
+    txt += "Target '##connected' will immediately be replaced by the latest known list of connected minions.";
+    txt += "<br/>";
     txt += "Otherwise, the target is assumed to be a regular glob selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/globbing.html#globbing' target='_blank' rel='noopener'>Globbing Targeting" + Documentation.EXTERNAL_LINK + "</a>.";
     txt += "<br/>";
     txt += "The dropdown-box to the right of the field is automatically updated with the assumed target type. When you do not agree, it is possible to manually select a value. That value will then be left alone by the system. Note that the dropdown-box only contains the choice 'Nodegroup' when nodegroups are configured in the <b>master</b> file.";
@@ -154,6 +156,10 @@ export class CommandBox {
     document.getElementById("target").
       addEventListener("input", () => {
         const targetField = document.getElementById("target");
+        if (targetField.value === "##connected") {
+          // just replace it with the actual value
+          targetField.value = Utils.getStorageItem("session", "connected", "");
+        }
         const targetType = targetField.value;
         TargetType.autoSelectTargetType(targetType);
       });
@@ -351,11 +357,17 @@ export class CommandBox {
     }
     const nodeGroupsText = Utils.getStorageItem("session", "nodegroups", "[]");
     const nodeGroups = JSON.parse(nodeGroupsText);
+
+    const optionConnected = document.createElement("option");
+    optionConnected.value = "##connected";
+    targetList.appendChild(optionConnected);
+
     for (const nodeGroup of Object.keys(nodeGroups).sort()) {
       const option = document.createElement("option");
       option.value = "#" + nodeGroup;
       targetList.appendChild(option);
     }
+
     const minions = JSON.parse(Utils.getStorageItem("session", "minions", "[]"));
     for (const minionId of minions.sort()) {
       const option = document.createElement("option");

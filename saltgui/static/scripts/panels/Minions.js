@@ -39,7 +39,7 @@ export class MinionsPanel extends Panel {
       this._handleMinionsWheelKeyListAll(pWheelKeyListAllData);
 
       wheelMinionsConnectedPromise.then((pWheelMinionsConnectedData) => {
-        this._handlewheelMinionsConnected(pWheelMinionsConnectedData);
+        this._handlewheelMinionsConnected(pWheelMinionsConnectedData, pWheelKeyListAllData);
         return true;
       }, (pWheelMinionsConnectedMsg) => {
         Utils.debug("pWheelMinionsConnectedMsg", pWheelMinionsConnectedMsg);
@@ -102,10 +102,53 @@ export class MinionsPanel extends Panel {
     this.setMsg(txt);
   }
 
-  _handlewheelMinionsConnected (pWheelMinionsConnectedData) {
+  static _getShortestTargetClause (pWheelMinionsConnectedData, pWheelKeyListAllData) {
+    const connectedMinionIds = pWheelMinionsConnectedData.return[0].data.return;
+    const wheelKeyListMinionIds = pWheelKeyListAllData.return[0].data.return.minions;
+
+    // construct a target string of connected minions
+    if (connectedMinionIds.length === wheelKeyListMinionIds.length) {
+      return "*";
+    }
+
+    connectedMinionIds.sort();
+    wheelKeyListMinionIds.sort();
+
+    if (connectedMinionIds.length < wheelKeyListMinionIds.length / 2) {
+      // majority of minions are disconnected
+      // make it a simple list of the connected minions
+      let connectedStr = "";
+      for (const minionId of connectedMinionIds) {
+        connectedStr += "," + minionId;
+      }
+      return connectedStr.replace(/^,/, "");
+    }
+
+    // majority of minions are connected
+    // make it a compound
+    let notConnectedStr = "";
+    for (const minionId of wheelKeyListMinionIds) {
+      if (!connectedMinionIds.includes(minionId)) {
+        notConnectedStr += "," + minionId;
+      }
+    }
+    if (notConnectedStr.includes(",")) {
+      // make it a list in compound notation
+      notConnectedStr = "L@" + notConnectedStr.replace(/^,/, "");
+    } else {
+      // no need for list
+      notConnectedStr = notConnectedStr.substr(2);
+    }
+    return "* and not " + notConnectedStr;
+  }
+
+  _handlewheelMinionsConnected (pWheelMinionsConnectedData, pWheelKeyListAllData) {
     if (this.showErrorRowInstead(pWheelMinionsConnectedData)) {
       return;
     }
+
+    const connectedStr = MinionsPanel._getShortestTargetClause(pWheelMinionsConnectedData, pWheelKeyListAllData);
+    Utils.setStorageItem("session", "connected", connectedStr);
 
     const minionIds = pWheelMinionsConnectedData.return[0].data.return;
 
