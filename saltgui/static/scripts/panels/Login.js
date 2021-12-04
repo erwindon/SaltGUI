@@ -345,6 +345,9 @@ export class LoginPanel extends Panel {
     const stateOutput = wheelConfigValuesData.saltgui_state_output;
     Utils.setStorageItem("session", "state_output", stateOutput);
 
+    const stateOutputPct = wheelConfigValuesData.saltgui_state_output_pct;
+    Utils.setStorageItem("session", "state_output_pct", stateOutputPct);
+
     const outputFormats = wheelConfigValuesData.saltgui_output_formats;
     Utils.setStorageItem("session", "output_formats", outputFormats);
 

@@ -37,6 +37,10 @@ export class OptionsPanel extends Panel {
         "state-output", null, "full",
         [["output", "full", "terse", "mixed", "changes", "full_id", "terse_id", "mixed_id", "changes_id"]]
       ],
+      [
+        "state-output-pct", null, "false",
+        [["output-pct", "true", "false"]]
+      ],
       ["templates", null, "(none)"],
       ["public-pillars", "saltgui", "(none)"],
       ["preview-grains", "saltgui", "(none)"],
@@ -112,6 +116,10 @@ export class OptionsPanel extends Panel {
           } else if (pName === "state-output") {
             radio.addEventListener("change", () => {
               this._newStateOutput();
+            });
+          } else if (pName === "state-output-pct") {
+            radio.addEventListener("change", () => {
+              this._newStateOutputPct();
             });
           } else if (pName === "output-formats") {
             radio.addEventListener("change", () => {
@@ -327,6 +335,17 @@ export class OptionsPanel extends Panel {
     const stateOutputeTd = this.div.querySelector("#option-state-output-value");
     stateOutputeTd.innerText = value;
     Utils.setStorageItem("session", "state_output", value);
+  }
+
+  _newStateOutputPct () {
+    let value = "";
+    /* eslint-disable curly */
+    if (this._isSelected("state-output-pct", "output-pct", "false")) value = "false";
+    if (this._isSelected("state-output-pct", "output-pct", "true")) value = "true";
+    /* eslint-enable curly */
+    const stateOutputPcteTd = this.div.querySelector("#option-state-output-pct-value");
+    stateOutputPcteTd.innerText = value;
+    Utils.setStorageItem("session", "state_output_pct", value);
   }
 
   _newOutputFormats () {

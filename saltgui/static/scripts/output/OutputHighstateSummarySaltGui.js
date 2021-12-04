@@ -3,24 +3,35 @@ import {Utils} from "../Utils.js";
 
 export class OutputHighstateSummarySaltGui {
 
+  static addPercentage (pCount, pTotal) {
+    const stateOutputPct = Utils.getStorageItem("session", "state_output_pct", false);
+
+    if (stateOutputPct !== "true") {
+      return pCount;
+    }
+
+    return pCount + " (" + (100 * pCount / pTotal).toLocaleString(undefined, {"maximumFractionDigits": 1, "minimumFractionDigits": 1}) + "%)";
+  }
+
   static addSummarySpan (pDiv, pSucceeded, pFailed, pSkipped, pTotalMilliSeconds, pChangesDetail, pHidden) {
 
     // add a summary line
     let line = "";
 
+    const total = pSucceeded + pSkipped + pFailed;
+
     if (pSucceeded) {
-      line += ", " + pSucceeded + " succeeded";
+      line += ", " + OutputHighstateSummarySaltGui.addPercentage(pSucceeded, total) + " succeeded";
     }
     if (pSkipped) {
-      line += ", " + pSkipped + " skipped";
+      line += ", " + OutputHighstateSummarySaltGui.addPercentage(pSkipped, total) + " skipped";
     }
     if (pFailed) {
-      line += ", " + pFailed + " failed";
+      line += ", " + OutputHighstateSummarySaltGui.addPercentage(pFailed, total) + " failed";
     }
     if (pHidden) {
-      line += ", " + pHidden + " hidden";
+      line += ", " + OutputHighstateSummarySaltGui.addPercentage(pHidden, total) + " hidden";
     }
-    const total = pSucceeded + pSkipped + pFailed;
     if (total !== pSucceeded && total !== pSkipped && total !== pFailed) {
       // not a trivial total
       line += ", " + total + " total";

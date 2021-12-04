@@ -3,6 +3,10 @@ import {Utils} from "../Utils.js";
 
 export class OutputHighstateSummaryOriginal {
 
+  static addPercentage (pCount, pTotal) {
+    return (100 * pCount / pTotal).toLocaleString(undefined, {"maximumFractionDigits": 1, "minimumFractionDigits": 1}) + "%";
+  }
+
   static addSummarySpan (pDiv, pMinionId, pSucceeded, pFailed, pSkipped, pTotalMilliSeconds, pChangesSummary) {
 
     let txt = "\nSummary for " + pMinionId;
@@ -10,6 +14,8 @@ export class OutputHighstateSummaryOriginal {
     const summarySpan = Utils.createSpan("", txt);
     summarySpan.style.color = "aqua";
     pDiv.append(summarySpan);
+
+    const total = pSucceeded + pSkipped + pFailed;
 
     txt = "\nSucceeded: " + pSucceeded;
     const succeededSpan = Utils.createSpan("task-success", txt);
@@ -40,8 +46,24 @@ export class OutputHighstateSummaryOriginal {
     }
     pDiv.append(failedSpan);
 
+    const stateOutputPct = Utils.getStorageItem("session", "state_output_pct", false);
+    if (stateOutputPct === "true") {
+      txt = "\nSuccess %: " + OutputHighstateSummaryOriginal.addPercentage(pSucceeded, total);
+      const successSpan = Utils.createSpan("task-success", txt);
+      pDiv.append(successSpan);
+
+      txt = "\nFailure %: " + OutputHighstateSummaryOriginal.addPercentage(pFailed, total);
+      const failureSpan = Utils.createSpan("", txt);
+      if (pFailed > 0) {
+        failureSpan.classList.add("task-failure");
+      } else {
+        failureSpan.style.color = "aqua";
+      }
+      pDiv.append(failureSpan);
+    }
+
     txt = "\n------------";
-    txt += "\nTotal states run: " + (pSucceeded + pSkipped + pFailed);
+    txt += "\nTotal states run: " + total;
     txt += "\nTotal run time: " + Output.getDuration(pTotalMilliSeconds);
     const totalsSpan = Utils.createSpan("", txt);
     totalsSpan.style.color = "aqua";

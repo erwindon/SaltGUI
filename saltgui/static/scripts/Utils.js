@@ -432,7 +432,7 @@ export class Utils {
     } else if (pCnt === 1) {
       txt = pOneText;
     }
-    txt = txt.replace("{0}", pCnt);
+    txt = txt.replace("{0}", pCnt.toLocaleString());
     return txt;
   }
 
