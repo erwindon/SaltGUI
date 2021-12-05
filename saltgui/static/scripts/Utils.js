@@ -206,6 +206,7 @@ export class Utils {
 
     const input = document.createElement("input");
     input.type = "text";
+    input.spellcheck = false;
     input.classList.add("filter-text");
     input.placeholder = Character.LEFT_POINTING_MAGNIFYING_GLASS_COLOUR;
     if (pFieldList) {
