@@ -99,6 +99,10 @@ export class StatsPanel extends Panel {
         const thread = workerThreads[threadName];
         // find threads with all-zero statistics
         for (const counterName in thread) {
+          if (counterName === "Enabled") {
+            // not a counter
+            continue;
+          }
           if (thread[counterName] !== 0) {
             continue nextThread;
           }
