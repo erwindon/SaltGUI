@@ -11,6 +11,7 @@ export class StatsPanel extends Panel {
 
     this.addTitle("Stats");
     this.addTable(["/stats"]);
+    this.addMsg();
   }
 
   onShow () {
@@ -54,6 +55,9 @@ export class StatsPanel extends Panel {
   // provide a shortened date format for cases
   // where we see the timezone multiple times on one screen
   static _shortenedDate (dateInMs) {
+    if (dateInMs === null) {
+      return dateInMs;
+    }
     // get the regular data fomat
     let str = String(new Date(dateInMs * 1000));
     // remove the named timezone part
@@ -73,6 +77,12 @@ export class StatsPanel extends Panel {
   }
 
   _handleStats (pStatsData) {
+    if (this.showErrorRowInstead(pStatsData)) {
+      this.statsTd.innerText = "(error)";
+      return;
+    }
+
+    this.setMsg(null);
 
     for (const topKey in pStatsData) {
 

@@ -302,6 +302,11 @@ export class Panel {
     if (!this.table.tFoot) {
       this.table.createTFoot();
     }
+    // remove any old message
+    while (this.table.tFoot.rows.length > 0) {
+      this.table.tFoot.deleteRow(0);
+    }
+    // add the new message
     this.table.tFoot.appendChild(tr);
 
     // hide the "(loading)" message
