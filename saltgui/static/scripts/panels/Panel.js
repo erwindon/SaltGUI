@@ -62,14 +62,14 @@ export class Panel {
     span.classList.add("small-button-left");
     span.classList.add("small-button-for-click");
     span.classList.add("search-button");
-    span.innerText = Character.LEFT_POINTING_MAGNIFYING_GLASS_MONO;
+    span.innerText = Character.LEFT_POINTING_MAGNIFYING_GLASS;
     this.div.appendChild(span);
     this.searchButton = span;
   }
 
   addPlayPauseButton (pInitialStatus) {
     const playButton = document.createElement("span");
-    playButton.innerText = Character.CH_PLAY_MONO;
+    playButton.innerText = Character.CH_PLAY;
     playButton.classList.add("small-button");
     playButton.classList.add("small-button-left");
     playButton.classList.add("small-button-for-click");
@@ -78,7 +78,7 @@ export class Panel {
     this.playButton = playButton;
 
     const pauseButton = document.createElement("span");
-    pauseButton.innerText = Character.CH_PAUSE_MONO;
+    pauseButton.innerText = Character.CH_PAUSE;
     pauseButton.classList.add("small-button");
     pauseButton.classList.add("small-button-left");
     pauseButton.classList.add("small-button-for-click");
@@ -121,7 +121,7 @@ export class Panel {
     span.classList.add("small-button");
     span.classList.add("small-button-right");
     span.classList.add("small-button-for-hover");
-    span.innerText = Character.BLACK_QUESTION_MARK_ORNAMENT_MONO;
+    span.innerText = Character.BLACK_QUESTION_MARK_ORNAMENT;
     span.style.cursor = "help";
     this.div.appendChild(span);
 
@@ -134,7 +134,7 @@ export class Panel {
     span.classList.add("small-button");
     span.classList.add("small-button-right");
     span.classList.add("small-button-for-click");
-    span.innerText = Character.HEAVY_MULTIPLICATION_X_MONO;
+    span.innerText = Character.HEAVY_MULTIPLICATION_X;
     this.div.appendChild(span);
 
     span.addEventListener("click", (pClickEvent) => {

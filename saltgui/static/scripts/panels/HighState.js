@@ -105,7 +105,7 @@ export class HighStatePanel extends Panel {
       "No minions", "{0} minion", "{0} minions");
 
     if (this.playOrPause === "pause") {
-      txt += ", press " + Character.buttonInText(Character.CH_PLAY_MONO) + " to continue";
+      txt += ", press " + Character.buttonInText(Character.CH_PLAY) + " to continue";
     }
     this.setMsg(txt, true);
   }

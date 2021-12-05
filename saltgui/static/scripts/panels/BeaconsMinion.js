@@ -97,7 +97,7 @@ export class BeaconsMinionPanel extends Panel {
       "No beacons", "{0} beacon", "{0} beacons");
 
     if (this.playOrPause === "pause") {
-      txt += ", press " + Character.buttonInText(Character.CH_PLAY_MONO) + " to continue";
+      txt += ", press " + Character.buttonInText(Character.CH_PLAY) + " to continue";
     }
 
     this.setMsg(txt, true);

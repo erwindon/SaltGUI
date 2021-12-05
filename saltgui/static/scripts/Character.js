@@ -17,11 +17,11 @@ export class Character {
     Character._DOWNWARDS_ARROW = "\u2193";
     Character.CLOCKWISE_OPEN_CIRCLE_ARROW = "\u21BB";
     Character._MATHEMATICAL_OPERATOR_IDENTICAL_TO = "\u2261";
-    Character.HOURGLASS_WITH_FLOWING_SAND_MONO =
+    Character.HOURGLASS_WITH_FLOWING_SAND =
       "\u23F3" + Character._VARIATION_SELECTOR_15;
-    Character._DOUBLE_VERTICAL_BAR_MONO =
+    Character._DOUBLE_VERTICAL_BAR =
       "\u23F8" + Character._VARIATION_SELECTOR_15;
-    Character._BLACK_RIGHT_POINTING_TRIANGLE_MONO =
+    Character._BLACK_RIGHT_POINTING_TRIANGLE =
       "\u25B6" + Character._VARIATION_SELECTOR_15;
     Character.WHITE_RIGHT_POINTING_TRIANGLE = "\u25B7";
     Character.BLACK_RIGHT_POINTING_POINTER = "\u25BA";
@@ -33,10 +33,10 @@ export class Character {
     Character.WARNING_SIGN =
       "\u26A0" + Character._VARIATION_SELECTOR_16;
     Character.HEAVY_CHECK_MARK = "\u2714";
-    Character.HEAVY_MULTIPLICATION_X_MONO =
+    Character.HEAVY_MULTIPLICATION_X =
       "\u2716" + Character._VARIATION_SELECTOR_15;
     Character.HEAVY_BALLOT_X = "\u2718";
-    Character.BLACK_QUESTION_MARK_ORNAMENT_MONO =
+    Character.BLACK_QUESTION_MARK_ORNAMENT =
       "\u2753" + Character._VARIATION_SELECTOR_15;
     Character._BLACK_MEDIUM_RIGHT_POINTING_TRIANGLE = "\u2BC8";
 
@@ -45,17 +45,16 @@ export class Character {
       "\uD83D\uDCD6" + Character._VARIATION_SELECTOR_15;
 
     // D83D DD0D = 1F50D = LEFT-POINTING MAGNIFYING GLASS
-    Character.LEFT_POINTING_MAGNIFYING_GLASS_MONO =
+    Character.LEFT_POINTING_MAGNIFYING_GLASS =
       "\uD83D\uDD0D" + Character._VARIATION_SELECTOR_15;
-    Character.LEFT_POINTING_MAGNIFYING_GLASS_COLOUR = "\uD83D\uDD0D";
 
     // Aliases
     Character.CH_HAMBURGER = Character._MATHEMATICAL_OPERATOR_IDENTICAL_TO;
-    Character.CH_PAUSE_MONO = Character._DOUBLE_VERTICAL_BAR_MONO;
+    Character.CH_PAUSE = Character._DOUBLE_VERTICAL_BAR;
     // 'official' play-button
-    // Character.CH_PLAY_MONO = Character._BLACK_RIGHT_POINTING_TRIANGLE_MONO;
+    // Character.CH_PLAY = Character._BLACK_RIGHT_POINTING_TRIANGLE;
     // slightly smaller glyph
-    Character.CH_PLAY_MONO = Character._BLACK_MEDIUM_RIGHT_POINTING_TRIANGLE;
+    Character.CH_PLAY = Character._BLACK_MEDIUM_RIGHT_POINTING_TRIANGLE;
 
     Character.CH_SORT_NORMAL = Character._DOWNWARDS_ARROW;
     Character.CH_SORT_REVERSE = Character._UPWARDS_ARROW;

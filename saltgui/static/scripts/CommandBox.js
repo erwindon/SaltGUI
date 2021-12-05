@@ -542,7 +542,7 @@ export class CommandBox {
       div.appendChild(minionSpan1);
 
       const minionSpan2 = document.createElement("span");
-      minionSpan2.innerText = ": " + Character.HOURGLASS_WITH_FLOWING_SAND_MONO + " ";
+      minionSpan2.innerText = ": " + Character.HOURGLASS_WITH_FLOWING_SAND + " ";
       div.appendChild(minionSpan2);
 
       const output = document.querySelector(".run-command pre");
@@ -636,7 +636,7 @@ export class CommandBox {
       minionDiv.appendChild(minionSpan1);
 
       const minionSpan2 = document.createElement("span");
-      minionSpan2.innerText = ": " + Character.HOURGLASS_WITH_FLOWING_SAND_MONO + " ";
+      minionSpan2.innerText = ": " + Character.HOURGLASS_WITH_FLOWING_SAND + " ";
       minionDiv.appendChild(minionSpan2);
 
       output.appendChild(minionDiv);

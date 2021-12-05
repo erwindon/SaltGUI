@@ -45,9 +45,9 @@ export class EventsPanel extends Panel {
       }
     } else {
       if (tbody.rows.length) {
-        txt += ", press " + Character.buttonInText(Character.CH_PLAY_MONO) + " to continue";
+        txt += ", press " + Character.buttonInText(Character.CH_PLAY) + " to continue";
       } else {
-        txt += ", press " + Character.buttonInText(Character.CH_PLAY_MONO) + " to begin";
+        txt += ", press " + Character.buttonInText(Character.CH_PLAY) + " to begin";
       }
     }
     /* eslint-enable no-lonely-if */

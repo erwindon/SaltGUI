@@ -208,7 +208,7 @@ export class Utils {
     input.type = "text";
     input.spellcheck = false;
     input.classList.add("filter-text");
-    input.placeholder = Character.LEFT_POINTING_MAGNIFYING_GLASS_COLOUR;
+    input.placeholder = Character.LEFT_POINTING_MAGNIFYING_GLASS;
     if (pFieldList) {
       input.setAttribute("list", pFieldList);
     }
@@ -257,7 +257,7 @@ export class Utils {
       pInput.value,
       pSearchOptionsMenu.menuDropdownContent);
 
-    let placeholder = Character.LEFT_POINTING_MAGNIFYING_GLASS_COLOUR;
+    let placeholder = Character.LEFT_POINTING_MAGNIFYING_GLASS;
     if (pSearchOptionsMenu.menuDropdownContent.childNodes[0]._value === true) {
       placeholder += " caseSensitive";
     }

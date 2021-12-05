@@ -228,7 +228,7 @@ export class JobsPanel extends Panel {
       "", ", {0} job present", ", {0} jobs present");
 
     if (this.playOrPause === "pause") {
-      txt += ", press " + Character.buttonInText(Character.CH_PLAY_MONO) + " to continue";
+      txt += ", press " + Character.buttonInText(Character.CH_PLAY) + " to continue";
     }
 
     this.setMsg(txt, true);
