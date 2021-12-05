@@ -10,6 +10,11 @@ export class StatsPanel extends Panel {
     super("stats");
 
     this.addTitle("Stats");
+    this.addHelpButton([
+      "Numeric fields representing a timestamp are visible as string.",
+      "Numeric fields representing a duration are visible as string.",
+      "Trivial information on worker threads may have been removed."
+    ]);
     this.addTable(["/stats"]);
     this.addMsg();
   }

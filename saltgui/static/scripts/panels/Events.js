@@ -17,8 +17,8 @@ export class EventsPanel extends Panel {
     this.addPlayPauseButton("pause");
     this.addHelpButton([
       "The content of this page is",
-      "automatically refreshed",
-      "Display is limited to " + MAX_EVENTS_IN_VIEW + " events"
+      "automatically refreshed.",
+      "Display is limited to " + MAX_EVENTS_IN_VIEW + " events."
     ]);
     this.addTable(["Timestamp", "Tag", "Data"]);
     this.addMsg();

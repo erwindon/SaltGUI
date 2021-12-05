@@ -14,10 +14,10 @@ export class OptionsPanel extends Panel {
     this.addTitle("Options");
     // this.addSearchButton();
     this.addHelpButton([
-      "Names 'session_*' show the values from the login session",
-      "Names 'saltgui_*' show the values from the master file '/etc/salt/master'",
-      "Other names are regular variables from the master file",
-      "Changes made in this screen are valid for this session ONLY"
+      "Names 'session_*' show the values from the login session.",
+      "Names 'saltgui_*' show the values from the master file '/etc/salt/master'.",
+      "Other names are regular variables from the master file.",
+      "Changes made in this screen are valid for this session ONLY."
     ]);
     this.addTable(["Name", "Value"]);
 

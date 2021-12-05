@@ -25,7 +25,7 @@ export class KeysPanel extends Panel {
     this.addPlayPauseButton("play");
     this.addHelpButton([
       "The content of this page is",
-      "automatically refreshed"
+      "automatically refreshed."
     ]);
     this.addTable(["Minion", "Status", "-menu-", "Fingerprint"], "data-list-keys");
     this.setTableSortable("Status", "asc");
