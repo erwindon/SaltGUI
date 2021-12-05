@@ -55,9 +55,21 @@ export class StatsPanel extends Panel {
   // where we see the timezone multiple times on one screen
   static _shortenedDate (dateInMs) {
     // get the regular data fomat
-    const str = String(new Date(dateInMs * 1000));
+    let str = String(new Date(dateInMs * 1000));
     // remove the named timezone part
-    return str.replace(/ *[(].*[)]/, "");
+    str = str.replace(/ *[(].*[)]/, "");
+    return dateInMs + " (=" + str + ")";
+  }
+
+  static _shortenedInterval (intervalInMs) {
+    let str = new Date(intervalInMs * 1000).toISOString();
+    // remove the date prefix and the millisecond suffix
+    str = str.substr(11, 8);
+    // add the number of days (when there are any)
+    if (intervalInMs >= 86400) {
+      str = Math.floor(intervalInMs / 86400) + "d " + str;
+    }
+    return intervalInMs + " (=" + str + ")";
   }
 
   _handleStats (pStatsData) {
@@ -103,21 +115,23 @@ export class StatsPanel extends Panel {
       // this turns the fields into strings (was number)
       // we'll ignore that now
 
-      const ct = appData["Current Time"];
-      appData["Current Time"] = ct + " (=" + StatsPanel._shortenedDate(ct) + ")";
+      appData["Current Time"] = StatsPanel._shortenedDate(appData["Current Time"]);
 
-      const st = appData["Start Time"];
-      appData["Start Time"] = st + " (=" + StatsPanel._shortenedDate(st) + ")";
+      appData["Start Time"] = StatsPanel._shortenedDate(appData["Start Time"]);
 
-      const ut = appData["Uptime"];
-      // remove the date prefix and the millisecond suffix
-      let ut2 = new Date(ut * 1000).toISOString().
-        substr(11, 8);
-      if (ut >= 86400) {
-        // add the number of days (when there are any)
-        ut2 = Math.floor(ut / 86400) + "d " + ut2;
+      appData["Uptime"] = StatsPanel._shortenedInterval(appData["Uptime"]);
+
+      const requests = appData["Requests"];
+      for (const key in requests) {
+        requests[key]["Start Time"] = StatsPanel._shortenedDate(requests[key]["Start Time"]);
+        requests[key]["End Time"] = StatsPanel._shortenedDate(requests[key]["End Time"]);
       }
-      appData["Uptime"] = ut + " (=" + ut2 + ")";
+
+      const slowQueries = appData["Slow Queries"];
+      for (const key in slowQueries) {
+        slowQueries[key]["Start Time"] = StatsPanel._shortenedDate(slowQueries[key]["Start Time"]);
+        slowQueries[key]["End Time"] = StatsPanel._shortenedDate(slowQueries[key]["End Time"]);
+      }
     }
 
     this.statsTd.innerText = Output.formatObject(pStatsData);
