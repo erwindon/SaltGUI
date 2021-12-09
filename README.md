@@ -82,6 +82,7 @@ in the salt-master configuration wisely, as the integrity of the salt-master and
 
 See the [EAUTH documentation](https://docs.saltstack.com/en/latest/topics/eauth/index.html) and the [Salt auth source code](https://github.com/saltstack/salt/tree/master/salt/auth) for more information.
 
+
 ## Command Box
 SaltGUI supports entry of commands using the "command-box". Click on `>_` in the top right corner to open it.
 
@@ -92,6 +93,7 @@ Enter `salt-call` commands with the prefix `wheel.`. e.g. `wheel.key.finger`. Th
 Enter regular commands without special prefix. e.g. `test.ping`. The command is sent to the minions specified in the target field.
 
 Commands can be run normally, in which case the command runs to completion and shows the results. Alternatively, it can be started asynchronously, in which case only a bit of progress information is shown. When variable `state_events` is set to `true`, then the progress is shown per state when applicable. Batch commands are not supported at this time.
+
 
 ## Output
 SaltGUI shows the data that is returned by the Salt API.
@@ -104,6 +106,7 @@ saltgui_output_formats: doc,saltguihighstate,json
 `saltguihighstate` allows reformatting of highstate data in a sorted and more readable format.
 `json`, `yaml` and `nested` specify how all other output should be formatted. Only the first available of these formats is used.
 
+
 ## Time representation
 The time formats used by Salt are very detailed and by default have 6 decimal digits to specify as accurate as nano-seconds. For most uses that is not needed. The fraction can be truncated to less digits by modifying salt master configuration file `/etc/salt/master`.
 e.g.
@@ -112,6 +115,7 @@ saltgui_datetime_fraction_digits: 3
 ```
 The value must be a number from 0 to 6.
 Note that the effect is achieved by string truncation only. This is equivalent to always rounding downwards.
+
 
 ## Templates
 SaltGUI supports command templates for easier command entry into the command-box.
@@ -134,6 +138,7 @@ saltgui_templates:
         command: test.version
 ```
 
+
 ## Jobs
 SaltGUI shows a maximum of 7 jobs in on the right-hand-side of the screen.
 SaltGUI shows a maximum of 50 jobs on the dedicated jobs page.
@@ -155,6 +160,7 @@ saltgui_show_jobs:
     - grains.items
 ```
 
+
 ## Grains
 Selected grains can be previewed on the Grains page.
 The names of these grains can be configured
@@ -167,6 +173,7 @@ saltgui_preview_grains:
 The names can be specified as simple names like the example above.
 Alternatively, the [grains.get](https://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.grains.html#salt.modules.grains.get) notation can be used to get more detailed information. The separator is always `:`. e.g. `locale_info:timezone`.
 Alternatively, the [jsonpath](https://www.w3resource.com/JSON/JSONPath-with-JavaScript.php) notation can be used to allow even more freedom. Jsonpath is used when the text starts with a `$`. e.g. `$.ip4_interfaces.eth0[0]`.
+
 
 ## Pillars
 Pillars potentially contain security senstitive information.
@@ -182,6 +189,7 @@ saltgui_public_pillars:
     - pub_.*
 ```
 
+
 ## Message-of-the-day
 A message-of-the-day (motd) can be added to the login screen.
 It can be used for any information, e.g.:
@@ -194,6 +202,7 @@ It can be used for any information, e.g.:
 The text is stored in file `saltgui/static/salt-motd.txt` or `saltgui/static/salt-motd.html`. The first must be pre-formatted text only. The second one can contain full HTML text. Both are shown when they are present. Note that the message should not contain sensitive data, as its content is shown before logging in.
 
 Alternatively, or additionally, the text can be retrieved from the `master` file entries `saltgui_motd_txt` and `saltgui_motd_html`. These entries can contain sensitive information because its content can only be retrieved after login. But it is still recommended to not let the text contain any sensitive data.
+
 
 ## Reduced menus
 When apis are disabled using the native `external_auth` mechanism,
@@ -216,6 +225,7 @@ All pages are still accessible using their original deep-link.
 And also any command can still be issued using the command-box.
 For real security measures, use parameter `external_auth`.
 
+
 ## Performance
 SaltGUI does not have artificial restrictions.
 But displaying all data may be slow when there is a lot of data.
@@ -229,6 +239,7 @@ This parameter forces SaltGUI to use a very simple tooltip representation.
 This is then the built-in version from the brower.
 Typical effect is that it is shown slightly delayed and that is looks a bit primitive.
 The only other allowed value is "none", with the effect that no tooltips are shown at all.
+
 
 ## Key administration
 In situations like cloud hosting, hosts may be deleted or shutdown frequently.
@@ -246,6 +257,7 @@ Minions that are unexpectedly down are highlighted on the Minions page.
 When the file is absent or empty, no such validation is done.
 It is suggested that the file is generated from a central source,
 e.g. the Azure, AWS or similar cloud portals; or from a company asset management list.
+
 
 ## Separate SaltGUI host
 In some specific environments you might not be able to serve SaltGUI directly from salt-api.
@@ -290,6 +302,7 @@ const config = {
 Note that the main page of SaltGUI is then located at `/app/`. When you want `/app` to work as well, you should instruct an intermediate proxy server to translate `/app` into `/app/`.
 
 > Currently you can't use totally independent salt-api without proxy as support for CORS preflight request is not properly support.
+
 
 ## Development environment with Docker
 To make life a bit easier for testing SaltGUI or setting up a local development environment you can use the provided docker-compose setup in this repository to run a saltmaster with three minions, including SaltGUI:
