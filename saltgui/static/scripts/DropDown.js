@@ -114,7 +114,7 @@ export class DropDownMenu {
     }
     button.addEventListener("click", (pClickEvent) => {
       pClickEvent.target.parentElement.style.display = "none";
-      setTimeout(() => {
+      window.setTimeout(() => {
         pClickEvent.target.parentElement.style.display = "";
       }, 500);
       this._callback(pClickEvent, pCallBack, pValue);

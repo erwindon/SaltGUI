@@ -32,7 +32,7 @@ export class StatsPanel extends Panel {
 
     this.onShowNow();
 
-    this.updateStatsTimer = setInterval(() => {
+    this.updateStatsTimer = window.setInterval(() => {
       this.onShowNow();
     }, 3000);
   }
@@ -52,7 +52,7 @@ export class StatsPanel extends Panel {
   onHide () {
     if (this.updateStatsTimer) {
       // stop the timer when noone is looking
-      clearInterval(this.updateStatsTimer);
+      window.clearInterval(this.updateStatsTimer);
       this.updateStatsTimer = null;
     }
   }

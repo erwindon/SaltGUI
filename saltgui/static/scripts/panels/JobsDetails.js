@@ -173,7 +173,7 @@ export class JobsDetailsPanel extends JobsPanel {
     if (!workLeft) {
       this.setPlayPauseButton("none");
       this.updateFooter();
-      clearInterval(this.updateNextJobInterval);
+      window.clearInterval(this.updateNextJobInterval);
     }
   }
 

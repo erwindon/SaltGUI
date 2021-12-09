@@ -19,7 +19,7 @@ export class LogoutPage extends Page {
     // verify often for an expired session that we expect
     this.sessionTimeoutInterval = window.setInterval(() => {
       if (Utils.getStorageItem("session", "token", null) === null) {
-        clearInterval(this.sessionTimeoutInterval);
+        window.clearInterval(this.sessionTimeoutInterval);
         return;
       }
       this._updateSessionTimeoutWarning();
