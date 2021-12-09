@@ -350,6 +350,10 @@ You'll need at least:
 - `yarn` 1.7 or above
 
 
+## Known issues
+At least in Chrome 96 and Edge 96, the "pause" icon is shown in its "emoji" form and appears in its coloured form. This also happens for the looking-glass icon in the search field.
+
+
 ## Contributing
 Open a PR! Try to use no dependencies where possible, as vanilla JS is the aim. Any libraries will need to be heavily considered first. Please see the section above as PRs won't be reviewed if they don't pass the tests.
 
