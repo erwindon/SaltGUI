@@ -17,11 +17,7 @@ export class LogoutPage extends Page {
     }, 60000);
 
     // verify often for an expired session that we expect
-    this.sessionTimeoutInterval = window.setInterval(() => {
-      if (Utils.getStorageItem("session", "token", null) === null) {
-        window.clearInterval(this.sessionTimeoutInterval);
-        return;
-      }
+    window.setInterval(() => {
       this._updateSessionTimeoutWarning();
     }, 1000);
   }
@@ -56,6 +52,13 @@ export class LogoutPage extends Page {
 
   _updateSessionTimeoutWarning () {
     const warning = document.getElementById("warning");
+
+    if (Utils.getStorageItem("session", "token", null) === null) {
+      // cannot force logout without session
+      warning.style.display = "";
+      warning.innerText = "No session";
+      return;
+    }
 
     const loginResponseStr = Utils.getStorageItem("session", "login-response", "{}");
     const loginResponse = JSON.parse(loginResponseStr);

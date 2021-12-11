@@ -168,8 +168,11 @@ export class OptionsPanel extends Panel {
       durationStr = "\nduration is " + str1.substr(11, 8);
     }
     let expiresInStr = "";
-    const str2 = new Date(pSessionExpire * 1000 - Date.now()).toISOString();
-    if (str2.startsWith("1970-01-01T")) {
+    const leftMillis = pSessionExpire * 1000 - Date.now();
+    if (leftMillis < 0) {
+      expiresInStr = "\nexpired";
+    } else if (leftMillis < 86400000) {
+      const str2 = new Date(leftMillis).toISOString();
       // remove the date prefix and the millisecond suffix
       expiresInStr = "\nexpires in " + str2.substr(11, 8);
     }
