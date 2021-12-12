@@ -395,7 +395,7 @@ export class KeysPanel extends Panel {
       } else if (status === "rejected") {
         cmdArr.push("include_rejected=", true);
       }
-      this.runCommand(pMinionId, cmdArr);
+      this.runCommand("", pMinionId, cmdArr);
     });
   }
 
@@ -407,7 +407,7 @@ export class KeysPanel extends Panel {
       return null;
     }, () => {
       const cmdArr = ["wheel.key.accept"];
-      this.runCommand("*", cmdArr);
+      this.runCommand("", "*", cmdArr);
     });
   }
 
@@ -422,7 +422,7 @@ export class KeysPanel extends Panel {
       return "Accept all rejected keys...";
     }, () => {
       const cmdArr = ["wheel.key.accept", "include_rejected=", true];
-      this.runCommand("*", cmdArr);
+      this.runCommand("", "*", cmdArr);
     });
   }
 
@@ -437,7 +437,7 @@ export class KeysPanel extends Panel {
       return "Accept all denied keys...";
     }, () => {
       const cmdArr = ["wheel.key.accept", "include_denied=", true];
-      this.runCommand("*", cmdArr);
+      this.runCommand("", "*", cmdArr);
     });
   }
 
@@ -452,7 +452,7 @@ export class KeysPanel extends Panel {
       return "Accept all denied+rejected keys...";
     }, () => {
       const cmdArr = ["wheel.key.accept", "include_denied=", true, "include_rejected=", true];
-      this.runCommand("*", cmdArr);
+      this.runCommand("", "*", cmdArr);
     });
   }
 
@@ -471,7 +471,7 @@ export class KeysPanel extends Panel {
       } else if (status === "rejected") {
         cmdArr.push("include_rejected=", true);
       }
-      this.runCommand(pMinionId, cmdArr);
+      this.runCommand("", pMinionId, cmdArr);
     });
   }
 
@@ -490,7 +490,7 @@ export class KeysPanel extends Panel {
       } else if (status === "denied") {
         cmdArr.push("include_denied=", true);
       }
-      this.runCommand(pMinionId, cmdArr);
+      this.runCommand("", pMinionId, cmdArr);
     });
   }
 
@@ -502,7 +502,7 @@ export class KeysPanel extends Panel {
       return null;
     }, () => {
       const cmdArr = ["wheel.key.reject"];
-      this.runCommand("*", cmdArr);
+      this.runCommand("", "*", cmdArr);
     });
   }
 
@@ -517,7 +517,7 @@ export class KeysPanel extends Panel {
       return "Reject all accepted keys...";
     }, () => {
       const cmdArr = ["wheel.key.reject", "include_accepted=", true];
-      this.runCommand("*", cmdArr);
+      this.runCommand("", "*", cmdArr);
     });
   }
 
@@ -532,7 +532,7 @@ export class KeysPanel extends Panel {
       return "Reject all denied keys...";
     }, () => {
       const cmdArr = ["wheel.key.reject", "include_denied=", true];
-      this.runCommand("*", cmdArr);
+      this.runCommand("", "*", cmdArr);
     });
   }
 
@@ -547,7 +547,7 @@ export class KeysPanel extends Panel {
       return "Reject all accepted+denied keys...";
     }, () => {
       const cmdArr = ["wheel.key.reject", "include_accepted=", true, "include_denied=", true];
-      this.runCommand("*", cmdArr);
+      this.runCommand("", "*", cmdArr);
     });
   }
 
@@ -560,7 +560,7 @@ export class KeysPanel extends Panel {
       return null;
     }, () => {
       const cmdArr = ["wheel.key.delete"];
-      this.runCommand(pMinionId, cmdArr);
+      this.runCommand("", pMinionId, cmdArr);
     });
   }
 
@@ -572,7 +572,7 @@ export class KeysPanel extends Panel {
       return null;
     }, () => {
       const cmdArr = ["wheel.key.delete"];
-      this.runCommand("*", cmdArr);
+      this.runCommand("", "*", cmdArr);
     });
   }
 

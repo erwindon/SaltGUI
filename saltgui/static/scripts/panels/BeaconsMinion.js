@@ -179,7 +179,8 @@ export class BeaconsMinionPanel extends Panel {
       // run the command with the original beacon definition
       tr.addEventListener("click", (pClickEvent) => {
         const beacon0 = beacons0[beaconName];
-        this.runCommand(pMinionId, ["beacons.modify", beaconName, beacon0]);
+        const cmdArr = ["beacons.modify", beaconName, beacon0];
+        this.runCommand("", pMinionId, cmdArr);
         pClickEvent.stopPropagation();
       });
 
@@ -204,7 +205,8 @@ export class BeaconsMinionPanel extends Panel {
       return "Disable beacons...";
     }, () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(minionId, ["beacons.disable"]);
+      const cmdArr = ["beacons.disable"];
+      this.runCommand("", minionId, cmdArr);
     });
   }
 
@@ -216,28 +218,32 @@ export class BeaconsMinionPanel extends Panel {
       return "Enable beacons...";
     }, () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(minionId, ["beacons.enable"]);
+      const cmdArr = ["beacons.enable"];
+      this.runCommand("", minionId, cmdArr);
     });
   }
 
   _addPanelMenuItemBeaconsAdd () {
     this.panelMenu.addMenuItem("Add beacon...", () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(minionId, ["beacons.add", "<name>", "<data>"]);
+      const cmdArr = ["beacons.add", "<name>", "<data>"];
+      this.runCommand("", minionId, cmdArr);
     });
   }
 
   _addPanelMenuItemBeaconsReset () {
     this.panelMenu.addMenuItem("Reset beacons...", () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(minionId, ["beacons.reset"]);
+      const cmdArr = ["beacons.reset"];
+      this.runCommand("", minionId, cmdArr);
     });
   }
 
   _addPanelMenuItemBeaconsSave () {
     this.panelMenu.addMenuItem("Save beacons...", () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(minionId, ["beacons.save"]);
+      const cmdArr = ["beacons.save"];
+      this.runCommand("", minionId, cmdArr);
     });
   }
 
@@ -246,7 +252,8 @@ export class BeaconsMinionPanel extends Panel {
       return;
     }
     pMenu.addMenuItem("Disable beacon...", () => {
-      this.runCommand(pMinionId, ["beacons.disable_beacon", key]);
+      const cmdArr = ["beacons.disable_beacon", key];
+      this.runCommand("", pMinionId, cmdArr);
     });
   }
 
@@ -255,13 +262,15 @@ export class BeaconsMinionPanel extends Panel {
       return;
     }
     pMenu.addMenuItem("Enable beacon...", () => {
-      this.runCommand(pMinionId, ["beacons.enable_beacon", key]);
+      const cmdArr = ["beacons.enable_beacon", key];
+      this.runCommand("", pMinionId, cmdArr);
     });
   }
 
   _addMenuItemBeaconsDelete (pMenu, pMinionId, key) {
     pMenu.addMenuItem("Delete beacon...", () => {
-      this.runCommand(pMinionId, ["beacons.delete", key]);
+      const cmdArr = ["beacons.delete", key];
+      this.runCommand("", pMinionId, cmdArr);
     });
   }
 

@@ -78,7 +78,8 @@ export class GrainsMinionPanel extends Panel {
       tbody.appendChild(grainTr);
 
       grainTr.addEventListener("click", (pClickEvent) => {
-        this.runCommand(pMinionId, ["grains.setval", grainName, grains[grainName]]);
+        const cmdArr = ["grains.setval", grainName, grains[grainName]];
+        this.runCommand("", pMinionId, cmdArr);
         pClickEvent.stopPropagation();
       });
     }
@@ -92,20 +93,23 @@ export class GrainsMinionPanel extends Panel {
     this.panelMenu.addMenuItem("Add grain...", () => {
       // use placeholders for name and value
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(minionId, ["grains.setval", "<name>", "<value>"]);
+      const cmdArr = ["grains.setval", "<name>", "<value>"];
+      this.runCommand("", minionId, cmdArr);
     });
   }
 
   _addPanelMenuItemSaltUtilRefreshGrains () {
     this.panelMenu.addMenuItem("Refresh grains...", () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(minionId, ["saltutil.refresh_grains"]);
+      const cmdArr = ["saltutil.refresh_grains"];
+      this.runCommand("", minionId, cmdArr);
     });
   }
 
   _addMenuItemGrainsSetValUpdate (pMenu, pMinionId, key, grains) {
     pMenu.addMenuItem("Edit grain...", () => {
-      this.runCommand(pMinionId, ["grains.setval", key, grains[key]]);
+      const cmdArr = ["grains.setval", key, grains[key]];
+      this.runCommand("", pMinionId, cmdArr);
     });
   }
 
@@ -114,7 +118,8 @@ export class GrainsMinionPanel extends Panel {
       return;
     }
     pMenu.addMenuItem("Add value...", () => {
-      this.runCommand(pMinionId, ["grains.append", key, "<value>"]);
+      const cmdArr = ["grains.append", key, "<value>"];
+      this.runCommand("", pMinionId, cmdArr);
     });
   }
 
@@ -125,7 +130,7 @@ export class GrainsMinionPanel extends Panel {
     }
     cmdArr.push(pKey);
     pMenu.addMenuItem("Delete key...", () => {
-      this.runCommand(pMinionId, cmdArr);
+      this.runCommand("", pMinionId, cmdArr);
     });
   }
 
@@ -136,7 +141,7 @@ export class GrainsMinionPanel extends Panel {
     }
     cmdArr.push(pKey);
     pMenu.addMenuItem("Delete value...", () => {
-      this.runCommand(pMinionId, cmdArr);
+      this.runCommand("", pMinionId, cmdArr);
     });
   }
 }

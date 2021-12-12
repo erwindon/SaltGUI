@@ -655,12 +655,12 @@ export class Panel {
     return commandString;
   }
 
-  runCommand (pTargetString, pCommandStringArray) {
-    const commandString = Panel.makeCommandString(pCommandStringArray);
-    this.runFullCommand("", pTargetString, commandString);
-  }
+  runCommand (pTargetType, pTargetString, pCommandString) {
+    if (typeof pCommandString !== "string") {
+      // assume it is an array
+      pCommandString = Panel.makeCommandString(pCommandString);
+    }
 
-  runFullCommand (pTargetType, pTargetString, pCommandString) {
     CommandBox.showManualRun(this.api);
     const target = document.getElementById("target");
     const command = document.getElementById("command");

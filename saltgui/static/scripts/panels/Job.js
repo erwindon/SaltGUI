@@ -104,7 +104,7 @@ export class JobPanel extends Panel {
       return pObj;
     }
     if (pObj.match(/^[a-z_][a-z0-9_]*(?:[.][a-z0-9_]+)*$/i)) {
-      // simple string that cannot be confuses with
+      // simple string that cannot be confused with
       // another object type
       return pObj;
     }
@@ -267,7 +267,7 @@ export class JobPanel extends Panel {
       }
       return "Re-run job...";
     }, () => {
-      this.runFullCommand(this.targettype, this.target, this.commandtext);
+      this.runCommand(this.targettype, this.target, this.commandtext);
     });
   }
 
@@ -303,7 +303,7 @@ export class JobPanel extends Panel {
       return "Re-run job on all minions...";
     }, () => {
       const lst = this._listForRerunJobOnAllMinions();
-      this.runFullCommand("list", lst, this.commandtext);
+      this.runCommand("list", lst, this.commandtext);
     });
   }
 
@@ -350,7 +350,7 @@ export class JobPanel extends Panel {
       return "Re-run job on unsuccessful minions...";
     }, () => {
       const lst = this._listForRerunJobOnUnsuccessfulMinions();
-      this.runFullCommand("list", lst, this.commandtext);
+      this.runCommand("list", lst, this.commandtext);
     });
   }
 
@@ -383,7 +383,7 @@ export class JobPanel extends Panel {
       return "Re-run job on failed minions...";
     }, () => {
       const lst = this._listForRerunJobOnFailedMinions();
-      this.runFullCommand("list", lst, this.commandtext);
+      this.runCommand("list", lst, this.commandtext);
     });
   }
 
@@ -416,7 +416,7 @@ export class JobPanel extends Panel {
       return "Re-run job on non responding minions...";
     }, () => {
       const lst = this._listForRerunJobOnNonRespondingMinions();
-      this.runFullCommand("list", lst, this.commandtext);
+      this.runCommand("list", lst, this.commandtext);
     });
   }
 
@@ -427,7 +427,8 @@ export class JobPanel extends Panel {
       }
       return "Terminate job...";
     }, () => {
-      this.runFullCommand(this.targettype, this.target, "saltutil.term_job " + this.jobid);
+      const cmdArr = ["saltutil.term_job", this.jobid];
+      this.runCommand(this.targettype, this.target, cmdArr);
     });
   }
 
@@ -438,7 +439,8 @@ export class JobPanel extends Panel {
       }
       return "Kill job...";
     }, () => {
-      this.runFullCommand(this.targettype, this.target, "saltutil.kill_job " + this.jobid);
+      const cmdArr = ["saltutil.kill_job", this.jobid];
+      this.runCommand(this.targettype, this.target, cmdArr);
     });
   }
 
@@ -449,7 +451,8 @@ export class JobPanel extends Panel {
       }
       return "Signal job...";
     }, () => {
-      this.runFullCommand(this.targettype, this.target, "saltutil.signal_job " + this.jobid + " signal=<signalnumber>");
+      const cmdArr = ["saltutil.signal_job", this.jobid, "signal=", "<signalnumber>"];
+      this.runCommand(this.targettype, this.target, cmdArr);
     });
   }
 
@@ -501,16 +504,20 @@ export class JobPanel extends Panel {
 
         const menu = new DropDownMenu(noResponseSpan, true);
         menu.addMenuItem("Show process info...", () => {
-          this.runFullCommand("list", minionId, "ps.proc_info " + pid);
+          const cmdArr = ["ps.proc_info", pid];
+          this.runCommand("", minionId, cmdArr);
         });
         menu.addMenuItem("Terminate process...", () => {
-          this.runFullCommand("list", minionId, "ps.kill_pid " + pid + " signal=15");
+          const cmdArr = ["ps.kill_pid", pid, "signal=", 15];
+          this.runCommand("", minionId, cmdArr);
         });
         menu.addMenuItem("Kill process...", () => {
-          this.runFullCommand("list", minionId, "ps.kill_pid " + pid + " signal=9");
+          const cmdArr = ["ps.kill_pid", pid, "signal=", 9];
+          this.runCommand("", minionId, cmdArr);
         });
         menu.addMenuItem("Signal process...", () => {
-          this.runFullCommand("list", minionId, "ps.kill_pid " + pid + " signal=<signalnumber>");
+          const cmdArr = ["ps.kill_pid", pid, "signal=", "<signalnumber>"];
+          this.runCommand("", minionId, cmdArr);
         });
 
         noResponseSpan.classList.remove("noresponse");

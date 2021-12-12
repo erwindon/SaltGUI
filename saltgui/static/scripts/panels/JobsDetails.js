@@ -380,7 +380,8 @@ export class JobsDetailsPanel extends JobsPanel {
 
   _addMenuItemJobsRerunJob (pMenu, job, argumentsText) {
     pMenu.addMenuItem("Re-run job...", () => {
-      this.runFullCommand(job["Target-type"], job.Target, job.Function + argumentsText);
+      const cmdStr = job.Function + argumentsText;
+      this.runCommand(job["Target-type"], job.Target, cmdStr);
     });
   }
 

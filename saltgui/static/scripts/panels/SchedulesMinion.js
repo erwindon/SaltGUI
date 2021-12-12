@@ -117,7 +117,7 @@ export class SchedulesMinionPanel extends Panel {
       tbody.appendChild(tr);
 
       tr.addEventListener("click", (pClickEvent) => {
-        this.runCommand(pMinionId, scheduleModifyCmdArr);
+        this.runCommand("", pMinionId, scheduleModifyCmdArr);
         pClickEvent.stopPropagation();
       });
     }
@@ -135,7 +135,8 @@ export class SchedulesMinionPanel extends Panel {
       return "Enable scheduler...";
     }, () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(minionId, ["schedule.enable"]);
+      const cmdArr = ["schedule.enable"];
+      this.runCommand("", minionId, cmdArr);
     });
   }
 
@@ -147,14 +148,15 @@ export class SchedulesMinionPanel extends Panel {
       return "Disable scheduler...";
     }, () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(minionId, ["schedule.disable"]);
+      const cmdArr = ["schedule.disable"];
+      this.runCommand("", minionId, cmdArr);
     });
   }
 
   _addPanelMenuItemScheduleAddInterval () {
     this.panelMenu.addMenuItem("Add interval schedule...", () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(minionId, [
+      const cmdArr = [
         "schedule.add",
         "<name>",
         "function=", "<function>",
@@ -162,39 +164,42 @@ export class SchedulesMinionPanel extends Panel {
         "minutes=", "<minutes>",
         "hours=", "<hours>",
         "days=", "<days>"
-      ]);
+      ];
+      this.runCommand("", minionId, cmdArr);
     });
   }
 
   _addPanelMenuItemScheduleAddCron () {
     this.panelMenu.addMenuItem("Add cron schedule...", () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(minionId, [
+      const cmdArr = [
         "schedule.add",
         "<name>",
         "function=", "<function>",
         "cron=", "<cron>"
-      ]);
+      ];
+      this.runCommand("", minionId, cmdArr);
     });
   }
 
   _addPanelMenuItemScheduleAddOnce () {
     this.panelMenu.addMenuItem("Add once schedule...", () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
-      this.runCommand(minionId, [
+      const cmdArr = [
         "schedule.add",
         "<name>",
         "function=", "<function>",
         "once=", new Date().toISOString().
           replace(/[.].*/, ""),
         "once_format=", "%Y-%m-%dT%H:%M:%S"
-      ]);
+      ];
+      this.runCommand("", minionId, cmdArr);
     });
   }
 
   _addMenuItemModifyJob (pMenu, pMinionId, scheduleModifyCmdArr) {
     pMenu.addMenuItem("Modify job...", () => {
-      this.runCommand(pMinionId, scheduleModifyCmdArr);
+      this.runCommand("", pMinionId, scheduleModifyCmdArr);
     });
   }
 
@@ -203,7 +208,8 @@ export class SchedulesMinionPanel extends Panel {
       return;
     }
     pMenu.addMenuItem("Enable job...", () => {
-      this.runCommand(pMinionId, ["schedule.enable_job", pJobName]);
+      const cmdArr = ["schedule.enable_job", pJobName];
+      this.runCommand("", pMinionId, cmdArr);
     });
   }
 
@@ -212,13 +218,15 @@ export class SchedulesMinionPanel extends Panel {
       return;
     }
     pMenu.addMenuItem("Disable job...", () => {
-      this.runCommand(pMinionId, ["schedule.disable_job", pJobName]);
+      const cmdArr = ["schedule.disable_job", pJobName];
+      this.runCommand("", pMinionId, cmdArr);
     });
   }
 
   _addMenuItemScheduleDeleteJob (pMenu, pMinionId, pJobName) {
     pMenu.addMenuItem("Delete job...", () => {
-      this.runCommand(pMinionId, ["schedule.delete", pJobName]);
+      const cmdArr = ["schedule.delete", pJobName];
+      this.runCommand("", pMinionId, cmdArr);
     });
   }
 
@@ -229,7 +237,7 @@ export class SchedulesMinionPanel extends Panel {
         scheduleRunJobCmdArr.push("force=", true);
       }
       scheduleRunJobCmdArr.push(pJobName);
-      this.runCommand(pMinionId, scheduleRunJobCmdArr);
+      this.runCommand("", pMinionId, scheduleRunJobCmdArr);
     });
   }
 }

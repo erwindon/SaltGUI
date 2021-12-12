@@ -56,13 +56,15 @@ export class HighStatePanel extends Panel {
 
   _addMenuItemStateApply (pMenu, pMinionId) {
     pMenu.addMenuItem("Apply state...", () => {
-      this.runCommand(pMinionId, ["state.apply"]);
+      const cmdArr = ["state.apply"];
+      this.runCommand("", pMinionId, cmdArr);
     });
   }
 
   _addMenuItemStateApplyTest (pMenu, pMinionId) {
     pMenu.addMenuItem("Test state...", () => {
-      this.runCommand(pMinionId, ["state.apply", "test=", true]);
+      const cmdArr = ["state.apply", "test=", true];
+      this.runCommand("", pMinionId, cmdArr);
     });
   }
 
@@ -88,9 +90,10 @@ export class HighStatePanel extends Panel {
       minionTr.addEventListener("click", (pClickEvent) => {
         const functionField = minionTr.querySelector(".function");
         if (functionField && functionField.cmd) {
-          this.runFullCommand("", minionId, functionField.cmd);
+          this.runCommand("", minionId, functionField.cmd);
         } else {
-          this.runCommand(minionId, ["state.apply"]);
+          const cmdArr = ["state.apply"];
+          this.runCommand("", minionId, cmdArr);
         }
         pClickEvent.stopPropagation();
       });
@@ -308,7 +311,8 @@ export class HighStatePanel extends Panel {
             continue;
           }
           span.addEventListener("click", (pClickEvent) => {
-            this.runCommand(minionId, ["state.sls_id", data.__id__, "mods=", data.__sls__]);
+            const cmdArr = ["state.sls_id", data.__id__, "mods=", data.__sls__];
+            this.runCommand("", minionId, cmdArr);
             pClickEvent.stopPropagation();
           });
           Output._setTaskToolTip(span, data);
