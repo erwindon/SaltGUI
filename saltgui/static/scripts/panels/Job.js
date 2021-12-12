@@ -181,7 +181,11 @@ export class JobPanel extends Panel {
     const commandText = info.Function + argumentsText;
 
     this.targettype = info["Target-type"];
-    this.target = info.Target;
+    if (Array.isArray(info.Target)) {
+      this.target = info.Target.join(",");
+    } else {
+      this.target = info.Target;
+    }
     this.commandtext = commandText;
     this.jobid = pJobId;
     this.minions = info.Minions;
