@@ -4,20 +4,23 @@ import {Issues} from "./Issues.js";
 
 export class JobsRunningIssues extends Issues {
 
-  onGetIssues (pPanel, pMsg) {
+  onGetIssues (pPanel) {
+
+    const msg = super.onGetIssues(pPanel, "JOBS-RUNNING");
+
     const runnerJobsActivePromise = this.api.getRunnerJobsActive();
 
     runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
       Issues.removeCategory(pPanel, "active-jobs");
       JobsRunningIssues._handleRunnerJobsActive(pPanel, pRunnerJobsActiveData);
-      pMsg.parentElement.removeChild(pMsg);
+      Issues.readyCategory(pPanel, msg);
       return true;
     }, (pRunnerJobsActiveMsg) => {
       Issues.removeCategory(pPanel, "active-jobs");
       const tr = Issues.addIssue(pPanel, "active-jobs", "retrieving");
       Issues.addIssueMsg(tr, "Could not retrieve list of jobs");
       Issues.addIssueErr(tr, pRunnerJobsActiveMsg);
-      pMsg.parentElement.removeChild(pMsg);
+      Issues.readyCategory(pPanel, msg);
       return false;
     });
 

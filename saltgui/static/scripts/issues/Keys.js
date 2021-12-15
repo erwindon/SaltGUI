@@ -4,21 +4,23 @@ import {Issues} from "./Issues.js";
 
 export class KeysIssues extends Issues {
 
-  onGetIssues (pPanel, pMsg) {
+  onGetIssues (pPanel) {
+
+    const msg = super.onGetIssues(pPanel, "KEYS");
 
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
 
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       Issues.removeCategory(pPanel, "unaccepted-key");
       KeysIssues._handleKeysWheelKeyListAll(pPanel, pWheelKeyListAllData);
-      pMsg.parentElement.removeChild(pMsg);
+      Issues.readyCategory(pPanel, msg);
       return true;
     }, (pWheelKeyListAllMsg) => {
       Issues.removeCategory(pPanel, "unaccepted-key");
       const tr = Issues.addIssue(pPanel, "unaccepted-key", "retrieving");
       Issues.addIssueMsg(tr, "Could not retrieve list of unaccepted keys");
       Issues.addIssueErr(tr, pWheelKeyListAllMsg);
-      pMsg.parentElement.removeChild(pMsg);
+      Issues.readyCategory(pPanel, msg);
       return false;
     });
 

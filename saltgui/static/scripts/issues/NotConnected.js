@@ -4,7 +4,9 @@ import {Issues} from "./Issues.js";
 
 export class NotConnectedIssues extends Issues {
 
-  onGetIssues (pPanel, pMsg) {
+  onGetIssues (pPanel) {
+
+    const msg = super.onGetIssues(pPanel, "NOT-CONNECTED");
 
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const wheelMinionsConnectedPromise = this.api.getWheelMinionsConnected();
@@ -17,7 +19,6 @@ export class NotConnectedIssues extends Issues {
       const tr = Issues.addIssue(pPanel, "not-connected", "retrieving-keys");
       Issues.addIssueMsg(tr, "Could not retrieve list of keys");
       Issues.addIssueErr(tr, pWheelKeyListAllMsg);
-      pMsg.parentElement.removeChild(pMsg);
       return false;
     });
 
@@ -29,7 +30,6 @@ export class NotConnectedIssues extends Issues {
       const tr = Issues.addIssue(pPanel, "not-connected", "retrieving-connected");
       Issues.addIssueMsg(tr, "Could not retrieve list of connected minions");
       Issues.addIssueErr(tr, pWheelMinionsConnectedMsg);
-      pMsg.parentElement.removeChild(pMsg);
       return false;
     });
 
@@ -38,11 +38,12 @@ export class NotConnectedIssues extends Issues {
     const allPromise = Promise.all([wheelKeyListAllPromise, wheelMinionsConnectedPromise]);
     /* eslint-enable compat/compat */
     allPromise.then((results) => {
-      pMsg.parentElement.removeChild(pMsg);
+      Issues.readyCategory(pPanel, msg);
       const wheelKeyListAllData = results[0];
       const wheelMinionsConnectedData = results[1];
       NotConnectedIssues._handleNotConnected(pPanel, wheelKeyListAllData, wheelMinionsConnectedData);
     }, (error) => {
+      Issues.readyCategory(pPanel, msg);
       console.error(error);
     });
 

@@ -12,7 +12,6 @@ export class Issues {
         tr.parentNode.removeChild(tr);
       }
     }
-    pPanel.updateFooter();
   }
 
   static removeIssue (pPanel, pCatName, pIssueName) {
@@ -22,7 +21,24 @@ export class Issues {
         tr.parentNode.removeChild(tr);
       }
     }
-    pPanel.updateFooter();
+  }
+
+  static readyCategory (pPanel, pMsg) {
+
+    // remove the "loading info..." message
+    pPanel.msg2.removeChild(pMsg);
+
+    // any category still loading?
+    if (pPanel.msg2.childNodes.length > 0) {
+      // not yet
+      return;
+    }
+
+    const txt = Utils.txtZeroOneMany(
+      pPanel.table.tBodies[0].children.length,
+      "No issues", "{0} issue", "{0} issues");
+    pPanel.setMsg(txt);
+    pPanel.setTableSortable("Description", "asc");
   }
 
   static addIssue (pPanel, pCatName, pIssueName) {
@@ -51,8 +67,6 @@ export class Issues {
     theTr.panel = pPanel;
 
     pPanel.table.tBodies[0].appendChild(theTr);
-
-    pPanel.updateFooter();
 
     return theTr;
   }
@@ -100,5 +114,16 @@ export class Issues {
       });
     }
     pTr.hasClick = true;
+  }
+
+  onGetIssues (pPanel, pTitle) {
+    this.api = pPanel.api;
+
+    const msg = document.createElement("div");
+    msg.classList.add("msg");
+    msg.innerText = "(loading info for " + pTitle + ")";
+    pPanel.msg2.appendChild(msg);
+
+    return msg;
   }
 }

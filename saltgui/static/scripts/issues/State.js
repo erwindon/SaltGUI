@@ -7,26 +7,27 @@ const MAX_HIGHSTATE_JOBS = 10;
 
 export class StateIssues extends Issues {
 
-  onGetIssues (pPanel, pMsg) {
+  onGetIssues (pPanel) {
+
+    const msg = super.onGetIssues(pPanel, "STATE");
 
     const runnerJobsListJobsPromise = this.api.getRunnerJobsListJobs(["state.apply", "state.highstate", "state.sls_id"]);
 
     runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
       Issues.removeCategory(pPanel, "state");
-      this._handleLowstateRunnerJobsListJobs(pPanel, pRunnerJobsListJobsData);
-      pMsg.parentElement.removeChild(pMsg);
+      this._handleLowstateRunnerJobsListJobs(pPanel, pRunnerJobsListJobsData, msg);
       return true;
     }, (pRunnerJobsListJobsMsg) => {
       Issues.removeCategory(pPanel, "state");
       const tr = Issues.addIssue(pPanel, "state", "retrieving");
       Issues.addIssueMsg(tr, "Could not retrieve list of jobs");
       Issues.addIssueErr(tr, pRunnerJobsListJobsMsg);
-      pMsg.parentElement.removeChild(pMsg);
+      Issues.readyCategory(pPanel, msg);
       return false;
     });
   }
 
-  _handleLowstateRunnerJobsListJobs (pPanel, pData) {
+  _handleLowstateRunnerJobsListJobs (pPanel, pData, pMsg) {
     // due to filter, all jobs are state.apply jobs
 
     let jobs = JobsPanel._jobsToArray(pData.return[0]);
@@ -39,16 +40,17 @@ export class StateIssues extends Issues {
     this.jobs = jobs;
     pPanel.setPlayPauseButton("play");
 
-    this._updateNextJob(pPanel);
+    this._updateNextJob(pPanel, pMsg);
   }
 
-  _updateNextJob (pPanel) {
+  _updateNextJob (pPanel, pMsg) {
     if (!this.jobs) {
       return;
     }
     if (!this.jobs.length) {
       pPanel.setPlayPauseButton("none");
       this.jobs = null;
+      Issues.readyCategory(pPanel, pMsg);
       return;
     }
     const job = this.jobs.pop();
@@ -58,7 +60,7 @@ export class StateIssues extends Issues {
     runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
       StateIssues._handleJobRunnerJobsListJob(pPanel, pRunnerJobsListJobData);
       window.setTimeout(() => {
-        this._updateNextJob(pPanel);
+        this._updateNextJob(pPanel, pMsg);
       }, 100);
       return true;
     }, (pRunnerJobsListJobsMsg) => {

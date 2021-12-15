@@ -14,7 +14,7 @@ export class IssuesPanel extends Panel {
   constructor () {
     super("issues");
 
-    this.addTitle("Issues");
+    this.addTitle("Issues (beta)");
     this.addSearchButton();
     this.addPlayPauseButton("none");
     this.addHelpButton([
@@ -25,6 +25,11 @@ export class IssuesPanel extends Panel {
     this.addTable(["-menu-", "Description"]);
     this.setTableClickable();
     this.addMsg();
+
+    // keep the list of "loading..." messages
+    const msg2 = document.createElement("div");
+    this.div.appendChild(msg2);
+    this.msg2 = msg2;
 
     // cannot use this now since we are loading
     // the data in random order
@@ -39,48 +44,22 @@ export class IssuesPanel extends Panel {
   }
 
   onShow () {
-    this.keysIssues.api = this.api;
-    const issuesStatusKeys = this.makeIssuesStatus("KEYS");
-    const p1 = this.keysIssues.onGetIssues(this, issuesStatusKeys);
-    this.jobsIssues.api = this.api;
-    const issuesStatusJobsRunning = this.makeIssuesStatus("JOBS-RUNNING");
-    const p2 = this.jobsIssues.onGetIssues(this, issuesStatusJobsRunning);
-    this.beaconsIssues.api = this.api;
-    const issuesStatusBeacons = this.makeIssuesStatus("BEACONS");
-    const p3 = this.beaconsIssues.onGetIssues(this, issuesStatusBeacons);
-    this.schedulesIssues.api = this.api;
-    const issuesStatusSchedules = this.makeIssuesStatus("SCHEDULES");
-    const p4 = this.schedulesIssues.onGetIssues(this, issuesStatusSchedules);
-    this.notConnectedIssues.api = this.api;
-    const issuesStatusNotConnected = this.makeIssuesStatus("NOT-CONNECTED");
-    const p5 = this.notConnectedIssues.onGetIssues(this, issuesStatusNotConnected);
-    this.lowStateIssues.api = this.api;
-    const issuesStatusState = this.makeIssuesStatus("STATE");
-    const p6 = this.lowStateIssues.onGetIssues(this, issuesStatusState);
+    const p1 = this.keysIssues.onGetIssues(this);
+    const p2 = this.jobsIssues.onGetIssues(this);
+    const p3 = this.beaconsIssues.onGetIssues(this);
+    const p4 = this.schedulesIssues.onGetIssues(this);
+    const p5 = this.notConnectedIssues.onGetIssues(this);
+    const p6 = this.lowStateIssues.onGetIssues(this);
 
     /* eslint-disable compat/compat */
-    /* Promise.all() is not supported in op_mini all, IE 11  compat/compat */
+    /* Promise.all is not supported in op_mini all, IE 11 */
     const allPromise = Promise.all([p1, p2, p3, p4, p5, p6]);
     /* eslint-enable compat/compat */
     allPromise.then(() => {
-      this.setTableSortable("Description", "asc");
-    }, (error) => {
-      console.error(error);
+      this.setMsg("");
+    }, (pErrorMsg) => {
+      this.setMsg("(error)");
+      Utils.addToolTip(this.msg, pErrorMsg);
     });
-  }
-
-  updateFooter () {
-    const txt = Utils.txtZeroOneMany(
-      this.table.tBodies[0].children.length,
-      "No issues", "{0} issue", "{0} issues");
-    this.setMsg(txt);
-  }
-
-  makeIssuesStatus (pTitle) {
-    const msg = document.createElement("div");
-    msg.classList.add("msg");
-    msg.innerText = "(loading info for " + pTitle + ")";
-    this.div.appendChild(msg);
-    return msg;
   }
 }

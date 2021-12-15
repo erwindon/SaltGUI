@@ -4,7 +4,9 @@ import {Issues} from "./Issues.js";
 
 export class BeaconsIssues extends Issues {
 
-  onGetIssues (pPanel, pMsg) {
+  onGetIssues (pPanel) {
+
+    const msg = super.onGetIssues(pPanel, "BEACONS");
 
     const localBeaconsListPromise = this.api.getLocalBeaconsList(null);
 
@@ -12,7 +14,7 @@ export class BeaconsIssues extends Issues {
       Issues.removeCategory(pPanel, "disabled-beacons");
       Issues.removeCategory(pPanel, "disabled-beacon");
       BeaconsIssues._handleLocalBeaconsList(pPanel, pLocalBeaconsListData);
-      pMsg.parentElement.removeChild(pMsg);
+      Issues.readyCategory(pPanel, msg);
       return true;
     }, (pLocalBeaconsListMsg) => {
       Issues.removeCategory(pPanel, "disabled-beacons");
@@ -23,7 +25,7 @@ export class BeaconsIssues extends Issues {
       const tr2 = Issues.addIssue(pPanel, "disabled-beacon", "retrieving");
       Issues.addIssueMsg(tr2, "Could not retrieve list of beacon");
       Issues.addIssueErr(tr2, pLocalBeaconsListMsg);
-      pMsg.parentElement.removeChild(pMsg);
+      Issues.readyCategory(pPanel, msg);
       return false;
     });
 

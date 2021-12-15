@@ -4,7 +4,9 @@ import {Issues} from "./Issues.js";
 
 export class SchedulesIssues extends Issues {
 
-  onGetIssues (pPanel, pMsg) {
+  onGetIssues (pPanel) {
+
+    const msg = super.onGetIssues(pPanel, "SCHEDULES");
 
     const localScheduleListPromise = this.api.getLocalScheduleList(null);
 
@@ -12,7 +14,7 @@ export class SchedulesIssues extends Issues {
       Issues.removeCategory(pPanel, "disabled-schedulers");
       Issues.removeCategory(pPanel, "disabled-schedules");
       SchedulesIssues._handleLocalScheduleList(pPanel, pLocalScheduleListData);
-      pMsg.parentElement.removeChild(pMsg);
+      Issues.readyCategory(pPanel, msg);
       return true;
     }, (pLocalScheduleListMsg) => {
       Issues.removeCategory(pPanel, "disabled-schedulers");
@@ -23,7 +25,7 @@ export class SchedulesIssues extends Issues {
       const tr2 = Issues.addIssue(pPanel, "disabled-schedules", "retrieving");
       Issues.addIssueMsg(tr2, "Could not retrieve list of schedules");
       Issues.addIssueErr(tr2, pLocalScheduleListMsg);
-      pMsg.parentElement.removeChild(pMsg);
+      Issues.readyCategory(pPanel, msg);
       return false;
     });
 
