@@ -19,7 +19,7 @@ The version tagged `release` is the latest released version. The version `master
 - View the seven most recent jobs run on Salt
 - Manually run any Salt function and see the output
 - View highstate for all minions with details
-- View issues for all minions with trivial solutions
+- View issues for all minions with trivial solutions (beta)
 - View the values for grains for a particular minion
 - View the schedules for a particular minion
 - View the values for pillars for a particular minion
