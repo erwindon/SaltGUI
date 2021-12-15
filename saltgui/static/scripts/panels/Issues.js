@@ -19,8 +19,9 @@ export class IssuesPanel extends Panel {
     this.addPlayPauseButton("none");
     this.addHelpButton([
       "This page contains an overview of problems",
-      "that are observed in various categories."
-    ]);
+      "that are observed in various categories.",
+      "Leave comments on GitHub #369 (click)"
+    ], "https://github.com/erwindon/SaltGUI/issues/369");
     // this.addTable(["Key", "-menu-", "Description"]);
     this.addTable(["-menu-", "Description"]);
     this.setTableClickable();

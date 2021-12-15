@@ -115,8 +115,8 @@ export class Panel {
     }
   }
 
-  addHelpButton (pHelpTextArr) {
-    const span = document.createElement("span");
+  addHelpButton (pHelpTextArr, pUrl) {
+    const span = document.createElement(pUrl ? "a" : "span");
     span.id = this.key + "-help-button";
     span.classList.add("small-button");
     span.classList.add("small-button-right");
@@ -124,6 +124,11 @@ export class Panel {
     span.innerText = Character.BLACK_QUESTION_MARK_ORNAMENT;
     span.style.cursor = "help";
     this.div.appendChild(span);
+
+    if (pUrl) {
+      span.href = pUrl;
+      span.target = "_blank";
+    }
 
     Utils.addToolTip(span, pHelpTextArr.join("\n"), "bottom-right");
   }
