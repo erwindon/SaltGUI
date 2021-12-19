@@ -80,11 +80,14 @@ export class KeysPanel extends Panel {
 
         // update td.fingerprint with fingerprint value
         const fingerprintTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
+        if (!fingerprintTr) {
+          continue;
+        }
         const fingerprintElement = fingerprintTr.querySelector(".fingerprint");
-        const fingerprint = hosts[minionId];
         if (!fingerprintElement) {
           continue;
         }
+        const fingerprint = hosts[minionId];
         if (!fingerprint.match(this.fingerprintPattern)) {
           item.classList.remove("fingerprint");
           Utils.addErrorToTableCell(fingerprintElement, fingerprint);
