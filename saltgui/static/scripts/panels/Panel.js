@@ -597,8 +597,12 @@ export class Panel {
     }
 
     const cntMinionsPre = Utils.getStorageItem("session", "minions_pre_length");
-    if (cntMinionsPre && cntMinionsPre !== "0") {
-      txt += ", " + Utils.txtZeroOneMany(cntMinionsPre, "", "{0} unaccepted key", "{0} unaccepted keys");
+    if (cntMinionsPre) {
+      txt += Utils.txtZeroOneMany(
+        parseInt(cntMinionsPre, 10),
+        "",
+        ", {0} unaccepted key",
+        ", {0} unaccepted keys");
     }
 
     this.setMsg(txt);
