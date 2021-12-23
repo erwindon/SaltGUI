@@ -12,7 +12,7 @@ export class TemplatesPanel extends Panel {
 
     this.addTitle("Templates");
     this.addSearchButton();
-    this.addTable(["Name", "Description", "Target", "Command", "-menu-"]);
+    this.addTable(["Name", "Location", "Description", "Target", "Command", "-menu-"]);
     this.setTableSortable("Name", "asc");
     this.setTableClickable();
     this.addMsg();
@@ -36,28 +36,36 @@ export class TemplatesPanel extends Panel {
     }
 
     // should we update it or just use from cache (see commandbox) ?
-    let templates = pWheelConfigValuesData.return[0].data.return.saltgui_templates;
-    if (templates) {
-      Utils.setStorageItem("session", "templates", JSON.stringify(templates));
+    let masterTemplates = pWheelConfigValuesData.return[0].data.return.saltgui_templates;
+    if (masterTemplates) {
+      Utils.setStorageItem("session", "templates", JSON.stringify(masterTemplates));
       Router.updateMainMenu();
     } else {
-      templates = {};
-    }
-    const keys = Object.keys(templates).sort();
-    for (const key of keys) {
-      const template = templates[key];
-      this._addTemplate(key, template);
+      masterTemplates = {};
     }
 
-    const txt = Utils.txtZeroOneMany(keys.length,
+    const masterKeys = Object.keys(masterTemplates).sort();
+    for (const key of masterKeys) {
+      const template = masterTemplates[key];
+      this._addTemplate("master", key, template);
+    }
+
+    const totalKeys = masterKeys.length;
+    let txt = Utils.txtZeroOneMany(totalKeys,
       "No templates", "{0} template", "{0} templates");
+    if (masterKeys.length > 0 && masterKeys.length !== totalKeys) {
+      txt += Utils.txtZeroOneMany(masterKeys.length,
+        "", ", {0} master template", ", {0} master templates");
+    }
     this.setMsg(txt);
   }
 
-  _addTemplate (pTemplateName, template) {
+  _addTemplate (pLocation, pTemplateName, template) {
     const tr = document.createElement("tr");
 
     tr.appendChild(Utils.createTd("name", pTemplateName));
+
+    tr.appendChild(Utils.createTd("location", pLocation));
 
     // calculate description
     const description = template["description"];
