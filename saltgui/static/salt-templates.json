@@ -1,0 +1,17 @@
+{
+"template3": {
+  "description": "Third template",
+  "target": "#*",
+  "command": "test.fib num=10"
+  },
+"template4": {
+  "description": "Fourth template",
+  "target": "xev*",
+  "command": "test.version"
+  },
+"template5": {
+  "description": "Fifth template",
+  "target": "xev*",
+  "command": "test.version"
+  }
+}
