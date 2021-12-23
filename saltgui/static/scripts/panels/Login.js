@@ -284,17 +284,29 @@ export class LoginPanel extends Panel {
   _onLoginSuccess () {
     this._showNoticeText("#4CAF50", "Please wait...", "notice_please_wait");
 
+    // these values were only used before login
     Utils.setStorageItem("local", "salt-motd-txt", "");
     Utils.setStorageItem("local", "salt-motd-html", "");
 
     // We need these functions to populate the dropdown boxes
     const wheelConfigValuesPromise = this.api.getWheelConfigValues();
-
-    // We need these functions to populate the dropdown boxes
     wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
       LoginPanel._handleLoginWheelConfigValues(pWheelConfigValuesData);
       return true;
     }, () => false);
+
+    const staticTemplatesJsonPromise = this.api.getStaticTemplatesJson();
+    staticTemplatesJsonPromise.then((pStaticTemplatesJson) => {
+      if (pStaticTemplatesJson) {
+        Utils.setStorageItem("session", "templates_json", JSON.stringify(pStaticTemplatesJson));
+      } else {
+        Utils.setStorageItem("session", "templates_json", "{}");
+      }
+      return true;
+    }, () => {
+      Utils.setStorageItem("session", "templates_json", "{}");
+      return false;
+    });
 
     // allow the success message to be seen
     window.setTimeout(() => {
@@ -327,7 +339,7 @@ export class LoginPanel extends Panel {
     // store for later use
 
     const templates = wheelConfigValuesData.saltgui_templates;
-    Utils.setStorageItem("session", "templates", JSON.stringify(templates));
+    Utils.setStorageItem("session", "templates_master", JSON.stringify(templates));
 
     const reactors = wheelConfigValuesData.reactor;
     Utils.setStorageItem("session", "reactors", JSON.stringify(reactors));

@@ -22,7 +22,8 @@ export class TemplatesPage extends Page {
 
   static isVisible () {
     // show template menu item if templates defined
-    const templatesText = Utils.getStorageItem("session", "templates", "");
-    return templatesText;
+    const templatesMasterText = Utils.getStorageItem("session", "templates_master", "");
+    const templatesJsonText = Utils.getStorageItem("session", "templates_json", "");
+    return templatesMasterText || templatesJsonText;
   }
 }

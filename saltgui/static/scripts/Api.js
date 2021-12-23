@@ -80,6 +80,10 @@ export class API {
     return this.apiRequest("GET", "/static/salt-motd.html");
   }
 
+  getStaticTemplatesJson () {
+    return this.apiRequest("GET", "/static/salt-templates.json");
+  }
+
   getLocalBeaconsList (pMinionId) {
     const params = {
       "client": "local",
@@ -336,6 +340,10 @@ export class API {
         if (pResponse.status === 404 && pPage.endsWith(".txt")) {
           // ok
           return "";
+        }
+        if (pResponse.status === 404 && pPage.endsWith(".json")) {
+          // ok
+          return {};
         }
         throw new HTTPError(pResponse.status, pResponse.statusText);
       });

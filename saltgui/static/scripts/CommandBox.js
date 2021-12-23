@@ -62,14 +62,19 @@ export class CommandBox {
     menu.setTitle("");
     menu.menuButton.classList.add("small-button-left");
     CommandBox.templateCatMenu = menu;
-    const templatesText = Utils.getStorageItem("session", "templates", "{}");
-    const templates = JSON.parse(templatesText);
-    const categories = TemplatesPanel.getTemplatesCategories(templates);
+    const templatesText1 = Utils.getStorageItem("session", "templates_json", "{}");
+    const templates1 = JSON.parse(templatesText1);
+    const templatesText2 = Utils.getStorageItem("session", "templates_master", "{}");
+    const templates2 = JSON.parse(templatesText2);
+    const categories = TemplatesPanel.getTemplatesCategories(templates1, templates2);
+
     if (categories.length < 2) {
       // no useful content
       return;
     }
+
     categories.unshift(null);
+
     for (const category of categories) {
       menu.addMenuItem(
         () => CommandBox._templateCatMenuItemTitle(category),
@@ -120,7 +125,14 @@ export class CommandBox {
     menu.menuButton.classList.add("small-button-left");
     CommandBox.templateTmplMenu = menu;
     CommandBox.templateTmplMenu._templateCategory = null;
-    const templatesText = Utils.getStorageItem("session", "templates", "{}");
+
+    CommandBox._populateTemplateMenu2(menu, "templates_master");
+    CommandBox._populateTemplateMenu2(menu, "templates_json");
+    menu.sortMenu();
+  }
+
+  static _populateTemplateMenu2 (pMenu, pTemplateType) {
+    const templatesText = Utils.getStorageItem("session", pTemplateType, "{}");
     const templates = JSON.parse(templatesText);
     const keys = Object.keys(templates).sort();
     for (const key of keys) {
@@ -129,7 +141,7 @@ export class CommandBox {
       if (!description) {
         description = "(" + key + ")";
       }
-      menu.addMenuItem(
+      pMenu.addMenuItem(
         () => CommandBox._templateTmplMenuItemTitle(template),
         () => {
           CommandBox._applyTemplate(template);

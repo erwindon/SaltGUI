@@ -66,7 +66,8 @@ export class OptionsPanel extends Panel {
       ],
       ["preview-grains", "saltgui", "(none)"],
       ["public-pillars", "saltgui", "(none)"],
-      ["templates", "saltgui", "(none)"],
+      ["templates-master", "saltgui", "(none)"],
+      ["templates-json", "saltgui", "(none)"],
       [
         "tooltip-mode", "saltgui", "full",
         [["mode", "full", "simple", "none"]]

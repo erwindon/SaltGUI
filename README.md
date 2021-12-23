@@ -179,6 +179,25 @@ When at least one template is assigned to a category, then you can select a temp
 selecting the actual category. Otherwise that choice remains hidden. Templates can be in multiple categories
 when a list of categories is assigned.
 
+Alternatively, a separate file can be used.
+The filename must be `saltgui/static/salt-templates.json`.
+e.g.:
+```
+{
+    "template3": {
+        "description": "Third template"
+        "target": "*"
+        "command": "test.fib num=10"
+    },
+    "template4": {
+        "description": "Fourth template"
+        "targettype": "glob"
+        "target": "dev*
+        "command": "test.version"
+    }
+}
+```
+
 ## Jobs
 SaltGUI shows a maximum of 7 jobs in on the right-hand-side of the screen.
 SaltGUI shows a maximum of 50 jobs on the dedicated jobs page.

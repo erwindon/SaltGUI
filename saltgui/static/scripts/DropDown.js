@@ -154,4 +154,13 @@ export class DropDownMenu {
       this.menuDropdownContent.removeChild(this.menuDropdownContent.firstChild);
     }
   }
+
+  sortMenu () {
+    // thx https://stackoverflow.com/questions/282670/easiest-way-to-sort-dom-nodes
+    /* eslint-disable no-confusing-arrow */
+    [...this.menuDropdownContent.children].
+      sort((aa, bb) => aa.innerText > bb.innerText ? 1 : -1).
+      forEach((node) => this.menuDropdownContent.appendChild(node));
+    /* eslint-enable no-confusing-arrow */
+  }
 }

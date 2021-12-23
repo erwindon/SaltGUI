@@ -12,8 +12,7 @@ export class TemplatesPanel extends Panel {
 
     this.addTitle("Templates");
     this.addSearchButton();
-    this.addTable(["Name", "@Category", "Description", "Target", "Command", "-menu-"], "data-list-templates");
-    this.setTableSortable("Name", "asc");
+    this.addTable(["Name", "@Category", "Location", "Description", "Target", "Command", "-menu-"], "data-list-templates");
     this.setTableClickable();
     this.addMsg();
   }
@@ -28,6 +27,24 @@ export class TemplatesPanel extends Panel {
       this._handleTemplatesWheelConfigValues(JSON.stringify(pWheelConfigValuesMsg));
       return false;
     });
+
+    const staticTemplatesJsonPromise = this.api.getStaticTemplatesJson();
+
+    staticTemplatesJsonPromise.then((pStaticTemplatesJson) => {
+      this._handleStaticTemplatesJson(pStaticTemplatesJson);
+      return true;
+    }, (pStaticTemplatesMsg) => {
+      this._handleStaticTemplatesJson(JSON.stringify(pStaticTemplatesMsg));
+      return false;
+    });
+
+    /* eslint-disable compat/compat */
+    /* Promise.all is not supported in op_mini all, IE 11 */
+    const allPromise = Promise.all([wheelConfigValuesPromise, staticTemplatesJsonPromise]);
+    /* eslint-enable compat/compat */
+    allPromise.then(() => {
+      this._showTemplates();
+    });
   }
 
   _handleTemplatesWheelConfigValues (pWheelConfigValuesData) {
@@ -35,61 +52,128 @@ export class TemplatesPanel extends Panel {
       return;
     }
 
-    // should we update it or just use from cache (see commandbox) ?
-    let templates = pWheelConfigValuesData.return[0].data.return.saltgui_templates;
-    if (templates) {
-      Utils.setStorageItem("session", "templates", JSON.stringify(templates));
-      this.setCategoriesTitle(templates);
-      this.showCategoriesColumn(templates);
-      TemplatesPanel.getTemplatesCategories(templates);
-      Router.updateMainMenu();
-    } else {
-      templates = {};
-    }
-    const keys = Object.keys(templates).sort();
-    for (const key of keys) {
-      const template = templates[key];
-      this._addTemplate(key, template);
+    const masterTemplates = pWheelConfigValuesData.return[0].data.return.saltgui_templates;
+    if (!masterTemplates) {
+      return;
     }
 
-    const txt = Utils.txtZeroOneMany(keys.length,
+    Utils.setStorageItem("session", "templates_master", JSON.stringify(masterTemplates));
+  }
+
+
+  _handleStaticTemplatesJson (pStaticTemplatesJson) {
+    if (this.showErrorRowInstead(pStaticTemplatesJson)) {
+      return;
+    }
+
+    if (!pStaticTemplatesJson) {
+      return;
+    }
+
+    Utils.setStorageItem("session", "templates_json", JSON.stringify(pStaticTemplatesJson));
+  }
+
+  _showTemplates () {
+    const masterTemplatesTxt = Utils.getStorageItem("session", "templates_master", "{}");
+    const masterTemplates = JSON.parse(masterTemplatesTxt);
+    const masterKeys = Object.keys(masterTemplates);
+    for (const key of masterKeys) {
+      const template = masterTemplates[key];
+      this._addTemplate("master", key, template);
+    }
+
+    const saltTemplatesTxt = Utils.getStorageItem("session", "templates_json", "{}");
+    const saltTemplates = JSON.parse(saltTemplatesTxt);
+    const saltTemplatesKeys = Object.keys(saltTemplates).sort();
+    for (const key of saltTemplatesKeys) {
+      const template = saltTemplates[key];
+      this._addTemplate("salt-templates.json", key, template);
+    }
+
+    const totalKeys = masterKeys.length + saltTemplatesKeys.length;
+    let txt = Utils.txtZeroOneMany(totalKeys,
       "No templates", "{0} template", "{0} templates");
+    if (masterKeys.length !== totalKeys) {
+      txt += Utils.txtZeroOneMany(masterKeys.length,
+        "", ", {0} template in master", ", {0} templates in master");
+    }
+    if (saltTemplatesKeys.length !== totalKeys) {
+      txt += Utils.txtZeroOneMany(saltTemplatesKeys.length,
+        "", ", {0} template in salt-templates.json", ", {0} templates in salt-templates.json");
+    }
     this.setMsg(txt);
+
+    // cannot join the arrays because there might be duplicate keys
+    // const allTemplates = Object.assign({}, masterTemplates, saltTemplates);
+
+    this.setCategoriesTitle(masterTemplates, saltTemplates);
+    this.showCategoriesColumn(masterTemplates, saltTemplates);
+    TemplatesPanel.getTemplatesCategories(masterTemplates, saltTemplates);
+
+    Router.updateMainMenu();
+
+    this.setTableSortable("Name", "asc");
   }
 
-  setCategoriesTitle (templates) {
+  setCategoriesTitle (pMasterTemplates, pSaltTemplates) {
     const categoryTh = this.table.querySelectorAll("th")[1];
-    const keys = Object.keys(templates);
-    for (const key of keys) {
-      const template = templates[key];
+
+    let maxCategories = 0;
+
+    const masterKeys = Object.keys(pMasterTemplates);
+    for (const key of masterKeys) {
+      const template = pMasterTemplates[key];
       const categories = TemplatesPanel.getTemplateCategories(template);
-      if (categories.length > 1) {
-        categoryTh.innerText = "Categories";
-      }
+      maxCategories = Math.max(maxCategories, categories.length);
+    }
+
+    const saltKeys = Object.keys(pSaltTemplates);
+    for (const key of saltKeys) {
+      const template = pSaltTemplates[key];
+      const categories = TemplatesPanel.getTemplateCategories(template);
+      maxCategories = Math.max(maxCategories, categories.length);
+    }
+
+    if (maxCategories > 1) {
+      categoryTh.innerText = "Categories";
     }
   }
 
-  showCategoriesColumn (templates) {
-    const keys = Object.keys(templates);
-    for (const key of keys) {
-      const template = templates[key];
+  showCategoriesColumn (pMasterTemplates, pSaltTemplates) {
+    let showCategoriesColumn = false;
+
+    const masterKeys = Object.keys(pMasterTemplates);
+    for (const key of masterKeys) {
+      const template = pMasterTemplates[key];
       const categories = TemplatesPanel.getTemplateCategories(template);
       if (categories.length > 1 || categories.length > 0 && categories[0] !== undefined) {
-        const categoryColumn = this.table.querySelectorAll("col")[1];
-        // show the categories column only when a category was filled in somewhere
-        // and it is not the only category
-        categoryColumn.removeAttribute("style");
-        return;
+        showCategoriesColumn = true;
       }
+    }
+
+    const saltKeys = Object.keys(pSaltTemplates);
+    for (const key of saltKeys) {
+      const template = pSaltTemplates[key];
+      const categories = TemplatesPanel.getTemplateCategories(template);
+      if (categories.length > 1 || categories.length > 0 && categories[0] !== undefined) {
+        showCategoriesColumn = true;
+      }
+    }
+
+    if (showCategoriesColumn) {
+      const categoryColumn = this.table.querySelectorAll("col")[1];
+      // show the categories column only when a category was filled in somewhere
+      // and it is not the only category
+      categoryColumn.removeAttribute("style");
     }
   }
 
-  static getTemplateCategories (template) {
+  static getTemplateCategories (pTemplate) {
     const categories = [];
-    if (template.category && typeof template.category === "string") {
-      categories.push(template.category);
-    } else if (typeof template.categories === "object" && Array.isArray(template.categories)) {
-      for (const category of template.categories) {
+    if (pTemplate.category && typeof pTemplate.category === "string") {
+      categories.push(pTemplate.category);
+    } else if (typeof pTemplate.categories === "object" && Array.isArray(pTemplate.categories)) {
+      for (const category of pTemplate.categories) {
         if (typeof category === "string") {
           categories.push(category);
         }
@@ -100,16 +184,24 @@ export class TemplatesPanel extends Panel {
     return categories;
   }
 
-  static getTemplatesCategories (templates) {
+  static getTemplatesCategories (pMasterTemplates, pSaltTemplates) {
     let categories = [];
-    const keys = Object.keys(templates);
-    for (const key of keys) {
-    // make unique
-      const template = templates[key];
+
+    const masterKeys = Object.keys(pMasterTemplates);
+    for (const key of masterKeys) {
+      const template = pMasterTemplates[key];
       categories = categories.concat(TemplatesPanel.getTemplateCategories(template));
     }
+
+    const saltKeys = Object.keys(pSaltTemplates);
+    for (const key of saltKeys) {
+      const template = pSaltTemplates[key];
+      categories = categories.concat(TemplatesPanel.getTemplateCategories(template));
+    }
+
     // make unique
     categories = categories.filter((element, index, array) => array.indexOf(element) === index);
+
     // make sorted, thx https://stackoverflow.com/questions/29829205/sort-an-array-so-that-null-values-always-come-last
     categories.sort((aa, bb) => (bb === null) - (aa === null) || +Number(aa > bb) || -Number(aa < bb));
 
@@ -120,6 +212,7 @@ export class TemplatesPanel extends Panel {
       if (!category) {
         continue;
       }
+
       // e.g. <option value="denied">
       const option = document.createElement("option");
       option.value = category;
@@ -129,7 +222,7 @@ export class TemplatesPanel extends Panel {
     return categories;
   }
 
-  _addTemplate (pTemplateName, template) {
+  _addTemplate (pLocation, pTemplateName, template) {
     const tr = document.createElement("tr");
 
     tr.appendChild(Utils.createTd("name", pTemplateName));
@@ -143,6 +236,8 @@ export class TemplatesPanel extends Panel {
       categoryTd.className = "value-none";
     }
     tr.appendChild(categoryTd);
+
+    tr.appendChild(Utils.createTd("location", pLocation));
 
     // calculate description
     const description = template["description"];
