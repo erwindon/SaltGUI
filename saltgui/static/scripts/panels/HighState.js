@@ -299,7 +299,7 @@ export class HighStatePanel extends Panel {
       const tasksTd = Utils.createTd("tasks", "");
 
       if (typeof minionResult.return !== "object" || Array.isArray(minionResult.return)) {
-        Utils.addErrorToTableCell(tasksTd, JSON.stringify(minionResult.return));
+        Utils.addErrorToTableCell(tasksTd, minionResult.return);
       } else {
         const keys = Object.keys(minionResult.return);
         for (const key of keys) {

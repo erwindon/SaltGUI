@@ -146,6 +146,17 @@ export class Utils {
   }
 
   static addErrorToTableCell (pTd, pErrorMessage, pStyle = "bottom-center") {
+
+    // reduce the ["str"] case
+    if (Array.isArray(pErrorMessage) && pErrorMessage.length === 1) {
+      pErrorMessage = pErrorMessage[0];
+    }
+
+    // show representation of the object
+    if (typeof pErrorMessage === "object") {
+      pErrorMessage = JSON.stringify(pErrorMessage);
+    }
+
     // the TD may contain text such as "loading...", clear that first
     pTd.innerText = "";
     const span = Utils.createSpan("", "(error)");
