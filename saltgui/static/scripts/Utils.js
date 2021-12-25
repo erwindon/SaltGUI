@@ -438,11 +438,13 @@ export class Utils {
   }
 
   static txtZeroOneMany (pCnt, pZeroText, pOneText, pManyText) {
-    let txt = pManyText;
+    let txt;
     if (pCnt === 0 || pCnt === undefined) {
       txt = pZeroText;
     } else if (pCnt === 1) {
       txt = pOneText;
+    } else {
+      txt = pManyText;
     }
     txt = txt.replace("{0}", pCnt.toLocaleString());
     return txt;
