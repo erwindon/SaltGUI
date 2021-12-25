@@ -245,6 +245,12 @@ export class HighStatePanel extends Panel {
         continue;
       }
 
+      const obj = jobData.Result[minionId].return;
+      if (typeof obj !== "object" || Array.isArray(obj)) {
+        // not an object, not a valid state answer
+        continue;
+      }
+
       // we already have the TR
       // but this function also clears the row
       this.getElement(trId);

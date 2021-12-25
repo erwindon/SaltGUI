@@ -82,6 +82,10 @@ export class StateIssues extends Issues {
       }
       for (const stateName in minionData.return) {
         const stateData = minionData.return[stateName];
+        if (typeof stateData !== "object") {
+          // e.g. an error string
+          continue;
+        }
         const key = minionId + "-" + stateData.__sls__ + "-" + stateData.__id__;
         if (stateData.result === true) {
           // problem solved in a later execution
