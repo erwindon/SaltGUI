@@ -1,6 +1,5 @@
 /* global window */
 
-import {Character} from "../Character.js";
 import {DropDownMenu} from "../DropDown.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
@@ -22,7 +21,7 @@ export class KeysPanel extends Panel {
     this._addPanelMenuItemWheelKeyRejectAllUnacceptedAcceptedDenied();
     this._addPanelMenuItemWheelKeyDeleteAll();
     this.addSearchButton();
-    this.addPlayPauseButton("play");
+    this.addPlayPauseButton();
     this.addHelpButton([
       "The content of this page is",
       "automatically refreshed."
@@ -32,6 +31,8 @@ export class KeysPanel extends Panel {
     this.addMsg();
 
     this.fingerprintPattern = /^[0-9a-f:]+$/i;
+
+    this.setPlayPauseButton("play");
   }
 
   onShow () {
@@ -173,16 +174,12 @@ export class KeysPanel extends Panel {
     // capitalize the first word (can only be "no")
     txt = txt.replace(/^no/, "No");
 
-    if (this.playOrPause === "pause") {
-      txt += ", press " + Character.buttonInText(Character.CH_PLAY) + " to continue";
-    }
-
     KeysPanel.cntUnaccepted = cnt["unaccepted"];
     KeysPanel.cntAccepted = cnt["accepted"];
     KeysPanel.cntDenied = cnt["denied"];
     KeysPanel.cntRejected = cnt["rejected"];
 
-    this.setMsg(txt, true);
+    this.setMsg(txt);
   }
 
   static _flagMinion (pMinionId, pMinionTr, pMinionsDict) {

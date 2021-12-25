@@ -67,7 +67,7 @@ export class Panel {
     this.searchButton = span;
   }
 
-  addPlayPauseButton (pInitialStatus) {
+  addPlayPauseButton () {
     const playButton = document.createElement("span");
     playButton.innerText = Character.CH_PLAY;
     playButton.classList.add("small-button");
@@ -102,7 +102,7 @@ export class Panel {
       pClickEvent.stopPropagation();
     });
 
-    this.setPlayPauseButton(pInitialStatus);
+    this.setPlayPauseButton("none");
   }
 
   setPlayPauseButton (pStatus) {
@@ -113,6 +113,7 @@ export class Panel {
     if (this.pauseButton) {
       this.pauseButton.style.display = pStatus === "play" ? "" : "none";
     }
+    this._updateMsg();
   }
 
   addHelpButton (pHelpTextArr, pUrl) {
@@ -238,19 +239,52 @@ export class Panel {
   }
 
   addMsg () {
-    const msg = document.createElement("div");
-    msg.id = this.key + "-msg";
-    msg.classList.add("msg");
-    msg.innerText = "(loading)";
-    this.div.appendChild(msg);
-    this.msg = msg;
+    const msgDiv = document.createElement("div");
+    msgDiv.id = this.key + "-msg";
+    msgDiv.classList.add("msg");
+    this.div.appendChild(msgDiv);
+    this.msgDiv = msgDiv;
+    this.setMsg("(loading)");
   }
 
-  setMsg (pText, isHTML = false) {
+  setMsg (pText) {
+    this.msgTxt = pText;
+    this._updateMsg();
+  }
+
+  _updateMsg () {
+    if (!this.msgDiv) {
+      // the div is not created yet
+      return;
+    }
+
+    let txt = this.msgTxt;
+    let isHTML = false;
+
+    if (this.playOrPause === "pause" && this.pauseButton) {
+      if (txt) {
+        txt += ", ";
+      }
+      if (this.table && this.table.tBodies[0].rows.length) {
+        txt += "press " + Character.buttonInText(Character.CH_PLAY) + " to continue";
+      } else {
+        txt += "press " + Character.buttonInText(Character.CH_PLAY) + " to begin";
+      }
+      isHTML = true;
+    }
+
+    if (this.playOrPause === "play" && this.playButton) {
+      if (txt) {
+        txt += ", ";
+      }
+      txt += "press " + Character.buttonInText(Character.CH_PAUSE) + " to pause";
+      isHTML = true;
+    }
+
     if (isHTML) {
-      this.msg.innerHTML = pText;
+      this.msgDiv.innerHTML = txt;
     } else {
-      this.msg.innerText = pText;
+      this.msgDiv.innerText = txt;
     }
   }
 
@@ -315,8 +349,8 @@ export class Panel {
     this.table.tFoot.appendChild(tr);
 
     // hide the "(loading)" message
-    if (this.msg !== null) {
-      this.msg.style.display = "none";
+    if (this.msgDiv) {
+      this.msgDiv.style.display = "none";
     }
 
     return true;
@@ -725,8 +759,8 @@ export class Panel {
     if (this.table) {
       this.clearTable();
     }
-    if (this.msg) {
-      this.msg.innerText = "(loading)";
+    if (this.msgDiv) {
+      this.setMsg("(loading)");
     }
     if (this.timeField) {
       this.timeField.innerHTML = "&nbsp;";

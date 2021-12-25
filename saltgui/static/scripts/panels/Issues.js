@@ -16,7 +16,7 @@ export class IssuesPanel extends Panel {
 
     this.addTitle("Issues (beta)");
     this.addSearchButton();
-    this.addPlayPauseButton("none");
+    this.addPlayPauseButton();
     this.addHelpButton([
       "This page contains an overview of problems",
       "that are observed in various categories.",
@@ -44,6 +44,10 @@ export class IssuesPanel extends Panel {
     this.lowStateIssues = new StateIssues();
   }
 
+  updateFooter () {
+    this.setMsg("(loading)");
+  }
+
   onShow () {
     const p1 = this.keysIssues.onGetIssues(this);
     const p2 = this.jobsIssues.onGetIssues(this);
@@ -60,7 +64,7 @@ export class IssuesPanel extends Panel {
       this.setMsg("");
     }, (pErrorMsg) => {
       this.setMsg("(error)");
-      Utils.addToolTip(this.msg, pErrorMsg);
+      Utils.addToolTip(this.msgDiv, pErrorMsg);
     });
   }
 }

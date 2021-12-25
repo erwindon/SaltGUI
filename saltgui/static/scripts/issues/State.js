@@ -38,7 +38,8 @@ export class StateIssues extends Issues {
     }
 
     this.jobs = jobs;
-    pPanel.setPlayPauseButton("play");
+    // this is good only while "State" is the only issue-provider
+    pPanel.setPlayPauseButton(jobs.length === 0 ? "none" : "play");
 
     this._updateNextJob(pPanel, pMsg);
   }
@@ -48,11 +49,20 @@ export class StateIssues extends Issues {
       return;
     }
     if (!this.jobs.length) {
+      // this is good only while "State" is the only issue-provider
       pPanel.setPlayPauseButton("none");
       this.jobs = null;
       Issues.readyCategory(pPanel, pMsg);
       return;
     }
+
+    if (pPanel.playOrPause !== "play") {
+      window.setTimeout(() => {
+        this._updateNextJob(pPanel, pMsg);
+      }, 1000);
+      return;
+    }
+
     const job = this.jobs.pop();
 
     const runnerJobsListJobPromise = this.api.getRunnerJobsListJob(job.id);

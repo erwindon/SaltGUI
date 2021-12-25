@@ -21,7 +21,7 @@ export class HighStatePanel extends Panel {
     this._addMenuItemStateApply(this.panelMenu, "*");
     this._addMenuItemStateApplyTest(this.panelMenu, "*");
     this.addSearchButton();
-    this.addPlayPauseButton("none");
+    this.addPlayPauseButton();
     this.addHelpButton([
       "This panel shows the latest state.highstate or state.apply job for each minion.",
       "Only the latest " + MAX_HIGHSTATE_JOBS + " jobs are verified.",
@@ -104,13 +104,9 @@ export class HighStatePanel extends Panel {
 
   updateFooter () {
     const tbody = this.table.tBodies[0];
-    let txt = Utils.txtZeroOneMany(tbody.rows.length,
+    const txt = Utils.txtZeroOneMany(tbody.rows.length,
       "No minions", "{0} minion", "{0} minions");
-
-    if (this.playOrPause === "pause") {
-      txt += ", press " + Character.buttonInText(Character.CH_PLAY) + " to continue";
-    }
-    this.setMsg(txt, true);
+    this.setMsg(txt);
   }
 
   _handleHighstateRunnerJobsListJobs (pData) {
@@ -134,7 +130,7 @@ export class HighStatePanel extends Panel {
 
     this.jobs = jobs;
 
-    this.setPlayPauseButton("play");
+    this.setPlayPauseButton(jobs.length === 0 ? "none" : "play");
 
     this._updateNextJob();
   }

@@ -446,7 +446,13 @@ export class Utils {
     } else {
       txt = pManyText;
     }
-    txt = txt.replace("{0}", pCnt.toLocaleString());
+    if (pCnt === undefined) {
+      // just in case
+      txt = txt.replace("{0}", pCnt);
+      console.log(pCnt, pZeroText, pOneText, pManyText);
+    } else {
+      txt = txt.replace("{0}", pCnt.toLocaleString());
+    }
     return txt;
   }
 

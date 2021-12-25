@@ -1,6 +1,5 @@
 /* global document */
 
-import {Character} from "../Character.js";
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
@@ -14,7 +13,7 @@ export class EventsPanel extends Panel {
 
     this.addTitle("Recent Events");
     this.addSearchButton();
-    this.addPlayPauseButton("pause");
+    this.addPlayPauseButton();
     this.addHelpButton([
       "The content of this page is",
       "automatically refreshed.",
@@ -22,6 +21,8 @@ export class EventsPanel extends Panel {
     ]);
     this.addTable(["Timestamp", "Tag", "Data"]);
     this.addMsg();
+
+    this.setPlayPauseButton("pause");
   }
 
   onShow () {
@@ -32,26 +33,18 @@ export class EventsPanel extends Panel {
     // update the footer
     const tbody = this.table.tBodies[0];
     // when there are more than a screen-ful of events, the user
-    // will not see the "press play" message. but ths user already
-    // knows that because that cause the events to be shown...
+    // will not see the "press play" message. but the user already
+    // knows that because that caused the events to be shown...
     let txt = Utils.txtZeroOneMany(tbody.rows.length,
       "No events", "{0} event", "{0} events");
-    /* eslint-disable no-lonely-if */
     if (this.playOrPause === "play") {
       if (tbody.rows.length) {
         txt += ", waiting for more events";
       } else {
         txt += ", waiting for events";
       }
-    } else {
-      if (tbody.rows.length) {
-        txt += ", press " + Character.buttonInText(Character.CH_PLAY) + " to continue";
-      } else {
-        txt += ", press " + Character.buttonInText(Character.CH_PLAY) + " to begin";
-      }
     }
-    /* eslint-enable no-lonely-if */
-    this.setMsg(txt, true);
+    this.setMsg(txt);
   }
 
   handleAnyEvent (pTag, pData) {

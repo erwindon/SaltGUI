@@ -20,7 +20,7 @@ export class BeaconsMinionPanel extends Panel {
     this._addPanelMenuItemBeaconsReset();
     this._addPanelMenuItemBeaconsSave();
     this.addSearchButton();
-    this.addPlayPauseButton("play");
+    this.addPlayPauseButton();
     this.addCloseButton();
     this.addHelpButton([
       "The content of column 'Value' is automatically refreshed.",
@@ -93,19 +93,15 @@ export class BeaconsMinionPanel extends Panel {
   updateFooter () {
     // update the footer
     const tbody = this.table.tBodies[0];
-    let txt = Utils.txtZeroOneMany(tbody.rows.length,
+    const txt = Utils.txtZeroOneMany(tbody.rows.length,
       "No beacons", "{0} beacon", "{0} beacons");
-
-    if (this.playOrPause === "pause") {
-      txt += ", press " + Character.buttonInText(Character.CH_PLAY) + " to continue";
-    }
-
-    this.setMsg(txt, true);
+    this.setMsg(txt);
   }
 
   _handleLocalBeaconsList (pLocalBeaconsListData, pMinionId) {
     if (this.showErrorRowInstead(pLocalBeaconsListData)) {
       this.setPlayPauseButton("none");
+      this.updateFooter();
       return;
     }
 
@@ -193,6 +189,8 @@ export class BeaconsMinionPanel extends Panel {
       tr.helpButtonSpan = helpButtonSpan;
       tr.appendChild(helpButtonTd);
     }
+
+    this.setPlayPauseButton(keys.length === 0 ? "none" : "play");
 
     this.updateFooter();
   }

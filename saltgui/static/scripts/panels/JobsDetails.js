@@ -19,7 +19,7 @@ export class JobsDetailsPanel extends JobsPanel {
     this._addPanelMenuItemShowEligible();
     this._addPanelMenuItemShowAll();
     this.addSearchButton();
-    this.addPlayPauseButton("play");
+    this.addPlayPauseButton();
     this.addHelpButton([
       "Entries for jobs that are primarily used by SaltGUI are normally hidden.",
       "It is possible to define exceptions on that, and also to define additions to that.",

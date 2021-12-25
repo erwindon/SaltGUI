@@ -1,6 +1,5 @@
 /* global */
 
-import {Character} from "../Character.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
 
@@ -210,9 +209,7 @@ export class JobsPanel extends Panel {
     this.numberOfJobsEligible = numberOfJobsEligible;
     this.numberOfJobsPresent = numberOfJobsPresent;
 
-    // an intermediate timer event may have caused
-    // the button to be hidden
-    this.setPlayPauseButton("play");
+    this.setPlayPauseButton(numberOfJobsShown === 0 ? "none" : "play");
 
     this.updateFooter();
 
@@ -228,12 +225,7 @@ export class JobsPanel extends Panel {
     }
     txt += Utils.txtZeroOneMany(this.numberOfJobsPresent,
       "", ", {0} job present", ", {0} jobs present");
-
-    if (this.playOrPause === "pause") {
-      txt += ", press " + Character.buttonInText(Character.CH_PLAY) + " to continue";
-    }
-
-    this.setMsg(txt, true);
+    this.setMsg(txt);
   }
 
   static _jobsToArray (jobs) {
