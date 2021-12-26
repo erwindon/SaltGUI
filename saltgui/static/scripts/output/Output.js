@@ -480,11 +480,32 @@ export class Output {
         }
       }
 
-      txt += Utils.txtZeroOneMany(cntMinions - cntResponses,
-        "", ", {0} no response", ", {0} no responses");
+      let cntMissingResponses = 0;
+      for (const minionId of pMinionData) {
+        if (!(minionId in pResponse)) {
+          cntMissingResponses += 1;
+        }
+      }
 
-      if (cntResponses > 0 && cntMinions !== cntResponses) {
-        txt += ", " + cntMinions + " total";
+      let cntExtraResponses = 0;
+      for (const minionId in pResponse) {
+        if (!pMinionData.includes(minionId)) {
+          cntExtraResponses += 1;
+        }
+      }
+
+      if (cntMissingResponses > 0) {
+        txt += Utils.txtZeroOneMany(cntMissingResponses,
+          "", ", {0} no response", ", {0} no responses");
+      }
+      if (cntExtraResponses > 0 && cntExtraResponses !== cntResponses) {
+        txt += Utils.txtZeroOneMany(cntExtraResponses,
+          "", ", {0} unexpected response", ", {0} unexpected responses");
+      }
+
+      const cntTotal = cntResponses + cntMissingResponses;
+      if (cntTotal !== cntResponses && cntTotal !== cntMissingResponses && cntTotal !== cntExtraResponses) {
+        txt += ", " + cntTotal + " total";
       }
 
       allDiv.appendChild(summaryJobsActiveSpan);
@@ -541,6 +562,18 @@ export class Output {
     if (pResponse.RUNNER && pResponse.RUNNER.outputter === "highstate") {
       pResponse = pResponse.RUNNER.data;
       pMinionData = Object.keys(pResponse);
+    }
+
+    // sometimes the administration is wrong and there are
+    // responses from minions that are not in the list
+    // also show the results of these minions
+    const originalMinionData = [...pMinionData];
+    for (const key in pResponse) {
+      if (pMinionData.includes(key)) {
+        // as expected
+        continue;
+      }
+      pMinionData.push(key);
     }
 
     // for all other types we consider the output per minion
@@ -627,6 +660,14 @@ export class Output {
         minionMultiLine = true;
         fndRepresentation = true;
         addHighStateSummaryFlag = true;
+      }
+
+      // who which output is unexpected
+      // unless all output is unexpected
+      // that happens when the minion-list is lost
+      // this happens with some storage backends
+      if (originalMinionData.length > 0 && !originalMinionData.includes(minionId)) {
+        minionLabel.innerText += " (unexpected)";
       }
 
       // nothing special? then it is normal output
