@@ -42,11 +42,13 @@ pre.output div:first-of-type {
   margin-top: 0;
 }
 
-pre .minion-id.host-success {
+pre .minion-id.host-success,
+pre #summary-jobs-active .host-success {
   color: lime;
 }
 
-pre .minion-id.host-failure {
+pre .minion-id.host-failure,
+pre #summary-jobs-active .host-failure {
   color: red;
 }
 
@@ -73,7 +75,9 @@ pre .task-failure {
 }
 
 pre .minion-id.host-skips,
-pre .minion-id.host-no-response {
+pre #summary-jobs-active .host-skips,
+pre .minion-id.host-no-response,
+pre #summary-jobs-active .host-no-response {
   color: yellow;
 }
 
