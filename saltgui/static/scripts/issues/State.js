@@ -102,15 +102,17 @@ export class StateIssues extends Issues {
           Issues.removeIssue(pPanel, "state", key);
           continue;
         }
-        const tr = Issues.addIssue(pPanel, "state", key);
         if (stateData.__sls__) {
+          const tr = Issues.addIssue(pPanel, "state", key);
           Issues.addIssueMsg(tr, "State '" + stateData.__sls__ + "/" + stateData.__id__ + "' on '" + minionId + "' failed");
           Issues.addIssueCmd(tr, "Apply state", minionId, ["state.sls_id", stateData.__id__, "mods=", stateData.__sls__]);
-        } else {
+          Issues.addIssueNav(tr, "job", {"id": jobData.jid, "minionid": minionId});
+        } else if (stateData.__id__) {
           // really old minions do not fill __sls__
+          const tr = Issues.addIssue(pPanel, "state", key);
           Issues.addIssueMsg(tr, "State '" + stateData.__id__ + "' on '" + minionId + "' failed");
+          Issues.addIssueNav(tr, "job", {"id": jobData.jid, "minionid": minionId});
         }
-        Issues.addIssueNav(tr, "job", {"id": jobData.jid, "minionid": minionId});
       }
     }
   }
