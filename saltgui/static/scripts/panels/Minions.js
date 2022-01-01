@@ -88,6 +88,10 @@ export class MinionsPanel extends Panel {
       const menu = new DropDownMenu(minionTr, true);
       this._addMenuItemStateApply(menu, minionId);
       this._addMenuItemStateApplyTest(menu, minionId);
+      this._addMenuItemShowGrains(menu, minionId);
+      this._addMenuItemShowPillars(menu, minionId);
+      this._addMenuItemShowSchedules(menu, minionId);
+      this._addMenuItemShowBeacons(menu, minionId);
 
       minionTr.addEventListener("click", (pClickEvent) => {
         const cmdArr = ["state.apply"];
@@ -188,6 +192,10 @@ export class MinionsPanel extends Panel {
     const menu = new DropDownMenu(minionTr, true);
     this._addMenuItemStateApply(menu, pMinionId);
     this._addMenuItemStateApplyTest(menu, pMinionId);
+    this._addMenuItemShowGrains(menu, pMinionId);
+    this._addMenuItemShowPillars(menu, pMinionId);
+    this._addMenuItemShowSchedules(menu, pMinionId);
+    this._addMenuItemShowBeacons(menu, pMinionId);
   }
 
   _addMenuItemStateApply (pMenu, pMinionId) {
@@ -201,6 +209,30 @@ export class MinionsPanel extends Panel {
     pMenu.addMenuItem("Test state...", () => {
       const cmdArr = ["state.apply", "test=", true];
       this.runCommand("", pMinionId, cmdArr);
+    });
+  }
+
+  _addMenuItemShowGrains (pMenu, pMinionId) {
+    pMenu.addMenuItem("Show grains", () => {
+      this.router.goTo("grains-minion", {"minionid": pMinionId});
+    });
+  }
+
+  _addMenuItemShowSchedules (pMenu, pMinionId) {
+    pMenu.addMenuItem("Show schedules", () => {
+      this.router.goTo("schedules-minion", {"minionid": pMinionId});
+    });
+  }
+
+  _addMenuItemShowPillars (pMenu, pMinionId) {
+    pMenu.addMenuItem("Show pillars", () => {
+      this.router.goTo("pillars-minion", {"minionid": pMinionId});
+    });
+  }
+
+  _addMenuItemShowBeacons (pMenu, pMinionId) {
+    pMenu.addMenuItem("Show beacons", () => {
+      this.router.goTo("beacons-minion", {"minionid": pMinionId});
     });
   }
 
