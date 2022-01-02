@@ -136,6 +136,7 @@ export class Utils {
 
     if (pToolTipText) {
       const toolTipSpan = Utils.createSpan("", pToolTipText);
+      toolTipSpan.classList.add("no-search");
       toolTipSpan.classList.add("tooltip-text");
       toolTipSpan.classList.add("tooltip-text-" + pStyle);
       pToolTipHost.classList.add("tooltip");
@@ -166,8 +167,8 @@ export class Utils {
 
   static _hasTextContent (pElement, pSearchText, pCaseSensitiveFlag) {
 
-    // why?
-    if (pElement.classList && pElement.classList.contains("run-command-button")) {
+    if (pElement.classList && pElement.classList.contains("no-search")) {
+      // skip stuff like header row, dropdown menus and tooltips
       return 0;
     }
 
@@ -374,12 +375,13 @@ export class Utils {
     let hasEmptyMatches = false;
     let hasNonEmptyMatches = false;
     const blocks = pTable.tagName === "TABLE" ? pTable.tBodies[0].rows : pTable.children;
-    for (const row of blocks) {
-      if (row.classList.contains("no-search")) {
+    for (const block of blocks) {
+      if (block.classList.contains("no-search")) {
+        // e.g. first row of output-panel
         continue;
       }
       let show = false;
-      const items = row.tagName === "TR" ? row.cells : [row];
+      const items = block.tagName === "TR" ? block.cells : [block];
       for (const cell of items) {
         // do not use "innerText"
         // that one does not handle hidden text
@@ -399,9 +401,9 @@ export class Utils {
         show = !show;
       }
       if (show) {
-        row.classList.remove("no-filter-match");
+        block.classList.remove("no-filter-match");
       } else {
-        row.classList.add("no-filter-match");
+        block.classList.add("no-filter-match");
       }
     }
     if (pSearchText && hasEmptyMatches) {

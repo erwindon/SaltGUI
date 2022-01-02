@@ -425,7 +425,7 @@ export class Output {
       return;
     }
 
-    const allDiv = Utils.createDiv("no-search");
+    const topSummaryDiv = Utils.createDiv("no-search");
     const cntMinions = pMinionData.length;
 
     if (!pCommand.startsWith("runners.") &&
@@ -511,10 +511,10 @@ export class Output {
         txt += ", " + cntTotal + " total";
       }
 
-      allDiv.appendChild(summaryJobsActiveSpan);
+      topSummaryDiv.appendChild(summaryJobsActiveSpan);
 
       summaryJobsListJobSpan.innerText = txt;
-      allDiv.appendChild(summaryJobsListJobSpan);
+      topSummaryDiv.appendChild(summaryJobsListJobSpan);
     }
 
     const masterTriangle = Utils.createSpan();
@@ -526,9 +526,9 @@ export class Output {
       masterTriangle.innerText = Character.WHITE_DOWN_POINTING_TRIANGLE;
     }
     masterTriangle.style.cursor = "pointer";
-    allDiv.appendChild(masterTriangle);
+    topSummaryDiv.appendChild(masterTriangle);
 
-    pOutputContainer.appendChild(allDiv);
+    pOutputContainer.appendChild(topSummaryDiv);
 
     masterTriangle.addEventListener("click", (pClickEvent) => {
       if (masterTriangle.innerText === Character.WHITE_DOWN_POINTING_TRIANGLE) {
