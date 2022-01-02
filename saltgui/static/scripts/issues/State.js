@@ -103,8 +103,13 @@ export class StateIssues extends Issues {
           continue;
         }
         const tr = Issues.addIssue(pPanel, "state", key);
-        Issues.addIssueMsg(tr, "State '" + stateData.__sls__ + "/" + stateData.__id__ + "' on '" + minionId + "' failed");
-        Issues.addIssueCmd(tr, "Apply state", minionId, ["state.sls_id", stateData.__id__, "mods=", stateData.__sls__]);
+        if (stateData.__sls__) {
+          Issues.addIssueMsg(tr, "State '" + stateData.__sls__ + "/" + stateData.__id__ + "' on '" + minionId + "' failed");
+          Issues.addIssueCmd(tr, "Apply state", minionId, ["state.sls_id", stateData.__id__, "mods=", stateData.__sls__]);
+        } else {
+          // really old minions do not fill __sls__
+          Issues.addIssueMsg(tr, "State '" + stateData.__id__ + "' on '" + minionId + "' failed");
+        }
         Issues.addIssueNav(tr, "job", {"id": jobData.jid, "minionid": minionId});
       }
     }

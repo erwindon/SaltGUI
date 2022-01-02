@@ -49,6 +49,11 @@ export class SchedulesMinionPanel extends Panel {
     }
 
     let schedules = pLocalScheduleList.return[0][pMinionId];
+    // because some really old minion do not fully support schedules
+    if (this.showErrorRowInstead(schedules)) {
+      return;
+    }
+
     schedules = SchedulesPanel.fixSchedulesMinion(schedules);
 
     this.schedulesEnabled = schedules.enabled;

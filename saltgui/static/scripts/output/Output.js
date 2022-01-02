@@ -357,21 +357,24 @@ export class Output {
   }
 
   static _getIsSuccess (pMinionResponse) {
-    if (Output._hasProperties(pMinionResponse, ["retcode", "return", "success"])) {
+    // really old minions do not return 'retcode'
+    if (Output._hasProperties(pMinionResponse, ["return", "success"])) {
       return pMinionResponse.success;
     }
     return true;
   }
 
   static _getRetCode (pMinionResponse) {
-    if (Output._hasProperties(pMinionResponse, ["retcode", "return", "success"])) {
+    // but really old minions do not return 'retcode'
+    if (Output._hasProperties(pMinionResponse, ["return", "success"])) {
       return pMinionResponse.retcode;
     }
     return 0;
   }
 
   static _getMinionResponse (pCommand, pMinionResponse) {
-    if (Output._hasProperties(pMinionResponse, ["retcode", "return", "success"])) {
+    // really old minions do not return 'retcode'
+    if (Output._hasProperties(pMinionResponse, ["return", "success"])) {
       return pMinionResponse.return;
     }
     if (pCommand.startsWith("runner.") && pMinionResponse && pMinionResponse["return"] !== undefined) {

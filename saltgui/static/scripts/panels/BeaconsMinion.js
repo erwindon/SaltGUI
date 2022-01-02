@@ -106,6 +106,12 @@ export class BeaconsMinionPanel extends Panel {
     }
 
     const beacons0 = pLocalBeaconsListData.return[0][pMinionId];
+    // because some really old minion do not support beacons
+    if (this.showErrorRowInstead(beacons0)) {
+      this.setPlayPauseButton("none");
+      this.updateFooter();
+      return;
+    }
 
     const beacons = BeaconsPanel.fixBeaconsMinion(beacons0);
 

@@ -180,6 +180,9 @@ export class JobsPanel extends Panel {
     this._hideJobs.push("wheel.key.list_all");
     this._hideJobs.push("wheel.key.reject");
 
+    // this was automatically executed by really old minions
+    this._hideJobs.push("mine.update");
+
     let numberOfJobsShown = 0;
     let numberOfJobsEligible = 0;
     const numberOfJobsPresent = jobs.length;
