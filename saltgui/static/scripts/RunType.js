@@ -11,8 +11,8 @@ export class RunType {
     RunType.menuRunType = new DropDownMenu(runblock);
     // do not show the menu title at first
     RunType.menuRunType.setTitle("");
-    RunType.menuRunType.addMenuItem("Normal", RunType._updateRunTypeText, "normal");
     RunType.menuRunType.addMenuItem("Async", RunType._updateRunTypeText, "async");
+    RunType.menuRunType.addMenuItem("Normal", RunType._updateRunTypeText, "normal");
     RunType._updateRunTypeText();
   }
 
@@ -20,12 +20,12 @@ export class RunType {
     const runType = RunType.getRunType();
 
     switch (runType) {
-    case "normal":
-      // now that the menu is used show the menu title
-      RunType.menuRunType.setTitle("Normal");
-      break;
     case "async":
+      // now that the menu is used show the menu title
       RunType.menuRunType.setTitle("Async");
+      break;
+    case "normal":
+      RunType.menuRunType.setTitle("Normal");
       break;
     default:
       Utils.error("runType", runType);
@@ -43,7 +43,7 @@ export class RunType {
   }
 
   static setRunTypeDefault () {
-    RunType.menuRunType._value = "normal";
+    RunType.menuRunType._value = "async";
     RunType._updateRunTypeText();
     // reset the title to the absolute minimum
     // so that the menu does not stand out in trivial situations
@@ -53,7 +53,7 @@ export class RunType {
   static getRunType () {
     const runType = RunType.menuRunType._value;
     if (runType === undefined || runType === "") {
-      return "normal";
+      return "async";
     }
     return runType;
   }
