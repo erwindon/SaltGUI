@@ -632,6 +632,7 @@ export class MinionsPanel extends Panel {
 
         if (txt) {
           txt += "\nUpgrade is highly recommended!";
+          txt += "\nClick to show these CVEs on cve.mitre.org";
           versionSpan.addEventListener("click", (pClickEvent) => {
             let url = "https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=";
             for (let i = 0; i < allCveKeys.length; i++) {
