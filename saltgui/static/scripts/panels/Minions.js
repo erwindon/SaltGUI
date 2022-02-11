@@ -544,7 +544,7 @@ export class MinionsPanel extends Panel {
     return found;
   }
 
-  static _addCveList (pName, pVersion, pBugs) {
+  static _addCveList (pName, pVersion, pBugs, pAllCveKeys) {
     let txt = "";
     if (!Object.keys(pBugs).length) {
       return txt;
@@ -569,6 +569,9 @@ export class MinionsPanel extends Panel {
       }
       txt += bug;
       cnt -= 1;
+      if (pAllCveKeys.indexOf(bug) < 0) {
+        pAllCveKeys.push(bug);
+      }
     }
     return txt;
   }
@@ -616,9 +619,10 @@ export class MinionsPanel extends Panel {
           // VOID
         }
 
+        const allCveKeys = Object.keys(masterBugs);
         let txt = "";
-        txt += MinionsPanel._addCveList("salt-master", masterVersion, masterBugs);
-        txt += MinionsPanel._addCveList("salt-minion", minionVersion, minionBugs);
+        txt += MinionsPanel._addCveList("salt-master", masterVersion, masterBugs, allCveKeys);
+        txt += MinionsPanel._addCveList("salt-minion", minionVersion, minionBugs, allCveKeys);
 
         if (outcome === "Minion requires update") {
           txt += "\nThis salt-minion (" + minionVersion + ") is older than the salt-master (" + masterVersion + ")";
@@ -629,7 +633,12 @@ export class MinionsPanel extends Panel {
         if (txt) {
           txt += "\nUpgrade is highly recommended!";
           versionSpan.addEventListener("click", (pClickEvent) => {
-            window.open("https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=saltstack");
+            let url = "https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=";
+            for (let i = 0; i < allCveKeys.length; i++) {
+              url += (i === 0 ? "" : "%20") + allCveKeys[i];
+            }
+            // if(allCveKeys.length === 0) url += "saltstack";
+            window.open(url);
             // prevent the click to open the run-dialog
             pClickEvent.stopPropagation();
           });
