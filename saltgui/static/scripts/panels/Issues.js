@@ -61,7 +61,9 @@ export class IssuesPanel extends Panel {
     const allPromise = Promise.all([p1, p2, p3, p4, p5, p6]);
     /* eslint-enable compat/compat */
     allPromise.then(() => {
-      this.setMsg("");
+      const txt = Utils.txtZeroOneMany(this.table.tBodies[0].rows.length,
+        "No issues", "{0} issue", "{0} issues");
+      this.setMsg(txt);
     }, (pErrorMsg) => {
       this.setMsg("(error)");
       Utils.addToolTip(this.msgDiv, pErrorMsg);
