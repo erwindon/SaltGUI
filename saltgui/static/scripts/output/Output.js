@@ -395,6 +395,30 @@ export class Output {
     return "host-success";
   }
 
+  static _addDownload (pParentDiv, pJobId, pObject, pFormatFunction, pTypeLabel, pContentType, pFilenameExtension) {
+    const downloadA = document.createElement("a");
+    downloadA.innerText = pTypeLabel;
+    downloadA.style = "float:right; margin-left:10px";
+    downloadA.addEventListener("click", (pClickEvent) => {
+      // based on one of the answers in:
+      // https://stackoverflow.com/questions/4184944/javascript-download-data-to-file-from-content-within-the-page
+      const dummyA = document.createElement("a");
+      const blob = new Blob([pFormatFunction(pObject)], {"type": pContentType});
+      /* eslint-disable compat/compat */
+      /* URL is not supported in op_mini all, IE 11  compat/compat */
+      dummyA.href = window.URL.createObjectURL(blob);
+      /* eslint-enable compat/compat */
+      if (pJobId) {
+        dummyA.download = "job-" + pJobId + "." + pFilenameExtension;
+      } else {
+        dummyA.download = "job." + pFilenameExtension;
+      }
+      dummyA.click();
+      pClickEvent.stopPropagation();
+    });
+    pParentDiv.appendChild(downloadA);
+  }
+
   // the orchestrator for the output
   // determines what format should be used and uses that
   static addResponseOutput (pOutputContainer, pJobId, pMinionData, pResponse, pCommand, pInitialStatus, pHighlightMinionId) {
@@ -427,6 +451,8 @@ export class Output {
 
     const topSummaryDiv = Utils.createDiv("no-search");
     const cntMinions = pMinionData.length;
+
+    const downloadObject = {};
 
     if (!pCommand.startsWith("runners.") &&
        !pCommand.startsWith("wheel.") &&
@@ -579,6 +605,20 @@ export class Output {
       pMinionData.push(key);
     }
 
+    // in reverse order
+    Output._addDownload(topSummaryDiv, pJobId, downloadObject,
+      JSON.stringify, "RAW-JSON", "application/json", "raw.json");
+    Output._addDownload(topSummaryDiv, pJobId, downloadObject,
+      OutputNested.formatNESTED, "NESTED", "text/plain", "nested.txt");
+    Output._addDownload(topSummaryDiv, pJobId, downloadObject,
+      OutputYaml.formatYAML, "YAML", "text/vnd.yaml", "yaml");
+    Output._addDownload(topSummaryDiv, pJobId, downloadObject,
+      OutputJson.formatJSON, "JSON", "application/json", "json");
+
+    const downloadLabel = Utils.createSpan("", "download as:");
+    downloadLabel.style = "float:right";
+    topSummaryDiv.appendChild(downloadLabel);
+
     // for all other types we consider the output per minion
     // this is more generic and it simplifies the handlers
     for (const minionId of pMinionData.sort()) {
@@ -588,6 +628,8 @@ export class Output {
       const isSuccess = Output._getIsSuccess(minionResponse);
       // const retCode = Output._getRetCode(minionResponse);
       minionResponse = Output._getMinionResponse(pCommand, minionResponse);
+      // provide the same (simplified) object for download
+      downloadObject[minionId] = minionResponse;
 
       const minionClass = Output.getMinionLabelClass(isSuccess, minionResponse);
       let minionLabel = Output.getMinionIdHtml(minionId, minionClass);
