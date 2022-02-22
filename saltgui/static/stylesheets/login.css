@@ -11,9 +11,11 @@
 #login-panel {
   align-self: center;
   background-color: white;
-  padding: 0 50px;
   box-shadow: 0 0 24px rgba(0, 0, 0, 0.7);
   border-radius: 2px;
+
+  /* 1px needed to prevent bottom margin to disappear when using small screens */
+  padding: 0 50px 1px;
 }
 
 #login-panel h1 {
