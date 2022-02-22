@@ -91,6 +91,10 @@ export class CommandBox {
     txt += "<br/>";
     txt += "Parameters in the form name=value are used to pass named variables. The same quoting rules apply to the value. The named parameters are used from left-to-right. Their actual position within the line is otherwise not important.";
     txt += "<br/>";
+    txt += "Enter `salt-run` commands with the prefix `runners.`. e.g. `runners.jobs.last_run`. The target field can remain empty in that case as it is not used.";
+    txt += "<br/>";
+    txt += "Enter `salt-call` commands with the prefix `wheel.`. e.g. `wheel.key.finger`. The target field will be added as named parameter `target`. But note that that parameter may not actually be used depending on the command.";
+    txt += "<br/>";
     txt += "A help button is visible when the command field contains some text. It will issue a <b>sys.doc</b> (or <b>runners.doc.wheel</b> or <b>runners.doc.runner</b>) command for the current command. The <b>sys.doc</b> command will be targetted to the given minions when the target field is not empty. It will be targetted to all minions when it is empty. The <b>runners.doc.wheel</b> or <b>runners.doc.runner</b> commands will always run on the master. When answers from multiple minions are available from <b>sys.doc</b>, only the first reasonable answer is used. Small variations in the answer may exist when not all minions have the same software version.";
     txt += "</p>";
 
