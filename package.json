@@ -99,7 +99,11 @@
     }
   },
   "stylelint": {
-    "extends": "stylelint-config-standard"
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "property-no-vendor-prefix": null,
+      "color-function-notation": null
+    }
   },
   "nyc": {
     "check-coverage": false,
