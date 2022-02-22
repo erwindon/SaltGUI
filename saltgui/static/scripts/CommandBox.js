@@ -447,6 +447,12 @@ export class CommandBox {
       return null;
     }
 
+    // prevent a common spelling error
+    if (functionToRun === "runner" || functionToRun.startsWith("runner.")) {
+      CommandBox._showError("'Runner' commands must be prefixed with 'runners.'");
+      return null;
+    }
+
     // RUNNERS commands do not have a target (MASTER is the target)
     // WHEEL commands also do not have a target
     // but we use the TARGET value to form the usually required MATCH parameter
