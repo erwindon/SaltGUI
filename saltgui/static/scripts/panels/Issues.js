@@ -14,14 +14,13 @@ export class IssuesPanel extends Panel {
   constructor () {
     super("issues");
 
-    this.addTitle("Issues (beta)");
+    this.addTitle("Issues");
     this.addSearchButton();
     this.addPlayPauseButton();
     this.addHelpButton([
       "This page contains an overview of problems",
-      "that are observed in various categories.",
-      "Leave comments on GitHub #369 (click)"
-    ], "https://github.com/erwindon/SaltGUI/issues/369");
+      "that are observed in various categories."
+    ]);
     // this.addTable(["Key", "-menu-", "Description"]);
     this.addTable(["-menu-", "Description"]);
     this.setTableClickable();
