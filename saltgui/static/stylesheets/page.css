@@ -291,7 +291,7 @@ table tr td:last-of-type {
   flex-grow: 1;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
   .minions {
     min-width: 0;
   }
