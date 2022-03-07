@@ -1,5 +1,6 @@
 /* global */
 
+import {Character} from "../Character.js";
 import {DropDownMenu} from "../DropDown.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
@@ -608,13 +609,13 @@ export class MinionsPanel extends Panel {
         const minionBugs = MinionsPanel._getCveBugs(minionVersion, MINION);
 
         if (Object.keys(masterBugs).length) {
-          versionSpan.style.color = "red";
+          versionSpan.innerText = Character.WARNING_SIGN + minionVersion;
         } else if (Object.keys(minionBugs).length) {
-          versionSpan.style.color = "red";
+          versionSpan.innerText = Character.WARNING_SIGN + minionVersion;
         } else if (outcome === "Minion requires update") {
-          versionSpan.style.color = "orange";
+          versionSpan.innerText = Character.WARNING_SIGN + minionVersion;
         } else if (outcome === "Minion newer than master") {
-          versionSpan.style.color = "orange";
+          versionSpan.innerText = Character.WARNING_SIGN + minionVersion;
         } else if (outcome === "Up to date") {
           // VOID
         }
