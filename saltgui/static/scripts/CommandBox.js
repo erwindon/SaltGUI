@@ -27,9 +27,17 @@ export class CommandBox {
 
     const manualRun = document.getElementById("popup-run-command");
     Utils.addTableHelp(manualRun, "Click for help", "bottom-center");
+
     const helpButton = manualRun.querySelector("#help");
     helpButton.addEventListener("click", (pClickEvent) => {
       CommandBox._showHelp();
+      pClickEvent.stopPropagation();
+    });
+
+    const customCommandHelpButton = manualRun.querySelector("#custom-command-help");
+    Utils.addToolTip(customCommandHelpButton, "Click for custom command help", "bottom-center");
+    customCommandHelpButton.addEventListener("click", (pClickEvent) => {
+      this._showCustomCommandHelp();
       pClickEvent.stopPropagation();
     });
   }
@@ -128,6 +136,33 @@ export class CommandBox {
     txt += "</p>";
 
     output.innerHTML = txt;
+  }
+
+  _showCustomCommandHelp () {
+    const output = document.querySelector(".run-command pre");
+    output.innerHTML = "";
+
+    const _handleWheelConfigValuesResponseForCustomCommandHelp = (pWheelConfigValuesData, wasSuccessful) => {
+      if (!wasSuccessful) {
+        output.innerHTML = "Error fetching custom command help from config values. Are you logged in?";
+        return;
+      }
+
+      const wheelConfigValuesData = pWheelConfigValuesData.return[0].data.return;
+      const saltgui_custom_command_help = wheelConfigValuesData.saltgui_custom_command_help;
+
+      if (!saltgui_custom_command_help) {
+        output.innerHTML = "No custom command help found.<br/>"
+                           + "Please, set saltgui_custom_command_help in salt config.";
+        return;
+      }
+
+      output.innerHTML = saltgui_custom_command_help;
+    }
+
+    this.api.getWheelConfigValues()
+      .then(pWheelConfigValuesData => _handleWheelConfigValuesResponseForCustomCommandHelp(pWheelConfigValuesData, true),
+            () => _handleWheelConfigValuesResponseForCustomCommandHelp({}, false));
   }
 
   _registerCommandBoxEventListeners () {
