@@ -27,6 +27,7 @@ export class CommandBox {
 
     const manualRun = document.getElementById("popup-run-command");
     Utils.addTableHelp(manualRun, "Click for help", "bottom-center");
+
     const helpButton = manualRun.querySelector("#help");
     helpButton.addEventListener("click", (pClickEvent) => {
       CommandBox._showHelp();
@@ -142,7 +143,7 @@ export class CommandBox {
       });
     document.getElementById("button-manual-run").addEventListener(
       "click", (pClickEvent) => {
-        CommandBox.showManualRun(this.api);
+        this.showManualRun(this.api);
         pClickEvent.stopPropagation();
       });
     document.getElementById("cmd-close-button").addEventListener(
@@ -331,7 +332,7 @@ export class CommandBox {
     button.disabled = false;
   }
 
-  static showManualRun (pApi) {
+  showManualRun (pApi) {
     const manualRun = document.getElementById("popup-run-command");
     manualRun.style.display = "block";
 
@@ -395,6 +396,8 @@ export class CommandBox {
     }, () => {
       // VOID
     });
+
+    this.documentation.initCustomCommandHelpButton();
   }
 
   static hideManualRun () {
