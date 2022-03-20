@@ -606,6 +606,10 @@ export class MinionsPanel extends Panel {
         }
 
         const minionVersion = versionTr.dataset.saltversion;
+        if (!minionVersion) {
+          // no response for this minion
+          continue;
+        }
         const minionBugs = MinionsPanel._getCveBugs(minionVersion, MINION);
 
         if (Object.keys(masterBugs).length) {
