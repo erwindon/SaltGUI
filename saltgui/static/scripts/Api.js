@@ -324,10 +324,10 @@ export class API {
             const expireValue = loginResponse.expire;
             if (now > expireValue) {
               this.logout().then(() => {
-                this.router.goTo("login", {"reason": "expired-session"});
+                this.router.goTo("login", {"reason": "session-expired"});
                 return true;
               }, () => {
-                this.router.goTo("login", {"reason": "expired-session"});
+                this.router.goTo("login", {"reason": "session-expired"});
                 return false;
               });
             }
