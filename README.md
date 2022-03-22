@@ -195,7 +195,7 @@ saltgui_public_pillars:
 A custom HTML help text can be shown from the "Manual Run" overlay.
 
 Therefor,
-- specify saltgui_custom_command_help in the salt master config. Example:
+- specify `saltgui_custom_command_help` in the salt master config. Example:
 ```
 saltgui_custom_command_help: |
   <h2>Job Commands</h2>
