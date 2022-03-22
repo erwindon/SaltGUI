@@ -33,13 +33,6 @@ export class CommandBox {
       CommandBox._showHelp();
       pClickEvent.stopPropagation();
     });
-
-    const customCommandHelpButton = manualRun.querySelector("#custom-command-help");
-    Utils.addToolTip(customCommandHelpButton, "Click for custom command help", "bottom-center");
-    customCommandHelpButton.addEventListener("click", (pClickEvent) => {
-      this._showCustomCommandHelp();
-      pClickEvent.stopPropagation();
-    });
   }
 
   static _populateTemplateMenu () {
@@ -138,33 +131,6 @@ export class CommandBox {
     output.innerHTML = txt;
   }
 
-  _showCustomCommandHelp () {
-    const output = document.querySelector(".run-command pre");
-    output.innerHTML = "";
-
-    const _handleWheelConfigValuesResponseForCustomCommandHelp = (pWheelConfigValuesData, wasSuccessful) => {
-      if (!wasSuccessful) {
-        output.innerHTML = "Error fetching custom command help from config values. Are you logged in?";
-        return;
-      }
-
-      const wheelConfigValuesData = pWheelConfigValuesData.return[0].data.return;
-      const saltgui_custom_command_help = wheelConfigValuesData.saltgui_custom_command_help;
-
-      if (!saltgui_custom_command_help) {
-        output.innerHTML = "No custom command help found.<br/>"
-                           + "Please, set saltgui_custom_command_help in salt config.";
-        return;
-      }
-
-      output.innerHTML = saltgui_custom_command_help;
-    }
-
-    this.api.getWheelConfigValues()
-      .then(pWheelConfigValuesData => _handleWheelConfigValuesResponseForCustomCommandHelp(pWheelConfigValuesData, true),
-            () => _handleWheelConfigValuesResponseForCustomCommandHelp({}, false));
-  }
-
   _registerCommandBoxEventListeners () {
     document.getElementById("popup-run-command").addEventListener(
       "click", (pClickEvent) => {
@@ -177,7 +143,7 @@ export class CommandBox {
       });
     document.getElementById("button-manual-run").addEventListener(
       "click", (pClickEvent) => {
-        CommandBox.showManualRun(this.api);
+        this.showManualRun(this.api);
         pClickEvent.stopPropagation();
       });
     document.getElementById("cmd-close-button").addEventListener(
@@ -366,7 +332,7 @@ export class CommandBox {
     button.disabled = false;
   }
 
-  static showManualRun (pApi) {
+  showManualRun (pApi) {
     const manualRun = document.getElementById("popup-run-command");
     manualRun.style.display = "block";
 
@@ -430,6 +396,8 @@ export class CommandBox {
     }, () => {
       // VOID
     });
+
+    this.documentation.initCustomCommandHelpButton();
   }
 
   static hideManualRun () {

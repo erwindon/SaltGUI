@@ -27,6 +27,7 @@ The version tagged `release` is the latest released version. The version `master
 - View the live events on the salt-event bus
 - View internal documentation for any salt command
 - View external documentation for any salt command
+- Define your own custom documentation for commands
 - Match list of minions against reference list
 - Match status of minions against reference list
 
@@ -190,6 +191,21 @@ saltgui_public_pillars:
     - pub_.*
 ```
 
+## Custom command documentation
+A custom HTML help text can be shown from the "Manual Run" overlay.
+
+Therefor,
+- specify saltgui_custom_command_help in the salt master config. Example:
+```
+saltgui_custom_command_help: |
+  <h2>Job Commands</h2>
+    runners.jobs.active
+      => Show active jobs
+      
+    runners.jobs.list_job «JID»
+      => Show job with given job id (JID)
+```
+- Hover the documentation icon (`📖︎`) near the command input field and select `Show custom help`
 
 ## Message-of-the-day
 A message-of-the-day (motd) can be added to the login screen.
