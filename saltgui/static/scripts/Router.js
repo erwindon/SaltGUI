@@ -260,8 +260,11 @@ export class Router {
       // the fact that we don't have a session will be caught later
       // but this was shows less error messages on the console
       // but do not destroy the reason when login is already the goal
+
+      // keep the old query parameters, and save the new location
+      pQuery["reason"] = "no-session";
+      pQuery["page"] = pHash;
       pHash = "login";
-      pQuery = {"reason": "no-session"};
     }
 
     const pages = Router._getPagesList();
