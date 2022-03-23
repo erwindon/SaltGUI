@@ -308,11 +308,14 @@ export class LoginPanel extends Panel {
         if (urlParams.get("page")) {
           // a redirect page is specified
           const params = {};
-          for(const pair of urlParams.entries()) {
+          for (const pair of urlParams.entries()) {
             params[pair[0]] = pair[1];
           }
+          // "page" is a "search", not a parameter
           const page = params["page"];
           delete params["page"];
+          // "reason" was a parameter for the login screen
+          delete params["reason"];
           this.router.goTo(page, params);
         } else {
           this.router.goTo("");
