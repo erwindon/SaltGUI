@@ -155,7 +155,8 @@ export class KeysPanel extends Panel {
     // cnt["missing"] = 0;
     const tbody = this.table.tBodies[0];
     for (const tr of tbody.children) {
-      const statusText = tr.dataset.status;
+      const statusTd = tr.querySelector(".status");
+      const statusText = statusTd.innerText;
       if (cnt[statusText] === undefined) {
         cnt[statusText] = 0;
       }
@@ -582,21 +583,21 @@ export class KeysPanel extends Panel {
       if (pData.act === "accept") {
         statusTd.className = "status";
         statusTd.classList.add("accepted");
-        if (tr.dataset.status !== "accepted") {
+        if (statusTd.innerText !== "accepted") {
           statusTd.innerText = "accepted";
           KeysPanel._flagMinion(pData.id, statusTd, tr, minionsDict);
         }
       } else if (pData.act === "reject") {
         statusTd.className = "status";
         statusTd.classList.add("rejected");
-        if (tr.dataset.status !== "rejected") {
+        if (statusTd.innerText !== "rejected") {
           statusTd.innerText = "rejected";
           KeysPanel._flagMinion(pData.id, statusTd, tr, minionsDict);
         }
       } else if (pData.act === "pend") {
         statusTd.className = "status";
         statusTd.classList.add("unaccepted");
-        if (tr.dataset.status !== "unaccepted") {
+        if (statusTd.innerText !== "unaccepted") {
           statusTd.innerText = "unaccepted";
           KeysPanel._flagMinion(pData.id, statusTd, tr, minionsDict);
         }
