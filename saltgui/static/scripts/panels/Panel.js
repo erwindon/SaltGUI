@@ -649,7 +649,7 @@ export class Panel {
 
     const offlineSpan = Utils.createSpan("status", "offline");
     // add an opinion when we have one
-    if (pMinionId in pMinionsDict) {
+    if (pMinionsDict && pMinionId in pMinionsDict) {
       if (pMinionsDict[pMinionId] === "true") {
         Utils.addToolTip(offlineSpan, "Minion is offline\nIs the host running and is the salt-minion installed and started?\nUpdate file 'minions.txt' when needed", "bottom-left");
         offlineSpan.classList.add("offline");
