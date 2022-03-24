@@ -304,7 +304,19 @@ export class LoginPanel extends Panel {
       if (Utils.getStorageItem("session", "login-response") !== null) {
         // we might have been logged out in this first second
         // e.g. when clock between client and server differs more than the session timout
-        this.router.goTo("");
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("page")) {
+          // a redirect page is specified
+          const params = {};
+          for(const pair of urlParams.entries()) {
+            params[pair[0]] = pair[1];
+          }
+          const page = params["page"];
+          delete params["page"];
+          this.router.goTo(page, params);
+        } else {
+          this.router.goTo("");
+        }
       }
     }, 1000);
   }
