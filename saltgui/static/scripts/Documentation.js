@@ -16,8 +16,6 @@ export class Documentation {
   constructor (pRouter, pCommandBox) {
     this.router = pRouter;
     this.commandbox = pCommandBox;
-    this.api = pCommandBox.api;
-    this._isCustomCommandHelpButtonInitialized = false;
 
     pCommandBox.cmdmenu.addMenuItem(
       () => Documentation._manualRunMenuSysDocPrepare(),
@@ -28,49 +26,14 @@ export class Documentation {
     pCommandBox.cmdmenu.addMenuItem(
       () => Documentation._manualRunMenuBeaconNamePrepare(),
       () => Documentation._manualRunMenuBeaconNameRun());
+    pCommandBox.cmdmenu.addMenuItem(
+      () => Documentation._manualRunMenuCustomHelpPrepare(),
+      () => Documentation._manualRunMenuCustomHelpRun());
 
     Documentation.DOCUMENTATION_URL = "https://docs.saltstack.com/en/latest/ref/";
     Documentation.EXTERNAL_LINK = Character.NO_BREAK_SPACE + Character.EXTERNAL_LINK_IMG;
 
     Documentation.PROVIDERS = { };
-  }
-
-  initCustomCommandHelpButton() {
-    // This method requires makes use of this.api, which requires a valid session.
-    // Thus, it cannot be used immediately in the constructor.
-
-    if (this._isCustomCommandHelpButtonInitialized) {
-      return;
-    }
-
-    this._getCustomCommandHelpPromise()
-    .then(customCommandHelp => {
-      if (!customCommandHelp) {
-        // Only show the button if the custom command help text has been defined.
-        return;
-      }
-
-      this.commandbox.cmdmenu.addMenuItem(
-        () => "Show custom help",
-        () => this._showCustomCommandHelp(customCommandHelp));
-      this._isCustomCommandHelpButtonInitialized = true;
-    })
-  }
-
-  _showCustomCommandHelp (customCommandHelp) {
-    const output = document.querySelector(".run-command pre");
-    output.innerHTML = customCommandHelp;
-  }
-
-  _getCustomCommandHelpPromise() {
-    return new Promise(onSuccess => {
-      this.api.getWheelConfigValues().
-        then(pWheelConfigValuesData => {
-          const wheelConfigValuesData = pWheelConfigValuesData.return[0].data.return;
-          const saltgui_custom_command_help = wheelConfigValuesData.saltgui_custom_command_help;
-          onSuccess(saltgui_custom_command_help);
-        })
-    });
   }
 
   // INTERNAL DOCUMENTATION
@@ -941,5 +904,19 @@ export class Documentation {
         pClickEvent.stopPropagation();
       });
     }
+  }
+
+  static _manualRunMenuCustomHelpPrepare () {
+    const customHelp = Utils.getStorageItem("session", "custom_command_help");
+    if (!customHelp) {
+      return null;
+    }
+    return "Show custom help";
+  }
+
+  static _manualRunMenuCustomHelpRun () {
+    const customHelp = Utils.getStorageItem("session", "custom_command_help");
+    const output = document.querySelector(".run-command pre");
+    output.innerHTML = customHelp;
   }
 }

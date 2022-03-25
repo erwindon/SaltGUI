@@ -205,7 +205,7 @@ saltgui_custom_command_help: |
   <h2>Job Commands</h2>
     runners.jobs.active
       => Show active jobs
-      
+
     runners.jobs.list_job «JID»
       => Show job with given job id (JID)
 ```
@@ -229,7 +229,7 @@ Alternatively, or additionally, the text can be retrieved from the `master` file
 When apis are disabled using the native `external_auth` mechanism,
 SaltGUI may show menu-items that have become unuseable.
 In that case, it may be useful to reduce the menu-bar to less items.
-Variable `saltgui_pages` is read 
+Variable `saltgui_pages` is read
 from salt master configuration file `/etc/salt/master`.
 It contains the list of accessible pages per user.
 The first page in the list also becomes the landing page.

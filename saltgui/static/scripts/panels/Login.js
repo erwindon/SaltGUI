@@ -379,6 +379,9 @@ export class LoginPanel extends Panel {
     const motdHtml = wheelConfigValuesData.saltgui_motd_html;
     Utils.setStorageItem("session", "motd_html", motdHtml);
 
+    const customHelp = wheelConfigValuesData.saltgui_custom_command_help;
+    Utils.setStorageItem("session", "custom_command_help", customHelp);
+
     Router.updateMainMenu();
   }
 
