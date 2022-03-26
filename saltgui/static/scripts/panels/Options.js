@@ -41,7 +41,6 @@ export class OptionsPanel extends Panel {
         "state-output-pct", null, "false",
         [["output-pct", "true", "false"]]
       ],
-      ["templates", null, "(none)"],
       ["public-pillars", "saltgui", "(none)"],
       ["preview-grains", "saltgui", "(none)"],
       ["hide-jobs", "saltgui", "(none)"],
@@ -58,6 +57,7 @@ export class OptionsPanel extends Panel {
         "datetime-fraction-digits", "saltgui", "6",
         [["digits", "0", "1", "2", "3", "4", "5", "6"]]
       ],
+      ["templates", "saltgui", "(none)"],
       [
         "tooltip-mode", "saltgui", "full",
         [["mode", "full", "simple", "none"]]
