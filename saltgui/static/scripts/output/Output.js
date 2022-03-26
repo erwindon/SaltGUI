@@ -491,28 +491,42 @@ export class Output {
   }
 
   static _getIsSuccess (pMinionResponse) {
-    // really old minions do not return 'retcode'
+    if (Output._hasProperties(pMinionResponse, ["data", "tag"])) {
+      // e.g. wheel.keys.list_all
+      pMinionResponse = pMinionResponse.data;
+    }
     if (Output._hasProperties(pMinionResponse, ["return", "success"])) {
-      return pMinionResponse.success;
+      // e.g. wheel.keys.list_all (after data+tag reduction above)
+      // and even wheel.keys.aap (after data+tag reduction above)
+      return pMinionResponse.success === true;
+    }
+    if (Output._hasProperties(pMinionResponse, ["retcode"])) {
+      // note that really old minions do not return 'retcode'
+      return pMinionResponse.retcode === 0;
+    }
+    if (pMinionResponse.Error) {
+      // e.g. runners.jobs.list_job blahblah
+      return false;
     }
     return true;
   }
 
-  static _getRetCode (pMinionResponse) {
-    // but really old minions do not return 'retcode'
-    if (Output._hasProperties(pMinionResponse, ["return", "success"])) {
-      return pMinionResponse.retcode;
-    }
-    return 0;
-  }
-
   static _getMinionResponse (pCommand, pMinionResponse) {
-    // really old minions do not return 'retcode'
+    if (Output._hasProperties(pMinionResponse, ["data", "tag"])) {
+      // e.g. wheel.keys.list_all
+      pMinionResponse = pMinionResponse.data;
+    }
     if (Output._hasProperties(pMinionResponse, ["return", "success"])) {
+      // e.g. wheel.keys.list_all (after data+tag reduction above)
       return pMinionResponse.return;
     }
     if (pCommand.startsWith("runner.") && pMinionResponse && pMinionResponse["return"] !== undefined) {
+      // ???
       return pMinionResponse.return.return;
+    }
+    if (Output._hasProperties(pMinionResponse, ["ret"])) {
+      // ???
+      return pMinionResponse.ret;
     }
     return pMinionResponse;
   }
@@ -760,7 +774,6 @@ export class Output {
       let minionResponse = pResponse[minionId];
 
       const isSuccess = Output._getIsSuccess(minionResponse);
-      // const retCode = Output._getRetCode(minionResponse);
       minionResponse = Output._getMinionResponse(pCommand, minionResponse);
       // provide the same (simplified) object for download
       downloadObject[minionId] = minionResponse;

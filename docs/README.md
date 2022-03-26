@@ -110,6 +110,10 @@ minions, or with `*` when all minions are connected, or with an expression when 
 
 Commands can be run normally, in which case the command runs to completion and shows the results. Alternatively, it can be started asynchronously, in which case only a bit of progress information is shown. When variable `state_events` is set to `true`, then the progress is shown per state when applicable. Batch commands are not supported at this time.
 
+When executing commands, the setting for api-flag `full_return` is taken from option `saltgui_full_return` in salt master configuration file `/etc/salt/master`.
+When set to `true`, this will result in some more information available in the execution result, e.g. the job-id.
+This flag may (or may not) be applied to the internal commands that SaltGUI uses to show information.
+
 
 ## Output
 SaltGUI shows the data that is returned by the Salt API.

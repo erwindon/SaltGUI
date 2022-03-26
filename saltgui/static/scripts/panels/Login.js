@@ -411,6 +411,9 @@ export class LoginPanel extends Panel {
     const customHelp = wheelConfigValuesData.saltgui_custom_command_help;
     Utils.setStorageItem("session", "custom_command_help", customHelp);
 
+    const fullReturn = wheelConfigValuesData.saltgui_full_return;
+    Utils.setStorageItem("session", "full_return", fullReturn);
+
     Router.updateMainMenu();
   }
 
