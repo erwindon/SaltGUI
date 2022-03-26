@@ -77,6 +77,11 @@ export class BeaconsMinionPanel extends Panel {
         allBeacons["_offline"] += 1;
         continue;
       }
+      if (!Array.isArray(localBeaconsListAvailableData[minionId])) {
+        // check for missing minions
+        // check for minions not returning an array (it happens!)
+        continue;
+      }
       allBeacons["_cnt"] += 1;
       for (const beaconId of localBeaconsListAvailableData[minionId]) {
         if (beaconId in allBeacons) {
