@@ -308,7 +308,7 @@ export class LoginPanel extends Panel {
         if (urlParams.get("page")) {
           // a redirect page is specified
           const params = {};
-          for(const pair of urlParams.entries()) {
+          for (const pair of urlParams.entries()) {
             params[pair[0]] = pair[1];
           }
           const page = params["page"];
