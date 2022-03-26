@@ -22,17 +22,13 @@ export class OptionsPanel extends Panel {
     this.addTable(["Name", "Value"]);
 
     this.options = [
+      ["eauth", "session"],
+      ["user", "session"],
       ["token", "session"],
       ["start", "session"],
       ["expire", "session"],
-      ["eauth", "session"],
-      ["user", "session"],
       ["perms", "session"],
       ["nodegroups", null, "(none)"],
-      [
-        "state-verbose", null, "true",
-        [["verbose", "true", "false"]]
-      ],
       [
         "state-output", null, "full",
         [["output", "full", "terse", "mixed", "changes", "full_id", "terse_id", "mixed_id", "changes_id"]]
@@ -41,10 +37,20 @@ export class OptionsPanel extends Panel {
         "state-output-pct", null, "false",
         [["output-pct", "true", "false"]]
       ],
-      ["public-pillars", "saltgui", "(none)"],
-      ["preview-grains", "saltgui", "(none)"],
+      [
+        "state-verbose", null, "true",
+        [["verbose", "true", "false"]]
+      ],
+      [
+        "datetime-fraction-digits", "saltgui", "6",
+        [["digits", "0", "1", "2", "3", "4", "5", "6"]]
+      ],
       ["hide-jobs", "saltgui", "(none)"],
+
+      /* show-jobs is not in the alphabetic order, but keep it close to hide-jobs */
       ["show-jobs", "saltgui", "(all)"],
+      ["motd-txt", "saltgui", "(none)"],
+      ["motd-html", "saltgui", "(none)"],
       [
         "output-formats", "saltgui", "doc,saltguihighstate,json",
         [
@@ -53,20 +59,12 @@ export class OptionsPanel extends Panel {
           ["output", "json", "nested", "yaml"]
         ]
       ],
-      [
-        "datetime-fraction-digits", "saltgui", "6",
-        [["digits", "0", "1", "2", "3", "4", "5", "6"]]
-      ],
+      ["preview-grains", "saltgui", "(none)"],
+      ["public-pillars", "saltgui", "(none)"],
       ["templates", "saltgui", "(none)"],
       [
         "tooltip-mode", "saltgui", "full",
         [["mode", "full", "simple", "none"]]
-      ],
-      [
-        "motd-txt", "saltgui", "(none)"
-      ],
-      [
-        "motd-html", "saltgui", "(none)"
       ]
     ];
   }
