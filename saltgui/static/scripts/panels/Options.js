@@ -68,9 +68,7 @@ export class OptionsPanel extends Panel {
       ],
 
       /* last because it might be very long */
-      [
-        "custom-command-help", "saltgui", "(none)"
-      ]
+      ["custom-command-help", "saltgui", "(none)"]
     ];
   }
 

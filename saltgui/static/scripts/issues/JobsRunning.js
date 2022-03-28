@@ -30,8 +30,9 @@ export class JobsRunningIssues extends Issues {
   static _handleRunnerJobsActive (pPanel, pRunnerJobsActiveJobsData) {
     const allJobsDict = pRunnerJobsActiveJobsData.return[0];
     for (const jobId in allJobsDict) {
+      const job = allJobsDict[jobId];
       const tr = Issues.addIssue(pPanel, "active-jobs", jobId);
-      Issues.addIssueMsg(tr, "Job '" + jobId + "' is still running");
+      Issues.addIssueMsg(tr, "Job '" + jobId + "' (" + job.Function + ") is still running");
       Issues.addIssueNav(tr, "job", {"id": jobId});
       Issues.addIssueCmd(tr, "Terminate job", "*", ["saltutil.term_job", jobId]);
       Issues.addIssueCmd(tr, "Kill job", "*", ["saltutil.kill_job", jobId]);
