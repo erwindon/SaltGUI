@@ -26,6 +26,9 @@ export class Documentation {
     pCommandBox.cmdmenu.addMenuItem(
       () => Documentation._manualRunMenuBeaconNamePrepare(),
       () => Documentation._manualRunMenuBeaconNameRun());
+    pCommandBox.cmdmenu.addMenuItem(
+      () => Documentation._manualRunMenuCustomHelpPrepare(),
+      () => Documentation._manualRunMenuCustomHelpRun());
 
     Documentation.DOCUMENTATION_URL = "https://docs.saltstack.com/en/latest/ref/";
     Documentation.EXTERNAL_LINK = Character.NO_BREAK_SPACE + Character.EXTERNAL_LINK_IMG;
@@ -901,5 +904,19 @@ export class Documentation {
         pClickEvent.stopPropagation();
       });
     }
+  }
+
+  static _manualRunMenuCustomHelpPrepare () {
+    const customHelp = Utils.getStorageItem("session", "custom_command_help");
+    if (!customHelp) {
+      return null;
+    }
+    return "Show custom help";
+  }
+
+  static _manualRunMenuCustomHelpRun () {
+    const customHelp = Utils.getStorageItem("session", "custom_command_help");
+    const output = document.querySelector(".run-command pre");
+    output.innerHTML = customHelp;
   }
 }

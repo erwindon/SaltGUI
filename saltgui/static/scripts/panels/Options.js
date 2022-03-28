@@ -65,6 +65,11 @@ export class OptionsPanel extends Panel {
       [
         "tooltip-mode", "saltgui", "full",
         [["mode", "full", "simple", "none"]]
+      ],
+
+      /* last because it might be very long */
+      [
+        "custom-command-help", "saltgui", "(none)"
       ]
     ];
   }
