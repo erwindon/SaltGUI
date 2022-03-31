@@ -58,11 +58,13 @@ export class EventsPanel extends Panel {
 
     // add timestamp value
     const stampTd = Utils.createTd();
+    const stampSpan = Utils.createSpan();
     let stampTxt = pData["_stamp"];
     if (!stampTxt) {
       stampTxt = new Date().toISOString();
     }
-    stampTd.innerText = Output.dateTimeStr(stampTxt, "T");
+    Output.dateTimeStr(stampTxt, stampSpan, "bottom-left", "T");
+    stampTd.appendChild(stampSpan);
     tr.append(stampTd);
 
     // add tag value

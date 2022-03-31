@@ -193,7 +193,7 @@ export class Output {
     if (fractionSecondsPart !== "") {
       fractionSecondsPart = decimalSeparator + fractionSecondsPart;
     }
-    if (originalFractionSecondsPart != "") {
+    if (originalFractionSecondsPart !== "") {
       originalFractionSecondsPart = decimalSeparator + originalFractionSecondsPart;
     }
 
@@ -234,15 +234,29 @@ export class Output {
     switch (dateTimeRepresentation) {
     case "utc":
       ret = utcDT + fractionSecondsPart;
+      break;
     case "local":
       ret = localDT + fractionSecondsPart + " " + localTZ;
+      break;
     case "utc+localtime":
       ret = utcDT + fractionSecondsPart + " (" + localDT + " " + localTZ + ")";
+      break;
     case "local+utctime":
       ret = localDT + fractionSecondsPart + " " + localTZ + " (" + utcDT + ")";
+      break;
     default:
       // unknown format, use traditional representation
       ret = utcDT + fractionSecondsPart;
+    }
+
+    if (pDateTimeField) {
+      utcDT = dateObj.toLocaleString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
+      utcDT = utcDT.replace(/ [A-Z]*$/, originalFractionSecondsPart + "$&");
+      localDT = dateObj.toLocaleString(undefined, {"timeZoneName": "short"});
+      localDT = localDT.replace(/ [A-Z]*$/, originalFractionSecondsPart + "$&");
+      pDateTimeField.innerText = ret;
+      const txt = utcDT + "\n" + localDT;
+      Utils.addToolTip(pDateTimeField, txt, pDateTimeStyle);
     }
 
     return ret;
