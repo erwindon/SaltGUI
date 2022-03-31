@@ -156,18 +156,15 @@ export class Output {
   // (datetime) 2019, Jan 26 19:05:22.808348
   // current action is (only):
   // - reduce the number of digits for the fractional seconds
-  static dateTimeStr (pDtStr) {
+  static dateTimeStr (pDtStr, pFormat = "DT") {
 
     // no available setting, then return the original
-    const dateTimeFractionDigitsText = Utils.getStorageItem("session", "datetime_fraction_digits");
-    if (dateTimeFractionDigitsText === null) {
-      return pDtStr;
-    }
+    const dateTimeFractionDigitsText = Utils.getStorageItem("session", "datetime_fraction_digits", "6");
 
     // setting is not a number, return the original
     let dateTimeFractionDigits = Number.parseInt(dateTimeFractionDigitsText, 10);
     if (isNaN(dateTimeFractionDigits)) {
-      return pDtStr;
+      dateTimeFractionDigits = 6;
     }
 
     // stick to the min/max values without complaining
@@ -177,18 +174,48 @@ export class Output {
       dateTimeFractionDigits = 6;
     }
 
-    // find the fractional part (assume only one '.' in the string)
-    let dotPos = pDtStr.indexOf(".");
-    if (dotPos < 0) {
-      return pDtStr;
+    let fractionSecondsPart = pDtStr;
+    // leave nothing when there are no fractional seconds
+    fractionSecondsPart = fractionSecondsPart.replace(/^[^.]*$/, "");
+    // remove everything until '.'
+    // assume the last '.' is a decimal separator
+    // and that all others (if any) are just field separators
+    fractionSecondsPart = fractionSecondsPart.replace(/^.*[.]/, "");
+    // remove everything after the digits
+    fractionSecondsPart = fractionSecondsPart.replace(/[^0-9].*$/, "");
+    // truncate digits to maximum length
+    fractionSecondsPart = fractionSecondsPart.substring(0, dateTimeFractionDigits);
+
+    // remove the fraction from the original
+    pDtStr = pDtStr.replace(/[.][0-9]*$/, "");
+
+    if (pDtStr.match(/T/)) {
+      pDtStr += "Z";
+    } else {
+      pDtStr += " UTC";
     }
 
-    // with no digits, also remove the dot
-    if (dateTimeFractionDigits === 0) {
-      dotPos -= 1;
+    // the timestamps from the SaltAPI are always UTC
+    // "When the time zone offset is absent, date-only forms are interpreted as a UTC time and date-time forms are interpreted as local time."
+    // therefore add the explicit time-zone "Z" (=UTC)
+    const milliSecondsSinceEpoch = Date.parse(pDtStr);
+    const dateObj = new Date(milliSecondsSinceEpoch);
+
+    let utcDT;
+    if (pFormat === "T") {
+      utcDT = dateObj.toLocaleTimeString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
+    } else {
+      utcDT = dateObj.toLocaleString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
+    }
+    utcDT = utcDT.replace(/ *UTC$/, "");
+    if (fractionSecondsPart !== "") {
+      const decimalSeparator = 1.1.toLocaleString().substring(1, 2);
+      utcDT += decimalSeparator + fractionSecondsPart;
     }
 
-    return pDtStr.substring(0, dotPos + dateTimeFractionDigits + 1);
+    const localDT = dateObj.toLocaleTimeString(undefined, {"timeZoneName": "short"});
+
+    return utcDT + " (" + localDT + ")";
   }
 
   static getDuration (pMilliSeconds) {
