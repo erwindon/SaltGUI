@@ -156,10 +156,12 @@ export class Output {
   // (datetime) 2019, Jan 26 19:05:22.808348
   // current action is (only):
   // - reduce the number of digits for the fractional seconds
-  static dateTimeStr (pDtStr, pFormat = "DT") {
+  static dateTimeStr (pDtStr, pDateTimeField = null, pDateTimeStyle = "bottom-center", pTimeOnly = false) {
 
     // no available setting, then return the original
     const dateTimeFractionDigitsText = Utils.getStorageItem("session", "datetime_fraction_digits", "6");
+
+    const dateTimeRepresentation = Utils.getStorageItem("session", "datetime_representation", "utc");
 
     // setting is not a number, return the original
     let dateTimeFractionDigits = Number.parseInt(dateTimeFractionDigitsText, 10);
@@ -183,12 +185,22 @@ export class Output {
     fractionSecondsPart = fractionSecondsPart.replace(/^.*[.]/, "");
     // remove everything after the digits
     fractionSecondsPart = fractionSecondsPart.replace(/[^0-9].*$/, "");
+    let originalFractionSecondsPart = fractionSecondsPart;
     // truncate digits to maximum length
     fractionSecondsPart = fractionSecondsPart.substring(0, dateTimeFractionDigits);
+
+    const decimalSeparator = 1.1.toLocaleString().substring(1, 2);
+    if (fractionSecondsPart !== "") {
+      fractionSecondsPart = decimalSeparator + fractionSecondsPart;
+    }
+    if (originalFractionSecondsPart != "") {
+      originalFractionSecondsPart = decimalSeparator + originalFractionSecondsPart;
+    }
 
     // remove the fraction from the original
     pDtStr = pDtStr.replace(/[.][0-9]*$/, "");
 
+    // original was formatted as iso-date-time
     if (pDtStr.match(/T/)) {
       pDtStr += "Z";
     } else {
@@ -202,20 +214,38 @@ export class Output {
     const dateObj = new Date(milliSecondsSinceEpoch);
 
     let utcDT;
-    if (pFormat === "T") {
+    if (pTimeOnly || dateTimeRepresentation === "local+utctime") {
       utcDT = dateObj.toLocaleTimeString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
     } else {
       utcDT = dateObj.toLocaleString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
     }
     utcDT = utcDT.replace(/ *UTC$/, "");
-    if (fractionSecondsPart !== "") {
-      const decimalSeparator = 1.1.toLocaleString().substring(1, 2);
-      utcDT += decimalSeparator + fractionSecondsPart;
+
+    let localDT;
+    if (pTimeOnly || dateTimeRepresentation === "utc+localtime") {
+      localDT = dateObj.toLocaleTimeString(undefined, {"timeZoneName": "short"});
+    } else {
+      localDT = dateObj.toLocaleString(undefined, {"timeZoneName": "short"});
+    }
+    const localTZ = localDT.replace(/^.* /, "");
+    localDT = localDT.replace(/ [^ ]*$/, "");
+
+    let ret;
+    switch (dateTimeRepresentation) {
+    case "utc":
+      ret = utcDT + fractionSecondsPart;
+    case "local":
+      ret = localDT + fractionSecondsPart + " " + localTZ;
+    case "utc+localtime":
+      ret = utcDT + fractionSecondsPart + " (" + localDT + " " + localTZ + ")";
+    case "local+utctime":
+      ret = localDT + fractionSecondsPart + " " + localTZ + " (" + utcDT + ")";
+    default:
+      // unknown format, use traditional representation
+      ret = utcDT + fractionSecondsPart;
     }
 
-    const localDT = dateObj.toLocaleTimeString(undefined, {"timeZoneName": "short"});
-
-    return utcDT + " (" + localDT + ")";
+    return ret;
   }
 
   static getDuration (pMilliSeconds) {

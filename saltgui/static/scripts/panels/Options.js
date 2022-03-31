@@ -45,6 +45,10 @@ export class OptionsPanel extends Panel {
         "datetime-fraction-digits", "saltgui", "6",
         [["digits", "0", "1", "2", "3", "4", "5", "6"]]
       ],
+      [
+        "datetime-representation", "saltgui", "utc",
+        [["representation", "utc", "local", "utc+localtime", "local+utctime"]]
+      ],
       ["hide-jobs", "saltgui", "(none)"],
 
       /* show-jobs is not in the alphabetic order, but keep it close to hide-jobs */
@@ -112,7 +116,7 @@ export class OptionsPanel extends Panel {
           }
 
           const radio = document.createElement("input");
-          radio.id = "option-" + pName + "-value-" + row[0] + "-" + itemValue;
+          radio.id = "option-" + pName + "-value-" + row[0] + "-" + itemValue.replace(/[+]/, "-");
           radio.type = "radio";
           radio.name = "option-" + pName + "-value-" + row[0];
           radio.value = itemValue;
@@ -135,6 +139,10 @@ export class OptionsPanel extends Panel {
           } else if (pName === "datetime-fraction-digits") {
             radio.addEventListener("change", () => {
               this._newDatetimeFractionDigits();
+            });
+          } else if (pName === "datetime-representation") {
+            radio.addEventListener("change", () => {
+              this._newDatetimeRepresentation();
             });
           } else if (pName === "tooltip-mode") {
             radio.addEventListener("change", () => {
@@ -391,6 +399,19 @@ export class OptionsPanel extends Panel {
     const datetimeFractionDigitsTd = this.div.querySelector("#option-datetime-fraction-digits-value");
     datetimeFractionDigitsTd.innerText = value;
     Utils.setStorageItem("session", "datetime_fraction_digits", value);
+  }
+
+  _newDatetimeRepresentation () {
+    let value = "";
+    /* eslint-disable curly */
+    if (this._isSelected("datetime-representation", "representation", "utc")) value = "utc";
+    if (this._isSelected("datetime-representation", "representation", "local")) value = "local";
+    if (this._isSelected("datetime-representation", "representation", "utc-localtime")) value = "utc+localtime";
+    if (this._isSelected("datetime-representation", "representation", "local-utctime")) value = "local+utctime";
+    /* eslint-enable curly */
+    const datetimeRepresentationTd = this.div.querySelector("#option-datetime-representation-value");
+    datetimeRepresentationTd.innerText = value;
+    Utils.setStorageItem("session", "datetime_representation", value);
   }
 
   _newToolTipMode () {
