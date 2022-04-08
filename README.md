@@ -140,6 +140,27 @@ saltgui_templates:
         command: test.version
 ```
 
+When there are a lot of templates, they can be organized into categories.
+e.g.:
+```
+saltgui_templates:
+    template1:
+        description: First template
+        target: "*"
+        command: test.fib num=10
+        category: cat1
+    template2:
+        description: Second template
+        targettype: glob
+        target: dev*
+        command: test.version
+        categories:
+          - cat1
+          - cat2
+```
+When at least one template is assigned to a category, then you can select a template category before
+selecting the actual category. Otherwise that choice remains hidden. Templates can be in multiple categories
+when a list of categories is assigned.
 
 ## Jobs
 SaltGUI shows a maximum of 7 jobs in on the right-hand-side of the screen.
