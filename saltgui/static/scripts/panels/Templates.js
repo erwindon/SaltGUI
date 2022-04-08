@@ -12,7 +12,7 @@ export class TemplatesPanel extends Panel {
 
     this.addTitle("Templates");
     this.addSearchButton();
-    this.addTable(["Name", "Description", "Target", "Command", "-menu-"]);
+    this.addTable(["Name", "@Category", "Description", "Target", "Command", "-menu-"]);
     this.setTableSortable("Name", "asc");
     this.setTableClickable();
     this.addMsg();
@@ -58,6 +58,27 @@ export class TemplatesPanel extends Panel {
     const tr = document.createElement("tr");
 
     tr.appendChild(Utils.createTd("name", pTemplateName));
+
+    let categories = [];
+    const categoryColumn = this.table.querySelectorAll("col")[1];
+    if (template.category && typeof template.category === "string") {
+      categories = [template.category];
+    } else if (typeof template.categories === "object" && Array.isArray(template.categories)) {
+      for (const category of template.categories) {
+        if (typeof category === "string") {
+          categories.push(category);
+        }
+      }
+    }
+    if (categories.length) {
+      // show the categories column only when a category was filled in somewhere
+      categoryColumn.removeAttribute("style");
+    }
+    const categoryTh = this.table.querySelectorAll("th")[1];
+    if (categories.length > 1) {
+      categoryTh.innerText = "Categories";
+    }
+    tr.appendChild(Utils.createTd("category", categories.join("\n")));
 
     // calculate description
     const description = template["description"];

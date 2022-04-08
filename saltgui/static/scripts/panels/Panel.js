@@ -154,14 +154,36 @@ export class Panel {
     table.id = this.key + "-table";
     table.classList.add(this.key);
 
+    let anyHiddenColumns = false;
+    if (pColumnNames) {
+      for (const colName of pColumnNames) {
+        if (colName.startsWith("@")) {
+          anyHiddenColumns = true;
+        }
+      }
+    }
+
+    if (anyHiddenColumns) {
+      for (const colName of pColumnNames) {
+        const col = document.createElement("col");
+        if (colName.startsWith("@")) {
+          col.style.visibility = "collapse";
+        }
+        table.append(col);
+      }
+    }
+
     if (pColumnNames) {
       const thead = document.createElement("thead");
       thead.id = this.key + "-table-thead";
       const tr = document.createElement("tr");
       tr.id = this.key + "-table-thead-tr";
 
-      for (const columnName of pColumnNames) {
+      for (let columnName of pColumnNames) {
         const th = document.createElement("th");
+        if (columnName && columnName.startsWith("@")) {
+          columnName = columnName.substr(1);
+        }
         if (columnName && !columnName.startsWith("-")) {
           th.innerText = columnName;
         }
