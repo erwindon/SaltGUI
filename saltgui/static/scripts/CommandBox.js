@@ -55,11 +55,13 @@ export class CommandBox {
     if (titleElement.childElementCount) {
       // only build one dropdown menu. cannot be done in constructor
       // since the storage-item is then not populated yet.
+      CommandBox.templateCatMenu.setTitle("");
       return;
     }
     const menu = new DropDownMenu(titleElement);
     menu.setTitle("");
     menu.menuButton.classList.add("small-button-left");
+    CommandBox.templateCatMenu = menu;
     const templatesText = Utils.getStorageItem("session", "templates", "{}");
     const templates = JSON.parse(templatesText);
     const categories = TemplatesPanel.getTemplatesCategories(templates);
@@ -73,6 +75,13 @@ export class CommandBox {
         () => CommandBox._templateCatMenuItemTitle(category),
         () => {
           CommandBox.templateTmplMenu._templateCategory = category;
+          if (category === null) {
+            CommandBox.templateCatMenu.setTitle("(all)");
+          } else if (category === undefined) {
+            CommandBox.templateCatMenu.setTitle("(undefined)");
+          } else {
+            CommandBox.templateCatMenu.setTitle(category);
+          }
         }
       );
     }
