@@ -12,7 +12,7 @@ export class TemplatesPanel extends Panel {
 
     this.addTitle("Templates");
     this.addSearchButton();
-    this.addTable(["Name", "@Category", "Description", "Target", "Command", "-menu-"]);
+    this.addTable(["Name", "@Category", "Description", "Target", "Command", "-menu-"], "data-list-templates");
     this.setTableSortable("Name", "asc");
     this.setTableClickable();
     this.addMsg();
@@ -41,6 +41,7 @@ export class TemplatesPanel extends Panel {
       Utils.setStorageItem("session", "templates", JSON.stringify(templates));
       this.setCategoriesTitle(templates);
       this.showCategoriesColumn(templates);
+      TemplatesPanel.getTemplatesCategories(templates);
       Router.updateMainMenu();
     } else {
       templates = {};
@@ -111,6 +112,19 @@ export class TemplatesPanel extends Panel {
     categories = categories.filter((element, index, array) => array.indexOf(element) === index);
     // make sorted, thx https://stackoverflow.com/questions/29829205/sort-an-array-so-that-null-values-always-come-last
     categories.sort((aa, bb) => (bb === null) - (aa === null) || +Number(aa > bb) || -Number(aa < bb));
+
+    const lov = document.getElementById("data-list-templates");
+    // remove any previous lov-entries
+    lov.innerHTML = "";
+    for (const category of categories) {
+      if (!category) {
+        continue;
+      }
+      // e.g. <option value="denied">
+      const option = document.createElement("option");
+      option.value = category;
+      lov.appendChild(option);
+    }
 
     return categories;
   }
