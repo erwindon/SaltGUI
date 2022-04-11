@@ -154,6 +154,25 @@ export class Panel {
     table.id = this.key + "-table";
     table.classList.add(this.key);
 
+    let anyHiddenColumns = false;
+    if (pColumnNames) {
+      for (const colName of pColumnNames) {
+        if (colName.startsWith("@")) {
+          anyHiddenColumns = true;
+        }
+      }
+    }
+
+    if (anyHiddenColumns) {
+      for (const colName of pColumnNames) {
+        const col = document.createElement("col");
+        if (colName.startsWith("@")) {
+          col.style.visibility = "collapse";
+        }
+        table.append(col);
+      }
+    }
+
     if (pColumnNames) {
       const thead = document.createElement("thead");
       thead.id = this.key + "-table-thead";
@@ -162,8 +181,12 @@ export class Panel {
 
       for (const columnName of pColumnNames) {
         const th = document.createElement("th");
-        if (columnName && !columnName.startsWith("-")) {
-          th.innerText = columnName;
+        let cn = columnName;
+        if (cn && cn.startsWith("@")) {
+          cn = cn.substr(1);
+        }
+        if (cn && !cn.startsWith("-")) {
+          th.innerText = cn;
         }
         tr.appendChild(th);
       }

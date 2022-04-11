@@ -8,6 +8,7 @@ import {ParseCommandLine} from "./ParseCommandLine.js";
 import {Router} from "./Router.js";
 import {RunType} from "./RunType.js";
 import {TargetType} from "./TargetType.js";
+import {TemplatesPanel} from "./panels/Templates.js";
 import {Utils} from "./Utils.js";
 
 export class CommandBox {
@@ -34,14 +35,91 @@ export class CommandBox {
     });
   }
 
-  static _populateTemplateMenu () {
-    const titleElement = document.getElementById("template-menu-here");
+  static _templateCatMenuItemTitle (pCategory) {
+    let title;
+    if (pCategory === undefined) {
+      title = "(undefined)";
+    } else if (pCategory === null) {
+      title = "(all)";
+    } else {
+      title = pCategory;
+    }
+    if (CommandBox.templateTmplMenu && CommandBox.templateTmplMenu._templateCategory === pCategory) {
+      title = Character.BLACK_CIRCLE + " " + title;
+    }
+    return title;
+  }
+
+  static _populateTemplateCatMenu () {
+    const titleElement = document.getElementById("template-catmenu-here");
     if (titleElement.childElementCount) {
       // only build one dropdown menu. cannot be done in constructor
       // since the storage-item is then not populated yet.
+      CommandBox.templateCatMenu.setTitle("");
       return;
     }
     const menu = new DropDownMenu(titleElement);
+    menu.setTitle("");
+    menu.menuButton.classList.add("small-button-left");
+    CommandBox.templateCatMenu = menu;
+    const templatesText = Utils.getStorageItem("session", "templates", "{}");
+    const templates = JSON.parse(templatesText);
+    const categories = TemplatesPanel.getTemplatesCategories(templates);
+    if (categories.length < 2) {
+      // no useful content
+      return;
+    }
+    categories.unshift(null);
+    for (const category of categories) {
+      menu.addMenuItem(
+        () => CommandBox._templateCatMenuItemTitle(category),
+        () => {
+          CommandBox.templateTmplMenu._templateCategory = category;
+          if (category === null) {
+            CommandBox.templateCatMenu.setTitle("(all)");
+          } else if (category === undefined) {
+            CommandBox.templateCatMenu.setTitle("(undefined)");
+          } else {
+            CommandBox.templateCatMenu.setTitle(category);
+          }
+        }
+      );
+    }
+  }
+
+  static _templateTmplMenuItemTitle (pTemplate) {
+    if (CommandBox.templateTmplMenu._templateCategory === null) {
+      // "(all)" selected, return all
+      return pTemplate.description;
+    }
+    if (CommandBox.templateTmplMenu._templateCategory === undefined && pTemplate.category === undefined && pTemplate.categories === undefined) {
+      // no category selected, return templates without category
+      return pTemplate.description;
+    }
+    if (pTemplate.category && pTemplate.category === CommandBox.templateTmplMenu._templateCategory) {
+      // item has one category, return when it matches
+      return pTemplate.description;
+    }
+    if (pTemplate.categories && pTemplate.categories.indexOf(CommandBox.templateTmplMenu._templateCategory) >= 0) {
+      // item has a list of categories, return when one matches
+      return pTemplate.description;
+    }
+    return null;
+  }
+
+  static _populateTemplateTmplMenu () {
+    const titleElement = document.getElementById("template-tmplmenu-here");
+    if (titleElement.childElementCount) {
+      // only build one dropdown menu. cannot be done in constructor
+      // since the storage-item is then not populated yet.
+      // but reset the selected template category
+      CommandBox.templateTmplMenu._templateCategory = null;
+      return;
+    }
+    const menu = new DropDownMenu(titleElement);
+    menu.menuButton.classList.add("small-button-left");
+    CommandBox.templateTmplMenu = menu;
+    CommandBox.templateTmplMenu._templateCategory = null;
     const templatesText = Utils.getStorageItem("session", "templates", "{}");
     const templates = JSON.parse(templatesText);
     const keys = Object.keys(templates).sort();
@@ -52,7 +130,7 @@ export class CommandBox {
         description = "(" + key + ")";
       }
       menu.addMenuItem(
-        description,
+        () => CommandBox._templateTmplMenuItemTitle(template),
         () => {
           CommandBox._applyTemplate(template);
         }
@@ -386,7 +464,8 @@ export class CommandBox {
     commandField.focus();
     targetField.focus();
 
-    CommandBox._populateTemplateMenu();
+    CommandBox._populateTemplateCatMenu();
+    CommandBox._populateTemplateTmplMenu();
 
     const localTestProviders = pApi.getLocalTestProviders();
 

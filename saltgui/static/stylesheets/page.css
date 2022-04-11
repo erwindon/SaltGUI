@@ -196,7 +196,8 @@ table tr td:last-of-type {
   color: #2e7d32;
 }
 
-#template-menu-here {
+#template-catmenu-here,
+#template-tmplmenu-here {
   display: inline;
 }
 

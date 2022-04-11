@@ -62,7 +62,7 @@
         <!-- 2753 = BLACK QUESTION MARK ORNAMENT -->
         <!-- FE0E = VARIATION SELECTOR-15 (render as text) -->
         <span id="help" class="small-button small-button-right small-button-for-click" style="cursor: help">&#x2753;&#xFE0E;</span>
-        <div><h1>Manual Run</h1><p id="template-menu-here"></p></div>
+        <div><h1>Manual Run</h1><p id="template-catmenu-here"></p><p id="template-tmplmenu-here"></p></div>
         <div id="target-box"><input list="data-list-target" id='target' type='text' placeholder="Target" spellcheck="false" style="margin-right: 10px"/></div>
         <div id="cmd-box"><input id='command' type='text' placeholder="Command" spellcheck="false" style="margin-right: 10px"/></div>
         <div id="run-block"><input id="run-command" type='submit' value="Run command" style="margin-right: 10px"/></div>
@@ -71,6 +71,10 @@
     </div>
 
     <datalist id="data-list-target">
+      <!-- dynamic content only -->
+    </datalist>
+
+    <datalist id="data-list-templates">
       <!-- dynamic content only -->
     </datalist>
 
