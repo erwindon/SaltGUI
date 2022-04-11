@@ -149,6 +149,13 @@ export class Output {
     return true;
   }
 
+  static nDigits (pValue, pNrDigits) {
+    let digits = pValue.toString();
+    while (digits.length < pNrDigits) {
+      digits = "0" + digits;
+    }
+    return digits;
+  }
 
   // reformat a date-time string
   // supported formats:
@@ -162,6 +169,18 @@ export class Output {
     const dateTimeFractionDigitsText = Utils.getStorageItem("session", "datetime_fraction_digits", "6");
 
     const dateTimeRepresentation = Utils.getStorageItem("session", "datetime_representation", "utc");
+
+    if (typeof pDtStr === "number") {
+      pTimeOnly = pDtStr < 100 * 86400;
+      pDtStr = new Date(pDtStr * 1000);
+    }
+
+    if (typeof pDtStr === "object") {
+      // assume it is a Date
+      // 2019, Jan 26 19:05:22.808348
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      pDtStr = pDtStr.getUTCFullYear() + ", " + months[pDtStr.getUTCMonth()] + " " + pDtStr.getUTCDate() + " " + Output.nDigits(pDtStr.getUTCHours(), 2) + ":" + Output.nDigits(pDtStr.getUTCMinutes(), 2) + ":" + Output.nDigits(pDtStr.getUTCSeconds(), 2) + "." + Output.nDigits(pDtStr.getUTCMilliseconds(), 3);
+    }
 
     // setting is not a number, return the original
     let dateTimeFractionDigits = Number.parseInt(dateTimeFractionDigitsText, 10);
@@ -214,7 +233,7 @@ export class Output {
     const dateObj = new Date(milliSecondsSinceEpoch);
 
     let utcDT;
-    if (pTimeOnly || dateTimeRepresentation === "local+utctime") {
+    if (pTimeOnly || dateTimeRepresentation === "local-utctime") {
       utcDT = dateObj.toLocaleTimeString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
     } else {
       utcDT = dateObj.toLocaleString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
@@ -222,13 +241,19 @@ export class Output {
     utcDT = utcDT.replace(/ *UTC$/, "");
 
     let localDT;
-    if (pTimeOnly || dateTimeRepresentation === "utc+localtime") {
+    if (pTimeOnly || dateTimeRepresentation === "utc-localtime") {
       localDT = dateObj.toLocaleTimeString(undefined, {"timeZoneName": "short"});
     } else {
       localDT = dateObj.toLocaleString(undefined, {"timeZoneName": "short"});
     }
     const localTZ = localDT.replace(/^.* /, "");
     localDT = localDT.replace(/ [^ ]*$/, "");
+
+    if (milliSecondsSinceEpoch >= 86400 * 1000 && milliSecondsSinceEpoch < 100 * 86400 * 1000) {
+      const days = Math.trunc(milliSecondsSinceEpoch / (86400 * 1000)) + "d ";
+      utcDT = days + utcDT;
+      localDT = days + localDT;
+    }
 
     let ret;
     switch (dateTimeRepresentation) {
@@ -238,10 +263,10 @@ export class Output {
     case "local":
       ret = localDT + fractionSecondsPart + " " + localTZ;
       break;
-    case "utc+localtime":
+    case "utc-localtime":
       ret = utcDT + fractionSecondsPart + " (" + localDT + " " + localTZ + ")";
       break;
-    case "local+utctime":
+    case "local-utctime":
       ret = localDT + fractionSecondsPart + " " + localTZ + " (" + utcDT + ")";
       break;
     default:

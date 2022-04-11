@@ -1,6 +1,7 @@
 /* global document */
 
 import {Character} from "../Character.js";
+import {Output} from "../output/Output.js";
 import {OutputYaml} from "../output/OutputYaml.js";
 import {Panel} from "./Panel.js";
 import {Router} from "../Router.js";
@@ -47,7 +48,7 @@ export class OptionsPanel extends Panel {
       ],
       [
         "datetime-representation", "saltgui", "utc",
-        [["representation", "utc", "local", "utc+localtime", "local+utctime"]]
+        [["representation", "utc", "local", "utc-localtime:utc+localtime", "local-utctime:local+utctime"]]
       ],
       ["hide-jobs", "saltgui", "(none)"],
 
@@ -107,16 +108,16 @@ export class OptionsPanel extends Panel {
         }
         addSep = true;
         for (let i = 1; i < row.length; i++) {
-          let itemText = row[i];
           let itemValue = row[i];
+          let itemLabel = row[i];
           const colonPos = row[i].search(":");
           if (colonPos > 0) {
             itemValue = row[i].substring(0, colonPos);
-            itemText = row[i].substring(colonPos + 1);
+            itemLabel = row[i].substring(colonPos + 1);
           }
 
           const radio = document.createElement("input");
-          radio.id = "option-" + pName + "-value-" + row[0] + "-" + itemValue.replace(/[+]/, "-");
+          radio.id = "option-" + pName + "-value-" + row[0] + "-" + itemValue;
           radio.type = "radio";
           radio.name = "option-" + pName + "-value-" + row[0];
           radio.value = itemValue;
@@ -153,7 +154,7 @@ export class OptionsPanel extends Panel {
 
           const label = document.createElement("label");
           label.htmlFor = radio.id;
-          label.innerText = itemText;
+          label.innerText = itemLabel;
           label.style.whiteSpace = "nowrap";
           tdValue.appendChild(label);
         }
@@ -165,33 +166,61 @@ export class OptionsPanel extends Panel {
     tbody.appendChild(tr);
   }
 
-  static _enhanceSessionStart (pSessionStart) {
-    const startStr = new Date(pSessionStart * 1000);
-    return pSessionStart + "\n" + startStr;
+  static _enhanceSessionStart (pTd, pSessionStart) {
+    const line1 = Utils.createDiv(null, pSessionStart);
+
+    const line2s = Utils.createSpan();
+    Output.dateTimeStr(pSessionStart, line2s);
+    const line2d = Utils.createDiv();
+    line2d.appendChild(line2s);
+
+    pTd.innerHTML = "";
+    pTd.appendChild(line1);
+    pTd.appendChild(line2d);
   }
 
-  static _enhanceSessionExpire (pSessionStart, pSessionExpire) {
-    const expireStr = new Date(pSessionExpire * 1000);
+  static _enhanceSessionExpire (pTd, pSessionExpire, pSessionStart) {
+
+    const line1 = Utils.createDiv(null, pSessionExpire);
+
+    const line2s = Utils.createSpan();
+    Output.dateTimeStr(pSessionExpire, line2s);
+    const line2d = Utils.createDiv();
+    line2d.appendChild(line2s);
+
     const date = new Date(null);
     if (pSessionStart && pSessionExpire) {
       date.setSeconds(pSessionExpire - pSessionStart);
     }
-    let durationStr = "";
     const str1 = date.toISOString();
+    let line3 = null;
     if (str1.startsWith("1970-01-01T")) {
       // remove the date prefix and the millisecond suffix
-      durationStr = "\nduration is " + str1.substr(11, 8);
+      const durationStr = "duration is " + str1.substr(11, 8);
+      line3 = Utils.createDiv(null, durationStr);
     }
-    let expiresInStr = "";
+
+    let line4 = null;
     const leftMillis = pSessionExpire * 1000 - Date.now();
     if (leftMillis < 0) {
-      expiresInStr = "\nexpired";
+      const expiresInStr = "expired";
+      line4 = Utils.createDiv(null, expiresInStr);
     } else if (leftMillis < 86400000) {
       const str2 = new Date(leftMillis).toISOString();
       // remove the date prefix and the millisecond suffix
-      expiresInStr = "\nexpires in " + str2.substr(11, 8);
+      const expiresInStr = "expires in " + str2.substr(11, 8);
+      line4 = Utils.createDiv(null, expiresInStr);
     }
-    return pSessionExpire + "\n" + expireStr + durationStr + expiresInStr;
+
+    pTd.innerHTML = "";
+    pTd.appendChild(line1);
+    pTd.appendChild(line2d);
+    if (line3) {
+      pTd.appendChild(line3);
+    }
+    if (line4) {
+      pTd.appendChild(line4);
+    }
   }
 
   onHide () {
@@ -233,14 +262,12 @@ export class OptionsPanel extends Panel {
         value = category + "[" + name + "]";
       }
 
-      const origValue = value;
-      if (category === "session" && name === "start") {
-        value = OptionsPanel._enhanceSessionStart(value);
-      } else if (category === "session" && name === "expire") {
-        value = OptionsPanel._enhanceSessionExpire(sessionStart, value);
-      }
       const td = this.div.querySelector("#option-" + name + "-value");
-      if (name === "perms") {
+      if (category === "session" && name === "start") {
+        OptionsPanel._enhanceSessionStart(td, value);
+      } else if (category === "session" && name === "expire") {
+        OptionsPanel._enhanceSessionExpire(td, value, sessionStart);
+      } else if (category === "session" && name === "perms") {
         td.innerText = OutputYaml.formatYAML(value);
       } else if (category === "session") {
         td.innerText = value;
@@ -251,7 +278,7 @@ export class OptionsPanel extends Panel {
       if (category === "session" && name === "expire") {
         this.updateExpiresTimer = window.setInterval(() => {
           // just redo the whole text-block
-          td.innerText = OptionsPanel._enhanceSessionExpire(sessionStart, origValue);
+          OptionsPanel._enhanceSessionExpire(td, value, sessionStart);
         }, 1000);
       }
 
@@ -406,8 +433,8 @@ export class OptionsPanel extends Panel {
     /* eslint-disable curly */
     if (this._isSelected("datetime-representation", "representation", "utc")) value = "utc";
     if (this._isSelected("datetime-representation", "representation", "local")) value = "local";
-    if (this._isSelected("datetime-representation", "representation", "utc-localtime")) value = "utc+localtime";
-    if (this._isSelected("datetime-representation", "representation", "local-utctime")) value = "local+utctime";
+    if (this._isSelected("datetime-representation", "representation", "utc-localtime")) value = "utc-localtime";
+    if (this._isSelected("datetime-representation", "representation", "local-utctime")) value = "local-utctime";
     /* eslint-enable curly */
     const datetimeRepresentationTd = this.div.querySelector("#option-datetime-representation-value");
     datetimeRepresentationTd.innerText = value;
