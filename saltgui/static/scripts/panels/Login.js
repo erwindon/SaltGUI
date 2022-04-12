@@ -371,7 +371,7 @@ export class LoginPanel extends Panel {
     Utils.setStorageItem("session", "datetime_fraction_digits", JSON.stringify(dateTimeFractionDigits));
 
     const dateTimeRepresentation = wheelConfigValuesData.saltgui_datetime_representation;
-    Utils.setStorageItem("session", "datetime_representation", JSON.stringify(dateTimeRepresentation));
+    Utils.setStorageItem("session", "datetime_representation", dateTimeRepresentation);
 
     const toolTipMode = wheelConfigValuesData.saltgui_tooltip_mode;
     Utils.setStorageItem("session", "tooltip_mode", toolTipMode);
