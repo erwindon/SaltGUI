@@ -23,7 +23,8 @@ export class OutputHighstateTaskFull {
     }
 
     if (pTask.start_time) {
-      txt += "\n     Started: " + Output.dateTimeStr(pTask.start_time);
+      const startTime = Output.dateTimeStr("1999, Sep 9 " + pTask.start_time, null, null, true);
+      txt += "\n     Started: " + startTime;
     }
 
     if (pTask.duration >= 10) {

@@ -34,7 +34,7 @@ export class StatsPanel extends Panel {
 
     this.updateStatsTimer = window.setInterval(() => {
       this.onShowNow();
-    }, 3000);
+    }, 5000);
   }
 
   onShowNow () {
@@ -59,26 +59,11 @@ export class StatsPanel extends Panel {
 
   // provide a shortened date format for cases
   // where we see the timezone multiple times on one screen
-  static _shortenedDate (dateInMs) {
-    if (dateInMs === null) {
-      return dateInMs;
+  static _explainDateTime (pDateTimeInMs) {
+    if (pDateTimeInMs === null) {
+      return pDateTimeInMs;
     }
-    // get the regular data fomat
-    let str = String(new Date(dateInMs * 1000));
-    // remove the named timezone part
-    str = str.replace(/ *[(].*[)]/, "");
-    return dateInMs + " (=" + str + ")";
-  }
-
-  static _shortenedInterval (intervalInMs) {
-    let str = new Date(intervalInMs * 1000).toISOString();
-    // remove the date prefix and the millisecond suffix
-    str = str.substr(11, 8);
-    // add the number of days (when there are any)
-    if (intervalInMs >= 86400) {
-      str = Math.floor(intervalInMs / 86400) + "d " + str;
-    }
-    return intervalInMs + " (=" + str + ")";
+    return pDateTimeInMs + " (=" + Output.dateTimeStr(pDateTimeInMs) + ")";
   }
 
   _handleStats (pStatsData) {
@@ -134,22 +119,22 @@ export class StatsPanel extends Panel {
       // this turns the fields into strings (was number)
       // we'll ignore that now
 
-      appData["Current Time"] = StatsPanel._shortenedDate(appData["Current Time"]);
+      appData["Current Time"] = StatsPanel._explainDateTime(appData["Current Time"]);
 
-      appData["Start Time"] = StatsPanel._shortenedDate(appData["Start Time"]);
+      appData["Start Time"] = StatsPanel._explainDateTime(appData["Start Time"]);
 
-      appData["Uptime"] = StatsPanel._shortenedInterval(appData["Uptime"]);
+      appData["Uptime"] = StatsPanel._explainDateTime(appData["Uptime"]);
 
       const requests = appData["Requests"];
       for (const key in requests) {
-        requests[key]["Start Time"] = StatsPanel._shortenedDate(requests[key]["Start Time"]);
-        requests[key]["End Time"] = StatsPanel._shortenedDate(requests[key]["End Time"]);
+        requests[key]["Start Time"] = StatsPanel._explainDateTime(requests[key]["Start Time"]);
+        requests[key]["End Time"] = StatsPanel._explainDateTime(requests[key]["End Time"]);
       }
 
       const slowQueries = appData["Slow Queries"];
       for (const key in slowQueries) {
-        slowQueries[key]["Start Time"] = StatsPanel._shortenedDate(slowQueries[key]["Start Time"]);
-        slowQueries[key]["End Time"] = StatsPanel._shortenedDate(slowQueries[key]["End Time"]);
+        slowQueries[key]["Start Time"] = StatsPanel._explainDateTime(slowQueries[key]["Start Time"]);
+        slowQueries[key]["End Time"] = StatsPanel._explainDateTime(slowQueries[key]["End Time"]);
       }
     }
 

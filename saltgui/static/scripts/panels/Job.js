@@ -38,10 +38,12 @@ export class JobPanel extends Panel {
     this._addPanelMenuItemKillJob();
     this._addPanelMenuItemSignalJob();
 
-    const time = document.createElement("h2");
-    time.classList.add("time");
-    this.div.append(time);
-    this.timeField = time;
+    const timeH2 = document.createElement("h2");
+    const timeSpan = document.createElement("span");
+    timeSpan.classList.add("time");
+    timeH2.appendChild(timeSpan);
+    this.div.append(timeH2);
+    this.timeField = timeSpan;
 
     const warning = document.createElement("h2");
     warning.classList.add("warning");
@@ -170,7 +172,7 @@ export class JobPanel extends Panel {
     if (info.Error) {
       this.updateTitle("ERROR");
       this.output.innerText = info.Error + " (" + pJobId + ")";
-      this.timeField.innerText = Output.dateTimeStr(info.StartTime);
+      Output.dateTimeStr(info.StartTime, this.timeField, "bottom-left");
       return;
     }
 
@@ -200,7 +202,7 @@ export class JobPanel extends Panel {
       TargetType.makeTargetText(info);
     this.updateTitle(functionText);
 
-    this.timeField.innerText = Output.dateTimeStr(info.StartTime);
+    Output.dateTimeStr(info.StartTime, this.timeField, "bottom-left");
 
     let minions = ["WHEEL"];
     if (info.Minions) {

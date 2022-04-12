@@ -18,7 +18,8 @@ export class OutputHighstateTaskTerse {
       txt += "Clean";
     }
     if (pTask.start_time) {
-      txt += " - Started: " + Output.dateTimeStr(pTask.start_time);
+      const startTime = Output.dateTimeStr("1999, Sep 9 " + pTask.start_time, null, null, true);
+      txt += " - Started: " + startTime;
     }
     if (pTask.duration >= 10) {
       txt += " - Duration: " + Output.getDuration(pTask.duration);

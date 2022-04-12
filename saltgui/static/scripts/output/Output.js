@@ -149,6 +149,13 @@ export class Output {
     return true;
   }
 
+  static nDigits (pValue, pNrDigits) {
+    let digits = pValue.toString();
+    while (digits.length < pNrDigits) {
+      digits = "0" + digits;
+    }
+    return digits;
+  }
 
   // reformat a date-time string
   // supported formats:
@@ -156,18 +163,29 @@ export class Output {
   // (datetime) 2019, Jan 26 19:05:22.808348
   // current action is (only):
   // - reduce the number of digits for the fractional seconds
-  static dateTimeStr (pDtStr) {
+  static dateTimeStr (pDtStr, pDateTimeField = null, pDateTimeStyle = "bottom-center", pTimeOnly = false) {
 
     // no available setting, then return the original
-    const dateTimeFractionDigitsText = Utils.getStorageItem("session", "datetime_fraction_digits");
-    if (dateTimeFractionDigitsText === null) {
-      return pDtStr;
+    const dateTimeFractionDigitsText = Utils.getStorageItem("session", "datetime_fraction_digits", "6");
+
+    const dateTimeRepresentation = Utils.getStorageItem("session", "datetime_representation", "utc");
+
+    if (typeof pDtStr === "number") {
+      pTimeOnly = pDtStr < 100 * 86400;
+      pDtStr = new Date(pDtStr * 1000);
+    }
+
+    if (typeof pDtStr === "object") {
+      // assume it is a Date
+      // 2019, Jan 26 19:05:22.808348
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      pDtStr = pDtStr.getUTCFullYear() + ", " + months[pDtStr.getUTCMonth()] + " " + pDtStr.getUTCDate() + " " + Output.nDigits(pDtStr.getUTCHours(), 2) + ":" + Output.nDigits(pDtStr.getUTCMinutes(), 2) + ":" + Output.nDigits(pDtStr.getUTCSeconds(), 2) + "." + Output.nDigits(pDtStr.getUTCMilliseconds(), 3);
     }
 
     // setting is not a number, return the original
     let dateTimeFractionDigits = Number.parseInt(dateTimeFractionDigitsText, 10);
     if (isNaN(dateTimeFractionDigits)) {
-      return pDtStr;
+      dateTimeFractionDigits = 6;
     }
 
     // stick to the min/max values without complaining
@@ -177,18 +195,96 @@ export class Output {
       dateTimeFractionDigits = 6;
     }
 
-    // find the fractional part (assume only one '.' in the string)
-    let dotPos = pDtStr.indexOf(".");
-    if (dotPos < 0) {
-      return pDtStr;
+    let fractionSecondsPart = pDtStr;
+    // leave nothing when there are no fractional seconds
+    fractionSecondsPart = fractionSecondsPart.replace(/^[^.]*$/, "");
+    // remove everything until '.'
+    // assume the last '.' is a decimal separator
+    // and that all others (if any) are just field separators
+    fractionSecondsPart = fractionSecondsPart.replace(/^.*[.]/, "");
+    // remove everything after the digits
+    fractionSecondsPart = fractionSecondsPart.replace(/[^0-9].*$/, "");
+    let originalFractionSecondsPart = fractionSecondsPart;
+    // truncate digits to maximum length
+    fractionSecondsPart = fractionSecondsPart.substring(0, dateTimeFractionDigits);
+
+    const decimalSeparator = 1.1.toLocaleString().substring(1, 2);
+    if (fractionSecondsPart !== "") {
+      fractionSecondsPart = decimalSeparator + fractionSecondsPart;
+    }
+    if (originalFractionSecondsPart !== "") {
+      originalFractionSecondsPart = decimalSeparator + originalFractionSecondsPart;
     }
 
-    // with no digits, also remove the dot
-    if (dateTimeFractionDigits === 0) {
-      dotPos -= 1;
+    // remove the fraction from the original
+    pDtStr = pDtStr.replace(/[.][0-9]*$/, "");
+
+    // original was formatted as iso-date-time
+    if (pDtStr.match(/T/)) {
+      pDtStr += "Z";
+    } else {
+      pDtStr += " UTC";
     }
 
-    return pDtStr.substring(0, dotPos + dateTimeFractionDigits + 1);
+    // the timestamps from the SaltAPI are always UTC
+    // "When the time zone offset is absent, date-only forms are interpreted as a UTC time and date-time forms are interpreted as local time."
+    // therefore add the explicit time-zone "Z" (=UTC)
+    const milliSecondsSinceEpoch = Date.parse(pDtStr);
+    const dateObj = new Date(milliSecondsSinceEpoch);
+
+    let utcDT;
+    if (pTimeOnly || dateTimeRepresentation === "local-utctime") {
+      utcDT = dateObj.toLocaleTimeString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
+    } else {
+      utcDT = dateObj.toLocaleString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
+    }
+    utcDT = utcDT.replace(/ *UTC$/, "");
+
+    let localDT;
+    if (pTimeOnly || dateTimeRepresentation === "utc-localtime") {
+      localDT = dateObj.toLocaleTimeString(undefined, {"timeZoneName": "short"});
+    } else {
+      localDT = dateObj.toLocaleString(undefined, {"timeZoneName": "short"});
+    }
+    const localTZ = localDT.replace(/^.* /, "");
+    localDT = localDT.replace(/ [^ ]*$/, "");
+
+    if (milliSecondsSinceEpoch >= 86400 * 1000 && milliSecondsSinceEpoch < 100 * 86400 * 1000) {
+      const days = Math.trunc(milliSecondsSinceEpoch / (86400 * 1000)) + "d ";
+      utcDT = days + utcDT;
+      localDT = days + localDT;
+    }
+
+    let ret;
+    switch (dateTimeRepresentation) {
+    case "utc":
+      ret = utcDT + fractionSecondsPart;
+      break;
+    case "local":
+      ret = localDT + fractionSecondsPart + " " + localTZ;
+      break;
+    case "utc-localtime":
+      ret = utcDT + fractionSecondsPart + " (" + localDT + " " + localTZ + ")";
+      break;
+    case "local-utctime":
+      ret = localDT + fractionSecondsPart + " " + localTZ + " (" + utcDT + ")";
+      break;
+    default:
+      // unknown format, use traditional representation
+      ret = utcDT + fractionSecondsPart;
+    }
+
+    if (pDateTimeField) {
+      utcDT = dateObj.toLocaleString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
+      utcDT = utcDT.replace(/ [A-Z]*$/, originalFractionSecondsPart + "$&");
+      localDT = dateObj.toLocaleString(undefined, {"timeZoneName": "short"});
+      localDT = localDT.replace(/ [A-Z]*$/, originalFractionSecondsPart + "$&");
+      pDateTimeField.innerText = ret;
+      const txt = utcDT + "\n" + localDT;
+      Utils.addToolTip(pDateTimeField, txt, pDateTimeStyle);
+    }
+
+    return ret;
   }
 
   static getDuration (pMilliSeconds) {

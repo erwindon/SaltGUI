@@ -60,8 +60,10 @@ export class JobsSummaryPanel extends JobsPanel {
     });
     td.appendChild(statusSpan);
 
-    const startTimeText = Output.dateTimeStr(job.StartTime);
-    const startTimeDiv = Utils.createDiv("time", startTimeText);
+    const startTimeDiv = Utils.createDiv("time");
+    const startTimeSpan = Utils.createSpan();
+    Output.dateTimeStr(job.StartTime, startTimeSpan);
+    startTimeDiv.appendChild(startTimeSpan);
     td.appendChild(startTimeDiv);
 
     tr.appendChild(td);

@@ -28,7 +28,7 @@ export class BeaconsMinionPanel extends Panel {
       "Note that some beacons produce multiple values, e.g. one per disk.",
       "In that case, effectively only one of the values is visible here."
     ]);
-    this.addTable(["Name", "-menu-", "Config", "Value", "-help-"]);
+    this.addTable(["Name", "-menu-", "Config", "Timestamp", "Value", "-help-"]);
     this.setTableSortable("Name", "asc");
     this.setTableClickable();
     this.addMsg();
@@ -161,24 +161,30 @@ export class BeaconsMinionPanel extends Panel {
       // menu comes before this data on purpose
       const beaconConfig = Output.formatObject(beacon);
       const beaconConfigTd = Utils.createTd("beacon-config", beaconConfig);
-      let initialValue = "";
-      if (beacons.enabled === false) {
-        beaconConfigTd.classList.add("beacon-disabled");
-        initialValue += "\n(beacons" + Character.NO_BREAK_SPACE + "disabled)";
-      }
+      let initialTimestamp = "(waiting)";
+      let initialValue = "(waiting)";
       if (beacon.enabled === false) {
         beaconConfigTd.classList.add("beacon-disabled");
-        initialValue += "\n(beacon" + Character.NO_BREAK_SPACE + "disabled)";
+        initialTimestamp = "---";
+        initialValue = "(beacon" + Character.NO_BREAK_SPACE + "disabled)";
+      } else if (beacons.enabled === false) {
+        beaconConfigTd.classList.add("beacon-disabled");
+        initialTimestamp = "---";
+        initialValue = "(beacons" + Character.NO_BREAK_SPACE + "disabled)";
       }
       tr.appendChild(beaconConfigTd);
 
-      if (initialValue === "") {
-        initialValue = "(waiting)";
-      }
-      initialValue = initialValue.trim();
+      const beaconTimestampTd = Utils.createTd();
+      const beaconTimestampSpan = Utils.createSpan("beacon-timestamp", initialTimestamp);
+      beaconTimestampSpan.classList.add("beacon-waiting");
+      beaconTimestampTd.appendChild(beaconTimestampSpan);
+      tr.appendChild(beaconTimestampTd);
+      tr.beaconTimestampSpan = beaconTimestampSpan;
+
       const beaconValueTd = Utils.createTd("beacon-value", initialValue);
       beaconValueTd.classList.add("beacon-waiting");
       tr.appendChild(beaconValueTd);
+      tr.beaconValueTd = beaconValueTd;
 
       const tbody = this.table.tBodies[0];
       tbody.appendChild(tr);
@@ -302,24 +308,25 @@ export class BeaconsMinionPanel extends Panel {
       return;
     }
 
-    let txt = "";
+    let value = "";
     let stamp = "";
     if (pData["_stamp"]) {
       // keep timestamp for further logic
       stamp = pData["_stamp"];
-      txt += Output.dateTimeStr(stamp) + "\n";
       delete pData["_stamp"];
+      Output.dateTimeStr(stamp, tr.beaconTimestampSpan, undefined, true);
     }
+    tr.beaconTimestampSpan.classList.remove("beacon-waiting");
+
     if (pTag !== prefix + beaconName + "/") {
       // Show the tag when it has extra information
-      txt += pTag + "\n";
+      value = pTag + "\n";
     }
     if (pData["id"] === minionId) {
       delete pData["id"];
     }
-    txt += Output.formatObject(pData);
-    const td = tr.getElementsByTagName("td")[3];
-    td.classList.remove("beacon-waiting");
+    value += Output.formatObject(pData);
+    tr.beaconValueTd.classList.remove("beacon-waiting");
 
     // round down to 0.1 second
     // secondary events are close, but rarely exact on the same time
@@ -358,7 +365,7 @@ export class BeaconsMinionPanel extends Panel {
       tr.helpButtonSpan.style.display = "none";
     }
 
-    td.innerText = txt;
+    tr.beaconValueTd.innerText = value;
 
     tr.prevStamp = stamp;
     tr.prevTag = pTag;
