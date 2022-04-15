@@ -37,7 +37,7 @@ export class JobsRunningIssues extends Issues {
     let thenStr = then.
       toISOString().
       replace(/[-:.A-Z]/g, "").
-      substr(0, 20);
+      substring(0, 20);
     while (thenStr.length < 20) {
       thenStr += "0";
     }

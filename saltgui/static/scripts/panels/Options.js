@@ -196,7 +196,7 @@ export class OptionsPanel extends Panel {
     let line3 = null;
     if (str1.startsWith("1970-01-01T")) {
       // remove the date prefix and the millisecond suffix
-      const durationStr = "duration is " + str1.substr(11, 8);
+      const durationStr = "duration is " + str1.substring(11, 19);
       line3 = Utils.createDiv(null, durationStr);
     }
 
@@ -208,7 +208,7 @@ export class OptionsPanel extends Panel {
     } else if (leftMillis < 86400000) {
       const str2 = new Date(leftMillis).toISOString();
       // remove the date prefix and the millisecond suffix
-      const expiresInStr = "expires in " + str2.substr(11, 8);
+      const expiresInStr = "expires in " + str2.substring(11, 19);
       line4 = Utils.createDiv(null, expiresInStr);
     }
 

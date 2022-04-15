@@ -143,7 +143,7 @@ export class MinionsPanel extends Panel {
       notConnectedStr = "L@" + notConnectedStr.replace(/^,/, "");
     } else {
       // no need for list
-      notConnectedStr = notConnectedStr.substr(2);
+      notConnectedStr = notConnectedStr.substring(2);
     }
     return "* and not " + notConnectedStr;
   }

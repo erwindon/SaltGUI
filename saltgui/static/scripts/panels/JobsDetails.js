@@ -271,7 +271,7 @@ export class JobsDetailsPanel extends JobsPanel {
       }
       if (key !== "0-0" && key !== "1-1") {
         // don't show the retcode for expected combinations
-        detailsHTML += "(" + key.substr(2) + ")";
+        detailsHTML += "(" + key.substring(2) + ")";
       }
       detailsHTML += "</span>";
     }

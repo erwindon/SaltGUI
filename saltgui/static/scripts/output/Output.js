@@ -601,7 +601,7 @@ export class Output {
         }
         if (key !== "0-0" && key !== "1-1") {
           // don't show the retcode for expected combinations
-          txt += "(" + key.substr(2) + ")";
+          txt += "(" + key.substring(2) + ")";
         }
       }
 

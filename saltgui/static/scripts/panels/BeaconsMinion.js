@@ -331,7 +331,7 @@ export class BeaconsMinionPanel extends Panel {
     // round down to 0.1 second
     // secondary events are close, but rarely exact on the same time
     // original: yyyy-mm-ddThh:mm:ss.ssssss
-    stamp = stamp.substr(0, 21);
+    stamp = stamp.substring(0, 21);
 
     // when the warning-line has been shown, then from then on,
     // show an empty line when there is no warning.

@@ -183,7 +183,7 @@ export class Panel {
         const th = document.createElement("th");
         let cn = columnName;
         if (cn && cn.startsWith("@")) {
-          cn = cn.substr(1);
+          cn = cn.substring(1);
         }
         if (cn && !cn.startsWith("-")) {
           th.innerText = cn;
@@ -701,7 +701,7 @@ export class Panel {
       if (cmd.match(/^[a-z_]+=$/i)) {
         // handle key-value pairs
         const pos = cmd.indexOf("=");
-        commandString += cmd.substr(0, pos + 1);
+        commandString += cmd.substring(0, pos + 1);
         // value comes in a separate element
         separator = "";
         continue;
