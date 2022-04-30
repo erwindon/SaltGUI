@@ -39,14 +39,16 @@ The version tagged `release` is the latest released version. The version `master
 ```
 external_auth:
   pam:
-    saltuser:
+    saltuser1:
       - .*
       - '@runner'
       - '@wheel'
       - '@jobs'
 ```
 - See `docs/PERMISSIONS.md` for more restricted security configurations.
-- `saltuser` is a unix (PAM) user, make sure it exists or create a new one.
+- The username 'saltuser1' is only an example. Generic accounts are not recommended, use personal accounts instead. Or use a user-group, see https://docs.saltproject.io/en/latest/topics/eauth/index.html for details.
+- Multiple entries like `saltuser1` can be added when you have multiple users.
+- `saltuser1` is a unix (PAM) user, make sure it exists or create a new one.
 - At the bottom of this file, also setup the rest_cherrypi server to access SaltGUI from "http://localhost:3333" (or on any of the hostnames that the server has):
 ```
 rest_cherrypy:
@@ -63,7 +65,7 @@ rest_cherrypy:
 - Restart everything with ``pkill salt-master && pkill salt-api && salt-master -d && salt-api -d``
 - You should be good to go. If you have any problems, open a GitHub issue. As always, SSL is recommended wherever possible but setup is beyond the scope of this guide.
 
-**Note: With this configuration, the `saltuser` user has access to all salt modules available, maybe this is not what you want**
+**Note: With this configuration, the user has access to all salt modules available, maybe this is not what you want**
 
 Please read the [Permissions](docs/PERMISSIONS.md) page for more information.
 
