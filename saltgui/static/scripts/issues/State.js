@@ -39,6 +39,11 @@ export class StateIssues extends Issues {
       Issues.readyCategory(pPanel, msg);
       return false;
     });
+
+    /* eslint-disable compat/compat */
+    /* Promise.all is not supported in op_mini all, IE 11 */
+    return Promise.all([wheelKeyListAllPromise, runnerJobsListJobsPromise]);
+    /* eslint-enable compat/compat */
   }
 
   _handleLowstateRunnerJobsListJobs (pPanel, pData, pKeys, pMsg) {
@@ -54,7 +59,7 @@ export class StateIssues extends Issues {
     }
 
     this.jobs = jobs;
-    // this is good only while "State" is the only issue-provider
+    // this is good only while "State" is the only issue-provider that uses play/pause
     pPanel.setPlayPauseButton(jobs.length === 0 ? "none" : "play");
 
     this._updateNextJob(pPanel, pMsg, pKeys);

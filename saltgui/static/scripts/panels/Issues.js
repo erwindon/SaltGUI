@@ -21,7 +21,6 @@ export class IssuesPanel extends Panel {
       "This page contains an overview of problems",
       "that are observed in various categories."
     ]);
-    // this.addTable(["Key", "-menu-", "Description"]);
     this.addTable(["-menu-", "Description"]);
     this.setTableClickable();
     this.addMsg();
@@ -33,7 +32,7 @@ export class IssuesPanel extends Panel {
 
     // cannot use this now since we are loading
     // the data in random order
-    // this.setTableSortable("Key", "asc");
+    // this.setTableSortable("Description", "asc");
 
     this.keysIssues = new KeysIssues();
     this.jobsIssues = new JobsRunningIssues();
@@ -60,9 +59,7 @@ export class IssuesPanel extends Panel {
     const allPromise = Promise.all([p1, p2, p3, p4, p5, p6]);
     /* eslint-enable compat/compat */
     allPromise.then(() => {
-      const txt = Utils.txtZeroOneMany(this.table.tBodies[0].rows.length,
-        "No issues", "{0} issue", "{0} issues");
-      this.setMsg(txt);
+      // VOID
     }, (pErrorMsg) => {
       this.setMsg("(error)");
       Utils.addToolTip(this.msgDiv, pErrorMsg);
