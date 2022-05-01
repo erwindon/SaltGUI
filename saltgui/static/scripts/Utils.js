@@ -357,7 +357,7 @@ export class Utils {
       pSearchText = pSearchText.toUpperCase();
     }
 
-    let regexp = undefined;
+    let regexp;
 
     const errorBox = pTable.parentElement.querySelector(".search-error");
     if (regExpFlag) {

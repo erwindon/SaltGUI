@@ -78,7 +78,7 @@
       ],
       "no-redeclare": 0,
       "no-ternary": 0,
-      "no-undef-init": 0,
+      "no-undef-init": 2,
       "no-undefined": 0,
       "no-underscore-dangle": 0,
       "no-unused-vars": [
