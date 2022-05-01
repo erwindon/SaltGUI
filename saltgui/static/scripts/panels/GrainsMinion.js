@@ -60,7 +60,7 @@ export class GrainsMinionPanel extends Panel {
 
     const grainNames = Object.keys(grains).sort();
     for (const grainName of grainNames) {
-      const grainTr = document.createElement("tr");
+      const grainTr = Utils.createTr();
 
       const grainNameTd = Utils.createTd("grain-name", grainName);
       grainTr.appendChild(grainNameTd);

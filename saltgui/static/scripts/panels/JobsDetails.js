@@ -327,7 +327,7 @@ export class JobsDetailsPanel extends JobsPanel {
   }
 
   addJob (job) {
-    const tr = document.createElement("tr");
+    const tr = Utils.createTr();
     tr.id = Utils.getIdFromJobId(job.id);
     tr.dataset.jobid = job.id;
     tr.appendChild(Utils.createTd("", job.id));

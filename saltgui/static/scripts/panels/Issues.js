@@ -26,7 +26,7 @@ export class IssuesPanel extends Panel {
     this.addMsg();
 
     // keep the list of "loading..." messages
-    const msg2 = document.createElement("div");
+    const msg2 = Utils.createDiv();
     this.div.appendChild(msg2);
     this.msg2 = msg2;
 

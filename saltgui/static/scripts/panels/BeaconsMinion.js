@@ -137,7 +137,7 @@ export class BeaconsMinionPanel extends Panel {
 
     const keys = Object.keys(beacons.beacons).sort();
     for (const beaconName of keys) {
-      const tr = document.createElement("tr");
+      const tr = Utils.createTr();
       tr.id = "beacon-" + beaconName;
 
       const nameTd = Utils.createTd("beacon-name", beaconName);

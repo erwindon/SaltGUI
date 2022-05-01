@@ -42,7 +42,7 @@ export class Panel {
   }
 
   addTitle (pTitle) {
-    const h1 = document.createElement("h1");
+    const h1 = Utils.createElem("h1");
     h1.id = this.key + "-title";
     h1.innerText = pTitle;
     this.div.appendChild(h1);
@@ -55,7 +55,7 @@ export class Panel {
   }
 
   addPanelMenu () {
-    const span = document.createElement("span");
+    const span = Utils.createSpan();
     span.id = this.key + "-menu";
     const menu = new DropDownMenu(span);
     menu.menuButton.classList.add("small-button-left");
@@ -73,7 +73,7 @@ export class Panel {
   }
 
   addSearchButton () {
-    const span = document.createElement("span");
+    const span = Utils.createSpan();
     span.id = this.key + "-search-button";
     span.classList.add("small-button");
     span.classList.add("small-button-left");
@@ -85,7 +85,7 @@ export class Panel {
   }
 
   addPlayPauseButton () {
-    const playButton = document.createElement("span");
+    const playButton = Utils.createSpan();
     playButton.innerText = Character.CH_PLAY;
     playButton.classList.add("small-button");
     playButton.classList.add("small-button-left");
@@ -94,7 +94,7 @@ export class Panel {
     this.div.appendChild(playButton);
     this.playButton = playButton;
 
-    const pauseButton = document.createElement("span");
+    const pauseButton = Utils.createSpan();
     pauseButton.innerText = Character.CH_PAUSE;
     pauseButton.classList.add("small-button");
     pauseButton.classList.add("small-button-left");
@@ -134,7 +134,7 @@ export class Panel {
   }
 
   addHelpButton (pHelpTextArr, pUrl) {
-    const span = document.createElement(pUrl ? "a" : "span");
+    const span = Utils.createElem(pUrl ? "a" : "span");
     span.id = this.key + "-help-button";
     span.classList.add("small-button");
     span.classList.add("small-button-right");
@@ -152,7 +152,7 @@ export class Panel {
   }
 
   addCloseButton () {
-    const span = document.createElement("span");
+    const span = Utils.createSpan();
     span.id = this.key + "-close-button";
     span.classList.add("small-button");
     span.classList.add("small-button-right");
@@ -195,7 +195,7 @@ export class Panel {
   }
 
   addTable (pColumnNames, pFieldList = null) {
-    const table = document.createElement("table");
+    const table = Utils.createElem("table");
     table.id = this.key + "-table";
     table.classList.add(this.key);
 
@@ -210,7 +210,7 @@ export class Panel {
 
     if (anyHiddenColumns) {
       for (const colName of pColumnNames) {
-        const col = document.createElement("col");
+        const col = Utils.createElem("col");
         if (colName.startsWith("@")) {
           col.style.visibility = "collapse";
         }
@@ -219,13 +219,13 @@ export class Panel {
     }
 
     if (pColumnNames) {
-      const thead = document.createElement("thead");
+      const thead = Utils.createElem("thead");
       thead.id = this.key + "-table-thead";
-      const tr = document.createElement("tr");
+      const tr = Utils.createTr();
       tr.id = this.key + "-table-thead-tr";
 
       for (const columnName of pColumnNames) {
-        const th = document.createElement("th");
+        const th = Utils.createElem("th");
         let cn = columnName;
         if (cn && cn.startsWith("@")) {
           cn = cn.substring(1);
@@ -239,7 +239,7 @@ export class Panel {
       table.appendChild(thead);
     }
 
-    const tbody = document.createElement("tbody");
+    const tbody = Utils.createElem("tbody");
     // not needed yet
     // tbody.id = this.key + "-table-tbody";
     table.appendChild(tbody);
@@ -299,7 +299,7 @@ export class Panel {
   }
 
   addConsole () {
-    const console = document.createElement("div");
+    const console = Utils.createDiv();
     console.id = this.key + "-output";
     console.classList.add("output");
     this.div.appendChild(console);
@@ -307,7 +307,7 @@ export class Panel {
   }
 
   addMsg () {
-    const msgDiv = document.createElement("div");
+    const msgDiv = Utils.createDiv();
     msgDiv.id = this.key + "-msg";
     msgDiv.classList.add("msg");
     this.div.appendChild(msgDiv);
@@ -402,7 +402,7 @@ export class Panel {
     td.colSpan = 99;
     Utils.addErrorToTableCell(td, pData, "bottom-left");
 
-    const tr = document.createElement("tr");
+    const tr = Utils.createTr();
     tr.id = "error-row";
     tr.appendChild(td);
 
@@ -432,7 +432,7 @@ export class Panel {
       return;
     }
 
-    minionTr = document.createElement("tr");
+    minionTr = Utils.createTr();
     minionTr.id = Utils.getIdFromMinionId(pMinionId);
     minionTr.dataset.minionId = pMinionId;
 
@@ -459,7 +459,7 @@ export class Panel {
     if (minionTr === null) {
       // minion not found on screen...
       // construct a basic element that can be updated
-      minionTr = document.createElement("tr");
+      minionTr = Utils.createTr();
       minionTr.id = id;
       this.table.querySelector("tbody").appendChild(minionTr);
     }

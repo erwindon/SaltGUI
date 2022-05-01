@@ -121,7 +121,7 @@ export class TemplatesPanel extends Panel {
         continue;
       }
       // e.g. <option value="denied">
-      const option = document.createElement("option");
+      const option = Utils.createElem("option");
       option.value = category;
       lov.appendChild(option);
     }
@@ -130,7 +130,7 @@ export class TemplatesPanel extends Panel {
   }
 
   _addTemplate (pTemplateName, template) {
-    const tr = document.createElement("tr");
+    const tr = Utils.createTr();
 
     tr.appendChild(Utils.createTd("name", pTemplateName));
 

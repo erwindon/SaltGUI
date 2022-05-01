@@ -440,19 +440,19 @@ export class CommandBox {
     }
     const nodeGroups = Utils.getStorageItemObject("session", "nodegroups");
 
-    const optionConnected = document.createElement("option");
+    const optionConnected = Utils.createElem("option");
     optionConnected.value = "##connected";
     targetList.appendChild(optionConnected);
 
     for (const nodeGroup of Object.keys(nodeGroups).sort()) {
-      const option = document.createElement("option");
+      const option = Utils.createElem("option");
       option.value = "#" + nodeGroup;
       targetList.appendChild(option);
     }
 
     const minions = Utils.getStorageItemList("session", "minions");
     for (const minionId of [...minions].sort()) {
-      const option = document.createElement("option");
+      const option = Utils.createElem("option");
       option.value = minionId;
       targetList.appendChild(option);
     }
@@ -622,15 +622,15 @@ export class CommandBox {
     const id = "run-" + Utils.getIdFromMinionId(eventMinionId);
     let div = document.getElementById(id);
     if (div === null) {
-      div = document.createElement("div");
+      div = Utils.createDiv();
       div.id = "run-" + Utils.getIdFromMinionId(eventMinionId);
       div.style.marginTop = 0;
 
-      const minionSpan1 = document.createElement("span");
+      const minionSpan1 = Utils.createSpan();
       minionSpan1.innerText = eventMinionId;
       div.appendChild(minionSpan1);
 
-      const minionSpan2 = document.createElement("span");
+      const minionSpan2 = Utils.createSpan();
       minionSpan2.innerText = ": " + Character.HOURGLASS_WITH_FLOWING_SAND + " ";
       div.appendChild(minionSpan2);
 
@@ -677,7 +677,7 @@ export class CommandBox {
 
     // make sure there is a black circle for the current event
     while (div.children.length <= eventSeqNr + 2) {
-      const newSpan = document.createElement("span");
+      const newSpan = Utils.createSpan();
       newSpan.innerText = Character.BLACK_CIRCLE;
       div.appendChild(newSpan);
     }
@@ -710,28 +710,28 @@ export class CommandBox {
     minionsList.remove();
 
     // leave some space
-    const spacerDiv = document.createElement("div");
+    const spacerDiv = Utils.createDiv();
     output.appendChild(spacerDiv);
 
     // add new minions list to track progress of this state command
     for (const minionId of CommandBox.minionIds) {
-      const minionDiv = document.createElement("div");
+      const minionDiv = Utils.createDiv();
       minionDiv.id = "run-" + Utils.getIdFromMinionId(minionId);
       minionDiv.style.marginTop = 0;
       minionDiv.classList.add("task-summary");
 
-      const minionSpan1 = document.createElement("span");
+      const minionSpan1 = Utils.createSpan();
       minionSpan1.innerText = minionId;
       minionDiv.appendChild(minionSpan1);
 
-      const minionSpan2 = document.createElement("span");
+      const minionSpan2 = Utils.createSpan();
       minionSpan2.innerText = ": " + Character.HOURGLASS_WITH_FLOWING_SAND + " ";
       minionDiv.appendChild(minionSpan2);
 
       output.appendChild(minionDiv);
     }
 
-    const warnSpan = document.createElement("span");
+    const warnSpan = Utils.createSpan();
     warnSpan.innerText = "\nnote that unresponsive minions will not time out in this overview";
     output.appendChild(warnSpan);
   }

@@ -13,7 +13,7 @@ export class LoginPanel extends Panel {
 
     // The FORM is important, so that the ENTER key
     // in any field is redirected to the submit button
-    const form = document.createElement("form");
+    const form = Utils.createElem("form");
     this.div.append(form);
 
     const motdTxt = Utils.createDiv("motd");
@@ -28,7 +28,7 @@ export class LoginPanel extends Panel {
     form.append(noticeWrapper);
     this.noticeWrapperDiv = noticeWrapper;
 
-    const username = document.createElement("input");
+    const username = Utils.createElem("input");
     username.type = "text";
     username.id = "username";
     username.placeholder = "Username";
@@ -36,7 +36,7 @@ export class LoginPanel extends Panel {
     form.append(username);
     this.usernameField = username;
 
-    const password = document.createElement("input");
+    const password = Utils.createElem("input");
     password.type = "password";
     password.id = "password";
     password.placeholder = "Password";
@@ -44,25 +44,25 @@ export class LoginPanel extends Panel {
     this.passwordField = password;
 
     // see https://docs.saltstack.com/en/latest/ref/auth/all/index.html
-    const select = document.createElement("select");
+    const select = Utils.createElem("select");
     form.append(select);
     this.eauthField = select;
     this._updateEauthField();
 
-    const submit = document.createElement("input");
+    const submit = Utils.createElem("input");
     submit.id = "login-button";
     submit.type = "submit";
     submit.value = "Login";
     form.append(submit);
     this.loginButton = submit;
 
-    const aa = document.createElement("a");
+    const aa = Utils.createElem("a");
     aa.href = "https://github.com/erwindon/SaltGUI";
     aa.target = "_blank";
     aa.rel = "noopener";
     aa.classList.add("attribution");
 
-    const img = document.createElement("img");
+    const img = Utils.createElem("img");
     img.src = "static/images/github.png";
     aa.append(img);
 
@@ -82,12 +82,12 @@ export class LoginPanel extends Panel {
       return;
     }
 
-    const optgroup = document.createElement("optgroup");
+    const optgroup = Utils.createElem("optgroup");
     optgroup.label = sectionName;
     this.eauthField.append(optgroup);
 
     for (const optionValue of optionValues) {
-      const option = document.createElement("option");
+      const option = Utils.createElem("option");
       option.value = optionValue;
       option.innerText = optionValue;
       optgroup.append(option);
@@ -98,7 +98,7 @@ export class LoginPanel extends Panel {
     // start fresh
     this.eauthField.innerHTML = "";
 
-    const option1 = document.createElement("option");
+    const option1 = Utils.createElem("option");
     option1.id = "eauth-default";
     option1.value = "default";
     option1.innerText = "Type";
