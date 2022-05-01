@@ -122,8 +122,7 @@ export class SchedulesPanel extends Panel {
 
     minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 
-    const statusDiv = Utils.createTd("status", "accepted");
-    statusDiv.classList.add("accepted");
+    const statusDiv = Utils.createTd(["status", "accepted"], "accepted");
     minionTr.appendChild(statusDiv);
 
     let cnt;

@@ -38,17 +38,14 @@ export class JobPanel extends Panel {
     this._addPanelMenuItemSignalJob();
 
     const timeH2 = Utils.createElem("h2");
-    const timeSpan = Utils.createSpan();
-    timeSpan.classList.add("time");
+    const timeSpan = Utils.createSpan("time");
     timeH2.appendChild(timeSpan);
     this.div.append(timeH2);
     this.timeField = timeSpan;
 
     this.addWarningField();
 
-    const output = Utils.createElem("pre");
-    output.id = "job-table";
-    output.classList.add("output");
+    const output = Utils.createElem("pre", "output", "", "job-table");
     this.output = output;
 
     const searchBox = Utils.makeSearchBox(this.searchButton, this.output, "data-list-job");

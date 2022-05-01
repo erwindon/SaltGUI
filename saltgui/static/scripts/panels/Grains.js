@@ -27,8 +27,7 @@ export class GrainsPanel extends Panel {
     // the div is not added to the DOM yet
     const tr = this.div.querySelector("#grains-table-thead-tr");
     for (const previewGrain of this.previewGrains) {
-      const th = document.createElement("th");
-      th.innerText = previewGrain;
+      const th = document.createElement("th", "", previewGrain);
       tr.appendChild(th);
     }
 

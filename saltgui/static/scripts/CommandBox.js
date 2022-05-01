@@ -626,12 +626,10 @@ export class CommandBox {
       div.id = "run-" + Utils.getIdFromMinionId(eventMinionId);
       div.style.marginTop = 0;
 
-      const minionSpan1 = Utils.createSpan();
-      minionSpan1.innerText = eventMinionId;
+      const minionSpan1 = Utils.createSpan("", eventMinionId);
       div.appendChild(minionSpan1);
 
-      const minionSpan2 = Utils.createSpan();
-      minionSpan2.innerText = ": " + Character.HOURGLASS_WITH_FLOWING_SAND + " ";
+      const minionSpan2 = Utils.createSpan("", ": " + Character.HOURGLASS_WITH_FLOWING_SAND + " ");
       div.appendChild(minionSpan2);
 
       const output = document.querySelector(".run-command pre");
@@ -642,8 +640,7 @@ export class CommandBox {
     const minionClass = Output.getMinionLabelClass(isSuccess, pData);
 
     const span1 = div.children[0];
-    span1.classList.add("minion-id");
-    span1.classList.add(minionClass);
+    span1.classList.add("minion-id", minionClass);
 
     const span2 = div.children[1];
     span2.innerText = div.children.length > 2 ? ": " : "";
@@ -677,8 +674,7 @@ export class CommandBox {
 
     // make sure there is a black circle for the current event
     while (div.children.length <= eventSeqNr + 2) {
-      const newSpan = Utils.createSpan();
-      newSpan.innerText = Character.BLACK_CIRCLE;
+      const newSpan = Utils.createSpan("", Character.BLACK_CIRCLE);
       div.appendChild(newSpan);
     }
 
@@ -701,8 +697,7 @@ export class CommandBox {
       // not an asynchronous job
       return;
     }
-    labelSpan.classList.remove("minion-id");
-    labelSpan.classList.remove("host-success");
+    labelSpan.classList.remove("minion-id", "host-success");
 
     // remove the initial minions list
     const minionsId = Utils.getIdFromMinionId("minions");
@@ -715,24 +710,22 @@ export class CommandBox {
 
     // add new minions list to track progress of this state command
     for (const minionId of CommandBox.minionIds) {
-      const minionDiv = Utils.createDiv();
+      const minionDiv = Utils.createDiv("task-summary");
       minionDiv.id = "run-" + Utils.getIdFromMinionId(minionId);
       minionDiv.style.marginTop = 0;
-      minionDiv.classList.add("task-summary");
 
-      const minionSpan1 = Utils.createSpan();
-      minionSpan1.innerText = minionId;
+      const minionSpan1 = Utils.createSpan("", minionId);
       minionDiv.appendChild(minionSpan1);
 
-      const minionSpan2 = Utils.createSpan();
-      minionSpan2.innerText = ": " + Character.HOURGLASS_WITH_FLOWING_SAND + " ";
+      const minionSpan2 = Utils.createSpan("", ": " + Character.HOURGLASS_WITH_FLOWING_SAND + " ");
       minionDiv.appendChild(minionSpan2);
 
       output.appendChild(minionDiv);
     }
 
-    const warnSpan = Utils.createSpan();
-    warnSpan.innerText = "\nnote that unresponsive minions will not time out in this overview";
+    const warnSpan = Utils.createSpan(
+      "",
+      "\nnote that unresponsive minions will not time out in this overview");
     output.appendChild(warnSpan);
   }
 }

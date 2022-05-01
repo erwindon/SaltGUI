@@ -273,9 +273,8 @@ export class KeysPanel extends Panel {
     minionIdTd.appendChild(minionIdSpan);
     minionTr.appendChild(minionIdTd);
 
-    const accepted = Utils.createTd("status", "accepted");
+    const accepted = Utils.createTd(["status", "accepted"], "accepted");
     accepted.setAttribute("sorttable_customkey", 2);
-    accepted.classList.add("accepted");
     minionTr.appendChild(accepted);
 
     KeysPanel._flagMinion(pMinionId, accepted, minionTr, pMinionsDict);
@@ -296,9 +295,8 @@ export class KeysPanel extends Panel {
     minionIdTd.appendChild(minionIdSpan);
     minionTr.appendChild(minionIdTd);
 
-    const rejected = Utils.createTd("status", "rejected");
+    const rejected = Utils.createTd(["status", "rejected"], "rejected");
     rejected.setAttribute("sorttable_customkey", 4);
-    rejected.classList.add("rejected");
     minionTr.appendChild(rejected);
 
     KeysPanel._flagMinion(pMinionId, rejected, minionTr, pMinionsDict);
@@ -322,9 +320,8 @@ export class KeysPanel extends Panel {
     minionIdTd.appendChild(minionIdSpan);
     minionTr.appendChild(minionIdTd);
 
-    const denied = Utils.createTd("status", "denied");
+    const denied = Utils.createTd(["status", "denied"], "denied");
     denied.setAttribute("sorttable_customkey", 3);
-    denied.classList.add("denied");
     minionTr.appendChild(denied);
 
     KeysPanel._flagMinion(pMinionId, denied, minionTr, pMinionsDict);
@@ -348,11 +345,10 @@ export class KeysPanel extends Panel {
     minionIdTd.appendChild(minionIdSpan);
     minionTr.appendChild(minionIdTd);
 
-    const pre = Utils.createTd("status", "unaccepted");
+    const pre = Utils.createTd(["status", "unaccepted"], "unaccepted");
     // unaccepted comes first because user action is needed
     // all others have the same order as in 'salt-key'
     pre.setAttribute("sorttable_customkey", 1);
-    pre.classList.add("unaccepted");
     minionTr.appendChild(pre);
 
     KeysPanel._flagMinion(pMinionId, pre, minionTr, pMinionsDict);
@@ -382,9 +378,8 @@ export class KeysPanel extends Panel {
     minionIdTd.appendChild(minionIdSpan);
     minionTr.appendChild(minionIdTd);
 
-    const missing = Utils.createTd("status", "missing");
+    const missing = Utils.createTd(["status", "missing"], "missing");
     missing.setAttribute("sorttable_customkey", 5);
-    missing.classList.add("missing");
     minionTr.appendChild(missing);
 
     KeysPanel._flagMinion(pMinionId, missing, minionTr, pMinionsDict);

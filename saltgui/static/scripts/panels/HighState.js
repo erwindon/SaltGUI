@@ -136,7 +136,7 @@ export class HighStatePanel extends Panel {
       this._addMenuItemStateApply(menu, minionId);
       this._addMenuItemStateApplyTest(menu, minionId);
 
-      minionTr.appendChild(Utils.createTd("", ""));
+      minionTr.appendChild(Utils.createTd());
 
       minionTr.addEventListener("click", (pClickEvent) => {
         const functionField = minionTr.querySelector(".function");
@@ -337,8 +337,7 @@ export class HighStatePanel extends Panel {
 
       minionTr.appendChild(Utils.createTd("minion-id", minionId));
 
-      const minionTd = Utils.createTd("status", "accepted");
-      minionTd.classList.add("accepted");
+      const minionTd = Utils.createTd(["status", "accepted"], "accepted");
       minionTr.appendChild(minionTd);
 
       const jobIdTd = Utils.createTd();
@@ -382,7 +381,7 @@ export class HighStatePanel extends Panel {
       this._addJobsMenuItemShowDetails(menu, jobData, minionId);
 
       const minionResult = jobData.Result[minionId];
-      const tasksTd = Utils.createTd("tasks", "");
+      const tasksTd = Utils.createTd("tasks");
 
       if (typeof minionResult.return !== "object" || Array.isArray(minionResult.return)) {
         Utils.addErrorToTableCell(tasksTd, minionResult.return);

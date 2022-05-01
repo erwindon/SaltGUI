@@ -25,8 +25,6 @@ export class OutputHighstateTaskTerse {
       txt += " - Duration: " + Output.getDuration(pTask.duration);
     }
 
-    const span = Utils.createSpan();
-    span.innerText = txt;
-    return span;
+    return Utils.createSpan("", txt);
   }
 }

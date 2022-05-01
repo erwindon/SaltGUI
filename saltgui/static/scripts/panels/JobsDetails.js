@@ -359,8 +359,7 @@ export class JobsDetailsPanel extends JobsPanel {
     this._addMenuItemJobsRerunJob(menu, job, argumentsText);
 
     const statusTd = Utils.createTd();
-    const statusSpan = Utils.createSpan("job-status", "loading...");
-    statusSpan.classList.add("no-job-status");
+    const statusSpan = Utils.createSpan(["job-status", "no-job-status"], "loading...");
     statusSpan.addEventListener("click", (pClickEvent) => {
       // show "loading..." only once, but we are updating the whole column
       statusSpan.classList.add("no-job-status");
@@ -375,8 +374,7 @@ export class JobsDetailsPanel extends JobsPanel {
 
     tr.dataset.detailsUnknown = "true";
     const detailsTd = Utils.createTd("details");
-    const detailsSpan = Utils.createSpan("details2", "(click)");
-    detailsSpan.classList.add("no-job-details");
+    const detailsSpan = Utils.createSpan(["details2", "no-job-details"], "(click)");
     detailsSpan.addEventListener("click", (pClickEvent) => {
       detailsSpan.classList.add("no-job-details");
       detailsSpan.innerText = "loading...";

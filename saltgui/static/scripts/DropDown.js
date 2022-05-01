@@ -1,3 +1,5 @@
+/* global */
+
 import {Character} from "./Character.js";
 import {Utils} from "./Utils.js";
 
@@ -31,8 +33,7 @@ export class DropDownMenu {
       pParentElement = td;
     }
 
-    this.menuDropdown = Utils.createDiv("run-command-button");
-    this.menuDropdown.classList.add("no-search");
+    this.menuDropdown = Utils.createDiv(["run-command-button", "no-search"]);
 
     if (pParentElement.id === "cmd-box") {
       this.menuButton = Utils.createDiv("", Character.OPEN_BOOK);
@@ -46,12 +47,10 @@ export class DropDownMenu {
       // assume it will be a command menu
       this.menuButton = Utils.createDiv("", Character.CH_HAMBURGER);
     }
-    this.menuButton.classList.add("small-button");
+    this.menuButton.classList.add("small-button", "small-button-for-hover", "menu-dropdown");
     if (pIsSmall) {
       this.menuButton.classList.add("small-small-button");
     }
-    this.menuButton.classList.add("small-button-for-hover");
-    this.menuButton.classList.add("menu-dropdown");
     this.menuButton.addEventListener("click", (pClickEvent) => {
       // better support for touch screens where user touch
       // the menu button instead of hovering over it

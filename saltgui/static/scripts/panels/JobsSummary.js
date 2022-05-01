@@ -50,8 +50,7 @@ export class JobsSummaryPanel extends JobsPanel {
     const functionDiv = Utils.createDiv("function", functionText);
     td.appendChild(functionDiv);
 
-    const statusSpan = Utils.createSpan("job-status", "loading...");
-    statusSpan.classList.add("no-job-status");
+    const statusSpan = Utils.createSpan(["job-status", "no-job-status"], "loading...");
     // effectively also the whole column, but it does not look like a column on screen
     statusSpan.addEventListener("click", (pClickEvent) => {
       // show "loading..." only once, but we are updating the whole column
