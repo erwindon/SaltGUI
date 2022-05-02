@@ -218,9 +218,11 @@ export class KeysPanel extends Panel {
       }
     }
 
-    const minionIdSpan = pMinionTr.querySelector("td span");
+    const minionIdTd = pMinionTr.querySelector("td");
+    const minionIdSpan = minionIdTd.querySelector("span");
 
     if (txt) {
+      minionIdTd.setAttribute("sorttable_customkey", pMinionId);
       minionIdSpan.innerText = Character.WARNING_SIGN + pMinionId;
       Utils.addToolTip(
         minionIdSpan,

@@ -582,6 +582,7 @@ export class Panel {
     }
     if (pMinionData) {
       const td = Utils.createTd();
+      td.setAttribute("sorttable_customkey", saltversion);
       const span = Utils.createSpan("saltversion", saltversion);
       td.appendChild(span);
       if (typeof pMinionData === "string") {
