@@ -52,6 +52,12 @@ pre #summary-jobs-active .host-failure {
   color: red;
 }
 
+td.address > span {
+  color: #3f51b5;
+  cursor: copy;
+  position: relative;
+}
+
 td.tasks span {
   padding-top: 3px;
   padding-bottom: 3px;
@@ -199,12 +205,6 @@ table tr td:last-of-type {
 #template-catmenu-here,
 #template-tmplmenu-here {
   display: inline;
-}
-
-.minions td.address > span {
-  color: #3f51b5;
-  cursor: copy;
-  position: relative;
 }
 
 .jobs td.details > span,
