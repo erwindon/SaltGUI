@@ -219,6 +219,10 @@ export class JobsDetailsPanel extends JobsPanel {
 
     pData = pData.return[0];
 
+    if (typeof pData !== "object") {
+      Utils.addErrorToTableCell(detailsSpan.parentElement, pData);
+      return;
+    }
     if (pData.Error) {
       // typically happens for jobs that are expired from jobs-cache
       Utils.addErrorToTableCell(detailsSpan.parentElement, pData.Error);

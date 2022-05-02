@@ -169,9 +169,15 @@ export class JobPanel extends Panel {
 
     const info = pRunnerJobsListJobData.return[0];
 
+    if (typeof info !== "object") {
+      this.updateTitle("ERROR");
+      this.output.innerText = pJobId + "\n--------------------\n" + info;
+      this.timeField.innerText = "";
+      return;
+    }
     if (info.Error) {
       this.updateTitle("ERROR");
-      this.output.innerText = info.Error + " (" + pJobId + ")";
+      this.output.innerText = pJobId + "\n--------------------\n" + info.Error;
       Output.dateTimeStr(info.StartTime, this.timeField, "bottom-left");
       return;
     }
