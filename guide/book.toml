@@ -1,0 +1,6 @@
+[book]
+authors = ["Brighton Sikarskie <bsikar@tuta.io>"]
+title = "SaltGUI"
+description = "A web interface for managing SaltStack based infrastructure."
+language = "en"
+multilingual = false

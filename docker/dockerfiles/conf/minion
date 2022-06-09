@@ -1,2 +1,0 @@
-# /etc/salt/minion
-master: saltmaster-local

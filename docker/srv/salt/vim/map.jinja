@@ -1,8 +1,0 @@
-{% set vim = salt['grains.filter_by']({
-    'default': {
-        'package': 'vim',
-    },
-    'RedHat': {
-        'package': 'vim-enhanced',
-    }
-}) %}
