@@ -14,7 +14,7 @@
 - [Custom Commands](custom-commands.md)
 - [Message of the day](motd.md)
 - [Reduced Menus](reduced-menus.md)
-- [Preformance](preformance.md)
+- [Performance](performance.md)
 - [Settings and Statistics](settings-and-statistics.md)
 - [Key Administration](key-administration.md)
 - [Separate SaltGUI host](separate-saltgui-host.md)

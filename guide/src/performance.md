@@ -1,4 +1,4 @@
-# Preformance
+# Performance
 
 SaltGUI does not have artificial restrictions.
 But displaying all data may be slow when there is a lot of data.
