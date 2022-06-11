@@ -238,6 +238,12 @@ export class JobsPanel extends Panel {
   }
 
   static _jobsToArray (jobs) {
+    if (typeof jobs === "string") {
+      // typically when special returner is misconfigured
+      // the warning may help solve that too
+      console.warn(jobs);
+      return [];
+    }
     const keys = Object.keys(jobs);
     const newArray = [];
 
