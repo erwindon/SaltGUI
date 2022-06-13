@@ -1,0 +1,46 @@
+version: '3'
+services:
+  saltmaster-local:
+    image: erwindon/saltgui-saltmaster:3003
+    hostname: saltmaster-local
+    ports:
+      - 4505:4505
+      - 4506:4506
+      - 3333:3333
+    volumes:
+    - ./srv/:/srv/
+    - ./conf/master:/etc/salt/master
+    - ../saltgui:/saltgui
+
+  saltminion-ubuntu:
+    image: erwindon/saltgui-saltminion-ubuntu:3003
+    hostname: saltminion-ubuntu
+    depends_on:
+      - saltmaster-local
+    restart: on-failure
+
+  saltminion-debian:
+    image: erwindon/saltgui-saltminion-debian:3003
+    hostname: saltminion-debian
+    depends_on:
+      - saltmaster-local
+    restart: on-failure
+
+  saltminion-centos:
+    image: erwindon/saltgui-saltminion-centos:3003
+    hostname: saltminion-centos
+    depends_on:
+      - saltmaster-local
+    restart: on-failure
+
+  # This example will demonstrate how to use NGINX for SaltGUI and proxy to salt-api
+  # saltgui-nginx:
+  #   image: erwindon/saltgui-nginx:1.14.0
+  #   hostname: saltgui-nginx
+  #   ports:
+  #     - 8080:80
+  #   depends_on:
+  #     - saltmaster-local
+  #   restart: on-failure
+  #   volumes:
+  #   - ../saltgui:/data/www

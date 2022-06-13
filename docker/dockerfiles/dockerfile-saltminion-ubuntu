@@ -1,0 +1,34 @@
+FROM ubuntu:20.04
+
+LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
+LABEL name=salt-minion
+LABEL project="SaltGUI testing"
+LABEL version=3003
+
+ENV SALT_VERSION=3003
+ENV DEBIAN_FRONTEND=noninteractive
+
+# fix ubuntu
+# see https://askubuntu.com/questions/1235914/hash-sum-mismatch-error-due-to-identical-sha1-and-md5-but-different-sha256
+RUN mkdir /etc/gcrypt && echo all >> /etc/gcrypt/hwf.deny
+
+# add saltstack key and install dependencies
+RUN apt-get update \
+  && apt-get install curl gnupg2 net-tools --yes --no-install-recommends \
+  && apt-key adv --fetch-keys http://repo.saltstack.com/py3/ubuntu/20.04/amd64/latest/SALTSTACK-GPG-KEY.pub \
+  && echo "deb http://repo.saltstack.com/py3/ubuntu/20.04/amd64/latest focal main" > /etc/apt/sources.list.d/saltstack.list \
+  # install salt-minion
+  && apt-get update \
+  && apt-get install salt-minion=${SALT_VERSION}* --yes --no-install-recommends \
+  # show which versions are installed
+  && dpkg -l | grep salt- \
+  # cleanup temporary files
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -y autoremove \
+  && apt-get clean
+
+# copy the minion configuration
+COPY ./conf/minion /etc/salt/minion
+
+# define main container command
+CMD /usr/bin/salt-minion

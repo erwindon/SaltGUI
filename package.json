@@ -1,0 +1,152 @@
+{
+  "name": "saltgui-test",
+  "description": "Code linting and testing package for SaltGUI",
+  "author": "Martijn Jacobs",
+  "version": "0.0.1",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/register": "^7.15.3",
+    "babel-plugin-istanbul": "^6.0.0",
+    "chai": "^4.3.4",
+    "eslint": "^8.0.1",
+    "eslint-plugin-compat": "^4.0.0",
+    "mocha": "^10.0.0",
+    "nightmare": "^3.0.2",
+    "nyc": "^15.1.0",
+    "stylelint": "^14.0.1",
+    "stylelint-config-standard": "^26.0.0",
+    "stylelint-csstree-validator": "^2.0.0",
+    "stylelint-scss": "^4.0.0"
+  },
+  "eslintConfig": {
+    "env": {
+      "es6": true
+    },
+    "extends": [
+      "eslint:all",
+      "plugin:compat/recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module"
+    },
+    "rules": {
+      "array-element-newline": 0,
+      "capitalized-comments": 0,
+      "class-methods-use-this": 2,
+      "complexity": 0,
+      "dot-notation": 0,
+      "function-call-argument-newline": 0,
+      "function-paren-newline": 0,
+      "guard-for-in": 0,
+      "id-length": [
+        "error",
+        {
+          "exceptions": [
+            "i"
+          ]
+        }
+      ],
+      "indent": [
+        "error",
+        2
+      ],
+      "init-declarations": 0,
+      "max-classes-per-file": 0,
+      "max-len": 0,
+      "max-lines": 0,
+      "max-lines-per-function": 0,
+      "max-params": 0,
+      "max-statements": 0,
+      "multiline-comment-style": 0,
+      "multiline-ternary": 0,
+      "no-console": 0,
+      "no-continue": 0,
+      "no-invalid-this": 2,
+      "no-loss-of-precision": 0,
+      "no-magic-numbers": 0,
+      "no-mixed-operators": 0,
+      "no-param-reassign": 0,
+      "no-plusplus": [
+        "error",
+        {
+          "allowForLoopAfterthoughts": true
+        }
+      ],
+      "no-redeclare": 0,
+      "no-ternary": 0,
+      "no-undef-init": 0,
+      "no-undefined": 0,
+      "no-underscore-dangle": 0,
+      "no-unused-vars": [
+        "error",
+        {
+          "args": "all"
+        }
+      ],
+      "no-warning-comments": 0,
+      "object-property-newline": 0,
+      "object-shorthand": 0,
+      "one-var": 0,
+      "padded-blocks": 0,
+      "prefer-destructuring": 0,
+      "prefer-named-capture-group": 0,
+      "prefer-template": 0,
+      "require-unicode-regexp": 0
+    }
+  },
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "property-no-vendor-prefix": null,
+      "color-function-notation": null
+    }
+  },
+  "nyc": {
+    "check-coverage": false,
+    "per-file": true,
+    "lines": 85,
+    "statements": 85,
+    "functions": 85,
+    "branches": 85,
+    "cache": true,
+    "all": true,
+    "watermarks": {
+      "lines": [
+        70,
+        90
+      ],
+      "functions": [
+        70,
+        90
+      ],
+      "branches": [
+        70,
+        90
+      ],
+      "statements": [
+        70,
+        90
+      ]
+    },
+    "exclude": [
+      "tests/**/*.js",
+      "node_modules/**/*.js"
+    ],
+    "include": [
+      "saltgui/static/scripts/**/*.js"
+    ]
+  },
+  "scripts": {
+    "eslint": "eslint saltgui/static/scripts tests/",
+    "eslint:fix": "eslint saltgui/static/scripts tests/ --fix",
+    "stylelint": "stylelint 'saltgui/static/stylesheets/*.css'",
+    "wait-for-docker": "node tests/helpers/wait-for-docker.js",
+    "test:unit": "mocha --require @babel/register --trace-warnings --check-leaks --reporter spec tests/unit/",
+    "test:functional": "mocha --bail --trace-warnings --check-leaks --reporter spec tests/functional/",
+    "test:coverage": "nyc mocha --require @babel/register --trace-warnings --check-leaks --reporter spec tests/unit/"
+  }
+}
