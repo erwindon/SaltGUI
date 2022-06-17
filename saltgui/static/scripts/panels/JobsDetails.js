@@ -219,6 +219,10 @@ export class JobsDetailsPanel extends JobsPanel {
 
     pData = pData.return[0];
 
+    if (typeof pData !== "object") {
+      Utils.addErrorToTableCell(detailsSpan.parentElement, pData);
+      return;
+    }
     if (pData.Error) {
       // typically happens for jobs that are expired from jobs-cache
       Utils.addErrorToTableCell(detailsSpan.parentElement, pData.Error);
@@ -235,7 +239,9 @@ export class JobsDetailsPanel extends JobsPanel {
 
     const keyCount = Object.keys(pData.Result).length;
     detailsHTML += ", ";
-    if (keyCount === pData.Minions.length) {
+    if (pData.Minions.length === 0) {
+      detailsHTML += "<span>";
+    } else if (keyCount === pData.Minions.length) {
       detailsHTML += "<span style='color: green'>";
     } else {
       detailsHTML += "<span style='color: red'>";
@@ -248,7 +254,11 @@ export class JobsDetailsPanel extends JobsPanel {
     for (const minionId in pData.Result) {
       const result = pData.Result[minionId];
       // use keys that can conveniently be sorted
-      const key = (result.success ? "0-" : "1-") + result.retcode;
+      let key = (result.success ? "0-" : "1-") + result.retcode;
+      if (key === "1-undefined") {
+        // that information was not presnet
+        key = "2-unknown";
+      }
       if (summary[key] === undefined) {
         summary[key] = 0;
       }
@@ -264,14 +274,17 @@ export class JobsDetailsPanel extends JobsPanel {
       } else if (key.startsWith("0-")) {
         detailsHTML += "<span style='color: orange'>";
         detailsHTML += Utils.txtZeroOneMany(summary[key], "", "{0} success", "{0} successes");
-      } else {
-        // if (key.startsWith("1-"))
+      } else if (key.startsWith("1-")) {
         detailsHTML += "<span style='color: red'>";
         detailsHTML += Utils.txtZeroOneMany(summary[key], "", "{0} failure", "{0} failures");
+      } else {
+        // if (key.startsWith("2-"))
+        detailsHTML += "<span>";
+        detailsHTML += Utils.txtZeroOneMany(summary[key], "", "{0} unknown result", "{0} unknown results");
       }
-      if (key !== "0-0" && key !== "1-1") {
+      if (key !== "0-0" && key !== "1-1" && key !== "2-unknown") {
         // don't show the retcode for expected combinations
-        detailsHTML += "(" + key.substr(2) + ")";
+        detailsHTML += "(" + key.substring(2) + ")";
       }
       detailsHTML += "</span>";
     }
@@ -320,8 +333,11 @@ export class JobsDetailsPanel extends JobsPanel {
     }
     tr.appendChild(Utils.createTd("function", functionText));
 
-    const startTimeText = Output.dateTimeStr(job.StartTime);
-    tr.appendChild(Utils.createTd("starttime", startTimeText));
+    const startTimeTd = Utils.createTd();
+    const startTimeSpan = Utils.createSpan("starttime");
+    Output.dateTimeStr(job.StartTime, startTimeSpan);
+    startTimeTd.appendChild(startTimeSpan);
+    tr.appendChild(startTimeTd);
 
     const menu = new DropDownMenu(tr, true);
     this._addJobsMenuItemShowDetails(menu, job);

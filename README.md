@@ -19,7 +19,7 @@ The version tagged `release` is the latest released version. The version `master
 - View the seven most recent jobs run on Salt
 - Manually run any Salt function and see the output
 - View highstate for all minions with details
-- View issues for all minions with trivial solutions (beta)
+- View issues for all minions with trivial solutions
 - View the values for grains for a particular minion
 - View the schedules for a particular minion
 - View the values for pillars for a particular minion
@@ -27,6 +27,7 @@ The version tagged `release` is the latest released version. The version `master
 - View the live events on the salt-event bus
 - View internal documentation for any salt command
 - View external documentation for any salt command
+- Define your own custom documentation for commands
 - Match list of minions against reference list
 - Match status of minions against reference list
 
@@ -38,14 +39,16 @@ The version tagged `release` is the latest released version. The version `master
 ```
 external_auth:
   pam:
-    saltuser:
+    saltuser1:
       - .*
       - '@runner'
       - '@wheel'
       - '@jobs'
 ```
 - See `docs/PERMISSIONS.md` for more restricted security configurations.
-- `saltuser` is a unix (PAM) user, make sure it exists or create a new one.
+- The username 'saltuser1' is only an example. Generic accounts are not recommended, use personal accounts instead. Or use a user-group, see https://docs.saltproject.io/en/latest/topics/eauth/index.html for details.
+- Multiple entries like `saltuser1` can be added when you have multiple users.
+- `saltuser1` is a unix (PAM) user, make sure it exists or create a new one.
 - At the bottom of this file, also setup the rest_cherrypi server to access SaltGUI from "http://localhost:3333" (or on any of the hostnames that the server has):
 ```
 rest_cherrypy:
@@ -62,7 +65,7 @@ rest_cherrypy:
 - Restart everything with ``pkill salt-master && pkill salt-api && salt-master -d && salt-api -d``
 - You should be good to go. If you have any problems, open a GitHub issue. As always, SSL is recommended wherever possible but setup is beyond the scope of this guide.
 
-**Note: With this configuration, the `saltuser` user has access to all salt modules available, maybe this is not what you want**
+**Note: With this configuration, the user has access to all salt modules available, maybe this is not what you want**
 
 Please read the [Permissions](docs/PERMISSIONS.md) page for more information.
 
@@ -93,6 +96,9 @@ Enter `salt-call` commands with the prefix `wheel.`. e.g. `wheel.key.finger`. Th
 
 Enter regular commands without special prefix. e.g. `test.ping`. The command is sent to the minions specified in the target field.
 
+The text `##connected` in the target field will be immediatelly replaced by the list of connected
+minions, or with `*` when all minions are connected, or with an expression when that is shorter.
+
 Commands can be run normally, in which case the command runs to completion and shows the results. Alternatively, it can be started asynchronously, in which case only a bit of progress information is shown. When variable `state_events` is set to `true`, then the progress is shown per state when applicable. Batch commands are not supported at this time.
 
 
@@ -117,6 +123,18 @@ saltgui_datetime_fraction_digits: 3
 The value must be a number from 0 to 6.
 Note that the effect is achieved by string truncation only. This is equivalent to always rounding downwards.
 
+How the date and times that are shown can also be changed.
+e.g.:
+
+```
+saltgui_datetime_representation: utc
+```
+The value must be `utc`, `local`, `utc-localtime` or `local-utctime`.
+With `utc`, only the UTC date and time are shown.
+With `local`, only the local date and time are shown. This includes an indication of the timezone.
+With `utc-localtime`, the UTC date and time are shown. Additionally, the local time (not the local date) is shown.
+With `local-utctime`, the local date and time are shown. Additionally, the UTC time (not the UTC date) is shown.
+In all cases, a tooltip is added to a date+time field that shows the full representation of the date and time in both the local timezone and in UTC.
 
 ## Templates
 SaltGUI supports command templates for easier command entry into the command-box.
@@ -139,11 +157,36 @@ saltgui_templates:
         command: test.version
 ```
 
+When there are a lot of templates, they can be organized into categories.
+e.g.:
+```
+saltgui_templates:
+    template1:
+        description: First template
+        target: "*"
+        command: test.fib num=10
+        category: cat1
+    template2:
+        description: Second template
+        targettype: glob
+        target: dev*
+        command: test.version
+        categories:
+          - cat1
+          - cat2
+```
+When at least one template is assigned to a category, then you can select a template category before
+selecting the actual category. Otherwise that choice remains hidden. Templates can be in multiple categories
+when a list of categories is assigned.
 
 ## Jobs
 SaltGUI shows a maximum of 7 jobs in on the right-hand-side of the screen.
 SaltGUI shows a maximum of 50 jobs on the dedicated jobs page.
-Commands that are used internally in SaltGUI are hidden.
+Commands that are used internally in SaltGUI are initially hidden.
+
+On the Jobs page, more jobs can be made visible.
+Select 'Show eligible jobs` to show all jobs that are not classified as internally-used jobs.
+Select 'Show all jobs` to show all jobs that are known to salt.
 
 Additional commands to hide can be configured
 in salt master configuration file `/etc/salt/master`.
@@ -190,6 +233,21 @@ saltgui_public_pillars:
     - pub_.*
 ```
 
+## Custom command documentation
+A custom HTML help text can be shown from the "Manual Run" overlay.
+
+To use it,
+- specify `saltgui_custom_command_help` in the salt master config. Example:
+```
+saltgui_custom_command_help: |
+  <h2>Job Commands</h2>
+    runners.jobs.active
+      => Show active jobs
+
+    runners.jobs.list_job «JID»
+      => Show job with given job id (JID)
+```
+- Hover the documentation icon (`📖︎`) near the command input field and select `Show custom help`
 
 ## Message-of-the-day
 A message-of-the-day (motd) can be added to the login screen.
@@ -209,8 +267,7 @@ Alternatively, or additionally, the text can be retrieved from the `master` file
 When apis are disabled using the native `external_auth` mechanism,
 SaltGUI may show menu-items that have become unuseable.
 In that case, it may be useful to reduce the menu-bar to less items.
-Variable `saltgui_pages` is read 
-from salt master configuration file `/etc/salt/master`.
+Variable `saltgui_pages` is read from salt master configuration file `/etc/salt/master`.
 It contains the list of accessible pages per user.
 The first page in the list also becomes the landing page.
 Users that are not listed still have the full menu.
@@ -370,99 +427,127 @@ SaltGUI includes these libraries (with possible modifications):
 
 ## Changelog
 
-## 1.27.0 (2021-11-29)
-- introduced a highstate overview per minion in the jobs menu (erwindon, thx xzenor)
-- improved handling of JS promises (erwindon)
-- several small improvements on gui behaviour (erwindon)
-- fixed real-time job status on Keys page (erwindon)
-- improve pause/play button, added 'none' state (erwindon)
-- added icon for CentOS Stream (erwindon, thx xzenor)
-- automatically provide alternative for unknown icon (erwindon)
-- solution for jobs results without minions list, e.g. when using mysql (erwindon, thx xzenor)
+## 1.28.0 (2022-04-16)
+- Added icons for Rocky (thx byoungstrom), OpenWRT (thx vemilyus), and a few more (erwindon)
 - Bump eslint and stylelint to latest versions (erwindon)
-- more code cleanups and various small stuff (erwindon)
+- Fixed stylelint issues now that stylelint became more strict (erwindon)
+- Enhanced date/time representation (thx achimmihca)
+- Fixed logout warning (erwindon)
+- Added support for template categories (thx xzenor)
+- Added support for issues overview (erwindon, thx xzenor)
+- Improved help texts (erwindon, thx achimmihca)
+- Deeplink now survives login screen (thx achimmihca)
+- Added easier targetting connected minions only with '##connected' target
+- Use consistent style when warning for something (erwindon)
+- Improved reporting on CVE issues (erwindon)
+- Added direct navigation to minion details (erwindon)
+- Improved hightstate overview (erwindon)
+- Fix for viewing a job that was started with a list target (erwindon)
+- Fix to prevent spell-checking in the text fields (erwindon)
+- Added support for state_output_pct (erwindon)
+- Provided simple download facility for job results (thx buffman23)
+- Fixed json-stringify for strings like `1777' (erwindon)
+- Fixed race-condition on startup (erwindon)
+- Do not analyse version of offline minion (erwindon)
+- Handle the output of some really old minions (erwindon)
+- Fixed aysnc status indicator in command-panel (erwindon)
+- Fixed pluralization issue due to text-vs-number mistake (erwindon)
+- More code cleanups and various small stuff (erwindon)
+- Celebrating 350 stars on GitHub
+
+## 1.27.0 (2021-11-29)
+- Introduced a highstate overview per minion in the jobs menu (erwindon, thx xzenor)
+- Improved handling of JS promises (erwindon)
+- Several small improvements on gui behaviour (erwindon)
+- Fixed real-time job status on Keys page (erwindon)
+- Improve pause/play button, added 'none' state (erwindon)
+- Added icon for CentOS Stream (erwindon, thx xzenor)
+- Automatically provide alternative for unknown icon (erwindon)
+- Solution for jobs results without minions list, e.g. when using mysql (erwindon, thx xzenor)
+- Bump eslint and stylelint to latest versions (erwindon)
+- More code cleanups and various small stuff (erwindon)
 
 ## 1.26.0 (2021-10-31)
-- applied review comments on documentation (thx achimmihca)
-- prevent use of null when a task reported changes as such (thx xzenor)
-- add support for additional salt.auth types (thx hoaivan)
-- added a message-of-the-day (motd) facility, before and/or after login (erwindon)
-- various gui (code) improvements and tweaks (erwindon)
-- fixed highstate tooltip content (erwindon)
-- use uniform buttons, but smaller when in a table (erwindon)
-- hide the commandbox on automatic logout (erwindon)
-- fixed beacon template for cert_info (erwindon)
-- bump stylelint+eslint versions (erwindon)
-- fixed several codebeat reported issues (erwindon)
-- added a few more CVEs to test for (erwindon)
-- fixed several constructions that needed higher ES versions (erwindon)
-- display warning sign for error information in beacon data (erwindon)
-- inform when no, or less, beacon-type info is available (erwindon)
+- Applied review comments on documentation (thx achimmihca)
+- Prevent use of null when a task reported changes as such (thx xzenor)
+- Add support for additional salt.auth types (thx hoaivan)
+- Added a message-of-the-day (motd) facility, before and/or after login (erwindon)
+- Various gui (code) improvements and tweaks (erwindon)
+- Fixed highstate tooltip content (erwindon)
+- Use uniform buttons, but smaller when in a table (erwindon)
+- Hide the commandbox on automatic logout (erwindon)
+- Fixed beacon template for cert_info (erwindon)
+- Bump stylelint+eslint versions (erwindon)
+- Fixed several codebeat reported issues (erwindon)
+- Added a few more CVEs to test for (erwindon)
+- Fixed several constructions that needed higher ES versions (erwindon)
+- Display warning sign for error information in beacon data (erwindon)
+- Inform when no, or less, beacon-type info is available (erwindon)
 
 ## 1.25.0 (2021-08-01)
-- fixed generating commands without proper quoting (erwindon, thx xzenor)
-- added extended help for beacon configuration (erwindon)
-- fixed sticky key status (erwindon)
-- updated CVE info to include recent disclosures (erwindon)
-- several small improvements and fixes (erwindon)
-- updated several dependencies reported by dependabot (erwindon)
-- celebrating 300 stars on GitHub
+- Fixed generating commands without proper quoting (erwindon, thx xzenor)
+- Added extended help for beacon configuration (erwindon)
+- Fixed sticky key status (erwindon)
+- Updated CVE info to include recent disclosures (erwindon)
+- Several small improvements and fixes (erwindon)
+- Updated several dependencies reported by dependabot (erwindon)
+- Celebrating 300 stars on GitHub
 
 ## 1.24.0 (2021-03-04)
 - SaltGUI is now a single page application (erwindon)
-- allow reduced number of pages (erwindon, thx bbinet)
-- show unconnected minions even before api timeout (erwindon)
-- job output refresh without page reload (erwindon)
-- cmd panel close refresh page without reload and smarter (erwindon)
-- updated list of CVEs that we must warn for (erwindon)
+- Allow reduced number of pages (erwindon, thx bbinet)
+- Show unconnected minions even before api timeout (erwindon)
+- Job output refresh without page reload (erwindon)
+- Cmd panel close refresh page without reload and smarter (erwindon)
+- Updated list of CVEs that we must warn for (erwindon)
 
 ## 1.23.0 (2020-12-28)
-- warn when there are no matching targets (erwindon)
-- added basic support for reactors (erwindon)
-- added support to add all 3 schedule types (erwindon)
-- consider the state_verbose and state_output variables (erwindon)
-- async (highstate) jobs now provide feeback about progress (erwindon)
-- added support for bulk state apply (erwindon)
-- added support for bulk key management (erwindon)
-- prefer js escape codes over html escape codes (erwindon)
-- centralized special character handling (erwindon)
-- restyled the top-right cmd-button (erwindon, thx dawidmalina)
-- wheel commands can only take named parameters (erwindon)
-- let pages decide on their own visibility (erwindon)
-- better support for touchscreens (erwindon)
-- show cherrypy details on (hidden) screen (ewindon)
-- improved session timeout detection (erwindon)
-- improved (hidden) options screen (erwindon)
-- reduce update-rate of jobs overview, now interruptable (erwindon)
-- cleaned code for dropdown menus (erwindon)
-- small fixes for sonarqube results (erwindon)
-- small fixes for layout and spelling (erwindon)
+- Warn when there are no matching targets (erwindon)
+- Added basic support for reactors (erwindon)
+- Added support to add all 3 schedule types (erwindon)
+- Consider the state_verbose and state_output variables (erwindon)
+- Async (highstate) jobs now provide feeback about progress (erwindon)
+- Added support for bulk state apply (erwindon)
+- Added support for bulk key management (erwindon)
+- Prefer JS escape codes over html escape codes (erwindon)
+- Centralized special character handling (erwindon)
+- Restyled the top-right cmd-button (erwindon, thx dawidmalina)
+- Wheel commands can only take named parameters (erwindon)
+- Let pages decide on their own visibility (erwindon)
+- Better support for touchscreens (erwindon)
+- Show cherrypy details on (hidden) screen (ewindon)
+- Improved session timeout detection (erwindon)
+- Improved (hidden) options screen (erwindon)
+- Reduce update-rate of jobs overview, now interruptable (erwindon)
+- Cleaned code for dropdown menus (erwindon)
+- Small fixes for sonarqube results (erwindon)
+- Small fixes for layout and spelling (erwindon)
 - Celebrating (almost) 250 stars on GitHub
 
 ## 1.22.0 (2020-11-05)
-- added alert for all known CVEs (erwindon)
-- added external documentation access (erwindon)
-- improved support for multiple message beacons (erwindon)
-- added play/pause buttons for dynamic screens (erwindon)
-- use more util functions for common tasks (erwindon)
-- reorganized code in pages and panels (erwindon)
-- improved support for very old browsers (erwindon)
-- replaceAll is not universally supported (erwindon, thx Timbus)
-- added support for """strings""" (erwindon, thx jfunnell)
-- modernized js code (erwindon)
-- fixed whitespace situations with commands (erwindon)
-- additional eslint fixes (erwindon)
-- update of tools (erwindon)
-- small documentation fixes (erwindon)
+- Added alert for all known CVEs (erwindon)
+- Added external documentation access (erwindon)
+- Improved support for multiple message beacons (erwindon)
+- Added play/pause buttons for dynamic screens (erwindon)
+- Use more util functions for common tasks (erwindon)
+- Reorganized code in pages and panels (erwindon)
+- Improved support for very old browsers (erwindon)
+- ReplaceAll is not universally supported (erwindon, thx Timbus)
+- Added support for """strings""" (erwindon, thx jfunnell)
+- Modernized JS code (erwindon)
+- Fixed whitespace situations with commands (erwindon)
+- Additional eslint fixes (erwindon)
+- Update of tools (erwindon)
+- Small documentation fixes (erwindon)
 
 ## 1.21.0 (2020-08-02)
-- added event-monitoring page (erwindon, thx mchugh19)
-- added search-options (erwindon, thx mchugh19)
-- upgraded eslint to 7.5; applied most rules (erwindon)
-- warn for imminent session timout (erwindon)
-- simplified html object selection (erwindon)
-- unified search handling (erwindon)
-- mark current choice in selection menus (erwindon)
+- Added event-monitoring page (erwindon, thx mchugh19)
+- Added search-options (erwindon, thx mchugh19)
+- Upgraded eslint to 7.5; applied most rules (erwindon)
+- Warn for imminent session timout (erwindon)
+- Simplified html object selection (erwindon)
+- Unified search handling (erwindon)
+- Mark current choice in selection menus (erwindon)
 
 ## 1.20.0 (2020-05-22)
 - Cleanup handling of urls; allow alternative prefixes (erwindon, thx ggiesen)
@@ -485,14 +570,14 @@ SaltGUI includes these libraries (with possible modifications):
 - Celebrating 200 stars on GitHub
 
 ## 1.18.0 (2019-11-22)
-- added missing openbsd icon (erwindon, thx hbonath)
-- added support for orchestration output (erwindon, thx gnouts)
-- clarified some documentation issues (erwindon)
-- smarter placement of tooltips (erwindon)
-- no inner-scrollbar for cmd box (erwindon)
-- hide job details with data from many minions (erwindon)
-- added menu option for state testing (erwindon)
-- more code cleanups (erwindon)
+- Added missing openbsd icon (erwindon, thx hbonath)
+- Added support for orchestration output (erwindon, thx gnouts)
+- Clarified some documentation issues (erwindon)
+- Smarter placement of tooltips (erwindon)
+- No inner-scrollbar for cmd box (erwindon)
+- Hide job details with data from many minions (erwindon)
+- Added menu option for state testing (erwindon)
+- More code cleanups (erwindon)
 
 ## 1.17.0 (2019-07-14)
 - Added code and instructions to set up standalone SaltGUI (dawidmalina)
@@ -537,7 +622,7 @@ SaltGUI includes these libraries (with possible modifications):
 - Major cleanup of js-promise handling (erwindon)
 - Re-organized all menu item creations (erwindon)
 - Better validations on url parameters (erwindon)
-- js and css code cleanups (erwindon)
+- JS and CSS code cleanups (erwindon)
 - Small layout fixes (erwindon)
 - Additional testing (dawidmalina)
 
@@ -563,7 +648,7 @@ SaltGUI includes these libraries (with possible modifications):
 - Fixed missing summary of changes for SaltGuiHighstate (erwindon)
 - Added original highstate output format (erwindon)
 - Updated salt version to 2019.2.0 for docker images (erwindon)
-- All js code is now in modules (erwindon)
+- All JS code is now in modules (erwindon)
 - Some more small fixes (erwindon)
 
 ## 1.11.0 (2019-03-30)

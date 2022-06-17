@@ -11,32 +11,32 @@ select {
   min-width: 200px;
 }
 
-input[type='text'],
-input[type='password'],
+input[type="text"],
+input[type="password"],
 select {
   border: 2px solid #e2e2e2;
   border-radius: 2px;
 }
 
-input[type='text']:focus,
-input[type='password']:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
 select:focus {
   border: 2px solid #4caf50;
 }
 
-input[type='submit'] {
+input[type="submit"] {
   background-color: #4caf50;
   color: white;
   border: 0;
   margin-top: 5px;
   margin-bottom: 0;
   cursor: pointer;
-  box-shadow: 0 0 5px rgba(33, 33, 33, 0.5);
+  box-shadow: 0 0 5px rgba(33, 33, 33, 50%);
   width: 20%;
   min-width: 200px;
 }
 
-input[type='submit']:active:hover {
+input[type="submit"]:active:hover {
   box-shadow: 0 0 0;
 }
 

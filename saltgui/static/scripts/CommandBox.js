@@ -8,6 +8,7 @@ import {ParseCommandLine} from "./ParseCommandLine.js";
 import {Router} from "./Router.js";
 import {RunType} from "./RunType.js";
 import {TargetType} from "./TargetType.js";
+import {TemplatesPanel} from "./panels/Templates.js";
 import {Utils} from "./Utils.js";
 
 export class CommandBox {
@@ -34,14 +35,91 @@ export class CommandBox {
     });
   }
 
-  static _populateTemplateMenu () {
-    const titleElement = document.getElementById("template-menu-here");
+  static _templateCatMenuItemTitle (pCategory) {
+    let title;
+    if (pCategory === undefined) {
+      title = "(undefined)";
+    } else if (pCategory === null) {
+      title = "(all)";
+    } else {
+      title = pCategory;
+    }
+    if (CommandBox.templateTmplMenu && CommandBox.templateTmplMenu._templateCategory === pCategory) {
+      title = Character.BLACK_CIRCLE + " " + title;
+    }
+    return title;
+  }
+
+  static _populateTemplateCatMenu () {
+    const titleElement = document.getElementById("template-catmenu-here");
     if (titleElement.childElementCount) {
       // only build one dropdown menu. cannot be done in constructor
       // since the storage-item is then not populated yet.
+      CommandBox.templateCatMenu.setTitle("");
       return;
     }
     const menu = new DropDownMenu(titleElement);
+    menu.setTitle("");
+    menu.menuButton.classList.add("small-button-left");
+    CommandBox.templateCatMenu = menu;
+    const templatesText = Utils.getStorageItem("session", "templates", "{}");
+    const templates = JSON.parse(templatesText);
+    const categories = TemplatesPanel.getTemplatesCategories(templates);
+    if (categories.length < 2) {
+      // no useful content
+      return;
+    }
+    categories.unshift(null);
+    for (const category of categories) {
+      menu.addMenuItem(
+        () => CommandBox._templateCatMenuItemTitle(category),
+        () => {
+          CommandBox.templateTmplMenu._templateCategory = category;
+          if (category === null) {
+            CommandBox.templateCatMenu.setTitle("(all)");
+          } else if (category === undefined) {
+            CommandBox.templateCatMenu.setTitle("(undefined)");
+          } else {
+            CommandBox.templateCatMenu.setTitle(category);
+          }
+        }
+      );
+    }
+  }
+
+  static _templateTmplMenuItemTitle (pTemplate) {
+    if (CommandBox.templateTmplMenu._templateCategory === null) {
+      // "(all)" selected, return all
+      return pTemplate.description;
+    }
+    if (CommandBox.templateTmplMenu._templateCategory === undefined && pTemplate.category === undefined && pTemplate.categories === undefined) {
+      // no category selected, return templates without category
+      return pTemplate.description;
+    }
+    if (pTemplate.category && pTemplate.category === CommandBox.templateTmplMenu._templateCategory) {
+      // item has one category, return when it matches
+      return pTemplate.description;
+    }
+    if (pTemplate.categories && pTemplate.categories.indexOf(CommandBox.templateTmplMenu._templateCategory) >= 0) {
+      // item has a list of categories, return when one matches
+      return pTemplate.description;
+    }
+    return null;
+  }
+
+  static _populateTemplateTmplMenu () {
+    const titleElement = document.getElementById("template-tmplmenu-here");
+    if (titleElement.childElementCount) {
+      // only build one dropdown menu. cannot be done in constructor
+      // since the storage-item is then not populated yet.
+      // but reset the selected template category
+      CommandBox.templateTmplMenu._templateCategory = null;
+      return;
+    }
+    const menu = new DropDownMenu(titleElement);
+    menu.menuButton.classList.add("small-button-left");
+    CommandBox.templateTmplMenu = menu;
+    CommandBox.templateTmplMenu._templateCategory = null;
     const templatesText = Utils.getStorageItem("session", "templates", "{}");
     const templates = JSON.parse(templatesText);
     const keys = Object.keys(templates).sort();
@@ -52,7 +130,7 @@ export class CommandBox {
         description = "(" + key + ")";
       }
       menu.addMenuItem(
-        description,
+        () => CommandBox._templateTmplMenuItemTitle(template),
         () => {
           CommandBox._applyTemplate(template);
         }
@@ -90,6 +168,10 @@ export class CommandBox {
     txt += "The command field is used to enter the command and its parameters. Double quotes (\") are needed around each item that contains spaces, or when it is otherwise mistaken for a number, boolean, list or object according to the <a href='https://tools.ietf.org/html/rfc7159' target='_blank' rel='noopener'>JSON" + Documentation.EXTERNAL_LINK + "</a> notation. Additionally, strings in the form \"\"\"string\"\"\" are recognized. This is a notation from the <a href='https://docs.python.org/3/tutorial/introduction.html#strings' target='_blank' rel='noopener'>Python" + Documentation.EXTERNAL_LINK + "</a> language, which is very useful for the construction of strings that need to contain double-quote characters. This form does not handle any escape characters.";
     txt += "<br/>";
     txt += "Parameters in the form name=value are used to pass named variables. The same quoting rules apply to the value. The named parameters are used from left-to-right. Their actual position within the line is otherwise not important.";
+    txt += "<br/>";
+    txt += "Enter `salt-run` commands with the prefix `runners.`. e.g. `runners.jobs.last_run`. The target field can remain empty in that case as it is not used.";
+    txt += "<br/>";
+    txt += "Enter `salt-call` commands with the prefix `wheel.`. e.g. `wheel.key.finger`. The target field will be added as named parameter `target`. But note that that parameter may not actually be used depending on the command.";
     txt += "<br/>";
     txt += "A help button is visible when the command field contains some text. It will issue a <b>sys.doc</b> (or <b>runners.doc.wheel</b> or <b>runners.doc.runner</b>) command for the current command. The <b>sys.doc</b> command will be targetted to the given minions when the target field is not empty. It will be targetted to all minions when it is empty. The <b>runners.doc.wheel</b> or <b>runners.doc.runner</b> commands will always run on the master. When answers from multiple minions are available from <b>sys.doc</b>, only the first reasonable answer is used. Small variations in the answer may exist when not all minions have the same software version.";
     txt += "</p>";
@@ -382,7 +464,8 @@ export class CommandBox {
     commandField.focus();
     targetField.focus();
 
-    CommandBox._populateTemplateMenu();
+    CommandBox._populateTemplateCatMenu();
+    CommandBox._populateTemplateTmplMenu();
 
     const localTestProviders = pApi.getLocalTestProviders();
 
@@ -444,6 +527,12 @@ export class CommandBox {
 
     if (typeof functionToRun !== "string") {
       CommandBox._showError("First (unnamed) parameter is the function name, it must be a string, not a " + typeof functionToRun);
+      return null;
+    }
+
+    // prevent a common spelling error
+    if (functionToRun === "runner" || functionToRun.startsWith("runner.")) {
+      CommandBox._showError("'Runner' commands must be prefixed with 'runners.'");
       return null;
     }
 

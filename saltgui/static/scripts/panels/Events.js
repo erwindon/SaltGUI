@@ -58,19 +58,13 @@ export class EventsPanel extends Panel {
 
     // add timestamp value
     const stampTd = Utils.createTd();
+    const stampSpan = Utils.createSpan();
     let stampTxt = pData["_stamp"];
     if (!stampTxt) {
       stampTxt = new Date().toISOString();
     }
-    // The toISOString applies the same offset, so we do it twice
-    const localTimeOffset = new Date().getTimezoneOffset() * 60 * 1000;
-    const stampDateTime2 = Date.parse(stampTxt) - 2 * localTimeOffset;
-    stampTxt = new Date(stampDateTime2).toISOString();
-    // fix milliseconds/nanoseconds
-    stampTxt = Output.dateTimeStr(stampTxt);
-    // remove date
-    stampTxt = stampTxt.replace(/.*T/, "");
-    stampTd.innerText = Output.dateTimeStr(stampTxt);
+    Output.dateTimeStr(stampTxt, stampSpan, "bottom-left", "T");
+    stampTd.appendChild(stampSpan);
     tr.append(stampTd);
 
     // add tag value

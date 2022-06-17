@@ -96,7 +96,7 @@ export class LogoutPage extends Page {
     const left = new Date(leftMillis).toISOString();
     if (left.startsWith("1970-01-01T")) {
       // remove the date prefix and the millisecond suffix
-      warning.innerText = "Session expires in " + left.substr(11, 8);
+      warning.innerText = "Session expires in " + left.substring(11, 19);
     } else {
       // stupid fallback
       warning.innerText = "Session expires in " + leftMillis + " milliseconds";

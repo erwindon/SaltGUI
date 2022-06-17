@@ -5,7 +5,7 @@
 .tooltip > .tooltip-text {
   visibility: hidden;
   font-size: 14px;
-  background-color: rgba(76, 175, 80, 0.8); /* #4caf50 */
+  background-color: rgba(76, 175, 80, 80%); /* #4caf50 */
   color: white;
   padding: 7px;
   border-radius: 3px;
@@ -59,7 +59,7 @@
 }
 
 pre.output .tooltip > .tooltip-text {
-  background-color: rgba(76, 175, 80, 0.8); /* #4caf50 */
+  background-color: rgba(76, 175, 80, 80%); /* #4caf50 */
 }
 
 pre.output .tooltip:hover {
@@ -77,7 +77,7 @@ pre.output .tooltip:hover {
   border-width: 5px;
   border-style: solid;
   top: 100%;
-  border-color: rgba(76, 175, 80, 0.8) transparent transparent transparent;
+  border-color: rgba(76, 175, 80, 80%) transparent transparent transparent;
 }
 
 .tooltip > .tooltip-text-bottom-left::after {
@@ -86,7 +86,7 @@ pre.output .tooltip:hover {
 
 .tooltip > .tooltip-text-error-bottom-left::after {
   left: calc(5% - 2.5px);
-  border-color: red transparent transparent transparent;
+  border-color: red transparent transparent;
 }
 
 .tooltip > .tooltip-text-bottom-center::after {
@@ -98,5 +98,5 @@ pre.output .tooltip:hover {
 }
 
 pre.output .tooltip > .tooltip-text::after {
-  border-color: rgba(76, 175, 80, 0.8) transparent transparent transparent; /* #4caf50 */
+  border-color: rgba(76, 175, 80, 80%) transparent transparent transparent; /* #4caf50 */
 }

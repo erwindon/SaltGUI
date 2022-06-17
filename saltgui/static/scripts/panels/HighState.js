@@ -289,8 +289,11 @@ export class HighStatePanel extends Panel {
 
       /* eslint-enable max-depth */
 
-      const startTimeText = Output.dateTimeStr(jobData.StartTime);
-      minionTr.appendChild(Utils.createTd("starttime", startTimeText));
+      const startTimeTd = Utils.createTd();
+      const startTimeSpan = Utils.createSpan("starttime");
+      Output.dateTimeStr(jobData.StartTime, startTimeSpan);
+      startTimeTd.appendChild(startTimeSpan);
+      minionTr.appendChild(startTimeTd);
 
       const menu = new DropDownMenu(minionTr, true);
       this._addMenuItemStateApply(menu, minionId);

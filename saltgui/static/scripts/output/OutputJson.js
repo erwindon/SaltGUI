@@ -17,8 +17,14 @@ export class OutputJson {
       return "undefined";
     }
 
+    if (typeof pValue === "string") {
+      // JSON.stringify does not handle this properly
+      // as it may leave numeric-text unquoted
+      return "\"" + pValue.replace(/["\\]/g, "\\$&") + "\"";
+    }
+
     if (typeof pValue !== "object") {
-      // a simple type
+      // any other simple type
       // leave that to the builtin function
       return JSON.stringify(pValue);
     }

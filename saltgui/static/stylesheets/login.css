@@ -11,9 +11,11 @@
 #login-panel {
   align-self: center;
   background-color: white;
-  padding: 0 50px;
-  box-shadow: 0 0 24px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 24px rgba(0, 0, 0, 70%);
   border-radius: 2px;
+
+  /* 1px needed to prevent bottom margin to disappear when using small screens */
+  padding: 0 50px 1px;
 }
 
 #login-panel h1 {
@@ -92,8 +94,8 @@
   }
 }
 
-#notice.notice_session_expired,
-#notice.notice_session_cancelled {
+#notice.notice-session-expired,
+#notice.notice-session-cancelled {
   /* keep these visible because user is likely not present when this happens */
   animation-name: show-notice-stay;
   height: 38px;

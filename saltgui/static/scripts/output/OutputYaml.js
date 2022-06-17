@@ -62,7 +62,7 @@ export class OutputYaml {
       if (!needQuotes) {
         return pValue;
       }
-      return "'" + pValue.replaceAll("'", "\\'") + "'";
+      return "'" + pValue.replace(/['\\]/g, "\\$&") + "'";
     }
 
     if (typeof pValue !== "object") {

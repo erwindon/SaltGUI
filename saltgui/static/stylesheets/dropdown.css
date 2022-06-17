@@ -21,8 +21,8 @@ div.panel > .menu-dropdown {
   overflow-y: auto;
   overflow-x: visible;
   background: #fff;
-  box-shadow: 0 3px 10px -2px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 10px -2px rgba(0, 0, 0, 30%);
+  border: 1px solid rgba(0, 0, 0, 10%);
   z-index: 5;
   cursor: pointer;
 }
@@ -34,7 +34,7 @@ div.panel > .menu-dropdown {
   float: left;
   clear: both;
   width: 100%;
-  padding: 15px 30px 15px 30px;
+  padding: 15px 30px;
   margin: 0;
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
@@ -43,7 +43,7 @@ div.panel > .menu-dropdown {
 
 /* Change color of menu-dropdown links on hover */
 .run-command-button .menu-dropdown-content div:hover {
-  background: rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 15%);
   cursor: pointer;
 }
 
@@ -79,7 +79,7 @@ pre.output .run-command-button:hover .menu-dropdown {
   display: none;
   position: absolute;
   background-color: #f9f9f9;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 20%);
   z-index: 3;
 }
 

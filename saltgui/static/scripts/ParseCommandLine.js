@@ -56,8 +56,8 @@ export class ParseCommandLine {
       const firstEqualSign = pToRun.indexOf("=");
       if (firstEqualSign >= 0 && firstEqualSign < firstSpaceChar) {
         // we have the name of a named parameter
-        name = pToRun.substr(0, firstEqualSign);
-        pToRun = pToRun.substr(firstEqualSign + 1);
+        name = pToRun.substring(0, firstEqualSign);
+        pToRun = pToRun.substring(firstEqualSign + 1);
         if (pToRun === "" || pToRun[0] === " ") {
           return "Must have value for named parameter '" + name + "'";
         }

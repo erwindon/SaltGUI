@@ -52,6 +52,12 @@ pre #summary-jobs-active .host-failure {
   color: red;
 }
 
+td.address > span {
+  color: #3f51b5;
+  cursor: copy;
+  position: relative;
+}
+
 td.tasks span {
   padding-top: 3px;
   padding-bottom: 3px;
@@ -196,14 +202,9 @@ table tr td:last-of-type {
   color: #2e7d32;
 }
 
-#template-menu-here {
+#template-catmenu-here,
+#template-tmplmenu-here {
   display: inline;
-}
-
-.minions td.address > span {
-  color: #3f51b5;
-  cursor: copy;
-  position: relative;
 }
 
 .jobs td.details > span,
@@ -291,7 +292,7 @@ table tr td:last-of-type {
   flex-grow: 1;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
   .minions {
     min-width: 0;
   }

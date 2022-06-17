@@ -14,15 +14,13 @@ export class IssuesPanel extends Panel {
   constructor () {
     super("issues");
 
-    this.addTitle("Issues (beta)");
+    this.addTitle("Issues");
     this.addSearchButton();
     this.addPlayPauseButton();
     this.addHelpButton([
       "This page contains an overview of problems",
-      "that are observed in various categories.",
-      "Leave comments on GitHub #369 (click)"
-    ], "https://github.com/erwindon/SaltGUI/issues/369");
-    // this.addTable(["Key", "-menu-", "Description"]);
+      "that are observed in various categories."
+    ]);
     this.addTable(["-menu-", "Description"]);
     this.setTableClickable();
     this.addMsg();
@@ -34,7 +32,7 @@ export class IssuesPanel extends Panel {
 
     // cannot use this now since we are loading
     // the data in random order
-    // this.setTableSortable("Key", "asc");
+    // this.setTableSortable("Description", "asc");
 
     this.keysIssues = new KeysIssues();
     this.jobsIssues = new JobsRunningIssues();
@@ -61,7 +59,7 @@ export class IssuesPanel extends Panel {
     const allPromise = Promise.all([p1, p2, p3, p4, p5, p6]);
     /* eslint-enable compat/compat */
     allPromise.then(() => {
-      this.setMsg("");
+      // VOID
     }, (pErrorMsg) => {
       this.setMsg("(error)");
       Utils.addToolTip(this.msgDiv, pErrorMsg);

@@ -154,6 +154,25 @@ export class Panel {
     table.id = this.key + "-table";
     table.classList.add(this.key);
 
+    let anyHiddenColumns = false;
+    if (pColumnNames) {
+      for (const colName of pColumnNames) {
+        if (colName.startsWith("@")) {
+          anyHiddenColumns = true;
+        }
+      }
+    }
+
+    if (anyHiddenColumns) {
+      for (const colName of pColumnNames) {
+        const col = document.createElement("col");
+        if (colName.startsWith("@")) {
+          col.style.visibility = "collapse";
+        }
+        table.append(col);
+      }
+    }
+
     if (pColumnNames) {
       const thead = document.createElement("thead");
       thead.id = this.key + "-table-thead";
@@ -162,8 +181,12 @@ export class Panel {
 
       for (const columnName of pColumnNames) {
         const th = document.createElement("th");
-        if (columnName && !columnName.startsWith("-")) {
-          th.innerText = columnName;
+        let cn = columnName;
+        if (cn && cn.startsWith("@")) {
+          cn = cn.substring(1);
+        }
+        if (cn && !cn.startsWith("-")) {
+          th.innerText = cn;
         }
         tr.appendChild(th);
       }
@@ -559,6 +582,7 @@ export class Panel {
     }
     if (pMinionData) {
       const td = Utils.createTd();
+      td.setAttribute("sorttable_customkey", saltversion);
       const span = Utils.createSpan("saltversion", saltversion);
       td.appendChild(span);
       if (typeof pMinionData === "string") {
@@ -598,7 +622,7 @@ export class Panel {
 
     const minions = pData.return[0];
     const minionIds = Object.keys(minions).sort();
-    const minionsDict = JSON.parse(Utils.getStorageItem("session", "minions-txt"));
+    const minionsDict = JSON.parse(Utils.getStorageItem("session", "minions-txt", "{}"));
 
     // save for the autocompletion
     // This callback will also be called after LOGOUT due to the regular error handling
@@ -649,7 +673,7 @@ export class Panel {
 
     const offlineSpan = Utils.createSpan("status", "offline");
     // add an opinion when we have one
-    if (pMinionId in pMinionsDict) {
+    if (pMinionsDict && pMinionId in pMinionsDict) {
       if (pMinionsDict[pMinionId] === "true") {
         Utils.addToolTip(offlineSpan, "Minion is offline\nIs the host running and is the salt-minion installed and started?\nUpdate file 'minions.txt' when needed", "bottom-left");
         offlineSpan.classList.add("offline");
@@ -678,7 +702,7 @@ export class Panel {
       if (cmd.match(/^[a-z_]+=$/i)) {
         // handle key-value pairs
         const pos = cmd.indexOf("=");
-        commandString += cmd.substr(0, pos + 1);
+        commandString += cmd.substring(0, pos + 1);
         // value comes in a separate element
         separator = "";
         continue;

@@ -2,6 +2,7 @@
 
 import {Issues} from "./Issues.js";
 import {JobsPanel} from "../panels/Jobs.js";
+import {Utils} from "../Utils.js";
 
 const MAX_HIGHSTATE_JOBS = 10;
 
@@ -11,24 +12,44 @@ export class StateIssues extends Issues {
 
     const msg = super.onGetIssues(pPanel, "STATE");
 
+    const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
+
     const runnerJobsListJobsPromise = this.api.getRunnerJobsListJobs(["state.apply", "state.highstate", "state.sls_id"]);
 
-    runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
-      Issues.removeCategory(pPanel, "state");
-      this._handleLowstateRunnerJobsListJobs(pPanel, pRunnerJobsListJobsData, msg);
+    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
+      runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
+        Issues.removeCategory(pPanel, "state");
+        this._handleLowstateRunnerJobsListJobs(pPanel, pRunnerJobsListJobsData, pWheelKeyListAllData, msg);
+        return true;
+      }, (pRunnerJobsListJobsMsg) => {
+        Issues.removeCategory(pPanel, "state");
+        const tr = Issues.addIssue(pPanel, "state", "retrieving");
+        Issues.addIssueMsg(tr, "Could not retrieve list of jobs");
+        Issues.addIssueErr(tr, pRunnerJobsListJobsMsg);
+        Issues.readyCategory(pPanel, msg);
+        return false;
+      });
       return true;
-    }, (pRunnerJobsListJobsMsg) => {
+    }, (pWheelKeyListAllMsg) => {
+      Utils.ignorePromise(runnerJobsListJobsPromise);
       Issues.removeCategory(pPanel, "state");
       const tr = Issues.addIssue(pPanel, "state", "retrieving");
-      Issues.addIssueMsg(tr, "Could not retrieve list of jobs");
-      Issues.addIssueErr(tr, pRunnerJobsListJobsMsg);
+      Issues.addIssueMsg(tr, "Could not retrieve list of keys");
+      Issues.addIssueErr(tr, pWheelKeyListAllMsg);
       Issues.readyCategory(pPanel, msg);
       return false;
     });
+
+    /* eslint-disable compat/compat */
+    /* Promise.all is not supported in op_mini all, IE 11 */
+    return Promise.all([wheelKeyListAllPromise, runnerJobsListJobsPromise]);
+    /* eslint-enable compat/compat */
   }
 
-  _handleLowstateRunnerJobsListJobs (pPanel, pData, pMsg) {
+  _handleLowstateRunnerJobsListJobs (pPanel, pData, pKeys, pMsg) {
     // due to filter, all jobs are state.apply jobs
+
+    pKeys = pKeys.return[0].data.return.minions;
 
     let jobs = JobsPanel._jobsToArray(pData.return[0]);
     JobsPanel._sortJobs(jobs);
@@ -38,13 +59,13 @@ export class StateIssues extends Issues {
     }
 
     this.jobs = jobs;
-    // this is good only while "State" is the only issue-provider
+    // this is good only while "State" is the only issue-provider that uses play/pause
     pPanel.setPlayPauseButton(jobs.length === 0 ? "none" : "play");
 
-    this._updateNextJob(pPanel, pMsg);
+    this._updateNextJob(pPanel, pMsg, pKeys);
   }
 
-  _updateNextJob (pPanel, pMsg) {
+  _updateNextJob (pPanel, pMsg, pKeys) {
     if (!this.jobs) {
       return;
     }
@@ -58,7 +79,7 @@ export class StateIssues extends Issues {
 
     if (pPanel.playOrPause !== "play") {
       window.setTimeout(() => {
-        this._updateNextJob(pPanel, pMsg);
+        this._updateNextJob(pPanel, pMsg, pKeys);
       }, 1000);
       return;
     }
@@ -68,9 +89,9 @@ export class StateIssues extends Issues {
     const runnerJobsListJobPromise = this.api.getRunnerJobsListJob(job.id);
 
     runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
-      StateIssues._handleJobRunnerJobsListJob(pPanel, pRunnerJobsListJobData);
+      StateIssues._handleJobRunnerJobsListJob(pPanel, pRunnerJobsListJobData, pKeys);
       window.setTimeout(() => {
-        this._updateNextJob(pPanel, pMsg);
+        this._updateNextJob(pPanel, pMsg, pKeys);
       }, 100);
       return true;
     }, (pRunnerJobsListJobsMsg) => {
@@ -81,10 +102,16 @@ export class StateIssues extends Issues {
     });
   }
 
-  static _handleJobRunnerJobsListJob (pPanel, pJobData) {
+  static _handleJobRunnerJobsListJob (pPanel, pJobData, pKeys) {
     const jobData = pJobData.return[0];
 
     for (const minionId in jobData.Result) {
+
+      if (pKeys.indexOf(minionId) < 0) {
+        // this is no longer a valid minion
+        continue;
+      }
+
       const minionData = jobData.Result[minionId];
       if (minionData.out !== "highstate") {
         // never mind
@@ -102,15 +129,17 @@ export class StateIssues extends Issues {
           Issues.removeIssue(pPanel, "state", key);
           continue;
         }
-        const tr = Issues.addIssue(pPanel, "state", key);
-        if (stateData.__sls__) {
+        if (stateData.__sls__ && stateData.__id__) {
+          const tr = Issues.addIssue(pPanel, "state", key);
           Issues.addIssueMsg(tr, "State '" + stateData.__sls__ + "/" + stateData.__id__ + "' on '" + minionId + "' failed");
           Issues.addIssueCmd(tr, "Apply state", minionId, ["state.sls_id", stateData.__id__, "mods=", stateData.__sls__]);
-        } else {
+          Issues.addIssueNav(tr, "job", {"id": jobData.jid, "minionid": minionId});
+        } else if (stateData.__id__) {
           // really old minions do not fill __sls__
+          const tr = Issues.addIssue(pPanel, "state", key);
           Issues.addIssueMsg(tr, "State '" + stateData.__id__ + "' on '" + minionId + "' failed");
+          Issues.addIssueNav(tr, "job", {"id": jobData.jid, "minionid": minionId});
         }
-        Issues.addIssueNav(tr, "job", {"id": jobData.jid, "minionid": minionId});
       }
     }
   }

@@ -136,8 +136,8 @@ export class OutputHighstateTaskSaltGui {
 
     if (pTask["start_time"] !== undefined) {
       taskDiv.append(document.createElement("br"));
-      taskDiv.append(document.createTextNode(
-        indent + "Started at " + Output.dateTimeStr(pTask.start_time)));
+      const startTime = Output.dateTimeStr("1999, Sep 9 " + pTask.start_time, null, null, true);
+      taskDiv.append(document.createTextNode(indent + "Started at " + startTime));
     }
 
     if (pTask["duration"] !== undefined) {

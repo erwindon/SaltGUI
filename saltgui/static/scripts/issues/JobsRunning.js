@@ -29,9 +29,25 @@ export class JobsRunningIssues extends Issues {
 
   static _handleRunnerJobsActive (pPanel, pRunnerJobsActiveJobsData) {
     const allJobsDict = pRunnerJobsActiveJobsData.return[0];
+    const then = new Date();
+    // ignore jobs that were started less than 60 seconds ago
+    // so that we do not detect our own jobs; and
+    // so that we do not complain about trivial stuff
+    then.setTime(then.getTime() - 60000);
+    let thenStr = then.
+      toISOString().
+      replace(/[-:.A-Z]/g, "").
+      substring(0, 20);
+    while (thenStr.length < 20) {
+      thenStr += "0";
+    }
     for (const jobId in allJobsDict) {
+      if (jobId > thenStr) {
+        continue;
+      }
+      const job = allJobsDict[jobId];
       const tr = Issues.addIssue(pPanel, "active-jobs", jobId);
-      Issues.addIssueMsg(tr, "Job '" + jobId + "' is still running");
+      Issues.addIssueMsg(tr, "Job '" + jobId + "' (" + job.Function + ") is still running");
       Issues.addIssueNav(tr, "job", {"id": jobId});
       Issues.addIssueCmd(tr, "Terminate job", "*", ["saltutil.term_job", jobId]);
       Issues.addIssueCmd(tr, "Kill job", "*", ["saltutil.kill_job", jobId]);

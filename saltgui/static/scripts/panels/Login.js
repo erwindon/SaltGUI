@@ -66,7 +66,7 @@ export class LoginPanel extends Panel {
     img.src = "static/images/github.png";
     aa.append(img);
 
-    const txt = document.createTextNode("SaltGUI v1.27.0");
+    const txt = document.createTextNode("SaltGUI v1.28.0");
     aa.append(txt);
 
     form.append(aa);
@@ -242,10 +242,10 @@ export class LoginPanel extends Panel {
       this._showNoticeText("gray", "Not logged in", "notice_not_logged_in");
       break;
     case "session-cancelled":
-      this._showNoticeText("#F44336", "Session cancelled", "notice_session_cancelled");
+      this._showNoticeText("#F44336", "Session cancelled", "notice-session-cancelled");
       break;
     case "session-expired":
-      this._showNoticeText("#F44336", "Session expired", "notice_session_expired");
+      this._showNoticeText("#F44336", "Session expired", "notice-session-expired");
       break;
     case "logout":
       // gray because this is the result of a user action
@@ -301,7 +301,23 @@ export class LoginPanel extends Panel {
       // erase credentials since we don't do page-refresh
       this.usernameField.value = "";
       this.passwordField.value = "";
-      this.router.goTo("");
+      if (Utils.getStorageItem("session", "login-response") !== null) {
+        // we might have been logged out in this first second
+        // e.g. when clock between client and server differs more than the session timout
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("page")) {
+          // a redirect page is specified
+          const params = {};
+          for (const pair of urlParams.entries()) {
+            params[pair[0]] = pair[1];
+          }
+          const page = params["page"];
+          delete params["page"];
+          this.router.goTo(page, params);
+        } else {
+          this.router.goTo("");
+        }
+      }
     }, 1000);
   }
 
@@ -354,6 +370,9 @@ export class LoginPanel extends Panel {
     const dateTimeFractionDigits = wheelConfigValuesData.saltgui_datetime_fraction_digits;
     Utils.setStorageItem("session", "datetime_fraction_digits", JSON.stringify(dateTimeFractionDigits));
 
+    const dateTimeRepresentation = wheelConfigValuesData.saltgui_datetime_representation;
+    Utils.setStorageItem("session", "datetime_representation", dateTimeRepresentation);
+
     const toolTipMode = wheelConfigValuesData.saltgui_tooltip_mode;
     Utils.setStorageItem("session", "tooltip_mode", toolTipMode);
 
@@ -362,6 +381,9 @@ export class LoginPanel extends Panel {
 
     const motdHtml = wheelConfigValuesData.saltgui_motd_html;
     Utils.setStorageItem("session", "motd_html", motdHtml);
+
+    const customHelp = wheelConfigValuesData.saltgui_custom_command_help;
+    Utils.setStorageItem("session", "custom_command_help", customHelp);
 
     Router.updateMainMenu();
   }

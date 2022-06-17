@@ -151,9 +151,6 @@ export class JobsPanel extends Panel {
     this._hideJobs.push("pillar.obfuscate");
     this._hideJobs.push("ps.kill_pid");
     this._hideJobs.push("ps.proc_info");
-    this._hideJobs.push("runner.jobs.active");
-    this._hideJobs.push("runner.jobs.list_job");
-    this._hideJobs.push("runner.jobs.list_jobs");
     this._hideJobs.push("test.providers");
     this._hideJobs.push("test.version");
     this._hideJobs.push("saltutil.find_job");
@@ -173,12 +170,21 @@ export class JobsPanel extends Panel {
     this._hideJobs.push("schedule.modify");
     this._hideJobs.push("schedule.run_job");
     this._hideJobs.push("sys.doc");
+    // runner jobs
+    this._hideJobs.push("runner.doc.runner");
+    this._hideJobs.push("runner.doc.wheel");
+    this._hideJobs.push("runner.jobs.active");
+    this._hideJobs.push("runner.jobs.list_job");
+    this._hideJobs.push("runner.jobs.list_jobs");
+    this._hideJobs.push("runner.manage.versions");
+    // wheel jobs
     this._hideJobs.push("wheel.config.values");
     this._hideJobs.push("wheel.key.accept");
     this._hideJobs.push("wheel.key.delete");
     this._hideJobs.push("wheel.key.finger");
     this._hideJobs.push("wheel.key.list_all");
     this._hideJobs.push("wheel.key.reject");
+    this._hideJobs.push("wheel.minions.connected");
 
     // this was automatically executed by really old minions
     this._hideJobs.push("mine.update");
@@ -232,6 +238,12 @@ export class JobsPanel extends Panel {
   }
 
   static _jobsToArray (jobs) {
+    if (typeof jobs === "string") {
+      // typically when special returner is misconfigured
+      // the warning may help solve that too
+      console.warn(jobs);
+      return [];
+    }
     const keys = Object.keys(jobs);
     const newArray = [];
 

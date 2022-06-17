@@ -28,16 +28,17 @@ export class Issues {
     // remove the "loading info..." message
     pPanel.msg2.removeChild(pMsg);
 
+    const txt = Utils.txtZeroOneMany(
+      pPanel.table.tBodies[0].children.length,
+      "No issues", "{0} issue", "{0} issues");
+    pPanel.setMsg(txt);
+
     // any category still loading?
     if (pPanel.msg2.childNodes.length > 0) {
       // not yet
       return;
     }
 
-    const txt = Utils.txtZeroOneMany(
-      pPanel.table.tBodies[0].children.length,
-      "No issues", "{0} issue", "{0} issues");
-    pPanel.setMsg(txt);
     pPanel.setTableSortable("Description", "asc");
   }
 
