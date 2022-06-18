@@ -119,8 +119,7 @@ export class LoginPanel extends Panel {
     // and only while the code is on a branch
 
     // allow user to add any value they want
-    const saltAuthText = Utils.getStorageItem("local", "salt-auth-txt", "[]");
-    const saltAuth = JSON.parse(saltAuthText);
+    const saltAuth = Utils.getStorageItemList("local", "salt-auth-txt");
     this._addEauthSection("salt-auth.txt", saltAuth);
 
     this.eauthField.value = Utils.getStorageItem("local", "eauth", "pam");

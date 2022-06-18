@@ -62,11 +62,7 @@ export class PillarsMinionPanel extends Panel {
     }
 
     // collect the public pillars and compile their regexps
-    const publicPillarsText = Utils.getStorageItem("session", "public_pillars", "[]");
-    let publicPillars = JSON.parse(publicPillarsText);
-    if (!Array.isArray(publicPillars)) {
-      publicPillars = [];
-    }
+    const publicPillars = Utils.getStorageItemList("session", "public_pillars");
     for (let i = 0; i < publicPillars.length; i++) {
       try {
         publicPillars[i] = new RegExp(publicPillars[i]);

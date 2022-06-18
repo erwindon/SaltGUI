@@ -21,11 +21,7 @@ export class GrainsPanel extends Panel {
     this.setTableClickable();
 
     // collect the list of displayed extra grains
-    const previewGrainsText = Utils.getStorageItem("session", "preview_grains", "[]");
-    this.previewGrains = JSON.parse(previewGrainsText);
-    if (!Array.isArray(this.previewGrains)) {
-      this.previewGrains = [];
-    }
+    this.previewGrains = Utils.getStorageItemList("session", "preview_grains");
 
     // add the preview columns (before we sort the table)
     // the div is not added to the DOM yet

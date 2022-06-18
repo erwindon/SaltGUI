@@ -438,8 +438,7 @@ export class CommandBox {
     while (targetList.firstChild) {
       targetList.removeChild(targetList.firstChild);
     }
-    const nodeGroupsText = Utils.getStorageItem("session", "nodegroups", "[]");
-    const nodeGroups = JSON.parse(nodeGroupsText);
+    const nodeGroups = Utils.getStorageItemObject("session", "nodegroups");
 
     const optionConnected = document.createElement("option");
     optionConnected.value = "##connected";
@@ -451,7 +450,7 @@ export class CommandBox {
       targetList.appendChild(option);
     }
 
-    const minions = JSON.parse(Utils.getStorageItem("session", "minions", "[]"));
+    const minions = Utils.getStorageItemList("session", "minions");
     for (const minionId of minions.sort()) {
       const option = document.createElement("option");
       option.value = minionId;

@@ -5,9 +5,13 @@ import {Utils} from "../Utils.js";
 
 export class JobsPanel extends Panel {
 
-  // constructor (pKey) {
-  //   super(pKey);
-  // }
+  constructor (pKey) {
+    super(pKey);
+
+    // collect the list of hidden/shown functions
+    this._showJobs = Utils.getStorageItemList("session", "show_jobs");
+    this._hideJobs = Utils.getStorageItemList("session", "hide_jobs");
+  }
 
   onShow (cnt) {
     const runnerJobsListJobsPromise = this.api.getRunnerJobsListJobs();
@@ -115,19 +119,6 @@ export class JobsPanel extends Panel {
 
     const jobs = JobsPanel._jobsToArray(pData.return[0]);
     JobsPanel._sortJobs(jobs);
-
-    // collect the list of hidden minions
-    const hideJobsText = Utils.getStorageItem("session", "hide_jobs", "[]");
-    this._hideJobs = JSON.parse(hideJobsText);
-    if (!Array.isArray(this._hideJobs)) {
-      this._hideJobs = [];
-    }
-    // collect the list of hidden minions
-    const showJobsText = Utils.getStorageItem("session", "show_jobs", "[]");
-    this._showJobs = JSON.parse(showJobsText);
-    if (!Array.isArray(this._showJobs)) {
-      this._showJobs = [];
-    }
 
     // These jobs are likely started by the SaltGUI
     // do not display them
