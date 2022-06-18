@@ -185,9 +185,7 @@ export class JobsPanel extends Panel {
     const numberOfJobsPresent = jobs.length;
     for (const job of jobs) {
 
-      // Arrays.includes() is only available from ES7/2016
-      if (this._hideJobs.indexOf(job.Function) < 0 ||
-         this._showJobs.indexOf(job.Function) >= 0) {
+      if (Utils.isIncluded(job.Function, this._showJobs, this._hideJobs)) {
         numberOfJobsEligible += 1;
       } else if (pMaxNumberOfJobs !== 99999) {
         continue;

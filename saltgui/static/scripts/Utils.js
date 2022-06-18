@@ -600,4 +600,14 @@ export class Utils {
     console.error(...pStr);
     /* eslint-enable no-console */
   }
+
+  static isIncluded (pItem, pAllowList, pDenyList) {
+    if (pAllowList && pAllowList.length > 0) {
+      return pAllowList.includes(pItem);
+    }
+    if (pDenyList && pDenyList.length > 0) {
+      return !pDenyList.includes(pItem);
+    }
+    return true;
+  }
 }
