@@ -305,24 +305,100 @@ export class HighStatePanel extends Panel {
 
       if (typeof minionResult.return !== "object" || Array.isArray(minionResult.return)) {
         Utils.addErrorToTableCell(tasksTd, minionResult.return);
-      } else {
-        const keys = Object.keys(minionResult.return);
-        for (const key of keys) {
-          const span = Utils.createSpan("", Character.BLACK_CIRCLE);
-          span.style.backgroundColor = "black";
+        minionTr.appendChild(tasksTd);
+        this._afterJob();
+        return;
+      }
 
-          const data = minionResult.return[key];
-          if (typeof data !== "object") {
-            continue;
-          }
-          span.addEventListener("click", (pClickEvent) => {
-            const cmdArr = ["state.sls_id", data.__id__, "mods=", data.__sls__];
-            this.runCommand("", minionId, cmdArr);
-            pClickEvent.stopPropagation();
-          });
-          Output._setTaskToolTip(span, data);
-          tasksTd.append(span);
+      const keys = Object.keys(minionResult.return);
+
+      const stats = {};
+      for (const key of keys) {
+
+        const data = minionResult.return[key];
+        if (typeof data !== "object") {
+          continue;
         }
+
+        // always create the span for the state
+        // we may use it for presentation (keys.length <= 20); or
+        // for information (keys.length > 20)
+
+        const span = Utils.createSpan("", Character.BLACK_CIRCLE);
+        span.style.backgroundColor = "black";
+
+        // this also sets the span's class(es)
+        Output._setTaskToolTip(span, data);
+
+        if (keys.length > 20) {
+          let statKey = "";
+          let prio = 0;
+
+          // statkeys are sortable on their priority
+          if (span.classList.contains("task-skipped")) {
+            statKey = "task-skipped";
+            prio = 31;
+          } else if (span.classList.contains("task-success")) {
+            statKey = "task-success";
+            prio = 41;
+          } else if (span.classList.contains("task-failure")) {
+            statKey = "task-failure";
+            prio = 21;
+          } else {
+            statKey = "task-unknown";
+            prio = 11;
+          }
+
+          if (span.classList.contains("task-changes")) {
+            prio -= 1;
+            statKey += " task-changes";
+          }
+
+          // allow keys to be sortable
+          statKey = prio + statKey;
+
+          if (statKey in stats) {
+            stats[statKey] += 1;
+          } else {
+            stats[statKey] = 1;
+          }
+
+          continue;
+        }
+
+        span.addEventListener("click", (pClickEvent) => {
+          const cmdArr = ["state.sls_id", data.__id__, "mods=", data.__sls__];
+          this.runCommand("", minionId, cmdArr);
+          pClickEvent.stopPropagation();
+        });
+
+        tasksTd.append(span);
+      }
+
+      if (Object.keys(stats).length > 0) {
+
+        const summarySpan = Utils.createSpan("tooltip");
+
+        let sep = "";
+
+        // show the summary when one was build up
+        for (const statKey of Object.keys(stats).sort()) {
+          const sepSpan = Utils.createSpan("", sep + stats[statKey] + Character.MULTIPLICATION_SIGN);
+          summarySpan.append(sepSpan);
+          sep = " ";
+
+          // remove the priority indicator from the key
+          const itemSpan = Utils.createSpan(statKey.substring(2), Character.BLACK_CIRCLE);
+          summarySpan.append(itemSpan);
+        }
+
+        // allow similar navigation, but just only to the job level
+        summarySpan.addEventListener("click", (pClickEvent) => {
+          this.router.goTo("job", {"id": pJobId, "minionid": minionId});
+          pClickEvent.stopPropagation();
+        });
+
+        tasksTd.append(summarySpan);
       }
 
       minionTr.appendChild(tasksTd);
