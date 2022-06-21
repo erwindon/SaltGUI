@@ -38,4 +38,4 @@ rest_cherrypy:
 
 **Note: With this configuration, the user has access to all salt modules available, maybe this is not what you want**
 
-Please read the [Permissions](docs/PERMISSIONS.md) page for more information.
+Please read the [Permissions](https://github.com/erwindon/SaltGUI/blob/master/guide/PERMISSIONS.md) page for more information.
