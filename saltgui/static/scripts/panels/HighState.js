@@ -284,7 +284,7 @@ export class HighStatePanel extends Panel {
         functionText = functionText.substring(0, maxTextLength) + "...";
       }
       const functionField = Utils.createTd("function", functionText);
-      functionField.cmd = functionText;
+      functionField.cmd = jobData.Function + argumentsText;
       minionTr.appendChild(functionField);
 
       /* eslint-enable max-depth */
