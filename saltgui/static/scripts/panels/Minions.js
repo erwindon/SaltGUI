@@ -394,30 +394,28 @@ export class MinionsPanel extends Panel {
       ["CVE-2020-11651", MASTER, ["201[4-8]"]],
       ["CVE-2020-11651", MASTER, ["2019", "[0-1]"]],
       ["CVE-2020-11651", MASTER, ["2019", "2", "[0-3]"]],
-      ["CVE-2020-11651", MASTER, ["3000", null]],
       ["CVE-2020-11651", MASTER, ["3000", "[0-1]"]],
 
       ["CVE-2020-11652", MASTER, ["0"]],
       ["CVE-2020-11652", MASTER, ["201[4-8]"]],
       ["CVE-2020-11652", MASTER, ["2019", "[0-1]"]],
       ["CVE-2020-11652", MASTER, ["2019", "2", "[0-3]"]],
-      ["CVE-2020-11652", MASTER, ["3000", null]],
       ["CVE-2020-11652", MASTER, ["3000", "[0-1]"]],
 
       ["CVE-2020-16846", MASTER + MINION, ["0"]],
       ["CVE-2020-16846", MASTER + MINION, ["201[4-9]"]],
       ["CVE-2020-16846", MASTER + MINION, ["300[0-1]"]],
-      ["CVE-2020-16846", MASTER + MINION, ["3002", null]],
+      ["CVE-2020-16846", MASTER + MINION, ["3002", "0"]],
 
       ["CVE-2020-17490", MASTER + MINION, ["0"]],
       ["CVE-2020-17490", MASTER + MINION, ["201[4-9]"]],
       ["CVE-2020-17490", MASTER + MINION, ["300[0-1]"]],
-      ["CVE-2020-17490", MASTER + MINION, ["3002", null]],
+      ["CVE-2020-17490", MASTER + MINION, ["3002", "0"]],
 
       ["CVE-2020-25592", MASTER + MINION, ["0"]],
       ["CVE-2020-25592", MASTER + MINION, ["201[4-9]"]],
       ["CVE-2020-25592", MASTER + MINION, ["300[0-1]"]],
-      ["CVE-2020-25592", MASTER + MINION, ["3002", null]],
+      ["CVE-2020-25592", MASTER + MINION, ["3002", "0"]],
 
       ["CVE-2020-28243", MINION, ["0"]],
       ["CVE-2020-28243", MINION, ["201[4-9]"]],
@@ -503,6 +501,12 @@ export class MinionsPanel extends Panel {
     }
 
     const items = pVersion.split(".");
+
+    if (items.length == 1 && items[0].startsWith("30")) {
+       // pretend that the main release of the 30xx series
+       // is actually patch "0"
+       items.push("0");
+    }
 
     // ["CVE-2020-25592", MASTER+MINION, ["3002", null] ],
     const entries = MinionsPanel._getCveData();
