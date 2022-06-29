@@ -346,6 +346,9 @@ export class LoginPanel extends Panel {
     const showJobs = wheelConfigValuesData.saltgui_show_jobs;
     Utils.setStorageItem("session", "show_jobs", JSON.stringify(showJobs));
 
+    const syndicInfo = wheelConfigValuesData.order_masters + "-" + wheelConfigValuesData.syndic_master;
+    Utils.setStorageItem("session", "syndic_info", syndicInfo);
+
     let nodeGroups = wheelConfigValuesData.nodegroups;
     // Even when not set, the api server gives this an actual value "{}" here.
     // Let's assume the user never sets that value. Sounds reasonable because

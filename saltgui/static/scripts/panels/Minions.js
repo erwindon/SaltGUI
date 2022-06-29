@@ -93,12 +93,6 @@ export class MinionsPanel extends Panel {
       this._addMenuItemShowPillars(menu, minionId);
       this._addMenuItemShowSchedules(menu, minionId);
       this._addMenuItemShowBeacons(menu, minionId);
-
-      minionTr.addEventListener("click", (pClickEvent) => {
-        const cmdArr = ["state.apply"];
-        this.runCommand("", minionId, cmdArr);
-        pClickEvent.stopPropagation();
-      });
     }
 
     Utils.setStorageItem("session", "minions_pre_length", keys.minions_pre.length);
@@ -197,6 +191,12 @@ export class MinionsPanel extends Panel {
     this._addMenuItemShowPillars(menu, pMinionId);
     this._addMenuItemShowSchedules(menu, pMinionId);
     this._addMenuItemShowBeacons(menu, pMinionId);
+
+    minionTr.addEventListener("click", (pClickEvent) => {
+      const cmdArr = ["state.apply"];
+      this.runCommand("", pMinionId, cmdArr);
+      pClickEvent.stopPropagation();
+    });
   }
 
   _addMenuItemStateApply (pMenu, pMinionId) {

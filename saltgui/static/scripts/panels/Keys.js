@@ -27,6 +27,7 @@ export class KeysPanel extends Panel {
       "The content of this page is",
       "automatically refreshed."
     ]);
+    this.addWarningField();
     this.addTable(["Minion", "Status", "-menu-", "Fingerprint"], "data-list-keys");
     this.setTableSortable("Status", "asc");
     this.addMsg();
@@ -39,6 +40,8 @@ export class KeysPanel extends Panel {
   onShow () {
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const wheelKeyFingerPromise = this.api.getWheelKeyFinger();
+
+    this.showSyndicInfo(false);
 
     this.loadMinionsTxt();
 
@@ -58,6 +61,40 @@ export class KeysPanel extends Panel {
       Utils.ignorePromise(wheelKeyFingerPromise);
       return false;
     });
+  }
+
+  showSyndicInfo (pSyndicEventFound) {
+    const syndicInfo = Utils.getStorageItem("session", "syndic_info", "false-masterofmasters");
+    if (syndicInfo === "true-masterofmasters") {
+      this.setWarningText(
+        "This overview contains only the keys of minions that are connected to this salt-master or to one of its backup instances." +
+        " Keys for minions that are connected to other salt-masters are not shown in this SaltGUI." +
+        " However, commands and information retrieval should be possible for all minions." +
+        " This salt-master is commanding all other salt-masters and salt-minions." +
+        " The minion-list should be complete, but indirectly reachable minions may show a small delay.");
+    } else if (syndicInfo.startsWith("true-")) {
+      this.setWarningText(
+        "This overview contains only the keys of minions that are connected to this salt-master or to one of its backup instances." +
+        " Keys for minions that are connected to other salt-masters are not shown in this SaltGUI." +
+        " Commands and information retrieval should be possible for all directly and indirectly reachable minions." +
+        " This salt-master is commanded by another salt-master, and it is commanding other salt-masters and salt-minions." +
+        " The minion-list will be incomplete, and indirectly reachable minions may show a small delay.");
+    } else if (syndicInfo === "false-masterofmasters") {
+      if (pSyndicEventFound) {
+        this.setWarningText(
+          "This overview contains only the keys of minions that are connected to this salt-master or to one of its backup instances." +
+          " Keys for minions that are connected to other salt-masters are not shown in this SaltGUI." +
+          " Commands and information retrieval should be possible for all directly reachable minions." +
+          " This salt-master is commanded by another salt-master, and it is not commanding other salt-masters and salt-minions." +
+          " The minion-list will be incomplete.");
+      } else {
+        // we are not sure yet, this may be regular standalone salt-master
+      }
+    } else if (syndicInfo.startsWith("false-")) {
+      console.warn("Strange value '" + syndicInfo + "' for syndicInfo, please review the relevant settings");
+    } else {
+      console.error("Unknown value '" + syndicInfo + "' for syndicInfo, please report as issue for SaltGUI");
+    }
   }
 
   _handleWheelKeyFinger (pWheelKeyFingerData) {
@@ -676,5 +713,9 @@ export class KeysPanel extends Panel {
 
   handleSaltKeyEvent (pData) {
     this.handleSaltAuthEvent(pData);
+  }
+
+  handleSyndicEvent () {
+    this.showSyndicInfo(true);
   }
 }
