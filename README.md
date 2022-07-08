@@ -136,6 +136,7 @@ With `utc-localtime`, the UTC date and time are shown. Additionally, the local t
 With `local-utctime`, the local date and time are shown. Additionally, the UTC time (not the UTC date) is shown.
 In all cases, a tooltip is added to a date+time field that shows the full representation of the date and time in both the local timezone and in UTC.
 
+
 ## Templates
 SaltGUI supports command templates for easier command entry into the command-box.
 The menu item for that becomes visible there when you define one or more templates
@@ -178,6 +179,7 @@ saltgui_templates:
 When at least one template is assigned to a category, then you can select a template category before
 selecting the actual category. Otherwise that choice remains hidden. Templates can be in multiple categories
 when a list of categories is assigned.
+
 
 ## Jobs
 SaltGUI shows a maximum of 7 jobs in on the right-hand-side of the screen.
@@ -233,6 +235,7 @@ saltgui_public_pillars:
     - pub_.*
 ```
 
+
 ## Custom command documentation
 A custom HTML help text can be shown from the "Manual Run" overlay.
 
@@ -249,6 +252,7 @@ saltgui_custom_command_help: |
 ```
 - Hover the documentation icon (`📖︎`) near the command input field and select `Show custom help`
 
+
 ## Message-of-the-day
 A message-of-the-day (motd) can be added to the login screen.
 It can be used for any information, e.g.:
@@ -261,6 +265,14 @@ It can be used for any information, e.g.:
 The text is stored in file `saltgui/static/salt-motd.txt` or `saltgui/static/salt-motd.html`. The first must be pre-formatted text only. The second one can contain full HTML text. Both are shown when they are present. Note that the message should not contain sensitive data, as its content is shown before logging in.
 
 Alternatively, or additionally, the text can be retrieved from the `master` file entries `saltgui_motd_txt` and `saltgui_motd_html`. These entries can contain sensitive information because its content can only be retrieved after login. But it is still recommended to not let the text contain any sensitive data.
+
+
+## Multi master setup
+When multiple salt-masters are in use in a multi-master setup, an installation of salt-api is needed per salt-master. And SaltGUI must have an installation per salt-api installation.
+No specific extra configuration is needed for SaltGUI in this scenario.
+But note that SaltGUI cannot bypass the restrictions that are implied by a multi-master setup.
+e.g. each salt-master only holds the job history of the jobs that are initiated from that salt-master.
+For multi-master setup, see also https://docs.saltproject.io/en/latest/topics/tutorials/multimaster.html.
 
 
 ## Reduced menus
