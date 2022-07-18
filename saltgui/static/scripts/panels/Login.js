@@ -340,10 +340,15 @@ export class LoginPanel extends Panel {
     const previewGrains = wheelConfigValuesData.saltgui_preview_grains;
     Utils.setStorageItem("session", "preview_grains", JSON.stringify(previewGrains));
 
-    const hideJobs = wheelConfigValuesData.saltgui_hide_jobs;
-    Utils.setStorageItem("session", "hide_jobs", JSON.stringify(hideJobs));
+    const showSaltEnvs = wheelConfigValuesData.saltgui_show_saltenvs;
+    Utils.setStorageItem("session", "show_saltenvs", JSON.stringify(showSaltEnvs));
+    const hideSaltEnvs = wheelConfigValuesData.saltgui_hide_saltenvs;
+    Utils.setStorageItem("session", "hide_saltenvs", JSON.stringify(hideSaltEnvs));
+
     const showJobs = wheelConfigValuesData.saltgui_show_jobs;
     Utils.setStorageItem("session", "show_jobs", JSON.stringify(showJobs));
+    const hideJobs = wheelConfigValuesData.saltgui_hide_jobs;
+    Utils.setStorageItem("session", "hide_jobs", JSON.stringify(hideJobs));
 
     let nodeGroups = wheelConfigValuesData.nodegroups;
     // Even when not set, the api server gives this an actual value "{}" here.
