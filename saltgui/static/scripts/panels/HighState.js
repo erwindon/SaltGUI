@@ -36,6 +36,10 @@ export class HighStatePanel extends Panel {
     this.setTableSortable("Minion", "asc");
     this.setTableClickable();
     this.addMsg();
+
+    // collect the list of hidden/shown environments
+    this._showSaltEnvs = Utils.getStorageItemList("session", "show_saltenvs");
+    this._hideSaltEnvs = Utils.getStorageItemList("session", "hide_saltenvs");
   }
 
   onShow () {
@@ -211,6 +215,30 @@ export class HighStatePanel extends Panel {
     }
   }
 
+  static _getJobNamedParam (pParamName, pJobData) {
+    const args = pJobData.Arguments;
+    if (!args) {
+      return null;
+    }
+    for (const arg of args) {
+      // for jobs that were started using 'salt-call'
+      if (typeof arg === "string" && arg.startsWith(pParamName + "=")) {
+        return arg.replace(/^[^=]*=/, "");
+      }
+      // for jobs that were started using 'salt'
+      if (typeof arg !== "object" || Array.isArray(arg)) {
+        continue;
+      }
+      if (arg.__kwarg__ !== true) {
+        continue;
+      }
+      if (arg[pParamName] !== undefined) {
+        return arg[pParamName];
+      }
+    }
+    return null;
+  }
+
   _handleJobsRunnerJobsListJob (pJobId, pJobData) {
 
     if (this.showErrorRowInstead(pJobData)) {
@@ -231,6 +259,12 @@ export class HighStatePanel extends Panel {
     }
 
     const jobData = pJobData.return[0];
+
+    const saltEnv = HighStatePanel._getJobNamedParam("saltenv", jobData);
+    if (!Utils.isIncluded(saltEnv, this._showSaltEnvs, this._hideSaltEnvs)) {
+      this._afterJob();
+      return;
+    }
 
     for (const minionId in jobData.Result) {
       const trId = Utils.getIdFromMinionId(minionId);

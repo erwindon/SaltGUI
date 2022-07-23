@@ -602,6 +602,9 @@ export class Utils {
   }
 
   static isIncluded (pItem, pAllowList, pDenyList) {
+    if (!pItem) {
+      return true;
+    }
     if (pAllowList && pAllowList.length > 0) {
       return pAllowList.includes(pItem);
     }
