@@ -451,7 +451,7 @@ export class CommandBox {
     }
 
     const minions = Utils.getStorageItemList("session", "minions");
-    for (const minionId of minions.sort()) {
+    for (const minionId of [...minions].sort()) {
       const option = document.createElement("option");
       option.value = minionId;
       targetList.appendChild(option);
