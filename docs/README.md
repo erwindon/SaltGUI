@@ -6,9 +6,9 @@ The version tagged `release` is the latest released version. The version `master
 
 
 ## Screenshots
-![overview](/docs/screenshots/overview.png)
+![overview](screenshots/overview.png)
 
-![job](/docs/screenshots/job.png)
+![job](screenshots/job.png)
 
 
 ## Features
