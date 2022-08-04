@@ -532,10 +532,10 @@ export class MinionsPanel extends Panel {
 
     const items = pVersion.split(".");
 
-    if (items.length == 1 && items[0].startsWith("30")) {
-       // pretend that the main release of the 30xx series
-       // is actually patch "0"
-       items.push("0");
+    if (items.length === 1 && items[0].startsWith("30")) {
+      // pretend that the main release of the 30xx series
+      // is actually patch "0"
+      items.push("0");
     }
 
     // ["CVE-2020-25592", MASTER+MINION, ["3002", null] ],
