@@ -10,6 +10,7 @@ import {TargetType} from "../TargetType.js";
 import {Utils} from "../Utils.js";
 
 const MAX_HIGHSTATE_JOBS = 10;
+const MAX_HIGHSTATE_STATES = 20;
 
 export class HighStatePanel extends Panel {
 
@@ -25,6 +26,7 @@ export class HighStatePanel extends Panel {
     this.addHelpButton([
       "This panel shows the latest state.highstate or state.apply job for each minion.",
       "Only the latest " + MAX_HIGHSTATE_JOBS + " jobs are verified.",
+      "With more than " + MAX_HIGHSTATE_STATES + " states, a summary is shown instead.",
       "Click on an individual state to re-apply only that state."
     ]);
     this.addTable(["Minion", "State", "Latest JID", "Target", "Function", "Start Time", "-menu-", "States"]);
@@ -321,16 +323,19 @@ export class HighStatePanel extends Panel {
         }
 
         // always create the span for the state
-        // we may use it for presentation (keys.length <= 20); or
-        // for information (keys.length > 20)
+        // we may use it for presentation (keys.length <= MAX_HIGHSTATE_STATES); or
+        // for information (keys.length > MAX_HIGHSTATE_STATES)
 
-        const span = Utils.createSpan("", Character.BLACK_CIRCLE);
+        const span = Utils.createSpan("task", Character.BLACK_CIRCLE);
         span.style.backgroundColor = "black";
 
         // this also sets the span's class(es)
         Output._setTaskToolTip(span, data);
 
-        if (keys.length > 20) {
+        // add class here, because it gets lost in _setTaskToolTip
+        span.classList.add("task");
+
+        if (keys.length > MAX_HIGHSTATE_STATES) {
           let statKey = "";
           let prio = 0;
 
@@ -389,6 +394,8 @@ export class HighStatePanel extends Panel {
 
           // remove the priority indicator from the key
           const itemSpan = Utils.createSpan(statKey.substring(2), Character.BLACK_CIRCLE);
+          itemSpan.classList.add("tasksummary");
+          itemSpan.style.backgroundColor = "black";
           summarySpan.append(itemSpan);
         }
 

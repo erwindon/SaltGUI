@@ -63,11 +63,13 @@ td.tasks span {
   padding-bottom: 3px;
 }
 
-td.tasks span:first-child {
+td.tasks span.task:first-child,
+td.tasks span.tasksummary {
   padding-left: 2px;
 }
 
-td.tasks span:last-child {
+td.tasks span.task:last-child,
+td.tasks span.tasksummary {
   padding-right: 2px;
 }
 
