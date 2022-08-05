@@ -1,14 +1,16 @@
 # SaltGUI
 
-A new open source web interface for managing a SaltStack server. Built using vanilla ES6 and implemented as a wrapper around the rest_cherrypy server.
+SaltGUI is an open source web interface for managing a SaltStack server and its minions. Built using vanilla ES6 and implemented as a wrapper around the rest_cherrypy server a.k.a. salt-api.
 
 The version tagged `release` is the latest released version. The version `master` should be fine, but it may contain changes that are not yet in these release-notes.
 
+See [SaltGUI documentation](https://erwindon.github.io/SaltGUI/) for the complete documentation.
+
 
 ## Screenshots
-![overview](/docs/screenshots/overview.png)
+![overview](screenshots/overview.png)
 
-![job](/docs/screenshots/job.png)
+![job](screenshots/job.png)
 
 
 ## Features

@@ -132,6 +132,12 @@ export class Router {
         pClickEvent.stopPropagation();
       });
 
+    document.getElementById("docu").
+      addEventListener("click", (pClickEvent) => {
+        window.open("https://erwindon.github.io/SaltGUI/", "_blank");
+        pClickEvent.stopPropagation();
+      });
+
     addEventListener("popstate", (popstate) => {
       const hash = popstate.target.location.hash.replace(/^#/, "");
       const search = popstate.target.location.search;
