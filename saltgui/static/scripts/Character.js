@@ -9,6 +9,7 @@ export class Character {
     // VS16 = request emoji representation
     Character._VARIATION_SELECTOR_16 = "\uFE0F";
 
+    Character.MULTIPLICATION_SIGN = "\u00D7";
     Character.NO_BREAK_SPACE = "\u00A0";
     Character.NON_BREAKING_HYPHEN = "\u2011";
     Character.HORIZONTAL_ELLIPSIS = "\u2026";
