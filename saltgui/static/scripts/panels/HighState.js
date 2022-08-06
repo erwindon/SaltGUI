@@ -24,6 +24,9 @@ export class HighStatePanel extends Panel {
     this.addPanelMenu();
     this._addMenuItemStateApply(this.panelMenu, "*");
     this._addMenuItemStateApplyTest(this.panelMenu, "*");
+    this.addSettingsMenu();
+    this._addMenuItemUseStateHighstate();
+    this._addMenuItemUseStateApply();
     this.addSearchButton();
     this.addPlayPauseButton();
     this.addHelpButton([
@@ -40,17 +43,30 @@ export class HighStatePanel extends Panel {
 
   onShow () {
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
-    const runnerJobsListJobsPromise = this.api.getRunnerJobsListJobs(["state.apply", "state.highstate"]);
+
+    const cmdList = [];
+    if (Utils.getStorageItem("local", "use_state_highstate", "true") === "true") {
+      cmdList.push("state.highstate");
+    }
+    if (Utils.getStorageItem("local", "use_state_apply", "true") === "true") {
+      cmdList.push("state.apply");
+    }
+
+    const runnerJobsListJobsPromise = this.api.getRunnerJobsListJobs(cmdList);
 
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       this._handleMinionsWheelKeyListAll(pWheelKeyListAllData);
-      runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
-        this._handleHighstateRunnerJobsListJobs(pRunnerJobsListJobsData);
-        return true;
-      }, (pRunnerJobsListJobsMsg) => {
-        this._handleHighstateRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
-        return false;
-      });
+      if (cmdList.length === 0) {
+        this._handleHighstateRunnerJobsListJobs({"return": [{}]});
+      } else {
+        runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
+          this._handleHighstateRunnerJobsListJobs(pRunnerJobsListJobsData);
+          return true;
+        }, (pRunnerJobsListJobsMsg) => {
+          this._handleHighstateRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
+          return false;
+        });
+      }
       return true;
     }, (pWheelKeyListAllMsg) => {
       this._handleMinionsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
@@ -71,6 +87,32 @@ export class HighStatePanel extends Panel {
       const cmdArr = ["state.apply", "test=", true];
       this.runCommand("", pMinionId, cmdArr);
     });
+  }
+
+  _addMenuItemUseStateHighstate () {
+    this.settingsMenu.addMenuItem(
+      () => {
+        const stateHighstateFlag = Utils.getStorageItem("local", "use_state_highstate", "true");
+        return (stateHighstateFlag === "true" ? Character.HEAVY_CHECK_MARK + Character.NO_BREAK_SPACE : "") + "Include state.highstate";
+      }, () => {
+        const stateHighstateFlag = Utils.getStorageItem("local", "use_state_highstate", "true");
+        Utils.setStorageItem("local", "use_state_highstate", stateHighstateFlag === "false" ? "true" : "false");
+        this.clearPanel();
+        this.onShow();
+      });
+  }
+
+  _addMenuItemUseStateApply () {
+    this.settingsMenu.addMenuItem(
+      () => {
+        const stateApplyFlag = Utils.getStorageItem("local", "use_state_apply", "true");
+        return (stateApplyFlag === "true" ? Character.HEAVY_CHECK_MARK + Character.NO_BREAK_SPACE : "") + "Include state.apply";
+      }, () => {
+        const stateApplyFlag = Utils.getStorageItem("local", "use_state_apply", "true");
+        Utils.setStorageItem("local", "use_state_apply", stateApplyFlag === "false" ? "true" : "false");
+        this.clearPanel();
+        this.onShow();
+      });
   }
 
   _handleMinionsWheelKeyListAll (pWheelKeyListAll) {
