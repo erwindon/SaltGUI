@@ -215,10 +215,10 @@ export class HighStatePanel extends Panel {
     }
   }
 
-  static _getJobNamedParam (pParamName, pJobData) {
+  static _getJobNamedParam (pParamName, pJobData, pDefaultValue) {
     const args = pJobData.Arguments;
     if (!args) {
-      return null;
+      return pDefaultValue;
     }
     for (const arg of args) {
       // for jobs that were started using 'salt-call'
@@ -236,7 +236,7 @@ export class HighStatePanel extends Panel {
         return arg[pParamName];
       }
     }
-    return null;
+    return pDefaultValue;
   }
 
   _handleJobsRunnerJobsListJob (pJobId, pJobData) {
@@ -260,7 +260,7 @@ export class HighStatePanel extends Panel {
 
     const jobData = pJobData.return[0];
 
-    const saltEnv = HighStatePanel._getJobNamedParam("saltenv", jobData);
+    const saltEnv = HighStatePanel._getJobNamedParam("saltenv", jobData, "default");
     if (!Utils.isIncluded(saltEnv, this._showSaltEnvs, this._hideSaltEnvs)) {
       this._afterJob();
       return;

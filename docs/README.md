@@ -260,7 +260,7 @@ saltgui_hide_saltenvs:
     - env3
 ```
 Typically only one of these variables should be set.
-Jobs that were started without the `saltenv` parameter are always shown.
+Jobs that were started without the `saltenv` parameter are, for this purpose only, assumed to use the value `default` for this parameter. This allows these jobs to be hidden/showed using the same mechanism. SaltGUI does not replicate the internal logic of the salt-master and/or the salt-minion to determine which saltenv would actually have been used for such jobs.
 
 ## Custom command documentation
 A custom HTML help text can be shown from the "Manual Run" overlay.
