@@ -1,3 +1,7 @@
+---
+layout: none
+title: CONTRIBUTING
+---
 Contributions to the SaltGUI projects are welcome!
 This can either be through a pull-request (PR) or by creating an issue with an idea.
 

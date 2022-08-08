@@ -1,3 +1,7 @@
+---
+layout: none
+title: PERMISSIONS
+---
 # Permission settings
 
 What users can do with SaltGUI is configured in salt using the `external_auth` configuration directive.

@@ -1,3 +1,7 @@
+---
+layout: none
+title: LICENSE
+---
 The MIT License (MIT)
 Copyright (c) 2016, 2017, 2018 Oliver Dunk, Martijn Jacobs, Erwin Dondorp
 

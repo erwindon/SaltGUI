@@ -1,2 +1,5 @@
-theme: jekyll-theme-minimal
-title: ""
+include:
+  - CONTRIBUTING.md
+  - LICENSE.md
+  - PERMISSIONS.md
+  - README.md

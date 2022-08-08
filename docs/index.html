@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>SaltGUI - documentation</title>
+		<link rel="stylesheet" href="style.css">
+		<link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+		<script type="text/javascript">
+			function newContent(name) {
+				const content = new XMLHttpRequest();
+				content.open("GET", name + ".html", true);
+				content.send();
+				content.onreadystatechange = function() {
+					if (content.readyState === 4 && content.status === 200) {
+						document.getElementById("fr").innerHTML = content.responseText;
+						const links = document.querySelectorAll("header a");
+						for (const link of links) {
+							if (link.innerText === name) {
+								link.style.fontWeight = "bold";
+							} else {
+								link.style.fontWeight = "normal";
+							}
+						}
+					}
+				}
+			}
+			function addLink(name) {
+				const theDiv = document.getElementById("links");
+				const p = document.createElement("p");
+				const a = document.createElement("a");
+				a.innerText = name;
+				a.style.cursor = "pointer";
+				a.onclick = function(){ newContent(name); };
+				p.appendChild(a);
+				theDiv.appendChild(p);
+			}
+		</script>
+	</head>
+	<body>
+		<div class="wrapper">
+			<header>
+				<h1><a href="https://erwindon.github.io/SaltGUI/">SaltGUI</a></h1>
+				<p>A web interface for managing SaltStack based infrastructure.</p>
+				<p class="view"><a href="https://github.com/erwindon/SaltGUI">View the Project on GitHub <small>erwindon/SaltGUI</small></a></p>
+				<div id="links"/>
+			</header>
+
+			<section id="fr">
+			</section>
+
+			<footer>
+				<p>This project is maintained by <a href="https://github.com/erwindon">erwindon</a></p>
+				<p><small>Hosted on GitHub Pages</br/>Theme derived from <a href="https://github.com/orderedlist/minimal">orderedlist/minimal</a></small></p>
+			</footer>
+		</div>
+		<script src="assets/js/scale.fix.js"></script>
+		<script type="text/javascript">
+			addLink("README");
+			newContent("README");
+			addLink("PERMISSIONS");
+			addLink("CONTRIBUTING");
+			addLink("LICENSE");
+		</script>
+	</body>
+</html>
+<!-- vim:set ts=4: -->
