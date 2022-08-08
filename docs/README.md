@@ -52,7 +52,7 @@ external_auth:
       - '@jobs'
 ```
 - See `docs/PERMISSIONS.md` for more restricted security configurations.
-- The username 'saltuser1' is only an example. Generic accounts are not recommended, use personal accounts instead. Or use a user-group, see https://docs.saltproject.io/en/latest/topics/eauth/index.html for details.
+- The username 'saltuser1' is only an example. Generic accounts are not recommended, use personal accounts instead. Or use a user-group, see [EAUTH](https://docs.saltproject.io/en/latest/topics/eauth/index.html) for details.
 - Multiple entries like `saltuser1` can be added when you have multiple users.
 - `saltuser1` is a unix (PAM) user, make sure it exists or create a new one.
 - At the bottom of this file, also setup the rest_cherrypi server to access SaltGUI from "http://localhost:3333" (or on any of the hostnames that the server has):
@@ -278,7 +278,7 @@ When multiple salt-masters are in use in a multi-master setup, an installation o
 No specific extra configuration is needed for SaltGUI in this scenario.
 But note that SaltGUI cannot bypass the restrictions that are implied by a multi-master setup.
 e.g. each salt-master only holds the job history of the jobs that are initiated from that salt-master.
-For multi-master setup, see also https://docs.saltproject.io/en/latest/topics/tutorials/multimaster.html.
+For multi-master setup, see also [Multi Master tutorial](https://docs.saltproject.io/en/latest/topics/tutorials/multimaster.html).
 
 
 ## Reduced menus
@@ -438,6 +438,6 @@ Open a PR! Try to use no dependencies where possible, as vanilla JS is the aim. 
 This excellent frontend is originally written by [Oliver Dunk](https://github.com/oliverdunk).
 
 SaltGUI includes these libraries (with possible modifications):
-* sorttable: see https://www.kryogenix.org/code/browser/sorttable/
-* search-highlight: https://www.the-art-of-web.com/javascript/search-highlight/
-* jsonpath: https://www.w3resource.com/JSON/JSONPath-with-JavaScript.php
+* [sorttable](https://www.kryogenix.org/code/browser/sorttable/)
+* [search-highlight](https://www.the-art-of-web.com/javascript/search-highlight/)
+* [jsonpath](https://www.w3resource.com/JSON/JSONPath-with-JavaScript.php)
