@@ -4,13 +4,13 @@ title: CONTRIBUTING
 ---
 # CONTRIBUTING
 
-Contributions to the SaltGUI projects are welcome!
+Contributions to the SaltGUI project are welcome!<br>
 This can either be through a pull-request (PR) or by creating an issue with an idea.
 
 When you create an issue with an idea, make sure that:
 * it is one idea/question at a time
-* a new idea is useful for most users
-* the `salt-api` calls to be used are mentionned when possible for new ideas
+* it is useful for most users
+* new `salt-api` calls are identified in the request
 
 There are few coding standards:
 * obey the rules from stylelint (for CSS)
