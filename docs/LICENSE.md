@@ -2,6 +2,7 @@
 layout: none
 title: LICENSE
 ---
+# License
 The MIT License (MIT)
 
 Copyright (c) 2018-2022 Erwin Dondorp<br>
