@@ -11,7 +11,9 @@
 				content.send();
 				content.onreadystatechange = function() {
 					if (content.readyState === 4 && content.status === 200) {
-						document.getElementById("fr").innerHTML = content.responseText;
+						const section = document.getElementById("section");
+						section.innerHTML = content.responseText;
+						window.scrollTo(0, 0);
 						const links = document.querySelectorAll("header a");
 						for (const link of links) {
 							if (link.innerText === name) {
@@ -44,7 +46,7 @@
 				<div id="links"/>
 			</header>
 
-			<section id="fr">
+			<section id="section">
 			</section>
 
 			<footer>
