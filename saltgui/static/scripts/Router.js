@@ -131,6 +131,13 @@ export class Router {
         pClickEvent.stopPropagation();
       });
 
+    // for touch screens
+    document.getElementById("logo").
+      addEventListener("dblclick", (pClickEvent) => {
+        this.goTo("options");
+        pClickEvent.stopPropagation();
+      });
+
     document.getElementById("docu").
       addEventListener("click", (pClickEvent) => {
         window.open("https://erwindon.github.io/SaltGUI/", "_blank");
