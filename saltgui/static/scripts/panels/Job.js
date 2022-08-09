@@ -216,10 +216,10 @@ export class JobPanel extends Panel {
       this.warningField.innerText = "";
     } else if (info.Function.startsWith("wheel.")) {
       minions = ["WHEEL"];
-      this.warningField.innerText = Character.INFORMATION_SIGN + Character.NO_BREAK_SPACE + "WHEEL jobs are not associated with minions";
+      this.warningField.innerText = Character.CIRCLED_INFORMATION_SOURCE + Character.NO_BREAK_SPACE + "WHEEL jobs are not associated with minions";
     } else if (info.Function.startsWith("runners.")) {
       minions = ["RUNNER"];
-      this.warningField.innerText = Character.INFORMATION_SIGN + Character.NO_BREAK_SPACE + "RUNNER jobs are not associated with minions";
+      this.warningField.innerText = Character.CIRCLED_INFORMATION_SOURCE + Character.NO_BREAK_SPACE + "RUNNER jobs are not associated with minions";
     } else {
       minions = Object.keys(this.result);
       this.warningField.innerText = Character.WARNING_SIGN + Character.NO_BREAK_SPACE + "minion list is missing in the result, thus cannot determine missing output";

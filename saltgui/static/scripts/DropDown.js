@@ -35,7 +35,7 @@ export class DropDownMenu {
     this.menuDropdown.classList.add("no-search");
 
     if (pParentElement.id === "cmd-box") {
-      this.menuButton = Utils.createDiv("", Character.A_BOOK);
+      this.menuButton = Utils.createDiv("", Character.OPEN_BOOK);
     } else if (pParentElement.classList && pParentElement.classList.contains("minion-output")) {
       this.menuButton = Utils.createSpan("", Character.CH_HAMBURGER);
     } else {

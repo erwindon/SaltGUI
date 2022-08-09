@@ -100,8 +100,7 @@ export class Router {
 
     const miniMenuDiv = document.querySelector(".minimenu");
     const dropdownContent2 = miniMenuDiv.querySelector(".dropdown-content");
-    // 00A0 = NO-BREAK SPACE
-    const menuItemDiv = Utils.createDiv("run-command-button menu-item", (pParentId ? "-\u00A0" : "") + pButtonId, "button-" + pButtonId + "2");
+    const menuItemDiv = Utils.createDiv("run-command-button menu-item", (pParentId ? "-" + Character.NO_BREAK_SPACE : "") + pButtonId, "button-" + pButtonId + "2");
     dropdownContent2.append(menuItemDiv);
 
     // activate the menu items as needed
