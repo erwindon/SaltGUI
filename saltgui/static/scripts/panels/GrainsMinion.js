@@ -45,6 +45,9 @@ export class GrainsMinionPanel extends Panel {
     }
 
     const grains = pLocalGrainsItemsData.return[0][pMinionId];
+    if (this.showErrorRowInstead(grains)) {
+      return;
+    }
 
     if (grains === undefined) {
       this.setMsg("Unknown minion '" + pMinionId + "'");

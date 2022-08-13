@@ -48,6 +48,9 @@ export class PillarsMinionPanel extends Panel {
     }
 
     const pillars = pLocalPillarItemsData.return[0][pMinionId];
+    if (this.showErrorRowInstead(pillars)) {
+      return;
+    }
 
     if (pillars === undefined) {
       this.setMsg("Unknown minion '" + pMinionId + "'");
