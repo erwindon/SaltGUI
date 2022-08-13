@@ -442,6 +442,11 @@ export class Panel {
 
     // so, it is an array
 
+    // sort it, so that we get more consistent results
+    // when there are minions which report multiple IP
+    // numbers for their hostname
+    ipv4.sort();
+
     // get the public IP number (if any)
     for (const ipv4Number of ipv4) {
       // See https://nl.wikipedia.org/wiki/RFC_1918
