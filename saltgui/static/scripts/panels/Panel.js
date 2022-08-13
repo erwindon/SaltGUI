@@ -518,6 +518,86 @@ export class Panel {
     return ipv4[0];
   }
 
+  static _getIpNumberPrefixes (pAllMinionsGrains) {
+    // First we gather all (resonable) prefixes
+    // Only use byte-boundaries for networks
+    // Must match a subnet of A, B or C network
+    const prefixes = {};
+    for (const minionId in pAllMinionsGrains) {
+      const grains = pAllMinionsGrains[minionId];
+      if (!grains.fqdn_ip4) {
+        continue;
+      }
+      if (!Array.isArray(grains.fqdn_ip4)) {
+        continue;
+      }
+      for (const ip of grains.fqdn_ip4) {
+        const parts = ip.split(".");
+        if (ip.startsWith("10.")) {
+          prefixes[parts[0] + "."] = true;
+        }
+        if (ip.startsWith("10.") ||
+           ip.startsWith("172.16.") ||
+           ip.startsWith("172.17.") ||
+           ip.startsWith("172.18.") ||
+           ip.startsWith("172.19.") ||
+           ip.startsWith("172.20.") ||
+           ip.startsWith("172.21.") ||
+           ip.startsWith("172.22.") ||
+           ip.startsWith("172.23.") ||
+           ip.startsWith("172.24.") ||
+           ip.startsWith("172.25.") ||
+           ip.startsWith("172.26.") ||
+           ip.startsWith("172.27.") ||
+           ip.startsWith("172.28.") ||
+           ip.startsWith("172.29.") ||
+           ip.startsWith("172.30.") ||
+           ip.startsWith("172.31.") ||
+           ip.startsWith("192.168.")) {
+          prefixes[parts[0] + "." + parts[1] + "."] = true;
+          prefixes[parts[0] + "." + parts[1] + "." + parts[2] + "."] = true;
+        }
+      }
+    }
+
+    // Then we look whether each minion uses the prefix
+    // When at least one minion does not use the subnet,
+    //    then it is not a suitable subnet
+    for (const prefix in prefixes) {
+      for (const minionId in pAllMinionsGrains) {
+        let cnt = 0;
+        const grains = pAllMinionsGrains[minionId];
+        if (!grains.fqdn_ip4) {
+          continue;
+        }
+        if (!Array.isArray(grains.fqdn_ip4)) {
+          continue;
+        }
+        for (const ip of grains.fqdn_ip4) {
+          if (!ip.startsWith(prefix)) {
+            continue;
+          }
+          cnt += 1;
+        }
+        // multiple or unused?
+        //    then it is not a suitable subnet
+        if (cnt !== 1) {
+          prefixes[prefix] = false;
+          break;
+        }
+      }
+    }
+
+    // actually remove the unused prefixes
+    for (const prefix in prefixes) {
+      if (!prefixes[prefix]) {
+        delete prefixes[prefix];
+      }
+    }
+
+    return prefixes;
+  }
+
   static _restoreClickToCopy (pTarget) {
     Utils.addToolTip(pTarget, "Click to copy");
   }
