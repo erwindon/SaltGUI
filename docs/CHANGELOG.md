@@ -1,7 +1,3 @@
----
-layout: none
-title: CHANGELOG
----
 # Changelog
 
 ## 1.28.0 (2022-04-16)

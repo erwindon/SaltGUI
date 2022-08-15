@@ -1,7 +1,3 @@
----
-layout: none
-title: CONTRIBUTING
----
 # Contributing
 
 Contributions to the SaltGUI project are welcome!<br>

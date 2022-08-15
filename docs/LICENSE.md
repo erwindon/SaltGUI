@@ -1,7 +1,3 @@
----
-layout: none
-title: LICENSE
----
 # License
 The MIT License (MIT)
 
