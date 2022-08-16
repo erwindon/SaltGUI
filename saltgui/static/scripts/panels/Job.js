@@ -210,7 +210,7 @@ export class JobPanel extends Panel {
 
     Output.dateTimeStr(info.StartTime, this.timeField, "bottom-left");
 
-    let minions = ["WHEEL"];
+    let minions;
     if (info.Minions) {
       minions = info.Minions;
       this.warningField.innerText = "";
