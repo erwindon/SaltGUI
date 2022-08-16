@@ -49,11 +49,6 @@ export class Issues {
 
     const theTr = document.createElement("tr");
 
-    // const keyTd = document.createElement("td");
-    // keyTd.innerText = pCatName + "-" + pIssueName;
-    // keyTd.classList.add("key");
-    // theTr.appendChild(keyTd);
-
     const menu = new DropDownMenu(theTr, true);
     theTr.menu = menu;
 

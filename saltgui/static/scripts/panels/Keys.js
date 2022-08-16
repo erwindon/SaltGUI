@@ -152,7 +152,6 @@ export class KeysPanel extends Panel {
     cnt["accepted"] = 0;
     cnt["denied"] = 0;
     cnt["rejected"] = 0;
-    // cnt["missing"] = 0;
     const tbody = this.table.tBodies[0];
     for (const tr of tbody.children) {
       const statusTd = tr.querySelector(".status");

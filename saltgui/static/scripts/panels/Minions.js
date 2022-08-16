@@ -677,7 +677,6 @@ export class MinionsPanel extends Panel {
             for (let i = 0; i < allCveKeys.length; i++) {
               url += (i === 0 ? "" : "%20") + allCveKeys[i];
             }
-            // if(allCveKeys.length === 0) url += "saltstack";
             window.open(url);
             // prevent the click to open the run-dialog
             pClickEvent.stopPropagation();
