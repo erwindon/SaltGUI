@@ -37,6 +37,7 @@ Resticting access to modules can be simply done by replacing a wildcard and spec
 
 The following configuration is a mimimum set of permissions, so that SaltGUI can populate its screens:
 ```
+      - beacons.list
       - grains.items
       - pillar.items
       - pillar.obfuscate
@@ -45,10 +46,15 @@ The following configuration is a mimimum set of permissions, so that SaltGUI can
         - jobs.active
         - jobs.list_job
         - jobs.list_jobs
+        - manage.versions
       - '@wheel':
         - config.values
         - key.finger
         - key.list_all
+        - minions.connected
 ```
 Adititional permissions are needed to run the commands associated with the popupmenu items.
 These commands are clearly visible in the gui, and are not listed here.
+
+SaltGUI is designed to cope with any API failure, whether due to authorization issues, or due to technical issues.
+Please report any deviations from that.
