@@ -128,7 +128,7 @@ export class OutputHighstateTaskSaltGui {
       // trim extra whitespace
       txt = txt.replace(/[ \r\n]+$/g, "");
       // indent extra lines
-      txt = txt.replace(/[\n]+/g, "\n" + indent);
+      txt = txt.replace(/\n+/g, "\n" + indent);
       taskDiv.append(document.createTextNode(indent + txt));
     }
 
