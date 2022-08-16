@@ -1,4 +1,4 @@
-/* global config document window */
+/* global config document */
 
 import {Character} from "../Character.js";
 import {CommandBox} from "../CommandBox.js";
@@ -6,6 +6,14 @@ import {DropDownMenu} from "../DropDown.js";
 import {SortTable} from "../../sorttable/sorttable.js";
 import {TargetType} from "../TargetType.js";
 import {Utils} from "../Utils.js";
+
+// which grain to use for IP-number display
+const IPNUMBERFIELD = "fqdn_ip4";
+// const IPNUMBERFIELD = "ipv4";
+// const IPNUMBERFIELD = "fqdn_ip6";
+// const IPNUMBERFIELD = "ipv6";
+// non-existent grains effectively disable the behaviour
+// const IPNUMBERFIELD = "DISABLED";
 
 export class Panel {
 
@@ -427,17 +435,29 @@ export class Panel {
     return minionTr;
   }
 
-  static _getBestIpNumber (pMinionData, prefixes) {
+  static _getIpNumberUses (pAllMinionsGrains, pIpNumber) {
+    let cnt = 0;
+    for (const minionId in pAllMinionsGrains) {
+      const ipNumbers = pAllMinionsGrains[minionId][IPNUMBERFIELD];
+      if (!Array.isArray(ipNumbers)) {
+        continue;
+      }
+      if (ipNumbers.includes(pIpNumber)) {
+        cnt += 1;
+      }
+    }
+    return cnt;
+  }
+
+  static _getBestIpNumber (pMinionData, pAllMinionsGrains) {
     if (!pMinionData) {
       return null;
     }
-    const ipv4 = pMinionData.fqdn_ip4;
-    if (!ipv4) {
-      return null;
-    }
+
+    const allIpNumbers = pMinionData[IPNUMBERFIELD];
     // either a string or something strange
-    if (!Array.isArray(ipv4)) {
-      return ipv4;
+    if (!Array.isArray(allIpNumbers)) {
+      return null;
     }
 
     // so, it is an array
@@ -445,212 +465,146 @@ export class Panel {
     // sort it, so that we get more consistent results
     // when there are minions which report multiple IP
     // numbers for their hostname
-    ipv4.sort();
+    allIpNumbers.sort();
 
     // get the public IP number (if any)
-    for (const ipv4Number of ipv4) {
-      // See https://nl.wikipedia.org/wiki/RFC_1918
-      // local = 127.0.0.0/8
-      if (ipv4Number.startsWith("127.")) {
+    let bestPriority = 100;
+    let bestIpNumber = null;
+    for (const ipNumber of allIpNumbers) {
+      if (typeof ipNumber !== "string") {
         continue;
       }
-      // private A = 10.0.0.0/8
-      if (ipv4Number.startsWith("10.")) {
-        continue;
-      }
-      // private B = 172.16.0.0/20
-      /* eslint-disable curly */
-      if (ipv4Number.startsWith("172.16.")) continue;
-      if (ipv4Number.startsWith("172.17.")) continue;
-      if (ipv4Number.startsWith("172.18.")) continue;
-      if (ipv4Number.startsWith("172.19.")) continue;
-      if (ipv4Number.startsWith("172.20.")) continue;
-      if (ipv4Number.startsWith("172.21.")) continue;
-      if (ipv4Number.startsWith("172.22.")) continue;
-      if (ipv4Number.startsWith("172.23.")) continue;
-      if (ipv4Number.startsWith("172.24.")) continue;
-      if (ipv4Number.startsWith("172.25.")) continue;
-      if (ipv4Number.startsWith("172.26.")) continue;
-      if (ipv4Number.startsWith("172.27.")) continue;
-      if (ipv4Number.startsWith("172.28.")) continue;
-      if (ipv4Number.startsWith("172.29.")) continue;
-      if (ipv4Number.startsWith("172.30.")) continue;
-      if (ipv4Number.startsWith("172.31.")) continue;
-      /* eslint-enable curly */
-      // private C = 192.168.0.0/16
-      if (ipv4Number.startsWith("192.168.")) {
-        continue;
-      }
-      // not a local/private address, therefore it is public
-      return ipv4Number;
-    }
 
-    // No public IP was found
-    // Use a common prefix in all available IP numbers
-    // get the private IP number (if any)
-    // when it matches one of the common prefixes
-    for (const prefix in prefixes) {
-      for (const ipv4Number of ipv4) {
-        if (ipv4Number.startsWith(prefix)) {
-          return ipv4Number;
-        }
+      // IP numbers that are used by multiple minions are not a
+      // candidate for display here. typically happens for:
+      // 127.0.0.1 (localhost), 10.0.2.15 (virtualbox host address)
+      if (Panel._getIpNumberUses(pAllMinionsGrains, ipNumber) !== 1) {
+        continue;
+      }
+
+      const prio = Panel._getIpNumberPriority(ipNumber);
+      if (prio < bestPriority) {
+        bestIpNumber = ipNumber;
+        bestPriority = prio;
       }
     }
 
-    // no luck...
-    // try again, but without the restrictions
-    for (const ipv4Number of ipv4) {
-      // C = 192.168.x.x
-      if (ipv4Number.startsWith("192.168.")) {
-        return ipv4Number;
-      }
-    }
-    for (const ipv4Number of ipv4) {
-      // B = 172.16.0.0 .. 172.31.255.255
-      // never mind the sub-ranges
-      if (ipv4Number.startsWith("172.")) {
-        return ipv4Number;
-      }
-    }
-    for (const ipv4Number of ipv4) {
-      // A = 10.x.x.x
-      if (ipv4Number.startsWith("10.")) {
-        return ipv4Number;
-      }
-    }
-
-    // just pick the first one, should then be a local address (127.x.x.x)
-    return ipv4[0];
+    return bestIpNumber;
   }
 
-  static _getIpNumberPrefixes (pAllMinionsGrains) {
-    // First we gather all (resonable) prefixes
-    // Only use byte-boundaries for networks
-    // Must match a subnet of A, B or C network
-    const prefixes = {};
-    for (const minionId in pAllMinionsGrains) {
-      const grains = pAllMinionsGrains[minionId];
-      if (!grains.fqdn_ip4) {
-        continue;
-      }
-      if (!Array.isArray(grains.fqdn_ip4)) {
-        continue;
-      }
-      for (const ip of grains.fqdn_ip4) {
-        const parts = ip.split(".");
-        if (ip.startsWith("10.")) {
-          prefixes[parts[0] + "."] = true;
-        }
-        if (ip.startsWith("10.") ||
-           ip.startsWith("172.16.") ||
-           ip.startsWith("172.17.") ||
-           ip.startsWith("172.18.") ||
-           ip.startsWith("172.19.") ||
-           ip.startsWith("172.20.") ||
-           ip.startsWith("172.21.") ||
-           ip.startsWith("172.22.") ||
-           ip.startsWith("172.23.") ||
-           ip.startsWith("172.24.") ||
-           ip.startsWith("172.25.") ||
-           ip.startsWith("172.26.") ||
-           ip.startsWith("172.27.") ||
-           ip.startsWith("172.28.") ||
-           ip.startsWith("172.29.") ||
-           ip.startsWith("172.30.") ||
-           ip.startsWith("172.31.") ||
-           ip.startsWith("192.168.")) {
-          prefixes[parts[0] + "." + parts[1] + "."] = true;
-          prefixes[parts[0] + "." + parts[1] + "." + parts[2] + "."] = true;
-        }
+  static _getAllIpNumbers (pMinionData) {
+    const allIpNumbers = pMinionData[IPNUMBERFIELD];
+    if (!Array.isArray(allIpNumbers)) {
+      return [];
+    }
+    for (const str of allIpNumbers) {
+      if (typeof str !== "string") {
+        return [];
       }
     }
+    return allIpNumbers;
+  }
 
-    // Then we look whether each minion uses the prefix
-    // When at least one minion does not use the subnet,
-    //    then it is not a suitable subnet
-    for (const prefix in prefixes) {
-      for (const minionId in pAllMinionsGrains) {
-        let cnt = 0;
-        const grains = pAllMinionsGrains[minionId];
-        if (!grains.fqdn_ip4) {
-          continue;
-        }
-        if (!Array.isArray(grains.fqdn_ip4)) {
-          continue;
-        }
-        for (const ip of grains.fqdn_ip4) {
-          if (!ip.startsWith(prefix)) {
-            continue;
-          }
-          cnt += 1;
-        }
-        // multiple or unused?
-        //    then it is not a suitable subnet
-        if (cnt !== 1) {
-          prefixes[prefix] = false;
-          break;
-        }
-      }
+  static _getIpNumberPriority (pIpNumber) {
+    // See https://nl.wikipedia.org/wiki/RFC_1918
+
+    if (typeof pIpNumber !== "string") {
+      return 10;
     }
 
-    // actually remove the unused prefixes
-    for (const prefix in prefixes) {
-      if (!prefixes[prefix]) {
-        delete prefixes[prefix];
-      }
+    if (pIpNumber.startsWith("127.") || pIpNumber === "::1") {
+      // local = 127.0.0.0/8
+      return 5;
+    }
+    if (pIpNumber.startsWith("10.")) {
+      // private A = 10.0.0.0/8
+      return 4;
+    }
+    if (pIpNumber.startsWith("192.")) {
+      // private C = 192.168.0.0/16
+      return 3;
+    }
+    if (pIpNumber.startsWith("172.16.") ||
+        pIpNumber.startsWith("172.17.") ||
+        pIpNumber.startsWith("172.18.") ||
+        pIpNumber.startsWith("172.19.") ||
+        pIpNumber.startsWith("172.20.") ||
+        pIpNumber.startsWith("172.21.") ||
+        pIpNumber.startsWith("172.22.") ||
+        pIpNumber.startsWith("172.23.") ||
+        pIpNumber.startsWith("172.24.") ||
+        pIpNumber.startsWith("172.25.") ||
+        pIpNumber.startsWith("172.26.") ||
+        pIpNumber.startsWith("172.27.") ||
+        pIpNumber.startsWith("172.28.") ||
+        pIpNumber.startsWith("172.29.") ||
+        pIpNumber.startsWith("172.30.") ||
+        pIpNumber.startsWith("172.31.")) {
+      // private B = 172.16.0.0/20
+      return 2;
     }
 
-    return prefixes;
+    // anything else could be a public IP number
+    return 1;
   }
 
   static _restoreClickToCopy (pTarget) {
-    Utils.addToolTip(pTarget, "Click to copy");
+    if (pTarget.dataset.multiIpNumber === pTarget.dataset.singleIpNumber) {
+      Utils.addToolTip(pTarget, "Click to copy");
+    } else {
+      const cntIpNumbers = pTarget.dataset.multiIpNumber.trim().split("\n").length;
+      let tooltipTxt = "Click to copy this IP number";
+      tooltipTxt += "\nALT-Click to copy these " + cntIpNumbers + " IP numbers:";
+      tooltipTxt += "\n" + pTarget.dataset.multiIpNumber;
+      Utils.addToolTip(pTarget, tooltipTxt);
+    }
   }
 
-  static _copyAddress (pTarget) {
-    const selection = window.getSelection();
-    const range = document.createRange();
-
-    range.selectNodeContents(pTarget.firstChild);
-    selection.removeAllRanges();
-    selection.addRange(range);
-    document.execCommand("copy");
-    selection.removeAllRanges();
-
-    Utils.addToolTip(pTarget, "Copied!");
+  static _copyAddress (pTarget, useMultiAddress) {
+    if (useMultiAddress && pTarget.dataset.multiIpNumber !== pTarget.dataset.singleIpNumber) {
+      navigator.clipboard.writeText(pTarget.dataset.multiIpNumber);
+      Utils.addToolTip(pTarget, "Copied all!");
+    } else {
+      navigator.clipboard.writeText(pTarget.dataset.singleIpNumber);
+      Utils.addToolTip(pTarget, "Copied!");
+    }
   }
 
-  updateMinion (pMinionData, pMinionId, prefixes) {
+  updateMinion (pMinionData, pMinionId, pAllMinionsGrains) {
 
     const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
 
     minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 
-    const ipv4 = Panel._getBestIpNumber(pMinionData, prefixes);
-    if (ipv4) {
+    const bestIpNumber = Panel._getBestIpNumber(pMinionData, pAllMinionsGrains);
+    const allIpNumbers = Panel._getAllIpNumbers(pMinionData);
+
+    if (bestIpNumber) {
       const addressTd = Utils.createTd("status");
-      const addressSpan = Utils.createSpan("", ipv4);
+      const addressSpan = Utils.createSpan("", bestIpNumber);
+      addressSpan.dataset.singleIpNumber = bestIpNumber;
+      addressSpan.dataset.multiIpNumber = allIpNumbers.join("\n");
       addressTd.appendChild(addressSpan);
       // ipnumbers do not sort well, reformat into something sortable
-      const ipv4parts = ipv4.split(".");
+      const bestIpNumberParts = bestIpNumber.split(".");
       let sorttableCustomkey = "";
-      if (ipv4parts.length === 4) {
+      if (bestIpNumberParts.length === 4) {
         // never mind adding '.'; this is only a sort-key
         for (let i = 0; i < 4; i++) {
-          sorttableCustomkey += ipv4parts[i].padStart(3, "0");
+          sorttableCustomkey += bestIpNumberParts[i].padStart(3, "0");
         }
         addressTd.setAttribute("sorttable_customkey", sorttableCustomkey);
       }
       addressTd.classList.add("address");
       addressTd.setAttribute("tabindex", -1);
       addressSpan.addEventListener("click", (pClickEvent) => {
-        Panel._copyAddress(addressSpan);
+        Panel._copyAddress(addressSpan, pClickEvent.ctrlKey || pClickEvent.altKey);
         pClickEvent.stopPropagation();
       });
       addressSpan.addEventListener("mouseout", () => {
         Panel._restoreClickToCopy(addressSpan);
       });
-      Utils.addToolTip(addressSpan, "Click to copy");
+      Panel._restoreClickToCopy(addressSpan);
       minionTr.appendChild(addressTd);
     } else {
       const accepted = Utils.createTd("status", "accepted");

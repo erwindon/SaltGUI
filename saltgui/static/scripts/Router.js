@@ -123,7 +123,7 @@ export class Router {
   _registerRouterEventListeners () {
     document.getElementById("logo").
       addEventListener("click", (pClickEvent) => {
-        if (pClickEvent.ctrlKey) {
+        if (pClickEvent.ctrlKey || pClickEvent.altKey) {
           this.goTo("options");
         } else {
           this.goTo("");
