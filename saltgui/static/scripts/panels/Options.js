@@ -13,7 +13,7 @@ export class OptionsPanel extends Panel {
     super("options");
 
     this.addTitle("Options");
-    // this.addSearchButton();
+    this.addSearchButton();
     this.addHelpButton([
       "Names 'session_*' show the values from the login session.",
       "Names 'saltgui_*' show the values from the master file '/etc/salt/master'.",
