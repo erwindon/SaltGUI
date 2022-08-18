@@ -115,6 +115,22 @@ export class Router {
           if (pUrl && (pButtonId === "logout" || pages.length === 0 || pages.indexOf(pButtonId) >= 0)) {
             this.goTo(pUrl);
           }
+          // hide the menu, it will stay hidden when the mouse is not over it
+          // does not work well on touch-schreens
+          let dropDownPanel = null;
+          if (pClickEvent.target.classList.contains("run-command-button")) {
+            dropDownPanel = pClickEvent.target.parentElement;
+          } else {
+            // may be null when there is no dropdown part
+            dropDownPanel = pClickEvent.target.nextSibling;
+          }
+          if (dropDownPanel) {
+            dropDownPanel.style.display = "none";
+            window.setTimeout(() => {
+              dropDownPanel.style.display = "";
+            }, 500);
+          }
+          // prevent further actions
           pClickEvent.stopPropagation();
         });
     }
