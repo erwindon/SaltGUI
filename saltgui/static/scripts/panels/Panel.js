@@ -521,6 +521,10 @@ export class Panel {
   }
 
   static _getAllIpNumbers (pMinionData) {
+    if (!pMinionData) {
+      // for pages where no grains data available
+      return [];
+    }
     const allIpNumbers = pMinionData[IPNUMBERFIELD];
     if (!Array.isArray(allIpNumbers)) {
       return [];
