@@ -14,10 +14,10 @@ export class JobsDetailsPanel extends JobsPanel {
     super("jobs");
 
     this.addTitle("Recent Jobs");
-    this.addPanelMenu();
-    this._addPanelMenuItemShowSome();
-    this._addPanelMenuItemShowEligible();
-    this._addPanelMenuItemShowAll();
+    this.addSettingsMenu();
+    this._addSettingsMenuItemShowSome();
+    this._addSettingsMenuItemShowEligible();
+    this._addSettingsMenuItemShowAll();
     this.addSearchButton();
     this.addPlayPauseButton();
     this.addHelpButton([
@@ -47,7 +47,7 @@ export class JobsDetailsPanel extends JobsPanel {
       // pretend parameter was not present
       cnt = maxJobs;
     }
-    this.panelMenu._value = cnt;
+    this.settingsMenu._value = cnt;
 
     super.onShow(cnt);
   }
@@ -63,9 +63,9 @@ export class JobsDetailsPanel extends JobsPanel {
     }, 1000);
   }
 
-  _addPanelMenuItemShowSome () {
+  _addSettingsMenuItemShowSome () {
     const maxJobs = 50;
-    this.panelMenu.addMenuItem(() => {
+    this.settingsMenu.addMenuItem(() => {
       let title = "Show first " + maxJobs + " jobs";
       const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
       if (cnt === "undefined" || cnt === String(maxJobs)) {
@@ -77,8 +77,8 @@ export class JobsDetailsPanel extends JobsPanel {
     });
   }
 
-  _addPanelMenuItemShowEligible () {
-    this.panelMenu.addMenuItem(() => {
+  _addSettingsMenuItemShowEligible () {
+    this.settingsMenu.addMenuItem(() => {
       const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
       let title = "Show eligible jobs";
       if (cnt === "eligible") {
@@ -90,8 +90,8 @@ export class JobsDetailsPanel extends JobsPanel {
     });
   }
 
-  _addPanelMenuItemShowAll () {
-    this.panelMenu.addMenuItem(() => {
+  _addSettingsMenuItemShowAll () {
+    this.settingsMenu.addMenuItem(() => {
       const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
       let title = "Show all jobs";
       if (cnt === "all") {

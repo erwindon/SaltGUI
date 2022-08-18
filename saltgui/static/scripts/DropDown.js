@@ -38,6 +38,8 @@ export class DropDownMenu {
       this.menuButton = Utils.createDiv("", Character.OPEN_BOOK);
     } else if (pParentElement.classList && pParentElement.classList.contains("minion-output")) {
       this.menuButton = Utils.createSpan("", Character.CH_HAMBURGER);
+    } else if (pParentElement.id.endsWith("-settings")) {
+      this.menuButton = Utils.createSpan("", Character.GEAR);
     } else {
       // assume it will be a command menu
       this.menuButton = Utils.createDiv("", Character.CH_HAMBURGER);

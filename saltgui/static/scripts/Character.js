@@ -26,6 +26,7 @@ export class Character {
     Character.BLACK_DOWN_POINTING_TRIANGLE = "\u25BC";
     Character.WHITE_DOWN_POINTING_TRIANGLE = "\u25BD";
     Character.BLACK_CIRCLE = "\u25CF";
+    Character.GEAR = "\u2699";
     Character.WARNING_SIGN = "\u26A0" + Character._VARIATION_SELECTOR_16;
     Character.HEAVY_CHECK_MARK = "\u2714";
     Character.HEAVY_MULTIPLICATION_X = "\u2716" + Character._VARIATION_SELECTOR_15;
@@ -36,14 +37,20 @@ export class Character {
     // D83D DCD6 = 1F4D6 = OPEN BOOK
     Character.OPEN_BOOK = "\uD83D\uDCD6" + Character._VARIATION_SELECTOR_15;
 
+    // D83D DEC8 = 1F6C8 = CIRCLED INFORMATION SOURCE
+    Character.CIRCLED_INFORMATION_SOURCE =
+      "\uD83D\uDEC8" + Character._VARIATION_SELECTOR_16;
+
     // D83D DD0D = 1F50D = LEFT-POINTING MAGNIFYING GLASS
     Character.LEFT_POINTING_MAGNIFYING_GLASS = "\uD83D\uDD0D" + Character._VARIATION_SELECTOR_15;
 
     // D83D DEC8 = 1F6C8 = CIRCLED INFORMATION SOURCE
     Character.CIRCLED_INFORMATION_SOURCE = "\uD83D\uDEC8" + Character._VARIATION_SELECTOR_16;
 
+
     // Aliases
     Character.CH_HAMBURGER = Character._MATHEMATICAL_OPERATOR_IDENTICAL_TO;
+
     Character.CH_PAUSE = Character._DOUBLE_VERTICAL_BAR;
     // 'official' play-button
     // Character.CH_PLAY = Character._BLACK_RIGHT_POINTING_TRIANGLE;
@@ -52,6 +59,7 @@ export class Character {
 
     Character.CH_SORT_NORMAL = Character._DOWNWARDS_ARROW;
     Character.CH_SORT_REVERSE = Character._UPWARDS_ARROW;
+
 
     // Images
     Character.EXTERNAL_LINK_IMG = "<img src='static/images/externallink.png' width='12px'>";

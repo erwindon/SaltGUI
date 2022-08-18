@@ -63,6 +63,15 @@ export class Panel {
     this.panelMenu = menu;
   }
 
+  addSettingsMenu () {
+    const span = document.createElement("span");
+    span.id = this.key + "-settings";
+    const menu = new DropDownMenu(span);
+    menu.menuButton.classList.add("small-button-left");
+    this.div.appendChild(span);
+    this.settingsMenu = menu;
+  }
+
   addSearchButton () {
     const span = document.createElement("span");
     span.id = this.key + "-search-button";
