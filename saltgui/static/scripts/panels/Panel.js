@@ -157,6 +157,34 @@ export class Panel {
     });
   }
 
+  addWarningField () {
+    const warning = document.createElement("h2");
+    warning.classList.add("warning");
+    this.div.append(warning);
+    this.warningField = warning;
+  }
+
+  setWarningText (pIcon = "", pTxt = "") {
+    let newTxt;
+    switch (pIcon) {
+    case "info":
+      newTxt = Character.CIRCLED_INFORMATION_SOURCE + Character.NO_BREAK_SPACE + pTxt;
+      break;
+    case "warn":
+      newTxt = Character.WARNING_SIGN + Character.NO_BREAK_SPACE + pTxt;
+      break;
+    case "":
+      newTxt = pTxt;
+      break;
+    default:
+      newTxt = "???" + pIcon + "???" + Character.NO_BREAK_SPACE + pTxt;
+    }
+    if (this.warningField.innerText !== newTxt) {
+      // prevent selection of text to be cancelled
+      this.warningField.innerText = newTxt;
+    }
+  }
+
   addTable (pColumnNames, pFieldList = null) {
     const table = document.createElement("table");
     table.id = this.key + "-table";
