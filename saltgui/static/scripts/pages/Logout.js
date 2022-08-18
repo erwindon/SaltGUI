@@ -1,4 +1,4 @@
-/* global window */
+/* global */
 
 import {Page} from "./Page.js";
 import {Utils} from "../Utils.js";

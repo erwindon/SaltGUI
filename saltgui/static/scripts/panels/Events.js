@@ -1,4 +1,4 @@
-/* global document */
+/* global */
 
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";

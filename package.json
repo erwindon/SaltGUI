@@ -76,7 +76,7 @@
           "allowForLoopAfterthoughts": true
         }
       ],
-      "no-redeclare": 0,
+      "no-redeclare": 2,
       "no-ternary": 0,
       "no-undef-init": 2,
       "no-undefined": 0,

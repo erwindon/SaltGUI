@@ -1,4 +1,4 @@
-/* global document jsonPath */
+/* global jsonPath */
 
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";

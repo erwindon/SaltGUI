@@ -1,4 +1,4 @@
-/* global document MouseEvent window */
+/* global */
 
 import {Character} from "../Character.js";
 import {OutputDocumentation} from "./OutputDocumentation.js";

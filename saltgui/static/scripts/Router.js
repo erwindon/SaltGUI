@@ -1,4 +1,4 @@
-/* global document window */
+/* global */
 
 import {API} from "./Api.js";
 import {BeaconsMinionPage} from "./pages/BeaconsMinion.js";

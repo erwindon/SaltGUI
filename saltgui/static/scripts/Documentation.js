@@ -1,4 +1,4 @@
-/* global document */
+/* global */
 
 // documentation utilities
 

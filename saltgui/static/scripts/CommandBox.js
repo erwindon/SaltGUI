@@ -1,4 +1,4 @@
-/* global document */
+/* global */
 
 import {Character} from "./Character.js";
 import {Documentation} from "./Documentation.js";

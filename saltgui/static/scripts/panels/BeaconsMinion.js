@@ -1,4 +1,4 @@
-/* global document */
+/* global */
 
 import {BeaconsPanel} from "./Beacons.js";
 import {Character} from "../Character.js";

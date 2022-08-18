@@ -1,4 +1,4 @@
-/* global document */
+/* global */
 
 import {DropDownMenu} from "../DropDown.js";
 import {JobsPanel} from "./Jobs.js";

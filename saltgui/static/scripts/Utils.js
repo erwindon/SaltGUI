@@ -1,4 +1,4 @@
-/* global console document Hilitor window */
+/* global Hilitor */
 
 import {Character} from "./Character.js";
 import {DropDownMenu} from "./DropDown.js";

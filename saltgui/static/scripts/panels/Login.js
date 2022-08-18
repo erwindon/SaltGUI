@@ -1,4 +1,4 @@
-/* global document window */
+/* global */
 
 import {Panel} from "./Panel.js";
 import {Router} from "../Router.js";

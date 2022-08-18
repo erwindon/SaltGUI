@@ -1,4 +1,4 @@
-/* global config EventSource window */
+/* global config */
 
 import {CommandBox} from "./CommandBox.js";
 import {Utils} from "./Utils.js";
