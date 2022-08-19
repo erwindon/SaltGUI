@@ -23,7 +23,6 @@ export class Character {
     Character._BLACK_RIGHT_POINTING_TRIANGLE = "\u25B6" + Character._VARIATION_SELECTOR_15;
     Character.WHITE_RIGHT_POINTING_TRIANGLE = "\u25B7";
     Character.BLACK_RIGHT_POINTING_POINTER = "\u25BA";
-    Character.BLACK_DOWN_POINTING_TRIANGLE = "\u25BC";
     Character.WHITE_DOWN_POINTING_TRIANGLE = "\u25BD";
     Character.BLACK_CIRCLE = "\u25CF";
     Character.GEAR = "\u2699";

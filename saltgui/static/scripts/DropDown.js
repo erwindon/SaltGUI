@@ -40,6 +40,8 @@ export class DropDownMenu {
       this.menuButton = Utils.createSpan("", Character.CH_HAMBURGER);
     } else if (pParentElement.id.endsWith("-settings")) {
       this.menuButton = Utils.createSpan("", Character.GEAR);
+    } else if (pParentElement.classList && pParentElement.classList.contains("search-menu-and-field")) {
+      this.menuButton = Utils.createSpan("", Character.GEAR);
     } else {
       // assume it will be a command menu
       this.menuButton = Utils.createDiv("", Character.CH_HAMBURGER);
@@ -139,7 +141,7 @@ export class DropDownMenu {
     if (pTitle) {
       pTitle += Character.NO_BREAK_SPACE;
     }
-    pTitle += Character.BLACK_DOWN_POINTING_TRIANGLE;
+    pTitle += Character.GEAR;
     this.menuButton.innerText = DropDownMenu._sanitizeMenuItemTitle(pTitle);
   }
 
