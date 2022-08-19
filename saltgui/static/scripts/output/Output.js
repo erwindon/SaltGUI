@@ -316,16 +316,22 @@ export class Output {
 
     let txt = "";
 
-    if ("name" in pTask) {
-      txt += pTask.name;
+    if ("__sls__" in pTask) {
+      txt += "\n" + pTask.__sls__.replace(/[.]/g, "/") + ".sls";
     }
 
     if ("__id__" in pTask && pTask.__id__ !== pTask.name) {
       txt += "\n" + pTask.__id__;
     }
 
-    if ("__sls__" in pTask) {
-      txt += "\n" + pTask.__sls__.replace(/[.]/g, "/") + ".sls";
+    if ("name" in pTask) {
+      txt += "\n" + pTask.name;
+    }
+
+    if ("___key___" in pTask) {
+      const components = pTask.___key___.split("_|-");
+      const functionName = components[0] + "." + components[3];
+      txt += "\n" + functionName;
     }
 
     let nrChanges = 0;
