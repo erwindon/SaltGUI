@@ -684,12 +684,8 @@ export class Panel {
       if (typeof pMinionData === "string") {
         Utils.addErrorToTableCell(td, pMinionData);
       }
-      if (pMinionData.os && typeof pMinionData !== "string") {
-        const img = document.createElement("img");
-        img.setAttribute("src", config.NAV_URL + "/static/images/os-" + pMinionData.os.replace(" ", "-").toLowerCase() + ".png");
-        img.setAttribute("onerror", "this.onerror=null; this.title='Unknown OS for image, please report to SaltGUI team'; this.src='/static/images/os-UNKNOWN.png'");
-        img.classList.add("osimage");
-        td.prepend(img);
+      if (typeof pMinionData === "object" && pMinionData.os) {
+        Panel.addPrefixImage(td, "os-" + pMinionData.os);
       }
       minionTr.appendChild(td);
     }
@@ -882,5 +878,14 @@ export class Panel {
     if (this.searchBox && this.table) {
       Utils.hideShowTableSearchBar(this.searchBox, this.table, "hide");
     }
+  }
+
+  static addPrefixImage (pElem, pImageName) {
+    const img = document.createElement("img");
+    const pngName = pImageName.replace(" ", "-").toLowerCase() + ".png";
+    img.setAttribute("src", config.NAV_URL + "/static/images/" + pngName);
+    img.setAttribute("onerror", "this.onerror=null; this.title='Unknown image, please report to SaltGUI team that image \\'" + pngName + "\\' is missing'; this.src='/static/images/UNKNOWN.png'");
+    img.classList.add("prefiximage");
+    pElem.prepend(img);
   }
 }
