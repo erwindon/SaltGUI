@@ -60,7 +60,7 @@ export class LogoutPage extends Page {
       return;
     }
 
-    const loginResponseStr = Utils.getStorageItem("session", "login-response", "{}");
+    const loginResponseStr = Utils.getStorageItem("session", "login_response", "{}");
     const loginResponse = JSON.parse(loginResponseStr);
 
     const expireValue = loginResponse.expire;

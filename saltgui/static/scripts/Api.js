@@ -33,7 +33,7 @@ export class API {
           // just like 403 Unauthorized
           throw new HTTPError(-1, "No permissions");
         }
-        Utils.setStorageItem("session", "login-response", JSON.stringify(response));
+        Utils.setStorageItem("session", "login_response", JSON.stringify(response));
         Utils.setStorageItem("session", "token", response.token);
         return true;
       });
@@ -306,7 +306,7 @@ export class API {
           return null;
         }
         if (pResponse.status === 401 && pPage !== "/login") {
-          const loginResponseStr = Utils.getStorageItem("session", "login-response");
+          const loginResponseStr = Utils.getStorageItem("session", "login_response");
           if (!loginResponseStr) {
             this.logout().then(() => {
               this.router.goTo("login", {"reason": "no-session"});
@@ -378,7 +378,7 @@ export class API {
         return;
       }
 
-      const loginResponseStr = Utils.getStorageItem("session", "login-response");
+      const loginResponseStr = Utils.getStorageItem("session", "login_response");
       if (!loginResponseStr) {
         // no login details, stop the stream
         source.close();

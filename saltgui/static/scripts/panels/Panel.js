@@ -376,13 +376,13 @@ export class Panel {
             Utils.warn("lines in 'minions.txt' must have 1 or 2 words, not " + fields.length + " like in: " + line);
           }
         }
-        Utils.setStorageItem("session", "minions-txt", JSON.stringify(minions));
+        Utils.setStorageItem("session", "minions_txt", JSON.stringify(minions));
       } else {
-        Utils.setStorageItem("session", "minions-txt", "{}");
+        Utils.setStorageItem("session", "minions_txt", "{}");
       }
       return true;
     }, () => {
-      Utils.setStorageItem("session", "minions-txt", "{}");
+      Utils.setStorageItem("session", "minions_txt", "{}");
       return false;
     });
   }
@@ -702,7 +702,7 @@ export class Panel {
 
     const minions = pData.return[0];
     const minionIds = Object.keys(minions).sort();
-    const minionsDict = JSON.parse(Utils.getStorageItem("session", "minions-txt", "{}"));
+    const minionsDict = JSON.parse(Utils.getStorageItem("session", "minions_txt", "{}"));
 
     // save for the autocompletion
     // This callback will also be called after LOGOUT due to the regular error handling

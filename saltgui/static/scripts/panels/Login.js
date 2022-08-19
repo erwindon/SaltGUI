@@ -301,7 +301,7 @@ export class LoginPanel extends Panel {
       // erase credentials since we don't do page-refresh
       this.usernameField.value = "";
       this.passwordField.value = "";
-      if (Utils.getStorageItem("session", "login-response") !== null) {
+      if (Utils.getStorageItem("session", "login_response") !== null) {
         // we might have been logged out in this first second
         // e.g. when clock between client and server differs more than the session timout
         const urlParams = new URLSearchParams(window.location.search);

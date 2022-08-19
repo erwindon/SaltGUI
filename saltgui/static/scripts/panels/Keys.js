@@ -109,7 +109,7 @@ export class KeysPanel extends Panel {
 
     const allKeys = pWheelKeyListAllData.return[0].data.return;
 
-    const minionsDict = JSON.parse(Utils.getStorageItem("session", "minions-txt", "{}"));
+    const minionsDict = JSON.parse(Utils.getStorageItem("session", "minions_txt", "{}"));
 
     // Unaccepted goes first because that is where the user must decide
     const minionIdsPre = allKeys.minions_pre.sort();
@@ -576,7 +576,7 @@ export class KeysPanel extends Panel {
     }
 
     const tr = this.table.querySelector("tr#" + Utils.getIdFromMinionId(pData.id));
-    const minionsDict = JSON.parse(Utils.getStorageItem("session", "minions-txt", "{}"));
+    const minionsDict = JSON.parse(Utils.getStorageItem("session", "minions_txt", "{}"));
     if (tr) {
       const statusTd = tr.querySelector(".status");
       // drop all other classes (accepted, rejected, etc)

@@ -193,12 +193,12 @@ export class Router {
   }
 
   static _getUserName () {
-    const loginResponseStr = Utils.getStorageItem("session", "login-response", "{}");
+    const loginResponseStr = Utils.getStorageItem("session", "login_response", "{}");
     try {
       const loginResponse = JSON.parse(loginResponseStr);
       return loginResponse.user;
     } catch (err) {
-      Utils.error("error in object login-response=" + loginResponseStr + " --> " + err.name + ": " + err.message);
+      Utils.error("error in object login_response=" + loginResponseStr + " --> " + err.name + ": " + err.message);
       return null;
     }
   }
@@ -284,7 +284,7 @@ export class Router {
     // close the command-box when it is stil open
     CommandBox.hideManualRun();
 
-    if (pHash !== "login" && Utils.getStorageItem("session", "login-response") === null) {
+    if (pHash !== "login" && Utils.getStorageItem("session", "login_response") === null) {
       // the fact that we don't have a session will be caught later
       // but this was shows less error messages on the console
       // but do not destroy the reason when login is already the goal
