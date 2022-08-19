@@ -383,11 +383,11 @@ export class Output {
       if (key === "skip_watch") continue;
       if (key === "start_time") continue;
       if (key === "success") continue;
-      /* eslint-enable curly */
       // skip trivial info: result = true
-      if (key === "result" && pTask[key]) {
-        continue;
-      }
+      if (key === "result" && pTask[key] === true) continue;
+      // skip trivial info: result = null
+      if (key === "result" && pTask[key] === null) continue;
+      /* eslint-enable curly */
       txt += "\n" + key + " = ";
       if (typeof pTask.changes === "object") {
         txt += JSON.stringify(pTask[key]);
