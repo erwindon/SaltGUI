@@ -647,13 +647,13 @@ export class MinionsPanel extends Panel {
         const minionBugs = MinionsPanel._getCveBugs(minionVersion, MINION);
 
         if (Object.keys(masterBugs).length) {
-          versionSpan.innerText = Character.WARNING_SIGN + minionVersion;
+          Panel.addPrefixIcon(versionSpan, Character.WARNING_SIGN);
         } else if (Object.keys(minionBugs).length) {
-          versionSpan.innerText = Character.WARNING_SIGN + minionVersion;
+          Panel.addPrefixIcon(versionSpan, Character.WARNING_SIGN);
         } else if (outcome === "Minion requires update") {
-          versionSpan.innerText = Character.WARNING_SIGN + minionVersion;
+          Panel.addPrefixIcon(versionSpan, Character.WARNING_SIGN);
         } else if (outcome === "Minion newer than master") {
-          versionSpan.innerText = Character.WARNING_SIGN + minionVersion;
+          Panel.addPrefixIcon(versionSpan, Character.WARNING_SIGN);
         } else if (outcome === "Up to date") {
           // VOID
         }

@@ -222,7 +222,8 @@ export class KeysPanel extends Panel {
 
     if (txt) {
       minionIdTd.setAttribute("sorttable_customkey", pMinionId);
-      minionIdSpan.innerText = Character.WARNING_SIGN + pMinionId;
+      minionIdSpan.innerText = pMinionId;
+      Panel.addPrefixIcon(minionIdSpan, Character.WARNING_SIGN);
       Utils.addToolTip(
         minionIdSpan,
         txt + "\nUpdate file 'minions.txt' when needed",
