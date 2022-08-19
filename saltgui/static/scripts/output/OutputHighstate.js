@@ -137,7 +137,9 @@ export class OutputHighstate {
         taskSpan = OutputHighstateTaskFull.getStateOutput(task, taskId, taskName, functionName);
       }
 
-      if (!task.result) {
+      if (task.result === null) {
+        taskSpan.classList.add("task-skipped");
+      } else if (!task.result) {
         taskSpan.classList.add("task-failure");
       } else if (hasChanges) {
         taskSpan.classList.add("task-changes");
