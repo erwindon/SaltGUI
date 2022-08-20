@@ -68,5 +68,6 @@ export class OutputHighstateSummaryOriginal {
     const totalsSpan = Utils.createSpan("", txt);
     totalsSpan.style.color = "aqua";
     pDiv.append(totalsSpan);
+    pDiv.style.cursor = "pointer";
   }
 }
