@@ -1,6 +1,6 @@
 /* The container <div> - needed to position the menu-dropdown content */
 .menu-dropdown {
-  cursor: deafult;
+  cursor: default;
 }
 
 div.search-box .menu-dropdown {
