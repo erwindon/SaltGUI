@@ -33,8 +33,9 @@ import {Utils} from "../Utils.js";
 export class Output {
 
   static isOutputFormatAllowed (pRequestedOutputFormat) {
-    const supportedOutputFormats = Utils.getStorageItem("session", "output_formats", "doc,saltguihighstate,json");
-    return supportedOutputFormats.includes(pRequestedOutputFormat);
+    const outputFormats = Utils.getStorageItem("session", "output_formats", "doc,saltguihighstate,json");
+    const items = outputFormats.split(",");
+    return items.includes(pRequestedOutputFormat);
   }
 
   static isStateOutputSelected (pRequestedStateOutput) {

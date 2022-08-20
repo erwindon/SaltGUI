@@ -10,7 +10,8 @@ export class OutputHighstate {
 
   static isHighStateOutput (pCommand, pResponse) {
 
-    if (!Output.isOutputFormatAllowed("highstate")) {
+    if (!Output.isOutputFormatAllowed("highstate") &&
+        !Output.isOutputFormatAllowed("saltguihighstate")) {
       return false;
     }
 
