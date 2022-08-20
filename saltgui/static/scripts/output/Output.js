@@ -96,12 +96,12 @@ export class Output {
       return OutputJson.formatJSON(pObject);
     }
 
-    if (Output.isOutputFormatAllowed("yaml")) {
-      return OutputYaml.formatYAML(pObject);
-    }
-
     if (Output.isOutputFormatAllowed("nested")) {
       return OutputNested.formatNESTED(pObject);
+    }
+
+    if (Output.isOutputFormatAllowed("yaml")) {
+      return OutputYaml.formatYAML(pObject);
     }
 
     // when nothing is allowed, JSON is always allowed
@@ -705,9 +705,9 @@ export class Output {
     Output._addDownload(topSummaryDiv, pJobId, downloadObject,
       JSON.stringify, "RAW-JSON", "application/json", "raw.json");
     Output._addDownload(topSummaryDiv, pJobId, downloadObject,
-      OutputNested.formatNESTED, "NESTED", "text/plain", "nested.txt");
-    Output._addDownload(topSummaryDiv, pJobId, downloadObject,
       OutputYaml.formatYAML, "YAML", "text/vnd.yaml", "yaml");
+    Output._addDownload(topSummaryDiv, pJobId, downloadObject,
+      OutputNested.formatNESTED, "NESTED", "text/plain", "nested.txt");
     Output._addDownload(topSummaryDiv, pJobId, downloadObject,
       OutputJson.formatJSON, "JSON", "application/json", "json");
 
