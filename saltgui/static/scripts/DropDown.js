@@ -72,18 +72,27 @@ export class DropDownMenu {
   verifyAll () {
     let visibleCount = 0;
     if (this.menuDropdownContent) {
+      let prevChld = null;
       for (const chld of this.menuDropdownContent.children) {
         const verifyCallBack = chld.verifyCallBack;
-        if (verifyCallBack) {
-          const title = verifyCallBack(chld);
-          if (title === null) {
-            chld.style.display = "none";
-            continue;
+        const title = verifyCallBack ? verifyCallBack(chld) : chld.innerText;
+        if (title === null && chld.firstChild.tagName !== "HR") {
+          chld.style.display = "none";
+          if (prevChld && prevChld.firstChild && prevChld.firstChild.tagName === "HR") {
+            prevChld.style.display = "none";
           }
+          prevChld = chld;
+          continue;
+        }
+        if (chld.firstChild && chld.firstChild.tagName !== "HR") {
           chld.innerText = DropDownMenu._sanitizeMenuItemTitle(title);
-          chld.style.removeProperty("display");
+        }
+        chld.style.removeProperty("display");
+        if (prevChld && prevChld.firstChild && prevChld.firstChild.tagName === "HR") {
+          prevChld.style.removeProperty("display");
         }
         visibleCount += 1;
+        prevChld = chld;
       }
     }
     // hide the menu when it has no visible menu-items
@@ -126,6 +135,14 @@ export class DropDownMenu {
     this.menuDropdownContent.appendChild(button);
     this.verifyAll();
     return button;
+  }
+
+  addMenuSeparator () {
+    const div = document.createElement("div");
+    div.style.padding = 0;
+    const hr = document.createElement("hr");
+    div.appendChild(hr);
+    this.menuDropdownContent.appendChild(div);
   }
 
   _callback (pClickEvent, pCallBack, pValue) {

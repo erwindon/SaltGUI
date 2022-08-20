@@ -42,7 +42,7 @@ div.panel > .menu-dropdown {
 }
 
 /* Change color of menu-dropdown links on hover */
-.run-command-button .menu-dropdown-content div:hover {
+.run-command-button .menu-dropdown-content div.run-command-button:hover {
   background: rgba(0, 0, 0, 15%);
   cursor: pointer;
 }
