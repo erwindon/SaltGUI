@@ -9,12 +9,6 @@ import {Utils} from "../Utils.js";
 export class OutputHighstate {
 
   static isHighStateOutput (pCommand, pResponse) {
-
-    if (!Output.isOutputFormatAllowed("highstate") &&
-        !Output.isOutputFormatAllowed("saltguihighstate")) {
-      return false;
-    }
-
     if (typeof pResponse !== "object") {
       return false;
     }
