@@ -9,7 +9,10 @@ import {Panel} from "./Panel.js";
 import {TargetType} from "../TargetType.js";
 import {Utils} from "../Utils.js";
 
+// only consider this number of latest highstate jobs
 const MAX_HIGHSTATE_JOBS = 10;
+
+// more than this number of states switches to summary
 const MAX_HIGHSTATE_STATES = 20;
 
 export class HighStatePanel extends Panel {

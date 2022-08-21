@@ -589,6 +589,7 @@ export class MinionsPanel extends Panel {
     if (bugs.length > 1) {
       txt += "s";
     }
+    // initial line only has 3 entries due to some initial text on same line
     let cnt = 3;
     for (const bug of bugs) {
       if (bugs.length > 1 && bug === bugs[bugs.length - 1]) {
@@ -597,6 +598,7 @@ export class MinionsPanel extends Panel {
         txt += ",";
       }
       if (cnt <= 0) {
+        // start a new line with a maximum of 4 entries
         txt += "\n";
         cnt = 4;
       } else {

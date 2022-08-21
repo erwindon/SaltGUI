@@ -6,6 +6,9 @@ import {Output} from "../output/Output.js";
 import {TargetType} from "../TargetType.js";
 import {Utils} from "../Utils.js";
 
+// how many jobs to load in the side panel
+const MAX_JOBS_SUMMARY = 7;
+
 export class JobsSummaryPanel extends JobsPanel {
 
   constructor () {
@@ -19,8 +22,7 @@ export class JobsSummaryPanel extends JobsPanel {
   }
 
   onShow () {
-    const maxJobs = 7;
-    super.onShow(maxJobs);
+    super.onShow(MAX_JOBS_SUMMARY);
   }
 
   /* eslint-disable class-methods-use-this */
