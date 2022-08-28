@@ -47,7 +47,7 @@ external_auth:
       - '@wheel'
       - '@jobs'
 ```
-- See `docs/PERMISSIONS.md` for more restricted security configurations.
+- See [Permissions](docs/PERMISSIONS.md) for more restricted security configurations.
 - The username 'saltuser1' is only an example. Generic accounts are not recommended, use personal accounts instead. Or use a user-group, see [EAUTH](https://docs.saltproject.io/en/latest/topics/eauth/index.html) for details.
 - Multiple entries like `saltuser1` can be added when you have multiple users.
 - `saltuser1` is a unix (PAM) user, make sure it exists or create a new one.
@@ -69,7 +69,7 @@ rest_cherrypy:
 
 **Note: With this configuration, the user has access to all salt modules available, maybe this is not what you want**
 
-Please read the [Permissions](docs/PERMISSIONS.md) page for more information.
+Please read [Permissions](docs/PERMISSIONS.md) for more information.
 
 
 ## Authentication
