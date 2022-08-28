@@ -19,7 +19,7 @@ external_auth:
             - '@wheel':
                 - 'key.*'    # allows keys management and listing
                              # but no other wheel commands
-            - 'config.values'
+                - 'config.values'
 ```
 
 So this is a basic configuration which allows some of the basic functionality SaltGUI has to offer.
