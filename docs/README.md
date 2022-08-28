@@ -40,12 +40,12 @@ See [SaltGUI documentation](https://erwindon.github.io/SaltGUI/) for the complet
 - Find `external_auth` and configure as following (see the note below!):
 ```
 external_auth:
-  pam:
-    saltuser1:
-      - .*
-      - '@runner'
-      - '@wheel'
-      - '@jobs'
+    pam:
+        saltuser1:
+            - .*
+            - '@runner'
+            - '@wheel'
+            - '@jobs'
 ```
 - See [Permissions](docs/PERMISSIONS.md) for more restricted security configurations.
 - The username 'saltuser1' is only an example. Generic accounts are not recommended, use personal accounts instead. Or use a user-group, see [EAUTH](https://docs.saltproject.io/en/latest/topics/eauth/index.html) for details.
@@ -54,12 +54,12 @@ external_auth:
 - At the bottom of this file, also setup the rest_cherrypi server to access SaltGUI from "http://localhost:3333" (or on any of the hostnames that the server has):
 ```
 rest_cherrypy:
-  port: 3333
-  host: 0.0.0.0
-  disable_ssl: true
-  app: /srv/saltgui/index.html
-  static: /srv/saltgui/static
-  static_path: /static
+    port: 3333
+    host: 0.0.0.0
+    disable_ssl: true
+    app: /srv/saltgui/index.html
+    static: /srv/saltgui/static
+    static_path: /static
 ```
 - Note that the cherrypi server is part of the salt-api package and has no separate installation. It is configured using the master configuration file. When configured using the above configurations, both the api calls and the html/js files are served by the cherrypy server. Therefore no additional web application server is needed.
 - Note that from the SaltGUI GIT repository, only the directory `saltgui` forms the actual SaltGUI web application.
@@ -175,8 +175,8 @@ saltgui_templates:
         target: dev*
         command: test.version
         categories:
-          - cat1
-          - cat2
+            - cat1
+            - cat2
 ```
 When at least one template is assigned to a category, then you can select a template category before
 selecting the actual category. Otherwise that choice remains hidden. Templates can be in multiple categories
@@ -245,12 +245,12 @@ To use it,
 - specify `saltgui_custom_command_help` in the salt master config. Example:
 ```
 saltgui_custom_command_help: |
-  <h2>Job Commands</h2>
-    runners.jobs.active
-      => Show active jobs
+    <h2>Job Commands</h2>
+        runners.jobs.active
+        => Show active jobs
 
-    runners.jobs.list_job «JID»
-      => Show job with given job id (JID)
+        runners.jobs.list_job «JID»
+        => Show job with given job id (JID)
 ```
 - Hover the documentation icon (`📖︎`) near the command input field and select `Show custom help`
 
@@ -288,9 +288,9 @@ Users that are not listed still have the full menu.
 e.g.:
 ```
 saltgui_pages:
-  user1:
-    - keys
-    - grains
+    user1:
+        - keys
+        - grains
 ```
 Note that this is NOT a security mechanism to reduce what a user can do.
 All pages are still accessible using their original deep-link.
@@ -354,27 +354,26 @@ and use it as proxy to salt-api so that requests are answered from the same orig
 Sample NGINX configuration might look like this:
 ```
 server {
-  listen       80;
-  server_name  _;
-  root         /data/www;
-  index        index.html;
+    listen       80;
+    server_name  _;
+    root         /data/www;
+    index        index.html;
 
-  # handle internal api (proxy)
-  location /api/ {
-      proxy_set_header X-Real-IP $remote_addr;
-      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-      proxy_set_header X-NginX-Proxy true;
-      proxy_pass http://saltmaster-local:3333/;
-      proxy_ssl_session_reuse off;
-      proxy_set_header Host $http_host;
-      proxy_redirect off;
-  }
+    # handle internal api (proxy)
+    location /api/ {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-NginX-Proxy true;
+        proxy_pass http://saltmaster-local:3333/;
+        proxy_ssl_session_reuse off;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+    }
 
-  # handle saltgui web page
-  location / {
-    try_files $uri /index.html;
-  }
-
+    # handle saltgui web page
+    location / {
+        try_files $uri /index.html;
+    }
 }
 ```
 
@@ -382,8 +381,8 @@ The value of the `API_URL` in the `config.js` file must point to path where salt
 The value of the `NAV_URL` in the `config.js` file must point to path where the SaltGUI application is exposed.
 ```
 const config = {
-  API_URL: '/api',
-  NAV_URL: '/app'
+    API_URL: '/api',
+    NAV_URL: '/app'
 };
 ```
 Note that the main page of SaltGUI is then located at `/app/`. When you want `/app` to work as well, you should instruct an intermediate proxy server to translate `/app` into `/app/`.
