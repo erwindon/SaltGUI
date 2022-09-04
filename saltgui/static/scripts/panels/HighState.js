@@ -325,6 +325,8 @@ export class HighStatePanel extends Panel {
           continue;
         }
 
+        data.___key___ = key;
+
         // always create the span for the state
         // we may use it for presentation (keys.length <= MAX_HIGHSTATE_STATES); or
         // for information (keys.length > MAX_HIGHSTATE_STATES)
