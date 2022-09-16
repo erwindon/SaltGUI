@@ -320,7 +320,7 @@ export class Router {
       }
       // push history state, so that the address bar holds the correct
       // deep-link; and so that we can use the back-button
-      let url = "/";
+      let url = config.NAV_URL ? config.NAV_URL : "/";
       let sep = "?";
       for (const key in pQuery) {
         const value = pQuery[key];
