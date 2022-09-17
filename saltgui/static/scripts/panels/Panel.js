@@ -885,8 +885,8 @@ export class Panel {
   static addPrefixImage (pElem, pImageName) {
     const img = document.createElement("img");
     const pngName = pImageName.replace(" ", "-").toLowerCase() + ".png";
-    img.setAttribute("src", config.NAV_URL + "/static/images/" + pngName);
-    img.setAttribute("onerror", "this.onerror=null; this.title='Unknown image, please report to SaltGUI team that image \\'" + pngName + "\\' is missing'; this.src='/static/images/UNKNOWN.png'");
+    img.setAttribute("src", "static/images/" + pngName);
+    img.setAttribute("onerror", "this.onerror=null; this.title='Unknown image, please report to SaltGUI team that image \\'" + pngName + "\\' is missing'; this.src='static/images/UNKNOWN.png'");
     img.classList.add("prefiximage");
     pElem.prepend(img);
   }
