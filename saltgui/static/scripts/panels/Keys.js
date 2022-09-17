@@ -64,36 +64,30 @@ export class KeysPanel extends Panel {
   }
 
   showSyndicInfo (pSyndicEventFound) {
-    const syndicInfo = Utils.getStorageItem("session", "syndic_info", "false-masterofmasters");
-    if (syndicInfo === "true-masterofmasters") {
-      this.setWarningText(
-        "This overview contains only the keys of minions that are connected to this salt-master or to one of its backup instances." +
-        " Keys for minions that are connected to other salt-masters are not shown in this SaltGUI." +
-        " However, commands and information retrieval should be possible for all minions." +
-        " This salt-master is commanding all other salt-masters and salt-minions." +
-        " The minion-list should be complete, but indirectly reachable minions may show a small delay.");
-    } else if (syndicInfo.startsWith("true-")) {
-      this.setWarningText(
-        "This overview contains only the keys of minions that are connected to this salt-master or to one of its backup instances." +
-        " Keys for minions that are connected to other salt-masters are not shown in this SaltGUI." +
-        " Commands and information retrieval should be possible for all directly and indirectly reachable minions." +
-        " This salt-master is commanded by another salt-master, and it is commanding other salt-masters and salt-minions." +
-        " The minion-list will be incomplete, and indirectly reachable minions may show a small delay.");
-    } else if (syndicInfo === "false-masterofmasters") {
-      if (pSyndicEventFound) {
-        this.setWarningText(
-          "This overview contains only the keys of minions that are connected to this salt-master or to one of its backup instances." +
-          " Keys for minions that are connected to other salt-masters are not shown in this SaltGUI." +
-          " Commands and information retrieval should be possible for all directly reachable minions." +
-          " This salt-master is commanded by another salt-master, and it is not commanding other salt-masters and salt-minions." +
-          " The minion-list will be incomplete.");
-      } else {
-        // we are not sure yet, this may be regular standalone salt-master
-      }
-    } else if (syndicInfo.startsWith("false-")) {
-      console.warn("Strange value '" + syndicInfo + "' for syndicInfo, please review the relevant settings");
+    const syndicMaster = Utils.getStorageItem("session", "syndic_master", "");
+    const orderMasters = Utils.getStorageItem("session", "order_masters", "false") === "true";
+
+    let warningText = "";
+
+    if (syndicMaster !== "" && syndicMaster !== "masterofmasters") {
+      warningText += " The syndic-master of this salt-master is '" + syndicMaster + "'.";
+    }
+
+    if (orderMasters) {
+      warningText += " This salt-master is ready to work with salt-syndic nodes.";
+    }
+
+    if (pSyndicEventFound) {
+      warningText += " Events related to salt-syndic are seen in the salt-event-bus.";
+    }
+
+    if (warningText === "") {
+      this.setWarningText();
     } else {
-      console.error("Unknown value '" + syndicInfo + "' for syndicInfo, please report as issue for SaltGUI");
+      warningText += " This overview contains only the keys of minions that are connected to this salt-master.";
+      warningText += " Keys for minions that are connected to other salt-masters are not always shown in this SaltGUI.";
+      warningText += " Commands issued from this salt-master may involve minions that are not listed in SaltGUI.";
+      this.setWarningText("info", warningText.trim());
     }
   }
 
