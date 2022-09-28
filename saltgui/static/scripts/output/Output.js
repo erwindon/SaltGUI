@@ -723,7 +723,7 @@ export class Output {
 
     // for all other types we consider the output per minion
     // this is more generic and it simplifies the handlers
-    for (const minionId of pMinionData.sort()) {
+    for (const minionId of [...pMinionData].sort()) {
 
       let minionResponse = pResponse[minionId];
 

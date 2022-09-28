@@ -50,10 +50,15 @@ export class OptionsPanel extends Panel {
         "datetime-representation", "saltgui", "utc",
         [["representation", "utc", "local", "utc-localtime:utc+localtime", "local-utctime:local+utctime"]]
       ],
+
+      /* note that this is not in the alphabetic order */
+      ["show-jobs", "saltgui", "(all)"],
       ["hide-jobs", "saltgui", "(none)"],
 
-      /* show-jobs is not in the alphabetic order, but keep it close to hide-jobs */
-      ["show-jobs", "saltgui", "(all)"],
+      /* note that this is not in the alphabetic order */
+      ["show-saltenvs", "saltgui", "(all)"],
+      ["hide-saltenvs", "saltgui", "(none)"],
+
       ["motd-txt", "saltgui", "(none)"],
       ["motd-html", "saltgui", "(none)"],
       [

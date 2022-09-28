@@ -803,8 +803,7 @@ export class Documentation {
                 }`
     };
 
-    const beaconsListAvailableStr = Utils.getStorageItem("session", "beacons_list_available", "[]");
-    const beaconsListAvailable = JSON.parse(beaconsListAvailableStr);
+    const beaconsListAvailable = Utils.getStorageItemObject("session", "beacons_list_available");
 
     // show the beacon names
     let html = "<p>Choose a template for 'beacons.add'</p>";

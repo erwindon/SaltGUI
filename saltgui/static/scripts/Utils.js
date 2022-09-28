@@ -68,6 +68,27 @@ export class Utils {
     return null;
   }
 
+  static getStorageItemObject (pStorage, pKeyName, pDefaultValue = {}) {
+    const value = Utils.getStorageItem(pStorage, pKeyName, null);
+    const obj = JSON.parse(value);
+    if (obj !== null && typeof obj === "object" && !Array.isArray(obj)) {
+      return obj;
+    }
+    return pDefaultValue;
+  }
+
+  static getStorageItemList (pStorage, pKeyName, pDefaultValue = []) {
+    const value = Utils.getStorageItem(pStorage, pKeyName, null);
+    const obj = JSON.parse(value);
+    if (typeof obj !== "object") {
+      return [obj];
+    }
+    if (Array.isArray(obj)) {
+      return obj;
+    }
+    return pDefaultValue;
+  }
+
   static getStorageItem (pStorage, pKeyName, pDefaultValue = null) {
     const storage = Utils._getStorage(pStorage);
     if (!storage) {
@@ -578,5 +599,18 @@ export class Utils {
     /* eslint-disable no-console */
     console.error(...pStr);
     /* eslint-enable no-console */
+  }
+
+  static isIncluded (pItem, pAllowList, pDenyList) {
+    if (!pItem) {
+      return true;
+    }
+    if (pAllowList && pAllowList.length > 0) {
+      return pAllowList.includes(pItem);
+    }
+    if (pDenyList && pDenyList.length > 0) {
+      return !pDenyList.includes(pItem);
+    }
+    return true;
   }
 }

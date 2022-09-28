@@ -237,6 +237,30 @@ saltgui_public_pillars:
     - pub_.*
 ```
 
+## Highstate
+The highstate page provides an overview of the minions and their latest state information.
+At most 10 highstate jobs (`state.apply` or `state.highstate`) are considered.
+
+Individual low-states can be re-tried by clicking on their state symbol.
+Note that since the output of the `state.sls_id` commands is not considered in this overview,
+the result of such action has no effect on this screen.
+Use `state.apply test=true` to update the information without making changes on the minions.
+
+For organisations where the 'saltenv' facility is used, it is possible to limit the jobs that are
+considered to include (or exclude) only specific saltenvs.
+e.g.:
+```
+saltgui_show_saltenvs:
+    - base
+```
+or
+```
+saltgui_hide_saltenvs:
+    - env2
+    - env3
+```
+Typically only one of these variables should be set.
+Jobs that were started without the `saltenv` parameter are, for this purpose only, assumed to use the value `default` for this parameter. This allows these jobs to be hidden/showed using the same mechanism. SaltGUI does not replicate the internal logic of the salt-master and/or the salt-minion to determine which saltenv would actually have been used for such jobs.
 
 ## Custom command documentation
 A custom HTML help text can be shown from the "Manual Run" overlay.
