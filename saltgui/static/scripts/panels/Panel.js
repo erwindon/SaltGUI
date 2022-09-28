@@ -653,6 +653,8 @@ export class Panel {
       minionTr.appendChild(accepted);
     }
 
+    minionTr.dataset.minionId = pMinionId;
+
     let saltversion = "---";
     if (typeof pMinionData === "string") {
       saltversion = "";

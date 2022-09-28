@@ -433,6 +433,8 @@ export class API {
       } else if (tag.startsWith("salt/job/") && tag.includes("/prog/")) {
         // progress value (exists only for states)
         CommandBox.handleSaltJobProgEvent(tag, data);
+      } else if (tag.startsWith("syndic/")) {
+        pRouter.keysPage.handleSyndicEvent();
       }
 
       pRouter.eventsPage.handleAnyEvent(tag, data);

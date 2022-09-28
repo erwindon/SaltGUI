@@ -27,6 +27,7 @@ export class KeysPanel extends Panel {
       "The content of this page is",
       "automatically refreshed."
     ]);
+    this.addWarningField();
     this.addTable(["Minion", "Status", "-menu-", "Fingerprint"], "data-list-keys");
     this.setTableSortable("Status", "asc");
     this.addMsg();
@@ -39,6 +40,8 @@ export class KeysPanel extends Panel {
   onShow () {
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const wheelKeyFingerPromise = this.api.getWheelKeyFinger();
+
+    this.showSyndicInfo(false);
 
     this.loadMinionsTxt();
 
@@ -58,6 +61,34 @@ export class KeysPanel extends Panel {
       Utils.ignorePromise(wheelKeyFingerPromise);
       return false;
     });
+  }
+
+  showSyndicInfo (pSyndicEventFound) {
+    const syndicMaster = Utils.getStorageItem("session", "syndic_master", "");
+    const orderMasters = Utils.getStorageItem("session", "order_masters", "false") === "true";
+
+    let warningText = "";
+
+    if (syndicMaster !== "" && syndicMaster !== "masterofmasters") {
+      warningText += " The syndic-master of this salt-master is '" + syndicMaster + "'.";
+    }
+
+    if (orderMasters) {
+      warningText += " This salt-master is ready to work with salt-syndic nodes.";
+    }
+
+    if (pSyndicEventFound) {
+      warningText += " Events related to salt-syndic are seen in the salt-event-bus.";
+    }
+
+    if (warningText === "") {
+      this.setWarningText();
+    } else {
+      warningText += " This overview contains only the keys of minions that are connected to this salt-master.";
+      warningText += " Keys for minions that are connected to other salt-masters are not always shown in this SaltGUI.";
+      warningText += " Commands issued from this salt-master may involve minions that are not listed in SaltGUI.";
+      this.setWarningText("info", warningText.trim());
+    }
   }
 
   _handleWheelKeyFinger (pWheelKeyFingerData) {
@@ -676,5 +707,9 @@ export class KeysPanel extends Panel {
 
   handleSaltKeyEvent (pData) {
     this.handleSaltAuthEvent(pData);
+  }
+
+  handleSyndicEvent () {
+    this.showSyndicInfo(true);
   }
 }

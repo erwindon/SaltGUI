@@ -26,4 +26,8 @@ export class KeysPage extends Page {
   handleSaltJobRetEvent (pData) {
     this.jobs.handleSaltJobRetEvent(pData);
   }
+
+  handleSyndicEvent () {
+    this.keys.handleSyndicEvent();
+  }
 }
