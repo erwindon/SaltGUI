@@ -3,6 +3,7 @@
 import {Character} from "../Character.js";
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
+import {Utils} from "../Utils.js";
 
 export class StatsPanel extends Panel {
 
@@ -23,9 +24,9 @@ export class StatsPanel extends Panel {
     if (this.table.tBodies[0].children.length === 0) {
       // cannot do this in the constructor
       // since the framework removes all rows
-      const tr = document.createElement("tr");
+      const tr = Utils.createTr();
       this.table.tBodies[0].appendChild(tr);
-      const td = document.createElement("td");
+      const td = Utils.createTd();
       tr.appendChild(td);
       this.statsTd = td;
     }

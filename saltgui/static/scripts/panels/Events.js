@@ -54,7 +54,7 @@ export class EventsPanel extends Panel {
     }
 
     const tbody = this.table.tBodies[0];
-    const tr = document.createElement("tr");
+    const tr = Utils.createTr();
 
     // add timestamp value
     const stampTd = Utils.createTd();

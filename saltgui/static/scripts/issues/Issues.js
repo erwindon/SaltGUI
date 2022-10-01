@@ -47,13 +47,13 @@ export class Issues {
     // remove a previous incarnation of the same issue
     Issues.removeIssue(pPanel, pCatName, pIssueName);
 
-    const theTr = document.createElement("tr");
+    const theTr = Utils.createTr();
 
     const menu = new DropDownMenu(theTr, true);
     theTr.menu = menu;
 
-    const descTd = document.createElement("td");
-    const descSpan = document.createElement("span");
+    const descTd = Utils.createTd();
+    const descSpan = Utils.createSpan();
     descSpan.classList.add("desc");
     descTd.appendChild(descSpan);
     theTr.appendChild(descTd);
@@ -115,7 +115,7 @@ export class Issues {
   onGetIssues (pPanel, pTitle) {
     this.api = pPanel.api;
 
-    const msg = document.createElement("div");
+    const msg = Utils.createDiv();
     msg.classList.add("msg");
     msg.innerText = "(loading info for " + pTitle + ")";
     pPanel.msg2.appendChild(msg);

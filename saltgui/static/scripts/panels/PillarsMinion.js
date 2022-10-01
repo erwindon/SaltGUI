@@ -75,7 +75,7 @@ export class PillarsMinionPanel extends Panel {
 
     const keys = Object.keys(pillars).sort();
     for (const pillarName of keys) {
-      const pillar = document.createElement("tr");
+      const pillar = Utils.createTr();
 
       const nameTd = Utils.createTd("pillar-name", pillarName);
       pillar.appendChild(nameTd);

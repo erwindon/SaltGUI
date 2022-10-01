@@ -37,8 +37,8 @@ export class JobPanel extends Panel {
     this._addPanelMenuItemKillJob();
     this._addPanelMenuItemSignalJob();
 
-    const timeH2 = document.createElement("h2");
-    const timeSpan = document.createElement("span");
+    const timeH2 = Utils.createElem("h2");
+    const timeSpan = Utils.createSpan();
     timeSpan.classList.add("time");
     timeH2.appendChild(timeSpan);
     this.div.append(timeH2);
@@ -46,7 +46,7 @@ export class JobPanel extends Panel {
 
     this.addWarningField();
 
-    const output = document.createElement("pre");
+    const output = Utils.createElem("pre");
     output.id = "job-table";
     output.classList.add("output");
     this.output = output;

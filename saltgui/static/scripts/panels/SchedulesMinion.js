@@ -90,7 +90,7 @@ export class SchedulesMinionPanel extends Panel {
         delete schedule.maxrunning;
       }
 
-      const tr = document.createElement("tr");
+      const tr = Utils.createTr();
 
       const nameTd = Utils.createTd("schedule-name", scheduleName);
       tr.appendChild(nameTd);

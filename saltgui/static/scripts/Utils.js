@@ -237,7 +237,7 @@ export class Utils {
 
     const searchOptionsMenu = new DropDownMenu(menuAndFieldDiv, true);
 
-    const input = document.createElement("input");
+    const input = Utils.createElem("input");
     input.type = "text";
     input.spellcheck = false;
     input.classList.add("filter-text");
@@ -514,6 +514,11 @@ export class Utils {
     return span;
   }
 
+  // find old uses of document.createElement:
+  //   fgrep document.createElement *.js */*.js
+  // find legacy calls:
+  //   egrep "static create[A-Z][a-z]* " Utils.js; egrep --exclude=Utils.js "createElem[(]" *.js */*.js |
+  //   sed -e 's/.*Utils/Utils/' | sort | uniq -c | sort -nr
   static createElem (pTag, pClassName, pInnerText, pId) {
     const elem = document.createElement(pTag);
     if (pId) {

@@ -79,7 +79,7 @@ export class Output {
     // replace all returned JIDs to links
     // typically found in the output of an async job
     if (pMinionResponse.match(ParseCommandLine.getPatJid())) {
-      const link = document.createElement("a");
+      const link = Utils.createElem("a");
       link.href = "?id=" + encodeURIComponent(pMinionResponse) + "#job";
       link.innerText = pMinionResponse;
       return link;
@@ -498,13 +498,13 @@ export class Output {
   }
 
   static _addDownload (pParentDiv, pJobId, pObject, pFormatFunction, pTypeLabel, pContentType, pFilenameExtension) {
-    const downloadA = document.createElement("a");
+    const downloadA = Utils.createElem("a");
     downloadA.innerText = pTypeLabel;
     downloadA.style = "float:right; margin-left:10px";
     downloadA.addEventListener("click", (pClickEvent) => {
       // based on one of the answers in:
       // https://stackoverflow.com/questions/4184944/javascript-download-data-to-file-from-content-within-the-page
-      const dummyA = document.createElement("a");
+      const dummyA = Utils.createElem("a");
       const blob = new Blob([pFormatFunction(pObject)], {"type": pContentType});
       /* eslint-disable compat/compat */
       /* URL is not supported in op_mini all, IE 11  compat/compat */
@@ -870,7 +870,7 @@ export class Output {
       div.append(minionRow);
 
       if (minionMultiLine) {
-        div.appendChild(document.createElement("br"));
+        div.appendChild(Utils.createBr());
       }
 
       // move back to the top of the host, that makes
