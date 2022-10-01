@@ -20,8 +20,8 @@ export class TargetType {
   // It takes a while before we known the list of nodegroups
   // so this conclusion must be re-evaluated each time
   static _targetTypeNodeGroupPrepare (pMenuItem) {
-    const nodeGroupsText = Utils.getStorageItem("session", "nodegroups");
-    if (!nodeGroupsText || nodeGroupsText === "{}") {
+    const nodeGroups = Utils.getStorageItemObject("session", "nodegroups");
+    if (!nodeGroups || Object.keys(nodeGroups).length === 0) {
       return null;
     }
 

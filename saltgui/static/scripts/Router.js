@@ -192,27 +192,9 @@ export class Router {
     }
   }
 
-  static _getUserName () {
-    const loginResponseStr = Utils.getStorageItem("session", "login_response", "{}");
-    try {
-      const loginResponse = JSON.parse(loginResponseStr);
-      return loginResponse.user;
-    } catch (err) {
-      Utils.error("error in object login_response=" + loginResponseStr + " --> " + err.name + ": " + err.message);
-      return null;
-    }
-  }
-
   static _getPagesList () {
-    const pagesText = Utils.getStorageItem("session", "pages", "{}");
-    let pages;
-    try {
-      pages = JSON.parse(pagesText);
-    } catch (err) {
-      Utils.error("error in object saltgui_pages=" + pagesText + " --> " + err.name + ": " + err.message);
-      return {};
-    }
-    const userName = Router._getUserName();
+    const pages = Utils.getStorageItemObject("session", "pages");
+    const userName = Utils.getStorageItemObject("session", "login_response").user;
     if (!userName || typeof pages !== "object" || !(userName in pages)) {
       return [];
     }

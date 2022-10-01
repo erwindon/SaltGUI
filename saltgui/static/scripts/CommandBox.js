@@ -62,8 +62,7 @@ export class CommandBox {
     menu.setTitle("");
     menu.menuButton.classList.add("small-button-left");
     CommandBox.templateCatMenu = menu;
-    const templatesText = Utils.getStorageItem("session", "templates", "{}");
-    const templates = JSON.parse(templatesText);
+    const templates = Utils.getStorageItemObject("session", "templates");
     const categories = TemplatesPanel.getTemplatesCategories(templates);
     if (categories.length < 2) {
       // no useful content
@@ -120,8 +119,7 @@ export class CommandBox {
     menu.menuButton.classList.add("small-button-left");
     CommandBox.templateTmplMenu = menu;
     CommandBox.templateTmplMenu._templateCategory = null;
-    const templatesText = Utils.getStorageItem("session", "templates", "{}");
-    const templates = JSON.parse(templatesText);
+    const templates = Utils.getStorageItemObject("session", "templates");
     const keys = Object.keys(templates).sort();
     for (const key of keys) {
       const template = templates[key];
@@ -547,8 +545,7 @@ export class CommandBox {
     // SALT API returns a 500-InternalServerError when it hits an unknown group
     // Let's improve on that
     if (pTargetType === "nodegroup") {
-      const nodeGroupsTxt = Utils.getStorageItem("session", "nodegroups", "{}");
-      const nodeGroups = JSON.parse(nodeGroupsTxt);
+      const nodeGroups = Utils.getStorageItemObject("session", "nodegroups");
       if (!(pTarget in nodeGroups)) {
         CommandBox._showError("Unknown nodegroup '" + pTarget + "'");
         return null;

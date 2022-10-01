@@ -245,8 +245,7 @@ export class OptionsPanel extends Panel {
       this._addOptionRow(name, category, defaultValue, valuesArr);
     }
 
-    const loginResponseStr = Utils.getStorageItem("session", "login_response", "{}");
-    const loginResponse = JSON.parse(loginResponseStr);
+    const loginResponse = Utils.getStorageItemObject("session", "login_response");
     const sessionStart = loginResponse.start;
 
     for (const option of this.options) {

@@ -68,6 +68,8 @@ export class Utils {
     return null;
   }
 
+  // find old code:
+  //   egrep 'Utils.getStorageItem.*"\{ *\}"' *.js */*.js
   static getStorageItemObject (pStorage, pKeyName, pDefaultValue = {}) {
     const value = Utils.getStorageItem(pStorage, pKeyName, null);
     const obj = JSON.parse(value);
@@ -77,6 +79,8 @@ export class Utils {
     return pDefaultValue;
   }
 
+  // find old code:
+  //   egrep 'Utils.getStorageItem.*"\[ *]"' *.js */*.js
   static getStorageItemList (pStorage, pKeyName, pDefaultValue = []) {
     const value = Utils.getStorageItem(pStorage, pKeyName, null);
     const obj = JSON.parse(value);
