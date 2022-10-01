@@ -514,46 +514,45 @@ export class Utils {
     return span;
   }
 
-  static createTd (pClassName, pInnerText, pId) {
-    const td = document.createElement("td");
+  static createElem (pTag, pClassName, pInnerText, pId) {
+    const elem = document.createElement(pTag);
     if (pId) {
-      td.id = pId;
+      elem.id = pId;
     }
     if (pClassName) {
-      td.className = pClassName;
+      if (Array.isArray(pClassName)) {
+        elem.classList.add(...pClassName);
+      } else {
+        elem.className = pClassName;
+      }
     }
     if (pInnerText) {
-      td.innerText = pInnerText;
+      elem.innerText = pInnerText;
     }
-    return td;
+    return elem;
+  }
+
+  // helper function when createElem is used more than
+  // 10 times for a specific pTag
+
+  static createBr (pClassName, pInnerText, pId) {
+    return Utils.createElem("br", pClassName, pInnerText, pId);
   }
 
   static createDiv (pClassName, pInnerText, pId) {
-    const div = document.createElement("div");
-    if (pId) {
-      div.id = pId;
-    }
-    if (pClassName) {
-      div.className = pClassName;
-    }
-    if (pInnerText) {
-      div.innerText = pInnerText;
-    }
-    return div;
+    return Utils.createElem("div", pClassName, pInnerText, pId);
   }
 
   static createSpan (pClassName, pInnerText, pId) {
-    const span = document.createElement("span");
-    if (pId) {
-      span.id = pId;
-    }
-    if (pClassName) {
-      span.className = pClassName;
-    }
-    if (pInnerText) {
-      span.innerText = pInnerText;
-    }
-    return span;
+    return Utils.createElem("span", pClassName, pInnerText, pId);
+  }
+
+  static createTd (pClassName, pInnerText, pId) {
+    return Utils.createElem("td", pClassName, pInnerText, pId);
+  }
+
+  static createTr (pClassName, pInnerText, pId) {
+    return Utils.createElem("tr", pClassName, pInnerText, pId);
   }
 
   static ignorePromise (pPromise) {
