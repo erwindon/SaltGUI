@@ -42,9 +42,7 @@ export class Panel {
   }
 
   addTitle (pTitle) {
-    const h1 = Utils.createElem("h1");
-    h1.id = this.key + "-title";
-    h1.innerText = pTitle;
+    const h1 = Utils.createElem("h1", "", pTitle, this.key + "-title");
     this.div.appendChild(h1);
     this.title = h1;
     this.originalTitle = pTitle;
@@ -73,32 +71,25 @@ export class Panel {
   }
 
   addSearchButton () {
-    const span = Utils.createSpan();
-    span.id = this.key + "-search-button";
-    span.classList.add("small-button");
-    span.classList.add("small-button-left");
-    span.classList.add("small-button-for-click");
-    span.classList.add("search-button");
-    span.innerText = Character.LEFT_POINTING_MAGNIFYING_GLASS;
+    const span = Utils.createSpan(
+      ["search-button", "small-button", "small-button-left", "small-button-for-click"],
+      Character.LEFT_POINTING_MAGNIFYING_GLASS,
+      this.key + "-search-button");
     this.div.appendChild(span);
     this.searchButton = span;
   }
 
   addPlayPauseButton () {
-    const playButton = Utils.createSpan();
-    playButton.innerText = Character.CH_PLAY;
-    playButton.classList.add("small-button");
-    playButton.classList.add("small-button-left");
-    playButton.classList.add("small-button-for-click");
+    const playButton = Utils.createSpan(
+      ["small-button", "small-button-left", "small-button-for-click"],
+      Character.CH_PLAY);
     playButton.style.cursor = "pointer";
     this.div.appendChild(playButton);
     this.playButton = playButton;
 
-    const pauseButton = Utils.createSpan();
-    pauseButton.innerText = Character.CH_PAUSE;
-    pauseButton.classList.add("small-button");
-    pauseButton.classList.add("small-button-left");
-    pauseButton.classList.add("small-button-for-click");
+    const pauseButton = Utils.createSpan(
+      ["small-button", "small-button-left", "small-button-for-click"],
+      Character.CH_PAUSE);
     pauseButton.style.display = "none";
     pauseButton.style.cursor = "pointer";
     this.div.appendChild(pauseButton);
@@ -134,12 +125,11 @@ export class Panel {
   }
 
   addHelpButton (pHelpTextArr, pUrl) {
-    const span = Utils.createElem(pUrl ? "a" : "span");
-    span.id = this.key + "-help-button";
-    span.classList.add("small-button");
-    span.classList.add("small-button-right");
-    span.classList.add("small-button-for-hover");
-    span.innerText = Character.BLACK_QUESTION_MARK_ORNAMENT;
+    const span = Utils.createElem(
+      pUrl ? "a" : "span",
+      ["small-button", "small-button-right", "small-button-for-hover"],
+      Character.BLACK_QUESTION_MARK_ORNAMENT,
+      this.key + "-help-button");
     span.style.cursor = "help";
     this.div.appendChild(span);
 
@@ -152,12 +142,10 @@ export class Panel {
   }
 
   addCloseButton () {
-    const span = Utils.createSpan();
-    span.id = this.key + "-close-button";
-    span.classList.add("small-button");
-    span.classList.add("small-button-right");
-    span.classList.add("small-button-for-click");
-    span.innerText = Character.HEAVY_MULTIPLICATION_X;
+    const span = Utils.createSpan(
+      ["small-button", "small-button-right", "small-button-for-click"],
+      Character.HEAVY_MULTIPLICATION_X,
+      this.key + "-close-button");
     this.div.appendChild(span);
 
     span.addEventListener("click", (pClickEvent) => {
@@ -167,8 +155,7 @@ export class Panel {
   }
 
   addWarningField () {
-    const warning = Utils.createElem("h2");
-    warning.classList.add("warning");
+    const warning = Utils.createElem("h2", "warning");
     this.div.append(warning);
     this.warningField = warning;
   }
@@ -195,9 +182,7 @@ export class Panel {
   }
 
   addTable (pColumnNames, pFieldList = null) {
-    const table = Utils.createElem("table");
-    table.id = this.key + "-table";
-    table.classList.add(this.key);
+    const table = Utils.createElem("table", this.key, "", this.key + "-table");
 
     let anyHiddenColumns = false;
     if (pColumnNames) {
@@ -299,17 +284,13 @@ export class Panel {
   }
 
   addConsole () {
-    const console = Utils.createDiv();
-    console.id = this.key + "-output";
-    console.classList.add("output");
+    const console = Utils.createDiv("output", "", this.key + "-output");
     this.div.appendChild(console);
     this.console = console;
   }
 
   addMsg () {
-    const msgDiv = Utils.createDiv();
-    msgDiv.id = this.key + "-msg";
-    msgDiv.classList.add("msg");
+    const msgDiv = Utils.createDiv("msg", "", this.key + "-msg");
     this.div.appendChild(msgDiv);
     this.msgDiv = msgDiv;
     this.setMsg("(loading)");
@@ -438,8 +419,7 @@ export class Panel {
 
     minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 
-    const minionTd = Utils.createTd("status", "accepted");
-    minionTd.classList.add("accepted");
+    const minionTd = Utils.createTd(["status", "accepted"], "accepted");
     minionTr.appendChild(minionTd);
 
     minionTr.appendChild(Utils.createTd("os", "loading..."));
@@ -621,7 +601,7 @@ export class Panel {
     const allIpNumbers = Panel._getAllIpNumbers(pMinionData);
 
     if (bestIpNumber) {
-      const addressTd = Utils.createTd("status");
+      const addressTd = Utils.createTd(["status", "address"]);
       const addressSpan = Utils.createSpan("", bestIpNumber);
       addressSpan.dataset.singleIpNumber = bestIpNumber;
       addressSpan.dataset.multiIpNumber = allIpNumbers.join("\n");
@@ -636,7 +616,6 @@ export class Panel {
         }
         addressTd.setAttribute("sorttable_customkey", sorttableCustomkey);
       }
-      addressTd.classList.add("address");
       addressTd.setAttribute("tabindex", -1);
       addressSpan.addEventListener("click", (pClickEvent) => {
         Panel._copyAddress(addressSpan, pClickEvent.ctrlKey || pClickEvent.altKey);
@@ -648,8 +627,7 @@ export class Panel {
       Panel._restoreClickToCopy(addressSpan);
       minionTr.appendChild(addressTd);
     } else {
-      const accepted = Utils.createTd("status", "accepted");
-      accepted.classList.add("accepted");
+      const accepted = Utils.createTd(["status", "accepted"], "accepted");
       minionTr.appendChild(accepted);
     }
 
@@ -883,11 +861,10 @@ export class Panel {
   }
 
   static addPrefixImage (pElem, pImageName) {
-    const img = Utils.createElem("img");
+    const img = Utils.createElem("img", "prefiximage");
     const pngName = pImageName.replace(" ", "-").toLowerCase() + ".png";
     img.setAttribute("src", config.NAV_URL + "/static/images/" + pngName);
     img.setAttribute("onerror", "this.onerror=null; this.title='Unknown image, please report to SaltGUI team that image \\'" + pngName + "\\' is missing'; this.src='/static/images/UNKNOWN.png'");
-    img.classList.add("prefiximage");
     pElem.prepend(img);
   }
 

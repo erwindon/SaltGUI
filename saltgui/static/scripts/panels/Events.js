@@ -72,11 +72,10 @@ export class EventsPanel extends Panel {
     tr.append(tagTd);
 
     // add data value
-    const dataTd = Utils.createTd("event-data");
     const pDataObj = {};
     Object.assign(pDataObj, pData);
     delete pDataObj._stamp;
-    dataTd.innerText = Output.formatObject(pDataObj);
+    const dataTd = Utils.createTd("event-data", Output.formatObject(pDataObj));
     tr.append(dataTd);
 
     tbody.prepend(tr);

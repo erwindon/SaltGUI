@@ -79,9 +79,8 @@ export class Output {
     // replace all returned JIDs to links
     // typically found in the output of an async job
     if (pMinionResponse.match(ParseCommandLine.getPatJid())) {
-      const link = Utils.createElem("a");
+      const link = Utils.createElem("a", pMinionResponse);
       link.href = "?id=" + encodeURIComponent(pMinionResponse) + "#job";
-      link.innerText = pMinionResponse;
       return link;
     }
 
@@ -115,9 +114,7 @@ export class Output {
   static _getNormalOutput (pMinionResponse) {
     const content = Output.formatObject(pMinionResponse);
     const isMultiLineString = Utils.isMultiLineString(content);
-    const element = isMultiLineString ? Utils.createDiv() : Utils.createSpan();
-    element.innerText = content;
-    return element;
+    return Utils.createElem(isMultiLineString ? "div" : "span", "", content);
   }
 
 
@@ -353,16 +350,12 @@ export class Output {
       txt += "\nhidden";
     }
 
-    while (pSpan.classList.length > 0) {
-      pSpan.classList.remove(pSpan.classList.item(0));
-    }
-
     if (pTask.result === null) {
-      pSpan.classList.add("task-skipped");
+      pSpan.className = "task-skipped";
     } else if (pTask.result) {
-      pSpan.classList.add("task-success");
+      pSpan.className = "task-success";
     } else {
-      pSpan.classList.add("task-failure");
+      pSpan.className = "task-failure";
     }
     if (nrChanges) {
       pSpan.classList.add("task-changes");
@@ -892,8 +885,9 @@ export class Output {
         });
       }
 
-      minionOutput.classList.add("minion-output");
-      minionOutput.classList.add(minionMultiLine ? "minion-output-multiple" : "minion-output-single");
+      minionOutput.classList.add(
+        "minion-output",
+        minionMultiLine ? "minion-output-multiple" : "minion-output-single");
       // hide the per-minion details when we have so many minions
       if (triangle && triangle.innerText === Character.WHITE_RIGHT_POINTING_TRIANGLE) {
         minionOutput.style.display = "none";

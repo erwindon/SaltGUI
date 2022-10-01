@@ -136,7 +136,7 @@ export class HighStatePanel extends Panel {
       this._addMenuItemStateApply(menu, minionId);
       this._addMenuItemStateApplyTest(menu, minionId);
 
-      minionTr.appendChild(Utils.createTd("", ""));
+      minionTr.appendChild(Utils.createTd());
 
       minionTr.addEventListener("click", (pClickEvent) => {
         const functionField = minionTr.querySelector(".function");
@@ -337,8 +337,7 @@ export class HighStatePanel extends Panel {
 
       minionTr.appendChild(Utils.createTd("minion-id", minionId));
 
-      const minionTd = Utils.createTd("status", "accepted");
-      minionTd.classList.add("accepted");
+      const minionTd = Utils.createTd(["status", "accepted"], "accepted");
       minionTr.appendChild(minionTd);
 
       const jobIdTd = Utils.createTd();
@@ -382,7 +381,7 @@ export class HighStatePanel extends Panel {
       this._addJobsMenuItemShowDetails(menu, jobData, minionId);
 
       const minionResult = jobData.Result[minionId];
-      const tasksTd = Utils.createTd("tasks", "");
+      const tasksTd = Utils.createTd("tasks");
 
       if (typeof minionResult.return !== "object" || Array.isArray(minionResult.return)) {
         Utils.addErrorToTableCell(tasksTd, minionResult.return);
@@ -413,7 +412,7 @@ export class HighStatePanel extends Panel {
         // this also sets the span's class(es)
         Output._setTaskToolTip(span, data);
 
-        // add class here, because it gets lost in _setTaskToolTip
+        // add class here again, because it gets lost in _setTaskToolTip
         span.classList.add("task");
 
         if (keys.length > MAX_HIGHSTATE_STATES) {
@@ -474,8 +473,7 @@ export class HighStatePanel extends Panel {
           sep = " ";
 
           // remove the priority indicator from the key
-          const itemSpan = Utils.createSpan(statKey.substring(2), Character.BLACK_CIRCLE);
-          itemSpan.classList.add("tasksummary");
+          const itemSpan = Utils.createSpan(["tasksummary", statKey.substring(2)], Character.BLACK_CIRCLE);
           itemSpan.style.backgroundColor = "black";
           summarySpan.append(itemSpan);
         }

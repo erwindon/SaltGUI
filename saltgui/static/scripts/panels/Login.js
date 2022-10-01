@@ -56,11 +56,10 @@ export class LoginPanel extends Panel {
     form.append(submit);
     this.loginButton = submit;
 
-    const aa = Utils.createElem("a");
+    const aa = Utils.createElem("a", "attribution");
     aa.href = "https://github.com/erwindon/SaltGUI";
     aa.target = "_blank";
     aa.rel = "noopener";
-    aa.classList.add("attribution");
 
     const img = Utils.createElem("img");
     img.src = "static/images/github.png";
@@ -87,9 +86,8 @@ export class LoginPanel extends Panel {
     this.eauthField.append(optgroup);
 
     for (const optionValue of optionValues) {
-      const option = Utils.createElem("option");
+      const option = Utils.createElem("option", "", optionValue);
       option.value = optionValue;
-      option.innerText = optionValue;
       optgroup.append(option);
     }
   }
@@ -98,10 +96,8 @@ export class LoginPanel extends Panel {
     // start fresh
     this.eauthField.innerHTML = "";
 
-    const option1 = Utils.createElem("option");
-    option1.id = "eauth-default";
+    const option1 = Utils.createElem("option", "", "Type", "eauth-default");
     option1.value = "default";
-    option1.innerText = "Type";
     this.eauthField.append(option1);
 
     this._addEauthSection("standard", ["pam"]);
@@ -143,8 +139,7 @@ export class LoginPanel extends Panel {
 
   _showNoticeText (pBackgroundColour, pText, pInfoClass) {
     // create a new child every time to restart the animation
-    const noticeDiv = Utils.createDiv("", pText, "notice");
-    noticeDiv.classList.add(pInfoClass);
+    const noticeDiv = Utils.createDiv(pInfoClass, pText, "notice");
     noticeDiv.style.backgroundColor = pBackgroundColour;
     while (this.noticeWrapperDiv.hasChildNodes()) {
       this.noticeWrapperDiv.removeChild(this.noticeWrapperDiv.firstChild);

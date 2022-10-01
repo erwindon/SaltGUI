@@ -156,10 +156,9 @@ export class Utils {
     }
 
     if (pToolTipText) {
-      const toolTipSpan = Utils.createSpan("", pToolTipText);
-      toolTipSpan.classList.add("no-search");
-      toolTipSpan.classList.add("tooltip-text");
-      toolTipSpan.classList.add("tooltip-text-" + pStyle);
+      const toolTipSpan = Utils.createSpan(
+        ["no-search", "tooltip-text", "tooltip-text-" + pStyle],
+        pToolTipText);
       pToolTipHost.classList.add("tooltip");
 
       // ...then add the new tooltip
@@ -237,10 +236,9 @@ export class Utils {
 
     const searchOptionsMenu = new DropDownMenu(menuAndFieldDiv, true);
 
-    const input = Utils.createElem("input");
+    const input = Utils.createElem("input", "filter-text");
     input.type = "text";
     input.spellcheck = false;
-    input.classList.add("filter-text");
     input.placeholder = Character.LEFT_POINTING_MAGNIFYING_GLASS;
     if (pFieldList) {
       input.setAttribute("list", pFieldList);
@@ -505,8 +503,11 @@ export class Utils {
   }
 
   static createJobStatusSpan (pJobId, pInitialDisplay) {
-    const span = Utils.createSpan("", "", "status" + pJobId);
-    span.innerText = Character.CLOCKWISE_OPEN_CIRCLE_ARROW + Character.NO_BREAK_SPACE;
+    const span = Utils.createSpan(
+      "",
+      Character.CLOCKWISE_OPEN_CIRCLE_ARROW + Character.NO_BREAK_SPACE,
+      "status" + pJobId);
+
     if (!pInitialDisplay) {
       span.style.display = "none";
     }

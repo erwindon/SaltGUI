@@ -110,10 +110,7 @@ export class SchedulesMinionPanel extends Panel {
       // menu comes before this data on purpose
       const scheduleValue = Output.formatObject(schedule);
       const scheduleValueTd = Utils.createTd("schedule-value", scheduleValue);
-      if (schedule.enabled === false) {
-        scheduleValueTd.classList.add("schedule-disabled");
-      }
-      if (schedules.enabled === false) {
+      if (schedule.enabled === false || schedules.enabled === false) {
         scheduleValueTd.classList.add("schedule-disabled");
       }
       tr.appendChild(scheduleValueTd);
