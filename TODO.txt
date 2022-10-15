@@ -1,0 +1,13 @@
+Branch zzz-multimaster
+("zzz" to move it to the bottom of the list)
+PoC for showing 'multimaster' data
+
+PRO:
+* it shows that/how minions are connected to other masters
+
+CON:
+* it does not work yet, because config.items does not return the orignal
+  value for "master" (it returns only the current master)
+
+VERDICT:
+Keep until it is fixed

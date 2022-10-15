@@ -138,6 +138,7 @@ export class JobsPanel extends Panel {
     this._hideJobs.push("beacons.modify");
     this._hideJobs.push("beacons.reset");
     this._hideJobs.push("beacons.save");
+    this._hideJobs.push("config.items");
     this._hideJobs.push("grains.append");
     this._hideJobs.push("grains.delkey");
     this._hideJobs.push("grains.delval");
