@@ -42,7 +42,7 @@ export class MinionsPanel extends Panel {
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const wheelMinionsConnectedPromise = skipWheelMinionsConnected ? null : this.api.getWheelMinionsConnected();
     const localGrainsItemsPromise = useCacheGrains ? this.api.getRunnerCacheGrains(null) : this.api.getLocalGrainsItems(null);
-
+    const localConfigItemsPromise = this.api.getLocalConfigItems(null);
     const runnerManageVersionsPromise = this.api.getRunnerManageVersions();
 
     this.loadMinionsTxt();
@@ -69,6 +69,15 @@ export class MinionsPanel extends Panel {
         return false;
       });
 
+      localConfigItemsPromise.then((ok_LocalConfigItems) => {
+        this.updateMinionsMultiMaster(ok_LocalConfigItems);
+        return true;
+      }, (_error_LocalConfigItems) => {
+        const allMinionsErr = Utils.msgPerMinion(ok_WheelKeyListAll.return[0].data.return.minions, JSON.stringify(_error_LocalConfigItems));
+        this.updateMinions({"return": [allMinionsErr]});
+        return false;
+      });
+
       runnerManageVersionsPromise.then((ok_RunnerManageVersions) => {
         this._handleRunnerManageVersions(ok_RunnerManageVersions);
         return true;
@@ -76,6 +85,7 @@ export class MinionsPanel extends Panel {
         this._handleRunnerManageVersions(JSON.stringify(_error_RunnerManageVersions));
         return false;
       });
+
       return true;
     }, (_error_WheelKeyListAll) => {
       this._handleMinionsWheelKeyListAll(JSON.stringify(_error_WheelKeyListAll));
@@ -83,6 +93,7 @@ export class MinionsPanel extends Panel {
         Utils.ignorePromise(wheelMinionsConnectedPromise);
       }
       Utils.ignorePromise(localGrainsItemsPromise);
+      Utils.ignorePromise(localConfigItemsPromise);
       Utils.ignorePromise(runnerManageVersionsPromise);
       return false;
     });
@@ -210,6 +221,45 @@ export class MinionsPanel extends Panel {
       this.runCommand("", pMinionId, cmdArr);
       pClickEvent.stopPropagation();
     });
+  }
+
+  updateMinionsMultiMaster (pMinionData) {
+
+    const minions = pMinionData.return[0];
+    const minionIds = Object.keys(minions).sort();
+
+    for (const minionId of minionIds) {
+      let minionInfo = minions[minionId];
+
+      // TODO: development only
+      if (minionId.startsWith("salt-mmminion")) {
+        minionInfo = {"master": ["a", "b"], "master_type": "str", "random_master": true};
+      }
+
+      const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
+      if (!minionTr) {
+        continue;
+      }
+
+      const td = Utils.createTd();
+      minionTr.appendChild(td);
+
+      if (typeof minionInfo.master !== "object" || !Array.isArray(minionInfo.master) || minionInfo.master.length <= 1) {
+        // single master or strange config
+        continue;
+      }
+
+      let str = "This minion has multiple masters:";
+      for (const master of minionInfo.master) {
+        str += "\n- " + master;
+      }
+      str += "\nrandom_master = " + minionInfo.random_master;
+      str += "\nmaster_type = " + minionInfo.master_type;
+
+      const span = Utils.createSpan("", Character.CIRCLED_LATIN_CAPITAL_LETTER_M);
+      td.appendChild(span);
+      Utils.addToolTip(span, str, "bottom-right-text-left");
+    }
   }
 
   _addMenuItemStateApply (pMenu, pMinionId) {

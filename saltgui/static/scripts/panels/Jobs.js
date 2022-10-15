@@ -165,6 +165,7 @@ export class JobsPanel extends Panel {
       "beacons.modify",
       "beacons.reset",
       "beacons.save",
+      "config.items",
       "grains.append",
       "grains.delkey",
       "grains.delval",
