@@ -49,6 +49,11 @@
   transform: translate(-95%, 0);
 }
 
+.tooltip > .tooltip-text-bottom-right-text-left {
+  text-align: left;
+  transform: translate(-95%, 0);
+}
+
 .tooltip:hover {
   /* only slightly darker than 'whitesmoke(#f5f5f5)' */
   background-color: #e0e0e0;
@@ -93,7 +98,8 @@ pre.output .tooltip:hover {
   left: calc(50% - 2.5px);
 }
 
-.tooltip > .tooltip-text-bottom-right::after {
+.tooltip > .tooltip-text-bottom-right::after,
+.tooltip > .tooltip-text-bottom-right-text-left::after {
   left: calc(95% - 2.5px);
 }
 

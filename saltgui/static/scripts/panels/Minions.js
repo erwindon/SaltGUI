@@ -22,7 +22,7 @@ export class MinionsPanel extends Panel {
     this._addMenuItemStateApply(this.panelMenu, "*");
     this._addMenuItemStateApplyTest(this.panelMenu, "*");
     this.addSearchButton();
-    this.addTable(["Minion", "Status", "Salt version", "OS version", "-menu-"]);
+    this.addTable(["Minion", "Status", "Salt version", "OS version", "-menu-", "-info-"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable();
     this.addMsg();
@@ -32,6 +32,7 @@ export class MinionsPanel extends Panel {
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const wheelMinionsConnectedPromise = this.api.getWheelMinionsConnected();
     const localGrainsItemsPromise = this.api.getLocalGrainsItems(null);
+    const localConfigItemsPromise = this.api.getLocalConfigItems(null);
     const runnerManageVersionsPromise = this.api.getRunnerManageVersions();
 
     this.loadMinionsTxt();
@@ -56,6 +57,15 @@ export class MinionsPanel extends Panel {
         return false;
       });
 
+      localConfigItemsPromise.then((pLocalConfigItemsData) => {
+        this.updateMinionsMultiMaster(pLocalConfigItemsData);
+        return true;
+      }, (pLocalConfigItemsMsg) => {
+        const allMinionsErr = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, JSON.stringify(pLocalConfigItemsMsg));
+        this.updateMinions({"return": [allMinionsErr]});
+        return false;
+      });
+
       runnerManageVersionsPromise.then((pRunnerManageVersionsData) => {
         this._handleRunnerManageVersions(pRunnerManageVersionsData);
         return true;
@@ -63,11 +73,13 @@ export class MinionsPanel extends Panel {
         this._handleRunnerManageVersions(JSON.stringify(pRunnerManageVersionsMsg));
         return false;
       });
+
       return true;
     }, (pWheelKeyListAllMsg) => {
       this._handleMinionsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
       Utils.ignorePromise(wheelMinionsConnectedPromise);
       Utils.ignorePromise(localGrainsItemsPromise);
+      Utils.ignorePromise(localConfigItemsPromise);
       Utils.ignorePromise(runnerManageVersionsPromise);
       return false;
     });
@@ -197,6 +209,44 @@ export class MinionsPanel extends Panel {
     this._addMenuItemShowPillars(menu, pMinionId);
     this._addMenuItemShowSchedules(menu, pMinionId);
     this._addMenuItemShowBeacons(menu, pMinionId);
+  }
+
+  updateMinionsMultiMaster (pMinionData) {
+
+    const minions = pMinionData.return[0];
+    const minionIds = Object.keys(minions).sort();
+
+    for (const minionId of minionIds) {
+      let minionInfo = minions[minionId];
+
+if(minionId.startsWith("salt-mmminion")) {
+minionInfo = {"master": ["a","b"], "random_master":true, "master_type":"str"};
+}
+
+      const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
+      if (!minionTr) {
+        continue;
+      }
+
+      const td = Utils.createTd();
+      minionTr.appendChild(td);
+
+      if (typeof minionInfo.master !== "object" || !Array.isArray(minionInfo.master) || minionInfo.master.length <= 1) {
+        // single master or strange config
+        continue;
+      }
+
+      let str = "This minion has multiple masters:";
+      for (const master of minionInfo.master) {
+        str += "\n- " + master;
+      }
+      str += "\nrandom_master = " + minionInfo.random_master;
+      str += "\nmaster_type = " + minionInfo.master_type;
+
+      const span = Utils.createSpan("", Character.CIRCLED_LATIN_CAPITAL_LETTER_M);
+      td.appendChild(span);
+      Utils.addToolTip(span, str, "bottom-right-text-left");
+    }
   }
 
   _addMenuItemStateApply (pMenu, pMinionId) {
