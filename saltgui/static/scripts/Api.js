@@ -120,6 +120,21 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
+  getLocalConfigItems (pMinionId) {
+    const params = {
+      "client": "local",
+      "fun": "config.items"
+    };
+    if (pMinionId) {
+      params["tgt_type"] = "list";
+      params.tgt = pMinionId;
+    } else {
+      params["tgt_type"] = "glob";
+      params.tgt = "*";
+    }
+    return this.apiRequest("POST", "/", params);
+  }
+
   getLocalGrainsItems (pMinionId) {
     const params = {
       "client": "local",
