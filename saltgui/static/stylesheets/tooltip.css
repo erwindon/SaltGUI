@@ -50,6 +50,11 @@
   transform: translate(-95%, 0);
 }
 
+.tooltip > .tooltip-text-bottom-right-text-left {
+  text-align: left;
+  transform: translate(-95%, 0);
+}
+
 .tooltip > .tooltip-text-fab {
   text-align: right;
   transform: translate(-163px, 52px);
@@ -115,7 +120,8 @@ pre.output .tooltip:hover {
   left: calc(50% - 2.5px);
 }
 
-.tooltip > .tooltip-text-bottom-right::after {
+.tooltip > .tooltip-text-bottom-right::after,
+.tooltip > .tooltip-text-bottom-right-text-left::after {
   left: calc(95% - 2.5px);
 }
 
