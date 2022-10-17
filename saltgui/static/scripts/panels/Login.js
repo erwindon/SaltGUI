@@ -75,20 +75,23 @@ export class LoginPanel extends Panel {
     this._registerEventListeners(form);
   }
 
-  _addEauthSection (sectionName, optionValues) {
-    if (optionValues.length === 0) {
+  _addEauthSection (pSectionName, pOptionValues) {
+    if (pOptionValues.length === 0) {
       // no optionValues --> no section
       return;
     }
 
-    const optgroup = Utils.createElem("optgroup");
-    optgroup.label = sectionName;
-    this.eauthField.append(optgroup);
+    let parent = this.eauthField;
+    if (pSectionName) {
+      parent = Utils.createElem("optgroup");
+      parent.label = pSectionName;
+      this.eauthField.append(parent);
+    }
 
-    for (const optionValue of optionValues) {
+    for (const optionValue of pOptionValues) {
       const option = Utils.createElem("option", "", optionValue);
       option.value = optionValue;
-      optgroup.append(option);
+      parent.append(option);
     }
   }
 
@@ -115,10 +118,25 @@ export class LoginPanel extends Panel {
     // and only while the code is on a branch
 
     // allow user to add any value they want
-    const saltAuth = Utils.getStorageItemList("local", "salt-auth-txt");
-    this._addEauthSection("salt-auth.txt", saltAuth);
-
-    this.eauthField.value = Utils.getStorageItem("local", "eauth", "pam");
+    let saltAuth = Utils.getStorageItemList("local", "salt-auth-txt");
+    if (saltAuth.includes("CLEAR")) {
+      saltAuth = saltAuth.filter((item) => item !== "CLEAR");
+      if (saltAuth.length === 0) {
+        // no cheating
+        console.warn("salt-auth-txt has no extries, except 'CLEAR', assuming 'pam'");
+        saltAuth = ["pam"];
+      }
+      this.eauthField.innerHTML = "";
+      this._addEauthSection(null, saltAuth);
+      if (saltAuth.length === 1) {
+        this.eauthField.style.display = "none";
+        Utils.setStorageItem("local", "eauth", saltAuth[0]);
+      }
+      this.eauthField.value = Utils.getStorageItem("local", "eauth", saltAuth[0]);
+    } else {
+      this._addEauthSection("salt-auth.txt", saltAuth);
+      this.eauthField.value = Utils.getStorageItem("local", "eauth", "pam");
+    }
   }
 
   _updateMotdField () {
