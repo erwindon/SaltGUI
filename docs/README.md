@@ -82,9 +82,16 @@ SaltGUI supports the following authentication methods supported by salt:
 
 Since pam by itself is already very powerfull, that one is mentionned as standard.
 By default, it provides access to the Linux password file,
-When other authentication methods need to be used their names can be added to file `saltgui/static/salt-auth.txt`.
+When other authentication methods need to be used, their names can be added to file `saltgui/static/salt-auth.txt`.
 There is one name per line in that file. Choose the authentication methods that are activated
 in the salt-master configuration wisely, as the integrity of the salt-master and all salt-minions depends on it.
+
+When a line `CLEAR` is present in the configuration file, then only the methods listed in the configuration file
+are shown. When only one method is listed, the corresponding dropdown-box will not be visible on the login panel.
+In that case, that method will always be used.
+
+Note that SaltGUI cannot inspect the `master` file to see which authentication methods are actually in use.
+This is because the salt-api can only read the file after login.
 
 See the [EAUTH documentation](https://docs.saltstack.com/en/latest/topics/eauth/index.html) and the [Salt auth source code](https://github.com/saltstack/salt/tree/master/salt/auth) for more information.
 
