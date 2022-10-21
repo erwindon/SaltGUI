@@ -290,9 +290,10 @@ export class Output {
 
     if (pDateTimeField) {
       utcDT = dateObj.toLocaleString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
-      utcDT = utcDT.replace(/ [A-Z]*$/, originalFractionSecondsPart + "$&");
+      // place the milliseconds after the seconds (before am/pm indicator and timezone)
+      utcDT = utcDT.replace(/( [a-zA-Z.]*)? [A-Z]*$/, originalFractionSecondsPart + "$&");
       localDT = dateObj.toLocaleString(undefined, {"timeZoneName": "short"});
-      localDT = localDT.replace(/ [A-Z]*$/, originalFractionSecondsPart + "$&");
+      localDT = localDT.replace(/( [a-zA-Z.]*)? [A-Z]*$/, originalFractionSecondsPart + "$&");
       pDateTimeField.innerText = ret;
       const txt = utcDT + "\n" + localDT;
       if (txt.search("Invalid") < 0) {
