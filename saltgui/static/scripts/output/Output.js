@@ -238,6 +238,7 @@ export class Output {
     if (pTimeOnly || dateTimeRepresentation === "local-utctime") {
       utcDT = dateObj.toLocaleTimeString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
       if (utcDT.search("Invalid") >= 0) {
+        // but not the verbose timezone name
         utcDT = dateObj.toTimeString().replace(/ *[(][^)]*[)]$/, "");
       }
     } else {
@@ -269,23 +270,27 @@ export class Output {
       localDT = days + localDT;
     }
 
+    // put the milliseconds in the proper location
+    const utcDTms = utcDT.replace(/( [a-zA-Z.]*)?( [A-Z]*)?$/, fractionSecondsPart + "$&");
+    const localDTms = localDT.replace(/( [a-zA-Z.]*)?( [A-Z]*)?$/, fractionSecondsPart + "$&");
+
     let ret;
     switch (dateTimeRepresentation) {
     case "utc":
-      ret = utcDT + fractionSecondsPart;
+      ret = utcDTms;
       break;
     case "local":
-      ret = localDT + fractionSecondsPart + " " + localTZ;
+      ret = localDTms + " " + localTZ;
       break;
     case "utc-localtime":
-      ret = utcDT + fractionSecondsPart + " (" + localDT + " " + localTZ + ")";
+      ret = utcDTms + " (" + localDT + " " + localTZ + ")";
       break;
     case "local-utctime":
-      ret = localDT + fractionSecondsPart + " " + localTZ + " (" + utcDT + ")";
+      ret = localDTms + " " + localTZ + " (" + utcDT + ")";
       break;
     default:
       // unknown format, use traditional representation
-      ret = utcDT + fractionSecondsPart;
+      ret = utcDTms;
     }
 
     if (pDateTimeField) {
