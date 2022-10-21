@@ -161,6 +161,10 @@ export class Output {
   // (datetime) 2019, Jan 26 19:05:22.808348
   // current action is (only):
   // - reduce the number of digits for the fractional seconds
+
+  // some older browsers cannot produce formatted datetime this way
+  // toLocaleString/toLocaleTimeString then return "Invalid Date"
+  // silently ignore that, provide an alternative and then do not produce a tooltip
   static dateTimeStr (pDtStr, pDateTimeField = null, pDateTimeStyle = "bottom-center", pTimeOnly = false) {
 
     // no available setting, then return the original
@@ -233,16 +237,28 @@ export class Output {
     let utcDT;
     if (pTimeOnly || dateTimeRepresentation === "local-utctime") {
       utcDT = dateObj.toLocaleTimeString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
+      if (utcDT.search("Invalid") >= 0) {
+        utcDT = dateObj.toTimeString().replace(/ *[(][^)]*[)]$/, "");
+      }
     } else {
       utcDT = dateObj.toLocaleString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
+      if (utcDT.search("Invalid") >= 0) {
+        utcDT = dateObj.toString().replace(/ *[(][^)]*[)]$/, "");
+      }
     }
     utcDT = utcDT.replace(/ *UTC$/, "");
 
     let localDT;
     if (pTimeOnly || dateTimeRepresentation === "utc-localtime") {
       localDT = dateObj.toLocaleTimeString(undefined, {"timeZoneName": "short"});
+      if (localDT.search("Invalid") >= 0) {
+        localDT = dateObj.toString().replace(/ *[(][^)]*[)]$/, "");
+      }
     } else {
       localDT = dateObj.toLocaleString(undefined, {"timeZoneName": "short"});
+      if (localDT.search("Invalid") >= 0) {
+        localDT = dateObj.toString().replace(/ *[(][^)]*[)]$/, "");
+      }
     }
     const localTZ = localDT.replace(/^.* /, "");
     localDT = localDT.replace(/ [^ ]*$/, "");
@@ -279,7 +295,9 @@ export class Output {
       localDT = localDT.replace(/ [A-Z]*$/, originalFractionSecondsPart + "$&");
       pDateTimeField.innerText = ret;
       const txt = utcDT + "\n" + localDT;
-      Utils.addToolTip(pDateTimeField, txt, pDateTimeStyle);
+      if (txt.search("Invalid") < 0) {
+        Utils.addToolTip(pDateTimeField, txt, pDateTimeStyle);
+      }
     }
 
     return ret;
