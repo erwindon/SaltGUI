@@ -145,6 +145,8 @@ With `utc-localtime`, the UTC date and time are shown. Additionally, the local t
 With `local-utctime`, the local date and time are shown. Additionally, the UTC time (not the UTC date) is shown.
 In all cases, a tooltip is added to a date+time field that shows the full representation of the date and time in both the local timezone and in UTC.
 
+When using very old browsers, the required date/time functions may not be present. In that case SaltGUI reverts to simply displaying the reported time from the Salt system. The tooltip is then not shown.
+
 
 ## Templates
 SaltGUI supports command templates for easier command entry into the command-box.
