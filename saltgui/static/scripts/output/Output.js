@@ -241,10 +241,16 @@ export class Output {
         // but not the verbose timezone name
         utcDT = dateObj.toTimeString().replace(/ *[(][^)]*[)]$/, "");
       }
+      if (utcDT.search("Invalid") >= 0) {
+        utcDT = pDtStr.replace(/^[-0-9]*T/, "");
+      }
     } else {
       utcDT = dateObj.toLocaleString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
       if (utcDT.search("Invalid") >= 0) {
         utcDT = dateObj.toString().replace(/ *[(][^)]*[)]$/, "");
+      }
+      if (utcDT.search("Invalid") >= 0) {
+        utcDT = pDtStr;
       }
     }
     utcDT = utcDT.replace(/ *UTC$/, "");
@@ -255,10 +261,16 @@ export class Output {
       if (localDT.search("Invalid") >= 0) {
         localDT = dateObj.toString().replace(/ *[(][^)]*[)]$/, "");
       }
+      if (localDT.search("Invalid") >= 0) {
+        localDT = pDtStr.replace(/^[-0-9]*T/, "");
+      }
     } else {
       localDT = dateObj.toLocaleString(undefined, {"timeZoneName": "short"});
       if (localDT.search("Invalid") >= 0) {
         localDT = dateObj.toString().replace(/ *[(][^)]*[)]$/, "");
+      }
+      if (localDT.search("Invalid") >= 0) {
+        localDT = pDtStr;
       }
     }
     const localTZ = localDT.replace(/^.* /, "");
@@ -271,8 +283,8 @@ export class Output {
     }
 
     // put the milliseconds in the proper location
-    const utcDTms = utcDT.replace(/( [a-zA-Z.]*)?( [-A-Z0-9]*)?$/, fractionSecondsPart + "$&");
-    const localDTms = localDT.replace(/( [a-zA-Z.]*)?( [-A-Z0-9]*)?$/, fractionSecondsPart + "$&");
+    const utcDTms = utcDT.replace(/( [a-zA-Z.]*)?( [-A-Z0-9]*|Z)?$/, fractionSecondsPart + "$&");
+    const localDTms = localDT.replace(/( [a-zA-Z.]*)?( [-A-Z0-9]*|Z)?$/, fractionSecondsPart + "$&");
 
     let ret;
     switch (dateTimeRepresentation) {
