@@ -242,7 +242,7 @@ export class Output {
         utcDT = dateObj.toTimeString().replace(/ *[(][^)]*[)]$/, "");
       }
       if (utcDT.search("Invalid") >= 0) {
-        utcDT = pDtStr.replace(/^[-0-9]*T/, "");
+        utcDT = pDtStr.replace(/^[-0-9]*T/, "").replace(/^1999, Sep 9 /, "");
       }
     } else {
       utcDT = dateObj.toLocaleString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
@@ -262,7 +262,7 @@ export class Output {
         localDT = dateObj.toString().replace(/ *[(][^)]*[)]$/, "");
       }
       if (localDT.search("Invalid") >= 0) {
-        localDT = pDtStr.replace(/^[-0-9]*T/, "");
+        localDT = pDtStr.replace(/^[-0-9]*T/, "").replace(/^1999, Sep 9 /, "");
       }
     } else {
       localDT = dateObj.toLocaleString(undefined, {"timeZoneName": "short"});
