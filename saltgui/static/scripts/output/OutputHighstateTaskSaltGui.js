@@ -161,8 +161,9 @@ export class OutputHighstateTaskSaltGui {
       if (key === "__id__") continue; // handled
       if (key === "__jid__") continue; // internal use
       if (key === "__orchestration__") continue; // internal use
-      if (key === "__sls__") continue; // handled
       if (key === "__run_num__") continue; // handled, not shown
+      if (key === "__sls__") continue; // handled
+      if (key === "__state_ran__") continue; // ignored, also in description
       if (key === "changes") continue; // handled
       if (key === "comment") continue; // handled
       if (key === "duration") continue; // handled
