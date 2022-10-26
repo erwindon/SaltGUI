@@ -567,6 +567,17 @@ export class Output {
     pParentDiv.appendChild(downloadA);
   }
 
+  static _addJID (pParentDiv, pJobId) {
+    const downloadA = Utils.createElem("a");
+    downloadA.innerText = pJobId;
+    downloadA.style = "float:right; margin-left:10px";
+    downloadA.addEventListener("click", (pClickEvent) => {
+      Output.router.goTo("job", {"id": pJobId});
+      pClickEvent.stopPropagation();
+    });
+    pParentDiv.appendChild(downloadA);
+  }
+
   // the orchestrator for the output
   // determines what format should be used and uses that
   static addResponseOutput (pOutputContainer, pJobId, pMinionData, pResponse, pCommand, pInitialStatus, pHighlightMinionId) {
@@ -751,6 +762,28 @@ export class Output {
         continue;
       }
       pMinionData.push(key);
+    }
+
+    // simplify the output and extract the jid
+    let jid;
+    if (Object.values(pResponse) && Object.values(pResponse)[0]) {
+      // start with runner output
+      jid = Object.values(pResponse)[0].jid;
+      // reducing the response is integrated below
+    } else if (!jid && pResponse.RUNNER && pResponse.RUNNER.data && pResponse.RUNNER.data.jid) {
+      // try the runner output; unfortunatelly the job is not retyrievable later
+      // jid = pResponse.RUNNER.data.jid;
+      pResponse.RUNNER = pResponse.RUNNER.data.return;
+    } else if (!jid && pResponse.WHEEL && pResponse.WHEEL.data && pResponse.WHEEL.data.jid) {
+      // try the wheel output; unfortunatelly the job is not retyrievable later
+      // jid = pResponse.WHEEL.data.jid;
+      pResponse.WHEEL = pResponse.WHEEL.data.return;
+    }
+    if (jid) {
+      Output._addJID(topSummaryDiv, jid);
+      const downloadLabel = Utils.createSpan("", "view as job:");
+      downloadLabel.style = "float:right; margin-left: 20px";
+      topSummaryDiv.appendChild(downloadLabel);
     }
 
     // in reverse order

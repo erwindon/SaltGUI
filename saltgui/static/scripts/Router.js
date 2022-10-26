@@ -17,6 +17,7 @@ import {LoginPage} from "./pages/Login.js";
 import {LogoutPage} from "./pages/Logout.js";
 import {MinionsPage} from "./pages/Minions.js";
 import {OptionsPage} from "./pages/Options.js";
+import {Output} from "./output/Output.js";
 import {PillarsMinionPage} from "./pages/PillarsMinion.js";
 import {PillarsPage} from "./pages/Pillars.js";
 import {ReactorsPage} from "./pages/Reactors.js";
@@ -32,6 +33,7 @@ export class Router {
 
     this.api = new API();
     this.api.router = this;
+    Output.router = this;
     this.commandbox = new CommandBox(this, this.api);
     this.pages = [];
     Router.currentPage = undefined;
