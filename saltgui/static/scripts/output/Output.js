@@ -161,6 +161,10 @@ export class Output {
   // (datetime) 2019, Jan 26 19:05:22.808348
   // current action is (only):
   // - reduce the number of digits for the fractional seconds
+
+  // some older browsers cannot produce formatted datetime this way
+  // toLocaleString/toLocaleTimeString then return "Invalid Date"
+  // silently ignore that, provide an alternative and then do not produce a tooltip
   static dateTimeStr (pDtStr, pDateTimeField = null, pDateTimeStyle = "bottom-center", pTimeOnly = false) {
 
     // no available setting, then return the original
@@ -233,16 +237,41 @@ export class Output {
     let utcDT;
     if (pTimeOnly || dateTimeRepresentation === "local-utctime") {
       utcDT = dateObj.toLocaleTimeString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
+      if (utcDT.search("Invalid") >= 0) {
+        // but not the verbose timezone name
+        utcDT = dateObj.toTimeString().replace(/ *[(][^)]*[)]$/, "");
+      }
+      if (utcDT.search("Invalid") >= 0) {
+        utcDT = pDtStr.replace(/^[-0-9]*T/, "").replace(/^1999, Sep 9 /, "");
+      }
     } else {
       utcDT = dateObj.toLocaleString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
+      if (utcDT.search("Invalid") >= 0) {
+        utcDT = dateObj.toString().replace(/ *[(][^)]*[)]$/, "");
+      }
+      if (utcDT.search("Invalid") >= 0) {
+        utcDT = pDtStr;
+      }
     }
     utcDT = utcDT.replace(/ *UTC$/, "");
 
     let localDT;
     if (pTimeOnly || dateTimeRepresentation === "utc-localtime") {
       localDT = dateObj.toLocaleTimeString(undefined, {"timeZoneName": "short"});
+      if (localDT.search("Invalid") >= 0) {
+        localDT = dateObj.toString().replace(/ *[(][^)]*[)]$/, "");
+      }
+      if (localDT.search("Invalid") >= 0) {
+        localDT = pDtStr.replace(/^[-0-9]*T/, "").replace(/^1999, Sep 9 /, "");
+      }
     } else {
       localDT = dateObj.toLocaleString(undefined, {"timeZoneName": "short"});
+      if (localDT.search("Invalid") >= 0) {
+        localDT = dateObj.toString().replace(/ *[(][^)]*[)]$/, "");
+      }
+      if (localDT.search("Invalid") >= 0) {
+        localDT = pDtStr;
+      }
     }
     const localTZ = localDT.replace(/^.* /, "");
     localDT = localDT.replace(/ [^ ]*$/, "");
@@ -253,33 +282,40 @@ export class Output {
       localDT = days + localDT;
     }
 
+    // put the milliseconds in the proper location
+    const utcDTms = utcDT.replace(/( [a-zA-Z.]*)?( [-A-Z0-9]*|Z)?$/, fractionSecondsPart + "$&");
+    const localDTms = localDT.replace(/( [a-zA-Z.]*)?( [-A-Z0-9]*|Z)?$/, fractionSecondsPart + "$&");
+
     let ret;
     switch (dateTimeRepresentation) {
     case "utc":
-      ret = utcDT + fractionSecondsPart;
+      ret = utcDTms;
       break;
     case "local":
-      ret = localDT + fractionSecondsPart + " " + localTZ;
+      ret = localDTms + " " + localTZ;
       break;
     case "utc-localtime":
-      ret = utcDT + fractionSecondsPart + " (" + localDT + " " + localTZ + ")";
+      ret = utcDTms + " (" + localDT + " " + localTZ + ")";
       break;
     case "local-utctime":
-      ret = localDT + fractionSecondsPart + " " + localTZ + " (" + utcDT + ")";
+      ret = localDTms + " " + localTZ + " (" + utcDT + ")";
       break;
     default:
       // unknown format, use traditional representation
-      ret = utcDT + fractionSecondsPart;
+      ret = utcDTms;
     }
 
     if (pDateTimeField) {
       utcDT = dateObj.toLocaleString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
-      utcDT = utcDT.replace(/ [A-Z]*$/, originalFractionSecondsPart + "$&");
+      // place the milliseconds after the seconds (before am/pm indicator and timezone)
+      utcDT = utcDT.replace(/( [a-zA-Z.]*)? [-A-Z0-9]*$/, originalFractionSecondsPart + "$&");
       localDT = dateObj.toLocaleString(undefined, {"timeZoneName": "short"});
-      localDT = localDT.replace(/ [A-Z]*$/, originalFractionSecondsPart + "$&");
+      localDT = localDT.replace(/( [a-zA-Z.]*)? [-A-Z0-9]*$/, originalFractionSecondsPart + "$&");
       pDateTimeField.innerText = ret;
       const txt = utcDT + "\n" + localDT;
-      Utils.addToolTip(pDateTimeField, txt, pDateTimeStyle);
+      if (txt.search("Invalid") < 0) {
+        Utils.addToolTip(pDateTimeField, txt, pDateTimeStyle);
+      }
     }
 
     return ret;
