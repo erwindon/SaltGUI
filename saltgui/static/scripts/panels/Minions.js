@@ -673,16 +673,18 @@ export class MinionsPanel extends Panel {
 
         if (txt) {
           txt += "\nUpgrade is highly recommended!";
-          txt += "\nClick to show these CVEs on cve.mitre.org";
-          versionSpan.addEventListener("click", (pClickEvent) => {
-            let url = "https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=";
-            for (let i = 0; i < allCveKeys.length; i++) {
-              url += (i === 0 ? "" : "%20") + allCveKeys[i];
-            }
-            window.open(url);
-            // prevent the click to open the run-dialog
-            pClickEvent.stopPropagation();
-          });
+          if (allCveKeys.length > 0) {
+            txt += "\nClick to show these CVEs on cve.mitre.org";
+            versionSpan.addEventListener("click", (pClickEvent) => {
+              let url = "https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=";
+              for (let i = 0; i < allCveKeys.length; i++) {
+                url += (i === 0 ? "" : "%20") + allCveKeys[i];
+              }
+              window.open(url);
+              // prevent the click to open the run-dialog
+              pClickEvent.stopPropagation();
+            });
+          }
           Utils.addToolTip(versionSpan, txt.trim(), "error-bottom-left");
         }
       }
