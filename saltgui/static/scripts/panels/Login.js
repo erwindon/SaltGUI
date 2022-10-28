@@ -423,6 +423,8 @@ export class LoginPanel extends Panel {
       // No permissions: login valid, but no api functions executable
       // e.g. PAM says OK and /etc/salt/master says NO
       this._showNoticeText("#F44336", error.message, "notice_login_other_error");
+    } else if (error.toString().startsWith("TypeError: NetworkError")) {
+      this._showNoticeText("#F44336", "Network Error", "notice_login_other_error");
     } else {
       this._showNoticeText("#F44336", "Authentication failed", "notice_auth_failed");
     }
