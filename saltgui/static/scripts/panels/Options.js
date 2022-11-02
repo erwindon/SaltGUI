@@ -31,6 +31,10 @@ export class OptionsPanel extends Panel {
       ["perms", "session"],
       ["nodegroups", null, "(none)"],
       [
+        "state-compress-ids", null, "false",
+        [["compress-ids", "true", "false"]]
+      ],
+      [
         "state-output", null, "full",
         [["output", "full", "terse", "mixed", "changes", "full_id", "terse_id", "mixed_id", "changes_id"]]
       ],
@@ -129,6 +133,10 @@ export class OptionsPanel extends Panel {
           if (pName === "state-verbose") {
             radio.addEventListener("change", () => {
               this._newStateVerbose();
+            });
+          } else if (pName === "state-compress-ids") {
+            radio.addEventListener("change", () => {
+              this._newStateCompressIds();
             });
           } else if (pName === "state-output") {
             radio.addEventListener("change", () => {
@@ -366,6 +374,17 @@ export class OptionsPanel extends Panel {
     const stateVerboseTd = this.div.querySelector("#option-state-verbose-value");
     stateVerboseTd.innerText = value;
     Utils.setStorageItem("session", "state_verbose", value);
+  }
+
+  _newStateCompressIds () {
+    let value = "";
+    /* eslint-disable curly */
+    if (this._isSelected("state-compress-ids", "compress-ids", "false")) value = "false";
+    if (this._isSelected("state-compress-ids", "compress-ids", "true")) value = "true";
+    /* eslint-enable curly */
+    const stateCompressIdsTd = this.div.querySelector("#option-state-compress-ids-value");
+    stateCompressIdsTd.innerText = value;
+    Utils.setStorageItem("session", "state_compress_ids", value);
   }
 
   _newStateOutput () {
