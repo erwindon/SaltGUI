@@ -286,3 +286,7 @@ pre.output {
   color: #4caf50;
   cursor: pointer;
 }
+
+.state-details-compressed {
+  color: gray;
+}
