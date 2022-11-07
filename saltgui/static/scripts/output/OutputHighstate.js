@@ -65,6 +65,34 @@ export class OutputHighstate {
 
     const div = Utils.createDiv();
 
+    // collapse states when requested
+    const stateCompressIds = Utils.getStorageItem("session", "state_compress_ids", "false");
+    let tasks = pTasks;
+    if (stateCompressIds === "true") {
+      tasks = {};
+      for (const task of pTasks) {
+        // group by this key
+        const key = task.__id__ + "-" + task.result;
+        if (key in tasks) {
+          // not first time we see this entry, adjust some properties
+          tasks[key].cnt += 1;
+          // sum() of duration
+          if (task.duration) {
+            tasks[key].duration += task.duration;
+          }
+          // min() of start_time
+          if (task["start_time"]) {
+            tasks[key]["start_time"] = Math.min(tasks[key]["start_time"], task["start_time"]);
+          }
+        } else {
+          // first time we see an entry, use all details and start counting at 1
+          tasks[key] = task;
+          tasks[key].cnt = 1;
+        }
+      }
+      tasks = Object.keys(tasks).map((key) => tasks[key]);
+    }
+
     let succeeded = 0;
     let failed = 0;
     let skipped = 0;
@@ -73,7 +101,7 @@ export class OutputHighstate {
     let changesDetail = 0;
     let hidden = 0;
     let nr = 0;
-    for (const task of pTasks) {
+    for (const task of tasks) {
 
       nr += 1;
 
@@ -117,6 +145,10 @@ export class OutputHighstate {
       let taskName = components[2];
       if (Output.isStateOutputSelected("_id")) {
         taskName = taskId;
+      }
+      // might be a grouped entry, then show the count
+      if (task.cnt) {
+        taskName += " (" + task.cnt + ")";
       }
 
       let taskSpan;

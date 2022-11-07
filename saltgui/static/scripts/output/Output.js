@@ -485,6 +485,11 @@ export class Output {
       summarySpan.append(span);
     }
 
+    const stateCompressIds = Utils.getStorageItem("session", "state_compress_ids", "false");
+    if (stateCompressIds === "true") {
+      summarySpan.append(Utils.createSpan("state-details-compressed", Character.NO_BREAK_SPACE + "(state details may be compressed)"));
+    }
+
     pMinionRow.append(summarySpan);
   }
 
