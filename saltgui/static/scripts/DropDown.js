@@ -176,7 +176,7 @@ export class DropDownMenu {
     return button;
   }
 
-  _addMenuSeparator () {
+  addMenuSeparator () {
     const div = document.createElement("div");
     div.style.padding = 0;
     div.isSeparator = true;

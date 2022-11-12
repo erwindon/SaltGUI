@@ -1,0 +1,12 @@
+Branch zzz-outputformat
+("zzz" to move it to the bottom of the list)
+PoC for supporting selectable output format in the JOB screen
+
+PRO:
+* previously, output format could only be seleced in the (hidden) Options screen, or in the master file.
+
+CON:
+* The implementation is a bit crude; with a long dropdown list with mostly technical items.
+
+VERDICT:
+Keep until there is an actual request for it
