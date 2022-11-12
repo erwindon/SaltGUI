@@ -1,7 +1,9 @@
 /* global */
 
+import {Character} from "../Character.js";
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
+import {OutputHighstate} from "../output/OutputHighstate.js";
 import {Panel} from "./Panel.js";
 import {ParseCommandLine} from "../ParseCommandLine.js";
 import {TargetType} from "../TargetType.js";
@@ -15,6 +17,7 @@ export class JobPanel extends Panel {
     this.addTitle("... on ...");
     this.addCloseButton();
     this.addPanelMenu();
+    this.addSettingsMenu();
     this.addSearchButton();
 
     // 1: re-run with original target pattern
@@ -36,6 +39,32 @@ export class JobPanel extends Panel {
     this._addPanelMenuItemTerminateJob();
     this._addPanelMenuItemKillJob();
     this._addPanelMenuItemSignalJob();
+
+    // settings
+    this._addSettingsMenuItemOutputAsSaltGuiHighState();
+    this._addSettingsMenuItemOutputAsHighState();
+    this._addSettingsMenuItemOutputAsJson();
+    this._addSettingsMenuItemOutputAsNested();
+    this._addSettingsMenuItemOutputAsYaml();
+    this.settingsMenu.addMenuSeparator();
+
+    this._addSettingsMenuItemOutputAsCompressIds();
+    this.settingsMenu.addMenuSeparator();
+
+    this._addSettingsMenuItemOutputAsStateOutput("full");
+    this._addSettingsMenuItemOutputAsStateOutput("full_id");
+    this._addSettingsMenuItemOutputAsStateOutput("terse");
+    this._addSettingsMenuItemOutputAsStateOutput("terse_id");
+    this._addSettingsMenuItemOutputAsStateOutput("mixed");
+    this._addSettingsMenuItemOutputAsStateOutput("mixed_id");
+    this._addSettingsMenuItemOutputAsStateOutput("changed");
+    this._addSettingsMenuItemOutputAsStateOutput("changed_id");
+    this.settingsMenu.addMenuSeparator();
+
+    this._addSettingsMenuItemOutputAsPct();
+    this.settingsMenu.addMenuSeparator();
+
+    this._addSettingsMenuItemOutputAsVerbose();
 
     const timeH2 = Utils.createElem("h2");
     const timeSpan = Utils.createSpan("time");
@@ -263,6 +292,21 @@ export class JobPanel extends Panel {
         link.removeAttribute("class");
       }
     }
+
+    // to enable menu items related to highstate output
+    // (a) do we have highstate output
+    this.highStateOutputFlag = false;
+    for (const minionid in info.Result) {
+      const out = info.Result[minionid].return;
+      if (OutputHighstate.isHighStateOutput(info.Function, out)) {
+        this.highStateOutputFlag = true;
+        break;
+      }
+    }
+    // (b) do we allow highstate output
+    const outputFormats = Utils.getStorageItem("session", "output_formats", "doc,saltguihighstate,json");
+    const outputFormatsItems = outputFormats.split(",");
+    this.highStateReprFlag = outputFormatsItems.includes("saltguihighstate") || outputFormatsItems.includes("highstate");
   }
 
   _addPanelMenuItemJobRerunJob () {
@@ -529,6 +573,228 @@ export class JobPanel extends Panel {
         noResponseSpan.classList.add("active");
       }
     }
+  }
+
+  _refreshPanel () {
+    // ...
+    // possible because panel header does not change
+    this.output.innerText = "...";
+    this.onShow();
+  }
+
+  _addSettingsMenuItemOutputAsSaltGuiHighState () {
+    this.settingsMenu.addMenuItem(() => {
+      if (this.highStateOutputFlag !== true) {
+        return null;
+      }
+      const outputFormats = Utils.getStorageItem("session", "output_formats", "doc,saltguihighstate,json");
+      const outputFormatsItems = outputFormats.split(",");
+      let title;
+      if (outputFormatsItems.includes("saltguihighstate")) {
+        title = Character.BLACK_CIRCLE + Character.NO_BREAK_SPACE + "remove saltguihighstate from saltgui_output_formats";
+      } else {
+        title = "add saltguihighstate to saltgui_output_formats";
+      }
+      return title;
+    }, () => {
+      const outputFormats = Utils.getStorageItem("session", "output_formats", "doc,saltguihighstate,json");
+      let outputFormatsItems = outputFormats.split(",");
+      if (outputFormatsItems.includes("saltguihighstate")) {
+        outputFormatsItems = outputFormatsItems.filter((item) => item !== "saltguihighstate");
+        // do not add highstate
+      } else {
+        outputFormatsItems = outputFormatsItems.filter((item) => item !== "highstate");
+        outputFormatsItems.push("saltguihighstate");
+      }
+      Utils.setStorageItem("session", "output_formats", outputFormatsItems.join(","));
+      this._refreshPanel();
+    });
+  }
+
+  _addSettingsMenuItemOutputAsHighState () {
+    this.settingsMenu.addMenuItem(() => {
+      if (this.highStateOutputFlag !== true) {
+        return null;
+      }
+      const outputFormats = Utils.getStorageItem("session", "output_formats", "doc,saltguihighstate,json");
+      const outputFormatsItems = outputFormats.split(",");
+      let title;
+      if (outputFormatsItems.includes("highstate")) {
+        title = Character.BLACK_CIRCLE + Character.NO_BREAK_SPACE + "remove highstate from saltgui_output_formats";
+      } else {
+        title = "add highstate to saltgui_output_formats";
+      }
+      return title;
+    }, () => {
+      const outputFormats = Utils.getStorageItem("session", "output_formats", "doc,saltguihighstate,json");
+      let outputFormatsItems = outputFormats.split(",");
+      if (outputFormatsItems.includes("highstate")) {
+        outputFormatsItems = outputFormatsItems.filter((item) => item !== "highstate");
+      } else {
+        outputFormatsItems = outputFormatsItems.filter((item) => item !== "saltguihighstate");
+        outputFormatsItems.push("highstate");
+      }
+      Utils.setStorageItem("session", "output_formats", outputFormatsItems.join(","));
+      this._refreshPanel();
+    });
+  }
+
+  _addSettingsMenuItemOutputAsJson () {
+    this.settingsMenu.addMenuItem(() => {
+      const outputFormats = Utils.getStorageItem("session", "output_formats", "doc,saltguihighstate,json");
+      const outputFormatsItems = outputFormats.split(",");
+      let title;
+      if (outputFormatsItems.includes("json")) {
+        title = Character.BLACK_CIRCLE + Character.NO_BREAK_SPACE + "remove json from saltgui_output_formats";
+      } else {
+        title = "add json to saltgui_output_formats";
+      }
+      return title;
+    }, () => {
+      const outputFormats = Utils.getStorageItem("session", "output_formats", "doc,saltguihighstate,json");
+      let outputFormatsItems = outputFormats.split(",");
+      if (outputFormatsItems.includes("json")) {
+        outputFormatsItems = outputFormatsItems.filter((item) => item !== "json");
+      } else {
+        outputFormatsItems = outputFormatsItems.filter((item) => item !== "nested");
+        outputFormatsItems = outputFormatsItems.filter((item) => item !== "yaml");
+        outputFormatsItems.push("json");
+      }
+      Utils.setStorageItem("session", "output_formats", outputFormatsItems.join(","));
+      this._refreshPanel();
+    });
+  }
+
+  _addSettingsMenuItemOutputAsNested () {
+    this.settingsMenu.addMenuItem(() => {
+      const outputFormats = Utils.getStorageItem("session", "output_formats", "doc,saltguihighstate,json");
+      const outputFormatsItems = outputFormats.split(",");
+      let title;
+      if (outputFormatsItems.includes("nested")) {
+        title = Character.BLACK_CIRCLE + Character.NO_BREAK_SPACE + "remove nested from saltgui_output_formats";
+      } else {
+        title = "add nested to saltgui_output_formats";
+      }
+      return title;
+    }, () => {
+      const outputFormats = Utils.getStorageItem("session", "output_formats", "doc,saltguihighstate,json");
+      let outputFormatsItems = outputFormats.split(",");
+      if (outputFormatsItems.includes("nested")) {
+        outputFormatsItems = outputFormatsItems.filter((item) => item !== "nested");
+      } else {
+        outputFormatsItems = outputFormatsItems.filter((item) => item !== "json");
+        outputFormatsItems = outputFormatsItems.filter((item) => item !== "yaml");
+        outputFormatsItems.push("nested");
+      }
+      Utils.setStorageItem("session", "output_formats", outputFormatsItems.join(","));
+      this._refreshPanel();
+    });
+  }
+
+  _addSettingsMenuItemOutputAsYaml () {
+    this.settingsMenu.addMenuItem(() => {
+      const outputFormats = Utils.getStorageItem("session", "output_formats", "doc,saltguihighstate,json");
+      const outputFormatsItems = outputFormats.split(",");
+      let title;
+      if (outputFormatsItems.includes("yaml")) {
+        title = Character.BLACK_CIRCLE + Character.NO_BREAK_SPACE + "remove yaml from saltgui_output_formats";
+      } else {
+        title = "add yaml to saltgui_output_formats";
+      }
+      return title;
+    }, () => {
+      const outputFormats = Utils.getStorageItem("session", "output_formats", "doc,saltguihighstate,yaml");
+      let outputFormatsItems = outputFormats.split(",");
+      if (outputFormatsItems.includes("yaml")) {
+        outputFormatsItems = outputFormatsItems.filter((item) => item !== "yaml");
+      } else {
+        outputFormatsItems = outputFormatsItems.filter((item) => item !== "json");
+        outputFormatsItems = outputFormatsItems.filter((item) => item !== "nested");
+        outputFormatsItems.push("yaml");
+      }
+      Utils.setStorageItem("session", "output_formats", outputFormatsItems.join(","));
+      this._refreshPanel();
+    });
+  }
+
+  _addSettingsMenuItemOutputAsCompressIds () {
+    this.settingsMenu.addMenuItem(() => {
+      if (this.highStateOutputFlag !== true || this.highStateReprFlag !== true) {
+        return null;
+      }
+      const stateCompressIds = Utils.getStorageItem("session", "state_compress_ids", "false");
+      let title;
+      if (stateCompressIds === "true") {
+        title = Character.BLACK_CIRCLE + Character.NO_BREAK_SPACE + "set state_compress_ids to false";
+      } else {
+        title = "set state_compress_ids to true";
+      }
+      return title;
+    }, () => {
+      const stateCompressIds = Utils.getStorageItem("session", "state_compress_ids", "false");
+      Utils.setStorageItem("session", "state_compress_ids", stateCompressIds === "false" ? "true" : "false");
+      this._refreshPanel();
+    });
+  }
+
+
+  _addSettingsMenuItemOutputAsStateOutput (pKeyword) {
+    this.settingsMenu.addMenuItem(() => {
+      if (this.highStateOutputFlag !== true || this.highStateReprFlag !== true) {
+        return null;
+      }
+      const stateOutput = Utils.getStorageItem("session", "state_output", "full");
+      let title;
+      if (stateOutput === pKeyword) {
+        title = Character.BLACK_CIRCLE + Character.NO_BREAK_SPACE + "set state_output to " + pKeyword;
+      } else {
+        title = "set state_output to " + pKeyword;
+      }
+      return title;
+    }, () => {
+      Utils.setStorageItem("session", "state_output", pKeyword);
+      this._refreshPanel();
+    });
+  }
+
+  _addSettingsMenuItemOutputAsPct () {
+    this.settingsMenu.addMenuItem(() => {
+      if (this.highStateOutputFlag !== true || this.highStateReprFlag !== true) {
+        return null;
+      }
+      const stateOutputPct = Utils.getStorageItem("session", "state_output_pct", "false");
+      let title;
+      if (stateOutputPct === "true") {
+        title = Character.BLACK_CIRCLE + Character.NO_BREAK_SPACE + "set state_output_pct to false";
+      } else {
+        title = "set state_output_pct to true";
+      }
+      return title;
+    }, () => {
+      const stateOutputPct = Utils.getStorageItem("session", "state_output_pct", "false");
+      Utils.setStorageItem("session", "state_output_pct", stateOutputPct === "false" ? "true" : "false");
+      this._refreshPanel();
+    });
+  }
+
+  _addSettingsMenuItemOutputAsVerbose () {
+    this.settingsMenu.addMenuItem(() => {
+      if (this.highStateOutputFlag !== true || this.highStateReprFlag !== true) {
+        return null;
+      }
+      const stateVerbose = Utils.getStorageItem("session", "state_verbose", "false");
+      let title;
+      if (stateVerbose === "true") {
+        title = Character.BLACK_CIRCLE + Character.NO_BREAK_SPACE + "set state_verbose to false";
+      } else {
+        title = "set state_verbose to true";
+      }
+      return title;
+    }, () => {
+      const stateVerbose = Utils.getStorageItem("session", "state_verbose", "false");
+      Utils.setStorageItem("session", "state_verbose", stateVerbose === "false" ? "true" : "false");
+      this._refreshPanel();
+    });
   }
 
   handleSaltJobRetEvent (pData) {
