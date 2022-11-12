@@ -163,12 +163,19 @@ export class OptionsPanel extends Panel {
               this._newToolTipMode();
             });
           }
-          tdValue.appendChild(radio);
+
+          if (pName === "state-output" && itemValue === "full_id") {
+            tdValue.append(Utils.createBr());
+          }
 
           const label = Utils.createElem("label", "", itemLabel);
           label.htmlFor = radio.id;
-          label.style.whiteSpace = "nowrap";
-          tdValue.appendChild(label);
+
+          const span2 = Utils.createSpan();
+
+          span2.appendChild(radio);
+          span2.appendChild(label);
+          tdValue.append(span2);
         }
       }
     }
