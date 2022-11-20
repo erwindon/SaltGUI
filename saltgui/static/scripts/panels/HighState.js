@@ -126,30 +126,33 @@ export class HighStatePanel extends Panel {
     }
 
     const keys = pWheelKeyListAll.return[0].data.return;
-
     const minionIds = keys.minions.sort();
     for (const minionId of minionIds) {
-      this.addMinion(minionId, 2);
-
-      // preliminary dropdown menu
-      const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
-      const menu = new DropDownMenu(minionTr, true);
-      this._addMenuItemStateApply(menu, minionId);
-      this._addMenuItemStateApplyTest(menu, minionId);
-
-      minionTr.appendChild(Utils.createTd());
-
-      minionTr.addEventListener("click", (pClickEvent) => {
-        const functionField = minionTr.querySelector(".function");
-        if (functionField && functionField.cmd) {
-          this.runCommand("", minionId, functionField.cmd);
-        } else {
-          const cmdArr = ["state.apply"];
-          this.runCommand("", minionId, cmdArr);
-        }
-        pClickEvent.stopPropagation();
-      });
+      this._handleMinionsWheelKeyListAllMinion (minionId);
     }
+  }
+
+  _handleMinionsWheelKeyListAllMinion (pMinionId) {
+    this.addMinion(pMinionId, 2);
+
+    // preliminary dropdown menu
+    const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
+    const menu = new DropDownMenu(minionTr, true);
+    this._addMenuItemStateApply(menu, pMinionId);
+    this._addMenuItemStateApplyTest(menu, pMinionId);
+
+    minionTr.appendChild(Utils.createTd());
+
+    minionTr.addEventListener("click", (pClickEvent) => {
+      const functionField = minionTr.querySelector(".function");
+      if (functionField && functionField.cmd) {
+        this.runCommand("", pMinionId, functionField.cmd);
+      } else {
+        const cmdArr = ["state.apply"];
+        this.runCommand("", pMinionId, cmdArr);
+      }
+      pClickEvent.stopPropagation();
+    });
 
     this.updateFooter();
   }
@@ -326,10 +329,11 @@ export class HighStatePanel extends Panel {
     for (const minionId in jobData.Result) {
       const trId = Utils.getIdFromMinionId(minionId);
 
-      // only use known minions
-      const minionTr = this.table.querySelector("#" + trId);
+      let minionTr = this.table.querySelector("#" + trId);
       if (minionTr === null) {
-        continue;
+        // create an unexpected row; happens for when syndic is in use
+        this._handleMinionsWheelKeyListAllMinion (minionId);
+        minionTr = this.table.querySelector("#" + trId);
       }
 
       if (minionTr.jid) {
