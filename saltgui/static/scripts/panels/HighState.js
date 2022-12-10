@@ -473,7 +473,8 @@ export class HighStatePanel extends Panel {
           sep = " ";
 
           // remove the priority indicator from the key
-          const itemSpan = Utils.createSpan(["tasksummary", statKey.substring(2)], Character.BLACK_CIRCLE);
+          const itemSpan = Utils.createSpan(["tasksummary", "taskcircle"], Character.BLACK_CIRCLE);
+          itemSpan.classList.add(...statKey.substring(2).split(" "));
           itemSpan.style.backgroundColor = "black";
           summarySpan.append(itemSpan);
         }
