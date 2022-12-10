@@ -368,9 +368,9 @@ export class Output {
       txt += "\n" + functionName;
     }
 
-    let nrChanges = 0;
+    let nrChanges;
     if (!pTask.changes) {
-      // no changes
+      nrChanges = 0;
     } else if (typeof pTask.changes !== "object") {
       nrChanges = 1;
       txt += "\n'changes' has type " + typeof pTask.changes;
@@ -378,21 +378,25 @@ export class Output {
       nrChanges = pTask.changes.length;
       txt += "\n'changes' is an array";
       txt += Utils.txtZeroOneMany(nrChanges, "", "\n" + nrChanges + " change", "\n" + nrChanges + " changes");
-    } else if (pTask.changes.ret !== null && typeof pTask.changes.ret === "object") {
-      nrChanges = Object.keys(pTask.changes.ret).length;
-      txt += Utils.txtZeroOneMany(nrChanges, "", "\n" + nrChanges + " change", "\n" + nrChanges + " changes");
+    } else if (typeof pTask.changes === "object" && Object.keys(pTask.changes).length == 0) {
+      // empty changes object does not count as real change
+      nrChanges = 0;
+    } else {
+      nrChanges = 1;
+      txt += "\nchanged";
     }
 
     if (Output.isHiddenTask(pTask)) {
       txt += "\nhidden";
     }
 
+    pSpan.className = "taskcircle";
     if (pTask.result === null) {
-      pSpan.className = "task-skipped";
+      pSpan.classList.add("task-skipped");
     } else if (pTask.result) {
-      pSpan.className = "task-success";
+      pSpan.classList.add("task-success");
     } else {
-      pSpan.className = "task-failure";
+      pSpan.classList.add("task-failure");
     }
     if (nrChanges) {
       pSpan.classList.add("task-changes");
