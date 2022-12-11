@@ -12,6 +12,7 @@
   position: absolute;
   white-space: pre;
   font-weight: normal;
+  line-height: initial;
 
   /* point the tooltip to its target */
   left: 50%;
