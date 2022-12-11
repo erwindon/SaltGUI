@@ -3,7 +3,7 @@
 }
 
 .tooltip > .tooltip-text {
-  visibility: hidden;
+  display: none;
   font-size: 14px;
   background-color: rgba(76, 175, 80, 80%); /* #4caf50 */
   color: white;
@@ -55,7 +55,7 @@
 }
 
 .tooltip:hover > .tooltip-text {
-  visibility: visible;
+  display: initial;
 }
 
 pre.output .tooltip > .tooltip-text {
