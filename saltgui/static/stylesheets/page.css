@@ -307,3 +307,22 @@ table tr td:last-of-type {
     width: auto;
   }
 }
+
+/* taskcircle */
+
+.taskcircle.task-success {
+  color: lime
+}
+
+.taskcircle.task-failure {
+  color: red;
+}
+
+.taskcircle.task-skipped {
+  color: yellow
+}
+
+.taskcircle.task-changes {
+  text-decoration-line: overline underline;
+  text-decoration-style: double;
+}
