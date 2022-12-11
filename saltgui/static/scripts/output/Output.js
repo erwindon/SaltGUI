@@ -378,7 +378,7 @@ export class Output {
       nrChanges = pTask.changes.length;
       txt += "\n'changes' is an array";
       txt += Utils.txtZeroOneMany(nrChanges, "", "\n" + nrChanges + " change", "\n" + nrChanges + " changes");
-    } else if (typeof pTask.changes === "object" && Object.keys(pTask.changes).length == 0) {
+    } else if (typeof pTask.changes === "object" && Object.keys(pTask.changes).length === 0) {
       // empty changes object does not count as real change
       nrChanges = 0;
     } else {

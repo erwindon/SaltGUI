@@ -311,7 +311,7 @@ table tr td:last-of-type {
 /* taskcircle */
 
 .taskcircle.task-success {
-  color: lime
+  color: lime;
 }
 
 .taskcircle.task-failure {
@@ -319,7 +319,7 @@ table tr td:last-of-type {
 }
 
 .taskcircle.task-skipped {
-  color: yellow
+  color: yellow;
 }
 
 .taskcircle.task-changes {
