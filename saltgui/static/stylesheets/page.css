@@ -121,6 +121,11 @@ pre .task-changes {
   color: aqua;
 }
 
+.task-summary {
+  word-break: break-all;
+  line-height: 2em;
+}
+
 pre .task-summary .task-changes {
   text-decoration-line: overline underline;
   text-decoration-style: double;
