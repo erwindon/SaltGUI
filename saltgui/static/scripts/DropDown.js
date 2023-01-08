@@ -69,10 +69,24 @@ export class DropDownMenu {
     pParentElement.appendChild(this.menuDropdown);
   }
 
+  // determine the visibility of all menu items
+  // menu items without verify-callback are always visible
+  // separators are only visible when there are visible items before it, and after it
   verifyAll () {
     let visibleCount = 0;
+    let itemsBeforeSeparator = 0;
+    let theSeparator = null;
     if (this.menuDropdownContent) {
       for (const chld of this.menuDropdownContent.children) {
+        if (chld.isSeparator) {
+          if (itemsBeforeSeparator > 0) {
+            theSeparator = chld;
+          }
+          itemsBeforeSeparator = 0;
+          chld.style.display = "none";
+          continue;
+        }
+
         const verifyCallBack = chld.verifyCallBack;
         if (verifyCallBack) {
           const title = verifyCallBack(chld);
@@ -80,10 +94,16 @@ export class DropDownMenu {
             chld.style.display = "none";
             continue;
           }
+          if (theSeparator) {
+            // first entry after a separator, so show it
+            theSeparator.style.removeProperty("display");
+            theSeparator = null;
+          }
           chld.innerText = DropDownMenu._sanitizeMenuItemTitle(title);
           chld.style.removeProperty("display");
         }
         visibleCount += 1;
+        itemsBeforeSeparator += 1;
       }
     }
     // hide the menu when it has no visible menu-items
@@ -131,6 +151,7 @@ export class DropDownMenu {
   addMenuSeparator () {
     const div = document.createElement("div");
     div.style.padding = 0;
+    div.isSeparator = true;
     const hr = document.createElement("hr");
     div.appendChild(hr);
     this.menuDropdownContent.appendChild(div);
