@@ -94,7 +94,9 @@ export class TargetType {
       return;
     }
 
-    if (pTarget.includes("@") || pTarget.includes(" ") ||
+    if (Array.isArray(pTarget)) {
+      TargetType.menuTargetType._value = "list";
+    } else if (pTarget.includes("@") || pTarget.includes(" ") ||
       pTarget.includes("(") || pTarget.includes(")")) {
       // "@" is a strong indicator for compound target
       // but "space", "(" and ")" are also typical for compound target
