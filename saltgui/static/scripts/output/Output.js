@@ -330,9 +330,9 @@ export class Output {
   }
 
   static isHiddenTask (pTask) {
-    const isStateVerbose = Utils.getStorageItem("session", "state_verbose", "true");
+    const isStateVerbose = Utils.getStorageItemBoolean("session", "state_verbose", true);
     /* eslint-disable curly */
-    if (isStateVerbose !== "false") return false;
+    if (isStateVerbose) return false;
     if (pTask.result !== true) return false;
     if (!pTask.changes) return true;
     if (typeof pTask.changes !== "object") return false;
@@ -489,8 +489,8 @@ export class Output {
       summarySpan.append(span);
     }
 
-    const stateCompressIds = Utils.getStorageItem("session", "state_compress_ids", "false");
-    if (stateCompressIds === "true") {
+    const stateCompressIds = Utils.getStorageItemBoolean("session", "state_compress_ids");
+    if (stateCompressIds) {
       summarySpan.append(Utils.createSpan("state-details-compressed", Character.NO_BREAK_SPACE + "(state details may be compressed)"));
     }
 

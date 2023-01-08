@@ -65,7 +65,7 @@ export class KeysPanel extends Panel {
 
   showSyndicInfo (pSyndicEventFound) {
     const syndicMaster = Utils.getStorageItem("session", "syndic_master", "");
-    const orderMasters = Utils.getStorageItem("session", "order_masters", "false") === "true";
+    const orderMasters = Utils.getStorageItemBoolean("session", "order_masters");
 
     let warningText = "";
 

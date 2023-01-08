@@ -93,6 +93,15 @@ export class Utils {
     return pDefaultValue;
   }
 
+  static getStorageItemBoolean (pStorage, pKeyName, pDefaultValue = false) {
+    const value = Utils.getStorageItem(pStorage, pKeyName, null);
+    const obj = JSON.parse(value);
+    if (typeof obj !== "boolean") {
+      return pDefaultValue;
+    }
+    return obj;
+  }
+
   static getStorageItem (pStorage, pKeyName, pDefaultValue = null) {
     const storage = Utils._getStorage(pStorage);
     if (!storage) {

@@ -66,9 +66,9 @@ export class OutputHighstate {
     const div = Utils.createDiv();
 
     // collapse states when requested
-    const stateCompressIds = Utils.getStorageItem("session", "state_compress_ids", "false");
+    const stateCompressIds = Utils.getStorageItemBoolean("session", "state_compress_ids");
     let tasks = pTasks;
-    if (stateCompressIds === "true") {
+    if (stateCompressIds) {
       tasks = {};
       for (const task of pTasks) {
         // group by this key

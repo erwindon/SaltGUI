@@ -46,8 +46,8 @@ export class OutputHighstateSummaryOriginal {
     }
     pDiv.append(failedSpan);
 
-    const stateOutputPct = Utils.getStorageItem("session", "state_output_pct", false);
-    if (stateOutputPct === "true") {
+    const stateOutputPct = Utils.getStorageItemBoolean("session", "state_output_pct");
+    if (stateOutputPct) {
       txt = "\nSuccess %: " + OutputHighstateSummaryOriginal.addPercentage(pSucceeded, total);
       const successSpan = Utils.createSpan("task-success", txt);
       pDiv.append(successSpan);
