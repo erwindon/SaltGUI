@@ -80,7 +80,7 @@ export class Output {
     // replace all returned JIDs to links
     // typically found in the output of an async job
     if (pMinionResponse.match(ParseCommandLine.getPatJid())) {
-      const link = Utils.createElem("a", pMinionResponse);
+      const link = Utils.createElem("a", "", pMinionResponse);
       link.href = "?id=" + encodeURIComponent(pMinionResponse) + "#job";
       return link;
     }
@@ -848,7 +848,7 @@ export class Output {
         addHighStateSummaryFlag = true;
       }
 
-      // who which output is unexpected
+      // show which output is unexpected
       // unless all output is unexpected
       // that happens when the minion-list is lost
       // this happens with some storage backends
