@@ -710,14 +710,12 @@ export class Panel {
       txt += ", " + Utils.txtZeroOneMany(cntOffline, "none offline", "{0} offline", "{0} offline");
     }
 
-    const cntMinionsPre = Utils.getStorageItem("session", "minions_pre_length");
-    if (cntMinionsPre) {
-      txt += Utils.txtZeroOneMany(
-        parseInt(cntMinionsPre, 10),
-        "",
-        ", {0} unaccepted key",
-        ", {0} unaccepted keys");
-    }
+    const cntMinionsPre = Utils.getStorageItemInteger("session", "minions_pre_length", 0);
+    txt += Utils.txtZeroOneMany(
+      cntMinionsPre,
+      "",
+      ", {0} unaccepted key",
+      ", {0} unaccepted keys");
 
     this.setMsg(txt);
   }

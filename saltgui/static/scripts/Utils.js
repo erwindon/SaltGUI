@@ -102,6 +102,16 @@ export class Utils {
     return obj;
   }
 
+  static getStorageItemInteger (pStorage, pKeyName, pDefaultValue = 0) {
+    const value = Utils.getStorageItem(pStorage, pKeyName, null);
+    const obj = Number.parseInt(value, 10);
+    if (isNaN(obj)) {
+      return pDefaultValue;
+    }
+    return obj;
+  }
+
+
   static getStorageItem (pStorage, pKeyName, pDefaultValue = null) {
     const storage = Utils._getStorage(pStorage);
     if (!storage) {

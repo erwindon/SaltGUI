@@ -168,7 +168,13 @@ export class Output {
   static dateTimeStr (pDtStr, pDateTimeField = null, pDateTimeStyle = "bottom-center", pTimeOnly = false) {
 
     // no available setting, then return the original
-    const dateTimeFractionDigitsText = Utils.getStorageItem("session", "datetime_fraction_digits", "6");
+    let dateTimeFractionDigits = Utils.getStorageItemInteger("session", "datetime_fraction_digits", 6);
+    // stick to the min/max values without complaining
+    if (dateTimeFractionDigits < 0) {
+      dateTimeFractionDigits = 0;
+    } else if (dateTimeFractionDigits > 6) {
+      dateTimeFractionDigits = 6;
+    }
 
     const dateTimeRepresentation = Utils.getStorageItem("session", "datetime_representation", "utc");
 
@@ -182,19 +188,6 @@ export class Output {
       // 2019, Jan 26 19:05:22.808348
       const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
       pDtStr = pDtStr.getUTCFullYear() + ", " + months[pDtStr.getUTCMonth()] + " " + pDtStr.getUTCDate() + " " + Output.nDigits(pDtStr.getUTCHours(), 2) + ":" + Output.nDigits(pDtStr.getUTCMinutes(), 2) + ":" + Output.nDigits(pDtStr.getUTCSeconds(), 2) + "." + Output.nDigits(pDtStr.getUTCMilliseconds(), 3);
-    }
-
-    // setting is not a number, return the original
-    let dateTimeFractionDigits = Number.parseInt(dateTimeFractionDigitsText, 10);
-    if (isNaN(dateTimeFractionDigits)) {
-      dateTimeFractionDigits = 6;
-    }
-
-    // stick to the min/max values without complaining
-    if (dateTimeFractionDigits < 0) {
-      dateTimeFractionDigits = 0;
-    } else if (dateTimeFractionDigits > 6) {
-      dateTimeFractionDigits = 6;
     }
 
     let fractionSecondsPart = pDtStr;
