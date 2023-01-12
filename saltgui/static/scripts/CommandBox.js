@@ -552,10 +552,13 @@ export class CommandBox {
       }
     }
 
+    const fullReturn = Utils.getStorageItemBoolean("session", "full_return");
+
     let params = {};
     if (functionToRun.startsWith("runners.")) {
       params = argsObject;
       params.client = "runner";
+      params["full_return"] = fullReturn;
       // use only the part after "runners." (8 chars)
       params.fun = functionToRun.substring(8);
       if (argsArray.length > 0) {
@@ -578,6 +581,7 @@ export class CommandBox {
       params.client = "local";
       params.fun = functionToRun;
       params.tgt = pTarget;
+      params["full_return"] = fullReturn;
       if (pTargetType) {
         params["tgt_type"] = pTargetType;
       }
