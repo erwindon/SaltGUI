@@ -136,6 +136,8 @@ export class OutputHighstateTaskSaltGui {
 
     if (pTask["start_time"] !== undefined) {
       taskDiv.append(Utils.createBr());
+      // start_time is set by the original minion in its own timezone
+      // we have no knowledge of that timezone, so no enhanced presentation here
       const startTime = Output.dateTimeStr("1999, Sep 9 " + pTask.start_time, null, null, true);
       taskDiv.append(document.createTextNode(indent + "Started at " + startTime));
     }

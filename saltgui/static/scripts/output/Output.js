@@ -203,6 +203,7 @@ export class Output {
     // truncate digits to maximum length
     fractionSecondsPart = fractionSecondsPart.substring(0, dateTimeFractionDigits);
 
+    // format the decimal number 1.1 and see which separator is used
     const decimalSeparator = 1.1.toLocaleString().substring(1, 2);
     if (fractionSecondsPart !== "") {
       fractionSecondsPart = decimalSeparator + fractionSecondsPart;
@@ -800,6 +801,13 @@ export class Output {
     downloadLabel.style = "float:right";
     topSummaryDiv.appendChild(downloadLabel);
 
+    const commandCmd = pCommand.trim().replace(/ .*/, "");
+
+    if (OutputHighstate.isHighStateOutput(commandCmd, {})) {
+      const span = Utils.createDiv("", "\n" + Character.CIRCLED_INFORMATION_SOURCE + " start-time of tasks is using local-time from the minion");
+      topSummaryDiv.append(span);
+    }
+
     // for all other types we consider the output per minion
     // this is more generic and it simplifies the handlers
     for (const minionId of [...pMinionData].sort()) {
@@ -851,7 +859,6 @@ export class Output {
       }
 
       // it might be highstate output
-      const commandCmd = pCommand.trim().replace(/ .*/, "");
       const isHighStateOutput = OutputHighstate.isHighStateOutput(commandCmd, minionResponse);
 
       const tasks = [];
