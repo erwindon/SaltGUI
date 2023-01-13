@@ -63,7 +63,7 @@ export class EventsPanel extends Panel {
     if (!stampTxt) {
       stampTxt = new Date().toISOString();
     }
-    Output.dateTimeStr(stampTxt, stampSpan, "bottom-left", "T");
+    Output.dateTimeStr(stampTxt, stampSpan, "bottom-left", true);
     stampTd.appendChild(stampSpan);
     tr.append(stampTd);
 
