@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.29.0 (2023-02-18)
+- Updated some OS logos (erwindon, thx mkbrown)
+- Bump eslint and stylelint to latest versions (erwindon)
+- Added CodeQL analysis (thx bsikar)
+- Improved reporting on CVE issues (erwindon)
+- Fixed some multi-master issues (erwindon)
+- Use shorter task summaries in tables (erwindon, thx pju51)
+- Publish documentation on github-pages (erwindon, thx bsikar)
+- Added more flexibility in hightstate overview (erwindon, thx pju51)
+- Improved handling of authentication methods (erwindon, thx xzenor)
+- Added interpretation of standard config parameter state_compress_ids (erwindon)
+- Improved handling of datetime representation (erwindon, thx mkbrown)
+- Allow use of full-return (erwindon)
+- More code cleanups and various small stuff (erwindon)
+- Celebrating 400 stars on GitHub
+
 ## 1.28.0 (2022-04-16)
 - Added icons for Rocky (thx byoungstrom), OpenWRT (thx vemilyus), and a few more (erwindon)
 - Bump eslint and stylelint to latest versions (erwindon)
