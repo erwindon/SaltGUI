@@ -467,7 +467,9 @@ Open a PR! Try to use no dependencies where possible, as vanilla JS is the aim. 
 
 
 ## Credits
-This excellent frontend is originally written by [Oliver Dunk](https://github.com/oliverdunk).
+This excellent frontend is originally written by [Oliver Dunk](https://github.com/oliverdunk).<br>
+It was then further developed by [Martijn Jacobs](https://github.com/maerteijn).<br>
+It is currently maintained by [Erwin Dondorp](https://github.com/erwindon).
 
 SaltGUI includes these libraries (with possible modifications):
 * [sorttable](https://www.kryogenix.org/code/browser/sorttable/)
