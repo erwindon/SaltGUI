@@ -1,3 +1,5 @@
+/* global */
+
 import {Character} from "./Character.js";
 import {Utils} from "./Utils.js";
 
@@ -31,23 +33,24 @@ export class DropDownMenu {
       pParentElement = td;
     }
 
-    this.menuDropdown = Utils.createDiv("run-command-button");
-    this.menuDropdown.classList.add("no-search");
+    this.menuDropdown = Utils.createDiv(["run-command-button", "no-search"]);
 
     if (pParentElement.id === "cmd-box") {
-      this.menuButton = Utils.createDiv("", Character.A_BOOK);
+      this.menuButton = Utils.createDiv("", Character.OPEN_BOOK);
     } else if (pParentElement.classList && pParentElement.classList.contains("minion-output")) {
       this.menuButton = Utils.createSpan("", Character.CH_HAMBURGER);
+    } else if (pParentElement.id.endsWith("-settings")) {
+      this.menuButton = Utils.createSpan("", Character.GEAR);
+    } else if (pParentElement.classList && pParentElement.classList.contains("search-menu-and-field")) {
+      this.menuButton = Utils.createSpan("", Character.GEAR);
     } else {
       // assume it will be a command menu
       this.menuButton = Utils.createDiv("", Character.CH_HAMBURGER);
     }
-    this.menuButton.classList.add("small-button");
+    this.menuButton.classList.add("small-button", "small-button-for-hover", "menu-dropdown");
     if (pIsSmall) {
       this.menuButton.classList.add("small-small-button");
     }
-    this.menuButton.classList.add("small-button-for-hover");
-    this.menuButton.classList.add("menu-dropdown");
     this.menuButton.addEventListener("click", (pClickEvent) => {
       // better support for touch screens where user touch
       // the menu button instead of hovering over it
@@ -66,10 +69,24 @@ export class DropDownMenu {
     pParentElement.appendChild(this.menuDropdown);
   }
 
+  // determine the visibility of all menu items
+  // menu items without verify-callback are always visible
+  // separators are only visible when there are visible items before it, and after it
   verifyAll () {
     let visibleCount = 0;
+    let itemsBeforeSeparator = 0;
+    let theSeparator = null;
     if (this.menuDropdownContent) {
       for (const chld of this.menuDropdownContent.children) {
+        if (chld.isSeparator) {
+          if (itemsBeforeSeparator > 0) {
+            theSeparator = chld;
+          }
+          itemsBeforeSeparator = 0;
+          chld.style.display = "none";
+          continue;
+        }
+
         const verifyCallBack = chld.verifyCallBack;
         if (verifyCallBack) {
           const title = verifyCallBack(chld);
@@ -77,10 +94,16 @@ export class DropDownMenu {
             chld.style.display = "none";
             continue;
           }
+          if (theSeparator) {
+            // first entry after a separator, so show it
+            theSeparator.style.removeProperty("display");
+            theSeparator = null;
+          }
           chld.innerText = DropDownMenu._sanitizeMenuItemTitle(title);
           chld.style.removeProperty("display");
         }
         visibleCount += 1;
+        itemsBeforeSeparator += 1;
       }
     }
     // hide the menu when it has no visible menu-items
@@ -125,6 +148,15 @@ export class DropDownMenu {
     return button;
   }
 
+  addMenuSeparator () {
+    const div = document.createElement("div");
+    div.style.padding = 0;
+    div.isSeparator = true;
+    const hr = document.createElement("hr");
+    div.appendChild(hr);
+    this.menuDropdownContent.appendChild(div);
+  }
+
   _callback (pClickEvent, pCallBack, pValue) {
     this._value = pValue;
     pCallBack(pClickEvent);
@@ -137,7 +169,7 @@ export class DropDownMenu {
     if (pTitle) {
       pTitle += Character.NO_BREAK_SPACE;
     }
-    pTitle += Character.BLACK_DOWN_POINTING_TRIANGLE;
+    pTitle += Character.GEAR;
     this.menuButton.innerText = DropDownMenu._sanitizeMenuItemTitle(pTitle);
   }
 

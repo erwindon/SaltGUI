@@ -1,4 +1,4 @@
-/* global console require setTimeout */
+/* global require */
 
 const request = require("request");
 

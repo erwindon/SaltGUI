@@ -1,4 +1,4 @@
-/* global document window */
+/* global config */
 
 import {API} from "./Api.js";
 import {BeaconsMinionPage} from "./pages/BeaconsMinion.js";
@@ -17,6 +17,7 @@ import {LoginPage} from "./pages/Login.js";
 import {LogoutPage} from "./pages/Logout.js";
 import {MinionsPage} from "./pages/Minions.js";
 import {OptionsPage} from "./pages/Options.js";
+import {Output} from "./output/Output.js";
 import {PillarsMinionPage} from "./pages/PillarsMinion.js";
 import {PillarsPage} from "./pages/Pillars.js";
 import {ReactorsPage} from "./pages/Reactors.js";
@@ -32,6 +33,7 @@ export class Router {
 
     this.api = new API();
     this.api.router = this;
+    Output.router = this;
     this.commandbox = new CommandBox(this, this.api);
     this.pages = [];
     Router.currentPage = undefined;
@@ -100,8 +102,7 @@ export class Router {
 
     const miniMenuDiv = document.querySelector(".minimenu");
     const dropdownContent2 = miniMenuDiv.querySelector(".dropdown-content");
-    // 00A0 = NO-BREAK SPACE
-    const menuItemDiv = Utils.createDiv("run-command-button menu-item", (pParentId ? "-\u00A0" : "") + pButtonId, "button-" + pButtonId + "2");
+    const menuItemDiv = Utils.createDiv("run-command-button menu-item", (pParentId ? "-" + Character.NO_BREAK_SPACE : "") + pButtonId, "button-" + pButtonId + "2");
     dropdownContent2.append(menuItemDiv);
 
     // activate the menu items as needed
@@ -116,6 +117,22 @@ export class Router {
           if (pUrl && (pButtonId === "logout" || pages.length === 0 || pages.indexOf(pButtonId) >= 0)) {
             this.goTo(pUrl);
           }
+          // hide the menu, it will stay hidden when the mouse is not over it
+          // does not work well on touch-schreens
+          let dropDownPanel = null;
+          if (pClickEvent.target.classList.contains("run-command-button")) {
+            dropDownPanel = pClickEvent.target.parentElement;
+          } else {
+            // may be null when there is no dropdown part
+            dropDownPanel = pClickEvent.target.nextSibling;
+          }
+          if (dropDownPanel) {
+            dropDownPanel.style.display = "none";
+            window.setTimeout(() => {
+              dropDownPanel.style.display = "";
+            }, 500);
+          }
+          // prevent further actions
           pClickEvent.stopPropagation();
         });
     }
@@ -124,11 +141,24 @@ export class Router {
   _registerRouterEventListeners () {
     document.getElementById("logo").
       addEventListener("click", (pClickEvent) => {
-        if (pClickEvent.ctrlKey) {
+        if (pClickEvent.ctrlKey || pClickEvent.altKey) {
           this.goTo("options");
         } else {
           this.goTo("");
         }
+        pClickEvent.stopPropagation();
+      });
+
+    // for touch screens
+    document.getElementById("logo").
+      addEventListener("dblclick", (pClickEvent) => {
+        this.goTo("options");
+        pClickEvent.stopPropagation();
+      });
+
+    document.getElementById("docu").
+      addEventListener("click", (pClickEvent) => {
+        window.open("https://erwindon.github.io/SaltGUI/", "_blank");
         pClickEvent.stopPropagation();
       });
 
@@ -164,27 +194,9 @@ export class Router {
     }
   }
 
-  static _getUserName () {
-    const loginResponseStr = Utils.getStorageItem("session", "login-response", "{}");
-    try {
-      const loginResponse = JSON.parse(loginResponseStr);
-      return loginResponse.user;
-    } catch (err) {
-      Utils.error("error in object login-response=" + loginResponseStr + " --> " + err.name + ": " + err.message);
-      return null;
-    }
-  }
-
   static _getPagesList () {
-    const pagesText = Utils.getStorageItem("session", "pages", "{}");
-    let pages;
-    try {
-      pages = JSON.parse(pagesText);
-    } catch (err) {
-      Utils.error("error in object saltgui_pages=" + pagesText + " --> " + err.name + ": " + err.message);
-      return {};
-    }
-    const userName = Router._getUserName();
+    const pages = Utils.getStorageItemObject("session", "pages");
+    const userName = Utils.getStorageItemObject("session", "login_response").user;
     if (!userName || typeof pages !== "object" || !(userName in pages)) {
       return [];
     }
@@ -256,7 +268,7 @@ export class Router {
     // close the command-box when it is stil open
     CommandBox.hideManualRun();
 
-    if (pHash !== "login" && Utils.getStorageItem("session", "login-response") === null) {
+    if (pHash !== "login" && Utils.getStorageItem("session", "login_response") === null) {
       // the fact that we don't have a session will be caught later
       // but this was shows less error messages on the console
       // but do not destroy the reason when login is already the goal
@@ -292,7 +304,7 @@ export class Router {
       }
       // push history state, so that the address bar holds the correct
       // deep-link; and so that we can use the back-button
-      let url = "/";
+      let url = config.NAV_URL ? config.NAV_URL : "/";
       let sep = "?";
       for (const key in pQuery) {
         const value = pQuery[key];

@@ -1,4 +1,4 @@
-/* global document */
+/* global */
 
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
@@ -54,7 +54,7 @@ export class ReactorsPanel extends Panel {
   }
 
   _addReactor (pEvent, pReactor) {
-    const tr = document.createElement("tr");
+    const tr = Utils.createTr();
     tr.appendChild(Utils.createTd("", pEvent));
     tr.appendChild(Utils.createTd("", Output.formatObject(pReactor)));
 

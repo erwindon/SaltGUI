@@ -1,4 +1,4 @@
-/* global document window */
+/* global */
 
 import {Panel} from "./Panel.js";
 import {Router} from "../Router.js";
@@ -13,7 +13,7 @@ export class LoginPanel extends Panel {
 
     // The FORM is important, so that the ENTER key
     // in any field is redirected to the submit button
-    const form = document.createElement("form");
+    const form = Utils.createElem("form");
     this.div.append(form);
 
     const motdTxt = Utils.createDiv("motd");
@@ -28,7 +28,7 @@ export class LoginPanel extends Panel {
     form.append(noticeWrapper);
     this.noticeWrapperDiv = noticeWrapper;
 
-    const username = document.createElement("input");
+    const username = Utils.createElem("input");
     username.type = "text";
     username.id = "username";
     username.placeholder = "Username";
@@ -36,7 +36,7 @@ export class LoginPanel extends Panel {
     form.append(username);
     this.usernameField = username;
 
-    const password = document.createElement("input");
+    const password = Utils.createElem("input");
     password.type = "password";
     password.id = "password";
     password.placeholder = "Password";
@@ -44,25 +44,24 @@ export class LoginPanel extends Panel {
     this.passwordField = password;
 
     // see https://docs.saltstack.com/en/latest/ref/auth/all/index.html
-    const select = document.createElement("select");
+    const select = Utils.createElem("select");
     form.append(select);
     this.eauthField = select;
     this._updateEauthField();
 
-    const submit = document.createElement("input");
+    const submit = Utils.createElem("input");
     submit.id = "login-button";
     submit.type = "submit";
     submit.value = "Login";
     form.append(submit);
     this.loginButton = submit;
 
-    const aa = document.createElement("a");
+    const aa = Utils.createElem("a", "attribution");
     aa.href = "https://github.com/erwindon/SaltGUI";
     aa.target = "_blank";
     aa.rel = "noopener";
-    aa.classList.add("attribution");
 
-    const img = document.createElement("img");
+    const img = Utils.createElem("img");
     img.src = "static/images/github.png";
     aa.append(img);
 
@@ -76,21 +75,23 @@ export class LoginPanel extends Panel {
     this._registerEventListeners(form);
   }
 
-  _addEauthSection (sectionName, optionValues) {
-    if (optionValues.length === 0) {
+  _addEauthSection (pSectionName, pOptionValues) {
+    if (pOptionValues.length === 0) {
       // no optionValues --> no section
       return;
     }
 
-    const optgroup = document.createElement("optgroup");
-    optgroup.label = sectionName;
-    this.eauthField.append(optgroup);
+    let parent = this.eauthField;
+    if (pSectionName) {
+      parent = Utils.createElem("optgroup");
+      parent.label = pSectionName;
+      this.eauthField.append(parent);
+    }
 
-    for (const optionValue of optionValues) {
-      const option = document.createElement("option");
+    for (const optionValue of pOptionValues) {
+      const option = Utils.createElem("option", "", optionValue);
       option.value = optionValue;
-      option.innerText = optionValue;
-      optgroup.append(option);
+      parent.append(option);
     }
   }
 
@@ -98,10 +99,8 @@ export class LoginPanel extends Panel {
     // start fresh
     this.eauthField.innerHTML = "";
 
-    const option1 = document.createElement("option");
-    option1.id = "eauth-default";
+    const option1 = Utils.createElem("option", "", "Type", "eauth-default");
     option1.value = "default";
-    option1.innerText = "Type";
     this.eauthField.append(option1);
 
     this._addEauthSection("standard", ["pam"]);
@@ -119,11 +118,25 @@ export class LoginPanel extends Panel {
     // and only while the code is on a branch
 
     // allow user to add any value they want
-    const saltAuthText = Utils.getStorageItem("local", "salt-auth-txt", "[]");
-    const saltAuth = JSON.parse(saltAuthText);
-    this._addEauthSection("salt-auth.txt", saltAuth);
-
-    this.eauthField.value = Utils.getStorageItem("local", "eauth", "pam");
+    let saltAuth = Utils.getStorageItemList("local", "salt-auth-txt");
+    if (saltAuth.includes("CLEAR")) {
+      saltAuth = saltAuth.filter((item) => item !== "CLEAR");
+      if (saltAuth.length === 0) {
+        // no cheating
+        console.warn("salt-auth-txt has no extries, except 'CLEAR', assuming 'pam'");
+        saltAuth = ["pam"];
+      }
+      this.eauthField.innerHTML = "";
+      this._addEauthSection(null, saltAuth);
+      if (saltAuth.length === 1) {
+        this.eauthField.style.display = "none";
+        Utils.setStorageItem("local", "eauth", saltAuth[0]);
+      }
+      this.eauthField.value = Utils.getStorageItem("local", "eauth", saltAuth[0]);
+    } else {
+      this._addEauthSection("salt-auth.txt", saltAuth);
+      this.eauthField.value = Utils.getStorageItem("local", "eauth", "pam");
+    }
   }
 
   _updateMotdField () {
@@ -144,8 +157,7 @@ export class LoginPanel extends Panel {
 
   _showNoticeText (pBackgroundColour, pText, pInfoClass) {
     // create a new child every time to restart the animation
-    const noticeDiv = Utils.createDiv("", pText, "notice");
-    noticeDiv.classList.add(pInfoClass);
+    const noticeDiv = Utils.createDiv(pInfoClass, pText, "notice");
     noticeDiv.style.backgroundColor = pBackgroundColour;
     while (this.noticeWrapperDiv.hasChildNodes()) {
       this.noticeWrapperDiv.removeChild(this.noticeWrapperDiv.firstChild);
@@ -301,7 +313,7 @@ export class LoginPanel extends Panel {
       // erase credentials since we don't do page-refresh
       this.usernameField.value = "";
       this.passwordField.value = "";
-      if (Utils.getStorageItem("session", "login-response") !== null) {
+      if (Utils.getStorageItem("session", "login_response") !== null) {
         // we might have been logged out in this first second
         // e.g. when clock between client and server differs more than the session timout
         const urlParams = new URLSearchParams(window.location.search);
@@ -341,10 +353,21 @@ export class LoginPanel extends Panel {
     const previewGrains = wheelConfigValuesData.saltgui_preview_grains;
     Utils.setStorageItem("session", "preview_grains", JSON.stringify(previewGrains));
 
-    const hideJobs = wheelConfigValuesData.saltgui_hide_jobs;
-    Utils.setStorageItem("session", "hide_jobs", JSON.stringify(hideJobs));
+    const showSaltEnvs = wheelConfigValuesData.saltgui_show_saltenvs;
+    Utils.setStorageItem("session", "show_saltenvs", JSON.stringify(showSaltEnvs));
+    const hideSaltEnvs = wheelConfigValuesData.saltgui_hide_saltenvs;
+    Utils.setStorageItem("session", "hide_saltenvs", JSON.stringify(hideSaltEnvs));
+
     const showJobs = wheelConfigValuesData.saltgui_show_jobs;
     Utils.setStorageItem("session", "show_jobs", JSON.stringify(showJobs));
+    const hideJobs = wheelConfigValuesData.saltgui_hide_jobs;
+    Utils.setStorageItem("session", "hide_jobs", JSON.stringify(hideJobs));
+
+    const syndicMaster = wheelConfigValuesData.syndic_master;
+    Utils.setStorageItem("session", "syndic_master", syndicMaster);
+
+    const orderMasters = wheelConfigValuesData.order_masters;
+    Utils.setStorageItem("session", "order_masters", orderMasters);
 
     let nodeGroups = wheelConfigValuesData.nodegroups;
     // Even when not set, the api server gives this an actual value "{}" here.
@@ -357,6 +380,9 @@ export class LoginPanel extends Panel {
 
     const stateVerbose = wheelConfigValuesData.saltgui_state_verbose;
     Utils.setStorageItem("session", "state_verbose", JSON.stringify(stateVerbose));
+
+    const stateCompressIds = wheelConfigValuesData.state_compress_ids;
+    Utils.setStorageItem("session", "state_compress_ids", stateCompressIds);
 
     const stateOutput = wheelConfigValuesData.saltgui_state_output;
     Utils.setStorageItem("session", "state_output", stateOutput);
@@ -385,6 +411,9 @@ export class LoginPanel extends Panel {
     const customHelp = wheelConfigValuesData.saltgui_custom_command_help;
     Utils.setStorageItem("session", "custom_command_help", customHelp);
 
+    const fullReturn = wheelConfigValuesData.saltgui_full_return;
+    Utils.setStorageItem("session", "full_return", fullReturn);
+
     Router.updateMainMenu();
   }
 
@@ -400,6 +429,8 @@ export class LoginPanel extends Panel {
       // No permissions: login valid, but no api functions executable
       // e.g. PAM says OK and /etc/salt/master says NO
       this._showNoticeText("#F44336", error.message, "notice_login_other_error");
+    } else if (error.toString().startsWith("TypeError: NetworkError")) {
+      this._showNoticeText("#F44336", "Network Error", "notice_login_other_error");
     } else {
       this._showNoticeText("#F44336", "Authentication failed", "notice_auth_failed");
     }

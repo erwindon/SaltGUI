@@ -1,0 +1,6 @@
+include:
+  - CHANGELOG.md
+  - CONTRIBUTING.md
+  - LICENSE.md
+  - PERMISSIONS.md
+  - README.md

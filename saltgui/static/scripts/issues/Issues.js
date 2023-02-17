@@ -47,19 +47,13 @@ export class Issues {
     // remove a previous incarnation of the same issue
     Issues.removeIssue(pPanel, pCatName, pIssueName);
 
-    const theTr = document.createElement("tr");
-
-    // const keyTd = document.createElement("td");
-    // keyTd.innerText = pCatName + "-" + pIssueName;
-    // keyTd.classList.add("key");
-    // theTr.appendChild(keyTd);
+    const theTr = Utils.createTr();
 
     const menu = new DropDownMenu(theTr, true);
     theTr.menu = menu;
 
-    const descTd = document.createElement("td");
-    const descSpan = document.createElement("span");
-    descSpan.classList.add("desc");
+    const descTd = Utils.createTd();
+    const descSpan = Utils.createSpan("desc");
     descTd.appendChild(descSpan);
     theTr.appendChild(descTd);
 
@@ -120,9 +114,7 @@ export class Issues {
   onGetIssues (pPanel, pTitle) {
     this.api = pPanel.api;
 
-    const msg = document.createElement("div");
-    msg.classList.add("msg");
-    msg.innerText = "(loading info for " + pTitle + ")";
+    const msg = Utils.createDiv("msg", "(loading info for " + pTitle + ")");
     pPanel.msg2.appendChild(msg);
 
     return msg;

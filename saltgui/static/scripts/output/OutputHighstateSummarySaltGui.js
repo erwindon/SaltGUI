@@ -4,9 +4,9 @@ import {Utils} from "../Utils.js";
 export class OutputHighstateSummarySaltGui {
 
   static addPercentage (pCount, pTotal) {
-    const stateOutputPct = Utils.getStorageItem("session", "state_output_pct", false);
+    const stateOutputPct = Utils.getStorageItemBoolean("session", "state_output_pct");
 
-    if (stateOutputPct !== "true") {
+    if (!stateOutputPct) {
       return pCount;
     }
 

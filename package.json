@@ -16,8 +16,8 @@
     "mocha": "^10.0.0",
     "nightmare": "^3.0.2",
     "nyc": "^15.1.0",
-    "stylelint": "^14.0.1",
-    "stylelint-config-standard": "^26.0.0",
+    "stylelint": "^15.0.0",
+    "stylelint-config-standard": "^30.0.1",
     "stylelint-csstree-validator": "^2.0.0",
     "stylelint-scss": "^4.0.0"
   },
@@ -76,9 +76,9 @@
           "allowForLoopAfterthoughts": true
         }
       ],
-      "no-redeclare": 0,
+      "no-redeclare": 2,
       "no-ternary": 0,
-      "no-undef-init": 0,
+      "no-undef-init": 2,
       "no-undefined": 0,
       "no-underscore-dangle": 0,
       "no-unused-vars": [

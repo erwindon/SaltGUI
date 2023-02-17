@@ -1,4 +1,4 @@
-/* global document window */
+/* global */
 
 import {Character} from "../Character.js";
 import {DropDownMenu} from "../DropDown.js";
@@ -8,16 +8,29 @@ import {Output} from "../output/Output.js";
 import {TargetType} from "../TargetType.js";
 import {Utils} from "../Utils.js";
 
+// for now these are static
+// changing these will affect the server load while loading this page
+// in any case, the details are only loaded for visible jobs
+// max number of background jobs to get job details
+// set to 0 to disable the automatic loading of job details
+const MAX_CNT_LOADING = 3;
+// start 1 background job every interval until MAX is reached
+// new jobs can be started when older ones are done
+const LOADING_INTERVAL_IN_MS = 1000;
+
+// how many jobs to load in the basic view
+const MAX_JOBS_DETAILS = 50;
+
 export class JobsDetailsPanel extends JobsPanel {
 
   constructor () {
     super("jobs");
 
     this.addTitle("Recent Jobs");
-    this.addPanelMenu();
-    this._addPanelMenuItemShowSome();
-    this._addPanelMenuItemShowEligible();
-    this._addPanelMenuItemShowAll();
+    this.addSettingsMenu();
+    this._addSettingsMenuItemShowSome();
+    this._addSettingsMenuItemShowEligible();
+    this._addSettingsMenuItemShowAll();
     this.addSearchButton();
     this.addPlayPauseButton();
     this.addHelpButton([
@@ -34,8 +47,7 @@ export class JobsDetailsPanel extends JobsPanel {
   onShow () {
     const patInteger = /^(?:(?:0)|(?:[-+]?[1-9][0-9]*))$/;
 
-    const maxJobs = 50;
-    let cnt = decodeURIComponent(Utils.getQueryParam("cnt", String(maxJobs)));
+    let cnt = decodeURIComponent(Utils.getQueryParam("cnt", String(MAX_JOBS_DETAILS)));
     if (cnt === "eligible") {
       cnt = 10000;
     } else if (cnt === "all") {
@@ -45,9 +57,9 @@ export class JobsDetailsPanel extends JobsPanel {
       cnt = parseInt(cnt, 10);
     } else {
       // pretend parameter was not present
-      cnt = maxJobs;
+      cnt = MAX_JOBS_DETAILS;
     }
-    this.panelMenu._value = cnt;
+    this.settingsMenu._value = cnt;
 
     super.onShow(cnt);
   }
@@ -55,30 +67,33 @@ export class JobsDetailsPanel extends JobsPanel {
   jobsListIsReady () {
     this.nrErrors = 0;
 
+    if (MAX_CNT_LOADING <= 0) {
+      return;
+    }
+
     // to update details
     // interval should be larger than the retrieval time
     // to prevent many of such jobs to appear
     this.updateNextJobInterval = window.setInterval(() => {
       this._updateNextJob();
-    }, 1000);
+    }, LOADING_INTERVAL_IN_MS);
   }
 
-  _addPanelMenuItemShowSome () {
-    const maxJobs = 50;
-    this.panelMenu.addMenuItem(() => {
-      let title = "Show first " + maxJobs + " jobs";
+  _addSettingsMenuItemShowSome () {
+    this.settingsMenu.addMenuItem(() => {
+      let title = "Show first " + MAX_JOBS_DETAILS + " jobs";
       const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
-      if (cnt === "undefined" || cnt === String(maxJobs)) {
+      if (cnt === "undefined" || cnt === String(MAX_JOBS_DETAILS)) {
         title = Character.BLACK_CIRCLE + " " + title;
       }
       return title;
     }, () => {
-      this.router.goTo("jobs", {"cnt": maxJobs});
+      this.router.goTo("jobs", {"cnt": MAX_JOBS_DETAILS});
     });
   }
 
-  _addPanelMenuItemShowEligible () {
-    this.panelMenu.addMenuItem(() => {
+  _addSettingsMenuItemShowEligible () {
+    this.settingsMenu.addMenuItem(() => {
       const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
       let title = "Show eligible jobs";
       if (cnt === "eligible") {
@@ -90,8 +105,8 @@ export class JobsDetailsPanel extends JobsPanel {
     });
   }
 
-  _addPanelMenuItemShowAll () {
-    this.panelMenu.addMenuItem(() => {
+  _addSettingsMenuItemShowAll () {
+    this.settingsMenu.addMenuItem(() => {
       const cnt = decodeURIComponent(Utils.getQueryParam("cnt"));
       let title = "Show all jobs";
       if (cnt === "all") {
@@ -130,7 +145,7 @@ export class JobsDetailsPanel extends JobsPanel {
 
     const tbody = this.table.tBodies[0];
     // find an item still marked as "(click)"
-    // but when we find 3 "loading..." items, the system is
+    // but when we find MAX_CNT_LOADING "loading..." items, the system is
     // probably overloaded and we skip a cycle
     let cntLoading = 0;
     let workLeft = false;
@@ -141,7 +156,7 @@ export class JobsDetailsPanel extends JobsPanel {
       }
       if (tr.dataset.isLoading === "true") {
         cntLoading += 1;
-        if (cntLoading >= 3) {
+        if (cntLoading >= MAX_CNT_LOADING) {
           // too many already running
           return;
         }
@@ -312,7 +327,7 @@ export class JobsDetailsPanel extends JobsPanel {
   }
 
   addJob (job) {
-    const tr = document.createElement("tr");
+    const tr = Utils.createTr();
     tr.id = Utils.getIdFromJobId(job.id);
     tr.dataset.jobid = job.id;
     tr.appendChild(Utils.createTd("", job.id));
@@ -344,8 +359,7 @@ export class JobsDetailsPanel extends JobsPanel {
     this._addMenuItemJobsRerunJob(menu, job, argumentsText);
 
     const statusTd = Utils.createTd();
-    const statusSpan = Utils.createSpan("job-status", "loading...");
-    statusSpan.classList.add("no-job-status");
+    const statusSpan = Utils.createSpan(["job-status", "no-job-status"], "loading...");
     statusSpan.addEventListener("click", (pClickEvent) => {
       // show "loading..." only once, but we are updating the whole column
       statusSpan.classList.add("no-job-status");
@@ -360,8 +374,7 @@ export class JobsDetailsPanel extends JobsPanel {
 
     tr.dataset.detailsUnknown = "true";
     const detailsTd = Utils.createTd("details");
-    const detailsSpan = Utils.createSpan("details2", "(click)");
-    detailsSpan.classList.add("no-job-details");
+    const detailsSpan = Utils.createSpan(["details2", "no-job-details"], "(click)");
     detailsSpan.addEventListener("click", (pClickEvent) => {
       detailsSpan.classList.add("no-job-details");
       detailsSpan.innerText = "loading...";

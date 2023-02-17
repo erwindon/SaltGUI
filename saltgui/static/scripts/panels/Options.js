@@ -1,4 +1,4 @@
-/* global document */
+/* global */
 
 import {Character} from "../Character.js";
 import {Output} from "../output/Output.js";
@@ -13,7 +13,7 @@ export class OptionsPanel extends Panel {
     super("options");
 
     this.addTitle("Options");
-    // this.addSearchButton();
+    this.addSearchButton();
     this.addHelpButton([
       "Names 'session_*' show the values from the login session.",
       "Names 'saltgui_*' show the values from the master file '/etc/salt/master'.",
@@ -30,6 +30,10 @@ export class OptionsPanel extends Panel {
       ["expire", "session"],
       ["perms", "session"],
       ["nodegroups", null, "(none)"],
+      [
+        "state-compress-ids", null, "false",
+        [["compress-ids", "true", "false"]]
+      ],
       [
         "state-output", null, "full",
         [["output", "full", "terse", "mixed", "changes", "full_id", "terse_id", "mixed_id", "changes_id"]]
@@ -50,10 +54,19 @@ export class OptionsPanel extends Panel {
         "datetime-representation", "saltgui", "utc",
         [["representation", "utc", "local", "utc-localtime:utc+localtime", "local-utctime:local+utctime"]]
       ],
+      [
+        "full-return", "saltgui", "false",
+        [["full-return", "true", "false"]]
+      ],
+
+      /* note that this is not in the alphabetic order */
+      ["show-jobs", "saltgui", "(all)"],
       ["hide-jobs", "saltgui", "(none)"],
 
-      /* show-jobs is not in the alphabetic order, but keep it close to hide-jobs */
-      ["show-jobs", "saltgui", "(all)"],
+      /* note that this is not in the alphabetic order */
+      ["show-saltenvs", "saltgui", "(all)"],
+      ["hide-saltenvs", "saltgui", "(none)"],
+
       ["motd-txt", "saltgui", "(none)"],
       ["motd-html", "saltgui", "(none)"],
       [
@@ -78,7 +91,7 @@ export class OptionsPanel extends Panel {
   }
 
   _addOptionRow (pName, pCategory, pDefaultValue, pValues = null) {
-    const tr = document.createElement("tr");
+    const tr = Utils.createTr();
     tr.id = "option-" + pName;
     tr.dataset.defaultValue = pDefaultValue;
 
@@ -94,16 +107,16 @@ export class OptionsPanel extends Panel {
       const span = Utils.createSpan("", "", "option-" + pName + "-value");
       tdValue.appendChild(span);
 
-      const br1 = document.createElement("br");
+      const br1 = Utils.createBr();
       tdValue.appendChild(br1);
 
-      const br2 = document.createElement("br");
+      const br2 = Utils.createBr();
       tdValue.appendChild(br2);
 
       let addSep = false;
       for (const row of pValues) {
         if (addSep) {
-          const br3 = document.createElement("br");
+          const br3 = Utils.createBr();
           tdValue.appendChild(br3);
         }
         addSep = true;
@@ -116,7 +129,7 @@ export class OptionsPanel extends Panel {
             itemLabel = row[i].substring(colonPos + 1);
           }
 
-          const radio = document.createElement("input");
+          const radio = Utils.createElem("input");
           radio.id = "option-" + pName + "-value-" + row[0] + "-" + itemValue;
           radio.type = "radio";
           radio.name = "option-" + pName + "-value-" + row[0];
@@ -124,6 +137,10 @@ export class OptionsPanel extends Panel {
           if (pName === "state-verbose") {
             radio.addEventListener("change", () => {
               this._newStateVerbose();
+            });
+          } else if (pName === "state-compress-ids") {
+            radio.addEventListener("change", () => {
+              this._newStateCompressIds();
             });
           } else if (pName === "state-output") {
             radio.addEventListener("change", () => {
@@ -149,14 +166,24 @@ export class OptionsPanel extends Panel {
             radio.addEventListener("change", () => {
               this._newToolTipMode();
             });
+          } else if (pName === "full-return") {
+            radio.addEventListener("change", () => {
+              this._newFullReturn();
+            });
           }
-          tdValue.appendChild(radio);
 
-          const label = document.createElement("label");
+          if (pName === "state-output" && itemValue === "full_id") {
+            tdValue.append(Utils.createBr());
+          }
+
+          const label = Utils.createElem("label", "", itemLabel);
           label.htmlFor = radio.id;
-          label.innerText = itemLabel;
-          label.style.whiteSpace = "nowrap";
-          tdValue.appendChild(label);
+
+          const span2 = Utils.createSpan();
+
+          span2.appendChild(radio);
+          span2.appendChild(label);
+          tdValue.append(span2);
         }
       }
     }
@@ -241,8 +268,7 @@ export class OptionsPanel extends Panel {
       this._addOptionRow(name, category, defaultValue, valuesArr);
     }
 
-    const loginResponseStr = Utils.getStorageItem("session", "login-response", "{}");
-    const loginResponse = JSON.parse(loginResponseStr);
+    const loginResponse = Utils.getStorageItemObject("session", "login_response");
     const sessionStart = loginResponse.start;
 
     for (const option of this.options) {
@@ -365,6 +391,17 @@ export class OptionsPanel extends Panel {
     Utils.setStorageItem("session", "state_verbose", value);
   }
 
+  _newStateCompressIds () {
+    let value = "";
+    /* eslint-disable curly */
+    if (this._isSelected("state-compress-ids", "compress-ids", "false")) value = "false";
+    if (this._isSelected("state-compress-ids", "compress-ids", "true")) value = "true";
+    /* eslint-enable curly */
+    const stateCompressIdsTd = this.div.querySelector("#option-state-compress-ids-value");
+    stateCompressIdsTd.innerText = value;
+    Utils.setStorageItem("session", "state_compress_ids", value);
+  }
+
   _newStateOutput () {
     let value = "";
     /* eslint-disable curly */
@@ -451,5 +488,16 @@ export class OptionsPanel extends Panel {
     const toolTipModeTd = this.div.querySelector("#option-tooltip-mode-value");
     toolTipModeTd.innerText = value;
     Utils.setStorageItem("session", "tooltip_mode", value);
+  }
+
+  _newFullReturn () {
+    let value = "";
+    /* eslint-disable curly */
+    if (this._isSelected("full-return", "full-return", "false")) value = "false";
+    if (this._isSelected("full-return", "full-return", "true")) value = "true";
+    /* eslint-enable curly */
+    const fullReturnTd = this.div.querySelector("#option-full-return-value");
+    fullReturnTd.innerText = value;
+    Utils.setStorageItem("session", "full_return", value);
   }
 }

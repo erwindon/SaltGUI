@@ -93,12 +93,6 @@ export class MinionsPanel extends Panel {
       this._addMenuItemShowPillars(menu, minionId);
       this._addMenuItemShowSchedules(menu, minionId);
       this._addMenuItemShowBeacons(menu, minionId);
-
-      minionTr.addEventListener("click", (pClickEvent) => {
-        const cmdArr = ["state.apply"];
-        this.runCommand("", minionId, cmdArr);
-        pClickEvent.stopPropagation();
-      });
     }
 
     Utils.setStorageItem("session", "minions_pre_length", keys.minions_pre.length);
@@ -197,6 +191,12 @@ export class MinionsPanel extends Panel {
     this._addMenuItemShowPillars(menu, pMinionId);
     this._addMenuItemShowSchedules(menu, pMinionId);
     this._addMenuItemShowBeacons(menu, pMinionId);
+
+    minionTr.addEventListener("click", (pClickEvent) => {
+      const cmdArr = ["state.apply"];
+      this.runCommand("", pMinionId, cmdArr);
+      pClickEvent.stopPropagation();
+    });
   }
 
   _addMenuItemStateApply (pMenu, pMinionId) {
@@ -394,30 +394,28 @@ export class MinionsPanel extends Panel {
       ["CVE-2020-11651", MASTER, ["201[4-8]"]],
       ["CVE-2020-11651", MASTER, ["2019", "[0-1]"]],
       ["CVE-2020-11651", MASTER, ["2019", "2", "[0-3]"]],
-      ["CVE-2020-11651", MASTER, ["3000", null]],
       ["CVE-2020-11651", MASTER, ["3000", "[0-1]"]],
 
       ["CVE-2020-11652", MASTER, ["0"]],
       ["CVE-2020-11652", MASTER, ["201[4-8]"]],
       ["CVE-2020-11652", MASTER, ["2019", "[0-1]"]],
       ["CVE-2020-11652", MASTER, ["2019", "2", "[0-3]"]],
-      ["CVE-2020-11652", MASTER, ["3000", null]],
       ["CVE-2020-11652", MASTER, ["3000", "[0-1]"]],
 
       ["CVE-2020-16846", MASTER + MINION, ["0"]],
       ["CVE-2020-16846", MASTER + MINION, ["201[4-9]"]],
       ["CVE-2020-16846", MASTER + MINION, ["300[0-1]"]],
-      ["CVE-2020-16846", MASTER + MINION, ["3002", null]],
+      ["CVE-2020-16846", MASTER + MINION, ["3002", "0"]],
 
       ["CVE-2020-17490", MASTER + MINION, ["0"]],
       ["CVE-2020-17490", MASTER + MINION, ["201[4-9]"]],
       ["CVE-2020-17490", MASTER + MINION, ["300[0-1]"]],
-      ["CVE-2020-17490", MASTER + MINION, ["3002", null]],
+      ["CVE-2020-17490", MASTER + MINION, ["3002", "0"]],
 
       ["CVE-2020-25592", MASTER + MINION, ["0"]],
       ["CVE-2020-25592", MASTER + MINION, ["201[4-9]"]],
       ["CVE-2020-25592", MASTER + MINION, ["300[0-1]"]],
-      ["CVE-2020-25592", MASTER + MINION, ["3002", null]],
+      ["CVE-2020-25592", MASTER + MINION, ["3002", "0"]],
 
       ["CVE-2020-28243", MINION, ["0"]],
       ["CVE-2020-28243", MINION, ["201[4-9]"]],
@@ -490,7 +488,37 @@ export class MinionsPanel extends Panel {
       ["CVE-2021-31607", MASTER + MINION, ["2016", "1[0-9]"]],
       ["CVE-2021-31607", MASTER + MINION, ["201[789]"]],
       ["CVE-2021-31607", MASTER + MINION, ["300[01]"]],
-      ["CVE-2021-31607", MASTER + MINION, ["3002", "[0-6]"]]
+      ["CVE-2021-31607", MASTER + MINION, ["3002", "[0-6]"]],
+
+      ["CVE-2022-22934", MASTER, ["201[4-9]"]],
+      ["CVE-2022-22934", MASTER, ["300[01]"]],
+      ["CVE-2022-22934", MASTER, ["3002", "[0-7]"]],
+      ["CVE-2022-22934", MASTER, ["3003", "[0-3]"]],
+      ["CVE-2022-22934", MASTER, ["3004", "[0]"]],
+
+      ["CVE-2022-22935", MASTER + MINION, ["201[4-9]"]],
+      ["CVE-2022-22935", MASTER + MINION, ["300[01]"]],
+      ["CVE-2022-22935", MASTER + MINION, ["3002", "[0-7]"]],
+      ["CVE-2022-22935", MASTER + MINION, ["3003", "[0-3]"]],
+      ["CVE-2022-22935", MASTER + MINION, ["3004", "[0]"]],
+
+      ["CVE-2022-22936", MASTER + MINION, ["201[4-9]"]],
+      ["CVE-2022-22936", MASTER + MINION, ["300[01]"]],
+      ["CVE-2022-22936", MASTER + MINION, ["3002", "[0-7]"]],
+      ["CVE-2022-22936", MASTER + MINION, ["3003", "[0-3]"]],
+      ["CVE-2022-22936", MASTER + MINION, ["3004", "[0]"]],
+
+      ["CVE-2022-22941", MASTER, ["201[4-9]"]],
+      ["CVE-2022-22941", MASTER, ["300[01]"]],
+      ["CVE-2022-22941", MASTER, ["3002", "[0-7]"]],
+      ["CVE-2022-22941", MASTER, ["3003", "[0-3]"]],
+      ["CVE-2022-22941", MASTER, ["3004", "[0]"]],
+
+      ["CVE-2022-22967", MASTER, ["201[4-9]"]],
+      ["CVE-2022-22967", MASTER, ["300[01]"]],
+      ["CVE-2022-22967", MASTER, ["3002", "[0-8]"]],
+      ["CVE-2022-22967", MASTER, ["3003", "[0-4]"]],
+      ["CVE-2022-22967", MASTER, ["3004", "[0-1]"]]
     ];
   }
 
@@ -503,6 +531,12 @@ export class MinionsPanel extends Panel {
     }
 
     const items = pVersion.split(".");
+
+    if (items.length === 1 && items[0].startsWith("30")) {
+      // pretend that the main release of the 30xx series
+      // is actually patch "0"
+      items.push("0");
+    }
 
     // ["CVE-2020-25592", MASTER+MINION, ["3002", null] ],
     const entries = MinionsPanel._getCveData();
@@ -555,6 +589,7 @@ export class MinionsPanel extends Panel {
     if (bugs.length > 1) {
       txt += "s";
     }
+    // initial line only has 3 entries due to some initial text on same line
     let cnt = 3;
     for (const bug of bugs) {
       if (bugs.length > 1 && bug === bugs[bugs.length - 1]) {
@@ -563,6 +598,7 @@ export class MinionsPanel extends Panel {
         txt += ",";
       }
       if (cnt <= 0) {
+        // start a new line with a maximum of 4 entries
         txt += "\n";
         cnt = 4;
       } else {
@@ -613,13 +649,13 @@ export class MinionsPanel extends Panel {
         const minionBugs = MinionsPanel._getCveBugs(minionVersion, MINION);
 
         if (Object.keys(masterBugs).length) {
-          versionSpan.innerText = Character.WARNING_SIGN + minionVersion;
+          Panel.addPrefixIcon(versionSpan, Character.WARNING_SIGN);
         } else if (Object.keys(minionBugs).length) {
-          versionSpan.innerText = Character.WARNING_SIGN + minionVersion;
+          Panel.addPrefixIcon(versionSpan, Character.WARNING_SIGN);
         } else if (outcome === "Minion requires update") {
-          versionSpan.innerText = Character.WARNING_SIGN + minionVersion;
+          Panel.addPrefixIcon(versionSpan, Character.WARNING_SIGN);
         } else if (outcome === "Minion newer than master") {
-          versionSpan.innerText = Character.WARNING_SIGN + minionVersion;
+          Panel.addPrefixIcon(versionSpan, Character.WARNING_SIGN);
         } else if (outcome === "Up to date") {
           // VOID
         }
@@ -637,17 +673,18 @@ export class MinionsPanel extends Panel {
 
         if (txt) {
           txt += "\nUpgrade is highly recommended!";
-          txt += "\nClick to show these CVEs on cve.mitre.org";
-          versionSpan.addEventListener("click", (pClickEvent) => {
-            let url = "https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=";
-            for (let i = 0; i < allCveKeys.length; i++) {
-              url += (i === 0 ? "" : "%20") + allCveKeys[i];
-            }
-            // if(allCveKeys.length === 0) url += "saltstack";
-            window.open(url);
-            // prevent the click to open the run-dialog
-            pClickEvent.stopPropagation();
-          });
+          if (allCveKeys.length > 0) {
+            txt += "\nClick to show these CVEs on cve.mitre.org";
+            versionSpan.addEventListener("click", (pClickEvent) => {
+              let url = "https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=";
+              for (let i = 0; i < allCveKeys.length; i++) {
+                url += (i === 0 ? "" : "%20") + allCveKeys[i];
+              }
+              window.open(url);
+              // prevent the click to open the run-dialog
+              pClickEvent.stopPropagation();
+            });
+          }
           Utils.addToolTip(versionSpan, txt.trim(), "error-bottom-left");
         }
       }

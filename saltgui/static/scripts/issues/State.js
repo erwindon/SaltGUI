@@ -4,6 +4,7 @@ import {Issues} from "./Issues.js";
 import {JobsPanel} from "../panels/Jobs.js";
 import {Utils} from "../Utils.js";
 
+// only consider this number of latest highstate jobs
 const MAX_HIGHSTATE_JOBS = 10;
 
 export class StateIssues extends Issues {

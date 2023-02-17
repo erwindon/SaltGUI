@@ -1,4 +1,4 @@
-/* global document jsonPath */
+/* global jsonPath */
 
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
@@ -12,7 +12,6 @@ export class GrainsPanel extends Panel {
 
     this.addTitle("Grains");
     this.addSearchButton();
-    // TODO extra columns
     this.addHelpButton([
       "The content of specific well-known grains can be made visible in",
       "columns by configuring their name in the server-side configuration file.",
@@ -22,19 +21,13 @@ export class GrainsPanel extends Panel {
     this.setTableClickable();
 
     // collect the list of displayed extra grains
-    const previewGrainsText = Utils.getStorageItem("session", "preview_grains", "[]");
-    this.previewGrains = JSON.parse(previewGrainsText);
-    if (!Array.isArray(this.previewGrains)) {
-      // TODO: msg
-      this.previewGrains = [];
-    }
+    this.previewGrains = Utils.getStorageItemList("session", "preview_grains");
 
     // add the preview columns (before we sort the table)
     // the div is not added to the DOM yet
     const tr = this.div.querySelector("#grains-table-thead-tr");
-    for (let i = 0; i < this.previewGrains.length; i++) {
-      const th = document.createElement("th");
-      th.innerText = this.previewGrains[i];
+    for (const previewGrain of this.previewGrains) {
+      const th = Utils.createElem("th", "", previewGrain);
       tr.appendChild(th);
     }
 
@@ -134,9 +127,8 @@ export class GrainsPanel extends Panel {
 
     // add the preview columns
     /* eslint-disable max-depth */
-    for (let i = 0; i < this.previewGrains.length; i++) {
+    for (const grainName of this.previewGrains) {
       const td = Utils.createTd();
-      const grainName = this.previewGrains[i];
       if (typeof pMinionData === "object") {
         if (grainName.startsWith("$")) {
           // it is a json path

@@ -1,4 +1,4 @@
-/* global document */
+/* global */
 
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
@@ -54,7 +54,7 @@ export class EventsPanel extends Panel {
     }
 
     const tbody = this.table.tBodies[0];
-    const tr = document.createElement("tr");
+    const tr = Utils.createTr();
 
     // add timestamp value
     const stampTd = Utils.createTd();
@@ -63,7 +63,7 @@ export class EventsPanel extends Panel {
     if (!stampTxt) {
       stampTxt = new Date().toISOString();
     }
-    Output.dateTimeStr(stampTxt, stampSpan, "bottom-left", "T");
+    Output.dateTimeStr(stampTxt, stampSpan, "bottom-left", true);
     stampTd.appendChild(stampSpan);
     tr.append(stampTd);
 
@@ -72,11 +72,10 @@ export class EventsPanel extends Panel {
     tr.append(tagTd);
 
     // add data value
-    const dataTd = Utils.createTd("event-data");
     const pDataObj = {};
     Object.assign(pDataObj, pData);
     delete pDataObj._stamp;
-    dataTd.innerText = Output.formatObject(pDataObj);
+    const dataTd = Utils.createTd("event-data", Output.formatObject(pDataObj));
     tr.append(dataTd);
 
     tbody.prepend(tr);

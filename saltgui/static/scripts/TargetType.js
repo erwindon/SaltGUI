@@ -1,4 +1,4 @@
-/* global document */
+/* global */
 
 import {Character} from "./Character.js";
 import {DropDownMenu} from "./DropDown.js";
@@ -20,8 +20,8 @@ export class TargetType {
   // It takes a while before we known the list of nodegroups
   // so this conclusion must be re-evaluated each time
   static _targetTypeNodeGroupPrepare (pMenuItem) {
-    const nodeGroupsText = Utils.getStorageItem("session", "nodegroups");
-    if (!nodeGroupsText || nodeGroupsText === "{}") {
+    const nodeGroups = Utils.getStorageItemObject("session", "nodegroups");
+    if (!nodeGroups || Object.keys(nodeGroups).length === 0) {
       return null;
     }
 
@@ -94,7 +94,9 @@ export class TargetType {
       return;
     }
 
-    if (pTarget.includes("@") || pTarget.includes(" ") ||
+    if (Array.isArray(pTarget)) {
+      TargetType.menuTargetType._value = "list";
+    } else if (pTarget.includes("@") || pTarget.includes(" ") ||
       pTarget.includes("(") || pTarget.includes(")")) {
       // "@" is a strong indicator for compound target
       // but "space", "(" and ")" are also typical for compound target

@@ -1,4 +1,4 @@
-/* global window */
+/* global */
 
 import {Character} from "../Character.js";
 import {DropDownMenu} from "../DropDown.js";
@@ -9,7 +9,11 @@ import {Panel} from "./Panel.js";
 import {TargetType} from "../TargetType.js";
 import {Utils} from "../Utils.js";
 
+// only consider this number of latest highstate jobs
 const MAX_HIGHSTATE_JOBS = 10;
+
+// more than this number of states switches to summary
+const MAX_HIGHSTATE_STATES = 20;
 
 export class HighStatePanel extends Panel {
 
@@ -20,32 +24,53 @@ export class HighStatePanel extends Panel {
     this.addPanelMenu();
     this._addMenuItemStateApply(this.panelMenu, "*");
     this._addMenuItemStateApplyTest(this.panelMenu, "*");
+    this.addSettingsMenu();
+    this._addMenuItemUseStateHighstate();
+    this._addMenuItemUseStateApply();
     this.addSearchButton();
     this.addPlayPauseButton();
     this.addHelpButton([
       "This panel shows the latest state.highstate or state.apply job for each minion.",
       "Only the latest " + MAX_HIGHSTATE_JOBS + " jobs are verified.",
+      "With more than " + MAX_HIGHSTATE_STATES + " states, a summary is shown instead.",
       "Click on an individual state to re-apply only that state."
     ]);
     this.addTable(["Minion", "State", "Latest JID", "Target", "Function", "Start Time", "-menu-", "States"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable();
     this.addMsg();
+
+    // collect the list of hidden/shown environments
+    this._showSaltEnvs = Utils.getStorageItemList("session", "show_saltenvs");
+    this._hideSaltEnvs = Utils.getStorageItemList("session", "hide_saltenvs");
   }
 
   onShow () {
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
-    const runnerJobsListJobsPromise = this.api.getRunnerJobsListJobs(["state.apply", "state.highstate"]);
+
+    const cmdList = [];
+    if (Utils.getStorageItem("local", "use_state_highstate", "true") === "true") {
+      cmdList.push("state.highstate");
+    }
+    if (Utils.getStorageItem("local", "use_state_apply", "true") === "true") {
+      cmdList.push("state.apply");
+    }
+
+    const runnerJobsListJobsPromise = this.api.getRunnerJobsListJobs(cmdList);
 
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       this._handleMinionsWheelKeyListAll(pWheelKeyListAllData);
-      runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
-        this._handleHighstateRunnerJobsListJobs(pRunnerJobsListJobsData);
-        return true;
-      }, (pRunnerJobsListJobsMsg) => {
-        this._handleHighstateRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
-        return false;
-      });
+      if (cmdList.length === 0) {
+        this._handleHighstateRunnerJobsListJobs({"return": [{}]});
+      } else {
+        runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
+          this._handleHighstateRunnerJobsListJobs(pRunnerJobsListJobsData);
+          return true;
+        }, (pRunnerJobsListJobsMsg) => {
+          this._handleHighstateRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
+          return false;
+        });
+      }
       return true;
     }, (pWheelKeyListAllMsg) => {
       this._handleMinionsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
@@ -68,6 +93,32 @@ export class HighStatePanel extends Panel {
     });
   }
 
+  _addMenuItemUseStateHighstate () {
+    this.settingsMenu.addMenuItem(
+      () => {
+        const stateHighstateFlag = Utils.getStorageItem("local", "use_state_highstate", "true");
+        return (stateHighstateFlag === "true" ? Character.HEAVY_CHECK_MARK + Character.NO_BREAK_SPACE : "") + "Include state.highstate";
+      }, () => {
+        const stateHighstateFlag = Utils.getStorageItem("local", "use_state_highstate", "true");
+        Utils.setStorageItem("local", "use_state_highstate", stateHighstateFlag === "false" ? "true" : "false");
+        this.clearPanel();
+        this.onShow();
+      });
+  }
+
+  _addMenuItemUseStateApply () {
+    this.settingsMenu.addMenuItem(
+      () => {
+        const stateApplyFlag = Utils.getStorageItem("local", "use_state_apply", "true");
+        return (stateApplyFlag === "true" ? Character.HEAVY_CHECK_MARK + Character.NO_BREAK_SPACE : "") + "Include state.apply";
+      }, () => {
+        const stateApplyFlag = Utils.getStorageItem("local", "use_state_apply", "true");
+        Utils.setStorageItem("local", "use_state_apply", stateApplyFlag === "false" ? "true" : "false");
+        this.clearPanel();
+        this.onShow();
+      });
+  }
+
   _handleMinionsWheelKeyListAll (pWheelKeyListAll) {
     if (this.showErrorRowInstead(pWheelKeyListAll)) {
       return;
@@ -85,7 +136,7 @@ export class HighStatePanel extends Panel {
       this._addMenuItemStateApply(menu, minionId);
       this._addMenuItemStateApplyTest(menu, minionId);
 
-      minionTr.appendChild(Utils.createTd("", ""));
+      minionTr.appendChild(Utils.createTd());
 
       minionTr.addEventListener("click", (pClickEvent) => {
         const functionField = minionTr.querySelector(".function");
@@ -206,6 +257,30 @@ export class HighStatePanel extends Panel {
     }
   }
 
+  static _getJobNamedParam (pParamName, pJobData, pDefaultValue) {
+    const args = pJobData.Arguments;
+    if (!args) {
+      return pDefaultValue;
+    }
+    for (const arg of args) {
+      // for jobs that were started using 'salt-call'
+      if (typeof arg === "string" && arg.startsWith(pParamName + "=")) {
+        return arg.replace(/^[^=]*=/, "");
+      }
+      // for jobs that were started using 'salt'
+      if (typeof arg !== "object" || Array.isArray(arg)) {
+        continue;
+      }
+      if (arg.__kwarg__ !== true) {
+        continue;
+      }
+      if (arg[pParamName] !== undefined) {
+        return arg[pParamName];
+      }
+    }
+    return pDefaultValue;
+  }
+
   _handleJobsRunnerJobsListJob (pJobId, pJobData) {
 
     if (this.showErrorRowInstead(pJobData)) {
@@ -226,6 +301,12 @@ export class HighStatePanel extends Panel {
     }
 
     const jobData = pJobData.return[0];
+
+    const saltEnv = HighStatePanel._getJobNamedParam("saltenv", jobData, "default");
+    if (!Utils.isIncluded(saltEnv, this._showSaltEnvs, this._hideSaltEnvs)) {
+      this._afterJob();
+      return;
+    }
 
     for (const minionId in jobData.Result) {
       const trId = Utils.getIdFromMinionId(minionId);
@@ -256,8 +337,7 @@ export class HighStatePanel extends Panel {
 
       minionTr.appendChild(Utils.createTd("minion-id", minionId));
 
-      const minionTd = Utils.createTd("status", "accepted");
-      minionTd.classList.add("accepted");
+      const minionTd = Utils.createTd(["status", "accepted"], "accepted");
       minionTr.appendChild(minionTd);
 
       const jobIdTd = Utils.createTd();
@@ -284,7 +364,7 @@ export class HighStatePanel extends Panel {
         functionText = functionText.substring(0, maxTextLength) + "...";
       }
       const functionField = Utils.createTd("function", functionText);
-      functionField.cmd = functionText;
+      functionField.cmd = jobData.Function + argumentsText;
       minionTr.appendChild(functionField);
 
       /* eslint-enable max-depth */
@@ -301,28 +381,111 @@ export class HighStatePanel extends Panel {
       this._addJobsMenuItemShowDetails(menu, jobData, minionId);
 
       const minionResult = jobData.Result[minionId];
-      const tasksTd = Utils.createTd("tasks", "");
+      const tasksTd = Utils.createTd("tasks");
 
       if (typeof minionResult.return !== "object" || Array.isArray(minionResult.return)) {
         Utils.addErrorToTableCell(tasksTd, minionResult.return);
-      } else {
-        const keys = Object.keys(minionResult.return);
-        for (const key of keys) {
-          const span = Utils.createSpan("", Character.BLACK_CIRCLE);
-          span.style.backgroundColor = "black";
+        minionTr.appendChild(tasksTd);
+        this._afterJob();
+        return;
+      }
 
-          const data = minionResult.return[key];
-          if (typeof data !== "object") {
-            continue;
-          }
-          span.addEventListener("click", (pClickEvent) => {
-            const cmdArr = ["state.sls_id", data.__id__, "mods=", data.__sls__];
-            this.runCommand("", minionId, cmdArr);
-            pClickEvent.stopPropagation();
-          });
-          Output._setTaskToolTip(span, data);
-          tasksTd.append(span);
+      const keys = Object.keys(minionResult.return);
+
+      const stats = {};
+      for (const key of keys) {
+
+        const data = minionResult.return[key];
+        if (typeof data !== "object") {
+          continue;
         }
+
+        data.___key___ = key;
+
+        // always create the span for the state
+        // we may use it for presentation (keys.length <= MAX_HIGHSTATE_STATES); or
+        // for information (keys.length > MAX_HIGHSTATE_STATES)
+
+        const span = Utils.createSpan("task", Character.BLACK_CIRCLE);
+        span.style.backgroundColor = "black";
+
+        // this also sets the span's class(es)
+        Output._setTaskToolTip(span, data);
+
+        // add class here again, because it gets lost in _setTaskToolTip
+        span.classList.add("task");
+
+        if (keys.length > MAX_HIGHSTATE_STATES) {
+          let statKey = "";
+          let prio = 0;
+
+          // statkeys are sortable on their priority
+          if (span.classList.contains("task-skipped")) {
+            statKey = "task-skipped";
+            prio = 31;
+          } else if (span.classList.contains("task-success")) {
+            statKey = "task-success";
+            prio = 41;
+          } else if (span.classList.contains("task-failure")) {
+            statKey = "task-failure";
+            prio = 21;
+          } else {
+            statKey = "task-unknown";
+            prio = 11;
+          }
+
+          if (span.classList.contains("task-changes")) {
+            prio -= 1;
+            statKey += " task-changes";
+          }
+
+          // allow keys to be sortable
+          statKey = prio + statKey;
+
+          if (statKey in stats) {
+            stats[statKey] += 1;
+          } else {
+            stats[statKey] = 1;
+          }
+
+          continue;
+        }
+
+        span.addEventListener("click", (pClickEvent) => {
+          const cmdArr = ["state.sls_id", data.__id__, "mods=", data.__sls__];
+          this.runCommand("", minionId, cmdArr);
+          pClickEvent.stopPropagation();
+        });
+
+        tasksTd.append(span);
+      }
+
+      if (Object.keys(stats).length > 0) {
+
+        const summarySpan = Utils.createSpan("tooltip");
+
+        let sep = "";
+
+        // show the summary when one was build up
+        for (const statKey of Object.keys(stats).sort()) {
+          const sepSpan = Utils.createSpan("", sep + stats[statKey] + Character.MULTIPLICATION_SIGN);
+          summarySpan.append(sepSpan);
+          sep = " ";
+
+          // remove the priority indicator from the key
+          const itemSpan = Utils.createSpan(["tasksummary", "taskcircle"], Character.BLACK_CIRCLE);
+          itemSpan.classList.add(...statKey.substring(2).split(" "));
+          itemSpan.style.backgroundColor = "black";
+          summarySpan.append(itemSpan);
+        }
+
+        // allow similar navigation, but just only to the job level
+        summarySpan.addEventListener("click", (pClickEvent) => {
+          this.router.goTo("job", {"id": pJobId, "minionid": minionId});
+          pClickEvent.stopPropagation();
+        });
+
+        tasksTd.append(summarySpan);
       }
 
       minionTr.appendChild(tasksTd);

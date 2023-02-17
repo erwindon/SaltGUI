@@ -70,9 +70,9 @@ export class ParseCommandLine {
 
       // Determine whether the JSON string starts with a known
       // character for a JSON type
-      let beginChar = undefined;
-      let endChar = undefined;
-      let objType = undefined;
+      let beginChar;
+      let endChar;
+      let objType;
       if (pToRun[0] === "{") {
         beginChar = "{";
         endChar = "}";

@@ -1,4 +1,4 @@
-/* global window */
+/* global */
 
 import {Page} from "./Page.js";
 import {Utils} from "../Utils.js";
@@ -60,8 +60,7 @@ export class LogoutPage extends Page {
       return;
     }
 
-    const loginResponseStr = Utils.getStorageItem("session", "login-response", "{}");
-    const loginResponse = JSON.parse(loginResponseStr);
+    const loginResponse = Utils.getStorageItemObject("session", "login_response");
 
     const expireValue = loginResponse.expire;
     if (!expireValue) {

@@ -1,4 +1,4 @@
-/* global document */
+/* global */
 
 import {BeaconsPanel} from "./Beacons.js";
 import {Character} from "../Character.js";
@@ -137,8 +137,7 @@ export class BeaconsMinionPanel extends Panel {
 
     const keys = Object.keys(beacons.beacons).sort();
     for (const beaconName of keys) {
-      const tr = document.createElement("tr");
-      tr.id = "beacon-" + beaconName;
+      const tr = Utils.createTr("", "", "beacon-" + beaconName);
 
       const nameTd = Utils.createTd("beacon-name", beaconName);
       tr.appendChild(nameTd);
@@ -175,14 +174,12 @@ export class BeaconsMinionPanel extends Panel {
       tr.appendChild(beaconConfigTd);
 
       const beaconTimestampTd = Utils.createTd();
-      const beaconTimestampSpan = Utils.createSpan("beacon-timestamp", initialTimestamp);
-      beaconTimestampSpan.classList.add("beacon-waiting");
+      const beaconTimestampSpan = Utils.createSpan(["beacon-timestamp", "beacon-waiting"], initialTimestamp);
       beaconTimestampTd.appendChild(beaconTimestampSpan);
       tr.appendChild(beaconTimestampTd);
       tr.beaconTimestampSpan = beaconTimestampSpan;
 
-      const beaconValueTd = Utils.createTd("beacon-value", initialValue);
-      beaconValueTd.classList.add("beacon-waiting");
+      const beaconValueTd = Utils.createTd(["beacon-value", "beacon-waiting"], initialValue);
       tr.appendChild(beaconValueTd);
       tr.beaconValueTd = beaconValueTd;
 
@@ -199,7 +196,7 @@ export class BeaconsMinionPanel extends Panel {
 
       const helpButtonTd = Utils.createTd("help-button");
       const helpButtonSpan = Utils.createSpan("warning-button", "", this.key + "-" + beaconName + "-help-button");
-      helpButtonSpan.innerText = Character.WARNING_SIGN;
+      Panel.addPrefixIcon(helpButtonSpan, Character.WARNING_SIGN);
       helpButtonSpan.style.display = "none";
       helpButtonSpan.style.cursor = "help";
       helpButtonTd.appendChild(helpButtonSpan);

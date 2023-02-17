@@ -1,4 +1,4 @@
-/* global document */
+/* global */
 
 import {Character} from "../Character.js";
 import {Output} from "./Output.js";
@@ -12,7 +12,7 @@ export class OutputHighstateTaskSaltGui {
     }
 
     if (typeof pTask.changes !== "object" || Array.isArray(pTask.changes)) {
-      pTaskDiv.append(document.createElement("br"));
+      pTaskDiv.append(Utils.createBr());
       pTaskDiv.append(document.createTextNode(pIndent + JSON.stringify(pTask.changes)));
       return;
     }
@@ -27,12 +27,12 @@ export class OutputHighstateTaskSaltGui {
       }
 
       if (typeof change === "string" && Utils.isMultiLineString(change)) {
-        pTaskDiv.append(document.createElement("br"));
+        pTaskDiv.append(Utils.createBr());
         // show multi-line text as a separate block
         pTaskDiv.append(document.createTextNode(pIndent + key + ":"));
         const lines = change.trim().split("\n");
         for (const line of lines) {
-          pTaskDiv.append(document.createElement("br"));
+          pTaskDiv.append(Utils.createBr());
           pTaskDiv.append(document.createTextNode("      " + line));
         }
         continue;
@@ -41,7 +41,7 @@ export class OutputHighstateTaskSaltGui {
       if (Array.isArray(change)) {
         for (const idx in change) {
           const task = change[idx];
-          pTaskDiv.append(document.createElement("br"));
+          pTaskDiv.append(Utils.createBr());
           pTaskDiv.append(document.createTextNode(
             pIndent + key + "[" + idx + "]: " + JSON.stringify(task)));
         }
@@ -50,7 +50,7 @@ export class OutputHighstateTaskSaltGui {
 
       if (change === null || typeof change !== "object") {
         // show all other non-objects in a simple way
-        pTaskDiv.append(document.createElement("br"));
+        pTaskDiv.append(Utils.createBr());
         pTaskDiv.append(document.createTextNode(
           pIndent + key + ": " +
           JSON.stringify(change)));
@@ -59,7 +59,7 @@ export class OutputHighstateTaskSaltGui {
 
       // treat old->new first
       if (change["old"] !== undefined && change["new"] !== undefined) {
-        pTaskDiv.append(document.createElement("br"));
+        pTaskDiv.append(Utils.createBr());
         // place changes on one line
         // don't use arrows here, these are higher than a regular
         // text-line and disturb the text-flow
@@ -80,7 +80,7 @@ export class OutputHighstateTaskSaltGui {
           continue;
         }
 
-        pTaskDiv.append(document.createElement("br"));
+        pTaskDiv.append(Utils.createBr());
         pTaskDiv.append(document.createTextNode(
           pIndent + key + ": " + taskkey + ": " +
           JSON.stringify(change[taskkey])));
@@ -118,24 +118,26 @@ export class OutputHighstateTaskSaltGui {
 
     const indent = "    ";
 
-    taskDiv.append(document.createElement("br"));
+    taskDiv.append(Utils.createBr());
     taskDiv.append(document.createTextNode(
       indent + "Function is " + pFunctionName));
 
     if (pTask.comment) {
-      taskDiv.append(document.createElement("br"));
+      taskDiv.append(Utils.createBr());
       let txt = pTask.comment;
       // trim extra whitespace
       txt = txt.replace(/[ \r\n]+$/g, "");
       // indent extra lines
-      txt = txt.replace(/[\n]+/g, "\n" + indent);
+      txt = txt.replace(/\n+/g, "\n" + indent);
       taskDiv.append(document.createTextNode(indent + txt));
     }
 
     OutputHighstateTaskSaltGui._addChangesInfo(taskDiv, pTask, indent);
 
     if (pTask["start_time"] !== undefined) {
-      taskDiv.append(document.createElement("br"));
+      taskDiv.append(Utils.createBr());
+      // start_time is set by the original minion in its own timezone
+      // we have no knowledge of that timezone, so no enhanced presentation here
       const startTime = Output.dateTimeStr("1999, Sep 9 " + pTask.start_time, null, null, true);
       taskDiv.append(document.createTextNode(indent + "Started at " + startTime));
     }
@@ -146,7 +148,7 @@ export class OutputHighstateTaskSaltGui {
         // anything below 10ms is not worth reporting
         // report only the "slow" jobs
         // it still counts for the grand total thought
-        taskDiv.append(document.createElement("br"));
+        taskDiv.append(Utils.createBr());
         taskDiv.append(document.createTextNode(
           indent + "Duration " + Output.getDuration(milliSeconds)));
       }
@@ -161,8 +163,9 @@ export class OutputHighstateTaskSaltGui {
       if (key === "__id__") continue; // handled
       if (key === "__jid__") continue; // internal use
       if (key === "__orchestration__") continue; // internal use
-      if (key === "__sls__") continue; // handled
       if (key === "__run_num__") continue; // handled, not shown
+      if (key === "__sls__") continue; // handled
+      if (key === "__state_ran__") continue; // ignored, also in description
       if (key === "changes") continue; // handled
       if (key === "comment") continue; // handled
       if (key === "duration") continue; // handled
@@ -175,7 +178,7 @@ export class OutputHighstateTaskSaltGui {
       if (key === "skip_watch") continue; // related to onlyif
       if (key === "start_time") continue; // handled
       /* eslint-enable line-comment-position,no-inline-comments,curly */
-      taskDiv.append(document.createElement("br"));
+      taskDiv.append(Utils.createBr());
       taskDiv.append(document.createTextNode(
         indent + key + " = " + JSON.stringify(item)));
     }

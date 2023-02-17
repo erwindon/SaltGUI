@@ -1,4 +1,4 @@
-/* global document */
+/* global */
 
 import {Character} from "../Character.js";
 import {Output} from "../output/Output.js";
@@ -48,6 +48,9 @@ export class PillarsMinionPanel extends Panel {
     }
 
     const pillars = pLocalPillarItemsData.return[0][pMinionId];
+    if (this.showErrorRowInstead(pillars)) {
+      return;
+    }
 
     if (pillars === undefined) {
       this.setMsg("Unknown minion '" + pMinionId + "'");
@@ -59,11 +62,7 @@ export class PillarsMinionPanel extends Panel {
     }
 
     // collect the public pillars and compile their regexps
-    const publicPillarsText = Utils.getStorageItem("session", "public_pillars", "[]");
-    let publicPillars = JSON.parse(publicPillarsText);
-    if (!Array.isArray(publicPillars)) {
-      publicPillars = [];
-    }
+    const publicPillars = Utils.getStorageItemList("session", "public_pillars");
     for (let i = 0; i < publicPillars.length; i++) {
       try {
         publicPillars[i] = new RegExp(publicPillars[i]);
@@ -76,7 +75,7 @@ export class PillarsMinionPanel extends Panel {
 
     const keys = Object.keys(pillars).sort();
     for (const pillarName of keys) {
-      const pillar = document.createElement("tr");
+      const pillar = Utils.createTr();
 
       const nameTd = Utils.createTd("pillar-name", pillarName);
       pillar.appendChild(nameTd);

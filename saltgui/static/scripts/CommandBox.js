@@ -1,4 +1,4 @@
-/* global document */
+/* global */
 
 import {Character} from "./Character.js";
 import {Documentation} from "./Documentation.js";
@@ -62,8 +62,7 @@ export class CommandBox {
     menu.setTitle("");
     menu.menuButton.classList.add("small-button-left");
     CommandBox.templateCatMenu = menu;
-    const templatesText = Utils.getStorageItem("session", "templates", "{}");
-    const templates = JSON.parse(templatesText);
+    const templates = Utils.getStorageItemObject("session", "templates");
     const categories = TemplatesPanel.getTemplatesCategories(templates);
     if (categories.length < 2) {
       // no useful content
@@ -120,8 +119,7 @@ export class CommandBox {
     menu.menuButton.classList.add("small-button-left");
     CommandBox.templateTmplMenu = menu;
     CommandBox.templateTmplMenu._templateCategory = null;
-    const templatesText = Utils.getStorageItem("session", "templates", "{}");
-    const templates = JSON.parse(templatesText);
+    const templates = Utils.getStorageItemObject("session", "templates");
     const keys = Object.keys(templates).sort();
     for (const key of keys) {
       const template = templates[key];
@@ -438,22 +436,21 @@ export class CommandBox {
     while (targetList.firstChild) {
       targetList.removeChild(targetList.firstChild);
     }
-    const nodeGroupsText = Utils.getStorageItem("session", "nodegroups", "[]");
-    const nodeGroups = JSON.parse(nodeGroupsText);
+    const nodeGroups = Utils.getStorageItemObject("session", "nodegroups");
 
-    const optionConnected = document.createElement("option");
+    const optionConnected = Utils.createElem("option");
     optionConnected.value = "##connected";
     targetList.appendChild(optionConnected);
 
     for (const nodeGroup of Object.keys(nodeGroups).sort()) {
-      const option = document.createElement("option");
+      const option = Utils.createElem("option");
       option.value = "#" + nodeGroup;
       targetList.appendChild(option);
     }
 
-    const minions = JSON.parse(Utils.getStorageItem("session", "minions", "[]"));
-    for (const minionId of minions.sort()) {
-      const option = document.createElement("option");
+    const minions = Utils.getStorageItemList("session", "minions");
+    for (const minionId of [...minions].sort()) {
+      const option = Utils.createElem("option");
       option.value = minionId;
       targetList.appendChild(option);
     }
@@ -548,18 +545,20 @@ export class CommandBox {
     // SALT API returns a 500-InternalServerError when it hits an unknown group
     // Let's improve on that
     if (pTargetType === "nodegroup") {
-      const nodeGroupsTxt = Utils.getStorageItem("session", "nodegroups", "{}");
-      const nodeGroups = JSON.parse(nodeGroupsTxt);
+      const nodeGroups = Utils.getStorageItemObject("session", "nodegroups");
       if (!(pTarget in nodeGroups)) {
         CommandBox._showError("Unknown nodegroup '" + pTarget + "'");
         return null;
       }
     }
 
+    const fullReturn = Utils.getStorageItemBoolean("session", "full_return");
+
     let params = {};
     if (functionToRun.startsWith("runners.")) {
       params = argsObject;
       params.client = "runner";
+      params["full_return"] = fullReturn;
       // use only the part after "runners." (8 chars)
       params.fun = functionToRun.substring(8);
       if (argsArray.length > 0) {
@@ -582,6 +581,7 @@ export class CommandBox {
       params.client = "local";
       params.fun = functionToRun;
       params.tgt = pTarget;
+      params["full_return"] = fullReturn;
       if (pTargetType) {
         params["tgt_type"] = pTargetType;
       }
@@ -623,16 +623,14 @@ export class CommandBox {
     const id = "run-" + Utils.getIdFromMinionId(eventMinionId);
     let div = document.getElementById(id);
     if (div === null) {
-      div = document.createElement("div");
+      div = Utils.createDiv();
       div.id = "run-" + Utils.getIdFromMinionId(eventMinionId);
       div.style.marginTop = 0;
 
-      const minionSpan1 = document.createElement("span");
-      minionSpan1.innerText = eventMinionId;
+      const minionSpan1 = Utils.createSpan("", eventMinionId);
       div.appendChild(minionSpan1);
 
-      const minionSpan2 = document.createElement("span");
-      minionSpan2.innerText = ": " + Character.HOURGLASS_WITH_FLOWING_SAND + " ";
+      const minionSpan2 = Utils.createSpan("", ": " + Character.HOURGLASS_WITH_FLOWING_SAND + " ");
       div.appendChild(minionSpan2);
 
       const output = document.querySelector(".run-command pre");
@@ -643,8 +641,7 @@ export class CommandBox {
     const minionClass = Output.getMinionLabelClass(isSuccess, pData);
 
     const span1 = div.children[0];
-    span1.classList.add("minion-id");
-    span1.classList.add(minionClass);
+    span1.classList.add("minion-id", minionClass);
 
     const span2 = div.children[1];
     span2.innerText = div.children.length > 2 ? ": " : "";
@@ -678,8 +675,7 @@ export class CommandBox {
 
     // make sure there is a black circle for the current event
     while (div.children.length <= eventSeqNr + 2) {
-      const newSpan = document.createElement("span");
-      newSpan.innerText = Character.BLACK_CIRCLE;
+      const newSpan = Utils.createSpan("", Character.BLACK_CIRCLE);
       div.appendChild(newSpan);
     }
 
@@ -702,8 +698,7 @@ export class CommandBox {
       // not an asynchronous job
       return;
     }
-    labelSpan.classList.remove("minion-id");
-    labelSpan.classList.remove("host-success");
+    labelSpan.classList.remove("minion-id", "host-success");
 
     // remove the initial minions list
     const minionsId = Utils.getIdFromMinionId("minions");
@@ -711,29 +706,27 @@ export class CommandBox {
     minionsList.remove();
 
     // leave some space
-    const spacerDiv = document.createElement("div");
+    const spacerDiv = Utils.createDiv();
     output.appendChild(spacerDiv);
 
     // add new minions list to track progress of this state command
     for (const minionId of CommandBox.minionIds) {
-      const minionDiv = document.createElement("div");
+      const minionDiv = Utils.createDiv("task-summary");
       minionDiv.id = "run-" + Utils.getIdFromMinionId(minionId);
       minionDiv.style.marginTop = 0;
-      minionDiv.classList.add("task-summary");
 
-      const minionSpan1 = document.createElement("span");
-      minionSpan1.innerText = minionId;
+      const minionSpan1 = Utils.createSpan("", minionId);
       minionDiv.appendChild(minionSpan1);
 
-      const minionSpan2 = document.createElement("span");
-      minionSpan2.innerText = ": " + Character.HOURGLASS_WITH_FLOWING_SAND + " ";
+      const minionSpan2 = Utils.createSpan("", ": " + Character.HOURGLASS_WITH_FLOWING_SAND + " ");
       minionDiv.appendChild(minionSpan2);
 
       output.appendChild(minionDiv);
     }
 
-    const warnSpan = document.createElement("span");
-    warnSpan.innerText = "\nnote that unresponsive minions will not time out in this overview";
+    const warnSpan = Utils.createSpan(
+      "",
+      "\nnote that unresponsive minions will not time out in this overview");
     output.appendChild(warnSpan);
   }
 }

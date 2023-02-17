@@ -35,6 +35,27 @@ header {
   user-select: none;
 }
 
+.docu {
+  cursor: pointer;
+  color: gray;
+  font-size: 30px;
+  font-weight: normal;
+  display: inline-block;
+  float: right;
+  padding: 10px 20px;
+
+  /* prevent text selection */
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+.docu:hover {
+  color: #4caf50;
+}
+
 h1 {
   color: #4caf50;
   font-weight: lighter;
@@ -61,7 +82,7 @@ h1 {
   margin-left: 0;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 950px) {
   .panel {
     margin-left: 0;
   }
@@ -77,6 +98,10 @@ h1 {
   float: right;
   margin-top: 8px;
   margin-right: 8px;
+}
+
+.fab:hover circle {
+  fill: gray;
 }
 
 #button-manual-run {
@@ -161,12 +186,12 @@ h1 {
   cursor: pointer;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 950px) {
   .fullmenu { display: inline-block; }
   .minimenu { display: none; }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 950px) {
   .fullmenu { display: none; }
   .minimenu { display: inline-block; }
 }
@@ -260,4 +285,8 @@ pre.output {
 .warning-button:hover {
   color: #4caf50;
   cursor: pointer;
+}
+
+.state-details-compressed {
+  color: gray;
 }

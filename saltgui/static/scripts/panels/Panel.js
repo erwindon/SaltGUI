@@ -1,4 +1,4 @@
-/* global config document window */
+/* global */
 
 import {Character} from "../Character.js";
 import {CommandBox} from "../CommandBox.js";
@@ -6,6 +6,14 @@ import {DropDownMenu} from "../DropDown.js";
 import {SortTable} from "../../sorttable/sorttable.js";
 import {TargetType} from "../TargetType.js";
 import {Utils} from "../Utils.js";
+
+// which grain to use for IP-number display
+const IPNUMBERFIELD = "fqdn_ip4";
+// const IPNUMBERFIELD = "ipv4";
+// const IPNUMBERFIELD = "fqdn_ip6";
+// const IPNUMBERFIELD = "ipv6";
+// non-existent grains effectively disable the behaviour
+// const IPNUMBERFIELD = "DISABLED";
 
 export class Panel {
 
@@ -34,9 +42,7 @@ export class Panel {
   }
 
   addTitle (pTitle) {
-    const h1 = document.createElement("h1");
-    h1.id = this.key + "-title";
-    h1.innerText = pTitle;
+    const h1 = Utils.createElem("h1", "", pTitle, this.key + "-title");
     this.div.appendChild(h1);
     this.title = h1;
     this.originalTitle = pTitle;
@@ -47,7 +53,7 @@ export class Panel {
   }
 
   addPanelMenu () {
-    const span = document.createElement("span");
+    const span = Utils.createSpan();
     span.id = this.key + "-menu";
     const menu = new DropDownMenu(span);
     menu.menuButton.classList.add("small-button-left");
@@ -55,33 +61,35 @@ export class Panel {
     this.panelMenu = menu;
   }
 
+  addSettingsMenu () {
+    const span = Utils.createSpan();
+    span.id = this.key + "-settings";
+    const menu = new DropDownMenu(span);
+    menu.menuButton.classList.add("small-button-left");
+    this.div.appendChild(span);
+    this.settingsMenu = menu;
+  }
+
   addSearchButton () {
-    const span = document.createElement("span");
-    span.id = this.key + "-search-button";
-    span.classList.add("small-button");
-    span.classList.add("small-button-left");
-    span.classList.add("small-button-for-click");
-    span.classList.add("search-button");
-    span.innerText = Character.LEFT_POINTING_MAGNIFYING_GLASS;
+    const span = Utils.createSpan(
+      ["search-button", "small-button", "small-button-left", "small-button-for-click"],
+      Character.LEFT_POINTING_MAGNIFYING_GLASS,
+      this.key + "-search-button");
     this.div.appendChild(span);
     this.searchButton = span;
   }
 
   addPlayPauseButton () {
-    const playButton = document.createElement("span");
-    playButton.innerText = Character.CH_PLAY;
-    playButton.classList.add("small-button");
-    playButton.classList.add("small-button-left");
-    playButton.classList.add("small-button-for-click");
+    const playButton = Utils.createSpan(
+      ["small-button", "small-button-left", "small-button-for-click"],
+      Character.CH_PLAY);
     playButton.style.cursor = "pointer";
     this.div.appendChild(playButton);
     this.playButton = playButton;
 
-    const pauseButton = document.createElement("span");
-    pauseButton.innerText = Character.CH_PAUSE;
-    pauseButton.classList.add("small-button");
-    pauseButton.classList.add("small-button-left");
-    pauseButton.classList.add("small-button-for-click");
+    const pauseButton = Utils.createSpan(
+      ["small-button", "small-button-left", "small-button-for-click"],
+      Character.CH_PAUSE);
     pauseButton.style.display = "none";
     pauseButton.style.cursor = "pointer";
     this.div.appendChild(pauseButton);
@@ -117,12 +125,11 @@ export class Panel {
   }
 
   addHelpButton (pHelpTextArr, pUrl) {
-    const span = document.createElement(pUrl ? "a" : "span");
-    span.id = this.key + "-help-button";
-    span.classList.add("small-button");
-    span.classList.add("small-button-right");
-    span.classList.add("small-button-for-hover");
-    span.innerText = Character.BLACK_QUESTION_MARK_ORNAMENT;
+    const span = Utils.createElem(
+      pUrl ? "a" : "span",
+      ["small-button", "small-button-right", "small-button-for-hover"],
+      Character.BLACK_QUESTION_MARK_ORNAMENT,
+      this.key + "-help-button");
     span.style.cursor = "help";
     this.div.appendChild(span);
 
@@ -135,12 +142,10 @@ export class Panel {
   }
 
   addCloseButton () {
-    const span = document.createElement("span");
-    span.id = this.key + "-close-button";
-    span.classList.add("small-button");
-    span.classList.add("small-button-right");
-    span.classList.add("small-button-for-click");
-    span.innerText = Character.HEAVY_MULTIPLICATION_X;
+    const span = Utils.createSpan(
+      ["small-button", "small-button-right", "small-button-for-click"],
+      Character.HEAVY_MULTIPLICATION_X,
+      this.key + "-close-button");
     this.div.appendChild(span);
 
     span.addEventListener("click", (pClickEvent) => {
@@ -149,10 +154,35 @@ export class Panel {
     });
   }
 
+  addWarningField () {
+    const warning = Utils.createElem("h2", "warning");
+    this.div.append(warning);
+    this.warningField = warning;
+  }
+
+  setWarningText (pIcon = "", pTxt = "") {
+    let newTxt;
+    switch (pIcon) {
+    case "info":
+      newTxt = Character.CIRCLED_INFORMATION_SOURCE + Character.NO_BREAK_SPACE + pTxt;
+      break;
+    case "warn":
+      newTxt = Character.WARNING_SIGN + Character.NO_BREAK_SPACE + pTxt;
+      break;
+    case "":
+      newTxt = pTxt;
+      break;
+    default:
+      newTxt = "???" + pIcon + "???" + Character.NO_BREAK_SPACE + pTxt;
+    }
+    if (this.warningField.innerText !== newTxt) {
+      // prevent selection of text to be cancelled
+      this.warningField.innerText = newTxt;
+    }
+  }
+
   addTable (pColumnNames, pFieldList = null) {
-    const table = document.createElement("table");
-    table.id = this.key + "-table";
-    table.classList.add(this.key);
+    const table = Utils.createElem("table", this.key, "", this.key + "-table");
 
     let anyHiddenColumns = false;
     if (pColumnNames) {
@@ -165,7 +195,7 @@ export class Panel {
 
     if (anyHiddenColumns) {
       for (const colName of pColumnNames) {
-        const col = document.createElement("col");
+        const col = Utils.createElem("col");
         if (colName.startsWith("@")) {
           col.style.visibility = "collapse";
         }
@@ -174,13 +204,13 @@ export class Panel {
     }
 
     if (pColumnNames) {
-      const thead = document.createElement("thead");
+      const thead = Utils.createElem("thead");
       thead.id = this.key + "-table-thead";
-      const tr = document.createElement("tr");
+      const tr = Utils.createTr();
       tr.id = this.key + "-table-thead-tr";
 
       for (const columnName of pColumnNames) {
-        const th = document.createElement("th");
+        const th = Utils.createElem("th");
         let cn = columnName;
         if (cn && cn.startsWith("@")) {
           cn = cn.substring(1);
@@ -194,7 +224,7 @@ export class Panel {
       table.appendChild(thead);
     }
 
-    const tbody = document.createElement("tbody");
+    const tbody = Utils.createElem("tbody");
     // not needed yet
     // tbody.id = this.key + "-table-tbody";
     table.appendChild(tbody);
@@ -254,17 +284,13 @@ export class Panel {
   }
 
   addConsole () {
-    const console = document.createElement("div");
-    console.id = this.key + "-output";
-    console.classList.add("output");
+    const console = Utils.createDiv("output", "", this.key + "-output");
     this.div.appendChild(console);
     this.console = console;
   }
 
   addMsg () {
-    const msgDiv = document.createElement("div");
-    msgDiv.id = this.key + "-msg";
-    msgDiv.classList.add("msg");
+    const msgDiv = Utils.createDiv("msg", "", this.key + "-msg");
     this.div.appendChild(msgDiv);
     this.msgDiv = msgDiv;
     this.setMsg("(loading)");
@@ -331,13 +357,13 @@ export class Panel {
             Utils.warn("lines in 'minions.txt' must have 1 or 2 words, not " + fields.length + " like in: " + line);
           }
         }
-        Utils.setStorageItem("session", "minions-txt", JSON.stringify(minions));
+        Utils.setStorageItem("session", "minions_txt", JSON.stringify(minions));
       } else {
-        Utils.setStorageItem("session", "minions-txt", "{}");
+        Utils.setStorageItem("session", "minions_txt", "{}");
       }
       return true;
     }, () => {
-      Utils.setStorageItem("session", "minions-txt", "{}");
+      Utils.setStorageItem("session", "minions_txt", "{}");
       return false;
     });
   }
@@ -357,7 +383,7 @@ export class Panel {
     td.colSpan = 99;
     Utils.addErrorToTableCell(td, pData, "bottom-left");
 
-    const tr = document.createElement("tr");
+    const tr = Utils.createTr();
     tr.id = "error-row";
     tr.appendChild(td);
 
@@ -387,14 +413,13 @@ export class Panel {
       return;
     }
 
-    minionTr = document.createElement("tr");
+    minionTr = Utils.createTr();
     minionTr.id = Utils.getIdFromMinionId(pMinionId);
     minionTr.dataset.minionId = pMinionId;
 
     minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 
-    const minionTd = Utils.createTd("status", "accepted");
-    minionTd.classList.add("accepted");
+    const minionTd = Utils.createTd(["status", "accepted"], "accepted");
     minionTr.appendChild(minionTd);
 
     minionTr.appendChild(Utils.createTd("os", "loading..."));
@@ -414,7 +439,7 @@ export class Panel {
     if (minionTr === null) {
       // minion not found on screen...
       // construct a basic element that can be updated
-      minionTr = document.createElement("tr");
+      minionTr = Utils.createTr();
       minionTr.id = id;
       this.table.querySelector("tbody").appendChild(minionTr);
     }
@@ -427,151 +452,186 @@ export class Panel {
     return minionTr;
   }
 
-  static _getBestIpNumber (pMinionData, prefixes) {
+  static _getIpNumberUses (pAllMinionsGrains, pIpNumber) {
+    let cnt = 0;
+    for (const minionId in pAllMinionsGrains) {
+      const ipNumbers = pAllMinionsGrains[minionId][IPNUMBERFIELD];
+      if (!Array.isArray(ipNumbers)) {
+        continue;
+      }
+      if (ipNumbers.includes(pIpNumber)) {
+        cnt += 1;
+      }
+    }
+    return cnt;
+  }
+
+  static _getBestIpNumber (pMinionData, pAllMinionsGrains) {
     if (!pMinionData) {
       return null;
     }
-    const ipv4 = pMinionData.fqdn_ip4;
-    if (!ipv4) {
-      return null;
-    }
+
+    const allIpNumbers = pMinionData[IPNUMBERFIELD];
     // either a string or something strange
-    if (!Array.isArray(ipv4)) {
-      return ipv4;
+    if (!Array.isArray(allIpNumbers)) {
+      return null;
     }
 
     // so, it is an array
 
+    // sort it, so that we get more consistent results
+    // when there are minions which report multiple IP
+    // numbers for their hostname
+    allIpNumbers.sort();
+
     // get the public IP number (if any)
-    for (const ipv4Number of ipv4) {
-      // See https://nl.wikipedia.org/wiki/RFC_1918
+    let bestPriority = 100;
+    let bestIpNumber = null;
+    for (const ipNumber of allIpNumbers) {
+      if (typeof ipNumber !== "string") {
+        continue;
+      }
+
+      // IP numbers that are used by multiple minions are not a
+      // candidate for display here. typically happens for:
+      // 127.0.0.1 (localhost), 10.0.2.15 (virtualbox host address)
+      if (Panel._getIpNumberUses(pAllMinionsGrains, ipNumber) !== 1) {
+        continue;
+      }
+
+      const prio = Panel._getIpNumberPriority(ipNumber);
+      if (prio < bestPriority) {
+        bestIpNumber = ipNumber;
+        bestPriority = prio;
+      }
+    }
+
+    return bestIpNumber;
+  }
+
+  static _getAllIpNumbers (pMinionData) {
+    if (!pMinionData) {
+      // for pages where no grains data available
+      return [];
+    }
+    const allIpNumbers = pMinionData[IPNUMBERFIELD];
+    if (!Array.isArray(allIpNumbers)) {
+      return [];
+    }
+    for (const str of allIpNumbers) {
+      if (typeof str !== "string") {
+        return [];
+      }
+    }
+    return allIpNumbers;
+  }
+
+  static _getIpNumberPriority (pIpNumber) {
+    // See https://nl.wikipedia.org/wiki/RFC_1918
+
+    if (typeof pIpNumber !== "string") {
+      return 10;
+    }
+
+    if (pIpNumber.startsWith("127.") || pIpNumber === "::1") {
       // local = 127.0.0.0/8
-      if (ipv4Number.startsWith("127.")) {
-        continue;
-      }
+      return 5;
+    }
+    if (pIpNumber.startsWith("10.")) {
       // private A = 10.0.0.0/8
-      if (ipv4Number.startsWith("10.")) {
-        continue;
-      }
-      // private B = 172.16.0.0/20
-      /* eslint-disable curly */
-      if (ipv4Number.startsWith("172.16.")) continue;
-      if (ipv4Number.startsWith("172.17.")) continue;
-      if (ipv4Number.startsWith("172.18.")) continue;
-      if (ipv4Number.startsWith("172.19.")) continue;
-      if (ipv4Number.startsWith("172.20.")) continue;
-      if (ipv4Number.startsWith("172.21.")) continue;
-      if (ipv4Number.startsWith("172.22.")) continue;
-      if (ipv4Number.startsWith("172.23.")) continue;
-      if (ipv4Number.startsWith("172.24.")) continue;
-      if (ipv4Number.startsWith("172.25.")) continue;
-      if (ipv4Number.startsWith("172.26.")) continue;
-      if (ipv4Number.startsWith("172.27.")) continue;
-      if (ipv4Number.startsWith("172.28.")) continue;
-      if (ipv4Number.startsWith("172.29.")) continue;
-      if (ipv4Number.startsWith("172.30.")) continue;
-      if (ipv4Number.startsWith("172.31.")) continue;
-      /* eslint-enable curly */
+      return 4;
+    }
+    if (pIpNumber.startsWith("192.")) {
       // private C = 192.168.0.0/16
-      if (ipv4Number.startsWith("192.168.")) {
-        continue;
-      }
-      // not a local/private address, therefore it is public
-      return ipv4Number;
+      return 3;
+    }
+    if (pIpNumber.startsWith("172.16.") ||
+        pIpNumber.startsWith("172.17.") ||
+        pIpNumber.startsWith("172.18.") ||
+        pIpNumber.startsWith("172.19.") ||
+        pIpNumber.startsWith("172.20.") ||
+        pIpNumber.startsWith("172.21.") ||
+        pIpNumber.startsWith("172.22.") ||
+        pIpNumber.startsWith("172.23.") ||
+        pIpNumber.startsWith("172.24.") ||
+        pIpNumber.startsWith("172.25.") ||
+        pIpNumber.startsWith("172.26.") ||
+        pIpNumber.startsWith("172.27.") ||
+        pIpNumber.startsWith("172.28.") ||
+        pIpNumber.startsWith("172.29.") ||
+        pIpNumber.startsWith("172.30.") ||
+        pIpNumber.startsWith("172.31.")) {
+      // private B = 172.16.0.0/20
+      return 2;
     }
 
-    // No public IP was found
-    // Use a common prefix in all available IP numbers
-    // get the private IP number (if any)
-    // when it matches one of the common prefixes
-    for (const prefix in prefixes) {
-      for (const ipv4Number of ipv4) {
-        if (ipv4Number.startsWith(prefix)) {
-          return ipv4Number;
-        }
-      }
-    }
-
-    // no luck...
-    // try again, but without the restrictions
-    for (const ipv4Number of ipv4) {
-      // C = 192.168.x.x
-      if (ipv4Number.startsWith("192.168.")) {
-        return ipv4Number;
-      }
-    }
-    for (const ipv4Number of ipv4) {
-      // B = 172.16.0.0 .. 172.31.255.255
-      // never mind the sub-ranges
-      if (ipv4Number.startsWith("172.")) {
-        return ipv4Number;
-      }
-    }
-    for (const ipv4Number of ipv4) {
-      // A = 10.x.x.x
-      if (ipv4Number.startsWith("10.")) {
-        return ipv4Number;
-      }
-    }
-
-    // just pick the first one, should then be a local address (127.x.x.x)
-    return ipv4[0];
+    // anything else could be a public IP number
+    return 1;
   }
 
   static _restoreClickToCopy (pTarget) {
-    Utils.addToolTip(pTarget, "Click to copy");
+    if (pTarget.dataset.multiIpNumber === pTarget.dataset.singleIpNumber) {
+      Utils.addToolTip(pTarget, "Click to copy");
+    } else {
+      const cntIpNumbers = pTarget.dataset.multiIpNumber.trim().split("\n").length;
+      let tooltipTxt = "Click to copy this IP number";
+      tooltipTxt += "\nALT-Click to copy these " + cntIpNumbers + " IP numbers:";
+      tooltipTxt += "\n" + pTarget.dataset.multiIpNumber;
+      Utils.addToolTip(pTarget, tooltipTxt);
+    }
   }
 
-  static _copyAddress (pTarget) {
-    const selection = window.getSelection();
-    const range = document.createRange();
-
-    range.selectNodeContents(pTarget.firstChild);
-    selection.removeAllRanges();
-    selection.addRange(range);
-    document.execCommand("copy");
-    selection.removeAllRanges();
-
-    Utils.addToolTip(pTarget, "Copied!");
+  static _copyAddress (pTarget, useMultiAddress) {
+    if (useMultiAddress && pTarget.dataset.multiIpNumber !== pTarget.dataset.singleIpNumber) {
+      navigator.clipboard.writeText(pTarget.dataset.multiIpNumber);
+      Utils.addToolTip(pTarget, "Copied all!");
+    } else {
+      navigator.clipboard.writeText(pTarget.dataset.singleIpNumber);
+      Utils.addToolTip(pTarget, "Copied!");
+    }
   }
 
-  updateMinion (pMinionData, pMinionId, prefixes) {
+  updateMinion (pMinionData, pMinionId, pAllMinionsGrains) {
 
     const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
 
     minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 
-    const ipv4 = Panel._getBestIpNumber(pMinionData, prefixes);
-    if (ipv4) {
-      const addressTd = Utils.createTd("status");
-      const addressSpan = Utils.createSpan("", ipv4);
+    const bestIpNumber = Panel._getBestIpNumber(pMinionData, pAllMinionsGrains);
+    const allIpNumbers = Panel._getAllIpNumbers(pMinionData);
+
+    if (bestIpNumber) {
+      const addressTd = Utils.createTd(["status", "address"]);
+      const addressSpan = Utils.createSpan("", bestIpNumber);
+      addressSpan.dataset.singleIpNumber = bestIpNumber;
+      addressSpan.dataset.multiIpNumber = allIpNumbers.join("\n");
       addressTd.appendChild(addressSpan);
       // ipnumbers do not sort well, reformat into something sortable
-      const ipv4parts = ipv4.split(".");
+      const bestIpNumberParts = bestIpNumber.split(".");
       let sorttableCustomkey = "";
-      if (ipv4parts.length === 4) {
+      if (bestIpNumberParts.length === 4) {
         // never mind adding '.'; this is only a sort-key
         for (let i = 0; i < 4; i++) {
-          sorttableCustomkey += ipv4parts[i].padStart(3, "0");
+          sorttableCustomkey += bestIpNumberParts[i].padStart(3, "0");
         }
         addressTd.setAttribute("sorttable_customkey", sorttableCustomkey);
       }
-      addressTd.classList.add("address");
       addressTd.setAttribute("tabindex", -1);
       addressSpan.addEventListener("click", (pClickEvent) => {
-        Panel._copyAddress(addressSpan);
+        Panel._copyAddress(addressSpan, pClickEvent.ctrlKey || pClickEvent.altKey);
         pClickEvent.stopPropagation();
       });
       addressSpan.addEventListener("mouseout", () => {
         Panel._restoreClickToCopy(addressSpan);
       });
-      Utils.addToolTip(addressSpan, "Click to copy");
+      Panel._restoreClickToCopy(addressSpan);
       minionTr.appendChild(addressTd);
     } else {
-      const accepted = Utils.createTd("status", "accepted");
-      accepted.classList.add("accepted");
+      const accepted = Utils.createTd(["status", "accepted"], "accepted");
       minionTr.appendChild(accepted);
     }
+
+    minionTr.dataset.minionId = pMinionId;
 
     let saltversion = "---";
     if (typeof pMinionData === "string") {
@@ -604,12 +664,8 @@ export class Panel {
       if (typeof pMinionData === "string") {
         Utils.addErrorToTableCell(td, pMinionData);
       }
-      if (pMinionData.os && typeof pMinionData !== "string") {
-        const img = document.createElement("img");
-        img.setAttribute("src", config.NAV_URL + "/static/images/os-" + pMinionData.os.replace(" ", "-").toLowerCase() + ".png");
-        img.setAttribute("onerror", "this.onerror=null; this.title='Unknown OS for image, please report to SaltGUI team'; this.src='/static/images/os-UNKNOWN.png'");
-        img.classList.add("osimage");
-        td.prepend(img);
+      if (typeof pMinionData === "object" && pMinionData.os) {
+        Panel.addPrefixImage(td, "os-" + pMinionData.os);
       }
       minionTr.appendChild(td);
     }
@@ -622,7 +678,7 @@ export class Panel {
 
     const minions = pData.return[0];
     const minionIds = Object.keys(minions).sort();
-    const minionsDict = JSON.parse(Utils.getStorageItem("session", "minions-txt", "{}"));
+    const minionsDict = Utils.getStorageItemObject("session", "minions-txt");
 
     // save for the autocompletion
     // This callback will also be called after LOGOUT due to the regular error handling
@@ -654,14 +710,12 @@ export class Panel {
       txt += ", " + Utils.txtZeroOneMany(cntOffline, "none offline", "{0} offline", "{0} offline");
     }
 
-    const cntMinionsPre = Utils.getStorageItem("session", "minions_pre_length");
-    if (cntMinionsPre) {
-      txt += Utils.txtZeroOneMany(
-        parseInt(cntMinionsPre, 10),
-        "",
-        ", {0} unaccepted key",
-        ", {0} unaccepted keys");
-    }
+    const cntMinionsPre = Utils.getStorageItemInteger("session", "minions_pre_length", 0);
+    txt += Utils.txtZeroOneMany(
+      cntMinionsPre,
+      "",
+      ", {0} unaccepted key",
+      ", {0} unaccepted keys");
 
     this.setMsg(txt);
   }
@@ -801,6 +855,24 @@ export class Panel {
 
     if (this.searchBox && this.table) {
       Utils.hideShowTableSearchBar(this.searchBox, this.table, "hide");
+    }
+  }
+
+  static addPrefixImage (pElem, pImageName) {
+    const img = Utils.createElem("img", "prefiximage");
+    const pngName = pImageName.replace(/ /g, "-").toLowerCase() + ".png";
+    img.setAttribute("src", "static/images/" + pngName);
+    img.setAttribute("onerror", "this.onerror=null; this.title='Unknown image, please report to SaltGUI team that image \\'" + pngName + "\\' is missing'; this.src='static/images/UNKNOWN.png'");
+    pElem.prepend(img);
+  }
+
+  static addPrefixIcon (pElem, pIconChar) {
+    // starts with a TD, but there may be a SPAN involved
+    if (pElem.querySelector("span")) {
+      pElem = pElem.querySelector("span");
+    }
+    if (!pElem.innerText.startsWith(pIconChar)) {
+      pElem.innerText = pIconChar + pElem.innerText;
     }
   }
 }

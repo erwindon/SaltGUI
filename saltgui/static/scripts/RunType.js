@@ -1,4 +1,4 @@
-/* global document */
+/* global */
 
 import {Character} from "./Character.js";
 import {DropDownMenu} from "./DropDown.js";
@@ -32,13 +32,13 @@ export class RunType {
     }
 
     const menuItems = RunType.menuRunType.menuDropdownContent.children;
-    for (let i = 0; i < menuItems.length; i++) {
-      let menuItemText = menuItems[i].innerText;
+    for (const menuItem of menuItems) {
+      let menuItemText = menuItem.innerText;
       menuItemText = menuItemText.replace(/^. /, "");
-      if (menuItems[i]._value === runType) {
+      if (menuItem._value === runType) {
         menuItemText = Character.BLACK_CIRCLE + " " + menuItemText;
       }
-      menuItems[i].innerText = menuItemText;
+      menuItem.innerText = menuItemText;
     }
   }
 

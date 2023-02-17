@@ -1,10 +1,13 @@
-/* global document */
+/* global */
 
 import {DropDownMenu} from "../DropDown.js";
 import {JobsPanel} from "./Jobs.js";
 import {Output} from "../output/Output.js";
 import {TargetType} from "../TargetType.js";
 import {Utils} from "../Utils.js";
+
+// how many jobs to load in the side panel
+const MAX_JOBS_SUMMARY = 7;
 
 export class JobsSummaryPanel extends JobsPanel {
 
@@ -19,8 +22,7 @@ export class JobsSummaryPanel extends JobsPanel {
   }
 
   onShow () {
-    const maxJobs = 7;
-    super.onShow(maxJobs);
+    super.onShow(MAX_JOBS_SUMMARY);
   }
 
   /* eslint-disable class-methods-use-this */
@@ -30,7 +32,7 @@ export class JobsSummaryPanel extends JobsPanel {
   /* eslint-enable class-methods-use-this */
 
   addJob (job) {
-    const tr = document.createElement("tr");
+    const tr = Utils.createTr();
     tr.id = Utils.getIdFromJobId(job.id);
 
     const td = Utils.createTd();
@@ -48,8 +50,7 @@ export class JobsSummaryPanel extends JobsPanel {
     const functionDiv = Utils.createDiv("function", functionText);
     td.appendChild(functionDiv);
 
-    const statusSpan = Utils.createSpan("job-status", "loading...");
-    statusSpan.classList.add("no-job-status");
+    const statusSpan = Utils.createSpan(["job-status", "no-job-status"], "loading...");
     // effectively also the whole column, but it does not look like a column on screen
     statusSpan.addEventListener("click", (pClickEvent) => {
       // show "loading..." only once, but we are updating the whole column

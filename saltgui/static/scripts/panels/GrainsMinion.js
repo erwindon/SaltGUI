@@ -1,4 +1,4 @@
-/* global document */
+/* global */
 
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
@@ -45,6 +45,9 @@ export class GrainsMinionPanel extends Panel {
     }
 
     const grains = pLocalGrainsItemsData.return[0][pMinionId];
+    if (this.showErrorRowInstead(grains)) {
+      return;
+    }
 
     if (grains === undefined) {
       this.setMsg("Unknown minion '" + pMinionId + "'");
@@ -57,7 +60,7 @@ export class GrainsMinionPanel extends Panel {
 
     const grainNames = Object.keys(grains).sort();
     for (const grainName of grainNames) {
-      const grainTr = document.createElement("tr");
+      const grainTr = Utils.createTr();
 
       const grainNameTd = Utils.createTd("grain-name", grainName);
       grainTr.appendChild(grainNameTd);

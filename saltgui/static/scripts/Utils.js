@@ -1,4 +1,4 @@
-/* global console document Hilitor window */
+/* global Hilitor */
 
 import {Character} from "./Character.js";
 import {DropDownMenu} from "./DropDown.js";
@@ -68,6 +68,50 @@ export class Utils {
     return null;
   }
 
+  // find old code:
+  //   egrep 'Utils.getStorageItem.*"\{ *\}"' *.js */*.js
+  static getStorageItemObject (pStorage, pKeyName, pDefaultValue = {}) {
+    const value = Utils.getStorageItem(pStorage, pKeyName, null);
+    const obj = JSON.parse(value);
+    if (obj !== null && typeof obj === "object" && !Array.isArray(obj)) {
+      return obj;
+    }
+    return pDefaultValue;
+  }
+
+  // find old code:
+  //   egrep 'Utils.getStorageItem.*"\[ *]"' *.js */*.js
+  static getStorageItemList (pStorage, pKeyName, pDefaultValue = []) {
+    const value = Utils.getStorageItem(pStorage, pKeyName, null);
+    const obj = JSON.parse(value);
+    if (typeof obj !== "object") {
+      return [obj];
+    }
+    if (Array.isArray(obj)) {
+      return obj;
+    }
+    return pDefaultValue;
+  }
+
+  static getStorageItemBoolean (pStorage, pKeyName, pDefaultValue = false) {
+    const value = Utils.getStorageItem(pStorage, pKeyName, null);
+    const obj = JSON.parse(value);
+    if (typeof obj !== "boolean") {
+      return pDefaultValue;
+    }
+    return obj;
+  }
+
+  static getStorageItemInteger (pStorage, pKeyName, pDefaultValue = 0) {
+    const value = Utils.getStorageItem(pStorage, pKeyName, null);
+    const obj = Number.parseInt(value, 10);
+    if (isNaN(obj)) {
+      return pDefaultValue;
+    }
+    return obj;
+  }
+
+
   static getStorageItem (pStorage, pKeyName, pDefaultValue = null) {
     const storage = Utils._getStorage(pStorage);
     if (!storage) {
@@ -135,10 +179,9 @@ export class Utils {
     }
 
     if (pToolTipText) {
-      const toolTipSpan = Utils.createSpan("", pToolTipText);
-      toolTipSpan.classList.add("no-search");
-      toolTipSpan.classList.add("tooltip-text");
-      toolTipSpan.classList.add("tooltip-text-" + pStyle);
+      const toolTipSpan = Utils.createSpan(
+        ["no-search", "tooltip-text", "tooltip-text-" + pStyle],
+        pToolTipText);
       pToolTipHost.classList.add("tooltip");
 
       // ...then add the new tooltip
@@ -216,10 +259,9 @@ export class Utils {
 
     const searchOptionsMenu = new DropDownMenu(menuAndFieldDiv, true);
 
-    const input = document.createElement("input");
+    const input = Utils.createElem("input", "filter-text");
     input.type = "text";
     input.spellcheck = false;
-    input.classList.add("filter-text");
     input.placeholder = Character.LEFT_POINTING_MAGNIFYING_GLASS;
     if (pFieldList) {
       input.setAttribute("list", pFieldList);
@@ -357,7 +399,7 @@ export class Utils {
       pSearchText = pSearchText.toUpperCase();
     }
 
-    let regexp = undefined;
+    let regexp;
 
     const errorBox = pTable.parentElement.querySelector(".search-error");
     if (regExpFlag) {
@@ -484,8 +526,11 @@ export class Utils {
   }
 
   static createJobStatusSpan (pJobId, pInitialDisplay) {
-    const span = Utils.createSpan("", "", "status" + pJobId);
-    span.innerText = Character.CLOCKWISE_OPEN_CIRCLE_ARROW + Character.NO_BREAK_SPACE;
+    const span = Utils.createSpan(
+      "",
+      Character.CLOCKWISE_OPEN_CIRCLE_ARROW + Character.NO_BREAK_SPACE,
+      "status" + pJobId);
+
     if (!pInitialDisplay) {
       span.style.display = "none";
     }
@@ -493,46 +538,50 @@ export class Utils {
     return span;
   }
 
-  static createTd (pClassName, pInnerText, pId) {
-    const td = document.createElement("td");
+  // find old uses of document.createElement:
+  //   fgrep document.createElement *.js */*.js
+  // find legacy calls:
+  //   egrep "static create[A-Z][a-z]* " Utils.js; egrep --exclude=Utils.js "createElem[(]" *.js */*.js |
+  //   sed -e 's/.*Utils/Utils/' | sort | uniq -c | sort -nr
+  static createElem (pTag, pClassName, pInnerText, pId) {
+    const elem = document.createElement(pTag);
     if (pId) {
-      td.id = pId;
+      elem.id = pId;
     }
     if (pClassName) {
-      td.className = pClassName;
+      if (Array.isArray(pClassName)) {
+        elem.classList.add(...pClassName);
+      } else {
+        elem.className = pClassName;
+      }
     }
     if (pInnerText) {
-      td.innerText = pInnerText;
+      elem.innerText = pInnerText;
     }
-    return td;
+    return elem;
+  }
+
+  // helper function when createElem is used more than
+  // 10 times for a specific pTag
+
+  static createBr (pClassName, pInnerText, pId) {
+    return Utils.createElem("br", pClassName, pInnerText, pId);
   }
 
   static createDiv (pClassName, pInnerText, pId) {
-    const div = document.createElement("div");
-    if (pId) {
-      div.id = pId;
-    }
-    if (pClassName) {
-      div.className = pClassName;
-    }
-    if (pInnerText) {
-      div.innerText = pInnerText;
-    }
-    return div;
+    return Utils.createElem("div", pClassName, pInnerText, pId);
   }
 
   static createSpan (pClassName, pInnerText, pId) {
-    const span = document.createElement("span");
-    if (pId) {
-      span.id = pId;
-    }
-    if (pClassName) {
-      span.className = pClassName;
-    }
-    if (pInnerText) {
-      span.innerText = pInnerText;
-    }
-    return span;
+    return Utils.createElem("span", pClassName, pInnerText, pId);
+  }
+
+  static createTd (pClassName, pInnerText, pId) {
+    return Utils.createElem("td", pClassName, pInnerText, pId);
+  }
+
+  static createTr (pClassName, pInnerText, pId) {
+    return Utils.createElem("tr", pClassName, pInnerText, pId);
   }
 
   static ignorePromise (pPromise) {
@@ -578,5 +627,18 @@ export class Utils {
     /* eslint-disable no-console */
     console.error(...pStr);
     /* eslint-enable no-console */
+  }
+
+  static isIncluded (pItem, pAllowList, pDenyList) {
+    if (!pItem) {
+      return true;
+    }
+    if (pAllowList && pAllowList.length > 0) {
+      return pAllowList.includes(pItem);
+    }
+    if (pDenyList && pDenyList.length > 0) {
+      return !pDenyList.includes(pItem);
+    }
+    return true;
   }
 }

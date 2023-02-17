@@ -63,11 +63,13 @@ td.tasks span {
   padding-bottom: 3px;
 }
 
-td.tasks span:first-child {
+td.tasks span.task:first-child,
+td.tasks span.tasksummary {
   padding-left: 2px;
 }
 
-td.tasks span:last-child {
+td.tasks span.task:last-child,
+td.tasks span.tasksummary {
   padding-right: 2px;
 }
 
@@ -117,6 +119,11 @@ td .task-changes {
 
 pre .task-changes {
   color: aqua;
+}
+
+.task-summary {
+  word-break: break-all;
+  line-height: 2em;
 }
 
 pre .task-summary .task-changes {
@@ -232,7 +239,7 @@ table tr td:last-of-type {
   color: red;
 }
 
-.osimage {
+.prefiximage {
   max-width: 18px;
   max-height: 18px;
   padding-right: 5px;
@@ -292,7 +299,7 @@ table tr td:last-of-type {
   flex-grow: 1;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 950px) {
   .minions {
     min-width: 0;
   }
@@ -304,4 +311,23 @@ table tr td:last-of-type {
   .dashboard .panel {
     width: auto;
   }
+}
+
+/* taskcircle */
+
+.taskcircle.task-success {
+  color: lime;
+}
+
+.taskcircle.task-failure {
+  color: red;
+}
+
+.taskcircle.task-skipped {
+  color: yellow;
+}
+
+.taskcircle.task-changes {
+  text-decoration-line: overline underline;
+  text-decoration-style: double;
 }

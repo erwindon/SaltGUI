@@ -1,4 +1,4 @@
-/* global beforeEach describe document it process require */
+/* global beforeEach describe it process require */
 
 const Nightmare = require("nightmare");
 const assert = require("chai").assert;

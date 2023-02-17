@@ -27,6 +27,7 @@ export class KeysPanel extends Panel {
       "The content of this page is",
       "automatically refreshed."
     ]);
+    this.addWarningField();
     this.addTable(["Minion", "Status", "-menu-", "Fingerprint"], "data-list-keys");
     this.setTableSortable("Status", "asc");
     this.addMsg();
@@ -39,6 +40,8 @@ export class KeysPanel extends Panel {
   onShow () {
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const wheelKeyFingerPromise = this.api.getWheelKeyFinger();
+
+    this.showSyndicInfo(false);
 
     this.loadMinionsTxt();
 
@@ -58,6 +61,34 @@ export class KeysPanel extends Panel {
       Utils.ignorePromise(wheelKeyFingerPromise);
       return false;
     });
+  }
+
+  showSyndicInfo (pSyndicEventFound) {
+    const syndicMaster = Utils.getStorageItem("session", "syndic_master", "");
+    const orderMasters = Utils.getStorageItemBoolean("session", "order_masters");
+
+    let warningText = "";
+
+    if (syndicMaster !== "" && syndicMaster !== "masterofmasters") {
+      warningText += " The syndic-master of this salt-master is '" + syndicMaster + "'.";
+    }
+
+    if (orderMasters) {
+      warningText += " This salt-master is ready to work with salt-syndic nodes.";
+    }
+
+    if (pSyndicEventFound) {
+      warningText += " Events related to salt-syndic are seen in the salt-event-bus.";
+    }
+
+    if (warningText === "") {
+      this.setWarningText();
+    } else {
+      warningText += " This overview contains only the keys of minions that are connected to this salt-master.";
+      warningText += " Keys for minions that are connected to other salt-masters are not always shown in this SaltGUI.";
+      warningText += " Commands issued from this salt-master may involve minions that are not listed in SaltGUI.";
+      this.setWarningText("info", warningText.trim());
+    }
   }
 
   _handleWheelKeyFinger (pWheelKeyFingerData) {
@@ -109,7 +140,7 @@ export class KeysPanel extends Panel {
 
     const allKeys = pWheelKeyListAllData.return[0].data.return;
 
-    const minionsDict = JSON.parse(Utils.getStorageItem("session", "minions-txt", "{}"));
+    const minionsDict = Utils.getStorageItemObject("session", "minions_txt");
 
     // Unaccepted goes first because that is where the user must decide
     const minionIdsPre = allKeys.minions_pre.sort();
@@ -152,7 +183,6 @@ export class KeysPanel extends Panel {
     cnt["accepted"] = 0;
     cnt["denied"] = 0;
     cnt["rejected"] = 0;
-    // cnt["missing"] = 0;
     const tbody = this.table.tBodies[0];
     for (const tr of tbody.children) {
       const statusTd = tr.querySelector(".status");
@@ -223,7 +253,8 @@ export class KeysPanel extends Panel {
 
     if (txt) {
       minionIdTd.setAttribute("sorttable_customkey", pMinionId);
-      minionIdSpan.innerText = Character.WARNING_SIGN + pMinionId;
+      minionIdSpan.innerText = pMinionId;
+      Panel.addPrefixIcon(minionIdSpan, Character.WARNING_SIGN);
       Utils.addToolTip(
         minionIdSpan,
         txt + "\nUpdate file 'minions.txt' when needed",
@@ -242,9 +273,8 @@ export class KeysPanel extends Panel {
     minionIdTd.appendChild(minionIdSpan);
     minionTr.appendChild(minionIdTd);
 
-    const accepted = Utils.createTd("status", "accepted");
+    const accepted = Utils.createTd(["status", "accepted"], "accepted");
     accepted.setAttribute("sorttable_customkey", 2);
-    accepted.classList.add("accepted");
     minionTr.appendChild(accepted);
 
     KeysPanel._flagMinion(pMinionId, accepted, minionTr, pMinionsDict);
@@ -265,9 +295,8 @@ export class KeysPanel extends Panel {
     minionIdTd.appendChild(minionIdSpan);
     minionTr.appendChild(minionIdTd);
 
-    const rejected = Utils.createTd("status", "rejected");
+    const rejected = Utils.createTd(["status", "rejected"], "rejected");
     rejected.setAttribute("sorttable_customkey", 4);
-    rejected.classList.add("rejected");
     minionTr.appendChild(rejected);
 
     KeysPanel._flagMinion(pMinionId, rejected, minionTr, pMinionsDict);
@@ -291,9 +320,8 @@ export class KeysPanel extends Panel {
     minionIdTd.appendChild(minionIdSpan);
     minionTr.appendChild(minionIdTd);
 
-    const denied = Utils.createTd("status", "denied");
+    const denied = Utils.createTd(["status", "denied"], "denied");
     denied.setAttribute("sorttable_customkey", 3);
-    denied.classList.add("denied");
     minionTr.appendChild(denied);
 
     KeysPanel._flagMinion(pMinionId, denied, minionTr, pMinionsDict);
@@ -317,11 +345,10 @@ export class KeysPanel extends Panel {
     minionIdTd.appendChild(minionIdSpan);
     minionTr.appendChild(minionIdTd);
 
-    const pre = Utils.createTd("status", "unaccepted");
+    const pre = Utils.createTd(["status", "unaccepted"], "unaccepted");
     // unaccepted comes first because user action is needed
     // all others have the same order as in 'salt-key'
     pre.setAttribute("sorttable_customkey", 1);
-    pre.classList.add("unaccepted");
     minionTr.appendChild(pre);
 
     KeysPanel._flagMinion(pMinionId, pre, minionTr, pMinionsDict);
@@ -351,9 +378,8 @@ export class KeysPanel extends Panel {
     minionIdTd.appendChild(minionIdSpan);
     minionTr.appendChild(minionIdTd);
 
-    const missing = Utils.createTd("status", "missing");
+    const missing = Utils.createTd(["status", "missing"], "missing");
     missing.setAttribute("sorttable_customkey", 5);
-    missing.classList.add("missing");
     minionTr.appendChild(missing);
 
     KeysPanel._flagMinion(pMinionId, missing, minionTr, pMinionsDict);
@@ -577,7 +603,7 @@ export class KeysPanel extends Panel {
     }
 
     const tr = this.table.querySelector("tr#" + Utils.getIdFromMinionId(pData.id));
-    const minionsDict = JSON.parse(Utils.getStorageItem("session", "minions-txt", "{}"));
+    const minionsDict = Utils.getStorageItemObject("session", "minions_txt");
     if (tr) {
       const statusTd = tr.querySelector(".status");
       // drop all other classes (accepted, rejected, etc)
@@ -676,5 +702,9 @@ export class KeysPanel extends Panel {
 
   handleSaltKeyEvent (pData) {
     this.handleSaltAuthEvent(pData);
+  }
+
+  handleSyndicEvent () {
+    this.showSyndicInfo(true);
   }
 }
