@@ -18,8 +18,8 @@ export class MinionsPanel extends Panel {
 
     this.addTitle("Minions");
     this.addPanelMenu();
-    this._addMenuItemStateApply(this.panelMenu, "*");
-    this._addMenuItemStateApplyTest(this.panelMenu, "*");
+    this._addMenuItemStateApply(this.panelMenu, Utils.getDefaultMinionTarget());
+    this._addMenuItemStateApplyTest(this.panelMenu, Utils.getDefaultMinionTarget());
     this.addSearchButton();
     this.addWarningField();
     this.addTable(["-menu-", "Minion", "Status", "Salt version", "OS version"]);
@@ -55,6 +55,7 @@ export class MinionsPanel extends Panel {
 
       localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
         this.updateMinions(pLocalGrainsItemsData);
+        this.removeMinionsWithoutAnswer();
         return true;
       }, (pLocalGrainsItemsMsg) => {
         const allMinionsErr = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, JSON.stringify(pLocalGrainsItemsMsg));
@@ -110,7 +111,7 @@ export class MinionsPanel extends Panel {
 
     // construct a target string of connected minions
     if (connectedMinionIds.length === wheelKeyListMinionIds.length) {
-      return "*";
+      return Utils.getDefaultMinionTarget();
     }
 
     connectedMinionIds.sort();
