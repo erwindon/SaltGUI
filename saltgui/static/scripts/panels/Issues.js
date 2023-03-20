@@ -21,6 +21,7 @@ export class IssuesPanel extends Panel {
       "This page contains an overview of problems",
       "that are observed in various categories."
     ]);
+    this.addWarningField();
     this.addTable(["-menu-", "Description"]);
     this.setTableClickable("cmd");
     this.addMsg();
@@ -48,6 +49,10 @@ export class IssuesPanel extends Panel {
   }
 
   onShow () {
+    if (Utils.getDefaultMinionTarget() !== "*") {
+      this.setWarningText("info", "due to user permission restrictions, for some categories, only a subset of the minions is used here");
+    }
+
     const p1 = this.keysIssues.onGetIssues(this);
     const p2 = this.jobsIssues.onGetIssues(this);
     const p3 = this.beaconsIssues.onGetIssues(this);
