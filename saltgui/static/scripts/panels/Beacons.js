@@ -11,6 +11,7 @@ export class BeaconsPanel extends Panel {
     this.addTitle("Beacons");
     this.addSearchButton();
     this.addFilterButton();
+    this.addWarningField();
     this.addTable(["-select-", "-menu-", "Minion", "Status", "Beacons"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable("page");
@@ -30,6 +31,7 @@ export class BeaconsPanel extends Panel {
       this._handleBeaconsWheelKeyListAll(pWheelKeyListAllData);
       localBeaconsListPromise.then((pLocalBeaconsListData) => {
         this.updateMinions(pLocalBeaconsListData);
+        this.removeMinionsWithoutAnswer();
         return true;
       }, (pLocalBeaconsListMsg) => {
         const allMinionsErr = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, JSON.stringify(pLocalBeaconsListMsg));
