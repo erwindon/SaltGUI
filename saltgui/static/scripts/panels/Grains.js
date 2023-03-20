@@ -60,6 +60,7 @@ export class GrainsPanel extends Panel {
       this._handleGrainsWheelKeyListAll(ok_WheelKeyListAll);
       localGrainsItemsPromise.then((ok_LocalGrainsItems) => {
         this.updateMinions(ok_LocalGrainsItems);
+        this.removeMinionsWithoutAnswer();
         return true;
       }, (_error_LocalGrainsItems) => {
         const allMinionsErr = Utils.msgPerMinion(ok_WheelKeyListAll.return[0].data.return.minions, JSON.stringify(_error_LocalGrainsItems));
