@@ -518,6 +518,7 @@ export class Panel {
     minionTr.appendChild(minionTd);
 
     minionTr.appendChild(Utils.createTd("os", "loading" + Character.HORIZONTAL_ELLIPSIS));
+    minionTr.dataset.loading = true;
 
     // fill out the number of columns to that of the header
     while (this.table.tHead.rows[0] && minionTr.cells.length < this.table.tHead.rows[0].cells.length - freeColumns) {
@@ -897,6 +898,11 @@ export class Panel {
     this.nrOffline = 0;
     for (const minionId of minionIds) {
       const minionInfo = minions[minionId];
+
+      const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
+      if (minionTr) {
+        delete minionTr.dataset.loading;
+      }
 
       // minions can be offline, then the info will be false
       // for grains/pillar we may receive data anyway when using cached data
@@ -1297,5 +1303,19 @@ export class Panel {
 
   onHide () {
     this.stopLoop();
+  }
+
+  // remove all rows from the table where we did not get a response from the server
+  // probably the access rights are restricted to only a subset of the minions
+  removeMinionsWithoutAnswer () {
+    const tbody = this.table.tBodies[0];
+    for (const tr of tbody.rows) {
+      if (tr.dataset.loading) {
+        tr.remove();
+      }
+    }
+    if (Utils.getDefaultMinionTarget() !== "*") {
+      this.setWarningText("info", "due to user permission restrictions, only a subset of the minions is shown here");
+    }
   }
 }
