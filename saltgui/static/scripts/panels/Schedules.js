@@ -11,6 +11,7 @@ export class SchedulesPanel extends Panel {
     this.addTitle("Schedules");
     this.addSearchButton();
     this.addFilterButton();
+    this.addWarningField();
     this.addTable(["-select-", "-menu-", "Minion", "Status", "Schedules"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable("page");
@@ -29,6 +30,7 @@ export class SchedulesPanel extends Panel {
       this._handleSchedulesWheelKeyListAll(ok_WheelKeyListAll);
       localScheduleListPromise.then((ok_LocalScheduleList) => {
         this.updateMinions(ok_LocalScheduleList);
+        this.removeMinionsWithoutAnswer();
         return true;
       }, (_error_LocalScheduleList) => {
         const allMinionsErr = Utils.msgPerMinion(ok_WheelKeyListAll.return[0].data.return.minions, JSON.stringify(_error_LocalScheduleList));

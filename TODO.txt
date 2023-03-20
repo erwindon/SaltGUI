@@ -1,0 +1,14 @@
+Branch zzz-subset
+("zzz" to move it to the bottom of the list)
+PoC for supporting subsets in `external_auth`
+see also https://docs.saltproject.io/en/latest/topics/eauth/index.html
+
+PRO:
+* previously, configured subsets usually leads to errors since SaltGUI still uses '*' as default pattern
+
+CON:
+* so far, few people need this. there was one request for it (https://github.com/erwindon/SaltGUI/pull/498) but that PR was not even finished.
+* multiple permission sets do not seem to work properly in saltstack anyway
+
+VERDICT:
+Keep until there is an actual request for it

@@ -33,6 +33,7 @@ export class PillarsPanel extends Panel {
       this._handlePillarsWheelKeyListAll(ok_WheelKeyListAll);
       localPillarObfuscatePromise.then((ok_LocalPillarObfuscate) => {
         this.updateMinions(ok_LocalPillarObfuscate);
+        this.removeMinionsWithoutAnswer();
         return true;
       }, (_error_LocalPillarObfuscate) => {
         const allMinionsErr = Utils.msgPerMinion(ok_WheelKeyListAll.return[0].data.return.minions, JSON.stringify(_error_LocalPillarObfuscate));

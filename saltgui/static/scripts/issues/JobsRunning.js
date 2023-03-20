@@ -1,6 +1,7 @@
 /* global */
 
 import {Issues} from "./Issues.js";
+import {Utils} from "../Utils.js";
 
 export class JobsRunningIssues extends Issues {
 
@@ -45,11 +46,12 @@ export class JobsRunningIssues extends Issues {
         continue;
       }
       const job = allJobsDict[jobId];
-      this.setIssueMsg("active-jobs", jobId, "Job '" + jobId + "' (" + job.Function + ") is still running");
-      this.addIssueNav("active-jobs", jobId, "job", {"id": jobId});
-      this.addIssueCmd("active-jobs", jobId, "Terminate job", "*", ["saltutil.term_job", jobId]);
-      this.addIssueCmd("active-jobs", jobId, "Kill job", "*", ["saltutil.kill_job", jobId]);
-      this.addIssueCmd("active-jobs", jobId, "Signal job", "*", ["saltutil.signal_job", jobId, "signal=", "<signalnumber>"]);
+      const tr = Issues.addIssue(pPanel, "active-jobs", jobId);
+      Issues.addIssueMsg(tr, "Job '" + jobId + "' (" + job.Function + ") is still running");
+      Issues.addIssueNav(tr, "job", {"id": jobId});
+      Issues.addIssueCmd(tr, "Terminate job", Utils.getDefaultMinionTarget(), ["saltutil.term_job", jobId]);
+      Issues.addIssueCmd(tr, "Kill job", Utils.getDefaultMinionTarget(), ["saltutil.kill_job", jobId]);
+      Issues.addIssueCmd(tr, "Signal job", Utils.getDefaultMinionTarget(), ["saltutil.signal_job", jobId, "signal=", "<signalnumber>"]);
     }
   }
 }
