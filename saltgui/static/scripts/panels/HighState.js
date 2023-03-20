@@ -22,8 +22,8 @@ export class HighStatePanel extends Panel {
 
     this.addTitle("HighState");
     this.addPanelMenu();
-    this._addMenuItemStateApply(this.panelMenu, "*");
-    this._addMenuItemStateApplyTest(this.panelMenu, "*");
+    this._addMenuItemStateApply(this.panelMenu, Utils.getDefaultMinionTarget());
+    this._addMenuItemStateApplyTest(this.panelMenu, Utils.getDefaultMinionTarget());
     this.addSettingsMenu();
     this._addMenuItemUseStateHighstate();
     this._addMenuItemUseStateApply();

@@ -650,4 +650,29 @@ export class Utils {
       ddc.style.display = pHide ? "none" : "";
     }
   }
+
+  static getDefaultMinionTarget () {
+    const perms = Utils.getStorageItemObject("session", "login_response").perms;
+
+    if (typeof perms !== "object" || !Array.isArray(perms)) {
+      // strange login info, just try the default
+      return "*";
+    }
+
+    for (const obj of perms) {
+      if (typeof obj !== "object" || Array.isArray(obj)) {
+        continue;
+      }
+      // so it is a regular object, but it may still be empty
+      // return the first useable key
+      /* eslint-disable no-unreachable-loop */
+      for (const key in obj) {
+        return key;
+      }
+      /* eslint-enable no-unreachable-loop */
+    }
+
+    // nothing sensible found, just try the default
+    return "*";
+  }
 }

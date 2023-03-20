@@ -94,7 +94,7 @@ export class Documentation {
     // the help text is taken from the first minion that answers
     // when no target is selected, just ask all minions
     if (target === "") {
-      target = "*";
+      target = Utils.getDefaultMinionTarget();
     }
 
     const commandField = document.getElementById("command");
