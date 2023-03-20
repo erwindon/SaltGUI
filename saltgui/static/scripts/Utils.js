@@ -675,4 +675,49 @@ export class Utils {
     }
     return true;
   }
+
+  static getDefaultMinionTarget () {
+    const perms = Utils.getStorageItemObject("session", "login_response").perms;
+
+    if (typeof perms !== "object" || !Array.isArray(perms)) {
+      // strange login info, just try the default
+      return "*";
+    }
+
+    let targetCnt = 0;
+    let lastTarget = null;
+    let targetSet = null;
+
+    for (const obj of perms) {
+      if (typeof obj !== "object" || Array.isArray(obj)) {
+        continue;
+      }
+      // so it is a regular object, but it may still be empty
+      // return the first useable key
+      /* eslint-disable no-unreachable-loop */
+      for (const key in obj) {
+        targetCnt += 1;
+        lastTarget = key;
+        if (targetSet === null) {
+          targetSet = "";
+        } else {
+          targetSet += " or ";
+        }
+        targetSet += key;
+      }
+      /* eslint-enable no-unreachable-loop */
+    }
+
+    if (targetCnt === 1) {
+      // just a single subset
+      return lastTarget;
+    } else if (targetCnt > 1) {
+      // multiple subsets
+      // NOTE: this does not work since salt-api likely only considers the first pattern in external_auth only
+      return targetSet;
+    }
+
+    // nothing sensible found, just try the default
+    return "*";
+  }
 }
