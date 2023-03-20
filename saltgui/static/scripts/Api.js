@@ -98,7 +98,7 @@ export class API {
       params.tgt = pMinionId;
     } else {
       params["tgt_type"] = "glob";
-      params.tgt = "*";
+      params.tgt = Utils.getDefaultMinionTarget();
     }
     return this.apiRequest("POST", "/", params);
   }
@@ -114,7 +114,7 @@ export class API {
       params.tgt = pMinionId;
     } else {
       params["tgt_type"] = "glob";
-      params.tgt = "*";
+      params.tgt = Utils.getDefaultMinionTarget();
     }
     return this.apiRequest("POST", "/", params);
   }
@@ -129,7 +129,7 @@ export class API {
       params.tgt = pMinionId;
     } else {
       params["tgt_type"] = "glob";
-      params.tgt = "*";
+      params.tgt = Utils.getDefaultMinionTarget();
     }
     return this.apiRequest("POST", "/", params);
   }
@@ -144,7 +144,7 @@ export class API {
       params.tgt = pMinionId;
     } else {
       params["tgt_type"] = "glob";
-      params.tgt = "*";
+      params.tgt = Utils.getDefaultMinionTarget();
     }
     return this.apiRequest("POST", "/", params);
   }
@@ -159,7 +159,7 @@ export class API {
       params.tgt = pMinionId;
     } else {
       params["tgt_type"] = "glob";
-      params.tgt = "*";
+      params.tgt = Utils.getDefaultMinionTarget();
     }
     return this.apiRequest("POST", "/", params);
   }
@@ -175,7 +175,7 @@ export class API {
       params.tgt = pMinionId;
     } else {
       params["tgt_type"] = "glob";
-      params.tgt = "*";
+      params.tgt = Utils.getDefaultMinionTarget();
     }
     return this.apiRequest("POST", "/", params);
   }
@@ -184,7 +184,7 @@ export class API {
     const params = {
       "client": "local",
       "fun": "test.providers",
-      "tgt": "*"
+      "tgt": Utils.getDefaultMinionTarget()
     };
     return this.apiRequest("POST", "/", params);
   }
