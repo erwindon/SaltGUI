@@ -898,5 +898,8 @@ export class Panel {
         tr.remove();
       }
     }
+    if (Utils.getDefaultMinionTarget() !== "*") {
+      this.setWarningText("info", "due to user permission restrictions, only a subset of the minions is shown here");
+    }
   }
 }

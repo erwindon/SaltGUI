@@ -11,6 +11,7 @@ export class SchedulesPanel extends Panel {
 
     this.addTitle("Schedules");
     this.addSearchButton();
+    this.addWarningField();
     this.addTable(["Minion", "Status", "Schedules", "-menu-"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable();
