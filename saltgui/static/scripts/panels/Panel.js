@@ -415,6 +415,7 @@ export class Panel {
     minionTr.appendChild(minionTd);
 
     minionTr.appendChild(Utils.createTd("os", "loading..."));
+    minionTr.dataset.loading = true;
 
     // fill out the number of columns to that of the header
     while (this.table.tHead.rows[0] && minionTr.cells.length < this.table.tHead.rows[0].cells.length - freeColumns) {
@@ -699,6 +700,11 @@ export class Panel {
     for (const minionId of minionIds) {
       const minionInfo = minions[minionId];
 
+      const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
+      if (minionTr) {
+        delete minionTr.dataset.loading;
+      }
+
       // minions can be offline, then the info will be false
       if (minionInfo === false) {
         this.updateOfflineMinion(minionId, minionsDict);
@@ -880,6 +886,17 @@ export class Panel {
     }
     if (!pElem.innerText.startsWith(pIconChar)) {
       pElem.innerText = pIconChar + pElem.innerText;
+    }
+  }
+
+  // remove all rows from the table where we did not get a response from the server
+  // probably the access rights are restricted to only a subset of the minions
+  removeMinionsWithoutAnswer () {
+    const tbody = this.table.tBodies[0];
+    for (const tr of tbody.rows) {
+      if (tr.dataset.loading) {
+        tr.remove();
+      }
     }
   }
 }

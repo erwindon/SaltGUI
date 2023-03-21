@@ -43,6 +43,7 @@ export class GrainsPanel extends Panel {
       this._handleGrainsWheelKeyListAll(pWheelKeyListAllData);
       localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
         this.updateMinions(pLocalGrainsItemsData);
+        this.removeMinionsWithoutAnswer();
         return true;
       }, (pLocalGrainsItemsMsg) => {
         const allMinionsErr = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, JSON.stringify(pLocalGrainsItemsMsg));
