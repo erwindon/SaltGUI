@@ -235,6 +235,13 @@ The names can be specified as simple names like the example above.
 Alternatively, the [grains.get](https://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.grains.html#salt.modules.grains.get) notation can be used to get more detailed information. The separator is always `:`. e.g. `locale_info:timezone`.
 Alternatively, the [jsonpath](https://www.w3resource.com/JSON/JSONPath-with-JavaScript.php) notation can be used to allow even more freedom. Jsonpath is used when the text starts with a `$`. e.g. `$.ip4_interfaces.eth0[0]`.
 
+In any table where the the minion status is shown and where the grain-values of the minion are also known, the minion status is
+replaced with the the best value from grain `fqdn_ip4`.
+The best value is chosen by first eliminating all values that appear for more than one minion.
+Then the first value that has the most specific network prefix is used.
+It is possible to chose a different grain by setting variable `saltgui_ipnumber_field` in salt master configuration file `/etc/salt/master`.
+It is possible to restrict the eligible IP-numbers by setting variable `saltgui_ipnumber_prefix` in salt master configuration file `/etc/salt/master`. Only values with that string-prefix are considered.
+The display of the IP-numbers can simply be disabled by choosing a non-existing grain or by choosing a non-existing prefix.
 
 ## Pillars
 Pillars potentially contain security senstitive information.

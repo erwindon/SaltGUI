@@ -7,14 +7,6 @@ import {SortTable} from "../../sorttable/sorttable.js";
 import {TargetType} from "../TargetType.js";
 import {Utils} from "../Utils.js";
 
-// which grain to use for IP-number display
-const IPNUMBERFIELD = "fqdn_ip4";
-// const IPNUMBERFIELD = "ipv4";
-// const IPNUMBERFIELD = "fqdn_ip6";
-// const IPNUMBERFIELD = "ipv6";
-// non-existent grains effectively disable the behaviour
-// const IPNUMBERFIELD = "DISABLED";
-
 export class Panel {
 
   constructor (pKey, pContextInfo = null) {
@@ -452,10 +444,10 @@ export class Panel {
     return minionTr;
   }
 
-  static _getIpNumberUses (pAllMinionsGrains, pIpNumber) {
+  static _getIpNumberUses (pAllMinionsGrains, pIpNumber, pIpNumberField) {
     let cnt = 0;
     for (const minionId in pAllMinionsGrains) {
-      const ipNumbers = pAllMinionsGrains[minionId][IPNUMBERFIELD];
+      const ipNumbers = pAllMinionsGrains[minionId][pIpNumberField];
       if (!Array.isArray(ipNumbers)) {
         continue;
       }
@@ -466,18 +458,21 @@ export class Panel {
     return cnt;
   }
 
-  static _getBestIpNumber (pMinionData, pAllMinionsGrains) {
+  static _getBestIpNumber (pMinionData, pAllMinionsGrains, pIpNumberField, pIpNumberPrefix) {
     if (!pMinionData) {
       return null;
     }
 
-    const allIpNumbers = pMinionData[IPNUMBERFIELD];
+    let allIpNumbers = pMinionData[pIpNumberField];
     // either a string or something strange
     if (!Array.isArray(allIpNumbers)) {
       return null;
     }
 
     // so, it is an array
+
+    // reduce to only the requested prefix
+    allIpNumbers = allIpNumbers.filter((item) => item.startsWith(pIpNumberPrefix));
 
     // sort it, so that we get more consistent results
     // when there are minions which report multiple IP
@@ -495,7 +490,7 @@ export class Panel {
       // IP numbers that are used by multiple minions are not a
       // candidate for display here. typically happens for:
       // 127.0.0.1 (localhost), 10.0.2.15 (virtualbox host address)
-      if (Panel._getIpNumberUses(pAllMinionsGrains, ipNumber) !== 1) {
+      if (Panel._getIpNumberUses(pAllMinionsGrains, ipNumber, pIpNumberField) !== 1) {
         continue;
       }
 
@@ -509,20 +504,26 @@ export class Panel {
     return bestIpNumber;
   }
 
-  static _getAllIpNumbers (pMinionData) {
+  static _getAllIpNumbers (pMinionData, pIpNumberField, pIpNumberPrefix) {
     if (!pMinionData) {
       // for pages where no grains data available
       return [];
     }
-    const allIpNumbers = pMinionData[IPNUMBERFIELD];
+
+    let allIpNumbers = pMinionData[pIpNumberField];
     if (!Array.isArray(allIpNumbers)) {
       return [];
     }
+
     for (const str of allIpNumbers) {
       if (typeof str !== "string") {
         return [];
       }
     }
+
+    // reduce to only the requested prefix
+    allIpNumbers = allIpNumbers.filter((item) => item.startsWith(pIpNumberPrefix));
+
     return allIpNumbers;
   }
 
@@ -597,8 +598,14 @@ export class Panel {
 
     minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 
-    const bestIpNumber = Panel._getBestIpNumber(pMinionData, pAllMinionsGrains);
-    const allIpNumbers = Panel._getAllIpNumbers(pMinionData);
+    // which grain to use for IP-number display
+    // typical choices are "fqdn_ip4", "ipv4", "fqdn_ip6" or "ipv6"
+    // non-existent grains effectively disable the behaviour
+    const ipNumberField = Utils.getStorageItem("session", "ipnumber_field", "fqdn_ip4");
+    const ipNumberPrefix = Utils.getStorageItem("session", "ipnumber_prefix", "");
+
+    const bestIpNumber = Panel._getBestIpNumber(pMinionData, pAllMinionsGrains, ipNumberField, ipNumberPrefix);
+    const allIpNumbers = Panel._getAllIpNumbers(pMinionData, ipNumberField, ipNumberPrefix);
 
     if (bestIpNumber) {
       const addressTd = Utils.createTd(["status", "address"]);
