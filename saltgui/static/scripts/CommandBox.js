@@ -594,10 +594,15 @@ export class CommandBox {
     }
 
     const runType = RunType.getRunType();
-    if (!pisRunTypeNormalOnly && params.client === "local" && runType === "async") {
-      params.client = "local_async";
-      // return looks like:
-      // { "jid": "20180718173942195461", "minions": [ ... ] }
+    if (!pisRunTypeNormalOnly && runType === "async") {
+      if (params.client === "local" && runType === "async") {
+        params.client = "local_async";
+        // return will look like:
+        // { "jid": "20180718173942195461", "minions": [ ... ] }
+      } else {
+        CommandBox._showError("Async is not supported for '" + functionToRun + "'");
+        return null;
+      }
     }
 
     return this.api.apiRequest("POST", "/", params);
