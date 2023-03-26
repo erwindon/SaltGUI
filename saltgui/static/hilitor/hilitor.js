@@ -84,7 +84,7 @@ function Hilitor(start, id, tag)
   };
 
   // recursively apply word highlighting
-  this.hiliteWords = function(node)
+  this.hiliteWords = function(node, isCaseSensitive=false)
   {
     if(node === undefined || !node) return;
     if(!matchRegExp) return;
@@ -95,24 +95,25 @@ function Hilitor(start, id, tag)
 
     if(node.hasChildNodes()) {
       for(const childNode of node.childNodes)
-        this.hiliteWords(childNode);
+        this.hiliteWords(childNode, isCaseSensitive);
     }
     if(node.nodeType === 3) { // NODE_TEXT
       // limit the number of highlighted matches to 25 otherwise the DOM grows rediculously
       // and performance drops with it. and it is still a good first indication.
       let nv, regs;
       if(this.nrHilites <= 25 && (nv = node.nodeValue) && (regs = matchRegExp.exec(nv)) && regs[0].length > 0) {
-        if(!wordColor[regs[0].toLowerCase()]) {
-          wordColor[regs[0].toLowerCase()] = colors[colorIdx++ % colors.length];
+        var found = isCaseSensitive ? regs[0] : regs[0].toLowerCase();
+        if(!wordColor[found]) {
+          wordColor[found] = colors[colorIdx++ % colors.length];
         }
 
         var match = document.createElement(hiliteTag);
         match.appendChild(document.createTextNode(regs[0]));
-        match.style.backgroundColor = wordColor[regs[0].toLowerCase()];
+        match.style.backgroundColor = wordColor[found];
         match.style.color = "#000";
 
         var after = node.splitText(regs.index);
-        after.nodeValue = after.nodeValue.substring(regs[0].length);
+        after.nodeValue = after.nodeValue.substring(found.length);
         node.parentNode.insertBefore(match, after);
 
         this.nrHilites++;
@@ -139,7 +140,7 @@ function Hilitor(start, id, tag)
     this.remove();
     if(input === undefined || !input) return undefined;
     if(this.setRegex(input, isCaseSensitive)) {
-      this.hiliteWords(targetNode);
+      this.hiliteWords(targetNode, isCaseSensitive);
     }
     return matchRegExp;
   };
