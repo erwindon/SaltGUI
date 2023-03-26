@@ -490,7 +490,7 @@ export class CommandBox {
     CommandBox.onRunReturn("ERROR:\n\n" + pMessage, "");
   }
 
-  getRunParams (pTargetType, pTarget, pToRun, pisRunTypeNormalOnly = false) {
+  getRunParams (pTargetType, pTarget, pToRun, pisRunTypeNormalOnly = false, pCanUseFullReturn = true) {
 
     // The leading # was used to indicate a nodegroup
     if (pTargetType === "nodegroup" && pTarget.startsWith("#")) {
@@ -552,7 +552,7 @@ export class CommandBox {
       }
     }
 
-    const fullReturn = Utils.getStorageItemBoolean("session", "full_return");
+    const fullReturn = pCanUseFullReturn && Utils.getStorageItemBoolean("session", "full_return");
 
     let params = {};
     if (functionToRun.startsWith("runners.")) {

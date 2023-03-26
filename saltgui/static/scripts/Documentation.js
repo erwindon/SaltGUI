@@ -122,7 +122,7 @@ export class Documentation {
 
     const targetType = TargetType.menuTargetType._value;
 
-    const func = this.commandbox.getRunParams(targetType, target, docCommand, true);
+    const func = this.commandbox.getRunParams(targetType, target, docCommand, true, false);
     if (func === null) {
       return;
     }
