@@ -214,7 +214,7 @@ export class KeysPanel extends Panel {
     this.setMsg(txt);
   }
 
-  static _flagMinion (pMinionId, pStatusField, pMinionTr, pMinionsDict) {
+  static _flagMinion (pMinionId, pStatusField, pMinionTr, pMinionsDict, pIsMissing = false) {
     let txt = "";
 
     if (!Object.keys(pMinionsDict).length) {
@@ -222,7 +222,7 @@ export class KeysPanel extends Panel {
       // assume we actually don't known
 
       // Arrays.includes() is only available from ES7/2016
-    } else if (Object.keys(pMinionsDict).indexOf(pMinionId) >= 0) {
+    } else if (!pIsMissing && Object.keys(pMinionsDict).indexOf(pMinionId) >= 0) {
       // this is a known minion
     } else {
       // this is an unknown minion
@@ -382,7 +382,7 @@ export class KeysPanel extends Panel {
     missing.setAttribute("sorttable_customkey", 5);
     minionTr.appendChild(missing);
 
-    KeysPanel._flagMinion(pMinionId, missing, minionTr, pMinionsDict);
+    KeysPanel._flagMinion(pMinionId, missing, minionTr, pMinionsDict, true);
 
     // drop down menu
     this._addDropDownMenu(minionTr, pMinionId, missing);
