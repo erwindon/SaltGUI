@@ -35,6 +35,7 @@ export class HighStatePanel extends Panel {
       "With more than " + MAX_HIGHSTATE_STATES + " states, a summary is shown instead.",
       "Click on an individual state to re-apply only that state."
     ]);
+    this.addWarningField();
     this.addTable(["Minion", "State", "Latest JID", "Target", "Function", "Start Time", "-menu-", "States"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable();
@@ -180,6 +181,7 @@ export class HighStatePanel extends Panel {
     }
 
     this.jobs = jobs;
+    this.jobsCnt = jobs.length;
 
     this.setPlayPauseButton(jobs.length === 0 ? "none" : "play");
 
@@ -246,6 +248,7 @@ export class HighStatePanel extends Panel {
     this.jobs = undefined;
     this.setPlayPauseButton("none");
 
+    let foundMinionWithoutJob = false;
     for (const tr of tbody.rows) {
       if (tr.jid) {
         // this row already populated
@@ -254,6 +257,18 @@ export class HighStatePanel extends Panel {
       const jidField = tr.querySelector(".os");
       jidField.innerText = "(no job)";
       jidField.classList.add("no-job-details");
+      foundMinionWithoutJob = true;
+    }
+
+    if (!foundMinionWithoutJob) {
+      // every row has data
+      super.setWarningText();
+    } else if (this.jobsCnt === 0) {
+      super.setWarningText("info", "no jobs were found");
+    } else if (this.jobsCnt < MAX_HIGHSTATE_JOBS) {
+      super.setWarningText("info", "only " + this.jobsCnt + " jobs were found and some minions did not have results in any of these");
+    } else {
+      super.setWarningText("info", "the latest " + MAX_HIGHSTATE_JOBS + " jobs were inspected and some minions did not have results in any of these");
     }
   }
 
