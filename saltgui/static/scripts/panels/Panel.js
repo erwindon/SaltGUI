@@ -848,7 +848,7 @@ export class Panel {
       this.setMsg("(loading)");
     }
     if (this.timeField) {
-      this.timeField.innerHTML = "&nbsp;";
+      this.timeField.innerText = Character.NO_BREAK_SPACE;
     }
     if (this.console) {
       this.console.innerText = "";
