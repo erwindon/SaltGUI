@@ -23,6 +23,9 @@ export class LogoutPage extends Page {
   }
 
   onShow () {
+    // on touchscreens the menus do not go away by themselves
+    Utils.hideAllMenus(true);
+
     this.api.logout().then(() => {
       this.router.goTo("login", {"reason": "logout"});
     });

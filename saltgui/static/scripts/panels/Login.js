@@ -302,6 +302,9 @@ export class LoginPanel extends Panel {
     // We need these functions to populate the dropdown boxes
     const wheelConfigValuesPromise = this.api.getWheelConfigValues();
 
+    // these may have been hidden on a previous logout
+    Utils.hideAllMenus(false);
+
     // We need these functions to populate the dropdown boxes
     wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
       LoginPanel._handleLoginWheelConfigValues(pWheelConfigValuesData);

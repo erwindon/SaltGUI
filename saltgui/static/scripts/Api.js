@@ -50,6 +50,9 @@ export class API {
   }
 
   logout () {
+    // on touchscreens the menus do not go away by themselves
+    Utils.hideAllMenus(true);
+
     // only delete the session here as the router should take care of
     // redirecting to the login screen
     return this.apiRequest("POST", "/logout", {}).

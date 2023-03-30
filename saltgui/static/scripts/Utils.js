@@ -641,4 +641,13 @@ export class Utils {
     }
     return true;
   }
+
+  static hideAllMenus (pHide) {
+    // hide all dropdowns that are still open;
+    // or allow them to be shown again
+    const allDropdownContent = document.querySelectorAll(".dropdown-content");
+    for (const ddc of allDropdownContent) {
+      ddc.style.display = pHide ? "none" : "";
+    }
+  }
 }
