@@ -13,7 +13,11 @@ export class ReactorsPanel extends Panel {
     this.addTitle("Reactors");
     this.addSearchButton();
     this.addTable(["Event", "Reactors"]);
-    this.setTableSortable("Event", "asc");
+
+    // cannot use this now since we are loading
+    // the data in random order
+    // this.setTableSortable("Event", "asc");
+
     this.addMsg();
   }
 
@@ -47,6 +51,8 @@ export class ReactorsPanel extends Panel {
         this._addReactor(eventTag, reactor[eventTag]);
       }
     }
+
+    this.setTableSortable("Event", "asc");
 
     const txt = Utils.txtZeroOneMany(reactors.length,
       "No reactors", "{0} reactor", "{0} reactors");
