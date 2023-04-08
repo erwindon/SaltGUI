@@ -265,10 +265,12 @@ export class HighStatePanel extends Panel {
       super.setWarningText();
     } else if (this.jobsCnt === 0) {
       super.setWarningText("info", "no jobs were found");
+    } else if (this.jobsCnt === 1) {
+      super.setWarningText("info", "only 1 job was found and some minions did not have results in that job");
     } else if (this.jobsCnt < MAX_HIGHSTATE_JOBS) {
-      super.setWarningText("info", "only " + this.jobsCnt + " jobs were found and some minions did not have results in any of these");
+      super.setWarningText("info", "only " + this.jobsCnt + " jobs were found and some minions did not have results in any of these jobs");
     } else {
-      super.setWarningText("info", "the latest " + MAX_HIGHSTATE_JOBS + " jobs were inspected and some minions did not have results in any of these");
+      super.setWarningText("info", "the latest " + MAX_HIGHSTATE_JOBS + " jobs were inspected and some minions did not have results in any of these jobs");
     }
   }
 
