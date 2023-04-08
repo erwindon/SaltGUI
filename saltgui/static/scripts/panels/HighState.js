@@ -59,6 +59,10 @@ export class HighStatePanel extends Panel {
 
     const runnerJobsListJobsPromise = this.api.getRunnerJobsListJobs(cmdList);
 
+    // remove the previous warning, if any
+    // and show this while loading more info
+    super.setWarningText("info", "loading...");
+
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       this._handleMinionsWheelKeyListAll(pWheelKeyListAllData);
       if (cmdList.length === 0) {
