@@ -323,6 +323,15 @@ export class HighStatePanel extends Panel {
 
     const jobData = pJobData.return[0];
 
+    // user may have changed the preference while this was loaded in the background
+    // ignore when no longer applicable
+    if (jobData.Function === "state.highstate" && Utils.getStorageItem("local", "use_state_highstate", "true") !== "true") {
+      return;
+    }
+    if (jobData.Function === "state.apply" && Utils.getStorageItem("local", "use_state_apply", "true") !== "true") {
+      return;
+    }
+
     const saltEnv = HighStatePanel._getJobNamedParam("saltenv", jobData, "default");
     if (!Utils.isIncluded(saltEnv, this._showSaltEnvs, this._hideSaltEnvs)) {
       this._afterJob();
