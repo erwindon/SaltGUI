@@ -21,10 +21,12 @@ export class OutputHighstateTaskSaltGui {
 
       const change = pTask.changes[key];
 
-      if (key === "out" && change === "highstate") {
-        // skip trivial case for orchestration
-        continue;
-      }
+      /* eslint-disable line-comment-position,no-inline-comments,curly */
+      if (key === "out" && change === "highstate") continue; // typical for orchestration
+      if (key === "retcode" && change === 0) continue; // typical for cmd.run
+      if (key === "stderr" && change === "") continue; // typical for cmd.run
+      if (key === "stdout" && change === "") continue; // typical for cmd.run
+      /* eslint-enable line-comment-position,no-inline-comments,curly */
 
       if (typeof change === "string" && Utils.isMultiLineString(change)) {
         pTaskDiv.append(Utils.createBr());
