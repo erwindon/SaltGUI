@@ -175,7 +175,7 @@ export class HighStatePanel extends Panel {
       return;
     }
 
-    // due to filter, all jobs are state.apply jobs
+    // due to filter, all jobs are state.apply and/or state.highstate jobs
 
     let jobs = JobsPanel._jobsToArray(pData.return[0]);
     JobsPanel._sortJobs(jobs);
