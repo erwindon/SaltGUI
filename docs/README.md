@@ -258,7 +258,7 @@ saltgui_public_pillars:
 ```
 
 ## Highstate
-The highstate page provides an overview of the minions and their latest state information.
+The Highstate page provides an overview of the minions and their latest state information.
 At most 10 highstate jobs (`state.apply` or `state.highstate`) are considered.
 
 Individual low-states can be re-tried by clicking on their state symbol.
@@ -281,6 +281,28 @@ saltgui_hide_saltenvs:
 ```
 Typically only one of these variables should be set.
 Jobs that were started without the `saltenv` parameter are, for this purpose only, assumed to use the value `default` for this parameter. This allows these jobs to be hidden/showed using the same mechanism. SaltGUI does not replicate the internal logic of the salt-master and/or the salt-minion to determine which saltenv would actually have been used for such jobs.
+
+## Issues
+The Issues page provides an overview of the system and reports any issues.
+When no issues are found, the list remains empty.
+The following issues may be reported:
+* Disabled beacons, either individually disabled or on minion level
+this should be solved by enabling or removing that beacon.
+* Jobs that are still running after 60 seconds
+this should be solved by terminating the job or just let it finish.
+* Unaccepted keys
+this should be solved by accepting or rejecting that key.
+* Unconnected minions
+this should be solved by fixing the minion, the minion's host or the connection to that host.
+* Disabled schedules, either individually disabled or on minion level
+this should be solved by enabling or removing that schedule.
+* States that contain one or more failed tasks
+this should be solved by retrying that state. Note that only all tasks of that state can be retried together.
+
+Each issue has its own dropdown-menu, which typically contains:
+* One or more salt-commands to fix the situation;
+But note that there might be more possible solutions, some of which may actually be more preferred.
+* A navigation-command to go to a page for more details.
 
 ## Custom command documentation
 A custom HTML help text can be shown from the "Manual Run" overlay.
