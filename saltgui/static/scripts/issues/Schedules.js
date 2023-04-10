@@ -53,6 +53,7 @@ export class SchedulesIssues extends Issues {
             const tr = Issues.addIssue(pPanel, "disabled-schedules", minionId + "-" + key);
             Issues.addIssueMsg(tr, "Schedule '" + key + "' on '" + minionId + "' is disabled");
             Issues.addIssueCmd(tr, "Enable schedule", minionId, ["schedule.enable_job", key]);
+            Issues.addIssueCmd(tr, "Delete schedule", minionId, ["schedule.delete", key]);
             Issues.addIssueNav(tr, "schedules-minion", {"minionid": minionId});
           }
         }

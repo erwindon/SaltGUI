@@ -59,6 +59,10 @@ export class HighStatePanel extends Panel {
 
     const runnerJobsListJobsPromise = this.api.getRunnerJobsListJobs(cmdList);
 
+    // remove the previous warning, if any
+    // and show this while loading more info
+    super.setWarningText("info", "loading...");
+
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       this._handleMinionsWheelKeyListAll(pWheelKeyListAllData);
       if (cmdList.length === 0) {
@@ -174,7 +178,7 @@ export class HighStatePanel extends Panel {
       return;
     }
 
-    // due to filter, all jobs are state.apply jobs
+    // due to filter, all jobs are state.apply and/or state.highstate jobs
 
     let jobs = JobsPanel._jobsToArray(pData.return[0]);
     JobsPanel._sortJobs(jobs);
@@ -268,10 +272,12 @@ export class HighStatePanel extends Panel {
       super.setWarningText();
     } else if (this.jobsCnt === 0) {
       super.setWarningText("info", "no jobs were found");
+    } else if (this.jobsCnt === 1) {
+      super.setWarningText("info", "only 1 job was found and some minions did not have results in that job");
     } else if (this.jobsCnt < MAX_HIGHSTATE_JOBS) {
-      super.setWarningText("info", "only " + this.jobsCnt + " jobs were found and some minions did not have results in any of these");
+      super.setWarningText("info", "only " + this.jobsCnt + " jobs were found and some minions did not have results in any of these jobs");
     } else {
-      super.setWarningText("info", "the latest " + MAX_HIGHSTATE_JOBS + " jobs were inspected and some minions did not have results in any of these");
+      super.setWarningText("info", "the latest " + MAX_HIGHSTATE_JOBS + " jobs were inspected and some minions did not have results in any of these jobs");
     }
   }
 
@@ -319,6 +325,15 @@ export class HighStatePanel extends Panel {
     }
 
     const jobData = pJobData.return[0];
+
+    // user may have changed the preference while this was loaded in the background
+    // ignore when no longer applicable
+    if (jobData.Function === "state.highstate" && Utils.getStorageItem("local", "use_state_highstate", "true") !== "true") {
+      return;
+    }
+    if (jobData.Function === "state.apply" && Utils.getStorageItem("local", "use_state_apply", "true") !== "true") {
+      return;
+    }
 
     const saltEnv = HighStatePanel._getJobNamedParam("saltenv", jobData, "default");
     if (!Utils.isIncluded(saltEnv, this._showSaltEnvs, this._hideSaltEnvs)) {

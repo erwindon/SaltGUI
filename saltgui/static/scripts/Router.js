@@ -253,8 +253,10 @@ export class Router {
     Router._showMenuItem(pages, "pillars");
     Router._showMenuItem(pages, "beacons");
     Router._showMenuItem(pages, "keys");
-    Router._showMenuItem(pages, "jobs", ["templates"]);
+    Router._showMenuItem(pages, "jobs", ["highstate", "templates"]);
+    Router._showMenuItem(pages, "highstate");
     Router._showMenuItem(pages, "templates");
+    Router._showMenuItem(pages, "issues");
     Router._showMenuItem(pages, "events", ["reactors"]);
     Router._showMenuItem(pages, "reactors");
     Router._showMenuItem(pages, "logout");
