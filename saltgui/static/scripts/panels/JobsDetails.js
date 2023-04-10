@@ -265,6 +265,12 @@ export class JobsDetailsPanel extends JobsPanel {
       "no results", "{0} result", "{0} results");
     detailsHTML += "</span>";
 
+    if (keyCount < pData.Minions.length) {
+      detailsHTML += ", <span style='color: red'>";
+      detailsHTML += pData.Minions.length - keyCount;
+      detailsHTML += " missing</span>";
+    }
+
     const summary = {};
     for (const minionId in pData.Result) {
       const result = pData.Result[minionId];

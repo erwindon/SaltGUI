@@ -109,6 +109,14 @@ export class JobsPanel extends Panel {
       // we show the tooltip here so that the user is invited to click on this
       // the user then sees other rows being updated without becoming invisible
       Utils.addToolTip(statusField, "Click to refresh column");
+
+      // remove the refresh button when it is still there
+      // needed when not all minions have reported their status
+      // but also there are no jobs running anymore
+      const detailsField = tr.querySelector("#status" + tr.dataset.jobid);
+      if (detailsField) {
+        detailsField.remove();
+      }
     }
   }
 
