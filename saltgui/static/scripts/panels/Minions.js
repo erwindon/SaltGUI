@@ -666,13 +666,12 @@ export class MinionsPanel extends Panel {
         txt += MinionsPanel._addCveList("salt-minion", minionVersion, minionBugs, allCveKeys);
 
         if (outcome === "Minion requires update") {
-          txt += "\nThis salt-minion (" + minionVersion + ") is older than the salt-master (" + masterVersion + ")";
+          txt += "\nThis salt-minion (" + minionVersion + ") is older than the salt-master (" + masterVersion + ")\nUpgrade minion is highly recommended!";
         } else if (outcome === "Minion newer than master") {
-          txt += "\nThis salt-minion (" + minionVersion + ") is newer than the salt-master (" + masterVersion + ")";
+          txt += "\nThis salt-minion (" + minionVersion + ") is newer than the salt-master (" + masterVersion + ")\nDowngrade minion is highly recommended!";
         }
 
         if (txt) {
-          txt += "\nUpgrade is highly recommended!";
           if (allCveKeys.length > 0) {
             txt += "\nClick to show these CVEs on cve.mitre.org";
             versionSpan.addEventListener("click", (pClickEvent) => {
