@@ -673,6 +673,9 @@ export class MinionsPanel extends Panel {
 
         if (txt) {
           if (allCveKeys.length > 0) {
+            if (Object.keys(masterBugs).length) {
+              txt += "\nUpgrade master is highly recommended!"
+            }
             txt += "\nClick to show these CVEs on cve.mitre.org";
             versionSpan.addEventListener("click", (pClickEvent) => {
               let url = "https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=";
