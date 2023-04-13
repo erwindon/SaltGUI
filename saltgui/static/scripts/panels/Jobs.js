@@ -5,15 +5,11 @@ import {Utils} from "../Utils.js";
 
 export class JobsPanel extends Panel {
 
-  constructor (pKey) {
-    super(pKey);
-
+  onShow (cnt) {
     // collect the list of hidden/shown functions
     this._showJobs = Utils.getStorageItemList("session", "show_jobs");
     this._hideJobs = Utils.getStorageItemList("session", "hide_jobs");
-  }
 
-  onShow (cnt) {
     const runnerJobsListJobsPromise = this.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.api.getRunnerJobsActive();
 
