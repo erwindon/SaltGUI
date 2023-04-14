@@ -199,7 +199,6 @@ export class Output {
     fractionSecondsPart = fractionSecondsPart.replace(/^.*[.]/, "");
     // remove everything after the digits
     fractionSecondsPart = fractionSecondsPart.replace(/[^0-9].*$/, "");
-    let originalFractionSecondsPart = fractionSecondsPart;
     // truncate digits to maximum length
     fractionSecondsPart = fractionSecondsPart.substring(0, dateTimeFractionDigits);
 
@@ -207,9 +206,6 @@ export class Output {
     const decimalSeparator = 1.1.toLocaleString().substring(1, 2);
     if (fractionSecondsPart !== "") {
       fractionSecondsPart = decimalSeparator + fractionSecondsPart;
-    }
-    if (originalFractionSecondsPart !== "") {
-      originalFractionSecondsPart = decimalSeparator + originalFractionSecondsPart;
     }
 
     // remove the fraction from the original
