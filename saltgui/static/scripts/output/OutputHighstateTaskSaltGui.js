@@ -110,7 +110,7 @@ export class OutputHighstateTaskSaltGui {
     taskDiv.append(document.createTextNode(pTaskName));
 
     if (pTaskId && pTaskId !== pTaskName) {
-      taskDiv.append(document.createTextNode(" id=" + encodeURIComponent(pTaskId)));
+      taskDiv.append(document.createTextNode(" id=[" + pTaskId + "]"));
     }
 
     if (pTask.__sls__) {
