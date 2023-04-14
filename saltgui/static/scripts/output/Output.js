@@ -300,16 +300,9 @@ export class Output {
     }
 
     if (pDateTimeField) {
-      utcDT = dateObj.toLocaleString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
-      // place the milliseconds after the seconds (before am/pm indicator and timezone)
-      utcDT = utcDT.replace(/( [a-zA-Z.]*)? [-A-Z0-9]*$/, originalFractionSecondsPart + "$&");
-      localDT = dateObj.toLocaleString(undefined, {"timeZoneName": "short"});
-      localDT = localDT.replace(/( [a-zA-Z.]*)? [-A-Z0-9]*$/, originalFractionSecondsPart + "$&");
       pDateTimeField.innerText = ret;
-      const txt = utcDT + "\n" + localDT;
-      if (txt.search("Invalid") < 0) {
-        Utils.addToolTip(pDateTimeField, txt, pDateTimeStyle);
-      }
+      const txt = utcDTms + " UTC\n" + localDTms + " " + localTZ;
+      Utils.addToolTip(pDateTimeField, txt, pDateTimeStyle);
     }
 
     return ret;
