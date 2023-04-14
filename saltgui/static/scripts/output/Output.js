@@ -165,7 +165,7 @@ export class Output {
   // some older browsers cannot produce formatted datetime this way
   // toLocaleString/toLocaleTimeString then return "Invalid Date"
   // silently ignore that, provide an alternative and then do not produce a tooltip
-  static dateTimeStr (pDtStr, pDateTimeField = null, pDateTimeStyle = "bottom-center", pTimeOnly = false) {
+  static dateTimeStr (pDtStr, pDateTimeField = null, pDateTimeStyle = "bottom-left", pTimeOnly = false) {
 
     // no available setting, then return the original
     let dateTimeFractionDigits = Utils.getStorageItemInteger("session", "datetime_fraction_digits", 6);
