@@ -6,7 +6,7 @@ The version tagged `release` is the latest released version. The version `master
 
 See [SaltGUI documentation](https://erwindon.github.io/SaltGUI/) for the complete documentation.
 
-IMPORTANT: since Salt version 3006, it is needed to add option `netapi_enable_clients` to allow salt-api - and thus SaltGUI - to work. See also https://docs.saltproject.io/en/3006.0/topics/netapi/netapi-enable-clients.html#netapi-enable-clients.
+IMPORTANT: since Salt version 3006, it is needed to add option `netapi_enable_clients` to allow salt-api - and thus SaltGUI - to work. See also [netapi-enable-clients.html](https://docs.saltproject.io/en/3006.0/topics/netapi/netapi-enable-clients.html#netapi-enable-clients).
 
 
 ## Screenshots
