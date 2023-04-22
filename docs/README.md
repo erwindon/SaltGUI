@@ -6,7 +6,7 @@ The version tagged `release` is the latest released version. The version `master
 
 See [SaltGUI documentation](https://erwindon.github.io/SaltGUI/) for the complete documentation.
 
-IMPORTANT: since Salt version 3006, it is needed to add option `netapi_enable_clients` to allow salt-api - and thus SaltGUI - to work. See also https://docs.saltproject.io/en/3006.0/topics/netapi/netapi-enable-clients.html#netapi-enable-clients. More detailsed documentation will be added here once 3006.0 is available in regular distributions.
+IMPORTANT: since Salt version 3006, it is needed to add option `netapi_enable_clients` to allow salt-api - and thus SaltGUI - to work. See also https://docs.saltproject.io/en/3006.0/topics/netapi/netapi-enable-clients.html#netapi-enable-clients.
 
 
 ## Screenshots
@@ -48,6 +48,13 @@ external_auth:
             - '@runner'
             - '@wheel'
             - '@jobs'
+
+# for SaltStack 3006 and higher
+netapi_enable_clients:
+    - local
+    - local_async
+    - runner
+    - wheel
 ```
 - See [Permissions](docs/PERMISSIONS.md) for more restricted security configurations.
 - The username 'saltuser1' is only an example. Generic accounts are not recommended, use personal accounts instead. Or use a user-group, see [EAUTH](https://docs.saltproject.io/en/latest/topics/eauth/index.html) for details.
