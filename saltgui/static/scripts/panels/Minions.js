@@ -521,7 +521,7 @@ export class MinionsPanel extends Panel {
       ["CVE-2022-22967", MASTER, ["3004", "[0-1]"]]
     ];
 
-    // the above table is up-to-date until (including) 3006
+    // the above table is up-to-date until (including) 3006.1
   }
 
   static _getCveBugs (pVersion, pNodeType) {
