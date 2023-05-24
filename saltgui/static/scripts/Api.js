@@ -430,6 +430,7 @@ export class API {
         Router.pillarsMinionPage.handleSaltJobRetEvent(data);
         Router.beaconsPage.handleSaltJobRetEvent(data);
         Router.beaconsMinionPage.handleSaltJobRetEvent(data);
+        Router.nodegroupsPage.handleSaltJobRetEvent(data);
         Router.jobsPage.handleSaltJobRetEvent(data);
         Router.templatesPage.handleSaltJobRetEvent(data);
         Router.reactorsPage.handleSaltJobRetEvent(data);
