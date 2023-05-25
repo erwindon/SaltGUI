@@ -11,8 +11,8 @@ export class NodegroupsPanel extends Panel {
 
     this.addTitle("Nodegroups");
     this.addPanelMenu();
-    this._addMenuItemStateApply(this.panelMenu, "*");
-    this._addMenuItemStateApplyTest(this.panelMenu, "*");
+    this._addMenuItemStateApplyMinion(this.panelMenu, "*");
+    this._addMenuItemStateApplyTestMinion(this.panelMenu, "*");
     this.addSearchButton();
     this.addTable(["Minion", "Status", "Salt version", "OS version", "-menu-"]);
     this.setTableSortable("Minion", "asc");
@@ -50,22 +50,31 @@ export class NodegroupsPanel extends Panel {
 
   _addNodegroupsRows () {
     const nodegroups = Utils.getStorageItemObject("session", "nodegroups");
-    for (const nodegroup of Object.keys(nodegroups).sort()) {
+    const allNodegroups = Object.keys(nodegroups).sort();
+    for (const nodegroup of allNodegroups) {
       this._addNodegroupRow(nodegroup);
     }
-    this._addNodegroupRow(null);
+    this._addNodegroupRow(null, allNodegroups);
   }
 
-  _addNodegroupRow (pNodegroup) {
-    const td = Utils.createTd(null, null, "ng-" + pNodegroup);
-    if (pNodegroup) {
-      td.innerHTML = "--- nodegroup <b>" + pNodegroup + "</b> ---";
-    } else {
-      td.innerText = "--- not in any nodegroup ---";
-    }
-    td.colSpan = 5;
+  _addNodegroupRow (pNodegroup, pAllNodegroups) {
     const tr = Utils.createTr();
-    tr.append(td);
+
+    const titleTd = Utils.createTd(null, null, "ng-" + pNodegroup);
+    if (pNodegroup) {
+      titleTd.innerHTML = "--- nodegroup <b>" + pNodegroup + "</b> ---";
+    } else {
+      titleTd.innerText = "--- not in any nodegroup ---";
+    }
+    titleTd.colSpan = 4;
+    tr.append(titleTd);
+
+    const menuTd = Utils.createTd();
+    const menu = new DropDownMenu(menuTd, true);
+    this._addMenuItemStateApplyGroup(menu, pNodegroup, pAllNodegroups);
+    this._addMenuItemStateApplyTestGroup(menu, pNodegroup, pAllNodegroups);
+    tr.append(menuTd);
+
     this.table.tBodies[0].appendChild(tr);
   }
 
@@ -82,8 +91,8 @@ export class NodegroupsPanel extends Panel {
 
       // preliminary dropdown menu
       const menu = new DropDownMenu(minionTr, true);
-      this._addMenuItemStateApply(menu, minionId);
-      this._addMenuItemStateApplyTest(menu, minionId);
+      this._addMenuItemStateApplyMinion(menu, minionId);
+      this._addMenuItemStateApplyTestMinion(menu, minionId);
       this._addMenuItemShowGrains(menu, minionId);
       this._addMenuItemShowPillars(menu, minionId);
       this._addMenuItemShowSchedules(menu, minionId);
@@ -107,8 +116,8 @@ export class NodegroupsPanel extends Panel {
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
     const menu = new DropDownMenu(minionTr, true);
-    this._addMenuItemStateApply(menu, pMinionId);
-    this._addMenuItemStateApplyTest(menu, pMinionId);
+    this._addMenuItemStateApplyMinion(menu, pMinionId);
+    this._addMenuItemStateApplyTestMinion(menu, pMinionId);
     this._addMenuItemShowGrains(menu, pMinionId);
     this._addMenuItemShowPillars(menu, pMinionId);
     this._addMenuItemShowSchedules(menu, pMinionId);
@@ -121,14 +130,43 @@ export class NodegroupsPanel extends Panel {
     });
   }
 
-  _addMenuItemStateApply (pMenu, pMinionId) {
+  static _getGroupTarget (pNodegroup, pAllNodegroups) {
+    if (pNodegroup) {
+      // could have use the '#' notation, but this is more native
+      return "N@" + pNodegroup;
+    }
+
+    let ret = "";
+    for (const nodegroup of pAllNodegroups) {
+      ret += " and not N@" + nodegroup;
+    }
+
+    // strip first " and "
+    return ret.substring(5);
+  }
+
+  _addMenuItemStateApplyGroup (pMenu, pNodegroup, pAllNodegroups) {
+    pMenu.addMenuItem("Apply state...", () => {
+      const cmdArr = ["state.apply"];
+      this.runCommand("", NodegroupsPanel._getGroupTarget(pNodegroup, pAllNodegroups), cmdArr);
+    });
+  }
+
+  _addMenuItemStateApplyTestGroup (pMenu, pNodegroup, pAllNodegroups) {
+    pMenu.addMenuItem("Test state...", () => {
+      const cmdArr = ["state.apply", "test=", true];
+      this.runCommand("", NodegroupsPanel._getGroupTarget(pNodegroup, pAllNodegroups), cmdArr);
+    });
+  }
+
+  _addMenuItemStateApplyMinion (pMenu, pMinionId) {
     pMenu.addMenuItem("Apply state...", () => {
       const cmdArr = ["state.apply"];
       this.runCommand("", pMinionId, cmdArr);
     });
   }
 
-  _addMenuItemStateApplyTest (pMenu, pMinionId) {
+  _addMenuItemStateApplyTestMinion (pMenu, pMinionId) {
     pMenu.addMenuItem("Test state...", () => {
       const cmdArr = ["state.apply", "test=", true];
       this.runCommand("", pMinionId, cmdArr);
