@@ -177,6 +177,16 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
+  getLocalTestPing (pNodegroup) {
+    const params = {
+      "client": "local",
+      "fun": "test.ping",
+      "tgt": "N@" + pNodegroup,
+      "tgt_type": "compound"
+    };
+    return this.apiRequest("POST", "/", params);
+  }
+
   getLocalTestProviders () {
     const params = {
       "client": "local",

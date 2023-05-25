@@ -33,6 +33,9 @@ export class NodegroupsPanel extends Panel {
 
       localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
         this.updateMinions(pLocalGrainsItemsData);
+        window.setTimeout(() => {
+          this._handleStep();
+        }, 100);
         return true;
       }, (pLocalGrainsItemsMsg) => {
         const allNodegroupsErr = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, JSON.stringify(pLocalGrainsItemsMsg));
@@ -48,9 +51,58 @@ export class NodegroupsPanel extends Panel {
     });
   }
 
+  _moveMinionToNodegroup (pMinionId, pNodegroup) {
+    const minionTrId = Utils.getIdFromMinionId(pMinionId);
+    const minionTr = this.table.querySelector("#" + minionTrId);
+    const nodegroupTrId = "ng-" + pNodegroup;
+    const nodegroupTr = this.table.querySelector("#" + nodegroupTrId);
+    if (minionTr.dataset.moved) {
+      // this minion is already part of a group
+      // duplicate it to put it in its 2nd (3rd,etc) group
+      const minionTr2 = minionTr.cloneNode(true);
+      nodegroupTr.parentNode.insertBefore(minionTr2, nodegroupTr.nextSibling);
+    } else {
+      // move the row to its proper place
+      nodegroupTr.parentNode.insertBefore(minionTr, nodegroupTr.nextSibling);
+      minionTr.dataset.moved = true;
+    }
+  }
+
+  _handleStep () {
+    if (!this.allNodegroups) {
+      return;
+    }
+
+    if (this.allNodegroups.length === 0) {
+      this.allNodegroups = null;
+      return;
+    }
+
+    const nodegroup = this.allNodegroups.shift();
+
+    const localTestPing = this.api.getLocalTestPing(nodegroup);
+    localTestPing.then((pLocalTestPingData) => {
+      // handle the list in reverse order
+      const nodelist = Object.keys(pLocalTestPingData.return[0]).sort().
+        reverse();
+
+      for (const minionId of nodelist) {
+        this._moveMinionToNodegroup(minionId, nodegroup);
+      }
+
+      // try again for more
+      window.setTimeout(() => {
+        this._handleStep();
+      }, 100);
+    }, (pLocalTestPingMsg) => {
+      this.showErrorRowInstead(pLocalTestPingMsg.toString());
+    });
+  }
+
   _addNodegroupsRows () {
     const nodegroups = Utils.getStorageItemObject("session", "nodegroups");
     const allNodegroups = Object.keys(nodegroups).sort();
+    this.allNodegroups = allNodegroups;
     for (const nodegroup of allNodegroups) {
       this._addNodegroupRow(nodegroup);
     }
@@ -58,9 +110,9 @@ export class NodegroupsPanel extends Panel {
   }
 
   _addNodegroupRow (pNodegroup, pAllNodegroups) {
-    const tr = Utils.createTr();
+    const tr = Utils.createTr(null, null, "ng-" + pNodegroup);
 
-    const titleTd = Utils.createTd(null, null, "ng-" + pNodegroup);
+    const titleTd = Utils.createTd();
     if (pNodegroup) {
       titleTd.innerHTML = "--- nodegroup <b>" + pNodegroup + "</b> ---";
     } else {
