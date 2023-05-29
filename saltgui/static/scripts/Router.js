@@ -39,25 +39,25 @@ export class Router {
     Router.currentPage = undefined;
 
     this._registerPage(new LoginPage(this));
-    this._registerPage(this.minionsPage = new MinionsPage(this));
-    this._registerPage(this.keysPage = new KeysPage(this));
-    this._registerPage(this.grainsPage = new GrainsPage(this));
-    this._registerPage(this.grainsMinionPage = new GrainsMinionPage(this));
-    this._registerPage(this.schedulesPage = new SchedulesPage(this));
-    this._registerPage(this.schedulesMinionPage = new SchedulesMinionPage(this));
-    this._registerPage(this.pillarsPage = new PillarsPage(this));
-    this._registerPage(this.pillarsMinionPage = new PillarsMinionPage(this));
-    this._registerPage(this.beaconsPage = new BeaconsPage(this));
-    this._registerPage(this.beaconsMinionPage = new BeaconsMinionPage(this));
-    this._registerPage(this.jobPage = new JobPage(this));
-    this._registerPage(this.jobsPage = new JobsPage(this));
-    this._registerPage(this.highStatePage = new HighStatePage(this));
-    this._registerPage(this.templatesPage = new TemplatesPage(this));
-    this._registerPage(this.eventsPage = new EventsPage(this));
-    this._registerPage(this.reactorsPage = new ReactorsPage(this));
-    this._registerPage(this.optionsPage = new OptionsPage(this));
-    this._registerPage(this.issuesPage = new IssuesPage(this));
-    this._registerPage(new LogoutPage(this));
+    this._registerPage(Router.minionsPage = new MinionsPage(this));
+    this._registerPage(Router.keysPage = new KeysPage(this));
+    this._registerPage(Router.grainsPage = new GrainsPage(this));
+    this._registerPage(Router.grainsMinionPage = new GrainsMinionPage(this));
+    this._registerPage(Router.schedulesPage = new SchedulesPage(this));
+    this._registerPage(Router.schedulesMinionPage = new SchedulesMinionPage(this));
+    this._registerPage(Router.pillarsPage = new PillarsPage(this));
+    this._registerPage(Router.pillarsMinionPage = new PillarsMinionPage(this));
+    this._registerPage(Router.beaconsPage = new BeaconsPage(this));
+    this._registerPage(Router.beaconsMinionPage = new BeaconsMinionPage(this));
+    this._registerPage(Router.jobPage = new JobPage(this));
+    this._registerPage(Router.jobsPage = new JobsPage(this));
+    this._registerPage(Router.highStatePage = new HighStatePage(this));
+    this._registerPage(Router.templatesPage = new TemplatesPage(this));
+    this._registerPage(Router.eventsPage = new EventsPage(this));
+    this._registerPage(Router.reactorsPage = new ReactorsPage(this));
+    this._registerPage(Router.optionsPage = new OptionsPage(this));
+    this._registerPage(Router.issuesPage = new IssuesPage(this));
+    this._registerPage(Router.logoutPage = new LogoutPage(this));
 
     this._registerRouterEventListeners();
 
@@ -181,7 +181,7 @@ export class Router {
     this._registerMenuItem(null, "jobs", "jobs");
     this._registerMenuItem("jobs", "highstate", "highstate");
     this._registerMenuItem("jobs", "templates", "templates");
-    this._registerMenuItem(null, "events", "eventsview");
+    this._registerMenuItem(null, "events", "events");
     this._registerMenuItem("events", "reactors", "reactors");
     this._registerMenuItem(null, "issues", "issues");
     this._registerMenuItem(null, "logout", "logout");
@@ -207,18 +207,23 @@ export class Router {
     return ret;
   }
 
-  static _showMenuItem (pPages, pName, pChildren = []) {
+  static _showMenuItem (pPages, pPage, pChildren = []) {
     // assume the best
     let visible = true;
 
     // do not show unwanted menu items
     // Arrays.includes() is only available from ES7/2016
-    if (pPages.length && pPages.indexOf(pName) < 0) {
+    if (pPages.length && pPages.indexOf(pPage.path) < 0) {
+      visible = false;
+    }
+
+    // do not show pages that have no actual content
+    if (!pPage.isVisible()) {
       visible = false;
     }
 
     // force visibility of the logout menuitem
-    if (pName === "logout") {
+    if (pPage.path === "logout") {
       visible = true;
     }
 
@@ -234,7 +239,7 @@ export class Router {
 
     // perform the hiding/showing
     for (let nr = 1; nr <= 2; nr++) {
-      const item = document.getElementById("button-" + pName + nr);
+      const item = document.getElementById("button-" + pPage.path + nr);
       item.style.color = !visible && hasVisibleChild ? "lightgray" : "black";
       if (visible || hasVisibleChild) {
         item.classList.remove("menu-item-hidden");
@@ -247,19 +252,19 @@ export class Router {
   static updateMainMenu () {
     const pages = Router._getPagesList();
 
-    Router._showMenuItem(pages, "minions", ["grains", "schedules", "pillars", "beacons"]);
-    Router._showMenuItem(pages, "grains");
-    Router._showMenuItem(pages, "schedules");
-    Router._showMenuItem(pages, "pillars");
-    Router._showMenuItem(pages, "beacons");
-    Router._showMenuItem(pages, "keys");
-    Router._showMenuItem(pages, "jobs", ["highstate", "templates"]);
-    Router._showMenuItem(pages, "highstate");
-    Router._showMenuItem(pages, "templates");
-    Router._showMenuItem(pages, "issues");
-    Router._showMenuItem(pages, "events", ["reactors"]);
-    Router._showMenuItem(pages, "reactors");
-    Router._showMenuItem(pages, "logout");
+    Router._showMenuItem(pages, Router.minionsPage, ["grains", "schedules", "pillars", "beacons"]);
+    Router._showMenuItem(pages, Router.grainsPage);
+    Router._showMenuItem(pages, Router.schedulesPage);
+    Router._showMenuItem(pages, Router.pillarsPage);
+    Router._showMenuItem(pages, Router.beaconsPage);
+    Router._showMenuItem(pages, Router.keysPage);
+    Router._showMenuItem(pages, Router.jobsPage, ["highstate", "templates"]);
+    Router._showMenuItem(pages, Router.highStatePage);
+    Router._showMenuItem(pages, Router.templatesPage);
+    Router._showMenuItem(pages, Router.issuesPage);
+    Router._showMenuItem(pages, Router.eventsPage, ["reactors"]);
+    Router._showMenuItem(pages, Router.reactorsPage);
+    Router._showMenuItem(pages, Router.logoutPage);
   }
 
   // pForward = 0 --> normal navigation
@@ -336,7 +341,7 @@ export class Router {
         // backward navigation from browser
         // do nothing extra
       }
-      this._showPage(route);
+      Router._showPage(route);
       return;
     }
 
@@ -349,7 +354,7 @@ export class Router {
     this.goTo("");
   }
 
-  _showPage (pPage) {
+  static _showPage (pPage) {
     pPage.clearPage();
 
     pPage.pageElement.style.display = "";
@@ -381,7 +386,7 @@ export class Router {
 
     // start the event-pipe (again)
     // it is either not started, or needs restarting
-    API.getEvents(this);
+    API.getEvents();
 
     if (Router.currentPage && Router.currentPage !== pPage) {
       Router._hidePage(Router.currentPage);

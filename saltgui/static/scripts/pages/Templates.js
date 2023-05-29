@@ -20,9 +20,11 @@ export class TemplatesPage extends Page {
     this.jobs.handleSaltJobRetEvent(pData);
   }
 
-  static isVisible () {
+  /* eslint-disable class-methods-use-this */
+  isVisible () {
+  /* eslint-enable class-methods-use-this */
     // show template menu item if templates defined
-    const templatesText = Utils.getStorageItem("session", "templates", "");
-    return templatesText;
+    const templates = Utils.getStorageItemObject("session", "templates");
+    return Object.keys(templates).length > 0;
   }
 }

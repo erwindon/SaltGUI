@@ -40,7 +40,9 @@ export class Page {
     this.panels.push(pPanel);
   }
 
-  static isVisible () {
+  /* eslint-disable class-methods-use-this */
+  isVisible () {
+  /* eslint-enable class-methods-use-this */
     // a page is visible, unless the page decides otherwise
     return true;
   }

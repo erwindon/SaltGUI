@@ -1,6 +1,7 @@
 /* global config */
 
 import {CommandBox} from "./CommandBox.js";
+import {Router} from "./Router.js";
 import {Utils} from "./Utils.js";
 
 export class HTTPError extends Error {
@@ -344,7 +345,7 @@ export class API {
       });
   }
 
-  static getEvents (pRouter) {
+  static getEvents () {
     const tokenOnSetup = Utils.getStorageItem("session", "token");
     if (!tokenOnSetup) {
       return;
@@ -409,38 +410,38 @@ export class API {
       // salt/beacon/<minion>/<beacon>/
       if (tag.startsWith("salt/beacon/")) {
         // new beacon-value is received
-        pRouter.beaconsMinionPage.handleSaltBeaconEvent(tag, data);
+        Router.beaconsMinionPage.handleSaltBeaconEvent(tag, data);
       } else if (tag === "salt/auth") {
         // new key has been received
-        pRouter.keysPage.handleSaltAuthEvent(data);
+        Router.keysPage.handleSaltAuthEvent(data);
       } else if (tag === "salt/key") {
-        pRouter.keysPage.handleSaltKeyEvent(data);
+        Router.keysPage.handleSaltKeyEvent(data);
       } else if (tag.startsWith("salt/job/") && tag.includes("/ret/")) {
         // return value
         CommandBox.handleSaltJobRetEvent(tag, data);
-        pRouter.keysPage.handleSaltJobRetEvent(data);
-        pRouter.jobPage.handleSaltJobRetEvent(data);
-        pRouter.minionsPage.handleSaltJobRetEvent(data);
-        pRouter.grainsPage.handleSaltJobRetEvent(data);
-        pRouter.grainsMinionPage.handleSaltJobRetEvent(data);
-        pRouter.schedulesPage.handleSaltJobRetEvent(data);
-        pRouter.schedulesMinionPage.handleSaltJobRetEvent(data);
-        pRouter.pillarsPage.handleSaltJobRetEvent(data);
-        pRouter.pillarsMinionPage.handleSaltJobRetEvent(data);
-        pRouter.beaconsPage.handleSaltJobRetEvent(data);
-        pRouter.beaconsMinionPage.handleSaltJobRetEvent(data);
-        pRouter.jobsPage.handleSaltJobRetEvent(data);
-        pRouter.templatesPage.handleSaltJobRetEvent(data);
-        pRouter.reactorsPage.handleSaltJobRetEvent(data);
-        pRouter.highStatePage.handleSaltJobRetEvent(data);
+        Router.keysPage.handleSaltJobRetEvent(data);
+        Router.jobPage.handleSaltJobRetEvent(data);
+        Router.minionsPage.handleSaltJobRetEvent(data);
+        Router.grainsPage.handleSaltJobRetEvent(data);
+        Router.grainsMinionPage.handleSaltJobRetEvent(data);
+        Router.schedulesPage.handleSaltJobRetEvent(data);
+        Router.schedulesMinionPage.handleSaltJobRetEvent(data);
+        Router.pillarsPage.handleSaltJobRetEvent(data);
+        Router.pillarsMinionPage.handleSaltJobRetEvent(data);
+        Router.beaconsPage.handleSaltJobRetEvent(data);
+        Router.beaconsMinionPage.handleSaltJobRetEvent(data);
+        Router.jobsPage.handleSaltJobRetEvent(data);
+        Router.templatesPage.handleSaltJobRetEvent(data);
+        Router.reactorsPage.handleSaltJobRetEvent(data);
+        Router.highStatePage.handleSaltJobRetEvent(data);
       } else if (tag.startsWith("salt/job/") && tag.includes("/prog/")) {
         // progress value (exists only for states)
         CommandBox.handleSaltJobProgEvent(tag, data);
       } else if (tag.startsWith("syndic/")) {
-        pRouter.keysPage.handleSyndicEvent();
+        Router.keysPage.handleSyndicEvent();
       }
 
-      pRouter.eventsPage.handleAnyEvent(tag, data);
+      Router.eventsPage.handleAnyEvent(tag, data);
     };
   }
 }
