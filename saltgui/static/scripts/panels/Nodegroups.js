@@ -109,6 +109,10 @@ export class NodegroupsPanel extends Panel {
       titleElement.innerHTML = titleElement.innerHTML.replace(
         " ---",
         ", " + Utils.txtZeroOneMany(cnt, "no minions", cnt + " minion", cnt + " minions") + " ---");
+      if (cnt === 0) {
+        // remove the title of the empty group "not in any nodegroup"
+        titleElement.parentElement.remove();
+      }
 
       return;
     }
