@@ -177,22 +177,17 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getLocalTestPing (pNodegroup) {
+  getLocalTestProviders (pNodegroup) {
     const params = {
       "client": "local",
-      "fun": "test.ping",
-      "tgt": "N@" + pNodegroup,
-      "tgt_type": "compound"
+      "fun": "test.providers"
     };
-    return this.apiRequest("POST", "/", params);
-  }
-
-  getLocalTestProviders () {
-    const params = {
-      "client": "local",
-      "fun": "test.providers",
-      "tgt": "*"
-    };
+    if (pNodegroup) {
+      params["tgt"] = "N@" + pNodegroup;
+      params["tgt_type"] = "compound";
+    } else {
+      params["tgt"] = "*";
+    }
     return this.apiRequest("POST", "/", params);
   }
 

@@ -15,7 +15,6 @@ export class NodegroupsPanel extends Panel {
     this._addMenuItemStateApplyTestMinion(this.panelMenu, "*");
     this.addSearchButton();
     this.addTable(["Minion", "Status", "Salt version", "OS version", "-menu-"]);
-    this.setTableSortable("Minion", "asc");
     this.setTableClickable();
     this.addMsg();
   }
@@ -61,6 +60,35 @@ export class NodegroupsPanel extends Panel {
       // duplicate it to put it in its 2nd (3rd,etc) group
       const minionTr2 = minionTr.cloneNode(true);
       nodegroupTr.parentNode.insertBefore(minionTr2, nodegroupTr.nextSibling);
+
+      // fix the click-to-copy-logic
+      const addressSpan = minionTr2.querySelector("td.address span");
+      addressSpan.addEventListener("click", (pClickEvent) => {
+        Panel._copyAddress(addressSpan, pClickEvent.ctrlKey || pClickEvent.altKey);
+        pClickEvent.stopPropagation();
+      });
+      addressSpan.addEventListener("mouseout", () => {
+        Panel.restoreClickToCopy(addressSpan);
+      });
+      Panel.restoreClickToCopy(addressSpan);
+
+      // fix the row menu
+      const oldMenuButton = minionTr2.querySelector("td div.run-command-button");
+      oldMenuButton.parentElement.remove();
+      const menu = new DropDownMenu(minionTr2, true);
+      this._addMenuItemStateApplyMinion(menu, pMinionId);
+      this._addMenuItemStateApplyTestMinion(menu, pMinionId);
+      this._addMenuItemShowGrains(menu, pMinionId);
+      this._addMenuItemShowPillars(menu, pMinionId);
+      this._addMenuItemShowSchedules(menu, pMinionId);
+      this._addMenuItemShowBeacons(menu, pMinionId);
+
+      // fix the row
+      minionTr2.addEventListener("click", (pClickEvent) => {
+        const cmdArr = ["state.apply"];
+        this.runCommand("", pMinionId, cmdArr);
+        pClickEvent.stopPropagation();
+      });
     } else {
       // move the row to its proper place
       nodegroupTr.parentNode.insertBefore(minionTr, nodegroupTr.nextSibling);
@@ -80,10 +108,11 @@ export class NodegroupsPanel extends Panel {
 
     const nodegroup = this.allNodegroups.shift();
 
-    const localTestPing = this.api.getLocalTestPing(nodegroup);
-    localTestPing.then((pLocalTestPingData) => {
+    // test group membership with function that is typically hidden
+    const localTestProviders = this.api.getLocalTestProviders(nodegroup);
+    localTestProviders.then((pLocalTestProvidersData) => {
       // handle the list in reverse order
-      const nodelist = Object.keys(pLocalTestPingData.return[0]).sort().
+      const nodelist = Object.keys(pLocalTestProvidersData.return[0]).sort().
         reverse();
 
       for (const minionId of nodelist) {
@@ -94,8 +123,8 @@ export class NodegroupsPanel extends Panel {
       window.setTimeout(() => {
         this._handleStep();
       }, 100);
-    }, (pLocalTestPingMsg) => {
-      this.showErrorRowInstead(pLocalTestPingMsg.toString());
+    }, (pLocalTestProvidersMsg) => {
+      this.showErrorRowInstead(pLocalTestProvidersMsg.toString());
     });
   }
 
@@ -126,6 +155,12 @@ export class NodegroupsPanel extends Panel {
     this._addMenuItemStateApplyGroup(menu, pNodegroup, pAllNodegroups);
     this._addMenuItemStateApplyTestGroup(menu, pNodegroup, pAllNodegroups);
     tr.append(menuTd);
+
+    tr.addEventListener("click", (pClickEvent) => {
+      const cmdArr = ["state.apply"];
+      this.runCommand("", NodegroupsPanel._getGroupTarget(pNodegroup, pAllNodegroups), cmdArr);
+      pClickEvent.stopPropagation();
+    });
 
     this.table.tBodies[0].appendChild(tr);
   }
