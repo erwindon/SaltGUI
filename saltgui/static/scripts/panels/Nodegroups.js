@@ -15,9 +15,12 @@ export class NodegroupsPanel extends Panel {
     this._addMenuItemStateApplyMinion(this.panelMenu, "*");
     this._addMenuItemStateApplyTestMinion(this.panelMenu, "*");
     this.addSearchButton();
+    this.addPlayPauseButton();
     this.addTable(["Minion", "Status", "Salt version", "OS version", "-menu-"]);
     this.setTableClickable();
     this.addMsg();
+
+    this.setPlayPauseButton("play");
   }
 
   onShow () {
@@ -49,6 +52,18 @@ export class NodegroupsPanel extends Panel {
       Utils.ignorePromise(localGrainsItemsPromise);
       return false;
     });
+  }
+
+  updateFooter () {
+    const txt = Utils.txtZeroOneMany(this.minionsCnt,
+      "No minions", "{0} minion", "{0} minions");
+
+    // see https://github.com/erwindon/SaltGUI/issues/517
+    // const nodegroups = Utils.getStorageItemObject("session", "nodegroups");
+    // txt += ", " + Utils.txtZeroOneMany(Object.keys(nodegroups).length,
+    //   "no nodegroups", "{0} nodegroup", "{0} nodegroups");
+
+    this.setMsg(txt);
   }
 
   _moveMinionToNodegroup (pMinionId, pNodegroup) {
@@ -98,11 +113,19 @@ export class NodegroupsPanel extends Panel {
   }
 
   _handleStep () {
-    if (!this.todoNodegroups) {
+
+    // user can decide
+    // system can decide to remove the play/pause button
+    if (this.playOrPause !== "play") {
+      // try again lkater for more
+      window.setTimeout(() => {
+        this._handleStep();
+      }, 100);
       return;
     }
 
     if (this.todoNodegroups.length === 0) {
+      this.setPlayPauseButton("none");
       this.todoNodegroups = null;
 
       const titleElement = this.table.querySelector("#ng-" + null + " td");
@@ -204,14 +227,8 @@ export class NodegroupsPanel extends Panel {
 
     Utils.setStorageItem("session", "minions_pre_length", keys.minions_pre.length);
 
-    let txt = Utils.txtZeroOneMany(minionIds.length,
-      "No minions", "{0} minion", "{0} minions");
-
-    const nodegroups = Utils.getStorageItemObject("session", "nodegroups");
-    txt += ", " + Utils.txtZeroOneMany(Object.keys(nodegroups).length,
-      "no nodegroups", "{0} nodegroup", "{0} nodegroups");
-
-    this.setMsg(txt);
+    this.minionsCnt = keys.minions.length;
+    this.updateFooter();
   }
 
   updateMinion (pMinionData, pMinionId, pAllNodegroupsGrains) {
