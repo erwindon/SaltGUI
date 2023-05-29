@@ -103,6 +103,13 @@ export class NodegroupsPanel extends Panel {
 
     if (this.allNodegroups.length === 0) {
       this.allNodegroups = null;
+
+      const titleElement = this.table.querySelector("#ng-" + null + " td");
+      const cnt = this.table.rows.length - titleElement.parentElement.rowIndex - 1;
+      titleElement.innerHTML = titleElement.innerHTML.replace(
+        " ---",
+        ", " + Utils.txtZeroOneMany(cnt, "no minions", cnt + " minion", cnt + " minions") + " ---");
+
       return;
     }
 
@@ -118,6 +125,12 @@ export class NodegroupsPanel extends Panel {
       for (const minionId of nodelist) {
         this._moveMinionToNodegroup(minionId, nodegroup);
       }
+
+      const titleElement = this.table.querySelector("#ng-" + nodegroup + " td");
+      const cnt = nodelist.length;
+      titleElement.innerHTML = titleElement.innerHTML.replace(
+        " ---",
+        ", " + Utils.txtZeroOneMany(cnt, "no minions", cnt + " minion", cnt + " minions") + " ---");
 
       // try again for more
       window.setTimeout(() => {
