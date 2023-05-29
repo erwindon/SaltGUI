@@ -97,12 +97,12 @@ export class NodegroupsPanel extends Panel {
   }
 
   _handleStep () {
-    if (!this.allNodegroups) {
+    if (!this.todoNodegroups) {
       return;
     }
 
-    if (this.allNodegroups.length === 0) {
-      this.allNodegroups = null;
+    if (this.todoNodegroups.length === 0) {
+      this.todoNodegroups = null;
 
       const titleElement = this.table.querySelector("#ng-" + null + " td");
       const cnt = this.table.rows.length - titleElement.parentElement.rowIndex - 1;
@@ -113,7 +113,7 @@ export class NodegroupsPanel extends Panel {
       return;
     }
 
-    const nodegroup = this.allNodegroups.shift();
+    const nodegroup = this.todoNodegroups.shift();
 
     // test group membership with function that is typically hidden
     const localTestProviders = this.api.getLocalTestProviders(nodegroup);
@@ -143,12 +143,12 @@ export class NodegroupsPanel extends Panel {
 
   _addNodegroupsRows () {
     const nodegroups = Utils.getStorageItemObject("session", "nodegroups");
-    const allNodegroups = Object.keys(nodegroups).sort();
-    this.allNodegroups = allNodegroups;
-    for (const nodegroup of allNodegroups) {
+    this.allNodegroups = Object.keys(nodegroups).sort();
+    this.todoNodegroups = Object.keys(nodegroups).sort();
+    for (const nodegroup of this.allNodegroups) {
       this._addNodegroupRow(nodegroup);
     }
-    this._addNodegroupRow(null, allNodegroups);
+    this._addNodegroupRow(null, this.allNodegroups);
   }
 
   _addNodegroupRow (pNodegroup, pAllNodegroups) {
