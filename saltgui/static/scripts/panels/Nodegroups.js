@@ -121,10 +121,10 @@ export class NodegroupsPanel extends Panel {
     const nodegroup = this.todoNodegroups.shift();
 
     // test group membership with function that is typically hidden
-    const localTestProviders = this.api.getLocalTestProviders(nodegroup);
-    localTestProviders.then((pLocalTestProvidersData) => {
+    const localTestVersion = this.api.getLocalTestVersion(nodegroup);
+    localTestVersion.then((pLocalTestVersionData) => {
       // handle the list in reverse order
-      const nodelist = Object.keys(pLocalTestProvidersData.return[0]).sort().
+      const nodelist = Object.keys(pLocalTestVersionData.return[0]).sort().
         reverse();
 
       for (const minionId of nodelist) {
@@ -141,8 +141,8 @@ export class NodegroupsPanel extends Panel {
       window.setTimeout(() => {
         this._handleStep();
       }, 100);
-    }, (pLocalTestProvidersMsg) => {
-      this.showErrorRowInstead(pLocalTestProvidersMsg.toString());
+    }, (pLocalTestVersionMsg) => {
+      this.showErrorRowInstead(pLocalTestVersionMsg.toString());
     });
   }
 

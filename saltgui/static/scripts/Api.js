@@ -177,17 +177,22 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getLocalTestProviders (pNodegroup) {
+  getLocalTestProviders () {
     const params = {
       "client": "local",
-      "fun": "test.providers"
+      "fun": "test.providers",
+      "tgt": "*"
     };
-    if (pNodegroup) {
-      params["tgt"] = "N@" + pNodegroup;
-      params["tgt_type"] = "compound";
-    } else {
-      params["tgt"] = "*";
-    }
+    return this.apiRequest("POST", "/", params);
+  }
+
+  getLocalTestVersion (pNodegroup) {
+    const params = {
+      "client": "local",
+      "fun": "test.providers",
+      "tgt": "N@" + pNodegroup,
+      "tgt_type": "compound"
+    };
     return this.apiRequest("POST", "/", params);
   }
 
