@@ -1,5 +1,6 @@
 /* global */
 
+import {Character} from "../Character.js";
 import {DropDownMenu} from "../DropDown.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
@@ -160,18 +161,16 @@ export class NodegroupsPanel extends Panel {
 
     const titleTd = Utils.createTd();
     if (pNodegroup) {
-      titleTd.innerHTML = "--- nodegroup <b>" + pNodegroup + "</b> ---";
+      titleTd.innerHTML = "--- nodegroup <b>" + pNodegroup + "</b> ---&nbsp;&nbsp;&nbsp;";
     } else {
-      titleTd.innerText = "--- not in any nodegroup ---";
+      titleTd.innerText = "--- not in any nodegroup ---" + Character.NO_BREAK_SPACE + Character.NO_BREAK_SPACE + Character.NO_BREAK_SPACE;
     }
-    titleTd.colSpan = 4;
+    titleTd.colSpan = 5;
     tr.append(titleTd);
 
-    const menuTd = Utils.createTd();
-    const menu = new DropDownMenu(menuTd, true);
+    const menu = new DropDownMenu(titleTd, true);
     this._addMenuItemStateApplyGroup(menu, pNodegroup, pAllNodegroups);
     this._addMenuItemStateApplyTestGroup(menu, pNodegroup, pAllNodegroups);
-    tr.append(menuTd);
 
     tr.addEventListener("click", (pClickEvent) => {
       const cmdArr = ["state.apply"];
