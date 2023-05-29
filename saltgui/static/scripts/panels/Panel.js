@@ -402,7 +402,7 @@ export class Panel {
     let minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
     if (minionTr !== null) {
       // minion already on screen...
-      return;
+      return minionTr;
     }
 
     minionTr = Utils.createTr();
@@ -423,6 +423,8 @@ export class Panel {
 
     const tbody = this.table.tBodies[0];
     tbody.appendChild(minionTr);
+
+    return minionTr;
   }
 
   getElement (id) {

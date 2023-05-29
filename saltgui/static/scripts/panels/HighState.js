@@ -133,10 +133,9 @@ export class HighStatePanel extends Panel {
 
     const minionIds = keys.minions.sort();
     for (const minionId of minionIds) {
-      this.addMinion(minionId, 2);
+      const minionTr = this.addMinion(minionId, 2);
 
       // preliminary dropdown menu
-      const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
       const menu = new DropDownMenu(minionTr, true);
       this._addMenuItemStateApply(menu, minionId);
       this._addMenuItemStateApplyTest(menu, minionId);

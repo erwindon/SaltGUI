@@ -82,10 +82,9 @@ export class SchedulesPanel extends Panel {
 
     const minionIds = keys.minions.sort();
     for (const minionId of minionIds) {
-      this.addMinion(minionId, 1);
+      const minionTr = this.addMinion(minionId, 1);
 
       // preliminary dropdown menu
-      const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
       const menu = new DropDownMenu(minionTr, true);
       this._addMenuItemShowSchedules(menu, minionId);
 
