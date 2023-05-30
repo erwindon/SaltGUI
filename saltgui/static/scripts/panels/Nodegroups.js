@@ -79,32 +79,36 @@ export class NodegroupsPanel extends Panel {
 
       // fix the click-to-copy-logic
       const addressSpan = minionTr2.querySelector("td.address span");
-      addressSpan.addEventListener("click", (pClickEvent) => {
-        Panel._copyAddress(addressSpan, pClickEvent.ctrlKey || pClickEvent.altKey);
-        pClickEvent.stopPropagation();
-      });
-      addressSpan.addEventListener("mouseout", () => {
+      if (addressSpan) {
+        addressSpan.addEventListener("click", (pClickEvent) => {
+          Panel._copyAddress(addressSpan, pClickEvent.ctrlKey || pClickEvent.altKey);
+          pClickEvent.stopPropagation();
+        });
+        addressSpan.addEventListener("mouseout", () => {
+          Panel.restoreClickToCopy(addressSpan);
+        });
         Panel.restoreClickToCopy(addressSpan);
-      });
-      Panel.restoreClickToCopy(addressSpan);
+      }
 
       // fix the row menu
       const oldMenuButton = minionTr2.querySelector("td div.run-command-button");
-      oldMenuButton.parentElement.remove();
-      const menu = new DropDownMenu(minionTr2, true);
-      this._addMenuItemStateApplyMinion(menu, pMinionId);
-      this._addMenuItemStateApplyTestMinion(menu, pMinionId);
-      this._addMenuItemShowGrains(menu, pMinionId);
-      this._addMenuItemShowPillars(menu, pMinionId);
-      this._addMenuItemShowSchedules(menu, pMinionId);
-      this._addMenuItemShowBeacons(menu, pMinionId);
+      if (oldMenuButton) {
+        oldMenuButton.parentElement.remove();
+        const menu = new DropDownMenu(minionTr2, true);
+        this._addMenuItemStateApplyMinion(menu, pMinionId);
+        this._addMenuItemStateApplyTestMinion(menu, pMinionId);
+        this._addMenuItemShowGrains(menu, pMinionId);
+        this._addMenuItemShowPillars(menu, pMinionId);
+        this._addMenuItemShowSchedules(menu, pMinionId);
+        this._addMenuItemShowBeacons(menu, pMinionId);
 
-      // fix the row
-      minionTr2.addEventListener("click", (pClickEvent) => {
-        const cmdArr = ["state.apply"];
-        this.runCommand("", pMinionId, cmdArr);
-        pClickEvent.stopPropagation();
-      });
+        // fix the row
+        minionTr2.addEventListener("click", (pClickEvent) => {
+          const cmdArr = ["state.apply"];
+          this.runCommand("", pMinionId, cmdArr);
+          pClickEvent.stopPropagation();
+        });
+      }
     } else {
       // move the row to its proper place
       nodegroupTr.parentNode.insertBefore(minionTr, nodegroupTr.nextSibling);
