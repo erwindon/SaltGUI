@@ -66,6 +66,17 @@ export class NodegroupsPanel extends Panel {
     this.setMsg(txt);
   }
 
+  updateOfflineMinion (pMinionId, pMinionsDict) {
+    super.updateOfflineMinion(pMinionId, pMinionsDict);
+
+    const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
+
+    // force same columns on all rows
+    minionTr.appendChild(Utils.createTd("saltversion"));
+    minionTr.appendChild(Utils.createTd("os"));
+    minionTr.appendChild(Utils.createTd("run-command-button"));
+  }
+
   _moveMinionToNodegroup (pMinionId, pNodegroup) {
     const minionTrId = Utils.getIdFromMinionId(pMinionId);
     const minionTr = this.table.querySelector("#" + minionTrId);
