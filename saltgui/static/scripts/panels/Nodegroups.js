@@ -131,8 +131,8 @@ export class NodegroupsPanel extends Panel {
       const titleElement = this.table.querySelector("#ng-" + null + " td");
       const cnt = this.table.rows.length - titleElement.parentElement.rowIndex - 1;
       titleElement.innerHTML = titleElement.innerHTML.replace(
-        " ---",
-        ", " + Utils.txtZeroOneMany(cnt, "no minions", cnt + " minion", cnt + " minions") + " ---");
+        " " + Character.EM_DASH,
+        " " + Character.EM_DASH + " " + Utils.txtZeroOneMany(cnt, "no minions", cnt + " minion", cnt + " minions") + " " + Character.EM_DASH);
       if (cnt === 0) {
         // remove the title of the empty group "not in any nodegroup"
         titleElement.parentElement.remove();
@@ -157,8 +157,8 @@ export class NodegroupsPanel extends Panel {
       const titleElement = this.table.querySelector("#ng-" + nodegroup + " td");
       const cnt = nodelist.length;
       titleElement.innerHTML = titleElement.innerHTML.replace(
-        " ---",
-        ", " + Utils.txtZeroOneMany(cnt, "no minions", cnt + " minion", cnt + " minions") + " ---");
+        " " + Character.EM_DASH,
+        " " + Character.EM_DASH + " " + Utils.txtZeroOneMany(cnt, "no minions", cnt + " minion", cnt + " minions") + " " + Character.EM_DASH);
 
       // try again for more
       window.setTimeout(() => {
@@ -184,9 +184,9 @@ export class NodegroupsPanel extends Panel {
 
     const titleTd = Utils.createTd();
     if (pNodegroup) {
-      titleTd.innerHTML = "--- nodegroup <b>" + pNodegroup + "</b> ---&nbsp;&nbsp;&nbsp;";
+      titleTd.innerHTML = Character.EM_DASH + " nodegroup <b>" + pNodegroup + "</b> " + Character.EM_DASH + "&nbsp;&nbsp;&nbsp;";
     } else {
-      titleTd.innerText = "--- not in any nodegroup ---" + Character.NO_BREAK_SPACE + Character.NO_BREAK_SPACE + Character.NO_BREAK_SPACE;
+      titleTd.innerText = Character.EM_DASH + " not in any nodegroup " + Character.EM_DASH + Character.NO_BREAK_SPACE + Character.NO_BREAK_SPACE + Character.NO_BREAK_SPACE;
     }
     titleTd.colSpan = 5;
     tr.append(titleTd);

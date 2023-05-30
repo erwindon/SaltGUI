@@ -642,7 +642,7 @@ export class Panel {
 
     minionTr.dataset.minionId = pMinionId;
 
-    let saltversion = "---";
+    let saltversion = Character.EM_DASH;
     if (typeof pMinionData === "string") {
       saltversion = "";
     } else if (pMinionData && pMinionData.saltversion) {
@@ -660,7 +660,7 @@ export class Panel {
       minionTr.appendChild(td);
     }
 
-    let os = "---";
+    let os = Character.EM_DASH;
     if (typeof pMinionData === "string") {
       os = "";
     } else if (pMinionData && pMinionData.os && pMinionData.osrelease) {
