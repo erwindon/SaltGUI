@@ -19,8 +19,6 @@ export class NodegroupsPanel extends Panel {
     this.addTable(["Minion", "Status", "Salt version", "OS version", "-menu-"]);
     this.setTableClickable();
     this.addMsg();
-
-    this.setPlayPauseButton("play");
   }
 
   onShow () {
@@ -30,6 +28,8 @@ export class NodegroupsPanel extends Panel {
     this.loadMinionsTxt();
 
     this._addNodegroupsRows();
+
+    this.setPlayPauseButton("play");
 
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       this._handleNodegroupsWheelKeyListAll(pWheelKeyListAllData);
