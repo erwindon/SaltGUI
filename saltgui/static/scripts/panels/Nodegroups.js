@@ -129,57 +129,7 @@ export class NodegroupsPanel extends Panel {
     }
   }
 
-  _handleStep () {
-
-    // user can decide
-    // system can decide to remove the play/pause button
-    if (this.playOrPause !== "play") {
-      // try again lkater for more
-      window.setTimeout(() => {
-        this._handleStep();
-      }, 100);
-      return;
-    }
-
-    if (this.todoNodegroups.length === 0) {
-      this.setPlayPauseButton("none");
-      this.todoNodegroups = null;
-
-      const titleElement = this.table.querySelector("#ng-" + null + " td");
-      const cnt = this.table.rows.length - titleElement.parentElement.rowIndex - 1;
-
-      if (cnt === 0) {
-        // remove the title of the empty group "not in any nodegroup"
-        titleElement.parentElement.remove();
-        return;
-      }
-
-      let txt = Utils.txtZeroOneMany(cnt, "no minions", cnt + " minion", cnt + " minions");
-      let online = 0;
-      let offline = 0;
-      for (let row = titleElement.parentElement.rowIndex + 1; row < this.table.rows.length; row++) {
-        const tr = this.table.rows[row];
-        if (tr.online === true) {
-          online += 1;
-        }
-        if (tr.offline === true) {
-          offline += 1;
-        }
-      }
-      if (online !== cnt) {
-        txt += ", " + online + " online";
-      }
-      if (offline !== 0) {
-        txt += ", " + offline + " offline";
-      }
-
-      titleElement.innerHTML = titleElement.innerHTML.replace(
-        " " + Character.EM_DASH,
-        " " + Character.EM_DASH + " " + txt + " " + Character.EM_DASH);
-
-      return;
-    }
-
+  _handleStepGroup () {
     const nodegroup = this.todoNodegroups.shift();
 
     // test group membership with function that is typically hidden
@@ -225,6 +175,63 @@ export class NodegroupsPanel extends Panel {
     }, (pLocalTestVersionMsg) => {
       this.showErrorRowInstead(pLocalTestVersionMsg.toString());
     });
+  }
+
+  _handleStepNoGroup () {
+    this.setPlayPauseButton("none");
+    this.todoNodegroups = null;
+
+    const titleElement = this.table.querySelector("#ng-" + null + " td");
+    const cnt = this.table.rows.length - titleElement.parentElement.rowIndex - 1;
+
+    if (cnt === 0) {
+      // remove the title of the empty group "not in any nodegroup"
+      titleElement.parentElement.remove();
+      return;
+    }
+
+    let txt = Utils.txtZeroOneMany(cnt, "no minions", cnt + " minion", cnt + " minions");
+    let online = 0;
+    let offline = 0;
+    for (let row = titleElement.parentElement.rowIndex + 1; row < this.table.rows.length; row++) {
+      const tr = this.table.rows[row];
+      if (tr.online === true) {
+        online += 1;
+      }
+      if (tr.offline === true) {
+        offline += 1;
+      }
+    }
+    if (online !== cnt) {
+      txt += ", " + online + " online";
+    }
+    if (offline !== 0) {
+      txt += ", " + offline + " offline";
+    }
+
+    titleElement.innerHTML = titleElement.innerHTML.replace(
+      " " + Character.EM_DASH,
+      " " + Character.EM_DASH + " " + txt + " " + Character.EM_DASH);
+  }
+
+  _handleStep () {
+
+    // user can decide
+    // system can decide to remove the play/pause button
+    if (this.playOrPause !== "play") {
+      // try again lkater for more
+      window.setTimeout(() => {
+        this._handleStep();
+      }, 100);
+      return;
+    }
+
+    if (this.todoNodegroups.length === 0) {
+      this._handleStepNoGroup();
+      return;
+    }
+
+    this._handleStepGroup();
   }
 
   _addNodegroupsRows () {
