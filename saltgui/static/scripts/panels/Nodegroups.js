@@ -238,7 +238,7 @@ export class NodegroupsPanel extends Panel {
   }
 
   _addNodegroupRow (pNodegroup, pAllNodegroups) {
-    const tr = Utils.createTr(null, null, "ng-" + pNodegroup);
+    const tr = Utils.createTr("no-search", null, "ng-" + pNodegroup);
 
     const titleTd = Utils.createTd();
     if (pNodegroup) {
