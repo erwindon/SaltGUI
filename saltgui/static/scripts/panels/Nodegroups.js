@@ -75,6 +75,8 @@ export class NodegroupsPanel extends Panel {
     minionTr.appendChild(Utils.createTd("saltversion"));
     minionTr.appendChild(Utils.createTd("os"));
     minionTr.appendChild(Utils.createTd("run-command-button"));
+
+    minionTr.offline = true;
   }
 
   _moveMinionToNodegroup (pMinionId, pNodegroup) {
@@ -145,13 +147,35 @@ export class NodegroupsPanel extends Panel {
 
       const titleElement = this.table.querySelector("#ng-" + null + " td");
       const cnt = this.table.rows.length - titleElement.parentElement.rowIndex - 1;
-      titleElement.innerHTML = titleElement.innerHTML.replace(
-        " " + Character.EM_DASH,
-        " " + Character.EM_DASH + " " + Utils.txtZeroOneMany(cnt, "no minions", cnt + " minion", cnt + " minions") + " " + Character.EM_DASH);
+
       if (cnt === 0) {
         // remove the title of the empty group "not in any nodegroup"
         titleElement.parentElement.remove();
+        return;
       }
+
+      let txt = Utils.txtZeroOneMany(cnt, "no minions", cnt + " minion", cnt + " minions");
+      let online = 0;
+      let offline = 0;
+      for (let row = titleElement.parentElement.rowIndex + 1; row < this.table.rows.length; row++) {
+        const tr = this.table.rows[row];
+        if (tr.online === true) {
+          online += 1;
+        }
+        if (tr.offline === true) {
+          offline += 1;
+        }
+      }
+      if (online !== cnt) {
+        txt += ", " + online + " online";
+      }
+      if (offline !== 0) {
+        txt += ", " + offline + " offline";
+      }
+
+      titleElement.innerHTML = titleElement.innerHTML.replace(
+        " " + Character.EM_DASH,
+        " " + Character.EM_DASH + " " + txt + " " + Character.EM_DASH);
 
       return;
     }
@@ -162,7 +186,8 @@ export class NodegroupsPanel extends Panel {
     const localTestVersion = this.api.getLocalTestVersion(nodegroup);
     localTestVersion.then((pLocalTestVersionData) => {
       // handle the list in reverse order
-      const nodelist = Object.keys(pLocalTestVersionData.return[0]).sort().
+      const retdata = pLocalTestVersionData.return[0];
+      const nodelist = Object.keys(retdata).sort().
         reverse();
 
       for (const minionId of nodelist) {
@@ -171,9 +196,27 @@ export class NodegroupsPanel extends Panel {
 
       const titleElement = this.table.querySelector("#ng-" + nodegroup + " td");
       const cnt = nodelist.length;
+
+      let txt = Utils.txtZeroOneMany(cnt, "no minions", cnt + " minion", cnt + " minions");
+      let online = 0;
+      let offline = 0;
+      for (const minionId of nodelist) {
+        if (retdata[minionId] === false) {
+          offline += 1;
+        } else {
+          online += 1;
+        }
+      }
+      if (online !== cnt) {
+        txt += ", " + online + " online";
+      }
+      if (offline !== 0) {
+        txt += ", " + offline + " offline";
+      }
+
       titleElement.innerHTML = titleElement.innerHTML.replace(
         " " + Character.EM_DASH,
-        " " + Character.EM_DASH + " " + Utils.txtZeroOneMany(cnt, "no minions", cnt + " minion", cnt + " minions") + " " + Character.EM_DASH);
+        " " + Character.EM_DASH + " " + txt + " " + Character.EM_DASH);
 
       // try again for more
       window.setTimeout(() => {
@@ -263,6 +306,8 @@ export class NodegroupsPanel extends Panel {
       this.runCommand("", pMinionId, cmdArr);
       pClickEvent.stopPropagation();
     });
+
+    minionTr.online = true;
   }
 
   static _getGroupTarget (pNodegroup, pAllNodegroups) {
