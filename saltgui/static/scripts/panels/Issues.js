@@ -43,7 +43,8 @@ export class IssuesPanel extends Panel {
   }
 
   updateFooter () {
-    this.setMsg("(loading)");
+    const txt = this.issuesStatus;
+    super.updateFooter(txt ? txt : "(loading)");
   }
 
   onShow () {

@@ -221,7 +221,7 @@ export class JobsPanel extends Panel {
   updateFooter () {
     let txt = Utils.txtZeroOneMany(this.numberOfJobsShown,
       "No jobs shown", "{0} job shown", "{0} jobs shown");
-    if (this.numberOfJobsEligible > this.numberOfJobsShown) {
+    if (this.numberOfJobsEligible > 0 && this.numberOfJobsEligible > this.numberOfJobsShown) {
       txt += Utils.txtZeroOneMany(this.numberOfJobsEligible,
         "", ", {0} job eligible", ", {0} jobs eligible");
     }

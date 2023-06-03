@@ -21,6 +21,8 @@ export class TemplatesPanel extends Panel {
   onShow () {
     const wheelConfigValuesPromise = this.api.getWheelConfigValues();
 
+    this.nrTemplates = 0;
+
     wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
       this._handleTemplatesWheelConfigValues(pWheelConfigValuesData);
       return true;
@@ -37,6 +39,8 @@ export class TemplatesPanel extends Panel {
 
     // should we update it or just use from cache (see commandbox) ?
     let templates = pWheelConfigValuesData.return[0].data.return.saltgui_templates;
+    this.nrTemplates = Object.keys(templates).length;
+
     if (templates) {
       Utils.setStorageItem("session", "templates", JSON.stringify(templates));
       this.setCategoriesTitle(templates);
@@ -52,7 +56,11 @@ export class TemplatesPanel extends Panel {
       this._addTemplate(key, template);
     }
 
-    const txt = Utils.txtZeroOneMany(keys.length,
+    this.updateFooter();
+  }
+
+  updateFooter () {
+    const txt = Utils.txtZeroOneMany(this.nrTemplates,
       "No templates", "{0} template", "{0} templates");
     this.setMsg(txt);
   }

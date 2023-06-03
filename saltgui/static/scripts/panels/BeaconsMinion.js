@@ -35,6 +35,8 @@ export class BeaconsMinionPanel extends Panel {
   }
 
   onShow () {
+    this.nrBeacons = 0;
+
     const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
 
     // preliminary title
@@ -97,9 +99,7 @@ export class BeaconsMinionPanel extends Panel {
 
   updateFooter () {
     // update the footer
-    const tbody = this.table.tBodies[0];
-    const txt = Utils.txtZeroOneMany(tbody.rows.length,
-      "No beacons", "{0} beacon", "{0} beacons");
+    const txt = Utils.txtZeroOneMany(this.nrBeacons, "No beacons", "{0} beacon", "{0} beacons");
     this.setMsg(txt);
   }
 
@@ -185,6 +185,7 @@ export class BeaconsMinionPanel extends Panel {
 
       const tbody = this.table.tBodies[0];
       tbody.appendChild(tr);
+      this.nrBeacons += 1;
 
       // run the command with the original beacon definition
       tr.addEventListener("click", (pClickEvent) => {

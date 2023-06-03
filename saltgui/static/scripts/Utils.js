@@ -490,11 +490,7 @@ export class Utils {
     } else {
       txt = pManyText;
     }
-    if (pCnt === undefined) {
-      // just in case
-      txt = txt.replace("{0}", pCnt);
-      console.log(pCnt, pZeroText, pOneText, pManyText);
-    } else {
+    if (pCnt !== undefined) {
       txt = txt.replace("{0}", pCnt.toLocaleString());
     }
     return txt;

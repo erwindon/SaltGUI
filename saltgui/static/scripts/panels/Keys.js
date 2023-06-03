@@ -41,6 +41,11 @@ export class KeysPanel extends Panel {
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const wheelKeyFingerPromise = this.api.getWheelKeyFinger();
 
+    this.nrUnaccepted = 0;
+    this.nrAccepted = 0;
+    this.nrDenied = 0;
+    this.nrRejected = 0;
+
     this.showSyndicInfo(false);
 
     this.loadMinionsTxt();
@@ -170,8 +175,6 @@ export class KeysPanel extends Panel {
       this._addMissingMinion(minionId, minionsDict);
     }
 
-    Utils.setStorageItem("session", "minions_pre_length", allKeys.minions_pre.length);
-
     this.updateFooter();
 
     this.panelMenu.verifyAll();
@@ -179,26 +182,30 @@ export class KeysPanel extends Panel {
 
   updateFooter () {
     const cnt = {};
-    cnt["unaccepted"] = 0;
-    cnt["accepted"] = 0;
-    cnt["denied"] = 0;
-    cnt["rejected"] = 0;
-    const tbody = this.table.tBodies[0];
-    for (const tr of tbody.children) {
-      const statusTd = tr.querySelector(".status");
-      const statusText = statusTd.innerText;
-      if (cnt[statusText] === undefined) {
-        cnt[statusText] = 0;
-      }
-      cnt[statusText] += 1;
-    }
 
     let txt = "";
-    for (const key of Object.keys(cnt).sort()) {
-      txt += ", " + Utils.txtZeroOneMany(cnt[key],
-        "no " + key + " keys",
-        "{0} " + key + " key",
-        "{0} " + key + " keys");
+
+    if (this.table) {
+      const tbody = this.table.tBodies[0];
+      for (const tr of tbody.children) {
+        const statusTd = tr.querySelector(".status");
+        const statusText = statusTd.innerText;
+        if (cnt[statusText] === undefined) {
+          cnt[statusText] = 0;
+        }
+        cnt[statusText] += 1;
+      }
+
+      for (const key of Object.keys(cnt).sort()) {
+        txt += ", " + Utils.txtZeroOneMany(cnt[key],
+          "no " + key + " keys",
+          "{0} " + key + " key",
+          "{0} " + key + " keys");
+      }
+    }
+
+    if (Object.keys(cnt).length === 0) {
+      txt += ", no keys";
     }
 
     // remove the first comma
@@ -206,12 +213,11 @@ export class KeysPanel extends Panel {
     // capitalize the first word (can only be "no")
     txt = txt.replace(/^no/, "No");
 
-    KeysPanel.cntUnaccepted = cnt["unaccepted"];
-    KeysPanel.cntAccepted = cnt["accepted"];
-    KeysPanel.cntDenied = cnt["denied"];
-    KeysPanel.cntRejected = cnt["rejected"];
+    this.nrUnaccepted = cnt["enaccepted"];
+    this.nrRejected = cnt["rejected"];
+    // others are reported but not saved
 
-    this.setMsg(txt);
+    super.updateFooter(txt);
   }
 
   static _flagMinion (pMinionId, pStatusField, pMinionTr, pMinionsDict, pIsMissing = false) {
@@ -421,7 +427,7 @@ export class KeysPanel extends Panel {
 
   _addPanelMenuItemWheelKeyAcceptAllUnaccepted () {
     this.panelMenu.addMenuItem(() => {
-      if (KeysPanel.cntUnaccepted > 0) {
+      if (this.nrUnaccepted > 0) {
         return "Accept all unaccepted keys...";
       }
       return null;
@@ -433,10 +439,10 @@ export class KeysPanel extends Panel {
 
   _addPanelMenuItemWheelKeyAcceptAllUnacceptedRejected () {
     this.panelMenu.addMenuItem(() => {
-      if (!KeysPanel.cntRejected) {
+      if (!this.nrRejected) {
         return null;
       }
-      if (KeysPanel.cntUnaccepted > 0) {
+      if (this.nrUnaccepted > 0) {
         return "Accept all unaccepted+rejected keys...";
       }
       return "Accept all rejected keys...";
@@ -448,10 +454,10 @@ export class KeysPanel extends Panel {
 
   _addPanelMenuItemWheelKeyAcceptAllUnacceptedDenied () {
     this.panelMenu.addMenuItem(() => {
-      if (!KeysPanel.cntDenied) {
+      if (!this.nrDenied) {
         return null;
       }
-      if (KeysPanel.cntUnaccepted > 0) {
+      if (this.nrUnaccepted > 0) {
         return "Accept all unaccepted+denied keys...";
       }
       return "Accept all denied keys...";
@@ -463,10 +469,10 @@ export class KeysPanel extends Panel {
 
   _addPanelMenuItemWheelKeyAcceptAllUnacceptedRejectedDenied () {
     this.panelMenu.addMenuItem(() => {
-      if (!KeysPanel.cntRejected || !KeysPanel.cntDenied) {
+      if (!this.nrRejected || !this.nrDenied) {
         return null;
       }
-      if (KeysPanel.cntUnaccepted > 0) {
+      if (this.nrUnaccepted > 0) {
         return "Accept all unaccepted+denied+rejected keys...";
       }
       return "Accept all denied+rejected keys...";
@@ -516,7 +522,7 @@ export class KeysPanel extends Panel {
 
   _addPanelMenuItemWheelKeyRejectAllUnaccepted () {
     this.panelMenu.addMenuItem(() => {
-      if (KeysPanel.cntUnaccepted > 0) {
+      if (this.nrUnaccepted > 0) {
         return "Reject all unaccepted keys...";
       }
       return null;
@@ -528,10 +534,10 @@ export class KeysPanel extends Panel {
 
   _addPanelMenuItemWheelKeyRejectAllUnacceptedAccepted () {
     this.panelMenu.addMenuItem(() => {
-      if (!KeysPanel.cntAccepted) {
+      if (!this.nrAccepted) {
         return null;
       }
-      if (KeysPanel.cntUnaccepted > 0) {
+      if (this.nrUnaccepted > 0) {
         return "Reject all unaccepted+accepted keys...";
       }
       return "Reject all accepted keys...";
@@ -543,10 +549,10 @@ export class KeysPanel extends Panel {
 
   _addPanelMenuItemWheelKeyRejectAllUnacceptedDenied () {
     this.panelMenu.addMenuItem(() => {
-      if (!KeysPanel.cntDenied) {
+      if (!this.nrDenied) {
         return null;
       }
-      if (KeysPanel.cntUnaccepted > 0) {
+      if (this.nrUnaccepted > 0) {
         return "Reject all unaccepted+denied keys...";
       }
       return "Reject all denied keys...";
@@ -558,10 +564,10 @@ export class KeysPanel extends Panel {
 
   _addPanelMenuItemWheelKeyRejectAllUnacceptedAcceptedDenied () {
     this.panelMenu.addMenuItem(() => {
-      if (!KeysPanel.cntAccepted || !KeysPanel.cntDenied) {
+      if (!this.nrAccepted || !this.nrDenied) {
         return null;
       }
-      if (KeysPanel.cntUnaccepted > 0) {
+      if (this.nrUnaccepted > 0) {
         return "Reject all unaccepted+accepted+denied keys...";
       }
       return "Reject all accepted+denied keys...";
@@ -586,7 +592,7 @@ export class KeysPanel extends Panel {
 
   _addPanelMenuItemWheelKeyDeleteAll () {
     this.panelMenu.addMenuItem(() => {
-      if (KeysPanel.cntAccepted > 0 || KeysPanel.cntUnaccepted > 0 || KeysPanel.cntRejected > 0 || KeysPanel.cntDenied > 0) {
+      if (this.nrAccepted > 0 || this.nrUnaccepted > 0 || this.nrRejected > 0 || this.nrDenied > 0) {
         return "Delete all keys...";
       }
       return null;

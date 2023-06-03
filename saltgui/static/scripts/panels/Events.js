@@ -26,25 +26,24 @@ export class EventsPanel extends Panel {
   }
 
   onShow () {
+    this.nrEvents = 0;
     this.updateFooter();
   }
 
   updateFooter () {
-    // update the footer
-    const tbody = this.table.tBodies[0];
     // when there are more than a screen-ful of events, the user
     // will not see the "press play" message. but the user already
     // knows that because that caused the events to be shown...
-    let txt = Utils.txtZeroOneMany(tbody.rows.length,
-      "No events", "{0} event", "{0} events");
+    let txt = Utils.txtZeroOneMany(this.nrEvents, "No events", "{0} event", "{0} events");
     if (this.playOrPause === "play") {
+      const tbody = this.table.tBodies[0];
       if (tbody.rows.length) {
         txt += ", waiting for more events";
       } else {
         txt += ", waiting for events";
       }
     }
-    this.setMsg(txt);
+    super.updateFooter(txt);
   }
 
   handleAnyEvent (pTag, pData) {
@@ -88,6 +87,7 @@ export class EventsPanel extends Panel {
       tbody.deleteRow(tbody.rows.length - 1);
     }
 
+    this.nrEvents = tbody.rows.length;
     this.updateFooter();
   }
 }
