@@ -401,10 +401,11 @@ export class API {
       const tag = saltEvent.tag;
       const data = saltEvent.data;
 
-      // erase the public key value when it is present
+      // shorten the public key value when it is present
       // it is long and boring (so not because it is a secret)
-      if (data.pub) {
-        data.pub = "...";
+      // the sizes are so that the first and last 8 characters of the public key are still shown
+      if (data.pub && data.pub.length > 75) {
+        data.pub = data.pub.substring(0, 35) + "..." + data.pub.substring(data.pub.length - 33);
       }
 
       // salt/beacon/<minion>/<beacon>/
