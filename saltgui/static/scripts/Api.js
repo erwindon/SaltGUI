@@ -186,6 +186,16 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
+  getLocalTestVersion (pNodegroup) {
+    const params = {
+      "client": "local",
+      "fun": "test.providers",
+      "tgt": "N@" + pNodegroup,
+      "tgt_type": "compound"
+    };
+    return this.apiRequest("POST", "/", params);
+  }
+
   getRunnerJobsActive () {
     const params = {
       "client": "runner",
@@ -431,6 +441,7 @@ export class API {
         Router.pillarsMinionPage.handleSaltJobRetEvent(data);
         Router.beaconsPage.handleSaltJobRetEvent(data);
         Router.beaconsMinionPage.handleSaltJobRetEvent(data);
+        Router.nodegroupsPage.handleSaltJobRetEvent(data);
         Router.jobsPage.handleSaltJobRetEvent(data);
         Router.templatesPage.handleSaltJobRetEvent(data);
         Router.reactorsPage.handleSaltJobRetEvent(data);

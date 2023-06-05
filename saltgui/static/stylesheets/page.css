@@ -227,7 +227,7 @@ table tr td:last-of-type {
   color: #f0f;
 }
 
-.unaccepted {
+.unaccepted, .keyunknown {
   color: #f00;
 }
 

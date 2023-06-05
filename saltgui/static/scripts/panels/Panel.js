@@ -572,7 +572,7 @@ export class Panel {
     return 1;
   }
 
-  static _restoreClickToCopy (pTarget) {
+  static restoreClickToCopy (pTarget) {
     if (pTarget.dataset.multiIpNumber === pTarget.dataset.singleIpNumber) {
       Utils.addToolTip(pTarget, "Click to copy");
     } else {
@@ -631,9 +631,9 @@ export class Panel {
         pClickEvent.stopPropagation();
       });
       addressSpan.addEventListener("mouseout", () => {
-        Panel._restoreClickToCopy(addressSpan);
+        Panel.restoreClickToCopy(addressSpan);
       });
-      Panel._restoreClickToCopy(addressSpan);
+      Panel.restoreClickToCopy(addressSpan);
       minionTr.appendChild(addressTd);
     } else {
       const accepted = Utils.createTd(["status", "accepted"], "accepted");
@@ -642,7 +642,7 @@ export class Panel {
 
     minionTr.dataset.minionId = pMinionId;
 
-    let saltversion = "---";
+    let saltversion = Character.EM_DASH;
     if (typeof pMinionData === "string") {
       saltversion = "";
     } else if (pMinionData && pMinionData.saltversion) {
@@ -660,7 +660,7 @@ export class Panel {
       minionTr.appendChild(td);
     }
 
-    let os = "---";
+    let os = Character.EM_DASH;
     if (typeof pMinionData === "string") {
       os = "";
     } else if (pMinionData && pMinionData.os && pMinionData.osrelease) {

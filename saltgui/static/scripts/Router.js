@@ -16,6 +16,7 @@ import {KeysPage} from "./pages/Keys.js";
 import {LoginPage} from "./pages/Login.js";
 import {LogoutPage} from "./pages/Logout.js";
 import {MinionsPage} from "./pages/Minions.js";
+import {NodegroupsPage} from "./pages/Nodegroups.js";
 import {OptionsPage} from "./pages/Options.js";
 import {Output} from "./output/Output.js";
 import {PillarsMinionPage} from "./pages/PillarsMinion.js";
@@ -49,6 +50,7 @@ export class Router {
     this._registerPage(Router.pillarsMinionPage = new PillarsMinionPage(this));
     this._registerPage(Router.beaconsPage = new BeaconsPage(this));
     this._registerPage(Router.beaconsMinionPage = new BeaconsMinionPage(this));
+    this._registerPage(Router.nodegroupsPage = new NodegroupsPage(this));
     this._registerPage(Router.jobPage = new JobPage(this));
     this._registerPage(Router.jobsPage = new JobsPage(this));
     this._registerPage(Router.highStatePage = new HighStatePage(this));
@@ -177,6 +179,7 @@ export class Router {
     this._registerMenuItem("minions", "schedules", "schedules");
     this._registerMenuItem("minions", "pillars", "pillars");
     this._registerMenuItem("minions", "beacons", "beacons");
+    this._registerMenuItem("minions", "nodegroups", "nodegroups");
     this._registerMenuItem(null, "keys", "keys");
     this._registerMenuItem(null, "jobs", "jobs");
     this._registerMenuItem("jobs", "highstate", "highstate");
@@ -257,6 +260,7 @@ export class Router {
     Router._showMenuItem(pages, Router.schedulesPage);
     Router._showMenuItem(pages, Router.pillarsPage);
     Router._showMenuItem(pages, Router.beaconsPage);
+    Router._showMenuItem(pages, Router.nodegroupsPage);
     Router._showMenuItem(pages, Router.keysPage);
     Router._showMenuItem(pages, Router.jobsPage, ["highstate", "templates"]);
     Router._showMenuItem(pages, Router.highStatePage);
