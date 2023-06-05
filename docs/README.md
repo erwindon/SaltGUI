@@ -30,6 +30,7 @@ such as `yubico_client`, or execution modules such as `boto3_sns`.
 - View the schedules for a particular minion
 - View the values for pillars for a particular minion
 - View the beacons for a particular minion
+- View the nodegroups with their member minions
 - View the live events on the salt-event bus
 - View internal documentation for any salt command
 - View external documentation for any salt command
@@ -269,6 +270,14 @@ e.g.:
 saltgui_public_pillars:
     - pub_.*
 ```
+
+## Nodegroups
+The Nodegroups page shows all minions, but groups the minions by their nodegroup.
+Since the group membership can only (reliably) be determined by executing salt commands, the overview takes some time to build.
+When a minion happens to be a member of multiple nodegroups, then a row for that minion will appear mutiple times in the overview.
+When using targeting based on nodegroups, the salt-system does not filter out the non-accepted minions.
+Therefore also the rejected, denied and unaccepted minions will show up.
+Even the minion names that are in the nodegroup, but which do not actually exist, will show up as 'unknown'.
 
 ## Highstate
 The Highstate page provides an overview of the minions and their latest state information.
