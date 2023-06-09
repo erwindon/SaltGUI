@@ -20,22 +20,25 @@ export class GrainsPanel extends Panel {
     this.addTable(["Minion", "Status", "Salt version", "OS version", "Grains", "-menu-"]);
     this.setTableClickable();
 
-    // collect the list of displayed extra grains
-    this.previewGrains = Utils.getStorageItemList("session", "preview_grains");
-
-    // add the preview columns (before we sort the table)
-    // the div is not added to the DOM yet
-    const tr = this.div.querySelector("#grains-table-thead-tr");
-    for (const previewGrain of this.previewGrains) {
-      const th = Utils.createElem("th", "", previewGrain);
-      tr.appendChild(th);
-    }
-
     this.setTableSortable("Minion", "asc");
     this.addMsg();
   }
 
   onShow () {
+    if (this.previewColumsAdded !== true) {
+      // collect the list of displayed extra grains
+      this.previewGrains = Utils.getStorageItemList("session", "preview_grains");
+
+      // add the preview columns (before we sort the table)
+      // the div is not added to the DOM yet
+      const tr = this.div.querySelector("#grains-table-thead-tr");
+      for (const previewGrain of this.previewGrains) {
+        const th = Utils.createElem("th", "", previewGrain);
+        tr.appendChild(th);
+      }
+      this.previewColumsAdded = true;
+    }
+
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const localGrainsItemsPromise = this.api.getLocalGrainsItems(null);
 
