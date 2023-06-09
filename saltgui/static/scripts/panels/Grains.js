@@ -20,7 +20,9 @@ export class GrainsPanel extends Panel {
     this.addTable(["Minion", "Status", "Salt version", "OS version", "Grains", "-menu-"]);
     this.setTableClickable();
 
-    this.setTableSortable("Minion", "asc");
+    // cannot initialize sorting before all columns are present
+    // this.setTableSortable("Minion", "asc");
+
     this.addMsg();
   }
 
@@ -37,6 +39,9 @@ export class GrainsPanel extends Panel {
         tr.appendChild(th);
       }
       this.previewColumsAdded = true;
+
+      // initialize sorting after all columns are present
+      this.setTableSortable("Minion", "asc");
     }
 
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
