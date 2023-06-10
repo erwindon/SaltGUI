@@ -69,7 +69,9 @@ export class StatsPanel extends Panel {
 
   _handleStats (pStatsData) {
     if (this.showErrorRowInstead(pStatsData)) {
-      this.statsTd.innerText = "(error)";
+      this.statsTd.innerHTML = "<span style='color:red'>this error is typically caused by using the <tt>collect_stats: True</tt> setting in the master configuration file, which is broken in at least the recent versions of salt-api</span>";
+      window.clearInterval(this.updateStatsTimer);
+      this.updateStatsTimer = null;
       return;
     }
 
