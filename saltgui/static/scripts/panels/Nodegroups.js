@@ -208,9 +208,7 @@ export class NodegroupsPanel extends Panel {
         txt += ", " + Utils.txtZeroOneMany(problems, "no problems", "{0} problem", "{0} problems");
       }
 
-      titleElement.innerHTML = titleElement.innerHTML.replace(
-        " " + Character.EM_DASH,
-        " " + Character.EM_DASH + " " + txt + " " + Character.EM_DASH);
+      titleElement.innerHTML = titleElement.innerHTML.replace("(loading)", txt);
 
       // try again for more
       window.setTimeout(() => {
@@ -253,9 +251,7 @@ export class NodegroupsPanel extends Panel {
       txt += ", " + offline + " offline";
     }
 
-    titleElement.innerHTML = titleElement.innerHTML.replace(
-      " " + Character.EM_DASH,
-      " " + Character.EM_DASH + " " + txt + " " + Character.EM_DASH);
+    titleElement.innerHTML = titleElement.innerHTML.replace("(loading)", txt);
   }
 
   _handleStep (pWheelKeyListAllSimpleData) {
@@ -293,9 +289,9 @@ export class NodegroupsPanel extends Panel {
 
     const titleTd = Utils.createTd();
     if (pNodegroup) {
-      titleTd.innerHTML = Character.EM_DASH + " nodegroup <b>" + pNodegroup + "</b> " + Character.EM_DASH + "&nbsp;&nbsp;&nbsp;";
+      titleTd.innerHTML = Character.EM_DASH + " nodegroup <b>" + pNodegroup + "</b> " + Character.EM_DASH + " (loading) " + Character.EM_DASH + "&nbsp;&nbsp;&nbsp;";
     } else {
-      titleTd.innerText = Character.EM_DASH + " not in any nodegroup " + Character.EM_DASH + Character.NO_BREAK_SPACE + Character.NO_BREAK_SPACE + Character.NO_BREAK_SPACE;
+      titleTd.innerText = Character.EM_DASH + " not in any nodegroup " + Character.EM_DASH + " (loading) " + Character.EM_DASH + Character.NO_BREAK_SPACE + Character.NO_BREAK_SPACE + Character.NO_BREAK_SPACE;
     }
     titleTd.colSpan = 5;
     tr.append(titleTd);
