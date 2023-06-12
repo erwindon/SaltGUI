@@ -113,7 +113,7 @@ export class Panel {
     if (this.pauseButton) {
       this.pauseButton.style.display = pStatus === "play" ? "" : "none";
     }
-    this._updateMsg();
+    this.updateFooter();
   }
 
   addHelpButton (pHelpTextArr, pUrl) {
@@ -299,34 +299,7 @@ export class Panel {
       return;
     }
 
-    let txt = this.msgTxt;
-    let isHTML = false;
-
-    if (this.playOrPause === "pause" && this.pauseButton) {
-      if (txt) {
-        txt += ", ";
-      }
-      if (this.table && this.table.tBodies[0].rows.length) {
-        txt += "press " + Character.buttonInText(Character.CH_PLAY) + " to continue";
-      } else {
-        txt += "press " + Character.buttonInText(Character.CH_PLAY) + " to begin";
-      }
-      isHTML = true;
-    }
-
-    if (this.playOrPause === "play" && this.playButton) {
-      if (txt) {
-        txt += ", ";
-      }
-      txt += "press " + Character.buttonInText(Character.CH_PAUSE) + " to pause";
-      isHTML = true;
-    }
-
-    if (isHTML) {
-      this.msgDiv.innerHTML = txt;
-    } else {
-      this.msgDiv.innerText = txt;
-    }
+    this.msgDiv.innerHTML = this.msgTxt;
   }
 
   loadMinionsTxt () {
@@ -696,37 +669,57 @@ export class Panel {
       Utils.setStorageItem("session", "minions", JSON.stringify(minionIds));
     }
 
-    let cntOnline = 0;
-    let cntOffline = 0;
+    this.nrOnline = 0;
+    this.nrOffline = 0;
     for (const minionId of minionIds) {
       const minionInfo = minions[minionId];
 
       // minions can be offline, then the info will be false
       if (minionInfo === false) {
         this.updateOfflineMinion(minionId, minionsDict);
-        cntOffline += 1;
+        this.nrOffline += 1;
       } else {
         this.updateMinion(minionInfo, minionId, minions);
-        cntOnline += 1;
+        this.nrOnline += 1;
       }
     }
 
-    let txt = Utils.txtZeroOneMany(minionIds.length, "No minions", "{0} minion", "{0} minions");
-    if (cntOnline !== minionIds.length) {
-      txt += ", " + Utils.txtZeroOneMany(cntOnline, "none online", "{0} online", "{0} online");
-    }
-    if (cntOffline > 0) {
-      txt += ", " + Utils.txtZeroOneMany(cntOffline, "none offline", "{0} offline", "{0} offline");
+    this.updateFooter();
+  }
+
+  updateFooter (txt = "") {
+
+    if (this.nrMinions !== undefined) {
+      txt += ", " + Utils.txtZeroOneMany(this.nrMinions, "no minions", "{0} minion", "{0} minions");
     }
 
-    const cntMinionsPre = Utils.getStorageItemInteger("session", "minions_pre_length", 0);
-    txt += Utils.txtZeroOneMany(
-      cntMinionsPre,
-      "",
-      ", {0} unaccepted key",
-      ", {0} unaccepted keys");
+    if (this.nrOnline >= 0 && this.nrMinions !== this.nrOnline) {
+      txt += ", " + Utils.txtZeroOneMany(this.nrOnline, "none online", "{0} online", "{0} online");
+    }
 
-    this.setMsg(txt);
+    if (this.nrOffline > 0) {
+      txt += ", " + Utils.txtZeroOneMany(this.nrOffline, "none offline", "{0} offline", "{0} offline");
+    }
+
+    if (this.nrUnaccepted > 0) {
+      txt += ", " + Utils.txtZeroOneMany(this.nrUnaccepted, "{0} unaccepted keys", "{0} unaccepted key", "{0} unaccepted keys");
+    }
+
+    if (this.playOrPause === "pause" && this.pauseButton) {
+      if (this.table && this.table.tBodies[0].rows.length) {
+        txt += ", press " + Character.buttonInText(Character.CH_PLAY) + " to continue";
+      } else {
+        txt += ", press " + Character.buttonInText(Character.CH_PLAY) + " to begin";
+      }
+    }
+
+    if (this.playOrPause === "play" && this.playButton) {
+      txt += ", press " + Character.buttonInText(Character.CH_PAUSE) + " to pause";
+    }
+
+    txt = txt.replaceAll(/^, /g, "");
+
+    this.setMsg(txt.length > 0 ? txt : "(???)");
   }
 
   updateOfflineMinion (pMinionId, pMinionsDict) {

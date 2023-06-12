@@ -21,6 +21,8 @@ export class PillarsPanel extends Panel {
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const localPillarObfuscatePromise = this.api.getLocalPillarObfuscate(null);
 
+    this.nrMinions = 0;
+
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       this._handlePillarsWheelKeyListAll(pWheelKeyListAllData);
       localPillarObfuscatePromise.then((pLocalPillarObfuscateData) => {
@@ -45,6 +47,8 @@ export class PillarsPanel extends Panel {
     }
 
     const keys = pWheelKeyListAllData.return[0].data.return;
+    this.nrMinions = keys.minions.length;
+    this.nrUnaccepted = keys.minions_pre.length;
 
     const minionIds = keys.minions.sort();
     for (const minionId of minionIds) {
@@ -60,9 +64,7 @@ export class PillarsPanel extends Panel {
       });
     }
 
-    const txt = Utils.txtZeroOneMany(minionIds.length,
-      "No minions", "{0} minion", "{0} minions");
-    this.setMsg(txt);
+    this.updateFooter();
   }
 
   updateOfflineMinion (pMinionId, pMinionsDict) {

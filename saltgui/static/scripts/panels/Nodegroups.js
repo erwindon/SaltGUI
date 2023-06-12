@@ -22,12 +22,15 @@ export class NodegroupsPanel extends Panel {
   }
 
   onShow () {
+    this.nrMinions = 0;
+
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const localGrainsItemsPromise = this.api.getLocalGrainsItems(null);
 
     this.loadMinionsTxt();
 
     this._addNodegroupsRows();
+    this.updateFooter();
 
     this.setPlayPauseButton("play");
 
@@ -55,15 +58,11 @@ export class NodegroupsPanel extends Panel {
   }
 
   updateFooter () {
-    const txt = Utils.txtZeroOneMany(this.minionsCnt,
-      "No minions", "{0} minion", "{0} minions");
+    const nodegroups = Utils.getStorageItemObject("session", "nodegroups");
+    const txt = ", " + Utils.txtZeroOneMany(Object.keys(nodegroups).length,
+      "no nodegroups", "{0} nodegroup", "{0} nodegroups");
 
-    // see https://github.com/erwindon/SaltGUI/issues/517
-    // const nodegroups = Utils.getStorageItemObject("session", "nodegroups");
-    // txt += ", " + Utils.txtZeroOneMany(Object.keys(nodegroups).length,
-    //   "no nodegroups", "{0} nodegroup", "{0} nodegroups");
-
-    this.setMsg(txt);
+    super.updateFooter(txt);
   }
 
   updateOfflineMinion (pMinionId, pMinionsDict) {
@@ -315,6 +314,8 @@ export class NodegroupsPanel extends Panel {
     }
 
     const keys = pWheelKeyListAll.return[0].data.return;
+    this.nrMinions = keys.minions.length;
+    this.nrUnaccepted = keys.minions_pre.length;
 
     const minionIds = keys.minions.sort();
     for (const minionId of minionIds) {
@@ -330,9 +331,6 @@ export class NodegroupsPanel extends Panel {
       this._addMenuItemShowBeacons(menu, minionId);
     }
 
-    Utils.setStorageItem("session", "minions_pre_length", keys.minions_pre.length);
-
-    this.minionsCnt = keys.minions.length;
     this.updateFooter();
   }
 

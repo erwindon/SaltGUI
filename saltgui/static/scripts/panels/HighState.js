@@ -49,6 +49,8 @@ export class HighStatePanel extends Panel {
   onShow () {
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
 
+    this.nrMinions = 0;
+
     const cmdList = [];
     if (Utils.getStorageItem("local", "use_state_highstate", "true") === "true") {
       cmdList.push("state.highstate");
@@ -132,6 +134,9 @@ export class HighStatePanel extends Panel {
     const keys = pWheelKeyListAll.return[0].data.return;
 
     const minionIds = keys.minions.sort();
+    this.nrMinions = minionIds.length;
+    this.nrUnaccepted = keys.minions_pre.length;
+
     for (const minionId of minionIds) {
       const minionTr = this.addMinion(minionId, 2);
 
@@ -155,13 +160,6 @@ export class HighStatePanel extends Panel {
     }
 
     this.updateFooter();
-  }
-
-  updateFooter () {
-    const tbody = this.table.tBodies[0];
-    const txt = Utils.txtZeroOneMany(tbody.rows.length,
-      "No minions", "{0} minion", "{0} minions");
-    this.setMsg(txt);
   }
 
   _handleHighstateRunnerJobsListJobs (pData) {
