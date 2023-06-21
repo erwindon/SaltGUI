@@ -300,12 +300,14 @@ export class NodegroupsPanel extends Panel {
     } else {
       titleTd.innerText = Character.EM_DASH + " not in any nodegroup " + Character.EM_DASH + " (loading) " + Character.EM_DASH + Character.NO_BREAK_SPACE + Character.NO_BREAK_SPACE + Character.NO_BREAK_SPACE;
     }
-    titleTd.colSpan = 5;
+    titleTd.colSpan = 4;
     tr.append(titleTd);
 
-    const menu = new DropDownMenu(titleTd, true);
+    const menuTd = Utils.createTd();
+    const menu = new DropDownMenu(menuTd, true);
     this._addMenuItemStateApplyGroup(menu, pNodegroup, pAllNodegroups);
     this._addMenuItemStateApplyTestGroup(menu, pNodegroup, pAllNodegroups);
+    tr.append(menuTd);
 
     tr.addEventListener("click", (pClickEvent) => {
       const cmdArr = ["state.apply"];
