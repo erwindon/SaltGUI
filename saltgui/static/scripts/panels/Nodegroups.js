@@ -293,6 +293,7 @@ export class NodegroupsPanel extends Panel {
 
   _addNodegroupRow (pNodegroup, pAllNodegroups) {
     const tr = Utils.createTr("no-search", null, "ng-" + pNodegroup);
+    tr.style.borderTop = "4px double #ddd";
 
     const titleTd = Utils.createTd();
     if (pNodegroup) {
