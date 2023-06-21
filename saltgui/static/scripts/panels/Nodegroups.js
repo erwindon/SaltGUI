@@ -140,17 +140,25 @@ export class NodegroupsPanel extends Panel {
 
       // fix the row menu
       const oldMenuButton = minionTr2.querySelector("td div.run-command-button");
+      const minionIsOk = minionTr2.dataset.saltversion !== undefined;
+
       if (oldMenuButton) {
         oldMenuButton.parentElement.remove();
         const menu = new DropDownMenu(minionTr2, true);
-        this._addMenuItemStateApplyMinion(menu, pMinionId);
-        this._addMenuItemStateApplyTestMinion(menu, pMinionId);
-        this._addMenuItemShowGrains(menu, pMinionId);
-        this._addMenuItemShowPillars(menu, pMinionId);
-        this._addMenuItemShowSchedules(menu, pMinionId);
-        this._addMenuItemShowBeacons(menu, pMinionId);
+        if (minionIsOk) {
+          this._addMenuItemStateApplyMinion(menu, pMinionId);
+          this._addMenuItemStateApplyTestMinion(menu, pMinionId);
+          this._addMenuItemShowGrains(menu, pMinionId);
+          this._addMenuItemShowPillars(menu, pMinionId);
+          this._addMenuItemShowSchedules(menu, pMinionId);
+          this._addMenuItemShowBeacons(menu, pMinionId);
+        } else {
+          this._addMenuItemShowKeys(menu);
+        }
+      }
 
-        // fix the row
+      if (minionIsOk) {
+        // fix the row as needed
         minionTr2.addEventListener("click", (pClickEvent) => {
           const cmdArr = ["state.apply"];
           this.runCommand("", pMinionId, cmdArr);
