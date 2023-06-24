@@ -253,6 +253,10 @@ The names can be specified as simple names like the example above.
 Alternatively, the [grains.get](https://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.grains.html#salt.modules.grains.get) notation can be used to get more detailed information. The separator is always `:`. e.g. `locale_info:timezone`.
 Alternatively, the [jsonpath](https://www.w3resource.com/JSON/JSONPath-with-JavaScript.php) notation can be used to allow even more freedom. Jsonpath is used when the text starts with a `$`. e.g. `$.ip4_interfaces.eth0[0]`.
 
+The configured value can be prefixed with a title and an '=' sign to specify the title to be used on the screen.
+e.g. `IP-Number=$.ip4_interfaces.eth0[0]` shows `IP-Number` as title, but uses the value `$.ip4_interfaces.eth0[0]` for each minion.
+Note that when the value somehow contains an '=' sign, then a title must be provided to prevent confusion.
+
 In any table where the the minion status is shown and where the grain-values of the minion are also known, the minion status is
 replaced with the the best value from grain `fqdn_ip4`.
 The best value is chosen by first eliminating all values that appear for more than one minion.
