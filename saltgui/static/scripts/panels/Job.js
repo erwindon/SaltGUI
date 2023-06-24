@@ -1,5 +1,6 @@
 /* global */
 
+import {Character} from "../Character.js";
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
@@ -12,7 +13,7 @@ export class JobPanel extends Panel {
   constructor () {
     super("job");
 
-    this.addTitle("... on ...");
+    this.addTitle(Character.HORIZONTAL_ELLIPSIS + " on " + Character.HORIZONTAL_ELLIPSIS);
     this.addCloseButton();
     this.addPanelMenu();
     this.addSearchButton();
@@ -493,7 +494,7 @@ export class JobPanel extends Panel {
     summaryJobsActiveSpan.innerText = info.Running.length + " active";
     summaryJobsActiveSpan.insertBefore(Utils.createJobStatusSpan(pJobId, true), summaryJobsActiveSpan.firstChild);
     summaryJobsActiveSpan.addEventListener("click", (pClickEvent) => {
-      this.output.innerText = "loading...";
+      this.output.innerText = "loading" + Character.HORIZONTAL_ELLIPSIS;
       this.onShow();
       this.panelMenu.verifyAll();
       pClickEvent.stopPropagation();

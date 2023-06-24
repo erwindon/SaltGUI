@@ -1,5 +1,6 @@
 /* global */
 
+import {Character} from "../Character.js";
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
@@ -10,7 +11,7 @@ export class GrainsMinionPanel extends Panel {
   constructor () {
     super("grains-minion");
 
-    this.addTitle("Grains on ...");
+    this.addTitle("Grains on " + Character.HORIZONTAL_ELLIPSIS);
     this.addPanelMenu();
     this._addPanelMenuItemGrainsSetValAdd();
     this._addPanelMenuItemSaltUtilRefreshGrains();

@@ -11,7 +11,7 @@ export class PillarsMinionPanel extends Panel {
   constructor () {
     super("pillars-minion");
 
-    this.addTitle("Pillars on ...");
+    this.addTitle("Pillars on " + Character.HORIZONTAL_ELLIPSIS);
     this.addPanelMenu();
     this._addPanelMenuItemSaltUtilRefreshPillar();
     this.addSearchButton();

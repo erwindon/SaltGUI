@@ -290,7 +290,7 @@ export class KeysPanel extends Panel {
 
     // force same columns on all rows
     // do not use class "fingerprint" yet
-    minionTr.appendChild(Utils.createTd("os", "loading..."));
+    minionTr.appendChild(Utils.createTd("os", "loading" + Character.HORIZONTAL_ELLIPSIS));
   }
 
   _addRejectedMinion (pMinionId, pMinionsDict) {
@@ -312,7 +312,7 @@ export class KeysPanel extends Panel {
 
     // force same columns on all rows
     // do not use class "fingerprint" yet
-    minionTr.appendChild(Utils.createTd("os", "loading..."));
+    minionTr.appendChild(Utils.createTd("os", "loading" + Character.HORIZONTAL_ELLIPSIS));
 
     const tbody = this.table.tBodies[0];
     tbody.appendChild(minionTr);
@@ -337,7 +337,7 @@ export class KeysPanel extends Panel {
 
     // force same columns on all rows
     // do not use class "fingerprint" yet
-    minionTr.appendChild(Utils.createTd("os", "loading..."));
+    minionTr.appendChild(Utils.createTd("os", "loading" + Character.HORIZONTAL_ELLIPSIS));
 
     const tbody = this.table.tBodies[0];
     tbody.appendChild(minionTr);
@@ -364,7 +364,7 @@ export class KeysPanel extends Panel {
 
     // force same columns on all rows
     // do not use class "fingerprint" yet
-    minionTr.appendChild(Utils.createTd("os", "loading..."));
+    minionTr.appendChild(Utils.createTd("os", "loading" + Character.HORIZONTAL_ELLIPSIS));
 
     const tbody = this.table.tBodies[0];
     if (pInsertAtTop) {

@@ -1,5 +1,6 @@
 /* global */
 
+import {Character} from "../Character.js";
 import {DropDownMenu} from "../DropDown.js";
 import {JobsPanel} from "./Jobs.js";
 import {Output} from "../output/Output.js";
@@ -41,7 +42,7 @@ export class JobsSummaryPanel extends JobsPanel {
     const maxTextLength = 50;
     if (targetText.length > maxTextLength) {
       // prevent column becoming too wide
-      targetText = targetText.substring(0, maxTextLength) + "...";
+      targetText = targetText.substring(0, maxTextLength) + Character.HORIZONTAL_ELLIPSIS;
     }
     const targetDiv = Utils.createDiv("target", targetText);
     td.appendChild(targetDiv);
@@ -50,12 +51,12 @@ export class JobsSummaryPanel extends JobsPanel {
     const functionDiv = Utils.createDiv("function", functionText);
     td.appendChild(functionDiv);
 
-    const statusSpan = Utils.createSpan(["job-status", "no-job-status"], "loading...");
+    const statusSpan = Utils.createSpan(["job-status", "no-job-status"], "loading" + Character.HORIZONTAL_ELLIPSIS);
     // effectively also the whole column, but it does not look like a column on screen
     statusSpan.addEventListener("click", (pClickEvent) => {
       // show "loading..." only once, but we are updating the whole column
       statusSpan.classList.add("no-job-status");
-      statusSpan.innerText = "loading...";
+      statusSpan.innerText = "loading" + Character.HORIZONTAL_ELLIPSIS;
       this.startRunningJobs();
       pClickEvent.stopPropagation();
     });
@@ -91,7 +92,7 @@ export class JobsSummaryPanel extends JobsPanel {
   _addMenuItemUpdateStatus (pMenu, statusSpan) {
     pMenu.addMenuItem("Update status", () => {
       statusSpan.classList.add("no-job-status");
-      statusSpan.innerText = "loading...";
+      statusSpan.innerText = "loading" + Character.HORIZONTAL_ELLIPSIS;
       this.startRunningJobs();
     });
   }

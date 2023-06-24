@@ -15,6 +15,8 @@
 // the array will be filled with 4 elements
 // the dictionary will be filled with one element named "x"
 
+import {Character} from "./Character.js";
+
 export class ParseCommandLine {
 
   static getPatJid () {
@@ -123,7 +125,7 @@ export class ParseCommandLine {
           // the first part of the string is valid JSON
           endCharPos += endChar.length;
           if (endCharPos < pToRun.length && pToRun[endCharPos] !== " ") {
-            return "Valid " + objType + ", but followed by text:" + pToRun.substring(endCharPos) + "...";
+            return "Valid " + objType + ", but followed by text:" + pToRun.substring(endCharPos) + Character.HORIZONTAL_ELLIPSIS;
           }
 
           // valid JSON and not followed by strange characters

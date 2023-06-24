@@ -126,7 +126,7 @@ export class DropDownMenu {
   // This allows dynamic menuitem titles (use menuitem.innerText)
   // or visibility (use menuitem.style.display = "none"/"inline-block")
   addMenuItem (pTitle, pCallBack, pValue) {
-    const button = Utils.createDiv("run-command-button", "...");
+    const button = Utils.createDiv("run-command-button", Character.HORIZONTAL_ELLIPSIS);
     if (pValue) {
       button._value = pValue;
     }

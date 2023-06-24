@@ -343,7 +343,7 @@ export class CommandBox {
     targetField.disabled = true;
     commandField.disabled = true;
     button.disabled = true;
-    output.innerText = "loading...";
+    output.innerText = "loading" + Character.HORIZONTAL_ELLIPSIS;
 
     const screenModifyingCommands = CommandBox.getScreenModifyingCommands();
     // test whether the command may have caused an update to the list
@@ -412,7 +412,7 @@ export class CommandBox {
     manualRun.style.display = "block";
 
     const outputField = document.querySelector(".run-command pre");
-    outputField.innerText = "Waiting for command...";
+    outputField.innerText = "Waiting for command" + Character.HORIZONTAL_ELLIPSIS;
 
     const targetField = document.getElementById("target");
     TargetType.autoSelectTargetType(targetField.value);

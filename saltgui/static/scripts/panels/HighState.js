@@ -63,7 +63,7 @@ export class HighStatePanel extends Panel {
 
     // remove the previous warning, if any
     // and show this while loading more info
-    super.setWarningText("info", "loading...");
+    super.setWarningText("info", "loading" + Character.HORIZONTAL_ELLIPSIS);
 
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       this._handleMinionsWheelKeyListAll(pWheelKeyListAllData);
@@ -380,7 +380,7 @@ export class HighStatePanel extends Panel {
       const maxTextLength = 50;
       if (targetText.length > maxTextLength) {
         // prevent column becoming too wide
-        targetText = targetText.substring(0, maxTextLength) + "...";
+        targetText = targetText.substring(0, maxTextLength) + Character.HORIZONTAL_ELLIPSIS;
       }
       minionTr.appendChild(Utils.createTd("target", targetText));
 
@@ -388,7 +388,7 @@ export class HighStatePanel extends Panel {
       let functionText = jobData.Function + argumentsText;
       if (functionText.length > maxTextLength) {
         // prevent column becoming too wide
-        functionText = functionText.substring(0, maxTextLength) + "...";
+        functionText = functionText.substring(0, maxTextLength) + Character.HORIZONTAL_ELLIPSIS;
       }
       const functionField = Utils.createTd("function", functionText);
       functionField.cmd = jobData.Function + argumentsText;

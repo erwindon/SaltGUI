@@ -1,5 +1,6 @@
 /* global */
 
+import {Character} from "../Character.js";
 import {Panel} from "./Panel.js";
 import {Router} from "../Router.js";
 import {Utils} from "../Utils.js";
@@ -294,7 +295,7 @@ export class LoginPanel extends Panel {
   }
 
   _onLoginSuccess () {
-    this._showNoticeText("#4CAF50", "Please wait...", "notice_please_wait");
+    this._showNoticeText("#4CAF50", "Please wait" + Character.HORIZONTAL_ELLIPSIS, "notice_please_wait");
 
     Utils.setStorageItem("local", "salt-motd-txt", "");
     Utils.setStorageItem("local", "salt-motd-html", "");

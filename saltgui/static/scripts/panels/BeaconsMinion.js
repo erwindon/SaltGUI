@@ -12,7 +12,7 @@ export class BeaconsMinionPanel extends Panel {
   constructor () {
     super("beacons-minion");
 
-    this.addTitle("Beacons on ...");
+    this.addTitle("Beacons on " + Character.HORIZONTAL_ELLIPSIS);
     this.addPanelMenu();
     this._addPanelMenuItemBeaconsDisableWhenNeeded();
     this._addPanelMenuItemBeaconsEnableWhenNeeded();

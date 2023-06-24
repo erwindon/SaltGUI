@@ -1,5 +1,6 @@
 /* global */
 
+import {Character} from "../Character.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
 
@@ -74,7 +75,7 @@ export class JobsPanel extends Panel {
         // prevent column becoming too wide
         // yes, the addition of running/returned may again make
         // the string longer than 50 characters, we accept that
-        targetText = targetText.substring(0, maxTextLength) + "...";
+        targetText = targetText.substring(0, maxTextLength) + Character.HORIZONTAL_ELLIPSIS;
       }
       // then add the operational statistics
       if (job.Running && job.Running.length > 0) {

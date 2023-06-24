@@ -387,7 +387,7 @@ export class Panel {
     const minionTd = Utils.createTd(["status", "accepted"], "accepted");
     minionTr.appendChild(minionTd);
 
-    minionTr.appendChild(Utils.createTd("os", "loading..."));
+    minionTr.appendChild(Utils.createTd("os", "loading" + Character.HORIZONTAL_ELLIPSIS));
 
     // fill out the number of columns to that of the header
     while (this.table.tHead.rows[0] && minionTr.cells.length < this.table.tHead.rows[0].cells.length - freeColumns) {
@@ -833,7 +833,7 @@ export class Panel {
   }
 
   clearPanel () {
-    if (this.title && this.originalTitle.includes("...")) {
+    if (this.title && this.originalTitle.includes(Character.HORIZONTAL_ELLIPSIS)) {
       this.title.innerText = this.originalTitle;
     }
     if (this.table) {

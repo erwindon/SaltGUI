@@ -1,5 +1,6 @@
 /* global config */
 
+import {Character} from "./Character.js";
 import {CommandBox} from "./CommandBox.js";
 import {Router} from "./Router.js";
 import {Utils} from "./Utils.js";
@@ -418,7 +419,7 @@ export class API {
       // it is long and boring (so not because it is a secret)
       // the sizes are so that the first and last 8 characters of the public key are still shown
       if (data.pub && data.pub.length > 75) {
-        data.pub = data.pub.substring(0, 35) + "..." + data.pub.substring(data.pub.length - 33);
+        data.pub = data.pub.substring(0, 35) + Character.HORIZONTAL_ELLIPSIS + data.pub.substring(data.pub.length - 33);
       }
 
       // salt/beacon/<minion>/<beacon>/

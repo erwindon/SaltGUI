@@ -170,7 +170,7 @@ export class JobsDetailsPanel extends JobsPanel {
         continue;
       }
       detailsField.classList.add("no-job-details");
-      detailsField.innerText = "loading...";
+      detailsField.innerText = "loading" + Character.HORIZONTAL_ELLIPSIS;
       tr.dataset.isLoading = "true";
       const jobId = tr.dataset.jobid;
 
@@ -342,7 +342,7 @@ export class JobsDetailsPanel extends JobsPanel {
     const maxTextLength = 50;
     if (targetText.length > maxTextLength) {
       // prevent column becoming too wide
-      targetText = targetText.substring(0, maxTextLength) + "...";
+      targetText = targetText.substring(0, maxTextLength) + Character.HORIZONTAL_ELLIPSIS;
     }
     tr.appendChild(Utils.createTd("target", targetText));
 
@@ -350,7 +350,7 @@ export class JobsDetailsPanel extends JobsPanel {
     let functionText = job.Function + argumentsText;
     if (functionText.length > maxTextLength) {
       // prevent column becoming too wide
-      functionText = functionText.substring(0, maxTextLength) + "...";
+      functionText = functionText.substring(0, maxTextLength) + Character.HORIZONTAL_ELLIPSIS;
     }
     tr.appendChild(Utils.createTd("function", functionText));
 
@@ -365,11 +365,11 @@ export class JobsDetailsPanel extends JobsPanel {
     this._addMenuItemJobsRerunJob(menu, job, argumentsText);
 
     const statusTd = Utils.createTd();
-    const statusSpan = Utils.createSpan(["job-status", "no-job-status"], "loading...");
+    const statusSpan = Utils.createSpan(["job-status", "no-job-status"], "loading" + Character.HORIZONTAL_ELLIPSIS);
     statusSpan.addEventListener("click", (pClickEvent) => {
       // show "loading..." only once, but we are updating the whole column
       statusSpan.classList.add("no-job-status");
-      statusSpan.innerText = "loading...";
+      statusSpan.innerText = "loading" + Character.HORIZONTAL_ELLIPSIS;
       this.startRunningJobs();
       pClickEvent.stopPropagation();
     });
@@ -383,7 +383,7 @@ export class JobsDetailsPanel extends JobsPanel {
     const detailsSpan = Utils.createSpan(["details2", "no-job-details"], "(click)");
     detailsSpan.addEventListener("click", (pClickEvent) => {
       detailsSpan.classList.add("no-job-details");
-      detailsSpan.innerText = "loading...";
+      detailsSpan.innerText = "loading" + Character.HORIZONTAL_ELLIPSIS;
       this._getJobDetails(job.id);
       pClickEvent.stopPropagation();
     });
@@ -423,7 +423,7 @@ export class JobsDetailsPanel extends JobsPanel {
   _addJobsMenuItemUpdateStatus (pMenu, pStatusSpan) {
     pMenu.addMenuItem("Update status", () => {
       pStatusSpan.classList.add("no-job-status");
-      pStatusSpan.innerText = "loading...";
+      pStatusSpan.innerText = "loading" + Character.HORIZONTAL_ELLIPSIS;
       this.startRunningJobs();
     });
   }
@@ -431,7 +431,7 @@ export class JobsDetailsPanel extends JobsPanel {
   _addMenuItemUpdateDetails (pMenu, pDetailsSpan, job) {
     pMenu.addMenuItem("Update details", () => {
       pDetailsSpan.classList.add("no-job-details");
-      pDetailsSpan.innerText = "loading...";
+      pDetailsSpan.innerText = "loading" + Character.HORIZONTAL_ELLIPSIS;
       this._getJobDetails(job.id);
     });
   }

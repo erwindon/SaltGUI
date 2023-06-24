@@ -1,5 +1,6 @@
 /* global */
 
+import {Character} from "../Character.js";
 import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
@@ -11,7 +12,7 @@ export class SchedulesMinionPanel extends Panel {
   constructor () {
     super("schedules-minion");
 
-    this.addTitle("Schedules on ...");
+    this.addTitle("Schedules on " + Character.HORIZONTAL_ELLIPSIS);
     this.addPanelMenu();
     this._addPanelMenuItemScheduleEnableWhenNeeded();
     this._addPanelMenuItemScheduleDisableWhenNeeded();

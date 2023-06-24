@@ -102,7 +102,7 @@ export class Documentation {
     const cmd = ParseCommandLine.getCommandFromCommandLine(commandLine);
 
     button.disabled = true;
-    output.innerText = "loading...";
+    output.innerText = "loading" + Character.HORIZONTAL_ELLIPSIS;
 
     let docCommand;
     let dummyCommand;
