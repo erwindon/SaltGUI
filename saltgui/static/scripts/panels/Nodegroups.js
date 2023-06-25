@@ -297,9 +297,9 @@ export class NodegroupsPanel extends Panel {
 
     const titleTd = Utils.createTd();
     if (pNodegroup) {
-      titleTd.innerHTML = Character.EM_DASH + " nodegroup <b>" + pNodegroup + "</b> " + Character.EM_DASH + " (loading) " + Character.EM_DASH + "&nbsp;&nbsp;&nbsp;";
+      titleTd.innerHTML = Character.EM_DASH + " nodegroup <b>" + pNodegroup + "</b> " + Character.EM_DASH + " (loading) " + Character.EM_DASH;
     } else {
-      titleTd.innerText = Character.EM_DASH + " not in any nodegroup " + Character.EM_DASH + " (loading) " + Character.EM_DASH + Character.NO_BREAK_SPACE + Character.NO_BREAK_SPACE + Character.NO_BREAK_SPACE;
+      titleTd.innerText = Character.EM_DASH + " not in any nodegroup " + Character.EM_DASH + " (loading) " + Character.EM_DASH;
     }
     titleTd.colSpan = 4;
     tr.append(titleTd);
