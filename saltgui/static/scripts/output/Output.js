@@ -579,6 +579,31 @@ export class Output {
     pParentDiv.appendChild(downloadA);
   }
 
+  static _hasStartTimeField (pResponse) {
+    if (typeof pResponse !== "object" || Array.isArray(pResponse)) {
+      // not even a valid response
+      return false;
+    }
+
+    for (const minionId in pResponse) {
+      const minionResponse = pResponse[minionId];
+      if (typeof minionResponse !== "object" || Array.isArray(minionResponse)) {
+        continue;
+      }
+      for (const key in minionResponse) {
+        const result = minionResponse[key];
+        if (typeof result !== "object" || Array.isArray(result)) {
+          continue;
+        }
+        if (typeof result.start_time === "string") {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
   // the orchestrator for the output
   // determines what format should be used and uses that
   static addResponseOutput (pOutputContainer, pJobId, pMinionData, pResponse, pCommand, pInitialStatus, pHighlightMinionId) {
@@ -803,7 +828,7 @@ export class Output {
 
     const commandCmd = pCommand.trim().replace(/ .*/, "");
 
-    if (OutputHighstate.isHighStateOutput(commandCmd, {})) {
+    if (Output._hasStartTimeField(pResponse)) {
       const span = Utils.createDiv("", "\n" + Character.CIRCLED_INFORMATION_SOURCE + " start-time of tasks is using local-time from the minion");
       topSummaryDiv.append(span);
     }
