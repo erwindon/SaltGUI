@@ -586,10 +586,19 @@ export class Output {
     }
 
     for (const minionId in pResponse) {
-      const minionResponse = pResponse[minionId];
+      let minionResponse = pResponse[minionId];
       if (typeof minionResponse !== "object" || Array.isArray(minionResponse)) {
         continue;
       }
+
+      if (minionResponse["return"] !== undefined) {
+        // with full_return, there is an extra level
+        minionResponse = minionResponse["return"];
+        if (typeof minionResponse !== "object" || Array.isArray(minionResponse)) {
+          continue;
+        }
+      }
+
       for (const key in minionResponse) {
         const result = minionResponse[key];
         if (typeof result !== "object" || Array.isArray(result)) {
