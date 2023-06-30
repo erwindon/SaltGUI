@@ -392,9 +392,7 @@ export class Panel {
     }
   }
 
-  __addConsole () {
-    // Currently unused but present in preparation for branch zzz-reports
-    // This method is called by ReportPanel in the Reports feature
+  addConsole () {
     const console = Utils.createDiv("output", "", this.key + "-output");
     this.div.appendChild(console);
     this.console = console;
