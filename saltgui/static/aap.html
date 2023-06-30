@@ -1,0 +1,48 @@
+<h1>OVERVIEW</h1>
+<table border=1>
+  <thead>
+    <tr>
+      <th>minion-id</th>
+      <th>kernelrelease</th>
+      <th>gpus</th>
+      <th>number of CPUs</th>
+      <th>xyz</th>
+      <th>aap</th>
+      <th>noot</th>
+      <th>mies</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for all minions %}
+    <tr>
+      <td>{{ minionid }}</td>
+      <td>{{ grain.kernelrelease }}</td>
+      <td>{{ grain.gpus }}</td>
+      <td>{{ grain.num_cpus }}</td>
+      <td>{{ grain.xyz }}</td>
+      <td>{{ pillar.aap }}</td>
+      <td>{{ pillar.noot }}</td>
+      <td>{{ pillar.mies }}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+<p>&nbsp;</p>
+<table border=1>
+  <thead>
+    <tr>
+      <th>minion-id</th>
+      <th>status</th>
+      <th>fingerprint</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for all keys %}
+    <tr>
+      <td>{{ minionid }}</td>
+      <td>{{ key.status }}</td>
+      <td>{{ key.fingerprint }}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
