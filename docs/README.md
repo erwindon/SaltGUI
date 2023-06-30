@@ -42,6 +42,7 @@ We suggest to upgrade the SaltStack installation when you are still using a vers
 - View external documentation for any salt command
 - View minions organized by node-group
 - View details optionally in a separate windows
+- Define your own simple reports
 - Define your own custom documentation for commands
 - Match list of minions against reference list
 - Match status of minions against reference list
@@ -334,6 +335,62 @@ When a minion happens to be a member of multiple nodegroups, then a row for that
 When using targeting based on nodegroups, the salt-system does not filter out the non-accepted minions.
 Therefore also the rejected, denied and unaccepted minions will show up.
 Even the minion names that are in the nodegroup, but which do not actually exist, will show up as 'unknown'.
+
+## Reports
+The Reports page shows a list of available reports.
+SaltGUI does not pre-define any reports.
+The list of reports is taken from a text file named `reports.txt`.
+It should contain one line per available report.
+Each line containing the basename of the report followed by a tab character and followed by a descriptive text.
+
+e.g.:
+```
+report1<tab>Description of report #1
+report2<tab>Description of report #2
+```
+
+The actual filename that will be used for the report template is `__basename__.html`, e.g. `report2.html`.
+The report template must consist of regular HTML code as it would appear within a `<body>` section.
+No `<html>` section or `<head>` section should be present in the file.
+
+Repeating sections can be added to the report template.
+Repeating sections can be defined:
+* for each accepted minion, using `{% for all minions %}` on a line
+just before the block and `{% endfor %}` on a line just after the block.
+The block will be repeated for each accepted minion and that will happen in alphabetical order.
+* for each known key, using `{% for all keys %}` on a line
+just before the block and `{% endfor %}` on a line just after the block.
+The block will be repeated for each known key and that will happen in alphabetical order.
+
+e.g.:
+```
+<table border=1>
+    <tr>
+      <th>minion-id</th>
+      <th>kernelrelease</th>
+      <th>number of CPUs</th>
+    </tr>
+  </thead>
+{% for all minions %}
+    <tr>
+      <td>{{ minionid }}</td>
+      <td>{{ grain.kernelrelease }}</td>
+      <td>{{ grain.num_cpus }}</td>
+    </tr>
+{% endfor %}
+</table>
+```
+
+The following placeholders will be replaced with actual values:<br>
+`{{ minionid }}`: only useful in a repeating section, replaced by the current minion-id.<br>
+`{{ grain.__name__ }}`: only useful in a repeating section, replaced by the value of grain `__name__` for the current minion.<br>
+`{{ pillar.__name__ }}`: only useful in a repeating section, replaced by the value of pillar `__name__` for the current minion.<br>
+`{{ key.status }}`: only useful in a repeating section, replaced by the status of current key. The styling is automatically adjusted to give the status values their well-known colours.<br>
+`{{ key.fingerprint }}`: only useful in a repeating section, replaced by the value of field `fingerprint` for the current key. The styling is automatically adjusted to show the fingerprint in a monospaced font.
+
+The presented report can be printed using the regular print-function from the browser.
+Most of the irrelevant gui-elements will be removed from the print-view.
+Note that this printing function actually works on all other pages as well.
 
 ## Highstate
 The Highstate page provides an overview of the minions and their latest state information.
