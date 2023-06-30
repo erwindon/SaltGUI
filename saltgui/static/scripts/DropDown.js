@@ -33,7 +33,7 @@ export class DropDownMenu {
       pParentElement = td;
     }
 
-    this.menuDropdown = Utils.createDiv(["run-command-button", "no-search"]);
+    this.menuDropdown = Utils.createDiv(["run-command-button", "no-search", "no-print"]);
 
     if (pParentElement.id === "cmd-box") {
       this.menuButton = Utils.createDiv("", Character.OPEN_BOOK);

@@ -48,7 +48,7 @@ export class Panel {
     const span = Utils.createSpan();
     span.id = this.key + "-menu";
     const menu = new DropDownMenu(span);
-    menu.menuButton.classList.add("small-button-left");
+    menu.menuButton.classList.add("small-button-left", "no-print");
     this.div.appendChild(span);
     this.panelMenu = menu;
   }
@@ -64,7 +64,7 @@ export class Panel {
 
   addSearchButton () {
     const span = Utils.createSpan(
-      ["search-button", "small-button", "small-button-left", "small-button-for-click"],
+      ["search-button", "small-button", "small-button-left", "small-button-for-click", "no-print"],
       Character.LEFT_POINTING_MAGNIFYING_GLASS,
       this.key + "-search-button");
     this.div.appendChild(span);
@@ -73,14 +73,14 @@ export class Panel {
 
   addPlayPauseButton () {
     const playButton = Utils.createSpan(
-      ["small-button", "small-button-left", "small-button-for-click"],
+      ["small-button", "small-button-left", "small-button-for-click", "no-print"],
       Character.CH_PLAY);
     playButton.style.cursor = "pointer";
     this.div.appendChild(playButton);
     this.playButton = playButton;
 
     const pauseButton = Utils.createSpan(
-      ["small-button", "small-button-left", "small-button-for-click"],
+      ["small-button", "small-button-left", "small-button-for-click", "no-print"],
       Character.CH_PAUSE);
     pauseButton.style.display = "none";
     pauseButton.style.cursor = "pointer";
@@ -119,7 +119,7 @@ export class Panel {
   addHelpButton (pHelpTextArr, pUrl) {
     const span = Utils.createElem(
       pUrl ? "a" : "span",
-      ["small-button", "small-button-right", "small-button-for-hover"],
+      ["small-button", "small-button-right", "small-button-for-hover", "no-print"],
       Character.BLACK_QUESTION_MARK_ORNAMENT,
       this.key + "-help-button");
     span.style.cursor = "help";
@@ -135,7 +135,7 @@ export class Panel {
 
   addCloseButton () {
     const span = Utils.createSpan(
-      ["small-button", "small-button-right", "small-button-for-click"],
+      ["small-button", "small-button-right", "small-button-for-click", "no-print"],
       Character.HEAVY_MULTIPLICATION_X,
       this.key + "-close-button");
     this.div.appendChild(span);

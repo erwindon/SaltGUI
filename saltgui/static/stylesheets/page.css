@@ -332,3 +332,11 @@ table tr td:last-of-type {
   text-decoration-line: overline underline;
   text-decoration-style: double;
 }
+
+@media print
+{
+  .no-print, .no-print *
+  {
+    display: none !important;
+  }
+}

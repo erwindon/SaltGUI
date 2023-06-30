@@ -545,7 +545,7 @@ export class Output {
   }
 
   static _addDownload (pParentDiv, pJobId, pObject, pFormatFunction, pTypeLabel, pContentType, pFilenameExtension) {
-    const downloadA = Utils.createElem("a");
+    const downloadA = Utils.createElem("a", "no-print");
     downloadA.innerText = pTypeLabel;
     downloadA.style = "float:right; margin-left:10px";
     downloadA.addEventListener("click", (pClickEvent) => {
@@ -831,7 +831,7 @@ export class Output {
     Output._addDownload(topSummaryDiv, pJobId, downloadObject,
       OutputJson.formatJSON, "JSON", "application/json", "json");
 
-    const downloadLabel = Utils.createSpan("", "download as:");
+    const downloadLabel = Utils.createSpan("no-print", "download as:");
     downloadLabel.style = "float:right";
     topSummaryDiv.appendChild(downloadLabel);
 

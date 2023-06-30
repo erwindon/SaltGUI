@@ -2,10 +2,16 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  background-color: #263238;
   position: absolute;
   height: 100%;
   top: 0;
+}
+
+@media not print
+{
+  #page-login {
+    background-color: #263238;
+  }
 }
 
 #login-panel {
