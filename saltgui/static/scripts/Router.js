@@ -26,6 +26,8 @@ import {PillarsMinionPage} from "./pages/PillarsMinion.js";
 import {PillarsPage} from "./pages/Pillars.js";
 import {QuickviewPage} from "./pages/Quickview.js";
 import {ReactorsPage} from "./pages/Reactors.js";
+import {ReportPage} from "./pages/Report.js";
+import {ReportsPage} from "./pages/Reports.js";
 import {SchedulesMinionPage} from "./pages/SchedulesMinion.js";
 import {SchedulesPage} from "./pages/Schedules.js";
 import {TemplatesPage} from "./pages/Templates.js";
@@ -68,6 +70,8 @@ export class Router {
     this._registerPage(Router.optionsPage = new OptionsPage(this)); // NOSONAR S1121
     this._registerPage(Router.issuesPage = new IssuesPage(this)); // NOSONAR S1121
     this._registerPage(Router.quickviewPage = new QuickviewPage(this)); // NOSONAR S1121
+    this._registerPage(Router.reportsPage = new ReportsPage(this)); // NOSONAR S1121
+    this._registerPage(Router.reportPage = new ReportPage(this)); // NOSONAR S1121
     this._registerPage(Router.logoutPage = new LogoutPage(this)); // NOSONAR S1121
 
     this._registerRouterEventListeners();
@@ -232,6 +236,7 @@ export class Router {
     this._registerMenuItem(null, "events", "events", "e");
     this._registerMenuItem("events", "reactors", "reactors", "r");
     this._registerMenuItem(null, "issues", "issues", "i");
+    this._registerMenuItem("issues", "reports", "reports");
     // no shortcut for logout
     this._registerMenuItem(null, "logout", "logout");
 
@@ -355,6 +360,8 @@ export class Router {
     Router._showMenuItem(pages, Router.highStatePage);
     Router._showMenuItem(pages, Router.orchestrationsPage);
     Router._showMenuItem(pages, Router.templatesPage);
+    Router._showMenuItem(pages, Router.issuesPage);
+    Router._showMenuItem(pages, Router.reportsPage);
     Router._showMenuItem(pages, Router.eventsPage, ["reactors"]);
     Router._showMenuItem(pages, Router.reactorsPage);
     Router._showMenuItem(pages, Router.issuesPage);
