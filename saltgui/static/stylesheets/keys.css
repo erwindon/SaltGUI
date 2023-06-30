@@ -2,8 +2,11 @@
   width: 100%;
 }
 
-td.fingerprint {
+.fingerprint {
   font-family: monospace;
+}
+
+td.fingerprint {
   overflow: hidden;
   text-overflow: ellipsis;
 

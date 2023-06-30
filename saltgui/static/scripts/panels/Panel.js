@@ -750,15 +750,17 @@ export class Panel {
     }
 
     if (this.playOrPause === "pause" && this.pauseButton) {
+      txt += "<span class='no-print'>";
       if (this.table && this.table.tBodies[0].rows.length) {
         txt += ", press " + Character.buttonInText(Character.CH_PLAY) + " to continue";
       } else {
         txt += ", press " + Character.buttonInText(Character.CH_PLAY) + " to begin";
       }
+      txt += "</span>";
     }
 
     if (this.playOrPause === "play" && this.playButton) {
-      txt += ", press " + Character.buttonInText(Character.CH_PAUSE) + " to pause";
+      txt += "<span class='no-print'>, press " + Character.buttonInText(Character.CH_PAUSE) + " to pause</span>";
     }
 
     txt = txt.replace(/^, /g, "");

@@ -1,0 +1,15 @@
+Branch zzz-reports
+("zzz" to move it to the bottom of the list)
+PoC for producing printable reports
+
+PRO:
+* previously, no report functionality was available
+
+CON:
+* there is not a high demand for this
+  it seemed solution for 2 users, but other solutions were chosen
+* the report templates must be constructed by the users
+  as html-body and with our own template format
+
+VERDICT:
+Keep until there is an actual request for it

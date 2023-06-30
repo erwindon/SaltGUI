@@ -37,11 +37,13 @@ export class EventsPanel extends Panel {
     let txt = Utils.txtZeroOneMany(this.nrEvents, "No events", "{0} event", "{0} events");
     if (this.playOrPause === "play") {
       const tbody = this.table.tBodies[0];
+      txt += "<span class='no-print'>";
       if (tbody.rows.length) {
         txt += ", waiting for more events";
       } else {
         txt += ", waiting for events";
       }
+      txt += "</span>";
     }
     super.updateFooter(txt);
   }

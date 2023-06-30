@@ -72,8 +72,16 @@ export class API {
       });
   }
 
+  getStaticFile (pFileName) {
+    return this.apiRequest("GET", "/static/" + pFileName);
+  }
+
   getStaticMinionsTxt () {
     return this.apiRequest("GET", "/static/minions.txt");
+  }
+
+  getStaticReportsTxt () {
+    return this.apiRequest("GET", "/static/reports.txt");
   }
 
   getStaticSaltAuthTxt () {
