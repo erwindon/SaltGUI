@@ -286,8 +286,10 @@ pre.output {
   white-space: pre-wrap;
 }
 
-.run-command pre.output {
-  min-height: 250px;
+@media not print {
+  .run-command pre.output {
+    min-height: 250px;
+  }
 }
 
 .search-box input {
