@@ -7,8 +7,7 @@
   top: 0;
 }
 
-@media not print
-{
+@media not print {
   #page-login {
     background-color: #263238;
   }
