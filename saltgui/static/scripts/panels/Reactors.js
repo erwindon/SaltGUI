@@ -44,7 +44,7 @@ export class ReactorsPanel extends Panel {
       Utils.setStorageItem("session", "reactors", JSON.stringify(reactors));
       Router.updateMainMenu();
     } else {
-      reactors = {};
+      reactors = [];
     }
     for (const reactor of reactors) {
       for (const eventTag in reactor) {
