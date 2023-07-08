@@ -13,10 +13,7 @@ export class ReactorsPanel extends Panel {
     this.addTitle("Reactors");
     this.addSearchButton();
     this.addTable(["Event", "Reactors"]);
-
-    // cannot use this now since we are loading
-    // the data in random order
-    // this.setTableSortable("Event", "asc");
+    this.setTableSortable("Event", "asc");
 
     this.addMsg();
   }
@@ -39,22 +36,29 @@ export class ReactorsPanel extends Panel {
     }
 
     // should we update it or just use from cache (see commandbox) ?
-    let reactors = pWheelConfigValuesData.return[0].data.return.reactor;
-    if (reactors) {
-      Utils.setStorageItem("session", "reactors", JSON.stringify(reactors));
+    let reactorsArr = pWheelConfigValuesData.return[0].data.return.reactor;
+    if (reactorsArr) {
+      Utils.setStorageItem("session", "reactors", JSON.stringify(reactorsArr));
       Router.updateMainMenu();
     } else {
-      reactors = [];
+      reactorsArr = [];
     }
-    for (const reactor of reactors) {
+
+    // the reactors are organized as an array of maps
+    // first re-organize into a single map
+    const reactorsMap = {};
+    for (const reactor of reactorsArr) {
       for (const eventTag in reactor) {
-        this._addReactor(eventTag, reactor[eventTag]);
+        reactorsMap[eventTag] = reactor[eventTag];
       }
     }
 
-    this.setTableSortable("Event", "asc");
+    // then populate the table
+    for (const eventTag of Object.keys(reactorsMap).sort()) {
+      this._addReactor(eventTag, reactorsMap[eventTag]);
+    }
 
-    const txt = Utils.txtZeroOneMany(reactors.length,
+    const txt = Utils.txtZeroOneMany(reactorsArr.length,
       "No reactors", "{0} reactor", "{0} reactors");
     this.setMsg(txt);
   }
