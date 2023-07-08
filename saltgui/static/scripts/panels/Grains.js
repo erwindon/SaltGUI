@@ -39,10 +39,10 @@ export class GrainsPanel extends Panel {
         tr.appendChild(th);
       }
       this.previewColumsAdded = true;
-
-      // initialize sorting after all columns are present
-      this.setTableSortable("Minion", "asc");
     }
+
+    // initialize sorting after all columns are present
+    this.setTableSortable("Minion", "asc");
 
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const localGrainsItemsPromise = this.api.getLocalGrainsItems(null);
