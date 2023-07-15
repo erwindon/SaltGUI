@@ -178,8 +178,7 @@ export class JobPanel extends Panel {
     this.output.innerText = "";
 
     // use same formatter as direct commands
-    const argumentsText = JobPanel.decodeArgumentsArray(info.Arguments);
-    const commandText = info.Function + argumentsText;
+    let argumentsText = JobPanel.decodeArgumentsArray(info.Arguments);
 
     this.targettype = info["Target-type"];
     if (Array.isArray(info.Target)) {
@@ -187,7 +186,7 @@ export class JobPanel extends Panel {
     } else {
       this.target = info.Target;
     }
-    this.commandtext = commandText;
+    this.commandtext = info.Function + argumentsText;
     this.jobid = pJobId;
     this.minions = info.Minions;
     this.result = info.Result;
@@ -197,7 +196,15 @@ export class JobPanel extends Panel {
 
     // ============================
 
-    const functionText = commandText + " on " +
+    const maxTextLength = 50;
+    let displayArguments = null;
+    if (argumentsText.length > maxTextLength) {
+      // prevent column becoming too wide
+      displayArguments = this.commandtext;
+      argumentsText = argumentsText.substring(0, maxTextLength) + "...";
+    }
+
+    const functionText = info.Function + argumentsText + " on " +
       TargetType.makeTargetText(info);
     this.updateTitle(functionText);
 
@@ -229,7 +236,7 @@ export class JobPanel extends Panel {
       initialStatus = "(loading)";
       this.jobIsTerminated = false;
     }
-    Output.addResponseOutput(this.output, pJobId, minions, info.Result, info.Function, initialStatus, pMinionId);
+    Output.addResponseOutput(this.output, pJobId, minions, info.Result, info.Function, initialStatus, pMinionId, displayArguments);
 
     // replace any jobid
     // Don't do this with output.innerHTML as there are already

@@ -615,7 +615,7 @@ export class Output {
 
   // the orchestrator for the output
   // determines what format should be used and uses that
-  static addResponseOutput (pOutputContainer, pJobId, pMinionData, pResponse, pCommand, pInitialStatus, pHighlightMinionId) {
+  static addResponseOutput (pOutputContainer, pJobId, pMinionData, pResponse, pCommand, pInitialStatus, pHighlightMinionId, pArguments) {
 
     // remove old content
     pOutputContainer.innerText = "";
@@ -735,6 +735,12 @@ export class Output {
 
       summaryJobsListJobSpan.innerText = txt;
       topSummaryDiv.appendChild(summaryJobsListJobSpan);
+    }
+
+    if (pArguments) {
+      const div = Utils.createDiv("", pArguments);
+      div.style.lineBreak = "anywhere";
+      pOutputContainer.appendChild(div);
     }
 
     const masterTriangle = Utils.createSpan();
