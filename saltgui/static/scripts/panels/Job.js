@@ -197,8 +197,10 @@ export class JobPanel extends Panel {
     // ============================
 
     const maxTextLength = 50;
+    let displayArguments = null;
     if (argumentsText.length > maxTextLength) {
       // prevent column becoming too wide
+      displayArguments = this.commandtext;
       argumentsText = argumentsText.substring(0, maxTextLength) + "...";
     }
 
@@ -234,7 +236,7 @@ export class JobPanel extends Panel {
       initialStatus = "(loading)";
       this.jobIsTerminated = false;
     }
-    Output.addResponseOutput(this.output, pJobId, minions, info.Result, info.Function, initialStatus, pMinionId, this.commandtext);
+    Output.addResponseOutput(this.output, pJobId, minions, info.Result, info.Function, initialStatus, pMinionId, displayArguments);
 
     // replace any jobid
     // Don't do this with output.innerHTML as there are already
