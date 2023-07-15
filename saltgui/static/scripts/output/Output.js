@@ -601,7 +601,7 @@ export class Output {
 
       for (const key in minionResponse) {
         const result = minionResponse[key];
-        if (typeof result !== "object" || Array.isArray(result)) {
+        if (result === null || typeof result !== "object" || Array.isArray(result)) {
           continue;
         }
         if (typeof result.start_time === "string") {
