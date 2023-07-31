@@ -17,9 +17,9 @@
     "nightmare": "^3.0.2",
     "nyc": "^15.1.0",
     "stylelint": "^15.0.0",
-    "stylelint-config-standard": "^30.0.1",
-    "stylelint-csstree-validator": "^2.0.0",
-    "stylelint-scss": "^4.0.0"
+    "stylelint-config-standard": "^34.0.0",
+    "stylelint-csstree-validator": "^3.0.0",
+    "stylelint-scss": "^5.0.0"
   },
   "eslintConfig": {
     "env": {

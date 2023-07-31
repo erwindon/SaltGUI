@@ -20,24 +20,34 @@ export class GrainsPanel extends Panel {
     this.addTable(["Minion", "Status", "Salt version", "OS version", "Grains", "-menu-"]);
     this.setTableClickable();
 
-    // collect the list of displayed extra grains
-    this.previewGrains = Utils.getStorageItemList("session", "preview_grains");
+    // cannot initialize sorting before all columns are present
+    // this.setTableSortable("Minion", "asc");
 
-    // add the preview columns (before we sort the table)
-    // the div is not added to the DOM yet
-    const tr = this.div.querySelector("#grains-table-thead-tr");
-    for (const previewGrain of this.previewGrains) {
-      const th = Utils.createElem("th", "", previewGrain);
-      tr.appendChild(th);
-    }
-
-    this.setTableSortable("Minion", "asc");
     this.addMsg();
   }
 
   onShow () {
+    if (this.previewColumsAdded !== true) {
+      // collect the list of displayed extra grains
+      this.previewGrains = Utils.getStorageItemList("session", "preview_grains");
+
+      // add the preview columns (before we sort the table)
+      // the div is not added to the DOM yet
+      const tr = this.div.querySelector("#grains-table-thead-tr");
+      for (const previewGrain of this.previewGrains) {
+        const th = Utils.createElem("th", "", previewGrain);
+        tr.appendChild(th);
+      }
+      this.previewColumsAdded = true;
+    }
+
+    // initialize sorting after all columns are present
+    this.setTableSortable("Minion", "asc");
+
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const localGrainsItemsPromise = this.api.getLocalGrainsItems(null);
+
+    this.nrMinions = 0;
 
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       this._handleGrainsWheelKeyListAll(pWheelKeyListAllData);
@@ -63,13 +73,14 @@ export class GrainsPanel extends Panel {
     }
 
     const keys = pWheelKeyListAllData.return[0].data.return;
+    this.nrMinions = keys.minions.length;
+    this.nrUnaccepted = keys.minions_pre.length;
 
     const minionIds = keys.minions.sort();
     for (const minionId of minionIds) {
-      this.addMinion(minionId, 1 + this.previewGrains.length);
+      const minionTr = this.addMinion(minionId, 1 + this.previewGrains.length);
 
       // preliminary dropdown menu
-      const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
       const menu = new DropDownMenu(minionTr, true);
       this._addMenuItemShowGrains(menu, minionId);
 
@@ -83,11 +94,7 @@ export class GrainsPanel extends Panel {
       });
     }
 
-    Utils.setStorageItem("session", "minions_pre_length", keys.minions_pre.length);
-
-    const txt = Utils.txtZeroOneMany(minionIds.length,
-      "No minions", "{0} minion", "{0} minions");
-    this.setMsg(txt);
+    this.updateFooter();
   }
 
   updateOfflineMinion (pMinionId, pMinionsDict) {

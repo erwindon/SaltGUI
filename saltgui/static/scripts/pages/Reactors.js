@@ -20,9 +20,11 @@ export class ReactorsPage extends Page {
     this.jobs.handleSaltJobRetEvent(pData);
   }
 
-  static isVisible () {
+  /* eslint-disable class-methods-use-this */
+  isVisible () {
+  /* eslint-enable class-methods-use-this */
     // show reactor menu item if reactors defined
-    const reactorsText = Utils.getStorageItem("session", "reactors", "");
-    return reactorsText;
+    const reactors = Utils.getStorageItemList("session", "reactors");
+    return reactors.length > 0;
   }
 }

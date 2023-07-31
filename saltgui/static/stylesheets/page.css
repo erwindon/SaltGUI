@@ -227,7 +227,8 @@ table tr td:last-of-type {
   color: #f0f;
 }
 
-.unaccepted {
+.unaccepted,
+.keyunknown {
   color: #f00;
 }
 
@@ -330,4 +331,11 @@ table tr td:last-of-type {
 .taskcircle.task-changes {
   text-decoration-line: overline underline;
   text-decoration-style: double;
+}
+
+@media print {
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
 }

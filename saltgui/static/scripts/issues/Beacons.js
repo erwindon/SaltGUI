@@ -64,6 +64,7 @@ export class BeaconsIssues extends Issues {
             const tr = Issues.addIssue(pPanel, "disabled-beacon", minionId + "-" + beaconName);
             Issues.addIssueMsg(tr, "Beacon '" + beaconName + "' on '" + minionId + "' is disabled");
             Issues.addIssueCmd(tr, "Enable beacon", minionId, ["beacons.enable_beacon", beaconName]);
+            Issues.addIssueCmd(tr, "Delete beacon", minionId, ["beacons.delete", beaconName]);
             Issues.addIssueNav(tr, "beacons-minion", {"minionid": minionId});
           }
         }

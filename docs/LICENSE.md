@@ -1,7 +1,7 @@
 # License
 The MIT License (MIT)
 
-Copyright (c) 2018-2022 Erwin Dondorp<br>
+Copyright (c) 2018-2023 Erwin Dondorp<br>
 Copyright (c) 2017-2018 Martijn Jacobs<br>
 Copyright (c) 2016-2017 Oliver Dunk
 

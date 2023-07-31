@@ -29,6 +29,8 @@ export class MinionsPanel extends Panel {
   }
 
   onShow () {
+    this.nrMinions = 0;
+
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const wheelMinionsConnectedPromise = this.api.getWheelMinionsConnected();
     const localGrainsItemsPromise = this.api.getLocalGrainsItems(null);
@@ -79,13 +81,14 @@ export class MinionsPanel extends Panel {
     }
 
     const keys = pWheelKeyListAll.return[0].data.return;
+    this.nrMinions = keys.minions.length;
+    this.nrUnaccepted = keys.minions_pre.length;
 
     const minionIds = keys.minions.sort();
     for (const minionId of minionIds) {
-      this.addMinion(minionId, 1);
+      const minionTr = this.addMinion(minionId, 1);
 
       // preliminary dropdown menu
-      const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
       const menu = new DropDownMenu(minionTr, true);
       this._addMenuItemStateApply(menu, minionId);
       this._addMenuItemStateApplyTest(menu, minionId);
@@ -95,11 +98,7 @@ export class MinionsPanel extends Panel {
       this._addMenuItemShowBeacons(menu, minionId);
     }
 
-    Utils.setStorageItem("session", "minions_pre_length", keys.minions_pre.length);
-
-    const txt = Utils.txtZeroOneMany(minionIds.length,
-      "No minions", "{0} minion", "{0} minions");
-    this.setMsg(txt);
+    this.updateFooter();
   }
 
   static _getShortestTargetClause (pWheelMinionsConnectedData, pWheelKeyListAllData) {
@@ -520,6 +519,8 @@ export class MinionsPanel extends Panel {
       ["CVE-2022-22967", MASTER, ["3003", "[0-4]"]],
       ["CVE-2022-22967", MASTER, ["3004", "[0-1]"]]
     ];
+
+    // the above table is up-to-date until (including) 3006.1
   }
 
   static _getCveBugs (pVersion, pNodeType) {

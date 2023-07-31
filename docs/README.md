@@ -6,6 +6,10 @@ The version tagged `release` is the latest released version. The version `master
 
 See [SaltGUI documentation](https://erwindon.github.io/SaltGUI/) for the complete documentation.
 
+IMPORTANT: since Salt version 3006, it is needed to add configuration option `netapi_enable_clients` to allow salt-api - and thus SaltGUI - to work. See also [netapi-enable-clients.html](https://docs.saltproject.io/en/3006.0/topics/netapi/netapi-enable-clients.html#netapi-enable-clients). Additionally, any Python
+packages that the SaltStack installation also depends on, must be installed with `salt-pip`. This includes authentication plugins
+such as `yubico_client`, or execution modules such as `boto3_sns`.
+
 
 ## Screenshots
 ![overview](screenshots/overview.png)
@@ -26,9 +30,11 @@ See [SaltGUI documentation](https://erwindon.github.io/SaltGUI/) for the complet
 - View the schedules for a particular minion
 - View the values for pillars for a particular minion
 - View the beacons for a particular minion
+- View the nodegroups with their member minions
 - View the live events on the salt-event bus
 - View internal documentation for any salt command
 - View external documentation for any salt command
+- View minions organized by node-group
 - Define your own custom documentation for commands
 - Match list of minions against reference list
 - Match status of minions against reference list
@@ -38,6 +44,7 @@ See [SaltGUI documentation](https://erwindon.github.io/SaltGUI/) for the complet
 - Install `salt-api` - this is available in the Salt PPA package which should already been installed if you're using Salt
 - Open the master config /etc/salt/master
 - Find `external_auth` and configure as following (see the note below!):
+
 ```
 external_auth:
     pam:
@@ -46,12 +53,21 @@ external_auth:
             - '@runner'
             - '@wheel'
             - '@jobs'
+
+# for SaltStack 3006 and higher
+netapi_enable_clients:
+    - local
+    - local_async
+    - runner
+    - wheel
 ```
+
 - See [Permissions](docs/PERMISSIONS.md) for more restricted security configurations.
 - The username 'saltuser1' is only an example. Generic accounts are not recommended, use personal accounts instead. Or use a user-group, see [EAUTH](https://docs.saltproject.io/en/latest/topics/eauth/index.html) for details.
 - Multiple entries like `saltuser1` can be added when you have multiple users.
 - `saltuser1` is a unix (PAM) user, make sure it exists or create a new one.
 - At the bottom of this file, also setup the rest_cherrypi server to access SaltGUI from "http://localhost:3333" (or on any of the hostnames that the server has):
+
 ```
 rest_cherrypy:
     port: 3333
@@ -61,9 +77,11 @@ rest_cherrypy:
     static: /srv/saltgui/static
     static_path: /static
 ```
+
 - Note that the cherrypi server is part of the salt-api package and has no separate installation. It is configured using the master configuration file. When configured using the above configurations, both the api calls and the html/js files are served by the cherrypy server. Therefore no additional web application server is needed.
 - Note that from the SaltGUI GIT repository, only the directory `saltgui` forms the actual SaltGUI web application.
 - Replace each of the `/srv/saltgui` in the above config with the actual `saltgui` directory from the GIT repository. Alternatively, you can create a soft-link /src/saltgui that points to the actual saltgui directory.
+- To successfully use `salt-api` with a default PAM setup, if may be needed to grant read access on `/etc/shadow` to the `salt` user. This is best done using `sudo usermod --append --groups shadow salt`.
 - Restart everything with ``pkill salt-master && pkill salt-api && salt-master -d && salt-api -d``
 - You should be good to go. If you have any problems, open a GitHub issue. As always, SSL is recommended wherever possible but setup is beyond the scope of this guide.
 
@@ -81,7 +99,7 @@ SaltGUI supports the following authentication methods supported by salt:
 - yubico
 
 Since pam by itself is already very powerfull, that one is mentionned as standard.
-By default, it provides access to the Linux password file,
+By default, it provides access to the Linux password file.
 When other authentication methods need to be used, their names can be added to file `saltgui/static/salt-auth.txt`.
 There is one name per line in that file. Choose the authentication methods that are activated
 in the salt-master configuration wisely, as the integrity of the salt-master and all salt-minions depends on it.
@@ -202,8 +220,8 @@ SaltGUI shows a maximum of 50 jobs on the dedicated jobs page.
 Commands that are used internally in SaltGUI are initially hidden.
 
 On the Jobs page, more jobs can be made visible.
-Select 'Show eligible jobs` to show all jobs that are not classified as internally-used jobs.
-Select 'Show all jobs` to show all jobs that are known to salt.
+Select `Show eligible jobs` to show all jobs that are not classified as internally-used jobs.
+Select `Show all jobs` to show all jobs that are known to salt.
 
 Additional commands to hide can be configured
 in salt master configuration file `/etc/salt/master`.
@@ -235,6 +253,13 @@ The names can be specified as simple names like the example above.
 Alternatively, the [grains.get](https://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.grains.html#salt.modules.grains.get) notation can be used to get more detailed information. The separator is always `:`. e.g. `locale_info:timezone`.
 Alternatively, the [jsonpath](https://www.w3resource.com/JSON/JSONPath-with-JavaScript.php) notation can be used to allow even more freedom. Jsonpath is used when the text starts with a `$`. e.g. `$.ip4_interfaces.eth0[0]`.
 
+In any table where the the minion status is shown and where the grain-values of the minion are also known, the minion status is
+replaced with the the best value from grain `fqdn_ip4`.
+The best value is chosen by first eliminating all values that appear for more than one minion.
+Then the first value that has the most specific network prefix is used.
+It is possible to chose a different grain by setting variable `saltgui_ipnumber_field` in salt master configuration file `/etc/salt/master`.
+It is possible to restrict the eligible IP-numbers by setting variable `saltgui_ipnumber_prefix` in salt master configuration file `/etc/salt/master`. Only values with that string-prefix are considered.
+The display of the IP-numbers can simply be disabled by choosing a non-existing grain or by choosing a non-existing prefix.
 
 ## Pillars
 Pillars potentially contain security senstitive information.
@@ -250,8 +275,16 @@ saltgui_public_pillars:
     - pub_.*
 ```
 
+## Nodegroups
+The Nodegroups page shows all minions, but groups the minions by their nodegroup.
+Since the group membership can only (reliably) be determined by executing salt commands, the overview takes some time to build.
+When a minion happens to be a member of multiple nodegroups, then a row for that minion will appear mutiple times in the overview.
+When using targeting based on nodegroups, the salt-system does not filter out the non-accepted minions.
+Therefore also the rejected, denied and unaccepted minions will show up.
+Even the minion names that are in the nodegroup, but which do not actually exist, will show up as 'unknown'.
+
 ## Highstate
-The highstate page provides an overview of the minions and their latest state information.
+The Highstate page provides an overview of the minions and their latest state information.
 At most 10 highstate jobs (`state.apply` or `state.highstate`) are considered.
 
 Individual low-states can be re-tried by clicking on their state symbol.
@@ -274,6 +307,28 @@ saltgui_hide_saltenvs:
 ```
 Typically only one of these variables should be set.
 Jobs that were started without the `saltenv` parameter are, for this purpose only, assumed to use the value `default` for this parameter. This allows these jobs to be hidden/showed using the same mechanism. SaltGUI does not replicate the internal logic of the salt-master and/or the salt-minion to determine which saltenv would actually have been used for such jobs.
+
+## Issues
+The Issues page provides an overview of the system and reports any issues.
+When no issues are found, the list remains empty.
+The following issues may be reported:
+* Disabled beacons, either individually disabled or on minion level
+this should be solved by enabling or removing that beacon.
+* Jobs that are still running after 60 seconds
+this should be solved by terminating the job or just let it finish.
+* Unaccepted keys
+this should be solved by accepting or rejecting that key.
+* Unconnected minions
+this should be solved by fixing the minion, the minion's host or the connection to that host.
+* Disabled schedules, either individually disabled or on minion level
+this should be solved by enabling or removing that schedule.
+* States that contain one or more failed tasks
+this should be solved by retrying that state. Note that only all tasks of that state can be retried together.
+
+Each issue has its own dropdown-menu, which typically contains:
+* One or more salt-commands to fix the situation;
+But note that there might be more possible solutions, some of which may actually be more preferred.
+* A navigation-command to go to a page for more details.
 
 ## Custom command documentation
 A custom HTML help text can be shown from the "Manual Run" overlay.

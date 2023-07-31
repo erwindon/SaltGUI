@@ -37,10 +37,16 @@ export class Page {
     const dashboard = this.pageElement.querySelector(".dashboard");
     dashboard.append(pPanel.div);
     pPanel.api = this.api;
+    if (this.panels.length > 0) {
+      // hide all but the leftmost (=main) panel when printing
+      pPanel.div.classList.add("no-print");
+    }
     this.panels.push(pPanel);
   }
 
-  static isVisible () {
+  /* eslint-disable class-methods-use-this */
+  isVisible () {
+  /* eslint-enable class-methods-use-this */
     // a page is visible, unless the page decides otherwise
     return true;
   }

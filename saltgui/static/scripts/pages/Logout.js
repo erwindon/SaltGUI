@@ -12,7 +12,7 @@ export class LogoutPage extends Page {
   onRegister () {
     // don't verify for invalid sessions too often
     // this happens only when the server was reset
-    window.setInterval(() => {
+    this.logoutTimer = window.setInterval(() => {
       this._logoutTimer();
     }, 60000);
 
@@ -23,6 +23,9 @@ export class LogoutPage extends Page {
   }
 
   onShow () {
+    // on touchscreens the menus do not go away by themselves
+    Utils.hideAllMenus(true);
+
     this.api.logout().then(() => {
       this.router.goTo("login", {"reason": "logout"});
     });
@@ -42,7 +45,18 @@ export class LogoutPage extends Page {
     const statsPromise = this.api.getStats();
     // don't act in the callbacks
     // Api.apiRequest will do all the work
-    statsPromise.then(() => true, () => {
+    statsPromise.then(() => true, (pHttpResponse) => {
+      if (pHttpResponse.status === 500) {
+        // assume this error applies only to /stats and
+        // not to any regular api functions
+        // may happen due to https://github.com/saltstack/salt/issues/59620
+        // repeating this is not so useful
+        if (this.logoutTimer) {
+          clearInterval(this.logoutTimer);
+          this.logoutTimer = null;
+        }
+        return;
+      }
       this.api.logout().then(() => {
         this.router.goTo("login", {"reason": "session-cancelled"});
         return false;

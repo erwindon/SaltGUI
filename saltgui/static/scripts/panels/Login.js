@@ -65,7 +65,7 @@ export class LoginPanel extends Panel {
     img.src = "static/images/github.png";
     aa.append(img);
 
-    const txt = document.createTextNode("SaltGUI v1.28.0");
+    const txt = document.createTextNode("SaltGUI v1.30.0-snapshot");
     aa.append(txt);
 
     form.append(aa);
@@ -302,6 +302,9 @@ export class LoginPanel extends Panel {
     // We need these functions to populate the dropdown boxes
     const wheelConfigValuesPromise = this.api.getWheelConfigValues();
 
+    // these may have been hidden on a previous logout
+    Utils.hideAllMenus(false);
+
     // We need these functions to populate the dropdown boxes
     wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
       LoginPanel._handleLoginWheelConfigValues(pWheelConfigValuesData);
@@ -352,6 +355,11 @@ export class LoginPanel extends Panel {
 
     const previewGrains = wheelConfigValuesData.saltgui_preview_grains;
     Utils.setStorageItem("session", "preview_grains", JSON.stringify(previewGrains));
+
+    const ipNumberField = wheelConfigValuesData.saltgui_ipnumber_field;
+    Utils.setStorageItem("session", "ipnumber_field", ipNumberField);
+    const ipNumberPrefix = wheelConfigValuesData.saltgui_ipnumber_prefix;
+    Utils.setStorageItem("session", "ipnumber_prefix", ipNumberPrefix);
 
     const showSaltEnvs = wheelConfigValuesData.saltgui_show_saltenvs;
     Utils.setStorageItem("session", "show_saltenvs", JSON.stringify(showSaltEnvs));

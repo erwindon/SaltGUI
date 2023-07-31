@@ -35,6 +35,7 @@ export class HighStatePanel extends Panel {
       "With more than " + MAX_HIGHSTATE_STATES + " states, a summary is shown instead.",
       "Click on an individual state to re-apply only that state."
     ]);
+    this.addWarningField();
     this.addTable(["Minion", "State", "Latest JID", "Target", "Function", "Start Time", "-menu-", "States"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable();
@@ -48,6 +49,8 @@ export class HighStatePanel extends Panel {
   onShow () {
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
 
+    this.nrMinions = 0;
+
     const cmdList = [];
     if (Utils.getStorageItem("local", "use_state_highstate", "true") === "true") {
       cmdList.push("state.highstate");
@@ -57,6 +60,10 @@ export class HighStatePanel extends Panel {
     }
 
     const runnerJobsListJobsPromise = this.api.getRunnerJobsListJobs(cmdList);
+
+    // remove the previous warning, if any
+    // and show this while loading more info
+    super.setWarningText("info", "loading...");
 
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       this._handleMinionsWheelKeyListAll(pWheelKeyListAllData);
@@ -127,11 +134,13 @@ export class HighStatePanel extends Panel {
     const keys = pWheelKeyListAll.return[0].data.return;
 
     const minionIds = keys.minions.sort();
+    this.nrMinions = minionIds.length;
+    this.nrUnaccepted = keys.minions_pre.length;
+
     for (const minionId of minionIds) {
-      this.addMinion(minionId, 2);
+      const minionTr = this.addMinion(minionId, 2);
 
       // preliminary dropdown menu
-      const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
       const menu = new DropDownMenu(minionTr, true);
       this._addMenuItemStateApply(menu, minionId);
       this._addMenuItemStateApplyTest(menu, minionId);
@@ -153,13 +162,6 @@ export class HighStatePanel extends Panel {
     this.updateFooter();
   }
 
-  updateFooter () {
-    const tbody = this.table.tBodies[0];
-    const txt = Utils.txtZeroOneMany(tbody.rows.length,
-      "No minions", "{0} minion", "{0} minions");
-    this.setMsg(txt);
-  }
-
   _handleHighstateRunnerJobsListJobs (pData) {
     if (this.showErrorRowInstead(pData)) {
       const tbody = this.table.tBodies[0];
@@ -170,7 +172,7 @@ export class HighStatePanel extends Panel {
       return;
     }
 
-    // due to filter, all jobs are state.apply jobs
+    // due to filter, all jobs are state.apply and/or state.highstate jobs
 
     let jobs = JobsPanel._jobsToArray(pData.return[0]);
     JobsPanel._sortJobs(jobs);
@@ -180,6 +182,7 @@ export class HighStatePanel extends Panel {
     }
 
     this.jobs = jobs;
+    this.jobsCnt = jobs.length;
 
     this.setPlayPauseButton(jobs.length === 0 ? "none" : "play");
 
@@ -246,6 +249,7 @@ export class HighStatePanel extends Panel {
     this.jobs = undefined;
     this.setPlayPauseButton("none");
 
+    let foundMinionWithoutJob = false;
     for (const tr of tbody.rows) {
       if (tr.jid) {
         // this row already populated
@@ -254,6 +258,20 @@ export class HighStatePanel extends Panel {
       const jidField = tr.querySelector(".os");
       jidField.innerText = "(no job)";
       jidField.classList.add("no-job-details");
+      foundMinionWithoutJob = true;
+    }
+
+    if (!foundMinionWithoutJob) {
+      // every row has data
+      super.setWarningText();
+    } else if (this.jobsCnt === 0) {
+      super.setWarningText("info", "no jobs were found");
+    } else if (this.jobsCnt === 1) {
+      super.setWarningText("info", "only 1 job was found and some minions did not have results in that job");
+    } else if (this.jobsCnt < MAX_HIGHSTATE_JOBS) {
+      super.setWarningText("info", "only " + this.jobsCnt + " jobs were found and some minions did not have results in any of these jobs");
+    } else {
+      super.setWarningText("info", "the latest " + MAX_HIGHSTATE_JOBS + " jobs were inspected and some minions did not have results in any of these jobs");
     }
   }
 
@@ -301,6 +319,15 @@ export class HighStatePanel extends Panel {
     }
 
     const jobData = pJobData.return[0];
+
+    // user may have changed the preference while this was loaded in the background
+    // ignore when no longer applicable
+    if (jobData.Function === "state.highstate" && Utils.getStorageItem("local", "use_state_highstate", "true") !== "true") {
+      return;
+    }
+    if (jobData.Function === "state.apply" && Utils.getStorageItem("local", "use_state_apply", "true") !== "true") {
+      return;
+    }
 
     const saltEnv = HighStatePanel._getJobNamedParam("saltenv", jobData, "default");
     if (!Utils.isIncluded(saltEnv, this._showSaltEnvs, this._hideSaltEnvs)) {

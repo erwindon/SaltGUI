@@ -490,11 +490,7 @@ export class Utils {
     } else {
       txt = pManyText;
     }
-    if (pCnt === undefined) {
-      // just in case
-      txt = txt.replace("{0}", pCnt);
-      console.log(pCnt, pZeroText, pOneText, pManyText);
-    } else {
+    if (pCnt !== undefined) {
       txt = txt.replace("{0}", pCnt.toLocaleString());
     }
     return txt;
@@ -640,5 +636,14 @@ export class Utils {
       return !pDenyList.includes(pItem);
     }
     return true;
+  }
+
+  static hideAllMenus (pHide) {
+    // hide all dropdowns that are still open;
+    // or allow them to be shown again
+    const allDropdownContent = document.querySelectorAll(".dropdown-content");
+    for (const ddc of allDropdownContent) {
+      ddc.style.display = pHide ? "none" : "";
+    }
   }
 }

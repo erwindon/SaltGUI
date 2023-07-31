@@ -7,14 +7,6 @@ import {SortTable} from "../../sorttable/sorttable.js";
 import {TargetType} from "../TargetType.js";
 import {Utils} from "../Utils.js";
 
-// which grain to use for IP-number display
-const IPNUMBERFIELD = "fqdn_ip4";
-// const IPNUMBERFIELD = "ipv4";
-// const IPNUMBERFIELD = "fqdn_ip6";
-// const IPNUMBERFIELD = "ipv6";
-// non-existent grains effectively disable the behaviour
-// const IPNUMBERFIELD = "DISABLED";
-
 export class Panel {
 
   constructor (pKey, pContextInfo = null) {
@@ -56,7 +48,7 @@ export class Panel {
     const span = Utils.createSpan();
     span.id = this.key + "-menu";
     const menu = new DropDownMenu(span);
-    menu.menuButton.classList.add("small-button-left");
+    menu.menuButton.classList.add("small-button-left", "no-print");
     this.div.appendChild(span);
     this.panelMenu = menu;
   }
@@ -72,7 +64,7 @@ export class Panel {
 
   addSearchButton () {
     const span = Utils.createSpan(
-      ["search-button", "small-button", "small-button-left", "small-button-for-click"],
+      ["search-button", "small-button", "small-button-left", "small-button-for-click", "no-print"],
       Character.LEFT_POINTING_MAGNIFYING_GLASS,
       this.key + "-search-button");
     this.div.appendChild(span);
@@ -81,14 +73,14 @@ export class Panel {
 
   addPlayPauseButton () {
     const playButton = Utils.createSpan(
-      ["small-button", "small-button-left", "small-button-for-click"],
+      ["small-button", "small-button-left", "small-button-for-click", "no-print"],
       Character.CH_PLAY);
     playButton.style.cursor = "pointer";
     this.div.appendChild(playButton);
     this.playButton = playButton;
 
     const pauseButton = Utils.createSpan(
-      ["small-button", "small-button-left", "small-button-for-click"],
+      ["small-button", "small-button-left", "small-button-for-click", "no-print"],
       Character.CH_PAUSE);
     pauseButton.style.display = "none";
     pauseButton.style.cursor = "pointer";
@@ -121,13 +113,13 @@ export class Panel {
     if (this.pauseButton) {
       this.pauseButton.style.display = pStatus === "play" ? "" : "none";
     }
-    this._updateMsg();
+    this.updateFooter();
   }
 
   addHelpButton (pHelpTextArr, pUrl) {
     const span = Utils.createElem(
       pUrl ? "a" : "span",
-      ["small-button", "small-button-right", "small-button-for-hover"],
+      ["small-button", "small-button-right", "small-button-for-hover", "no-print"],
       Character.BLACK_QUESTION_MARK_ORNAMENT,
       this.key + "-help-button");
     span.style.cursor = "help";
@@ -143,7 +135,7 @@ export class Panel {
 
   addCloseButton () {
     const span = Utils.createSpan(
-      ["small-button", "small-button-right", "small-button-for-click"],
+      ["small-button", "small-button-right", "small-button-for-click", "no-print"],
       Character.HEAVY_MULTIPLICATION_X,
       this.key + "-close-button");
     this.div.appendChild(span);
@@ -307,34 +299,7 @@ export class Panel {
       return;
     }
 
-    let txt = this.msgTxt;
-    let isHTML = false;
-
-    if (this.playOrPause === "pause" && this.pauseButton) {
-      if (txt) {
-        txt += ", ";
-      }
-      if (this.table && this.table.tBodies[0].rows.length) {
-        txt += "press " + Character.buttonInText(Character.CH_PLAY) + " to continue";
-      } else {
-        txt += "press " + Character.buttonInText(Character.CH_PLAY) + " to begin";
-      }
-      isHTML = true;
-    }
-
-    if (this.playOrPause === "play" && this.playButton) {
-      if (txt) {
-        txt += ", ";
-      }
-      txt += "press " + Character.buttonInText(Character.CH_PAUSE) + " to pause";
-      isHTML = true;
-    }
-
-    if (isHTML) {
-      this.msgDiv.innerHTML = txt;
-    } else {
-      this.msgDiv.innerText = txt;
-    }
+    this.msgDiv.innerHTML = this.msgTxt;
   }
 
   loadMinionsTxt () {
@@ -410,7 +375,7 @@ export class Panel {
     let minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
     if (minionTr !== null) {
       // minion already on screen...
-      return;
+      return minionTr;
     }
 
     minionTr = Utils.createTr();
@@ -431,6 +396,8 @@ export class Panel {
 
     const tbody = this.table.tBodies[0];
     tbody.appendChild(minionTr);
+
+    return minionTr;
   }
 
   getElement (id) {
@@ -452,10 +419,10 @@ export class Panel {
     return minionTr;
   }
 
-  static _getIpNumberUses (pAllMinionsGrains, pIpNumber) {
+  static _getIpNumberUses (pAllMinionsGrains, pIpNumber, pIpNumberField) {
     let cnt = 0;
     for (const minionId in pAllMinionsGrains) {
-      const ipNumbers = pAllMinionsGrains[minionId][IPNUMBERFIELD];
+      const ipNumbers = pAllMinionsGrains[minionId][pIpNumberField];
       if (!Array.isArray(ipNumbers)) {
         continue;
       }
@@ -466,18 +433,21 @@ export class Panel {
     return cnt;
   }
 
-  static _getBestIpNumber (pMinionData, pAllMinionsGrains) {
+  static _getBestIpNumber (pMinionData, pAllMinionsGrains, pIpNumberField, pIpNumberPrefix) {
     if (!pMinionData) {
       return null;
     }
 
-    const allIpNumbers = pMinionData[IPNUMBERFIELD];
+    let allIpNumbers = pMinionData[pIpNumberField];
     // either a string or something strange
     if (!Array.isArray(allIpNumbers)) {
       return null;
     }
 
     // so, it is an array
+
+    // reduce to only the requested prefix
+    allIpNumbers = allIpNumbers.filter((item) => item.startsWith(pIpNumberPrefix));
 
     // sort it, so that we get more consistent results
     // when there are minions which report multiple IP
@@ -495,7 +465,7 @@ export class Panel {
       // IP numbers that are used by multiple minions are not a
       // candidate for display here. typically happens for:
       // 127.0.0.1 (localhost), 10.0.2.15 (virtualbox host address)
-      if (Panel._getIpNumberUses(pAllMinionsGrains, ipNumber) !== 1) {
+      if (Panel._getIpNumberUses(pAllMinionsGrains, ipNumber, pIpNumberField) !== 1) {
         continue;
       }
 
@@ -509,20 +479,26 @@ export class Panel {
     return bestIpNumber;
   }
 
-  static _getAllIpNumbers (pMinionData) {
+  static _getAllIpNumbers (pMinionData, pIpNumberField, pIpNumberPrefix) {
     if (!pMinionData) {
       // for pages where no grains data available
       return [];
     }
-    const allIpNumbers = pMinionData[IPNUMBERFIELD];
+
+    let allIpNumbers = pMinionData[pIpNumberField];
     if (!Array.isArray(allIpNumbers)) {
       return [];
     }
+
     for (const str of allIpNumbers) {
       if (typeof str !== "string") {
         return [];
       }
     }
+
+    // reduce to only the requested prefix
+    allIpNumbers = allIpNumbers.filter((item) => item.startsWith(pIpNumberPrefix));
+
     return allIpNumbers;
   }
 
@@ -569,7 +545,7 @@ export class Panel {
     return 1;
   }
 
-  static _restoreClickToCopy (pTarget) {
+  static restoreClickToCopy (pTarget) {
     if (pTarget.dataset.multiIpNumber === pTarget.dataset.singleIpNumber) {
       Utils.addToolTip(pTarget, "Click to copy");
     } else {
@@ -597,8 +573,14 @@ export class Panel {
 
     minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 
-    const bestIpNumber = Panel._getBestIpNumber(pMinionData, pAllMinionsGrains);
-    const allIpNumbers = Panel._getAllIpNumbers(pMinionData);
+    // which grain to use for IP-number display
+    // typical choices are "fqdn_ip4", "ipv4", "fqdn_ip6" or "ipv6"
+    // non-existent grains effectively disable the behaviour
+    const ipNumberField = Utils.getStorageItem("session", "ipnumber_field", "fqdn_ip4");
+    const ipNumberPrefix = Utils.getStorageItem("session", "ipnumber_prefix", "");
+
+    const bestIpNumber = Panel._getBestIpNumber(pMinionData, pAllMinionsGrains, ipNumberField, ipNumberPrefix);
+    const allIpNumbers = Panel._getAllIpNumbers(pMinionData, ipNumberField, ipNumberPrefix);
 
     if (bestIpNumber) {
       const addressTd = Utils.createTd(["status", "address"]);
@@ -622,9 +604,9 @@ export class Panel {
         pClickEvent.stopPropagation();
       });
       addressSpan.addEventListener("mouseout", () => {
-        Panel._restoreClickToCopy(addressSpan);
+        Panel.restoreClickToCopy(addressSpan);
       });
-      Panel._restoreClickToCopy(addressSpan);
+      Panel.restoreClickToCopy(addressSpan);
       minionTr.appendChild(addressTd);
     } else {
       const accepted = Utils.createTd(["status", "accepted"], "accepted");
@@ -633,7 +615,7 @@ export class Panel {
 
     minionTr.dataset.minionId = pMinionId;
 
-    let saltversion = "---";
+    let saltversion = Character.EM_DASH;
     if (typeof pMinionData === "string") {
       saltversion = "";
     } else if (pMinionData && pMinionData.saltversion) {
@@ -651,7 +633,7 @@ export class Panel {
       minionTr.appendChild(td);
     }
 
-    let os = "---";
+    let os = Character.EM_DASH;
     if (typeof pMinionData === "string") {
       os = "";
     } else if (pMinionData && pMinionData.os && pMinionData.osrelease) {
@@ -687,37 +669,57 @@ export class Panel {
       Utils.setStorageItem("session", "minions", JSON.stringify(minionIds));
     }
 
-    let cntOnline = 0;
-    let cntOffline = 0;
+    this.nrOnline = 0;
+    this.nrOffline = 0;
     for (const minionId of minionIds) {
       const minionInfo = minions[minionId];
 
       // minions can be offline, then the info will be false
       if (minionInfo === false) {
         this.updateOfflineMinion(minionId, minionsDict);
-        cntOffline += 1;
+        this.nrOffline += 1;
       } else {
         this.updateMinion(minionInfo, minionId, minions);
-        cntOnline += 1;
+        this.nrOnline += 1;
       }
     }
 
-    let txt = Utils.txtZeroOneMany(minionIds.length, "No minions", "{0} minion", "{0} minions");
-    if (cntOnline !== minionIds.length) {
-      txt += ", " + Utils.txtZeroOneMany(cntOnline, "none online", "{0} online", "{0} online");
-    }
-    if (cntOffline > 0) {
-      txt += ", " + Utils.txtZeroOneMany(cntOffline, "none offline", "{0} offline", "{0} offline");
+    this.updateFooter();
+  }
+
+  updateFooter (txt = "") {
+
+    if (this.nrMinions !== undefined) {
+      txt += ", " + Utils.txtZeroOneMany(this.nrMinions, "no minions", "{0} minion", "{0} minions");
     }
 
-    const cntMinionsPre = Utils.getStorageItemInteger("session", "minions_pre_length", 0);
-    txt += Utils.txtZeroOneMany(
-      cntMinionsPre,
-      "",
-      ", {0} unaccepted key",
-      ", {0} unaccepted keys");
+    if (this.nrOnline >= 0 && this.nrMinions !== this.nrOnline) {
+      txt += ", " + Utils.txtZeroOneMany(this.nrOnline, "none online", "{0} online", "{0} online");
+    }
 
-    this.setMsg(txt);
+    if (this.nrOffline > 0) {
+      txt += ", " + Utils.txtZeroOneMany(this.nrOffline, "none offline", "{0} offline", "{0} offline");
+    }
+
+    if (this.nrUnaccepted > 0) {
+      txt += ", " + Utils.txtZeroOneMany(this.nrUnaccepted, "{0} unaccepted keys", "{0} unaccepted key", "{0} unaccepted keys");
+    }
+
+    if (this.playOrPause === "pause" && this.pauseButton) {
+      if (this.table && this.table.tBodies[0].rows.length) {
+        txt += ", press " + Character.buttonInText(Character.CH_PLAY) + " to continue";
+      } else {
+        txt += ", press " + Character.buttonInText(Character.CH_PLAY) + " to begin";
+      }
+    }
+
+    if (this.playOrPause === "play" && this.playButton) {
+      txt += ", press " + Character.buttonInText(Character.CH_PAUSE) + " to pause";
+    }
+
+    txt = txt.replaceAll(/^, /g, "");
+
+    this.setMsg(txt.length > 0 ? txt : "(???)");
   }
 
   updateOfflineMinion (pMinionId, pMinionsDict) {
@@ -841,7 +843,7 @@ export class Panel {
       this.setMsg("(loading)");
     }
     if (this.timeField) {
-      this.timeField.innerHTML = "&nbsp;";
+      this.timeField.innerText = Character.NO_BREAK_SPACE;
     }
     if (this.console) {
       this.console.innerText = "";

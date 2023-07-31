@@ -7,6 +7,12 @@ import {Utils} from "../Utils.js";
 // only consider this number of latest highstate jobs
 const MAX_HIGHSTATE_JOBS = 10;
 
+// note:
+// we cannot distinguish between:
+// * data from minions that have already been deleted; and
+// * data from minions that are actually behind a salt-syndic
+// therefore both are ignored
+
 export class StateIssues extends Issues {
 
   onGetIssues (pPanel) {
@@ -118,21 +124,24 @@ export class StateIssues extends Issues {
         // never mind
         continue;
       }
+
+      // the complicating factor is that each state may have multiple tasks
       for (const stateName in minionData.return) {
         const stateData = minionData.return[stateName];
         if (typeof stateData !== "object") {
           // e.g. an error string
           continue;
         }
-        const key = minionId + "-" + stateData.__sls__ + "-" + stateData.__id__;
+        const key = minionId + "-" + stateData.__sls__ + "-" + stateData.__id__ + "-" + stateData.__run_num__;
         if (stateData.result === true) {
           // problem solved in a later execution
           Issues.removeIssue(pPanel, "state", key);
           continue;
         }
-        if (stateData.__sls__ && stateData.__id__) {
+        if (stateData.__sls__ && stateData.__id__ && stateData.__run_num__ !== undefined) {
           const tr = Issues.addIssue(pPanel, "state", key);
-          Issues.addIssueMsg(tr, "State '" + stateData.__sls__ + "/" + stateData.__id__ + "' on '" + minionId + "' failed");
+          Issues.addIssueMsg(tr, "State '" + stateData.__sls__ + "/" + stateData.__id__ + "/" + stateData.__run_num__ + "' on '" + minionId + "' failed");
+          // note that all tasks from the state are applied again, not only the failed ones
           Issues.addIssueCmd(tr, "Apply state", minionId, ["state.sls_id", stateData.__id__, "mods=", stateData.__sls__]);
           Issues.addIssueNav(tr, "job", {"id": jobData.jid, "minionid": minionId});
         } else if (stateData.__id__) {

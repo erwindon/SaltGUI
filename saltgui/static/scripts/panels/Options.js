@@ -63,6 +63,9 @@ export class OptionsPanel extends Panel {
       ["show-jobs", "saltgui", "(all)"],
       ["hide-jobs", "saltgui", "(none)"],
 
+      ["ipnumber_field", "saltgui", "fqdn_ip4"],
+      ["ipnumber_prefix", "saltgui", "(none)"],
+
       /* note that this is not in the alphabetic order */
       ["show-saltenvs", "saltgui", "(all)"],
       ["hide-saltenvs", "saltgui", "(none)"],

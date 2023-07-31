@@ -398,7 +398,7 @@ export class CommandBox {
       minions = ["WHEEL"];
     }
     // do not suppress the jobId (even when we can)
-    Output.addResponseOutput(outputContainer, null, minions, pResponse, pCommand, "done", undefined);
+    Output.addResponseOutput(outputContainer, null, minions, pResponse, pCommand, "done", undefined, undefined);
     const targetField = document.getElementById("target");
     const commandField = document.getElementById("command");
     const button = document.querySelector(".run-command input[type='submit']");
@@ -490,7 +490,7 @@ export class CommandBox {
     CommandBox.onRunReturn("ERROR:\n\n" + pMessage, "");
   }
 
-  getRunParams (pTargetType, pTarget, pToRun, pisRunTypeNormalOnly = false) {
+  getRunParams (pTargetType, pTarget, pToRun, pisRunTypeNormalOnly = false, pCanUseFullReturn = true) {
 
     // The leading # was used to indicate a nodegroup
     if (pTargetType === "nodegroup" && pTarget.startsWith("#")) {
@@ -552,7 +552,7 @@ export class CommandBox {
       }
     }
 
-    const fullReturn = Utils.getStorageItemBoolean("session", "full_return");
+    const fullReturn = pCanUseFullReturn && Utils.getStorageItemBoolean("session", "full_return");
 
     let params = {};
     if (functionToRun.startsWith("runners.")) {
@@ -594,10 +594,15 @@ export class CommandBox {
     }
 
     const runType = RunType.getRunType();
-    if (!pisRunTypeNormalOnly && params.client === "local" && runType === "async") {
-      params.client = "local_async";
-      // return looks like:
-      // { "jid": "20180718173942195461", "minions": [ ... ] }
+    if (!pisRunTypeNormalOnly && runType === "async") {
+      if (params.client === "local" && runType === "async") {
+        params.client = "local_async";
+        // return will look like:
+        // { "jid": "20180718173942195461", "minions": [ ... ] }
+      } else {
+        CommandBox._showError("Async is not supported for '" + functionToRun + "'");
+        return null;
+      }
     }
 
     return this.api.apiRequest("POST", "/", params);

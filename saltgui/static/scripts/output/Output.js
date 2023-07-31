@@ -304,7 +304,7 @@ export class Output {
       // place the milliseconds after the seconds (before am/pm indicator and timezone)
       utcDT = utcDT.replace(/( [a-zA-Z.]*)? [-A-Z0-9]*$/, originalFractionSecondsPart + "$&");
       localDT = dateObj.toLocaleString(undefined, {"timeZoneName": "short"});
-      localDT = localDT.replace(/( [a-zA-Z.]*)? [-A-Z0-9]*$/, originalFractionSecondsPart + "$&");
+      localDT = localDT.replace(/( [a-zA-Z.]*)? [-A-Z0-9+]*$/, originalFractionSecondsPart + "$&");
       pDateTimeField.innerText = ret;
       const txt = utcDT + "\n" + localDT;
       if (txt.search("Invalid") < 0) {
@@ -505,7 +505,7 @@ export class Output {
       // note that really old minions do not return 'retcode'
       return pMinionResponse.retcode === 0;
     }
-    if (pMinionResponse.Error) {
+    if (pMinionResponse && pMinionResponse.Error) {
       // e.g. runners.jobs.list_job blahblah
       return false;
     }
@@ -545,7 +545,7 @@ export class Output {
   }
 
   static _addDownload (pParentDiv, pJobId, pObject, pFormatFunction, pTypeLabel, pContentType, pFilenameExtension) {
-    const downloadA = Utils.createElem("a");
+    const downloadA = Utils.createElem("a", "no-print");
     downloadA.innerText = pTypeLabel;
     downloadA.style = "float:right; margin-left:10px";
     downloadA.addEventListener("click", (pClickEvent) => {
@@ -579,9 +579,43 @@ export class Output {
     pParentDiv.appendChild(downloadA);
   }
 
+  static _hasStartTimeField (pResponse) {
+    if (typeof pResponse !== "object" || Array.isArray(pResponse)) {
+      // not even a valid response
+      return false;
+    }
+
+    for (const minionId in pResponse) {
+      let minionResponse = pResponse[minionId];
+      if (typeof minionResponse !== "object" || Array.isArray(minionResponse)) {
+        continue;
+      }
+
+      if (minionResponse["return"] !== undefined) {
+        // with full_return, there is an extra level
+        minionResponse = minionResponse["return"];
+        if (typeof minionResponse !== "object" || Array.isArray(minionResponse)) {
+          continue;
+        }
+      }
+
+      for (const key in minionResponse) {
+        const result = minionResponse[key];
+        if (result === null || typeof result !== "object" || Array.isArray(result)) {
+          continue;
+        }
+        if (typeof result.start_time === "string") {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
   // the orchestrator for the output
   // determines what format should be used and uses that
-  static addResponseOutput (pOutputContainer, pJobId, pMinionData, pResponse, pCommand, pInitialStatus, pHighlightMinionId) {
+  static addResponseOutput (pOutputContainer, pJobId, pMinionData, pResponse, pCommand, pInitialStatus, pHighlightMinionId, pArguments) {
 
     // remove old content
     pOutputContainer.innerText = "";
@@ -703,6 +737,12 @@ export class Output {
       topSummaryDiv.appendChild(summaryJobsListJobSpan);
     }
 
+    if (pArguments) {
+      const div = Utils.createDiv("", pArguments);
+      div.style.lineBreak = "anywhere";
+      pOutputContainer.appendChild(div);
+    }
+
     const masterTriangle = Utils.createSpan();
     // use cntMinions instead of cntResponses to be predictable
     // hide details when there are many minions to show
@@ -797,13 +837,13 @@ export class Output {
     Output._addDownload(topSummaryDiv, pJobId, downloadObject,
       OutputJson.formatJSON, "JSON", "application/json", "json");
 
-    const downloadLabel = Utils.createSpan("", "download as:");
+    const downloadLabel = Utils.createSpan("no-print", "download as:");
     downloadLabel.style = "float:right";
     topSummaryDiv.appendChild(downloadLabel);
 
     const commandCmd = pCommand.trim().replace(/ .*/, "");
 
-    if (OutputHighstate.isHighStateOutput(commandCmd, {})) {
+    if (Output._hasStartTimeField(pResponse)) {
       const span = Utils.createDiv("", "\n" + Character.CIRCLED_INFORMATION_SOURCE + " start-time of tasks is using local-time from the minion");
       topSummaryDiv.append(span);
     }

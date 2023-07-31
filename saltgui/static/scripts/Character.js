@@ -12,6 +12,7 @@ export class Character {
     Character.MULTIPLICATION_SIGN = "\u00D7";
     Character.NO_BREAK_SPACE = "\u00A0";
     Character.NON_BREAKING_HYPHEN = "\u2011";
+    Character.EM_DASH = "\u2014";
     Character.HORIZONTAL_ELLIPSIS = "\u2026";
     Character._UPWARDS_ARROW = "\u2191";
     Character.RIGHTWARDS_ARROW = "\u2192";

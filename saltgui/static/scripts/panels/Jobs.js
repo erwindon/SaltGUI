@@ -5,15 +5,11 @@ import {Utils} from "../Utils.js";
 
 export class JobsPanel extends Panel {
 
-  constructor (pKey) {
-    super(pKey);
-
+  onShow (cnt) {
     // collect the list of hidden/shown functions
     this._showJobs = Utils.getStorageItemList("session", "show_jobs");
     this._hideJobs = Utils.getStorageItemList("session", "hide_jobs");
-  }
 
-  onShow (cnt) {
     const runnerJobsListJobsPromise = this.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.api.getRunnerJobsActive();
 
@@ -109,6 +105,14 @@ export class JobsPanel extends Panel {
       // we show the tooltip here so that the user is invited to click on this
       // the user then sees other rows being updated without becoming invisible
       Utils.addToolTip(statusField, "Click to refresh column");
+
+      // remove the refresh button when it is still there
+      // needed when not all minions have reported their status
+      // but also there are no jobs running anymore
+      const detailsField = tr.querySelector("#status" + tr.dataset.jobid);
+      if (detailsField) {
+        detailsField.remove();
+      }
     }
   }
 
@@ -217,7 +221,7 @@ export class JobsPanel extends Panel {
   updateFooter () {
     let txt = Utils.txtZeroOneMany(this.numberOfJobsShown,
       "No jobs shown", "{0} job shown", "{0} jobs shown");
-    if (this.numberOfJobsEligible > this.numberOfJobsShown) {
+    if (this.numberOfJobsEligible > 0 && this.numberOfJobsEligible > this.numberOfJobsShown) {
       txt += Utils.txtZeroOneMany(this.numberOfJobsEligible,
         "", ", {0} job eligible", ", {0} jobs eligible");
     }
