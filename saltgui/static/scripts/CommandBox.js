@@ -646,10 +646,18 @@ export class CommandBox {
     const minionClass = Output.getMinionLabelClass(isSuccess, pData);
 
     const span1 = div.children[0];
+    span1.classList.remove("host-unknown");
     span1.classList.add("minion-id", minionClass);
 
     const span2 = div.children[1];
     span2.innerText = div.children.length > 2 ? ": " : "";
+
+    const anyUnknown = document.querySelector(".host-unknown");
+    if (anyUnknown === null) {
+      // no more unknowns, so there were no unresponsive minions, so stop warnimng for that
+      const unresponsive = document.getElementById("unresponsive");
+      unresponsive.style.display = "none";
+    }
   }
 
   static handleSaltJobProgEvent (pTag, pData) {
@@ -720,7 +728,7 @@ export class CommandBox {
       minionDiv.id = "run-" + Utils.getIdFromMinionId(minionId);
       minionDiv.style.marginTop = 0;
 
-      const minionSpan1 = Utils.createSpan("", minionId);
+      const minionSpan1 = Utils.createSpan("host-unknown", minionId);
       minionDiv.appendChild(minionSpan1);
 
       const minionSpan2 = Utils.createSpan("", ": " + Character.HOURGLASS_WITH_FLOWING_SAND + " ");
@@ -731,7 +739,8 @@ export class CommandBox {
 
     const warnSpan = Utils.createSpan(
       "",
-      "\nnote that unresponsive minions will not time out in this overview");
+      "\nnote that unresponsive minions will not time out in this overview",
+      "unresponsive");
     output.appendChild(warnSpan);
   }
 }
