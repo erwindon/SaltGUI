@@ -11,8 +11,8 @@ export class RunType {
     RunType.menuRunType = new DropDownMenu(runblock);
     // do not show the menu title at first
     RunType.menuRunType.setTitle("");
-    RunType.menuRunType.addMenuItem("Async", RunType._updateRunTypeText, "async");
     RunType.menuRunType.addMenuItem("Normal", RunType._updateRunTypeText, "normal");
+    RunType.menuRunType.addMenuItem("Async", RunType._updateRunTypeText, "async");
     RunType._updateRunTypeText();
   }
 
@@ -20,12 +20,12 @@ export class RunType {
     const runType = RunType.getRunType();
 
     switch (runType) {
+    case "normal":
+      RunType.menuRunType.setTitle("Normal");
+      break;
     case "async":
       // now that the menu is used show the menu title
       RunType.menuRunType.setTitle("Async");
-      break;
-    case "normal":
-      RunType.menuRunType.setTitle("Normal");
       break;
     default:
       Utils.error("runType", runType);
@@ -43,7 +43,12 @@ export class RunType {
   }
 
   static setRunTypeDefault () {
-    RunType.menuRunType._value = "async";
+    // Retrieve last used runType
+    RunType.menuRunType._value = Utils.getStorageItem("local", "runtype");
+    // Set default if previous runtype not stored
+    if (RunType.menuRunType._value != "normal" && RunType.menuRunType._value != "async") {
+      RunType.menuRunType._value = "normal";
+    }  
     RunType._updateRunTypeText();
     // reset the title to the absolute minimum
     // so that the menu does not stand out in trivial situations
@@ -53,8 +58,10 @@ export class RunType {
   static getRunType () {
     const runType = RunType.menuRunType._value;
     if (runType === undefined || runType === "") {
-      return "async";
+      return "normal";
     }
+    // Store last used runType
+    Utils.setStorageItem("local", "runtype", runType);
     return runType;
   }
 }
