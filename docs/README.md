@@ -66,7 +66,7 @@ netapi_enable_clients:
 - The username 'saltuser1' is only an example. Generic accounts are not recommended, use personal accounts instead. Or use a user-group, see [EAUTH](https://docs.saltproject.io/en/latest/topics/eauth/index.html) for details.
 - Multiple entries like `saltuser1` can be added when you have multiple users.
 - `saltuser1` is a unix (PAM) user, make sure it exists or create a new one.
-- At the bottom of this file, also setup the rest_cherrypi server to access SaltGUI from "http://localhost:3333" (or on any of the hostnames that the server has):
+- At the bottom of this file, also setup the rest_cherrypy server to access SaltGUI from "http://localhost:3333" (or on any of the hostnames that the server has):
 
 ```
 rest_cherrypy:
@@ -78,7 +78,7 @@ rest_cherrypy:
     static_path: /static
 ```
 
-- Note that the cherrypi server is part of the salt-api package and has no separate installation. It is configured using the master configuration file. When configured using the above configurations, both the api calls and the html/js files are served by the cherrypy server. Therefore no additional web application server is needed.
+- Note that the cherrypy server is part of the salt-api package and has no separate installation. It is configured using the master configuration file. When configured using the above configurations, both the api calls and the html/js files are served by the cherrypy server. Therefore no additional web application server is needed.
 - Note that from the SaltGUI GIT repository, only the directory `saltgui` forms the actual SaltGUI web application.
 - Replace each of the `/srv/saltgui` in the above config with the actual `saltgui` directory from the GIT repository. Alternatively, you can create a soft-link /src/saltgui that points to the actual saltgui directory.
 - To successfully use `salt-api` with a default PAM setup, if may be needed to grant read access on `/etc/shadow` to the `salt` user. This is best done using `sudo usermod --append --groups shadow salt`.
