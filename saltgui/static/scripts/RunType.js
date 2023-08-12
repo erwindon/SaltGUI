@@ -21,10 +21,10 @@ export class RunType {
 
     switch (runType) {
     case "normal":
+      // now that the menu is used show the menu title
       RunType.menuRunType.setTitle("Normal");
       break;
     case "async":
-      // now that the menu is used show the menu title
       RunType.menuRunType.setTitle("Async");
       break;
     default:
@@ -44,11 +44,11 @@ export class RunType {
 
   static setRunTypeDefault () {
     // Retrieve last used runType
-    RunType.menuRunType._value = Utils.getStorageItem("local", "runtype");
+    let runType = Utils.getStorageItem("local", "runtype");
     // Set default if previous runtype not stored
-    if (RunType.menuRunType._value != "normal" && RunType.menuRunType._value != "async") {
-      RunType.menuRunType._value = "normal";
-    }  
+    if (runType !== "normal" && runType !== "async") {
+      runType = "normal";
+    }
     RunType._updateRunTypeText();
     // reset the title to the absolute minimum
     // so that the menu does not stand out in trivial situations
@@ -56,9 +56,9 @@ export class RunType {
   }
 
   static getRunType () {
-    const runType = RunType.menuRunType._value;
+    let runType = RunType.menuRunType._value;
     if (runType === undefined || runType === "") {
-      return "normal";
+      runType = "normal";
     }
     // Store last used runType
     Utils.setStorageItem("local", "runtype", runType);
