@@ -191,6 +191,7 @@ export class API {
   getLocalTestVersion (pNodegroup) {
     const params = {
       "client": "local",
+      "full_return": true,
       "fun": "test.version",
       "tgt": "N@" + pNodegroup,
       "tgt_type": "compound"

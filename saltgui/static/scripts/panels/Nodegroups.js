@@ -176,6 +176,7 @@ export class NodegroupsPanel extends Panel {
     const nodegroup = this.todoNodegroups.shift();
 
     // test group membership with function that is typically hidden
+    // note: uses full_data=true
     const localTestVersion = this.api.getLocalTestVersion(nodegroup);
     localTestVersion.then((pLocalTestVersionData) => {
       const retdata = pLocalTestVersionData.return[0];
@@ -195,14 +196,15 @@ export class NodegroupsPanel extends Panel {
       let offline = 0;
       let problems = 0;
       for (const minionId of nodelist) {
-        if (retdata[minionId] === false) {
+        const minionData = retdata[minionId];
+        if (minionData === false) {
           offline += 1;
-        } else if (typeof retdata[minionId] === "string") {
+        } else if (minionData.retcode === 0) {
+          online += 1;
+        } else {
           // that's an error message
           // e.g. unaccepted minion or unknown minion
           problems += 1;
-        } else {
-          online += 1;
         }
       }
       if (online !== cnt) {
