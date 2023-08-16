@@ -31,6 +31,9 @@ export class RunType {
       Utils.error("runType", runType);
     }
 
+    // Store last used runType
+    Utils.setStorageItem("local", "runtype", runType);
+
     const menuItems = RunType.menuRunType.menuDropdownContent.children;
     for (const menuItem of menuItems) {
       let menuItemText = menuItem.innerText;
@@ -43,7 +46,12 @@ export class RunType {
   }
 
   static setRunTypeDefault () {
-    RunType.menuRunType._value = "normal";
+    // Retrieve last used runType
+    let runType = Utils.getStorageItem("local", "runtype");
+    // Set default if previous runtype not stored
+    if (runType !== "normal" && runType !== "async") {
+      runType = "normal";
+    }
     RunType._updateRunTypeText();
     // reset the title to the absolute minimum
     // so that the menu does not stand out in trivial situations
@@ -51,9 +59,9 @@ export class RunType {
   }
 
   static getRunType () {
-    const runType = RunType.menuRunType._value;
+    let runType = RunType.menuRunType._value;
     if (runType === undefined || runType === "") {
-      return "normal";
+      runType = Utils.getStorageItem("local", "runtype", "normal");
     }
     return runType;
   }

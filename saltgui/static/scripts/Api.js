@@ -41,10 +41,12 @@ export class API {
   }
 
   static _cleanStorage () {
-    // clear local storage except key 'eauth'
+    // clear local storage except key 'eauth' and 'runtype'
     const eauth = Utils.getStorageItem("local", "eauth");
+    const runtype = Utils.getStorageItem("local", "runtype");
     Utils.clearStorage("local");
     Utils.setStorageItem("local", "eauth", eauth);
+    Utils.setStorageItem("local", "runtype", runtype);
 
     // clear all of session storage
     Utils.clearStorage("session");
