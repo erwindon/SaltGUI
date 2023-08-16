@@ -31,6 +31,9 @@ export class RunType {
       Utils.error("runType", runType);
     }
 
+    // Store last used runType
+    Utils.setStorageItem("local", "runtype", runType);
+
     const menuItems = RunType.menuRunType.menuDropdownContent.children;
     for (const menuItem of menuItems) {
       let menuItemText = menuItem.innerText;
@@ -58,10 +61,8 @@ export class RunType {
   static getRunType () {
     let runType = RunType.menuRunType._value;
     if (runType === undefined || runType === "") {
-      runType = "normal";
+      runType = Utils.getStorageItem("local", "runtype", "normal");
     }
-    // Store last used runType
-    Utils.setStorageItem("local", "runtype", runType);
     return runType;
   }
 }
