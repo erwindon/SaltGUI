@@ -416,16 +416,11 @@ export class CommandBox {
 
     const targetField = document.getElementById("target");
     TargetType.autoSelectTargetType(targetField.value);
-    targetField.onkeyup = (keyUpEvent) => {
-      if (keyUpEvent.key === "Escape") {
-        CommandBox.hideManualRun();
-      }
-    };
 
-    const commandField = document.getElementById("command");
-    commandField.onkeyup = (keyUpEvent) => {
+    document.onkeyup = (keyUpEvent) => {
       if (keyUpEvent.key === "Escape") {
         CommandBox.hideManualRun();
+        keyUpEvent.stopPropagation();
       }
     };
 
@@ -454,6 +449,8 @@ export class CommandBox {
       option.value = minionId;
       targetList.appendChild(option);
     }
+
+    const commandField = document.getElementById("command");
 
     // give another field (which does not have a list) focus first
     // because when a field gets focus 2 times in a row,
