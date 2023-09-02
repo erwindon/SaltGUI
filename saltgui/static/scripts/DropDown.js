@@ -114,9 +114,9 @@ export class DropDownMenu {
 
   static _sanitizeMenuItemTitle (pTitle) {
     return pTitle.
-      replace(" ", Character.NO_BREAK_SPACE).
-      replace("-", Character.NON_BREAKING_HYPHEN).
-      replace("...", Character.HORIZONTAL_ELLIPSIS);
+      replaceAll(" ", Character.NO_BREAK_SPACE).
+      replaceAll("-", Character.NON_BREAKING_HYPHEN).
+      replaceAll("...", Character.HORIZONTAL_ELLIPSIS);
   }
 
   // Add a menu item at the end of this dropdown menu
