@@ -25,6 +25,7 @@ div.panel > .menu-dropdown {
   border: 1px solid rgba(0, 0, 0, 10%);
   z-index: 5;
   cursor: pointer;
+  text-align: left;
 }
 
 /* Links inside the menu-dropdown */
