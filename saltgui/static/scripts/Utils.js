@@ -348,11 +348,11 @@ export class Utils {
 
     // hide/show search box (the block may become more complicated later)
     const input = pSearchBlock.querySelector("input");
-    input.onkeyup = (ev) => {
-      if (ev.key === "Escape") {
+    input.onkeyup = (keyUpEvent) => {
+      if (keyUpEvent.key === "Escape") {
         Utils._updateTableFilter(pTable, "", menuItems);
         Utils.hideShowTableSearchBar(pSearchBlock, pTable);
-        // return;
+        keyUpEvent.stopPropagation();
       }
     };
     input.oninput = () => {
