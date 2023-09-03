@@ -35,7 +35,8 @@ export class GrainsPanel extends Panel {
       // the div is not added to the DOM yet
       const tr = this.div.querySelector("#grains-table-thead-tr");
       for (const previewGrain of this.previewGrains) {
-        const th = Utils.createElem("th", "", previewGrain);
+        const previewGrainTitle = previewGrain.replaceAll(/[=].*$/g, "");
+        const th = Utils.createElem("th", "", previewGrainTitle);
         tr.appendChild(th);
       }
       this.previewColumsAdded = true;
@@ -134,23 +135,24 @@ export class GrainsPanel extends Panel {
 
     // add the preview columns
     /* eslint-disable max-depth */
-    for (const grainName of this.previewGrains) {
+    for (const previewGrain of this.previewGrains) {
       const td = Utils.createTd();
       if (typeof pMinionData === "object") {
-        if (grainName.startsWith("$")) {
+        const previewGrainValue = previewGrain.replaceAll(/^[^=]*=/g, "");
+        if (previewGrainValue.startsWith("$")) {
           // it is a json path
-          const obj = jsonPath(pMinionData, grainName);
+          const obj = jsonPath(pMinionData, previewGrainValue);
           if (Array.isArray(obj)) {
             td.innerText = Output.formatObject(obj[0]);
             td.classList.add("grain-value");
           }
         } else {
           // a plain grain-name or a path in the grains.get style
-          const grainNames = grainName.split(":");
+          const grainNames = previewGrainValue.split(":");
           let obj = pMinionData;
-          for (const gn of grainNames) {
+          for (const grainName of grainNames) {
             if (obj) {
-              obj = obj[gn];
+              obj = obj[grainName];
             }
           }
           if (obj) {
