@@ -202,7 +202,7 @@ export class JobPanel extends Panel {
     if (argumentsText.length > maxTextLength) {
       // prevent column becoming too wide
       displayArguments = this.commandtext;
-      argumentsText = argumentsText.substring(0, maxTextLength) + "...";
+      argumentsText = argumentsText.substring(0, maxTextLength) + Character.HORIZONTAL_ELLIPSIS;
     }
 
     const functionText = info.Function + argumentsText + " on " +
