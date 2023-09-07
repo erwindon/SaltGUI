@@ -198,16 +198,24 @@ export class JobPanel extends Panel {
     // ============================
 
     const maxTextLength = 50;
-    let displayArguments = null;
+    const extraInfo = [];
+
     if (argumentsText.length > maxTextLength) {
-      // prevent column becoming too wide
-      displayArguments = this.commandtext;
+      // prevent title becoming too wide
+      // save info for display in actual output box
+      extraInfo.push(this.commandtext);
       argumentsText = argumentsText.substring(0, maxTextLength) + Character.HORIZONTAL_ELLIPSIS;
     }
 
-    const functionText = info.Function + argumentsText + " on " +
-      TargetType.makeTargetText(info);
-    this.updateTitle(functionText);
+    let targetText = "on " + TargetType.makeTargetText(info);
+    if (targetText.length > maxTextLength) {
+      // prevent title becoming too wide
+      // save info for display in actual output box
+      extraInfo.push(targetText);
+      targetText = targetText.substring(0, maxTextLength) + Character.HORIZONTAL_ELLIPSIS;
+    }
+
+    this.updateTitle(info.Function + argumentsText + " " + targetText);
 
     Output.dateTimeStr(info.StartTime, this.timeField, "bottom-left");
 
@@ -237,7 +245,7 @@ export class JobPanel extends Panel {
       initialStatus = "(loading)";
       this.jobIsTerminated = false;
     }
-    Output.addResponseOutput(this.output, pJobId, minions, info.Result, info.Function, initialStatus, pMinionId, displayArguments);
+    Output.addResponseOutput(this.output, pJobId, minions, info.Result, info.Function, initialStatus, pMinionId, extraInfo);
 
     // replace any jobid
     // Don't do this with output.innerHTML as there are already
