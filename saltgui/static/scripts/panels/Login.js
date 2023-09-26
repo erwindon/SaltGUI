@@ -360,7 +360,7 @@ export class LoginPanel extends Panel {
     const ipNumberField = wheelConfigValuesData.saltgui_ipnumber_field;
     Utils.setStorageItem("session", "ipnumber_field", ipNumberField);
     const ipNumberPrefix = wheelConfigValuesData.saltgui_ipnumber_prefix;
-    Utils.setStorageItem("session", "ipnumber_prefix", ipNumberPrefix);
+    Utils.setStorageItem("session", "ipnumber_prefix", JSON.stringify(ipNumberPrefix));
 
     const showSaltEnvs = wheelConfigValuesData.saltgui_show_saltenvs;
     Utils.setStorageItem("session", "show_saltenvs", JSON.stringify(showSaltEnvs));
