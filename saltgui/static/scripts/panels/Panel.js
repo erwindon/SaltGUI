@@ -433,6 +433,20 @@ export class Panel {
     return cnt;
   }
 
+  static _filterIpAddresses (allIpNumbers, pIpNumberPrefix) {
+    if (pIpNumberPrefix.length > 0) {
+      allIpNumbers = allIpNumbers.filter((item) => {
+        for (const prefix of pIpNumberPrefix) {
+          if (item.startsWith(prefix)) {
+            return true;
+          }
+        }
+        return false;
+      });
+    }
+    return allIpNumbers;
+  }
+
   static _getBestIpNumber (pMinionData, pAllMinionsGrains, pIpNumberField, pIpNumberPrefix) {
     if (!pMinionData) {
       return null;
@@ -447,7 +461,7 @@ export class Panel {
     // so, it is an array
 
     // reduce to only the requested prefix
-    allIpNumbers = allIpNumbers.filter((item) => item.startsWith(pIpNumberPrefix));
+    allIpNumbers = Panel._filterIpAddresses(allIpNumbers, pIpNumberPrefix);
 
     // sort it, so that we get more consistent results
     // when there are minions which report multiple IP
@@ -497,7 +511,7 @@ export class Panel {
     }
 
     // reduce to only the requested prefix
-    allIpNumbers = allIpNumbers.filter((item) => item.startsWith(pIpNumberPrefix));
+    allIpNumbers = Panel._filterIpAddresses(allIpNumbers, pIpNumberPrefix);
 
     return allIpNumbers;
   }
@@ -577,7 +591,7 @@ export class Panel {
     // typical choices are "fqdn_ip4", "ipv4", "fqdn_ip6" or "ipv6"
     // non-existent grains effectively disable the behaviour
     const ipNumberField = Utils.getStorageItem("session", "ipnumber_field", "fqdn_ip4");
-    const ipNumberPrefix = Utils.getStorageItem("session", "ipnumber_prefix", "");
+    const ipNumberPrefix = Utils.getStorageItemList("session", "ipnumber_prefix");
 
     const bestIpNumber = Panel._getBestIpNumber(pMinionData, pAllMinionsGrains, ipNumberField, ipNumberPrefix);
     const allIpNumbers = Panel._getAllIpNumbers(pMinionData, ipNumberField, ipNumberPrefix);
