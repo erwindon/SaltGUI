@@ -213,9 +213,10 @@ export class KeysPanel extends Panel {
     // capitalize the first word (can only be "no")
     txt = txt.replace(/^no/, "No");
 
-    this.nrUnaccepted = cnt["enaccepted"];
+    this.nrUnaccepted = cnt["unaccepted"];
+    this.nrAccepted = cnt["accepted"];
+    this.nrDenied = cnt["denied"];
     this.nrRejected = cnt["rejected"];
-    // others are reported but not saved
 
     super.updateFooter(txt);
   }
