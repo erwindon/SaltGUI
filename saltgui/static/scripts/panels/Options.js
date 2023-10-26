@@ -20,6 +20,10 @@ export class OptionsPanel extends Panel {
       "Other names are regular variables from the master file.",
       "Changes made in this screen are valid for this session ONLY."
     ]);
+
+    const txt = Utils.createDiv("", Character.CIRCLED_INFORMATION_SOURCE + " Any changes made here are for this login session only");
+    this.div.append(txt);
+
     this.addTable(["Name", "Value"]);
 
     this.options = [

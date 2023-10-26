@@ -81,6 +81,17 @@ pre.output .tooltip:hover {
   border-color: rgba(76, 175, 80, 80%) transparent transparent transparent;
 }
 
+.tooltip > .tooltip-text-logo {
+  left: 110px;
+  top: -5px;
+  height: calc(150% - 5px);
+}
+
+.tooltip > .tooltip-text-logo::after {
+  /* hide the tooltip pointer */
+  display: none;
+}
+
 .tooltip > .tooltip-text-bottom-left::after {
   left: calc(5% - 2.5px);
 }
