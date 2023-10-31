@@ -12,7 +12,7 @@ export class TemplatesPanel extends Panel {
 
     this.addTitle("Templates");
     this.addSearchButton();
-    this.addTable(["Name", "@Category", "Description", "Target", "Command", "-menu-"], "data-list-templates");
+    this.addTable(["Name", "Category", "Description", "Target", "Command", "-menu-"], "data-list-templates");
     this.setTableSortable("Name", "asc");
     this.setTableClickable();
     this.addMsg();
@@ -25,6 +25,7 @@ export class TemplatesPanel extends Panel {
 
     wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
       this._handleTemplatesWheelConfigValues(pWheelConfigValuesData);
+      this.hideColumn("Category");
       return true;
     }, (pWheelConfigValuesMsg) => {
       this._handleTemplatesWheelConfigValues(JSON.stringify(pWheelConfigValuesMsg));
@@ -43,8 +44,6 @@ export class TemplatesPanel extends Panel {
 
     if (templates) {
       Utils.setStorageItem("session", "templates", JSON.stringify(templates));
-      this.setCategoriesTitle(templates);
-      this.showCategoriesColumn(templates);
       TemplatesPanel.getTemplatesCategories(templates);
       Router.updateMainMenu();
     } else {
@@ -63,33 +62,6 @@ export class TemplatesPanel extends Panel {
     const txt = Utils.txtZeroOneMany(this.nrTemplates,
       "No templates", "{0} template", "{0} templates");
     this.setMsg(txt);
-  }
-
-  setCategoriesTitle (templates) {
-    const categoryTh = this.table.querySelectorAll("th")[1];
-    const keys = Object.keys(templates);
-    for (const key of keys) {
-      const template = templates[key];
-      const categories = TemplatesPanel.getTemplateCategories(template);
-      if (categories.length > 1) {
-        categoryTh.innerText = "Categories";
-      }
-    }
-  }
-
-  showCategoriesColumn (templates) {
-    const keys = Object.keys(templates);
-    for (const key of keys) {
-      const template = templates[key];
-      const categories = TemplatesPanel.getTemplateCategories(template);
-      if (categories.length > 1 || categories.length > 0 && categories[0] !== undefined) {
-        const categoryColumn = this.table.querySelectorAll("col")[1];
-        // show the categories column only when a category was filled in somewhere
-        // and it is not the only category
-        categoryColumn.removeAttribute("style");
-        return;
-      }
-    }
   }
 
   static getTemplateCategories (template) {
