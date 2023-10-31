@@ -1,5 +1,6 @@
 /* global */
 
+import {CommandBox} from "../CommandBox.js";
 import {Utils} from "../Utils.js";
 
 export class Page {
@@ -29,6 +30,36 @@ export class Page {
 
     this.panels = [];
     this.api = pRouter.api;
+
+    const body = document.querySelector("body");
+    body.onkeyup = (keyUpEvent) => {
+      if (this._handleTemplateKey(keyUpEvent)) {
+        keyUpEvent.stopPropagation();
+        return;
+      }
+    };
+  }
+
+  _handleTemplateKey (keyUpEvent) {
+    if (!Utils.isValidKeyUpEvent(keyUpEvent)) {
+      return false;
+    }
+
+    if (keyUpEvent.target !== document.body) {
+      // not when focus is in a text field
+      return false;
+    }
+
+    const templateName = Utils.getStorageItem("session", "template_" + keyUpEvent.key, "");
+    if (templateName === "") {
+      // key not bound to a template
+      return false;
+    }
+
+    // apply template
+    CommandBox.applyTemplateByName(templateName);
+    CommandBox.showManualRun(this.api);
+    return true;
   }
 
   addPanel (pPanel) {

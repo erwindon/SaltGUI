@@ -12,7 +12,7 @@ export class TemplatesPanel extends Panel {
 
     this.addTitle("Templates");
     this.addSearchButton();
-    this.addTable(["Name", "Category", "Description", "Target", "Command", "-menu-"], "data-list-templates");
+    this.addTable(["Name", "Category", "Key", "Description", "Target", "Command", "-menu-"], "data-list-templates");
     this.setTableSortable("Name", "asc");
     this.setTableClickable();
     this.addMsg();
@@ -26,6 +26,7 @@ export class TemplatesPanel extends Panel {
     wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
       this._handleTemplatesWheelConfigValues(pWheelConfigValuesData);
       this.hideColumn("Category");
+      this.hideColumn("Key");
       return true;
     }, (pWheelConfigValuesMsg) => {
       this._handleTemplatesWheelConfigValues(JSON.stringify(pWheelConfigValuesMsg));
@@ -123,6 +124,14 @@ export class TemplatesPanel extends Panel {
       categoryTd.className = "value-none";
     }
     tr.appendChild(categoryTd);
+
+    // calculate key
+    const key = template["key"];
+    if (key) {
+      tr.appendChild(Utils.createTd("", key));
+    } else {
+      tr.appendChild(Utils.createTd("value-none", "(none)"));
+    }
 
     // calculate description
     const description = template["description"];

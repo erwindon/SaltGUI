@@ -130,7 +130,7 @@ export class CommandBox {
       menu.addMenuItem(
         () => CommandBox._templateTmplMenuItemTitle(template),
         () => {
-          CommandBox._applyTemplate(template);
+          CommandBox.applyTemplateByTemplate(template);
         }
       );
     }
@@ -250,33 +250,44 @@ export class CommandBox {
       });
   }
 
-  static _applyTemplate (template) {
-
-    if (template.targettype) {
-      let targetType = template.targettype;
+  static applyTemplateByProperties (pTargetType, pTarget, pCommand) {
+    if (pTargetType) {
       const targetbox = document.getElementById("target-box");
       // show the extended selection controls when
       targetbox.style.display = "inherit";
-      if (targetType !== "glob" && targetType !== "list" && targetType !== "compound" && targetType !== "nodegroup") {
+      if (pTargetType !== "glob" && pTargetType !== "list" && pTargetType !== "compound" && pTargetType !== "nodegroup") {
         // we don't support that, revert to standard (not default)
-        targetType = "glob";
+        pTargetType = "glob";
       }
-      TargetType.setTargetType(targetType);
+      TargetType.setTargetType(pTargetType);
     } else {
       // not in the template, revert to default
       TargetType.setTargetTypeDefault();
     }
 
-    if (template.target) {
+    if (pTarget) {
       const targetField = document.getElementById("target");
-      targetField.value = template.target;
+      targetField.value = pTarget;
       TargetType.autoSelectTargetType(targetField.value);
     }
 
-    if (template.command) {
+    if (pCommand) {
       const commandField = document.getElementById("command");
-      commandField.value = template.command;
+      commandField.value = pCommand;
     }
+  }
+
+  static applyTemplateByTemplate (pTemplate) {
+    CommandBox.applyTemplateByProperties(pTemplate.targettype, pTemplate.target, pTemplate.command);
+  }
+
+  static applyTemplateByName (pTemplateName) {
+    const templates = Utils.getStorageItemObject("session", "templates");
+    const template = templates[pTemplateName];
+    if (!template) {
+      return;
+    }
+    CommandBox.applyTemplateByTemplate(template);
   }
 
   static getScreenModifyingCommands () {

@@ -646,4 +646,27 @@ export class Utils {
       ddc.style.display = pHide ? "none" : "";
     }
   }
+
+  static isValidKeyUpEvent (pKeyUpEvent) {
+    if (pKeyUpEvent.altKey) {
+      return false;
+    }
+    if (pKeyUpEvent.ctrlKey) {
+      return false;
+    }
+    if (pKeyUpEvent.metaKey) {
+      return false;
+    }
+    if (pKeyUpEvent.shiftKey) {
+      return false;
+    }
+    if (pKeyUpEvent.isComposing) {
+      return false;
+    }
+    if (pKeyUpEvent.key.length > 1) {
+      // not a simple key
+      // return false;
+    }
+    return true;
+  }
 }
