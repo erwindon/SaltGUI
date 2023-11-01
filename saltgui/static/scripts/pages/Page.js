@@ -37,6 +37,10 @@ export class Page {
         keyUpEvent.stopPropagation();
         return;
       }
+      if (Page._handleMenuKey(keyUpEvent)) {
+        keyUpEvent.stopPropagation();
+        // return;
+      }
     };
   }
 

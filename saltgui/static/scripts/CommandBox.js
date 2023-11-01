@@ -87,21 +87,26 @@ export class CommandBox {
   }
 
   static _templateTmplMenuItemTitle (pTemplate) {
+    let keyboardHint = "";
+    if (pTemplate.key) {
+      keyboardHint = Character.NO_BREAK_SPACE + "[" + pTemplate.key + "]";
+    }
+
     if (CommandBox.templateTmplMenu._templateCategory === null) {
       // "(all)" selected, return all
-      return pTemplate.description;
+      return pTemplate.description + keyboardHint;
     }
     if (CommandBox.templateTmplMenu._templateCategory === undefined && pTemplate.category === undefined && pTemplate.categories === undefined) {
       // no category selected, return templates without category
-      return pTemplate.description;
+      return pTemplate.description + keyboardHint;
     }
     if (pTemplate.category && pTemplate.category === CommandBox.templateTmplMenu._templateCategory) {
       // item has one category, return when it matches
-      return pTemplate.description;
+      return pTemplate.description + keyboardHint;
     }
     if (pTemplate.categories && pTemplate.categories.indexOf(CommandBox.templateTmplMenu._templateCategory) >= 0) {
       // item has a list of categories, return when one matches
-      return pTemplate.description;
+      return pTemplate.description + keyboardHint;
     }
     return null;
   }
