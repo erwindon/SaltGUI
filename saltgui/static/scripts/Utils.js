@@ -663,9 +663,13 @@ export class Utils {
     if (pKeyUpEvent.isComposing) {
       return false;
     }
+    if (pKeyUpEvent.target !== document.body) {
+      // not when focus is in a text field
+      return false;
+    }
     if (pKeyUpEvent.key.length > 1) {
       // not a simple key
-      // return false;
+      return false;
     }
     return true;
   }

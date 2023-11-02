@@ -77,7 +77,13 @@ export class Router {
     /* eslint-enable compat/compat */
   }
 
-  _registerMenuItem (pParentId, pButtonId, pUrl) {
+  _registerMenuItem (pParentId, pButtonId, pUrl, pKey) {
+
+    // shortcut
+
+    if (pKey) {
+      Utils.setStorageItem("session", "menu_" + pKey, pUrl);
+    }
 
     // full menu
 
@@ -177,19 +183,20 @@ export class Router {
       /* eslint-enable compat/compat */
     });
 
-    this._registerMenuItem(null, "minions", "minions");
-    this._registerMenuItem("minions", "grains", "grains");
-    this._registerMenuItem("minions", "schedules", "schedules");
-    this._registerMenuItem("minions", "pillars", "pillars");
-    this._registerMenuItem("minions", "beacons", "beacons");
-    this._registerMenuItem("minions", "nodegroups", "nodegroups");
-    this._registerMenuItem(null, "keys", "keys");
-    this._registerMenuItem(null, "jobs", "jobs");
-    this._registerMenuItem("jobs", "highstate", "highstate");
-    this._registerMenuItem("jobs", "templates", "templates");
-    this._registerMenuItem(null, "events", "events");
-    this._registerMenuItem("events", "reactors", "reactors");
-    this._registerMenuItem(null, "issues", "issues");
+    this._registerMenuItem(null, "minions", "minions", "m");
+    this._registerMenuItem("minions", "grains", "grains", "g");
+    this._registerMenuItem("minions", "schedules", "schedules", "s");
+    this._registerMenuItem("minions", "pillars", "pillars", "p");
+    this._registerMenuItem("minions", "beacons", "beacons", "b");
+    this._registerMenuItem("minions", "nodegroups", "nodegroups", "n");
+    this._registerMenuItem(null, "keys", "keys", "k");
+    this._registerMenuItem(null, "jobs", "jobs", "j");
+    this._registerMenuItem("jobs", "highstate", "highstate", "h");
+    this._registerMenuItem("jobs", "templates", "templates", "t");
+    this._registerMenuItem(null, "events", "events", "e");
+    this._registerMenuItem("events", "reactors", "reactors", "r");
+    this._registerMenuItem(null, "issues", "issues", "i");
+    // no shortcut for logout
     this._registerMenuItem(null, "logout", "logout");
   }
 
