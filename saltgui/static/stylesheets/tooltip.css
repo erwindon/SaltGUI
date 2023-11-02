@@ -50,6 +50,11 @@
   transform: translate(-95%, 0);
 }
 
+.tooltip > .tooltip-text-fab {
+  text-align: right;
+  transform: translate(-138px, 52px);
+}
+
 .tooltip:hover {
   /* only slightly darker than 'whitesmoke(#f5f5f5)' */
   background-color: #e0e0e0;
@@ -88,6 +93,11 @@ pre.output .tooltip:hover {
 }
 
 .tooltip > .tooltip-text-logo::after {
+  /* hide the tooltip pointer */
+  display: none;
+}
+
+.tooltip > .tooltip-text-fab::after {
   /* hide the tooltip pointer */
   display: none;
 }

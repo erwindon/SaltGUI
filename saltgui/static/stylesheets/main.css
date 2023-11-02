@@ -99,14 +99,10 @@ h1 {
 }
 
 .fab {
-  display: block;
+  display: inline-block;
   float: right;
   margin-top: 8px;
   margin-right: 8px;
-}
-
-.fab:hover circle {
-  fill: gray;
 }
 
 #button-manual-run {
@@ -189,6 +185,17 @@ h1 {
   background: rgba(0, 0, 0, 15%);
   color: #4caf50;
   cursor: pointer;
+}
+
+.menu-item-first-letter#button-logout1:hover::first-letter,
+.menu-item-first-letter#button-logout2:hover::first-letter,
+.menu-item-first-letter#minimenu-top:hover::first-letter {
+  text-decoration: none;
+}
+
+.menu-item-first-letter:hover::first-letter {
+  text-decoration: underline #4caf50 double;
+  text-decoration-skip-ink: none;
 }
 
 @media (width >= 950px) {

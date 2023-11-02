@@ -66,6 +66,9 @@ export class Router {
     const logo = document.getElementById("logo");
     Utils.addToolTip(logo, "ctrl-click to see\nOptions and Stats", "logo");
 
+    const fab = document.querySelector(".fab");
+    Utils.addToolTip(fab, "Type 'c' to show\nmanual run", "fab");
+
     Router.updateMainMenu();
 
     const hash = window.location.hash.replace(/^#/, "");
@@ -102,10 +105,10 @@ export class Router {
         dropdownContent = Utils.createDiv("dropdown-content", "", "dropdown-content-" + pParentId);
         dropDownDiv.append(dropdownContent);
       }
-      const itemDiv = Utils.createDiv("run-command-button menu-item", pButtonId, "button-" + pButtonId + "1");
+      const itemDiv = Utils.createDiv("run-command-button menu-item menu-item-first-letter", pButtonId, "button-" + pButtonId + "1");
       dropdownContent.append(itemDiv);
     } else {
-      const topItemDiv = Utils.createDiv("menu-item", pButtonId, "button-" + pButtonId + "1");
+      const topItemDiv = Utils.createDiv("menu-item menu-item-first-letter", pButtonId, "button-" + pButtonId + "1");
       dropDownDiv.append(topItemDiv);
     }
 
@@ -113,7 +116,14 @@ export class Router {
 
     const miniMenuDiv = document.querySelector(".minimenu");
     const dropdownContent2 = miniMenuDiv.querySelector(".dropdown-content");
-    const menuItemDiv = Utils.createDiv("run-command-button menu-item", (pParentId ? "-" + Character.NO_BREAK_SPACE : "") + pButtonId, "button-" + pButtonId + "2");
+    let menuItemDiv;
+    if (pParentId) {
+      menuItemDiv = Utils.createDiv("run-command-button menu-item");
+      menuItemDiv.append(Utils.createSpan("", "-" + Character.NO_BREAK_SPACE, ""));
+      menuItemDiv.append(Utils.createSpan("menu-item-first-letter", pButtonId, "button-" + pButtonId + "2"));
+    } else {
+      menuItemDiv = Utils.createDiv("run-command-button menu-item menu-item-first-letter", pButtonId, "button-" + pButtonId + "2");
+    }
     dropdownContent2.append(menuItemDiv);
 
     // activate the menu items as needed
