@@ -19,7 +19,6 @@ div.panel > .menu-dropdown {
   position: absolute;
   max-height: 300px;
   overflow-y: auto;
-  overflow-x: visible;
   background: #fff;
   box-shadow: 0 3px 10px -2px rgba(0, 0, 0, 30%);
   border: 1px solid rgba(0, 0, 0, 10%);
