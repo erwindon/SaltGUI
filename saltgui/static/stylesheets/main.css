@@ -87,7 +87,7 @@ h1 {
   margin-left: 0;
 }
 
-@media (max-width: 950px) {
+@media (width < 950px) {
   .panel {
     margin-left: 0;
   }
@@ -191,12 +191,12 @@ h1 {
   cursor: pointer;
 }
 
-@media (min-width: 950px) {
+@media (width >= 950px) {
   .fullmenu { display: inline-block; }
   .minimenu { display: none; }
 }
 
-@media (max-width: 950px) {
+@media (width < 950px) {
   .fullmenu { display: none; }
   .minimenu { display: inline-block; }
 }
