@@ -105,24 +105,30 @@ export class Router {
         dropdownContent = Utils.createDiv("dropdown-content", "", "dropdown-content-" + pParentId);
         dropDownDiv.append(dropdownContent);
       }
-      const itemDiv = Utils.createDiv("run-command-button menu-item menu-item-first-letter", pButtonId, "button-" + pButtonId + "1");
+      const itemDiv = Utils.createDiv("run-command-button menu-item", pButtonId, "button-" + pButtonId + "1");
+      if (pKey) {
+        // currently applies to all, but just in case
+        itemDiv.classList.add("menu-item-first-letter");
+      }
       dropdownContent.append(itemDiv);
     } else {
-      const topItemDiv = Utils.createDiv("menu-item menu-item-first-letter", pButtonId, "button-" + pButtonId + "1");
+      const topItemDiv = Utils.createDiv("menu-item", pButtonId, "button-" + pButtonId + "1");
       dropDownDiv.append(topItemDiv);
+      if (pKey) {
+        topItemDiv.classList.add("menu-item-first-letter");
+      }
     }
 
     // mini menu
 
     const miniMenuDiv = document.querySelector(".minimenu");
     const dropdownContent2 = miniMenuDiv.querySelector(".dropdown-content");
-    let menuItemDiv;
+    const menuItemDiv = Utils.createDiv("run-command-button menu-item", pButtonId, "button-" + pButtonId + "2");
     if (pParentId) {
-      menuItemDiv = Utils.createDiv("run-command-button menu-item");
-      menuItemDiv.append(Utils.createSpan("", "-" + Character.NO_BREAK_SPACE, ""));
-      menuItemDiv.append(Utils.createSpan("menu-item-first-letter", pButtonId, "button-" + pButtonId + "2"));
-    } else {
-      menuItemDiv = Utils.createDiv("run-command-button menu-item menu-item-first-letter", pButtonId, "button-" + pButtonId + "2");
+      menuItemDiv.style.paddingLeft = "50px";
+    }
+    if (pKey) {
+      menuItemDiv.classList.add("menu-item-first-letter");
     }
     dropdownContent2.append(menuItemDiv);
 
