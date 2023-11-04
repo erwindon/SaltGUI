@@ -38,6 +38,8 @@ such as `yubico_client`, or execution modules such as `boto3_sns`.
 - Define your own custom documentation for commands
 - Match list of minions against reference list
 - Match status of minions against reference list
+- Keyboard control for top-level navigation
+- Keyboard control to apply templates
 
 
 ## Quick start using PAM as authentication method
