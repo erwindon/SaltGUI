@@ -1,6 +1,7 @@
 /* global */
 
 import {Character} from "../Character.js";
+import {LoginPanel} from "../panels/Login.js";
 import {Output} from "../output/Output.js";
 import {OutputYaml} from "../output/OutputYaml.js";
 import {Panel} from "./Panel.js";
@@ -27,6 +28,7 @@ export class OptionsPanel extends Panel {
     this.addTable(["Name", "Value"]);
 
     this.options = [
+      ["saltgui", "version"],
       ["eauth", "session"],
       ["user", "session"],
       ["token", "session"],
@@ -285,7 +287,9 @@ export class OptionsPanel extends Panel {
       const valuesArr = option[3];
 
       let value;
-      if (category === "session") {
+      if (category === "version") {
+        value = LoginPanel.version;
+      } else if (category === "session") {
         value = loginResponse[name];
       } else if (category === null) {
         value = Utils.getStorageItem("session", name.replace(/-/g, "_"));

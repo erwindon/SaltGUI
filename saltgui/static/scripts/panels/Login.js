@@ -8,6 +8,8 @@ import {Utils} from "../Utils.js";
 export class LoginPanel extends Panel {
 
   constructor () {
+    LoginPanel.version = "SaltGUI v1.31.0-snapshot";
+
     super("login");
 
     this.addTitle("SaltGUI");
@@ -66,7 +68,7 @@ export class LoginPanel extends Panel {
     img.src = "static/images/github.png";
     aa.append(img);
 
-    const txt = document.createTextNode("SaltGUI v1.30.0-snapshot");
+    const txt = document.createTextNode(LoginPanel.version);
     aa.append(txt);
 
     form.append(aa);
