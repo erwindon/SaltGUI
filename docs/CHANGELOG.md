@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.30.0 (2023-11-11)
+
+- show long target list and/or long command in output panel as wrapped (erwindon)
+- fixed documentation for custom grain display (erwindon, thx sharkmerry7)
+- fixed visibility of of templates/nodegroups/reactors when no such info present (erwindon)
+- added documentation on how to configure for saltstack 3006+ (erwindon)
+- fixed display of state_id with embedded spaces (AntonOvseenko)
+- show on which information the highstate screen is based (erwindon)
+- fixed logout due to internal error in stats collection (erwindon)
+- made all pages mostly printer-aware (erwindon)
+- runtype is now a sticky setting (spankywetfish)
+- ESC now closes command-box always (erwindon)
+- allow custom title for custom grains (erwindon)
+- improved filtering on ip-number (AntonOvseenko)
+- options page is slightly more accessible (erwindon)
+- added navigation using keyboard (erwindon, thx ZsBT)
+- added apply-template using keyboard (erwindon, thx ZsBT)
+- added page with minions organized by nodegroup (erwindon)
+- updated CVE info (erwindon)
+- upgraded eslint and fixed related issues (erwindon)
+- upgraded stylelint and fixed related issues (erwindon)
+- various small fixes and improvements (erwindon)
+- Celebrating 450 stars on GitHub
+
 ## 1.29.0 (2023-02-18)
 - Updated some OS logos (erwindon, thx mkbrown)
 - Bump eslint and stylelint to latest versions (erwindon)
