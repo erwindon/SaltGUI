@@ -38,6 +38,8 @@ such as `yubico_client`, or execution modules such as `boto3_sns`.
 - Define your own custom documentation for commands
 - Match list of minions against reference list
 - Match status of minions against reference list
+- Keyboard control for top-level navigation
+- Keyboard control to apply templates
 
 
 ## Quick start using PAM as authentication method
@@ -184,6 +186,7 @@ saltgui_templates:
         description: First template
         target: "*"
         command: test.fib num=10
+        key: "f"
     template2:
         description: Second template
         targettype: glob
@@ -212,6 +215,9 @@ saltgui_templates:
 When at least one template is assigned to a category, then you can select a template category before
 selecting the actual category. Otherwise that choice remains hidden. Templates can be in multiple categories
 when a list of categories is assigned.
+
+When at least one template is assigned to a key, then you can select a template by typing that key
+while using any other screen in SaltGUI. Otherwise that choice remains hidden.
 
 
 ## Jobs

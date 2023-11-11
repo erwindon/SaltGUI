@@ -1,5 +1,7 @@
 /* global */
 
+import {CommandBox} from "../CommandBox.js";
+import {Router} from "../Router.js";
 import {Utils} from "../Utils.js";
 
 export class Page {
@@ -29,6 +31,53 @@ export class Page {
 
     this.panels = [];
     this.api = pRouter.api;
+
+    const body = document.querySelector("body");
+    body.onkeyup = (keyUpEvent) => {
+      if (!Utils.isValidKeyUpEvent(keyUpEvent)) {
+        return;
+      }
+
+      if (this._handleTemplateKey(keyUpEvent)) {
+        keyUpEvent.stopPropagation();
+        return;
+      }
+
+      if (this._handleMenuKey(keyUpEvent)) {
+        keyUpEvent.stopPropagation();
+        // return;
+      }
+    };
+  }
+
+  _handleTemplateKey (keyUpEvent) {
+    const templateName = Utils.getStorageItem("session", "template_" + keyUpEvent.key, "");
+    if (templateName === "") {
+      // key not bound to a template
+      return false;
+    }
+
+    // apply template
+    CommandBox.applyTemplateByName(templateName);
+    CommandBox.showManualRun(this.api);
+    return true;
+  }
+
+  _handleMenuKey (keyUpEvent) {
+    if (keyUpEvent.key === "c") {
+      CommandBox.showManualRun(this.api);
+      return true;
+    }
+
+    const pages = Router._getPagesList();
+    const page = Utils.getStorageItem("session", "menu_" + keyUpEvent.key, "");
+    // Arrays.includes() is only available from ES7/2016
+    if (page && (pages.length === 0 || pages.indexOf(page) >= 0)) {
+      this.router.goTo(page);
+      return true;
+    }
+
+    return false;
   }
 
   addPanel (pPanel) {

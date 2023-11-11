@@ -66,6 +66,9 @@ export class Router {
     const logo = document.getElementById("logo");
     Utils.addToolTip(logo, "ctrl-click to see\nOptions and Stats", "logo");
 
+    const fab = document.querySelector(".fab");
+    Utils.addToolTip(fab, "Type 'c' to show\nmanual run", "fab");
+
     Router.updateMainMenu();
 
     const hash = window.location.hash.replace(/^#/, "");
@@ -77,7 +80,13 @@ export class Router {
     /* eslint-enable compat/compat */
   }
 
-  _registerMenuItem (pParentId, pButtonId, pUrl) {
+  _registerMenuItem (pParentId, pButtonId, pUrl, pKey) {
+
+    // shortcut
+
+    if (pKey) {
+      Utils.setStorageItem("session", "menu_" + pKey, pUrl);
+    }
 
     // full menu
 
@@ -97,17 +106,30 @@ export class Router {
         dropDownDiv.append(dropdownContent);
       }
       const itemDiv = Utils.createDiv("run-command-button menu-item", pButtonId, "button-" + pButtonId + "1");
+      if (pKey) {
+        // currently applies to all, but just in case
+        itemDiv.classList.add("menu-item-first-letter");
+      }
       dropdownContent.append(itemDiv);
     } else {
       const topItemDiv = Utils.createDiv("menu-item", pButtonId, "button-" + pButtonId + "1");
       dropDownDiv.append(topItemDiv);
+      if (pKey) {
+        topItemDiv.classList.add("menu-item-first-letter");
+      }
     }
 
     // mini menu
 
     const miniMenuDiv = document.querySelector(".minimenu");
     const dropdownContent2 = miniMenuDiv.querySelector(".dropdown-content");
-    const menuItemDiv = Utils.createDiv("run-command-button menu-item", (pParentId ? "-" + Character.NO_BREAK_SPACE : "") + pButtonId, "button-" + pButtonId + "2");
+    const menuItemDiv = Utils.createDiv("run-command-button menu-item", pButtonId, "button-" + pButtonId + "2");
+    if (pParentId) {
+      menuItemDiv.style.paddingLeft = "50px";
+    }
+    if (pKey) {
+      menuItemDiv.classList.add("menu-item-first-letter");
+    }
     dropdownContent2.append(menuItemDiv);
 
     // activate the menu items as needed
@@ -177,19 +199,20 @@ export class Router {
       /* eslint-enable compat/compat */
     });
 
-    this._registerMenuItem(null, "minions", "minions");
-    this._registerMenuItem("minions", "grains", "grains");
-    this._registerMenuItem("minions", "schedules", "schedules");
-    this._registerMenuItem("minions", "pillars", "pillars");
-    this._registerMenuItem("minions", "beacons", "beacons");
-    this._registerMenuItem("minions", "nodegroups", "nodegroups");
-    this._registerMenuItem(null, "keys", "keys");
-    this._registerMenuItem(null, "jobs", "jobs");
-    this._registerMenuItem("jobs", "highstate", "highstate");
-    this._registerMenuItem("jobs", "templates", "templates");
-    this._registerMenuItem(null, "events", "events");
-    this._registerMenuItem("events", "reactors", "reactors");
-    this._registerMenuItem(null, "issues", "issues");
+    this._registerMenuItem(null, "minions", "minions", "m");
+    this._registerMenuItem("minions", "grains", "grains", "g");
+    this._registerMenuItem("minions", "schedules", "schedules", "s");
+    this._registerMenuItem("minions", "pillars", "pillars", "p");
+    this._registerMenuItem("minions", "beacons", "beacons", "b");
+    this._registerMenuItem("minions", "nodegroups", "nodegroups", "n");
+    this._registerMenuItem(null, "keys", "keys", "k");
+    this._registerMenuItem(null, "jobs", "jobs", "j");
+    this._registerMenuItem("jobs", "highstate", "highstate", "h");
+    this._registerMenuItem("jobs", "templates", "templates", "t");
+    this._registerMenuItem(null, "events", "events", "e");
+    this._registerMenuItem("events", "reactors", "reactors", "r");
+    this._registerMenuItem(null, "issues", "issues", "i");
+    // no shortcut for logout
     this._registerMenuItem(null, "logout", "logout");
   }
 

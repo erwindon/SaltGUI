@@ -176,25 +176,6 @@ export class Panel {
   addTable (pColumnNames, pFieldList = null) {
     const table = Utils.createElem("table", this.key, "", this.key + "-table");
 
-    let anyHiddenColumns = false;
-    if (pColumnNames) {
-      for (const colName of pColumnNames) {
-        if (colName.startsWith("@")) {
-          anyHiddenColumns = true;
-        }
-      }
-    }
-
-    if (anyHiddenColumns) {
-      for (const colName of pColumnNames) {
-        const col = Utils.createElem("col");
-        if (colName.startsWith("@")) {
-          col.style.visibility = "collapse";
-        }
-        table.append(col);
-      }
-    }
-
     if (pColumnNames) {
       const thead = Utils.createElem("thead");
       thead.id = this.key + "-table-thead";
@@ -889,6 +870,44 @@ export class Panel {
     }
     if (!pElem.innerText.startsWith(pIconChar)) {
       pElem.innerText = pIconChar + pElem.innerText;
+    }
+  }
+
+  hideColumn (colTitle) {
+
+    let colNr = -1;
+    // find a column with this name
+    for (let i = 0; i < this.table.tHead.children[0].children.length; i++) {
+      const td = this.table.tHead.children[0].children[i];
+      if (td.innerText === colTitle) {
+        colNr = i;
+        break;
+      }
+    }
+    if (colNr < 0) {
+      // column by that name already gone
+      return;
+    }
+
+    for (const tr of this.table.tBodies[0].children) {
+      const td = tr.children[colNr];
+      if (!td.classList.contains("value-none")) {
+        // column has an interesting value on this row
+        // do not hide the column
+        return;
+      }
+    }
+
+    // all column-values are trivial, remove the column
+    // title
+    for (const tr of this.table.tHead.children) {
+      const td = tr.children[colNr];
+      td.remove();
+    }
+    // data
+    for (const tr of this.table.tBodies[0].children) {
+      const td = tr.children[colNr];
+      td.remove();
     }
   }
 }
