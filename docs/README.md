@@ -216,8 +216,8 @@ When at least one template is assigned to a category, then you can select a temp
 selecting the actual category. Otherwise that choice remains hidden. Templates can be in multiple categories
 when a list of categories is assigned.
 
-When at least one template is assigned to a key, then you can select a template by typing that key
-while using any other screen in SaltGUI. Otherwise that choice remains hidden.
+When a key is assigned to a template, then you can activate a template by typing that key
+while using any screen in SaltGUI. Only keys that can be typed without shift/alt/ctrl are useable.
 
 
 ## Jobs
