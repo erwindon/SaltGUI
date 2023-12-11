@@ -16,7 +16,7 @@
     "mocha": "^10.0.0",
     "nightmare": "^3.0.2",
     "nyc": "^15.1.0",
-    "stylelint": "^15.0.0",
+    "stylelint": "^16.0.1",
     "stylelint-config-standard": "^34.0.0",
     "stylelint-csstree-validator": "^3.0.0",
     "stylelint-scss": "^5.0.0"
