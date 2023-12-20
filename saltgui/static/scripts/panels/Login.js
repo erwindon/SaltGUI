@@ -381,6 +381,12 @@ export class LoginPanel extends Panel {
     const hideJobs = wheelConfigValuesData.saltgui_hide_jobs;
     Utils.setStorageItem("session", "hide_jobs", JSON.stringify(hideJobs));
 
+    const useCacheForGrains = wheelConfigValuesData.saltgui_use_cache_for_grains;
+    Utils.setStorageItem("session", "use_cache_for_grains", JSON.stringify(useCacheForGrains));
+
+    const useCacheForPillar = wheelConfigValuesData.saltgui_use_cache_for_pillar;
+    Utils.setStorageItem("session", "use_cache_for_pillar", JSON.stringify(useCacheForPillar));
+
     const syndicMaster = wheelConfigValuesData.syndic_master;
     Utils.setStorageItem("session", "syndic_master", syndicMaster);
 

@@ -88,6 +88,14 @@ export class OptionsPanel extends Panel {
       ],
       ["preview-grains", "saltgui", "(none)"],
       ["public-pillars", "saltgui", "(none)"],
+      [
+        "use-cache-for-grains", "saltgui", "false",
+        [["grains", "true", "false"]]
+      ],
+      [
+        "use-cache-for-pillar", "saltgui", "false",
+        [["pillar", "true", "false"]]
+      ],
       ["templates", "saltgui", "(none)"],
       [
         "tooltip-mode", "saltgui", "full",
@@ -178,6 +186,14 @@ export class OptionsPanel extends Panel {
           } else if (pName === "full-return") {
             radio.addEventListener("change", () => {
               this._newFullReturn();
+            });
+          } else if (pName === "use-cache-for-grains") {
+            radio.addEventListener("change", () => {
+              this._newUseCacheForGrains();
+            });
+          } else if (pName === "use-cache-for-pillar") {
+            radio.addEventListener("change", () => {
+              this._newUseCacheForPillar();
             });
           }
 
@@ -458,6 +474,30 @@ export class OptionsPanel extends Panel {
     // refresh the right-hand panel based on the new option value
     Router.currentPage.stats.clearTable();
     Router.currentPage.stats.onShow();
+  }
+
+  _newUseCacheForGrains () {
+    let value = "";
+    /* eslint-disable curly */
+    if (this._isSelected("use-cache-for-grains", "grains", "false")) value = "false";
+    if (this._isSelected("use-cache-for-grains", "grains", "true")) value = "true";
+    value = value.replace(/^,/, "");
+    /* eslint-enable curly */
+    const useCacheForGrainsTd = this.div.querySelector("#option-use-cache-for-grains-value");
+    useCacheForGrainsTd.innerText = value || "(none)";
+    Utils.setStorageItem("session", "use_cache_for_grains", value);
+  }
+
+  _newUseCacheForPillar () {
+    let value = "";
+    /* eslint-disable curly */
+    if (this._isSelected("use-cache-for-pillar", "pillar", "false")) value = "false";
+    if (this._isSelected("use-cache-for-pillar", "pillar", "true")) value = "true";
+    value = value.replace(/^,/, "");
+    /* eslint-enable curly */
+    const useCacheForPillarTd = this.div.querySelector("#option-use-cache-for-pillar-value");
+    useCacheForPillarTd.innerText = value || "(none)";
+    Utils.setStorageItem("session", "use_cache_for_pillar", value);
   }
 
   _newDatetimeFractionDigits () {
