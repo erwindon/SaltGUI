@@ -40,6 +40,7 @@ such as `yubico_client`, or execution modules such as `boto3_sns`.
 - Match status of minions against reference list
 - Keyboard control for top-level navigation
 - Keyboard control to apply templates
+- Choose between live info and cached info for grains/pillar
 
 
 ## Quick start using PAM as authentication method
@@ -276,6 +277,10 @@ saltgui_ipnumber_prefix:
 ```
 The display of the IP-numbers can simply be disabled by choosing a non-existing grain or by choosing a non-existing prefix.
 
+SaltGUI will retrieve cached grains information when variable `saltgui_use_cache_for_grains` is set to `true`.
+In that case, unreachable minions will appear without warnings for that.
+In all cases, the information may be less accurate.
+
 ## Pillars
 Pillars potentially contain security senstitive information.
 Therefore their values are initially hidden.
@@ -289,6 +294,10 @@ e.g.:
 saltgui_public_pillars:
     - pub_.*
 ```
+
+SaltGUI will retrieve cached pillar information when variable `saltgui_use_cache_for_pillar` is set to `true`.
+In that case, unreachable minions will appear without warnings for that.
+In all cases, the information may be less accurate.
 
 ## Nodegroups
 The Nodegroups page shows all minions, but groups the minions by their nodegroup.
