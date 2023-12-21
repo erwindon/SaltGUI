@@ -167,6 +167,8 @@ export class JobsPanel extends Panel {
     this._hideJobs.push("schedule.run_job");
     this._hideJobs.push("sys.doc");
     // runner jobs
+    this._hideJobs.push("runner.cache.grains");
+    this._hideJobs.push("runner.cache.pillar");
     this._hideJobs.push("runner.doc.runner");
     this._hideJobs.push("runner.doc.wheel");
     this._hideJobs.push("runner.jobs.active");

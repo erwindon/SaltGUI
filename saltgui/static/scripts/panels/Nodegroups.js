@@ -16,6 +16,7 @@ export class NodegroupsPanel extends Panel {
     this._addMenuItemStateApplyTestMinion(this.panelMenu, "*");
     this.addSearchButton();
     this.addPlayPauseButton();
+    this.addWarningField();
     this.addTable(["Minion", "Status", "Salt version", "OS version", "-menu-"]);
     this.setTableClickable();
     this.addMsg();
@@ -24,8 +25,11 @@ export class NodegroupsPanel extends Panel {
   onShow () {
     this.nrMinions = 0;
 
+    const useCacheGrains = Utils.getStorageItemBoolean("session", "use_cache_for_grains", false);
+    this.setWarningText("info", useCacheGrains ? "the content of this screen is based on cached grains info, minion status or grain info may not be accurate" : "");
+
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
-    const localGrainsItemsPromise = this.api.getLocalGrainsItems(null);
+    const localGrainsItemsPromise = useCacheGrains ? this.api.getRunnerCacheGrains(null) : this.api.getLocalGrainsItems(null);
 
     this.loadMinionsTxt();
 

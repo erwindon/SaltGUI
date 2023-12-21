@@ -18,6 +18,7 @@ export class GrainsMinionPanel extends Panel {
 
     this.addSearchButton();
     this.addCloseButton();
+    this.addWarningField();
     this.addTable(["Name", "-menu-", "Value"]);
     this.setTableSortable("Name", "asc");
     this.setTableClickable();
@@ -29,7 +30,10 @@ export class GrainsMinionPanel extends Panel {
 
     this.updateTitle("Grains on " + minionId);
 
-    const localGrainsItemsPromise = this.api.getLocalGrainsItems(minionId);
+    const useCacheGrains = Utils.getStorageItemBoolean("session", "use_cache_for_grains", false);
+    this.setWarningText("info", useCacheGrains ? "the content of this screen is based on cached grains info, minion status or grain info may not be accurate" : "");
+
+    const localGrainsItemsPromise = useCacheGrains ? this.api.getRunnerCacheGrains(minionId) : this.api.getLocalGrainsItems(minionId);
 
     localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
       this._handleLocalGrainsItems(pLocalGrainsItemsData, minionId);

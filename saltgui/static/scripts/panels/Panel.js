@@ -153,6 +153,9 @@ export class Panel {
   }
 
   setWarningText (pIcon = "", pTxt = "") {
+    if (!pTxt) {
+      pIcon = "";
+    }
     let newTxt;
     switch (pIcon) {
     case "info":
@@ -670,6 +673,7 @@ export class Panel {
       const minionInfo = minions[minionId];
 
       // minions can be offline, then the info will be false
+      // for grains/pillar we may receive data anyway when using cached data
       if (minionInfo === false) {
         this.updateOfflineMinion(minionId, minionsDict);
         this.nrOffline += 1;
