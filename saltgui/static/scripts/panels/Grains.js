@@ -17,6 +17,7 @@ export class GrainsPanel extends Panel {
       "columns by configuring their name in the server-side configuration file.",
       "See README.md for more details."
     ]);
+    this.addWarningField();
     this.addTable(["Minion", "Status", "Salt version", "OS version", "Grains", "-menu-"]);
     this.setTableClickable();
 
@@ -45,8 +46,11 @@ export class GrainsPanel extends Panel {
     // initialize sorting after all columns are present
     this.setTableSortable("Minion", "asc");
 
+    const useCacheGrains = Utils.getStorageItemBoolean("session", "use_cache_for_grains", false);
+    this.setWarningText("info", useCacheGrains ? "the content of this screen is based on cached grains info, minion status or grain info may not be accurate" : "");
+
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
-    const localGrainsItemsPromise = this.api.getLocalGrainsItems(null);
+    const localGrainsItemsPromise = useCacheGrains ? this.api.getRunnerCacheGrains(null) : this.api.getLocalGrainsItems(null);
 
     this.nrMinions = 0;
 

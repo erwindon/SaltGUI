@@ -153,6 +153,9 @@ export class Panel {
   }
 
   setWarningText (pIcon = "", pTxt = "") {
+    if (!pTxt) {
+      pIcon = "";
+    }
     let newTxt;
     switch (pIcon) {
     case "info":
