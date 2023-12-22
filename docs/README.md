@@ -277,9 +277,10 @@ saltgui_ipnumber_prefix:
 ```
 The display of the IP-numbers can simply be disabled by choosing a non-existing grain or by choosing a non-existing prefix.
 
+### Cached Grains
 SaltGUI will retrieve cached grains information when variable `saltgui_use_cache_for_grains` is set to `true`.
 In that case, unreachable minions will appear without warnings for that.
-In all cases, the information may be less accurate.
+In all cases, the information may be less accurate, however the Information may help to create a basic inventory, as by nature an Inventory is never absolutely up-to-date till its next inventory update run.
 
 ## Pillars
 Pillars potentially contain security senstitive information.
