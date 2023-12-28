@@ -280,6 +280,7 @@ The display of the IP-numbers can simply be disabled by choosing a non-existing 
 SaltGUI will retrieve cached grains information when variable `saltgui_use_cache_for_grains` is set to `true`.
 In that case, unreachable minions will appear without warnings for that.
 In all cases, the information may be less accurate.
+A warning for offline minions is only shown on the Minions panel.
 
 ## Pillars
 Pillars potentially contain security senstitive information.
@@ -298,6 +299,7 @@ saltgui_public_pillars:
 SaltGUI will retrieve cached pillar information when variable `saltgui_use_cache_for_pillar` is set to `true`.
 In that case, unreachable minions will appear without warnings for that.
 In all cases, the information may be less accurate.
+A warning for offline minions is only shown on the Minions panel.
 
 ## Nodegroups
 The Nodegroups page shows all minions, but groups the minions by their nodegroup.

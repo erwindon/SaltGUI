@@ -569,7 +569,10 @@ export class Panel {
 
     const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
 
-    minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
+    const minionSpan = Utils.createSpan("minion-id", pMinionId);
+    const minionTd = Utils.createTd();
+    minionTd.append(minionSpan);
+    minionTr.appendChild(minionTd);
 
     // which grain to use for IP-number display
     // typical choices are "fqdn_ip4", "ipv4", "fqdn_ip6" or "ipv6"
@@ -609,6 +612,14 @@ export class Panel {
     } else {
       const accepted = Utils.createTd(["status", "accepted"], "accepted");
       minionTr.appendChild(accepted);
+    }
+
+    if (minionTr.dataset.isConnected === "false") {
+      Panel.addPrefixIcon(minionSpan, Character.WARNING_SIGN);
+      Utils.addToolTip(
+        minionSpan,
+        "This minion is currently not connected",
+        "bottom-left");
     }
 
     minionTr.dataset.minionId = pMinionId;

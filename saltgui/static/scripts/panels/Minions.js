@@ -157,7 +157,9 @@ export class MinionsPanel extends Panel {
     const minionIds = pWheelMinionsConnectedData.return[0].data.return;
 
     for (const tr of this.table.tBodies[0].childNodes) {
-      if (minionIds.indexOf(tr.dataset.minionId) >= 0) {
+      tr.dataset.isConnected = minionIds.indexOf(tr.dataset.minionId) >= 0;
+
+      if (tr.dataset.isConnected) {
         // skip the connected minions
         continue;
       }
