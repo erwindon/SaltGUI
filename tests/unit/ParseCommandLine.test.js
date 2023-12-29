@@ -1,8 +1,8 @@
-/* global describe it require */
+/* global describe it */
 
-const assert = require("chai").assert;
-
+import {Character} from "../../saltgui/static/scripts/Character.js";
 import {ParseCommandLine} from "../../saltgui/static/scripts/ParseCommandLine.js";
+import {assert} from "chai";
 
 describe("Unittests for ParseCommandLine.js", () => {
 
@@ -95,7 +95,7 @@ describe("Unittests for ParseCommandLine.js", () => {
     args = [];
     params = {};
     result = ParseCommandLine.parseCommandLine("{\"a}\":1}}", args, params);
-    assert.equal(result, "Valid dictionary, but followed by text:}...");
+    assert.equal(result, "Valid dictionary, but followed by text:}" + Character.HORIZONTAL_ELLIPSIS);
 
     // ARRAYS
 

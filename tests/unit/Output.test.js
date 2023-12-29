@@ -1,12 +1,11 @@
-/* global describe it require */
-
-const assert = require("chai").assert;
+/* global describe it */
 
 import {Character} from "../../saltgui/static/scripts/Character.js";
 import {OutputDocumentation} from "../../saltgui/static/scripts/output/OutputDocumentation.js";
 import {OutputJson} from "../../saltgui/static/scripts/output/OutputJson.js";
 import {OutputNested} from "../../saltgui/static/scripts/output/OutputNested.js";
 import {OutputYaml} from "../../saltgui/static/scripts/output/OutputYaml.js";
+import {assert} from "chai";
 
 Character.init();
 

@@ -1,8 +1,7 @@
-/* global describe it require */
-
-const assert = require("chai").assert;
+/* global describe it */
 
 import {TargetType} from "../../saltgui/static/scripts/TargetType.js";
+import {assert} from "chai";
 
 /* eslint-disable func-names */
 const testTargetType = function (targetType, targetPattern) {

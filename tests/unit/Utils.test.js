@@ -1,8 +1,7 @@
-/* global describe it require */
-
-const assert = require("chai").assert;
+/* global describe it */
 
 import {Utils} from "../../saltgui/static/scripts/Utils.js";
+import {assert} from "chai";
 
 describe("Unittests for Utils.js", () => {
 
