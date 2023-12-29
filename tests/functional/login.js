@@ -1,7 +1,7 @@
-/* global beforeEach describe it process require */
+/* global beforeEach describe it process */
 
-const Nightmare = require("nightmare");
-const assert = require("chai").assert;
+import Nightmare from "nightmare";
+import {assert} from "chai";
 
 const url = "http://localhost:3333/";
 
