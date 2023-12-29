@@ -22,6 +22,7 @@ export class MinionsPanel extends Panel {
     this._addMenuItemStateApply(this.panelMenu, "*");
     this._addMenuItemStateApplyTest(this.panelMenu, "*");
     this.addSearchButton();
+    this.addWarningField();
     this.addTable(["Minion", "Status", "Salt version", "OS version", "-menu-"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable();
@@ -31,9 +32,13 @@ export class MinionsPanel extends Panel {
   onShow () {
     this.nrMinions = 0;
 
+    const useCacheGrains = Utils.getStorageItemBoolean("session", "use_cache_for_grains", false);
+    this.setWarningText("info", useCacheGrains ? "the content of this screen is based on cached grains info, minion status or grain info may not be accurate" : "");
+
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const wheelMinionsConnectedPromise = this.api.getWheelMinionsConnected();
-    const localGrainsItemsPromise = this.api.getLocalGrainsItems(null);
+    const localGrainsItemsPromise = useCacheGrains ? this.api.getRunnerCacheGrains(null) : this.api.getLocalGrainsItems(null);
+
     const runnerManageVersionsPromise = this.api.getRunnerManageVersions();
 
     this.loadMinionsTxt();
@@ -152,7 +157,9 @@ export class MinionsPanel extends Panel {
     const minionIds = pWheelMinionsConnectedData.return[0].data.return;
 
     for (const tr of this.table.tBodies[0].childNodes) {
-      if (minionIds.indexOf(tr.dataset.minionId) >= 0) {
+      tr.dataset.isConnected = minionIds.indexOf(tr.dataset.minionId) >= 0;
+
+      if (tr.dataset.isConnected) {
         // skip the connected minions
         continue;
       }

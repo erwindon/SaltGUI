@@ -11,6 +11,7 @@ export class PillarsPanel extends Panel {
 
     this.addTitle("Pillars");
     this.addSearchButton();
+    this.addWarningField();
     this.addTable(["Minion", "Status", "Pillars", "-menu-"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable();
@@ -18,8 +19,11 @@ export class PillarsPanel extends Panel {
   }
 
   onShow () {
+    const useCachePillar = Utils.getStorageItemBoolean("session", "use_cache_for_pillar", false);
+    this.setWarningText("info", useCachePillar ? "the content of this screen is based on cached grains info, minion status or pillar info may not be accurate" : "");
+
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
-    const localPillarObfuscatePromise = this.api.getLocalPillarObfuscate(null);
+    const localPillarObfuscatePromise = useCachePillar ? this.api.getRunnerCachePillar(null) : this.api.getLocalPillarObfuscate(null);
 
     this.nrMinions = 0;
 

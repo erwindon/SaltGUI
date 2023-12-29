@@ -21,6 +21,7 @@ export class PillarsMinionPanel extends Panel {
       "automatically by configuring their name in the server-side configuration file.",
       "See README.md for more details."
     ]);
+    this.addWarningField();
     this.addTable(["Name", "Value"]);
     this.setTableSortable("Name", "asc");
     this.addMsg();
@@ -31,7 +32,10 @@ export class PillarsMinionPanel extends Panel {
 
     this.updateTitle("Pillars on " + minionId);
 
-    const localPillarItemsPromise = this.api.getLocalPillarItems(minionId);
+    const useCachePillar = Utils.getStorageItemBoolean("session", "use_cache_for_pillar", false);
+    this.setWarningText("info", useCachePillar ? "the content of this screen is based on cached grains info, minion status or pillar info may not be accurate" : "");
+
+    const localPillarItemsPromise = useCachePillar ? this.api.getRunnerCachePillar(minionId) : this.api.getLocalPillarItems(minionId);
 
     localPillarItemsPromise.then((pLocalPillarItemsData) => {
       this._handleLocalPillarItems(pLocalPillarItemsData, minionId);

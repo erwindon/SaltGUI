@@ -200,6 +200,24 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
+  getRunnerCacheGrains (pTgt) {
+    const params = {
+      "client": "runner",
+      "fun": "cache.grains",
+      "tgt": pTgt || "*"
+    };
+    return this.apiRequest("POST", "/", params);
+  }
+
+  getRunnerCachePillar (pTgt) {
+    const params = {
+      "client": "runner",
+      "fun": "cache.pillar",
+      "tgt": pTgt || "*"
+    };
+    return this.apiRequest("POST", "/", params);
+  }
+
   getRunnerJobsActive () {
     const params = {
       "client": "runner",
