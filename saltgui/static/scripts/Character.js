@@ -26,6 +26,7 @@ export class Character {
     Character.BLACK_RIGHT_POINTING_POINTER = "\u25BA";
     Character.WHITE_DOWN_POINTING_TRIANGLE = "\u25BD";
     Character.BLACK_CIRCLE = "\u25CF";
+    Character.BLACK_CIRCLE_WITH_OUTLINE = "\u25C9";
     Character.GEAR = "\u2699";
     Character.WARNING_SIGN = "\u26A0" + Character._VARIATION_SELECTOR_16;
     Character.HEAVY_CHECK_MARK = "\u2714";

@@ -113,8 +113,6 @@ pre .task-success {
 
 td .task-changes {
   color: aqua;
-  text-decoration-line: overline underline;
-  text-decoration-style: double;
 }
 
 pre .task-changes {
@@ -124,11 +122,6 @@ pre .task-changes {
 .task-summary {
   word-break: break-all;
   line-height: 2em;
-}
-
-pre .task-summary .task-changes {
-  text-decoration-line: overline underline;
-  text-decoration-style: double;
 }
 
 pre span.active {
@@ -322,15 +315,36 @@ table tr td:last-of-type {
 
 .taskcircle.task-failure {
   color: red;
+  text-decoration-line: underline;
+  text-decoration-style: double;
 }
 
 .taskcircle.task-skipped {
   color: yellow;
+  text-decoration-line: underline;
+  text-decoration-style: double;
 }
 
 .taskcircle.task-changes {
-  text-decoration-line: overline underline;
+  color: aqua;
+  text-decoration-line: underline;
   text-decoration-style: double;
+}
+
+.taskcirclehighstate.task-success {
+  color: lime;
+}
+
+.taskcirclehighstate.task-failure {
+  color: red;
+}
+
+.taskcirclehighstate.task-skipped {
+  color: yellow;
+}
+
+.taskcirclehighstate.task-changes {
+  color: aqua;
 }
 
 @media print {

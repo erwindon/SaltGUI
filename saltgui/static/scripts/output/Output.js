@@ -336,7 +336,7 @@ export class Output {
     return false;
   }
 
-  static _setTaskToolTip (pSpan, pTask) {
+  static _setTaskToolTip (pSpan, pTask, className) {
 
     if (typeof pTask !== "object") {
       return;
@@ -384,7 +384,7 @@ export class Output {
       txt += "\nhidden";
     }
 
-    pSpan.className = "taskcircle";
+    pSpan.className = className;
     if (pTask.result === null) {
       pSpan.classList.add("task-skipped");
     } else if (pTask.result) {
@@ -445,7 +445,7 @@ export class Output {
 
       const span = Utils.createSpan("", Character.BLACK_CIRCLE);
 
-      Output._setTaskToolTip(span, task);
+      Output._setTaskToolTip(span, task, "taskcircle");
 
       const myNr = nr;
       span.addEventListener("click", (pClickEvent) => {
