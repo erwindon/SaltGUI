@@ -179,7 +179,7 @@ export class SchedulesMinionPanel extends Panel {
         "schedule.add",
         "<name>",
         "function=", "<function>",
-        "cron=", "<cron>"
+        "cron=", "*/15 * * * *"
       ];
       this.runCommand("", minionId, cmdArr);
     });
