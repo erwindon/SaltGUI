@@ -602,7 +602,7 @@ export class MinionsPanel extends Panel {
     if (!Object.keys(pBugs).length) {
       return txt;
     }
-    txt += "\nThe " + pName + " has version " + pVersion + " and is VULNERABLE\nfor exploit";
+    txt += "\n" + Character.WARNING_SIGN + pName + " has version " + pVersion + " and is VULNERABLE\nfor exploit";
     const bugs = Object.keys(pBugs).sort();
     if (bugs.length > 1) {
       txt += "s";
@@ -680,13 +680,13 @@ export class MinionsPanel extends Panel {
 
         const allCveKeys = Object.keys(masterBugs);
         let txt = "";
-        txt += MinionsPanel._addCveList("salt-master", masterVersion, masterBugs, allCveKeys);
-        txt += MinionsPanel._addCveList("salt-minion", minionVersion, minionBugs, allCveKeys);
+        txt += MinionsPanel._addCveList("The salt-master", masterVersion, masterBugs, allCveKeys);
+        txt += MinionsPanel._addCveList("This salt-minion", minionVersion, minionBugs, allCveKeys);
 
         if (outcome === "Minion requires update") {
-          txt += "\nThis salt-minion (" + minionVersion + ") is older than the salt-master (" + masterVersion + ")";
+          txt += "\n" + Character.WARNING_SIGN + "This salt-minion (" + minionVersion + ") is older than the salt-master (" + masterVersion + ")";
         } else if (outcome === "Minion newer than master") {
-          txt += "\nThis salt-minion (" + minionVersion + ") is newer than the salt-master (" + masterVersion + ")";
+          txt += "\n" + Character.WARNING_SIGN + "This salt-minion (" + minionVersion + ") is newer than the salt-master (" + masterVersion + ")";
         }
 
         if (txt) {
