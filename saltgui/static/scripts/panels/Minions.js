@@ -524,10 +524,20 @@ export class MinionsPanel extends Panel {
       ["CVE-2022-22967", MASTER, ["300[01]"]],
       ["CVE-2022-22967", MASTER, ["3002", "[0-8]"]],
       ["CVE-2022-22967", MASTER, ["3003", "[0-4]"]],
-      ["CVE-2022-22967", MASTER, ["3004", "[0-1]"]]
+      ["CVE-2022-22967", MASTER, ["3004", "[0-1]"]],
+
+      ["CVE-2024-22231", MASTER + MINION, ["2"]],
+      ["CVE-2024-22231", MASTER + MINION, ["300[0-4]"]],
+      ["CVE-2024-22231", MASTER + MINION, ["3005", "[0-4]"]],
+      ["CVE-2024-22231", MASTER + MINION, ["3006", "[0-5]"]],
+
+      ["CVE-2024-22232", MASTER + MINION, ["2"]],
+      ["CVE-2024-22232", MASTER + MINION, ["300[0-4]"]],
+      ["CVE-2024-22232", MASTER + MINION, ["3005", "[0-4]"]],
+      ["CVE-2024-22232", MASTER + MINION, ["3006", "[0-5]"]]
     ];
 
-    // the above table is up-to-date until (including) 3006.1
+    // the above table is up-to-date until (including) 3006.6
   }
 
   static _getCveBugs (pVersion, pNodeType) {
