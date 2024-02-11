@@ -1,6 +1,6 @@
 /* global */
 
-import {DropDownMenu} from "../DropDown.js";
+import {DropDownMenuCmd} from "../DropDownCmd.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
 
@@ -93,7 +93,7 @@ export class BeaconsPanel extends Panel {
       const minionTr = this.addMinion(minionId, 1);
 
       // preliminary dropdown menu
-      const menu = new DropDownMenu(minionTr, true);
+      const menu = new DropDownMenuCmd(minionTr, true);
       this._addMenuItemShowBeacons(menu, minionId);
 
       minionTr.addEventListener("click", (pClickEvent) => {
@@ -139,12 +139,12 @@ export class BeaconsPanel extends Panel {
       minionTr.appendChild(beaconInfoTd);
     }
 
-    const menu = new DropDownMenu(minionTr, true);
+    const menu = new DropDownMenuCmd(minionTr, true);
     this._addMenuItemShowBeacons(menu, pMinionId);
   }
 
   _addMenuItemShowBeacons (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show beacons", () => {
+    pMenu.addMenuItemCmd("Show beacons", () => {
       this.router.goTo("beacons-minion", {"minionid": pMinionId});
     });
   }

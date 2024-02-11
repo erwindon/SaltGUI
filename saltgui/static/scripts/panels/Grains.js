@@ -1,6 +1,6 @@
 /* global jsonPath */
 
-import {DropDownMenu} from "../DropDown.js";
+import {DropDownMenuCmd} from "../DropDownCmd.js";
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
@@ -86,7 +86,7 @@ export class GrainsPanel extends Panel {
       const minionTr = this.addMinion(minionId, 1 + this.previewGrains.length);
 
       // preliminary dropdown menu
-      const menu = new DropDownMenu(minionTr, true);
+      const menu = new DropDownMenuCmd(minionTr, true);
       this._addMenuItemShowGrains(menu, minionId);
 
       for (let i = 0; i < this.previewGrains.length; i++) {
@@ -134,7 +134,7 @@ export class GrainsPanel extends Panel {
       minionTr.appendChild(grainInfoTd);
     }
 
-    const menu = new DropDownMenu(minionTr, true);
+    const menu = new DropDownMenuCmd(minionTr, true);
     this._addMenuItemShowGrains(menu, pMinionId);
 
     // add the preview columns
@@ -173,7 +173,7 @@ export class GrainsPanel extends Panel {
   }
 
   _addMenuItemShowGrains (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show grains", () => {
+    pMenu.addMenuItemCmd("Show grains", () => {
       this.router.goTo("grains-minion", {"minionid": pMinionId});
     });
   }

@@ -1,7 +1,7 @@
 /* global */
 
 import {Character} from "../Character.js";
-import {DropDownMenu} from "../DropDown.js";
+import {DropDownMenuCmd} from "../DropDownCmd.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
 
@@ -94,7 +94,7 @@ export class MinionsPanel extends Panel {
       const minionTr = this.addMinion(minionId, 1);
 
       // preliminary dropdown menu
-      const menu = new DropDownMenu(minionTr, true);
+      const menu = new DropDownMenuCmd(minionTr, true);
       this._addMenuItemStateApply(menu, minionId);
       this._addMenuItemStateApplyTest(menu, minionId);
       this._addMenuItemShowGrains(menu, minionId);
@@ -190,7 +190,7 @@ export class MinionsPanel extends Panel {
     super.updateMinion(pMinionData, pMinionId, pAllMinionsGrains);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
-    const menu = new DropDownMenu(minionTr, true);
+    const menu = new DropDownMenuCmd(minionTr, true);
     this._addMenuItemStateApply(menu, pMinionId);
     this._addMenuItemStateApplyTest(menu, pMinionId);
     this._addMenuItemShowGrains(menu, pMinionId);
@@ -206,39 +206,39 @@ export class MinionsPanel extends Panel {
   }
 
   _addMenuItemStateApply (pMenu, pMinionId) {
-    pMenu.addMenuItem("Apply state...", () => {
+    pMenu.addMenuItemCmd("Apply state...", () => {
       const cmdArr = ["state.apply"];
       this.runCommand("", pMinionId, cmdArr);
     });
   }
 
   _addMenuItemStateApplyTest (pMenu, pMinionId) {
-    pMenu.addMenuItem("Test state...", () => {
+    pMenu.addMenuItemCmd("Test state...", () => {
       const cmdArr = ["state.apply", "test=", true];
       this.runCommand("", pMinionId, cmdArr);
     });
   }
 
   _addMenuItemShowGrains (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show grains", () => {
+    pMenu.addMenuItemCmd("Show grains", () => {
       this.router.goTo("grains-minion", {"minionid": pMinionId});
     });
   }
 
   _addMenuItemShowSchedules (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show schedules", () => {
+    pMenu.addMenuItemCmd("Show schedules", () => {
       this.router.goTo("schedules-minion", {"minionid": pMinionId});
     });
   }
 
   _addMenuItemShowPillars (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show pillars", () => {
+    pMenu.addMenuItemCmd("Show pillars", () => {
       this.router.goTo("pillars-minion", {"minionid": pMinionId});
     });
   }
 
   _addMenuItemShowBeacons (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show beacons", () => {
+    pMenu.addMenuItemCmd("Show beacons", () => {
       this.router.goTo("beacons-minion", {"minionid": pMinionId});
     });
   }

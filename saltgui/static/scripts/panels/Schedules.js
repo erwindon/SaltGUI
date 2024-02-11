@@ -1,6 +1,6 @@
 /* global */
 
-import {DropDownMenu} from "../DropDown.js";
+import {DropDownMenuCmd} from "../DropDownCmd.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
 
@@ -89,7 +89,7 @@ export class SchedulesPanel extends Panel {
       const minionTr = this.addMinion(minionId, 1);
 
       // preliminary dropdown menu
-      const menu = new DropDownMenu(minionTr, true);
+      const menu = new DropDownMenuCmd(minionTr, true);
       this._addMenuItemShowSchedules(menu, minionId);
 
       minionTr.addEventListener("click", (pClickEvent) => {
@@ -146,12 +146,12 @@ export class SchedulesPanel extends Panel {
     minionTr.appendChild(td);
 
     // final dropdownmenu
-    const menu = new DropDownMenu(minionTr, true);
+    const menu = new DropDownMenuCmd(minionTr, true);
     this._addMenuItemShowSchedules(menu, pMinionId);
   }
 
   _addMenuItemShowSchedules (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show schedules", () => {
+    pMenu.addMenuItemCmd("Show schedules", () => {
       this.router.goTo("schedules-minion", {"minionid": pMinionId});
     });
   }

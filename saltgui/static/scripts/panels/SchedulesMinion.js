@@ -1,7 +1,7 @@
 /* global */
 
 import {Character} from "../Character.js";
-import {DropDownMenu} from "../DropDown.js";
+import {DropDownMenuCmd} from "../DropDownCmd.js";
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
 import {SchedulesPanel} from "./Schedules.js";
@@ -96,7 +96,7 @@ export class SchedulesMinionPanel extends Panel {
       const nameTd = Utils.createTd("schedule-name", scheduleName);
       tr.appendChild(nameTd);
 
-      const scheduleMenu = new DropDownMenu(tr, true);
+      const scheduleMenu = new DropDownMenuCmd(tr, true);
       const scheduleModifyCmdArr = ["schedule.modify", scheduleName];
       for (const key in schedule) {
         const value = schedule[key];
@@ -131,7 +131,7 @@ export class SchedulesMinionPanel extends Panel {
   }
 
   _addPanelMenuItemScheduleEnableWhenNeeded () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (this.schedulesEnabled) {
         return null;
       }
@@ -144,7 +144,7 @@ export class SchedulesMinionPanel extends Panel {
   }
 
   _addPanelMenuItemScheduleDisableWhenNeeded () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (!this.schedulesEnabled) {
         return null;
       }
@@ -157,7 +157,7 @@ export class SchedulesMinionPanel extends Panel {
   }
 
   _addPanelMenuItemScheduleAddInterval () {
-    this.panelMenu.addMenuItem("Add interval schedule...", () => {
+    this.panelMenu.addMenuItemCmd("Add interval schedule...", () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
       const cmdArr = [
         "schedule.add",
@@ -173,7 +173,7 @@ export class SchedulesMinionPanel extends Panel {
   }
 
   _addPanelMenuItemScheduleAddCron () {
-    this.panelMenu.addMenuItem("Add cron schedule...", () => {
+    this.panelMenu.addMenuItemCmd("Add cron schedule...", () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
       const cmdArr = [
         "schedule.add",
@@ -186,7 +186,7 @@ export class SchedulesMinionPanel extends Panel {
   }
 
   _addPanelMenuItemScheduleAddOnce () {
-    this.panelMenu.addMenuItem("Add once schedule...", () => {
+    this.panelMenu.addMenuItemCmd("Add once schedule...", () => {
       const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
       const cmdArr = [
         "schedule.add",
@@ -201,7 +201,7 @@ export class SchedulesMinionPanel extends Panel {
   }
 
   _addMenuItemModifyJob (pMenu, pMinionId, scheduleModifyCmdArr) {
-    pMenu.addMenuItem("Modify job...", () => {
+    pMenu.addMenuItemCmd("Modify job...", () => {
       this.runCommand("", pMinionId, scheduleModifyCmdArr);
     });
   }
@@ -210,7 +210,7 @@ export class SchedulesMinionPanel extends Panel {
     if (schedule.enabled !== false) {
       return;
     }
-    pMenu.addMenuItem("Enable job...", () => {
+    pMenu.addMenuItemCmd("Enable job...", () => {
       const cmdArr = ["schedule.enable_job", pJobName];
       this.runCommand("", pMinionId, cmdArr);
     });
@@ -220,21 +220,21 @@ export class SchedulesMinionPanel extends Panel {
     if (schedule.enabled === false) {
       return;
     }
-    pMenu.addMenuItem("Disable job...", () => {
+    pMenu.addMenuItemCmd("Disable job...", () => {
       const cmdArr = ["schedule.disable_job", pJobName];
       this.runCommand("", pMinionId, cmdArr);
     });
   }
 
   _addMenuItemScheduleDeleteJob (pMenu, pMinionId, pJobName) {
-    pMenu.addMenuItem("Delete job...", () => {
+    pMenu.addMenuItemCmd("Delete job...", () => {
       const cmdArr = ["schedule.delete", pJobName];
       this.runCommand("", pMinionId, cmdArr);
     });
   }
 
   _addMenuItemScheduleRunJob (pMenu, pMinionId, pJobName, schedule) {
-    pMenu.addMenuItem("Run job...", () => {
+    pMenu.addMenuItemCmd("Run job...", () => {
       const scheduleRunJobCmdArr = ["schedule.run_job"];
       if (schedule.enabled === false) {
         scheduleRunJobCmdArr.push("force=", true);

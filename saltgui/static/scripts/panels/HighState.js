@@ -1,7 +1,7 @@
 /* global */
 
 import {Character} from "../Character.js";
-import {DropDownMenu} from "../DropDown.js";
+import {DropDownMenuCmd} from "../DropDownCmd.js";
 import {JobPanel} from "./Job.js";
 import {JobsPanel} from "./Jobs.js";
 import {Output} from "../output/Output.js";
@@ -87,21 +87,21 @@ export class HighStatePanel extends Panel {
   }
 
   _addMenuItemStateApply (pMenu, pMinionId) {
-    pMenu.addMenuItem("Apply state...", () => {
+    pMenu.addMenuItemCmd("Apply state...", () => {
       const cmdArr = ["state.apply"];
       this.runCommand("", pMinionId, cmdArr);
     });
   }
 
   _addMenuItemStateApplyTest (pMenu, pMinionId) {
-    pMenu.addMenuItem("Test state...", () => {
+    pMenu.addMenuItemCmd("Test state...", () => {
       const cmdArr = ["state.apply", "test=", true];
       this.runCommand("", pMinionId, cmdArr);
     });
   }
 
   _addMenuItemUseStateHighstate () {
-    this.settingsMenu.addMenuItem(
+    this.settingsMenu.addMenuItemCmd(
       () => {
         const stateHighstateFlag = Utils.getStorageItem("local", "use_state_highstate", "true");
         return (stateHighstateFlag === "true" ? Character.HEAVY_CHECK_MARK + Character.NO_BREAK_SPACE : "") + "Include state.highstate";
@@ -114,7 +114,7 @@ export class HighStatePanel extends Panel {
   }
 
   _addMenuItemUseStateApply () {
-    this.settingsMenu.addMenuItem(
+    this.settingsMenu.addMenuItemCmd(
       () => {
         const stateApplyFlag = Utils.getStorageItem("local", "use_state_apply", "true");
         return (stateApplyFlag === "true" ? Character.HEAVY_CHECK_MARK + Character.NO_BREAK_SPACE : "") + "Include state.apply";
@@ -141,7 +141,7 @@ export class HighStatePanel extends Panel {
       const minionTr = this.addMinion(minionId, 2);
 
       // preliminary dropdown menu
-      const menu = new DropDownMenu(minionTr, true);
+      const menu = new DropDownMenuCmd(minionTr, true);
       this._addMenuItemStateApply(menu, minionId);
       this._addMenuItemStateApplyTest(menu, minionId);
 
@@ -402,7 +402,7 @@ export class HighStatePanel extends Panel {
       startTimeTd.appendChild(startTimeSpan);
       minionTr.appendChild(startTimeTd);
 
-      const menu = new DropDownMenu(minionTr, true);
+      const menu = new DropDownMenuCmd(minionTr, true);
       this._addMenuItemStateApply(menu, minionId);
       this._addMenuItemStateApplyTest(menu, minionId);
       this._addJobsMenuItemShowDetails(menu, jobData, minionId);
@@ -522,7 +522,7 @@ export class HighStatePanel extends Panel {
   }
 
   _addJobsMenuItemShowDetails (pMenu, pJob, pMinionId) {
-    pMenu.addMenuItem("Show details", () => {
+    pMenu.addMenuItemCmd("Show details", () => {
       this.router.goTo("job", {"id": pJob.jid, "minionid": pMinionId});
     });
   }

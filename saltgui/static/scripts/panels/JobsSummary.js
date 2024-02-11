@@ -1,7 +1,7 @@
 /* global */
 
 import {Character} from "../Character.js";
-import {DropDownMenu} from "../DropDown.js";
+import {DropDownMenuCmd} from "../DropDownCmd.js";
 import {JobsPanel} from "./Jobs.js";
 import {Output} from "../output/Output.js";
 import {TargetType} from "../TargetType.js";
@@ -70,7 +70,7 @@ export class JobsSummaryPanel extends JobsPanel {
 
     tr.appendChild(td);
 
-    const menu = new DropDownMenu(tr, true);
+    const menu = new DropDownMenuCmd(tr, true);
     this._addMenuItemShowDetails(menu, job);
     this._addMenuItemUpdateStatus(menu, statusSpan);
 
@@ -84,13 +84,13 @@ export class JobsSummaryPanel extends JobsPanel {
   }
 
   _addMenuItemShowDetails (pMenu, job) {
-    pMenu.addMenuItem("Show details", () => {
+    pMenu.addMenuItemCmd("Show details", () => {
       this.router.goTo("job", {"id": job.id});
     });
   }
 
   _addMenuItemUpdateStatus (pMenu, statusSpan) {
-    pMenu.addMenuItem("Update status", () => {
+    pMenu.addMenuItemCmd("Update status", () => {
       statusSpan.classList.add("no-job-status");
       statusSpan.innerText = "loading" + Character.HORIZONTAL_ELLIPSIS;
       this.startRunningJobs();

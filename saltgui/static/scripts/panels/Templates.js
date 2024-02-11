@@ -1,6 +1,6 @@
 /* global */
 
-import {DropDownMenu} from "../DropDown.js";
+import {DropDownMenuCmd} from "../DropDownCmd.js";
 import {Panel} from "./Panel.js";
 import {Router} from "../Router.js";
 import {Utils} from "../Utils.js";
@@ -166,7 +166,7 @@ export class TemplatesPanel extends Panel {
       tr.appendChild(Utils.createTd("command value-none", "(none)"));
     }
 
-    const menu = new DropDownMenu(tr, true);
+    const menu = new DropDownMenuCmd(tr, true);
     this._addMenuItemApplyTemplate(menu, targetType, target, command);
 
     const tbody = this.table.tBodies[0];
@@ -179,7 +179,7 @@ export class TemplatesPanel extends Panel {
   }
 
   _addMenuItemApplyTemplate (pMenu, pTargetType, target, pCommand) {
-    pMenu.addMenuItem("Apply template...", () => {
+    pMenu.addMenuItemCmd("Apply template...", () => {
       this.runCommand(pTargetType, target, pCommand);
     });
   }
