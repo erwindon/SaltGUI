@@ -433,11 +433,10 @@ export class HighStatePanel extends Panel {
         // we may use it for presentation (keys.length <= MAX_HIGHSTATE_STATES); or
         // for information (keys.length > MAX_HIGHSTATE_STATES)
 
-        const span = Utils.createSpan("task", Character.BLACK_CIRCLE);
-        span.style.backgroundColor = "black";
+        const span = Utils.createSpan("task", Character.BLACK_CIRCLE_WITH_OUTLINE);
 
         // this also sets the span's class(es)
-        Output._setTaskToolTip(span, data);
+        Output._setTaskToolTip(span, data, "taskcirclehighstate");
 
         // add class here again, because it gets lost in _setTaskToolTip
         span.classList.add("task");
@@ -500,9 +499,8 @@ export class HighStatePanel extends Panel {
           sep = " ";
 
           // remove the priority indicator from the key
-          const itemSpan = Utils.createSpan(["tasksummary", "taskcircle"], Character.BLACK_CIRCLE);
+          const itemSpan = Utils.createSpan(["tasksummary", "taskcirclehighstate"], Character.BLACK_CIRCLE_WITH_OUTLINE);
           itemSpan.classList.add(...statKey.substring(2).split(" "));
-          itemSpan.style.backgroundColor = "black";
           summarySpan.append(itemSpan);
         }
 

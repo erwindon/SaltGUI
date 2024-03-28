@@ -706,7 +706,7 @@ export class CommandBox {
     }
 
     const span = div.children[eventSeqNr + 2];
-    Output._setTaskToolTip(span, task);
+    Output._setTaskToolTip(span, task, "taskcircle");
   }
 
   static _prepareForAsyncResults (pResponse) {
