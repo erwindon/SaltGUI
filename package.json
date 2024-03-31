@@ -17,10 +17,10 @@
     "mocha": "^10.0.0",
     "nightmare": "^3.0.2",
     "nyc": "^15.1.0",
-    "stylelint": "^16.0.2",
-    "stylelint-config-standard": "^36.0.0",
-    "stylelint-csstree-validator": "^3.0.0",
-    "stylelint-scss": "^6.0.0"
+    "stylelint": "^14.0.1",
+    "stylelint-config-standard": "^25.0.0",
+    "stylelint-csstree-validator": "^2.0.0",
+    "stylelint-scss": "^4.0.0"
   },
   "eslintConfig": {
     "env": {
