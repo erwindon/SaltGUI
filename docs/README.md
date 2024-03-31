@@ -520,12 +520,12 @@ Then browse to [http://localhost:3333/](http://localhost:3333/), you can login w
 ## Testing
 We provide some functional tests and unit tests. They use the docker setup to run the functional tests. You will also need [yarn](https://yarnpkg.com) and [node.js](https://nodejs.org/en/) to run them. When you have docker, yarn and node.js installed, you can run the tests from the root of the repository like this:
 ```
-./runtests.sh
+bash runtests.bash
 ```
 
 To show the browser window + a debugger while running the functional tests you can run:
 ```
-NIGHTMARE_DEBUG=1 ./runtests.sh
+NIGHTMARE_DEBUG=1 bash runtests.bash
 ```
 
 We use the following testing libraries:
