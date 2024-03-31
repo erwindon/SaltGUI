@@ -1,6 +1,6 @@
-/* global require */
+/* global */
 
-const request = require("request");
+import request from "request";
 
 const url = "http://localhost:3333";
 
