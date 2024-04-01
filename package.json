@@ -19,7 +19,7 @@
     "nyc": "^15.1.0",
     "stylelint": "^14.0.1",
     "stylelint-config-standard": "^25.0.0",
-    "stylelint-csstree-validator": "^2.0.0",
+    "stylelint-csstree-validator": "^3.0.0",
     "stylelint-scss": "^4.0.0"
   },
   "eslintConfig": {
