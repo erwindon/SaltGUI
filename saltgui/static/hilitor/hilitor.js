@@ -102,7 +102,7 @@ function Hilitor(start, id, tag)
       // and performance drops with it. and it is still a good first indication.
       let nv, regs;
       if(this.nrHilites <= 25 && (nv = node.nodeValue) && (regs = matchRegExp.exec(nv)) && regs[0].length > 0) {
-        var found = isCaseSensitive ? regs[0] : regs[0].toLowerCase();
+        const found = isCaseSensitive ? regs[0] : regs[0].toLowerCase();
         if(!wordColor[found]) {
           wordColor[found] = colors[colorIdx++ % colors.length];
         }
