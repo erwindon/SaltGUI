@@ -44,7 +44,7 @@ export class IssuesPanel extends Panel {
 
   updateFooter () {
     const txt = this.issuesStatus;
-    super.updateFooter(txt ? txt : "(loading)");
+    super.updateFooter(txt || "(loading)");
   }
 
   onShow () {
