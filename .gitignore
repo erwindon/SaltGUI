@@ -6,7 +6,6 @@ node_modules/
 npm-debug.log
 yarn.lock
 .nyc_output/
-package-lock.json
 saltgui/static/minions.txt
 saltgui/static/mkMinions.sh
 saltgui/static/salt-auth.txt*
