@@ -24,6 +24,12 @@ rest_cherrypy:
     static: /saltgui/static
     static_path: /static
 
+netapi_enable_clients:
+    - local
+    - local_async
+    - runner
+    - wheel
+
 saltgui_templates:
     template1:
         description: First template

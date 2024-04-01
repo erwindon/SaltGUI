@@ -1,25 +1,25 @@
-FROM debian:10
+FROM debian:12
 
 LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
 LABEL name=salt-minion
 LABEL project="SaltGUI testing"
-LABEL version=3003
+LABEL version=3007.0
 
-ENV SALT_VERSION=3003
+ENV SALT_VERSION=3007.0
 ENV DEBIAN_FRONTEND=noninteractive
 
-# add saltstack key and install dependencies
-RUN apt-get update \
-  && apt-get install curl dirmngr gnupg net-tools --yes --no-install-recommends \
-  && apt-key adv --fetch-keys http://repo.saltstack.com/py3/debian/10/amd64/archive/${SALT_VERSION}/SALTSTACK-GPG-KEY.pub \
-  && echo "deb http://repo.saltstack.com/py3/debian/10/amd64/archive/${SALT_VERSION} buster main" > /etc/apt/sources.list.d/saltstack.list \
-  # install salt-minion
-  && apt-get update \
-  && apt-get install salt-minion=${SALT_VERSION}* --yes --no-install-recommends \
-  # show which versions are installed
-  && dpkg -l | grep salt- \
-  # cleanup temporary files
-  && rm -rf /var/lib/apt/lists/* \
+# add saltstack repo
+RUN apt-get update
+RUN apt-get install --yes --no-install-recommends curl ca-certificates gnupg2 net-tools dirmngr
+RUN curl -fsSL -o /etc/apt/keyrings/salt-archive-keyring-2023.gpg https://repo.saltproject.io/salt/py3/debian/12/amd64/SALT-PROJECT-GPG-PUBKEY-2023.gpg
+RUN echo "deb [signed-by=/etc/apt/keyrings/salt-archive-keyring-2023.gpg arch=amd64] https://repo.saltproject.io/salt/py3/debian/12/amd64/minor/${SALT_VERSION} bookworm main" > /etc/apt/sources.list.d/salt.list
+RUN apt-get update
+
+# install salt-minion
+RUN apt-get install salt-minion=${SALT_VERSION} --yes --no-install-recommends
+
+# cleanup temporary files
+RUN rm -rf /var/lib/apt/lists/* \
   && apt-get -y autoremove \
   && apt-get clean
 
