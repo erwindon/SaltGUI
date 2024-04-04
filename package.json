@@ -8,7 +8,7 @@
   "type": "module",
   "devDependencies": {
     "@babel/core": "^7.24.4",
-    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-env": "^7.24.4",
     "@babel/register": "^7.15.3",
     "babel-plugin-istanbul": "^6.0.0",
     "chai": "^5.0.0",
