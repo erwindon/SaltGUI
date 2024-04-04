@@ -113,8 +113,6 @@ pre .task-success {
 
 td .task-changes {
   color: aqua;
-  text-decoration-line: overline underline;
-  text-decoration-style: double;
 }
 
 pre .task-changes {
@@ -127,8 +125,6 @@ pre .task-changes {
 }
 
 pre .task-summary .task-changes {
-  text-decoration-line: overline underline;
-  text-decoration-style: double;
 }
 
 pre span.active {
@@ -329,8 +325,6 @@ table tr td:last-of-type {
 }
 
 .taskcircle.task-changes {
-  text-decoration-line: overline underline;
-  text-decoration-style: double;
 }
 
 @media print {

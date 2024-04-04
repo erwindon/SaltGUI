@@ -394,6 +394,7 @@ export class Output {
     }
     if (nrChanges) {
       pSpan.classList.add("task-changes");
+      pSpan.innerText = Character.BLACK_CIRCLE_WITH_OUTLINE;
     }
 
     for (const key in pTask) {
