@@ -464,6 +464,7 @@ export class HighStatePanel extends Panel {
           if (span.classList.contains("task-changes")) {
             prio -= 1;
             statKey += " task-changes";
+            span.innerText = Character.BLACK_CIRCLE_WITH_OUTLINE;
           }
 
           // allow keys to be sortable
@@ -502,6 +503,9 @@ export class HighStatePanel extends Panel {
           // remove the priority indicator from the key
           const itemSpan = Utils.createSpan(["tasksummary", "taskcircle"], Character.BLACK_CIRCLE);
           itemSpan.classList.add(...statKey.substring(2).split(" "));
+          if(itemSpan.classList.contains("task-changes")) {
+            itemSpan.innerText = Character.BLACK_CIRCLE_WITH_OUTLINE;
+          }
           itemSpan.style.backgroundColor = "black";
           summarySpan.append(itemSpan);
         }
