@@ -30,7 +30,6 @@ such as `yubico_client`, or execution modules such as `boto3_sns`.
 - View the schedules for a particular minion
 - View the values for pillars for a particular minion
 - View the beacons for a particular minion
-- View the nodegroups with their member minions
 - View the live events on the salt-event bus
 - View internal documentation for any salt command
 - View external documentation for any salt command
