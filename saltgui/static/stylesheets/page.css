@@ -124,9 +124,6 @@ pre .task-changes {
   line-height: 2em;
 }
 
-pre .task-summary .task-changes {
-}
-
 pre span.active {
   color: greenyellow;
   font-weight: bold;
@@ -322,9 +319,6 @@ table tr td:last-of-type {
 
 .taskcircle.task-skipped {
   color: yellow;
-}
-
-.taskcircle.task-changes {
 }
 
 @media print {
