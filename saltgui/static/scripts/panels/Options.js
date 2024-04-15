@@ -72,6 +72,9 @@ export class OptionsPanel extends Panel {
       ["ipnumber_field", "saltgui", "fqdn_ip4"],
       ["ipnumber_prefix", "saltgui", "(none)"],
 
+      ["max-show-highstates", "saltgui", "10"],
+      ["max-highstate-states", "saltgui", "20"],
+
       /* note that this is not in the alphabetic order */
       ["show-saltenvs", "saltgui", "(all)"],
       ["hide-saltenvs", "saltgui", "(none)"],

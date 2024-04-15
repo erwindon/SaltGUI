@@ -9,16 +9,16 @@ import {Panel} from "./Panel.js";
 import {TargetType} from "../TargetType.js";
 import {Utils} from "../Utils.js";
 
-// only consider this number of latest highstate jobs
-const MAX_HIGHSTATE_JOBS = 10;
-
-// more than this number of states switches to summary
-const MAX_HIGHSTATE_STATES = 20;
 
 export class HighStatePanel extends Panel {
 
   constructor () {
     super("highstate");
+
+    // only consider this number of latest highstate jobs
+    this._maxShowHighstates = Utils.getStorageItem("session", "max_show_highstates", 10);
+    // more than this number of states switches to summary
+    this._maxHighstateStates = Utils.getStorageItem("session", "max_highstate_states", 20);
 
     this.addTitle("HighState");
     this.addPanelMenu();
@@ -31,8 +31,8 @@ export class HighStatePanel extends Panel {
     this.addPlayPauseButton();
     this.addHelpButton([
       "This panel shows the latest state.highstate or state.apply job for each minion.",
-      "Only the latest " + MAX_HIGHSTATE_JOBS + " jobs are verified.",
-      "With more than " + MAX_HIGHSTATE_STATES + " states, a summary is shown instead.",
+      "Only the latest " + this._maxShowHighstates + " jobs are verified.",
+      "With more than " + this._maxHighstateStates + " states, a summary is shown instead.",
       "Click on an individual state to re-apply only that state."
     ]);
     this.addWarningField();
@@ -177,8 +177,8 @@ export class HighStatePanel extends Panel {
     let jobs = JobsPanel._jobsToArray(pData.return[0]);
     JobsPanel._sortJobs(jobs);
 
-    if (jobs.length > MAX_HIGHSTATE_JOBS) {
-      jobs = jobs.slice(0, MAX_HIGHSTATE_JOBS);
+    if (jobs.length > this._maxShowHighstates) {
+      jobs = jobs.slice(0, this._maxShowHighstates);
     }
 
     this.jobs = jobs;
@@ -268,10 +268,10 @@ export class HighStatePanel extends Panel {
       super.setWarningText("info", "no jobs were found");
     } else if (this.jobsCnt === 1) {
       super.setWarningText("info", "only 1 job was found and some minions did not have results in that job");
-    } else if (this.jobsCnt < MAX_HIGHSTATE_JOBS) {
+    } else if (this.jobsCnt < this._maxShowHighstates) {
       super.setWarningText("info", "only " + this.jobsCnt + " jobs were found and some minions did not have results in any of these jobs");
     } else {
-      super.setWarningText("info", "the latest " + MAX_HIGHSTATE_JOBS + " jobs were inspected and some minions did not have results in any of these jobs");
+      super.setWarningText("info", "the latest " + this._maxShowHighstates + " jobs were inspected and some minions did not have results in any of these jobs");
     }
   }
 
@@ -430,8 +430,8 @@ export class HighStatePanel extends Panel {
         data.___key___ = key;
 
         // always create the span for the state
-        // we may use it for presentation (keys.length <= MAX_HIGHSTATE_STATES); or
-        // for information (keys.length > MAX_HIGHSTATE_STATES)
+        // we may use it for presentation (keys.length <= this._maxHighstateStates); or
+        // for information (keys.length > this._maxHighstateStates)
 
         const span = Utils.createSpan("task", Character.BLACK_CIRCLE);
         span.style.backgroundColor = "black";
@@ -442,7 +442,7 @@ export class HighStatePanel extends Panel {
         // add class here again, because it gets lost in _setTaskToolTip
         span.classList.add("task");
 
-        if (keys.length > MAX_HIGHSTATE_STATES) {
+        if (keys.length > this._maxHighstateStates) {
           let statKey = "";
           let prio = 0;
 

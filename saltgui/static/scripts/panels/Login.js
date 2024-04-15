@@ -371,6 +371,12 @@ export class LoginPanel extends Panel {
     const ipNumberPrefix = wheelConfigValuesData.saltgui_ipnumber_prefix;
     Utils.setStorageItem("session", "ipnumber_prefix", JSON.stringify(ipNumberPrefix));
 
+    const maxShowHighstates = wheelConfigValuesData.saltgui_max_show_highstates;
+    Utils.setStorageItem("session", "max_show_highstates", JSON.stringify(maxShowHighstates));
+
+    const maxHighstateStates = wheelConfigValuesData.saltgui_max_highstate_states;
+    Utils.setStorageItem("session", "max_highstate_states", JSON.stringify(maxHighstateStates));
+
     const showSaltEnvs = wheelConfigValuesData.saltgui_show_saltenvs;
     Utils.setStorageItem("session", "show_saltenvs", JSON.stringify(showSaltEnvs));
     const hideSaltEnvs = wheelConfigValuesData.saltgui_hide_saltenvs;

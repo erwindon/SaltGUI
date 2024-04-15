@@ -310,7 +310,9 @@ Even the minion names that are in the nodegroup, but which do not actually exist
 
 ## Highstate
 The Highstate page provides an overview of the minions and their latest state information.
-At most 10 highstate jobs (`state.apply` or `state.highstate`) are considered.
+At most `saltgui_max_show_highstates` (10 if not set) highstate jobs (`state.apply` or `state.highstate`) are considered.
+
+More than `saltgui_max_highstate_states` (20 if not set) of states switches to summary from detailed view.
 
 Individual low-states can be re-tried by clicking on their state symbol.
 Note that since the output of the `state.sls_id` commands is not considered in this overview,
