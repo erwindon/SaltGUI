@@ -388,7 +388,11 @@ export class Output {
     if (pTask.result === null) {
       pSpan.classList.add("task-skipped");
     } else if (pTask.result) {
-      pSpan.classList.add("task-success");
+      if (nrChanges) {
+        pSpan.classList.add("task-changes-success");
+      } else {
+        pSpan.classList.add("task-success");
+      }
     } else {
       pSpan.classList.add("task-failure");
     }
