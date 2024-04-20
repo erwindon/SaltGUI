@@ -317,10 +317,6 @@ table tr td:last-of-type {
   color: lime;
 }
 
-.taskcircle.task-changes-success {
-  color: aqua;
-}
-
 .taskcircle.task-failure {
   color: red;
 }

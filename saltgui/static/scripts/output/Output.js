@@ -389,7 +389,7 @@ export class Output {
       pSpan.classList.add("task-skipped");
     } else if (pTask.result) {
       if (nrChanges) {
-        pSpan.classList.add("task-changes-success");
+        pSpan.classList.add("task-changes");
       } else {
         pSpan.classList.add("task-success");
       }
@@ -397,7 +397,6 @@ export class Output {
       pSpan.classList.add("task-failure");
     }
     if (nrChanges) {
-      pSpan.classList.add("task-changes");
       pSpan.innerText = Character.BLACK_CIRCLE_WITH_OUTLINE;
     }
 
