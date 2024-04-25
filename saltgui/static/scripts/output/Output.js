@@ -397,7 +397,7 @@ export class Output {
       pSpan.classList.add("task-failure");
     }
     if (nrChanges) {
-      pSpan.innerText = Character.BLACK_CIRCLE_WITH_OUTLINE;
+      pSpan.innerText = Character.BLACK_DIAMOND;
     }
 
     for (const key in pTask) {
