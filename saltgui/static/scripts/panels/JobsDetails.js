@@ -408,8 +408,8 @@ export class JobsDetailsPanel extends JobsPanel {
   }
 
   _addJobsMenuItemShowDetails (pMenu, job) {
-    pMenu.addMenuItem("Show details", () => {
-      this.router.goTo("job", {"id": job.id});
+    pMenu.addMenuItem("Show details", (pClickEvent) => {
+      this.router.goTo("job", {"id": job.id}, undefined, pClickEvent);
     });
   }
 

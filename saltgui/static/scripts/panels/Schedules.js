@@ -151,8 +151,8 @@ export class SchedulesPanel extends Panel {
   }
 
   _addMenuItemShowSchedules (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show schedules", () => {
-      this.router.goTo("schedules-minion", {"minionid": pMinionId});
+    pMenu.addMenuItem("Show schedules", (pClickEvent) => {
+      this.router.goTo("schedules-minion", {"minionid": pMinionId}, undefined, pClickEvent);
     });
   }
 }

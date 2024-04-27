@@ -144,8 +144,8 @@ export class BeaconsPanel extends Panel {
   }
 
   _addMenuItemShowBeacons (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show beacons", () => {
-      this.router.goTo("beacons-minion", {"minionid": pMinionId});
+    pMenu.addMenuItem("Show beacons", (pClickEvent) => {
+      this.router.goTo("beacons-minion", {"minionid": pMinionId}, undefined, pClickEvent);
     });
   }
 }

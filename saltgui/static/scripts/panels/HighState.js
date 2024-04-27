@@ -526,8 +526,8 @@ export class HighStatePanel extends Panel {
   }
 
   _addJobsMenuItemShowDetails (pMenu, pJob, pMinionId) {
-    pMenu.addMenuItem("Show details", () => {
-      this.router.goTo("job", {"id": pJob.jid, "minionid": pMinionId});
+    pMenu.addMenuItem("Show details", (pClickEvent) => {
+      this.router.goTo("job", {"id": pJob.jid, "minionid": pMinionId}, undefined, pClickEvent);
     });
   }
 }
