@@ -14,4 +14,8 @@ export class IssuesPage extends Page {
     this.jobs = new JobsSummaryPanel();
     super.addPanel(this.jobs);
   }
+
+  handleSaltJobRetEvent (pData) {
+    this.jobs.handleSaltJobRetEvent(pData);
+  }
 }
