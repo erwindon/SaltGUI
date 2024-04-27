@@ -63,7 +63,7 @@ export class PillarsPanel extends Panel {
       this._addMenuItemShowPillars(menu, minionId);
 
       minionTr.addEventListener("click", (pClickEvent) => {
-        this.router.goTo("pillars-minion", {"minionid": minionId});
+        this.router.goTo("pillars-minion", {"minionid": minionId}, undefined, pClickEvent);
         pClickEvent.stopPropagation();
       });
     }
