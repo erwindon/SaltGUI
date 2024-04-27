@@ -3,6 +3,7 @@
 import {JobsSummaryPanel} from "../panels/JobsSummary.js";
 import {Page} from "./Page.js";
 import {PillarsMinionPanel} from "../panels/PillarsMinion.js";
+import {Utils} from "../Utils.js";
 
 export class PillarsMinionPage extends Page {
 
@@ -11,11 +12,15 @@ export class PillarsMinionPage extends Page {
 
     this.pillarsminion = new PillarsMinionPanel();
     super.addPanel(this.pillarsminion);
-    this.jobs = new JobsSummaryPanel();
-    super.addPanel(this.jobs);
+    if (Utils.getQueryParam("popup") !== "true") {
+      this.jobs = new JobsSummaryPanel();
+      super.addPanel(this.jobs);
+    }
   }
 
   handleSaltJobRetEvent (pData) {
-    this.jobs.handleSaltJobRetEvent(pData);
+    if (this.jobs) {
+      this.jobs.handleSaltJobRetEvent(pData);
+    }
   }
 }

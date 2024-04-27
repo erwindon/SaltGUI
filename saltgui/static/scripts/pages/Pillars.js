@@ -3,6 +3,7 @@
 import {JobsSummaryPanel} from "../panels/JobsSummary.js";
 import {Page} from "./Page.js";
 import {PillarsPanel} from "../panels/Pillars.js";
+import {Utils} from "../Utils.js";
 
 export class PillarsPage extends Page {
 
@@ -11,11 +12,15 @@ export class PillarsPage extends Page {
 
     this.pillars = new PillarsPanel();
     super.addPanel(this.pillars);
-    this.jobs = new JobsSummaryPanel();
-    super.addPanel(this.jobs);
+    if (Utils.getQueryParam("popup") !== "true") {
+      this.jobs = new JobsSummaryPanel();
+      super.addPanel(this.jobs);
+    }
   }
 
   handleSaltJobRetEvent (pData) {
-    this.jobs.handleSaltJobRetEvent(pData);
+    if (this.jobs) {
+      this.jobs.handleSaltJobRetEvent(pData);
+    }
   }
 }

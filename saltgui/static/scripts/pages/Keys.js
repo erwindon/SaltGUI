@@ -3,6 +3,7 @@
 import {JobsSummaryPanel} from "../panels/JobsSummary.js";
 import {KeysPanel} from "../panels/Keys.js";
 import {Page} from "./Page.js";
+import {Utils} from "../Utils.js";
 
 export class KeysPage extends Page {
 
@@ -11,8 +12,10 @@ export class KeysPage extends Page {
 
     this.keys = new KeysPanel();
     super.addPanel(this.keys);
-    this.jobs = new JobsSummaryPanel();
-    super.addPanel(this.jobs);
+    if (Utils.getQueryParam("popup") !== "true") {
+      this.jobs = new JobsSummaryPanel();
+      super.addPanel(this.jobs);
+    }
   }
 
   handleSaltAuthEvent (pData) {
@@ -24,7 +27,9 @@ export class KeysPage extends Page {
   }
 
   handleSaltJobRetEvent (pData) {
-    this.jobs.handleSaltJobRetEvent(pData);
+    if (this.jobs) {
+      this.jobs.handleSaltJobRetEvent(pData);
+    }
   }
 
   handleSyndicEvent () {
