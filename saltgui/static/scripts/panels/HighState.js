@@ -370,7 +370,7 @@ export class HighStatePanel extends Panel {
       const jobIdTd = Utils.createTd();
       const jobIdSpan = Utils.createSpan("tooltip", pJobId);
       jobIdSpan.addEventListener("click", (pClickEvent) => {
-        this.router.goTo("job", {"id": pJobId, "minionid": minionId});
+        this.router.goTo("job", {"id": pJobId, "minionid": minionId}, undefined, pClickEvent);
         pClickEvent.stopPropagation();
       });
       jobIdTd.appendChild(jobIdSpan);
@@ -512,7 +512,7 @@ export class HighStatePanel extends Panel {
 
         // allow similar navigation, but just only to the job level
         summarySpan.addEventListener("click", (pClickEvent) => {
-          this.router.goTo("job", {"id": pJobId, "minionid": minionId});
+          this.router.goTo("job", {"id": pJobId, "minionid": minionId}, undefined, pClickEvent);
           pClickEvent.stopPropagation();
         });
 

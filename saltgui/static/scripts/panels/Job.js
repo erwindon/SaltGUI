@@ -269,7 +269,7 @@ export class JobPanel extends Panel {
         Utils.addToolTip(link, "this job");
       } else {
         link.addEventListener("click", (pClickEvent) => {
-          this.router.goTo("job", {"id": linkToJid});
+          this.router.goTo("job", {"id": linkToJid}, undefined, pClickEvent);
           pClickEvent.stopPropagation();
         });
       }
