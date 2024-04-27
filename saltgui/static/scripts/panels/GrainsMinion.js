@@ -17,7 +17,9 @@ export class GrainsMinionPanel extends Panel {
     this._addPanelMenuItemSaltUtilRefreshGrains();
 
     this.addSearchButton();
-    this.addCloseButton();
+    if (Utils.getQueryParam("popup") !== "true") {
+      this.addCloseButton();
+    }
     this.addWarningField();
     this.addTable(["Name", "-menu-", "Value"]);
     this.setTableSortable("Name", "asc");

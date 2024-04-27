@@ -15,7 +15,9 @@ export class PillarsMinionPanel extends Panel {
     this.addPanelMenu();
     this._addPanelMenuItemSaltUtilRefreshPillar();
     this.addSearchButton();
-    this.addCloseButton();
+    if (Utils.getQueryParam("popup") !== "true") {
+      this.addCloseButton();
+    }
     this.addHelpButton([
       "The content of specific well-known pillar values can be made visible",
       "automatically by configuring their name in the server-side configuration file.",
