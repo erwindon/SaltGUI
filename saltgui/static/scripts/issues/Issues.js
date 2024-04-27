@@ -82,9 +82,9 @@ export class Issues {
     });
 
     if (pTr.hasClick !== true) {
-      pTr.addEventListener("click", (ClickEvent) => {
+      pTr.addEventListener("click", (pClickEvent) => {
         pTr.panel.runCommand("", pTarget, pCommand);
-        ClickEvent.stopPropagation();
+        pClickEvent.stopPropagation();
       });
     }
     pTr.hasClick = true;
@@ -103,9 +103,9 @@ export class Issues {
     });
 
     if (pTr.hasClick !== true) {
-      pTr.addEventListener("click", (ClickEvent) => {
+      pTr.addEventListener("click", (pClickEvent) => {
         pTr.panel.router.goTo(pPage, pArgs);
-        ClickEvent.stopPropagation();
+        pClickEvent.stopPropagation();
       });
     }
     pTr.hasClick = true;
