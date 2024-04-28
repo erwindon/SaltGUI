@@ -31,7 +31,6 @@ export class Character {
     Character.WARNING_SIGN = "\u26A0" + Character._VARIATION_SELECTOR_16;
     Character.HEAVY_CHECK_MARK = "\u2714";
     Character.HEAVY_MULTIPLICATION_X = "\u2716" + Character._VARIATION_SELECTOR_15;
-    Character.HEAVY_BALLOT_X = "\u2718";
     Character.BLACK_QUESTION_MARK_ORNAMENT = "\u2753" + Character._VARIATION_SELECTOR_15;
     Character._BLACK_MEDIUM_RIGHT_POINTING_TRIANGLE = "\u2BC8";
 

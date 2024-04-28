@@ -94,17 +94,8 @@ export class OutputHighstateTaskSaltGui {
     const taskDiv = Utils.createDiv();
 
     const span = Utils.createSpan("task-icon");
-    if (pTask.result === null) {
-      span.innerText = Character.HEAVY_CHECK_MARK;
-      span.classList.add("task-skipped");
-    } else if (pTask.result) {
-      span.innerText = Character.HEAVY_CHECK_MARK;
-      span.classList.add("task-success");
-    } else {
-      span.innerText = Character.HEAVY_BALLOT_X;
-      span.classList.add("task-failure");
-    }
-    // don't use task-changes here
+    span.innerText = Output.getTaskCharacter(pTask);
+    span.classList.add(Output.getTaskClass(pTask));
     taskDiv.append(span);
 
     taskDiv.append(document.createTextNode(pTaskName));

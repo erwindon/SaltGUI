@@ -336,6 +336,83 @@ export class Output {
     return false;
   }
 
+  static _getTaskNrChanges (pTask) {
+    if (!pTask.changes) {
+      return 0;
+    }
+    if (typeof pTask.changes !== "object") {
+      return 1;
+    }
+    if (Array.isArray(pTask.changes)) {
+      return pTask.changes.length;
+    }
+    if (Object.keys(pTask.changes).length === 0) {
+      // empty changes object does not count as real change
+      return 0;
+    }
+    return 1;
+  }
+
+  static getTaskCharacter (pTask) {
+    if (!pTask.changes) {
+      return Character.BLACK_CIRCLE;
+    }
+    if (typeof pTask.changes !== "object") {
+      return Character.BLACK_DIAMOND;
+    }
+    if (Array.isArray(pTask.changes)) {
+      return pTask.changes.length === 0 ? Character.BLACK_CIRCLE : Character.BLACK_DIAMOND;
+    }
+    if (Object.keys(pTask.changes).length === 0) {
+      // empty changes object does not count as real change
+      return Character.BLACK_CIRCLE;
+    }
+    return Character.BLACK_DIAMOND;
+  }
+
+  static _getTaskChanges (pTask) {
+    if (!pTask.changes) {
+      return "";
+    }
+    if (typeof pTask.changes !== "object") {
+      return "\n'changes' has type " + typeof pTask.changes;
+    }
+    if (Array.isArray(pTask.changes)) {
+      const nrChanges = pTask.changes.length;
+      return Utils.txtZeroOneMany(
+        nrChanges,
+        "\n'changes' is an empty array",
+        "\n'changes' is an array\n" + nrChanges + " change",
+        "\n'changes' is an array\n" + nrChanges + " changes");
+    }
+    if (Object.keys(pTask.changes).length === 0) {
+      // empty changes object does not count as real change
+      return "";
+    }
+    return "\nchanged";
+  }
+
+  static getTaskClass (pTask) {
+    if (pTask.result === null) {
+      return "task-skipped";
+    }
+    if (pTask.result === false) {
+      return "task-failure";
+    }
+    if (Array.isArray(pTask.changes)) {
+      return pTask.changes.length ? "task-changes" : "task-success";
+    }
+    if (typeof pTask.changes !== "object") {
+      // pretend 1 change
+      return "task-changes";
+    }
+    if (Object.keys(pTask.changes).length === 0) {
+      // empty changes object does not count as real change
+      return "task-success";
+    }
+    return "task-changes";
+  }
+
   static _setTaskToolTip (pSpan, pTask) {
 
     if (typeof pTask !== "object") {
@@ -362,43 +439,15 @@ export class Output {
       txt += "\n" + functionName;
     }
 
-    let nrChanges;
-    if (!pTask.changes) {
-      nrChanges = 0;
-    } else if (typeof pTask.changes !== "object") {
-      nrChanges = 1;
-      txt += "\n'changes' has type " + typeof pTask.changes;
-    } else if (Array.isArray(pTask.changes)) {
-      nrChanges = pTask.changes.length;
-      txt += "\n'changes' is an array";
-      txt += Utils.txtZeroOneMany(nrChanges, "", "\n" + nrChanges + " change", "\n" + nrChanges + " changes");
-    } else if (typeof pTask.changes === "object" && Object.keys(pTask.changes).length === 0) {
-      // empty changes object does not count as real change
-      nrChanges = 0;
-    } else {
-      nrChanges = 1;
-      txt += "\nchanged";
-    }
+    txt += Output._getTaskChanges(pTask);
 
     if (Output.isHiddenTask(pTask)) {
       txt += "\nhidden";
     }
 
     pSpan.className = "taskcircle";
-    if (pTask.result === null) {
-      pSpan.classList.add("task-skipped");
-    } else if (pTask.result) {
-      if (nrChanges) {
-        pSpan.classList.add("task-changes");
-      } else {
-        pSpan.classList.add("task-success");
-      }
-    } else {
-      pSpan.classList.add("task-failure");
-    }
-    if (nrChanges) {
-      pSpan.innerText = Character.BLACK_DIAMOND;
-    }
+    pSpan.classList.add(Output.getTaskClass(pTask));
+    pSpan.innerText = Output.getTaskCharacter(pTask);
 
     for (const key in pTask) {
       /* eslint-disable curly */
