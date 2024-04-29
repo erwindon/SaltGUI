@@ -278,6 +278,18 @@ export class Router {
     }
   }
 
+  static _cancelSelections () {
+    // see https://stackoverflow.com/questions/3169786/clear-text-selection-with-javascript
+    const sel = window.getSelection ? window.getSelection() : document.selection;
+    if (sel) {
+      if (sel.removeAllRanges) {
+        sel.removeAllRanges();
+      } else if (sel.empty) {
+        sel.empty();
+      }
+    }
+  }
+
   static updateMainMenu () {
     const pages = Router._getPagesList();
 
@@ -370,6 +382,7 @@ export class Router {
         // forward navigation
         if (inNewWindow) {
           // in a new window
+          Router._cancelSelections();
           window.open(url);
           return;
         }
