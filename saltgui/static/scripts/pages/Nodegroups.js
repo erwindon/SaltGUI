@@ -12,12 +12,16 @@ export class NodegroupsPage extends Page {
 
     this.nodegroups = new NodegroupsPanel();
     super.addPanel(this.nodegroups);
-    this.jobs = new JobsSummaryPanel();
-    super.addPanel(this.jobs);
+    if (Utils.getQueryParam("popup") !== "true") {
+      this.jobs = new JobsSummaryPanel();
+      super.addPanel(this.jobs);
+    }
   }
 
   handleSaltJobRetEvent (pData) {
-    this.jobs.handleSaltJobRetEvent(pData);
+    if (this.jobs) {
+      this.jobs.handleSaltJobRetEvent(pData);
+    }
   }
 
   /* eslint-disable class-methods-use-this */

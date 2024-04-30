@@ -98,8 +98,8 @@ export class Issues {
     } else {
       title = "Go to " + pPage + " page";
     }
-    pTr.menu.addMenuItem(title, () => {
-      pTr.panel.router.goTo(pPage, pArgs);
+    pTr.menu.addMenuItem(title, (pClickEvent) => {
+      pTr.panel.router.goTo(pPage, pArgs, undefined, pClickEvent);
     });
 
     if (pTr.hasClick !== true) {

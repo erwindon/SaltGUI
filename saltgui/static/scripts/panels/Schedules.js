@@ -93,7 +93,7 @@ export class SchedulesPanel extends Panel {
       this._addMenuItemShowSchedules(menu, minionId);
 
       minionTr.addEventListener("click", (pClickEvent) => {
-        this.router.goTo("schedules-minion", {"minionid": minionId});
+        this.router.goTo("schedules-minion", {"minionid": minionId}, undefined, pClickEvent);
         pClickEvent.stopPropagation();
       });
     }
@@ -151,8 +151,8 @@ export class SchedulesPanel extends Panel {
   }
 
   _addMenuItemShowSchedules (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show schedules", () => {
-      this.router.goTo("schedules-minion", {"minionid": pMinionId});
+    pMenu.addMenuItem("Show schedules", (pClickEvent) => {
+      this.router.goTo("schedules-minion", {"minionid": pMinionId}, undefined, pClickEvent);
     });
   }
 }

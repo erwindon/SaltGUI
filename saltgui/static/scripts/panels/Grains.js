@@ -94,7 +94,7 @@ export class GrainsPanel extends Panel {
       }
 
       minionTr.addEventListener("click", (pClickEvent) => {
-        this.router.goTo("grains-minion", {"minionid": minionId});
+        this.router.goTo("grains-minion", {"minionid": minionId}, undefined, pClickEvent);
         pClickEvent.stopPropagation();
       });
     }
@@ -173,8 +173,8 @@ export class GrainsPanel extends Panel {
   }
 
   _addMenuItemShowGrains (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show grains", () => {
-      this.router.goTo("grains-minion", {"minionid": pMinionId});
+    pMenu.addMenuItem("Show grains", (pClickEvent) => {
+      this.router.goTo("grains-minion", {"minionid": pMinionId}, undefined, pClickEvent);
     });
   }
 }

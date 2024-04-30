@@ -12,12 +12,16 @@ export class ReactorsPage extends Page {
 
     this.reactors = new ReactorsPanel();
     super.addPanel(this.reactors);
-    this.jobs = new JobsSummaryPanel();
-    super.addPanel(this.jobs);
+    if (Utils.getQueryParam("popup") !== "true") {
+      this.jobs = new JobsSummaryPanel();
+      super.addPanel(this.jobs);
+    }
   }
 
   handleSaltJobRetEvent (pData) {
-    this.jobs.handleSaltJobRetEvent(pData);
+    if (this.jobs) {
+      this.jobs.handleSaltJobRetEvent(pData);
+    }
   }
 
   /* eslint-disable class-methods-use-this */

@@ -3,6 +3,7 @@
 import {BeaconsMinionPanel} from "../panels/BeaconsMinion.js";
 import {JobsSummaryPanel} from "../panels/JobsSummary.js";
 import {Page} from "./Page.js";
+import {Utils} from "../Utils.js";
 
 export class BeaconsMinionPage extends Page {
 
@@ -11,8 +12,10 @@ export class BeaconsMinionPage extends Page {
 
     this.beaconsminion = new BeaconsMinionPanel();
     super.addPanel(this.beaconsminion);
-    this.jobs = new JobsSummaryPanel();
-    super.addPanel(this.jobs);
+    if (Utils.getQueryParam("popup") !== "true") {
+      this.jobs = new JobsSummaryPanel();
+      super.addPanel(this.jobs);
+    }
   }
 
   handleSaltBeaconEvent (pTag, pData) {
@@ -20,6 +23,8 @@ export class BeaconsMinionPage extends Page {
   }
 
   handleSaltJobRetEvent (pData) {
-    this.jobs.handleSaltJobRetEvent(pData);
+    if (this.jobs) {
+      this.jobs.handleSaltJobRetEvent(pData);
+    }
   }
 }

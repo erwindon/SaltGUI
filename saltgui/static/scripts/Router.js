@@ -278,6 +278,18 @@ export class Router {
     }
   }
 
+  static _cancelSelections () {
+    // see https://stackoverflow.com/questions/3169786/clear-text-selection-with-javascript
+    const sel = window.getSelection ? window.getSelection() : document.selection;
+    if (sel) {
+      if (sel.removeAllRanges) {
+        sel.removeAllRanges();
+      } else if (sel.empty) {
+        sel.empty();
+      }
+    }
+  }
+
   static updateMainMenu () {
     const pages = Router._getPagesList();
 
@@ -300,7 +312,7 @@ export class Router {
   // pForward = 0 --> normal navigation
   // pForward = 1 --> back navigation using regular gui
   // pForward = 2 --> back navigation using browser
-  goTo (pHash, pQuery = {}, pForward = 0) {
+  goTo (pHash, pQuery = {}, pForward = 0, pEvent = null) {
 
     // close the command-box when it is stil open
     CommandBox.hideManualRun();
@@ -335,6 +347,11 @@ export class Router {
     const parentQuery = Object.fromEntries(new URLSearchParams(search));
     /* eslint-enable compat/compat */
 
+    let inNewWindow = false;
+    if (pEvent) {
+      inNewWindow = pEvent.altKey || pEvent.ctrlKey;
+    }
+
     for (const route of this.pages) {
       if (route.path !== pHash) {
         continue;
@@ -351,6 +368,10 @@ export class Router {
         url += sep + key + "=" + encodeURIComponent(value);
         sep = "&";
       }
+      if (inNewWindow) {
+        url += sep + "popup=true";
+        sep = "&";
+      }
       url += "#" + pHash;
       if (parentHash === route.path) {
         // page refresh
@@ -359,6 +380,12 @@ export class Router {
         window.history.replaceState({}, undefined, url);
       } else if (pForward === 0) {
         // forward navigation
+        if (inNewWindow) {
+          // in a new window
+          Router._cancelSelections();
+          window.open(url);
+          return;
+        }
         window.history.pushState({}, undefined, url);
         route.parentHash = parentHash;
         route.parentQuery = parentQuery;

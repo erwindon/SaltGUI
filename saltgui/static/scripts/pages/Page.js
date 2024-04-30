@@ -32,6 +32,13 @@ export class Page {
     this.panels = [];
     this.api = pRouter.api;
 
+    if (Utils.getQueryParam("popup") === "true") {
+      const fullmenu = document.querySelector(".fullmenu");
+      fullmenu.style.display = "none";
+      const minimenu = document.querySelector(".minimenu");
+      minimenu.style.display = "none";
+    }
+
     const body = document.querySelector("body");
     body.onkeyup = (keyUpEvent) => {
       if (!Utils.isValidKeyUpEvent(keyUpEvent)) {

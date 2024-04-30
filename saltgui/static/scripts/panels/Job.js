@@ -14,7 +14,9 @@ export class JobPanel extends Panel {
     super("job");
 
     this.addTitle(Character.HORIZONTAL_ELLIPSIS + " on " + Character.HORIZONTAL_ELLIPSIS);
-    this.addCloseButton();
+    if (Utils.getQueryParam("popup") !== "true") {
+      this.addCloseButton();
+    }
     this.addPanelMenu();
     this.addSearchButton();
 
@@ -267,7 +269,7 @@ export class JobPanel extends Panel {
         Utils.addToolTip(link, "this job");
       } else {
         link.addEventListener("click", (pClickEvent) => {
-          this.router.goTo("job", {"id": linkToJid});
+          this.router.goTo("job", {"id": linkToJid}, undefined, pClickEvent);
           pClickEvent.stopPropagation();
         });
       }

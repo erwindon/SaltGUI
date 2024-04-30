@@ -20,7 +20,9 @@ export class SchedulesMinionPanel extends Panel {
     this._addPanelMenuItemScheduleAddCron();
     this._addPanelMenuItemScheduleAddOnce();
     this.addSearchButton();
-    this.addCloseButton();
+    if (Utils.getQueryParam("popup") !== "true") {
+      this.addCloseButton();
+    }
     this.addTable(["Name", "-menu-", "Details"]);
     this.setTableSortable("Name", "asc");
     this.setTableClickable();

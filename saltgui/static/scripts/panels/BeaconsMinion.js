@@ -21,7 +21,9 @@ export class BeaconsMinionPanel extends Panel {
     this._addPanelMenuItemBeaconsSave();
     this.addSearchButton();
     this.addPlayPauseButton();
-    this.addCloseButton();
+    if (Utils.getQueryParam("popup") !== "true") {
+      this.addCloseButton();
+    }
     this.addHelpButton([
       "The content of column 'Value' is automatically refreshed.",
       "The content of column 'Config' is simplified to reduce its formatted size.",

@@ -402,14 +402,14 @@ export class JobsDetailsPanel extends JobsPanel {
     tbody.appendChild(tr);
 
     tr.addEventListener("click", (pClickEvent) => {
-      this.router.goTo("job", {"id": job.id});
+      this.router.goTo("job", {"id": job.id}, undefined, pClickEvent);
       pClickEvent.stopPropagation();
     });
   }
 
   _addJobsMenuItemShowDetails (pMenu, job) {
-    pMenu.addMenuItem("Show details", () => {
-      this.router.goTo("job", {"id": job.id});
+    pMenu.addMenuItem("Show details", (pClickEvent) => {
+      this.router.goTo("job", {"id": job.id}, undefined, pClickEvent);
     });
   }
 

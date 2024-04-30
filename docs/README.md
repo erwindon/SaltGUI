@@ -34,6 +34,7 @@ such as `yubico_client`, or execution modules such as `boto3_sns`.
 - View internal documentation for any salt command
 - View external documentation for any salt command
 - View minions organized by node-group
+- View details optionally in a separate windows
 - Define your own custom documentation for commands
 - Match list of minions against reference list
 - Match status of minions against reference list
@@ -114,6 +115,16 @@ Note that SaltGUI cannot inspect the `master` file to see which authentication m
 This is because the salt-api can only read the file after login.
 
 See the [EAUTH documentation](https://docs.saltstack.com/en/latest/topics/eauth/index.html) and the [Salt auth source code](https://github.com/saltstack/salt/tree/master/salt/auth) for more information.
+
+
+## Browser tabs
+SaltGUI is a single page web-application.
+In cases where you would zoom in on details, it is possible to open a new browser tab with the requested details.
+Use CTRL-click to open the page in a new tab.
+Use ALT-click to open the page in a new tab and also make that the current tab.
+This works for clicks on table-rows and for clicks on popup-menu items.
+These functions are a bit browser-dependent, but all major browsers seem to follow this behavior.
+When a new tab is opened by SaltGUI, it does not contain the menu bar items, secondary panels or a close-button inside the page.
 
 
 ## Command Box
