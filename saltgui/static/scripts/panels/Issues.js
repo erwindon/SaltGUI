@@ -22,7 +22,7 @@ export class IssuesPanel extends Panel {
       "that are observed in various categories."
     ]);
     this.addTable(["-menu-", "Description"]);
-    this.setTableClickable();
+    this.setTableClickable("cmd");
     this.addMsg();
 
     // keep the list of "loading..." messages

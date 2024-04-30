@@ -40,7 +40,7 @@ export class JobsDetailsPanel extends JobsPanel {
     ]);
     this.addTable(["JID", "Target", "Function", "Start Time", "-menu-", "Status", "Details"], "data-list-jobs");
     this.setTableSortable("JID", "desc");
-    this.setTableClickable();
+    this.setTableClickable("page");
     this.addMsg();
   }
 

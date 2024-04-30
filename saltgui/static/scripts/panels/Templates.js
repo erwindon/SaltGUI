@@ -14,7 +14,7 @@ export class TemplatesPanel extends Panel {
     this.addSearchButton();
     this.addTable(["Name", "Category", "Key", "Description", "Target", "Command", "-menu-"], "data-list-templates");
     this.setTableSortable("Name", "asc");
-    this.setTableClickable();
+    this.setTableClickable("cmd");
     this.addMsg();
   }
 

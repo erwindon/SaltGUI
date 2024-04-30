@@ -14,7 +14,7 @@ export class PillarsPanel extends Panel {
     this.addWarningField();
     this.addTable(["Minion", "Status", "Pillars", "-menu-"]);
     this.setTableSortable("Minion", "asc");
-    this.setTableClickable();
+    this.setTableClickable("page");
     this.addMsg();
   }
 

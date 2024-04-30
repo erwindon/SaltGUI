@@ -25,7 +25,7 @@ export class SchedulesMinionPanel extends Panel {
     }
     this.addTable(["Name", "-menu-", "Details"]);
     this.setTableSortable("Name", "asc");
-    this.setTableClickable();
+    this.setTableClickable("cmd");
     this.addMsg();
   }
 
