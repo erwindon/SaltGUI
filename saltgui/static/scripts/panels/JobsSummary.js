@@ -17,8 +17,8 @@ export class JobsSummaryPanel extends JobsPanel {
 
     this.addTitle("Recent Jobs");
     this.addSearchButton();
-    this.addTable(null);
-    this.setTableClickable();
+    this.addTable(["-dummy-", "-dummy-"]);
+    this.setTableClickable("page");
     this.addMsg();
   }
 

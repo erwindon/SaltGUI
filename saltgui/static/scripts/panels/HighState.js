@@ -38,7 +38,7 @@ export class HighStatePanel extends Panel {
     this.addWarningField();
     this.addTable(["Minion", "State", "Latest JID", "Target", "Function", "Start Time", "-menu-", "States"]);
     this.setTableSortable("Minion", "asc");
-    this.setTableClickable();
+    this.setTableClickable("cmd");
     this.addMsg();
 
     // collect the list of hidden/shown environments

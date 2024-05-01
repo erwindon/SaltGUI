@@ -25,7 +25,7 @@ export class MinionsPanel extends Panel {
     this.addWarningField();
     this.addTable(["Minion", "Status", "Salt version", "OS version", "-menu-"]);
     this.setTableSortable("Minion", "asc");
-    this.setTableClickable();
+    this.setTableClickable("cmd");
     this.addMsg();
   }
 

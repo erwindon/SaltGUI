@@ -13,7 +13,7 @@ export class SchedulesPanel extends Panel {
     this.addSearchButton();
     this.addTable(["Minion", "Status", "Schedules", "-menu-"]);
     this.setTableSortable("Minion", "asc");
-    this.setTableClickable();
+    this.setTableClickable("page");
     this.addMsg();
   }
 

@@ -13,7 +13,7 @@ export class BeaconsPanel extends Panel {
     this.addSearchButton();
     this.addTable(["Minion", "Status", "Beacons", "-menu-"]);
     this.setTableSortable("Minion", "asc");
-    this.setTableClickable();
+    this.setTableClickable("page");
     this.addMsg();
   }
 

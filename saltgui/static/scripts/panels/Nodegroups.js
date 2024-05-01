@@ -18,7 +18,7 @@ export class NodegroupsPanel extends Panel {
     this.addPlayPauseButton();
     this.addWarningField();
     this.addTable(["Minion", "Status", "Salt version", "OS version", "-menu-"]);
-    this.setTableClickable();
+    this.setTableClickable("cmd");
     this.addMsg();
   }
 

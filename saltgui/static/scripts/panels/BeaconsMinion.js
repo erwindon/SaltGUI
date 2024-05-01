@@ -32,7 +32,7 @@ export class BeaconsMinionPanel extends Panel {
     ]);
     this.addTable(["Name", "-menu-", "Config", "Timestamp", "Value", "-help-"]);
     this.setTableSortable("Name", "asc");
-    this.setTableClickable();
+    this.setTableClickable("cmd");
     this.addMsg();
   }
 

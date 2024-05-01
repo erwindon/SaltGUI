@@ -19,7 +19,6 @@ export class GrainsPanel extends Panel {
     ]);
     this.addWarningField();
     this.addTable(["Minion", "Status", "Salt version", "OS version", "Grains", "-menu-"]);
-    this.setTableClickable();
 
     // cannot initialize sorting before all columns are present
     // this.setTableSortable("Minion", "asc");
@@ -41,6 +40,7 @@ export class GrainsPanel extends Panel {
         tr.appendChild(th);
       }
       this.previewColumsAdded = true;
+      this.setTableClickable("page");
     }
 
     // initialize sorting after all columns are present

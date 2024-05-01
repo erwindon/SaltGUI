@@ -224,9 +224,27 @@ export class Panel {
     }
   }
 
-  setTableClickable () {
+  setTableClickable (pType) {
     // this function is only called when the table is clickable
+    // pType is "cmd" or "page"
     this.table.classList.add("highlight-rows");
+    if (!this.table.tHead) {
+      return;
+    }
+    const tr = this.table.tHead.children[0];
+    const nrColumns = tr.children.length;
+    const th = tr.children[nrColumns - 1];
+    th.innerHTML = "<span id='tableinfo' style='float:right'>" + Character.CIRCLED_INFORMATION_SOURCE + "</span>" + th.innerHTML;
+    const tableinfo = this.table.querySelector("#tableinfo");
+    switch (pType) {
+    case "cmd":
+      Utils.addToolTip (tableinfo, "Click row to show Manual Run for that row", "bottom-right");
+      break;
+    case "page":
+      Utils.addToolTip (tableinfo, "Click row to navigate to details page\nCTRL-click to open in a new tab and stay here\nALT-click to open in a new tab and go to it", "bottom-right");
+      break;
+    default:
+    }
   }
 
   setTableSortable (pColumnName, pDirection = "asc") {

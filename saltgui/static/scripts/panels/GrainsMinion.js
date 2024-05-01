@@ -23,7 +23,7 @@ export class GrainsMinionPanel extends Panel {
     this.addWarningField();
     this.addTable(["Name", "-menu-", "Value"]);
     this.setTableSortable("Name", "asc");
-    this.setTableClickable();
+    this.setTableClickable("cmd");
     this.addMsg();
   }
 
