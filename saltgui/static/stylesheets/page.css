@@ -321,9 +321,6 @@ table tr td:last-of-type {
   color: yellow;
 }
 
-.taskcircle.task-changes {
-}
-
 @media print {
   .no-print,
   .no-print * {
