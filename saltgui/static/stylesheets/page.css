@@ -173,6 +173,10 @@ table thead th {
   border-bottom: 2px solid #ddd;
 }
 
+table tr th:last-child {
+  padding-right: 0;
+}
+
 table tr td:last-child {
   width: 100%;
 }

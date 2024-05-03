@@ -234,8 +234,16 @@ export class Panel {
     const tr = this.table.tHead.children[0];
     const nrColumns = tr.children.length;
     const th = tr.children[nrColumns - 1];
-    th.innerHTML = "<span id='tableinfo' style='float:right'>" + Character.CIRCLED_INFORMATION_SOURCE + "</span>" + th.innerHTML;
-    const tableinfo = this.table.querySelector("#tableinfo");
+    const tableinfo = Utils.createSpan(
+      ["small-button", "small-button-right", "small-button-for-hover", "no-print"],
+      Character.BLACK_QUESTION_MARK_ORNAMENT);
+    tableinfo.style.minWidth = "inherit";
+    tableinfo.style.fontWeight = "normal";
+    tableinfo.style.padding = "0";
+    tableinfo.style.cursor = "help";
+    tableinfo.style.fontSize = "14px";
+    tableinfo.style.height = "inherit";
+    th.append(tableinfo);
     switch (pType) {
     case "cmd":
       Utils.addToolTip (tableinfo, "Click row to show Manual Run for that row", "bottom-right");
