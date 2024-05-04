@@ -64,10 +64,10 @@ export class Router {
     this._registerRouterEventListeners();
 
     const logo = document.getElementById("logo");
-    Utils.addToolTip(logo, "CTRL-click to see\nOptions and Stats", "logo");
+    Utils.addToolTip(logo, "CTRL-click here to see\nOptions and Stats", "logo");
 
     const fab = document.querySelector(".fab");
-    Utils.addToolTip(fab, "Type 'c' to show\nmanual run", "fab");
+    Utils.addToolTip(fab, "Click here or type 'c'\nto show manual run", "fab");
 
     Router.updateMainMenu();
 
