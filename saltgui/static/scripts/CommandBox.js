@@ -621,6 +621,20 @@ export class CommandBox {
     return this.api.apiRequest("POST", "/", params);
   }
 
+  static _createNewMinionRow (pMinionId) {
+    const div = Utils.createDiv("task-summary");
+    div.id = "run-" + Utils.getIdFromMinionId(pMinionId);
+    div.style.marginTop = 0;
+
+    const minionSpan1 = Utils.createSpan("", pMinionId);
+    div.appendChild(minionSpan1);
+
+    const minionSpan2 = Utils.createSpan("", ": " + Character.HOURGLASS_WITH_FLOWING_SAND + " ");
+    div.appendChild(minionSpan2);
+
+    return div;
+  }
+
   static handleSaltJobRetEvent (pTag, pData) {
     // salt/job/20201105221605666661/ret/ss04
     // {"jid": "20201105221605666661", "id": "ss04", "return": {"no_|-states_|-states_|-None": {"result": false, "comment": "No Top file or master_tops data matches found. Please see master log for details.", "name": "No States", "changes": {}, "__run_num__": 0}}, "retcode": 2, "success": false, "fun": "state.apply", "fun_args": null, "out": "highstate", "_stamp": "2020-11-05T22:16:06.377513"}
@@ -641,16 +655,8 @@ export class CommandBox {
     const id = "run-" + Utils.getIdFromMinionId(eventMinionId);
     let div = document.getElementById(id);
     if (div === null) {
-      div = Utils.createDiv();
-      div.id = "run-" + Utils.getIdFromMinionId(eventMinionId);
-      div.style.marginTop = 0;
-
-      const minionSpan1 = Utils.createSpan("", eventMinionId);
-      div.appendChild(minionSpan1);
-
-      const minionSpan2 = Utils.createSpan("", ": " + Character.HOURGLASS_WITH_FLOWING_SAND + " ");
-      div.appendChild(minionSpan2);
-
+      // for results from unexpected minions
+      div = CommandBox._createNewMinionRow(eventMinionId);
       const output = document.querySelector(".run-command pre");
       output.appendChild(div);
     }
@@ -693,10 +699,12 @@ export class CommandBox {
     const task = pData.data.ret;
 
     const divId = "run-" + Utils.getIdFromMinionId(eventMinionId);
-    const div = document.getElementById(divId);
+    let div = document.getElementById(divId);
     if (div === null) {
-      Utils.log("div=null, minion=" + eventMinionId);
-      return;
+      // for results from unexpected minions
+      div = CommandBox._createNewMinionRow(eventMinionId);
+      const output = document.querySelector(".run-command pre");
+      output.appendChild(div);
     }
 
     // make sure there is a black circle for the current event
@@ -712,7 +720,7 @@ export class CommandBox {
   static _prepareForAsyncResults (pResponse) {
     const ret = pResponse.return[0];
     CommandBox.jid = ret.jid;
-    CommandBox.minionIds = ret.minions;
+    CommandBox.minionIds = ret.minions.sort();
 
     const output = document.querySelector(".run-command pre");
 
@@ -737,17 +745,8 @@ export class CommandBox {
 
     // add new minions list to track progress of this state command
     for (const minionId of CommandBox.minionIds) {
-      const minionDiv = Utils.createDiv("task-summary");
-      minionDiv.id = "run-" + Utils.getIdFromMinionId(minionId);
-      minionDiv.style.marginTop = 0;
-
-      const minionSpan1 = Utils.createSpan("host-unknown", minionId);
-      minionDiv.appendChild(minionSpan1);
-
-      const minionSpan2 = Utils.createSpan("", ": " + Character.HOURGLASS_WITH_FLOWING_SAND + " ");
-      minionDiv.appendChild(minionSpan2);
-
-      output.appendChild(minionDiv);
+      const div = CommandBox._createNewMinionRow(minionId);
+      output.appendChild(div);
     }
 
     const warnSpan = Utils.createSpan(
