@@ -336,7 +336,7 @@ export class Output {
     return false;
   }
 
-  static _getTaskNrChanges (pTask) {
+  static getTaskNrChanges (pTask) {
     if (!pTask.changes) {
       return 0;
     }
@@ -393,24 +393,21 @@ export class Output {
   }
 
   static getTaskClass (pTask) {
+    let className;
+
     if (pTask.result === null) {
-      return "task-skipped";
+      className = "task-skipped";
+    } else if (pTask.result === false) {
+      className = "task-failure";
+    } else {
+      className = "task-success";
     }
-    if (pTask.result === false) {
-      return "task-failure";
+
+    if (Output.getTaskNrChanges(pTask) > 0) {
+      className += "-changes";
     }
-    if (Array.isArray(pTask.changes)) {
-      return pTask.changes.length ? "task-changes" : "task-success";
-    }
-    if (typeof pTask.changes !== "object") {
-      // pretend 1 change
-      return "task-changes";
-    }
-    if (Object.keys(pTask.changes).length === 0) {
-      // empty changes object does not count as real change
-      return "task-success";
-    }
-    return "task-changes";
+
+    return className;
   }
 
   static _setTaskToolTip (pSpan, pTask) {

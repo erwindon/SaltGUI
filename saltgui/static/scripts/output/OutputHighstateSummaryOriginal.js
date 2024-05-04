@@ -28,7 +28,7 @@ export class OutputHighstateSummaryOriginal {
       pDiv.append(oSpan);
 
       txt = "changed=" + pChangesSummary;
-      const changedSpan = Utils.createSpan("task-changes", txt);
+      const changedSpan = Utils.createSpan("task-success-changes", txt);
       pDiv.append(changedSpan);
 
       txt = ")";

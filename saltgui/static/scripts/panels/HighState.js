@@ -428,7 +428,7 @@ export class HighStatePanel extends Panel {
         // we may use it for presentation (keys.length <= this._maxHighstateStates); or
         // for information (keys.length > this._maxHighstateStates)
 
-        const span = Utils.createSpan("task", Character.BLACK_CIRCLE);
+        const span = Utils.createSpan("task");
         span.style.backgroundColor = "black";
 
         // this also sets the span's class(es)
@@ -438,32 +438,38 @@ export class HighStatePanel extends Panel {
         span.classList.add("task");
 
         if (keys.length > this._maxHighstateStates) {
-          let statKey = "";
-          let prio = 0;
+          const taskClass = Output.getTaskClass(data);
+          const taskChar = Output.getTaskCharacter(data);
 
-          // statkeys are sortable on their priority
-          if (span.classList.contains("task-skipped")) {
-            statKey = "task-skipped";
-            prio = 31;
-          } else if (span.classList.contains("task-success")) {
-            statKey = "task-success";
-            prio = 41;
-          } else if (span.classList.contains("task-failure")) {
-            statKey = "task-failure";
-            prio = 21;
-          } else {
-            statKey = "task-unknown";
-            prio = 11;
-          }
+          // priority must always be a 2-digit value (i.e. 10..99)
+          let priority;
 
-          if (span.classList.contains("task-changes")) {
-            prio -= 1;
-            statKey += " task-changes";
-            span.innerText = Character.BLACK_DIAMOND;
+          // taskClass is to be sorted on its priority (low to high)
+          switch (taskClass) {
+          case "task-success":
+            priority = 41;
+            break;
+          case "task-success-changes":
+            priority = 40;
+            break;
+          case "task-skipped":
+            priority = 31;
+            break;
+          case "task-skipped-changes":
+            priority = 30;
+            break;
+          case "task-failure":
+            priority = 21;
+            break;
+          case "task-failure-changes":
+            priority = 20;
+            break;
+          default:
+            priority = 11;
           }
 
           // allow keys to be sortable
-          statKey = prio + statKey;
+          const statKey = priority + taskClass + taskChar;
 
           if (statKey in stats) {
             stats[statKey] += 1;
@@ -491,18 +497,17 @@ export class HighStatePanel extends Panel {
 
         // show the summary when one was build up
         for (const statKey of Object.keys(stats).sort()) {
+          const character = statKey.substring(statKey.length - 1);
+          const className = statKey.substring(2, statKey.length - 1);
           const sepSpan = Utils.createSpan("", sep + stats[statKey] + Character.MULTIPLICATION_SIGN);
           summarySpan.append(sepSpan);
           sep = " ";
 
           // remove the priority indicator from the key
-          const itemSpan = Utils.createSpan(["tasksummary", "taskcircle"], Character.BLACK_CIRCLE);
-          itemSpan.classList.add(...statKey.substring(2).split(" "));
-          if(itemSpan.classList.contains("task-changes")) {
-            itemSpan.innerText = Character.BLACK_DIAMOND;
-          }
+          const itemSpan = Utils.createSpan(["tasksummary", className], character);
           itemSpan.style.backgroundColor = "black";
           summarySpan.append(itemSpan);
+          Utils.addToolTip(itemSpan, className.replace("task-", "").replace("-", " with "));
         }
 
         // allow similar navigation, but just only to the job level

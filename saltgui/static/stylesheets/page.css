@@ -73,15 +73,6 @@ td.tasks span.tasksummary {
   padding-right: 2px;
 }
 
-td .task-failure {
-  color: red;
-}
-
-pre .task-failure {
-  cursor: pointer;
-  color: red;
-}
-
 pre .minion-id.host-skips,
 pre #summary-jobs-active .host-skips,
 pre .minion-id.host-no-response,
@@ -89,34 +80,8 @@ pre #summary-jobs-active .host-no-response {
   color: yellow;
 }
 
-td .task-skipped {
-  color: yellow;
-}
-
-pre .task-skipped {
-  cursor: pointer;
-  color: yellow;
-}
-
 pre .minion-id {
   color: #4caf50;
-}
-
-td .task-success {
-  color: lime;
-}
-
-pre .task-success {
-  cursor: pointer;
-  color: lime;
-}
-
-td .task-changes {
-  color: aqua;
-}
-
-pre .task-changes {
-  color: aqua;
 }
 
 .task-summary {
@@ -311,18 +276,33 @@ table tr td:last-of-type {
   }
 }
 
-/* taskcircle */
+/* tasks */
 
-.taskcircle.task-success {
+.task-success {
   color: lime;
 }
 
-.taskcircle.task-failure {
+.task-success-changes {
+  color: aqua;
+}
+
+.task-failure,
+.task-failure-changes {
   color: red;
 }
 
-.taskcircle.task-skipped {
+.task-skipped,
+.task-skipped-changes {
   color: yellow;
+}
+
+pre .task-success,
+pre .task-success-changes,
+pre .task-skipped,
+pre .task-skipped-changes,
+pre .task-failure,
+pre .task-failure-changes {
+  cursor: pointer;
 }
 
 @media print {
