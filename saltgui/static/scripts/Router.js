@@ -64,7 +64,7 @@ export class Router {
     this._registerRouterEventListeners();
 
     const logo = document.getElementById("logo");
-    Utils.addToolTip(logo, "ctrl-click to see\nOptions and Stats", "logo");
+    Utils.addToolTip(logo, "CTRL-click to see\nOptions and Stats", "logo");
 
     const fab = document.querySelector(".fab");
     Utils.addToolTip(fab, "Type 'c' to show\nmanual run", "fab");
