@@ -1,7 +1,6 @@
 /* global */
 
 import {Character} from "../Character.js";
-import {DropDownMenu} from "../DropDown.js";
 import {JobPanel} from "./Job.js";
 import {JobsPanel} from "./Jobs.js";
 import {Output} from "../output/Output.js";
@@ -36,7 +35,7 @@ export class HighStatePanel extends Panel {
       "Click on an individual state to re-apply only that state."
     ]);
     this.addWarningField();
-    this.addTable(["Minion", "State", "Latest JID", "Target", "Function", "Start Time", "-menu-", "States"]);
+    this.addTable(["-menu-", "Minion", "State", "Latest JID", "Target", "Function", "Start Time", "States"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable("cmd");
     this.addMsg();
@@ -138,14 +137,11 @@ export class HighStatePanel extends Panel {
     this.nrUnaccepted = keys.minions_pre.length;
 
     for (const minionId of minionIds) {
-      const minionTr = this.addMinion(minionId, 2);
+      const minionTr = this.addMinion(minionId);
 
       // preliminary dropdown menu
-      const menu = new DropDownMenu(minionTr, true);
-      this._addMenuItemStateApply(menu, minionId);
-      this._addMenuItemStateApplyTest(menu, minionId);
-
-      minionTr.appendChild(Utils.createTd());
+      this._addMenuItemStateApply(minionTr.dropdownmenu, minionId);
+      this._addMenuItemStateApplyTest(minionTr.dropdownmenu, minionId);
 
       minionTr.addEventListener("click", (pClickEvent) => {
         const functionField = minionTr.querySelector(".function");
@@ -402,10 +398,9 @@ export class HighStatePanel extends Panel {
       startTimeTd.appendChild(startTimeSpan);
       minionTr.appendChild(startTimeTd);
 
-      const menu = new DropDownMenu(minionTr, true);
-      this._addMenuItemStateApply(menu, minionId);
-      this._addMenuItemStateApplyTest(menu, minionId);
-      this._addJobsMenuItemShowDetails(menu, jobData, minionId);
+      this._addMenuItemStateApply(minionTr.dropdownmenu, minionId);
+      this._addMenuItemStateApplyTest(minionTr.dropdownmenu, minionId);
+      this._addJobsMenuItemShowDetails(minionTr.dropdownmenu, jobData, minionId);
 
       const minionResult = jobData.Result[minionId];
       const tasksTd = Utils.createTd("tasks");

@@ -1,6 +1,5 @@
 /* global */
 
-import {DropDownMenu} from "../DropDown.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
 
@@ -11,7 +10,7 @@ export class SchedulesPanel extends Panel {
 
     this.addTitle("Schedules");
     this.addSearchButton();
-    this.addTable(["Minion", "Status", "Schedules", "-menu-"]);
+    this.addTable(["-menu-", "Minion", "Status", "Schedules"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable("page");
     this.addMsg();
@@ -86,11 +85,10 @@ export class SchedulesPanel extends Panel {
 
     const minionIds = keys.minions.sort();
     for (const minionId of minionIds) {
-      const minionTr = this.addMinion(minionId, 1);
+      const minionTr = this.addMinion(minionId);
 
       // preliminary dropdown menu
-      const menu = new DropDownMenu(minionTr, true);
-      this._addMenuItemShowSchedules(menu, minionId);
+      this._addMenuItemShowSchedules(minionTr.dropdownmenu, minionId);
 
       minionTr.addEventListener("click", (pClickEvent) => {
         this.router.goTo("schedules-minion", {"minionid": minionId}, undefined, pClickEvent);
@@ -146,8 +144,7 @@ export class SchedulesPanel extends Panel {
     minionTr.appendChild(td);
 
     // final dropdownmenu
-    const menu = new DropDownMenu(minionTr, true);
-    this._addMenuItemShowSchedules(menu, pMinionId);
+    this._addMenuItemShowSchedules(minionTr.dropdownmenu, pMinionId);
   }
 
   _addMenuItemShowSchedules (pMenu, pMinionId) {

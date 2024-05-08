@@ -1,6 +1,5 @@
 /* global */
 
-import {DropDownMenu} from "../DropDown.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
 
@@ -12,7 +11,7 @@ export class PillarsPanel extends Panel {
     this.addTitle("Pillars");
     this.addSearchButton();
     this.addWarningField();
-    this.addTable(["Minion", "Status", "Pillars", "-menu-"]);
+    this.addTable(["-menu-", "Minion", "Status", "Pillars"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable("page");
     this.addMsg();
@@ -56,11 +55,10 @@ export class PillarsPanel extends Panel {
 
     const minionIds = keys.minions.sort();
     for (const minionId of minionIds) {
-      const minionTr = this.addMinion(minionId, 1);
+      const minionTr = this.addMinion(minionId);
 
       // preliminary dropdown menu
-      const menu = new DropDownMenu(minionTr, true);
-      this._addMenuItemShowPillars(menu, minionId);
+      this._addMenuItemShowPillars(minionTr.dropdownmenu, minionId);
 
       minionTr.addEventListener("click", (pClickEvent) => {
         this.router.goTo("pillars-minion", {"minionid": minionId}, undefined, pClickEvent);
@@ -103,8 +101,7 @@ export class PillarsPanel extends Panel {
     }
     minionTr.appendChild(pillarInfoTd);
 
-    const menu = new DropDownMenu(minionTr, true);
-    this._addMenuItemShowPillars(menu, pMinionId);
+    this._addMenuItemShowPillars(minionTr.dropdownmenu, pMinionId);
   }
 
   _addMenuItemShowPillars (pMenu, pMinionId) {

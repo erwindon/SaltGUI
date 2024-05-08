@@ -38,7 +38,7 @@ export class JobsDetailsPanel extends JobsPanel {
       "It is possible to define exceptions on that, and also to define additions to that.",
       "See README.md for more details."
     ]);
-    this.addTable(["JID", "Target", "Function", "Start Time", "-menu-", "Status", "Details"], "data-list-jobs");
+    this.addTable(["-menu-", "JID", "Target", "Function", "Start Time", "Status", "Details"], "data-list-jobs");
     this.setTableSortable("JID", "desc");
     this.setTableClickable("page");
     this.addMsg();
@@ -176,7 +176,7 @@ export class JobsDetailsPanel extends JobsPanel {
 
       if (this.nrErrors >= 3) {
         // don't bother getting more data
-        // may show more then 3 errors when some are stil in-flight
+        // may show more then 3 errors when some are still in-flight
         this._handleJobsRunnerJobsListJob(jobId, "skipped");
         continue;
       }
@@ -336,6 +336,9 @@ export class JobsDetailsPanel extends JobsPanel {
     const tr = Utils.createTr();
     tr.id = Utils.getIdFromJobId(job.id);
     tr.dataset.jobid = job.id;
+
+    const menu = new DropDownMenu(tr, true);
+
     tr.appendChild(Utils.createTd("", job.id));
 
     let targetText = TargetType.makeTargetText(job);
@@ -360,7 +363,6 @@ export class JobsDetailsPanel extends JobsPanel {
     startTimeTd.appendChild(startTimeSpan);
     tr.appendChild(startTimeTd);
 
-    const menu = new DropDownMenu(tr, true);
     this._addJobsMenuItemShowDetails(menu, job);
     this._addMenuItemJobsRerunJob(menu, job, argumentsText);
 
