@@ -95,7 +95,7 @@ export class SchedulesMinionPanel extends Panel {
 
       const tr = Utils.createTr();
 
-      const scheduleMenu = new DropDownMenu(tr, true);
+      const scheduleMenu = new DropDownMenu(tr, "smaller");
 
       const nameTd = Utils.createTd("schedule-name", scheduleName);
       tr.appendChild(nameTd);

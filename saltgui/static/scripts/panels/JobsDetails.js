@@ -337,7 +337,7 @@ export class JobsDetailsPanel extends JobsPanel {
     tr.id = Utils.getIdFromJobId(job.id);
     tr.dataset.jobid = job.id;
 
-    const menu = new DropDownMenu(tr, true);
+    const menu = new DropDownMenu(tr, "smaller");
 
     tr.appendChild(Utils.createTd("", job.id));
 

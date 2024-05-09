@@ -394,7 +394,7 @@ export class Panel {
 
     // drop down menu
     const menuTd = Utils.createTd();
-    const menu = new DropDownMenu(menuTd, true);
+    const menu = new DropDownMenu(menuTd, "smaller");
     minionTr.dropdownmenu = menu;
     minionTr.appendChild(menuTd);
 
@@ -434,7 +434,7 @@ export class Panel {
 
     // drop down menu
     const menuTd = Utils.createTd();
-    const menu = new DropDownMenu(menuTd, true);
+    const menu = new DropDownMenu(menuTd, "smaller");
     minionTr.dropdownmenu = menu;
     minionTr.appendChild(menuTd);
 

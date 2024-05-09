@@ -113,7 +113,7 @@ export class TemplatesPanel extends Panel {
   _addTemplate (pTemplateName, template) {
     const tr = Utils.createTr();
 
-    const menu = new DropDownMenu(tr, true);
+    const menu = new DropDownMenu(tr, "smaller");
 
     tr.appendChild(Utils.createTd("name", pTemplateName));
 

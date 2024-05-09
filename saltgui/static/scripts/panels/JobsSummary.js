@@ -37,7 +37,7 @@ export class JobsSummaryPanel extends JobsPanel {
     tr.id = Utils.getIdFromJobId(job.id);
 
     // menu on left side to prevent it from going past end of window
-    const menu = new DropDownMenu(tr, true);
+    const menu = new DropDownMenu(tr, "smaller");
 
     const td = Utils.createTd();
 
