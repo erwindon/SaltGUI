@@ -19,6 +19,7 @@ export class JobPanel extends Panel {
     }
     this.addPanelMenu();
     this.addSearchButton();
+    this.addPlayPauseButton();
 
     // 1: re-run with original target pattern
     this._addPanelMenuItemJobRerunJob();
@@ -57,6 +58,21 @@ export class JobPanel extends Panel {
     this.div.append(this.output);
   }
 
+  _scheduleRefreshJob () {
+    const jobsActiveSpan = document.getElementById("summary-jobs-active");
+    if (jobsActiveSpan && jobsActiveSpan.innerText === "done") {
+console.log("DONE");
+      // no updates after "done"
+      return;
+    }
+
+console.log("scheduling onShow in 5s");
+    window.setTimeout(() => {
+console.log("running onShow");
+      this.onShow();
+    }, 5000);
+  }
+
   onShow () {
     const jobId = decodeURIComponent(Utils.getQueryParam("id"));
     const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
@@ -70,6 +86,7 @@ export class JobPanel extends Panel {
       this._handleJobRunnerJobsListJob(pRunnerJobsListJobData, jobId, minionId);
       runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         this._handleRunnerJobsActive(jobId, pRunnerJobsActiveData);
+        this._scheduleRefreshJob();
         return true;
       }, (pRunnerJobsActiveMsg) => {
         this._handleRunnerJobsActive(jobId, JSON.stringify(pRunnerJobsActiveMsg));
