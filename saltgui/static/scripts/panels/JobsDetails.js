@@ -74,7 +74,9 @@ export class JobsDetailsPanel extends JobsPanel {
     // to update details
     // interval should be larger than the retrieval time
     // to prevent many of such jobs to appear
+console.log("set panels/JobsDetails", "setInterval " + LOADING_INTERVAL_IN_MS);
     this.updateNextJobInterval = window.setInterval(() => {
+console.log("handle panels/JobsDetails", "setInterval "+ LOADING_INTERVAL_IN_MS);
       this._updateNextJob();
     }, LOADING_INTERVAL_IN_MS);
   }

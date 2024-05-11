@@ -43,7 +43,9 @@ export class NodegroupsPanel extends Panel {
 
       localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
         this.updateMinions(pLocalGrainsItemsData);
+console.log("set panels/Nodegroups1", "setTimeout 100");
         window.setTimeout(() => {
+console.log("handle panels/Nodegroups1", "setTimeout 100");
           this._handleStep(pWheelKeyListAllData.return[0].data.return);
         }, 100);
         return true;
@@ -225,7 +227,9 @@ export class NodegroupsPanel extends Panel {
       titleElement.innerHTML = titleElement.innerHTML.replace("(loading)", txt);
 
       // try again for more
+console.log("set panels/Nodegroups2", "setTimeout 100");
       window.setTimeout(() => {
+console.log("handle panels/Nodegroups2", "setTimeout 100");
         this._handleStep(pWheelKeyListAllSimpleData);
       }, 100);
     }, (pLocalTestVersionMsg) => {
@@ -274,7 +278,9 @@ export class NodegroupsPanel extends Panel {
     // system can decide to remove the play/pause button
     if (this.playOrPause !== "play") {
       // try again lkater for more
+console.log("set panels/Nodegroups3", "setTimeout 100");
       window.setTimeout(() => {
+console.log("handle panels/Nodegroups3", "setTimeout 100");
         this._handleStep(pWheelKeyListAllSimpleData);
       }, 100);
       return;

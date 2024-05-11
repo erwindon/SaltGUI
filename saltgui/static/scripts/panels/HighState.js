@@ -205,7 +205,9 @@ export class HighStatePanel extends Panel {
       this._handleJob(job);
     }
 
+console.log("set panels/Highstate", "setTimeout 1000");
     window.setTimeout(() => {
+console.log("handle panels/Highstate", "setTimeout 1000");
       this._updateNextJob();
     }, 1000);
   }
