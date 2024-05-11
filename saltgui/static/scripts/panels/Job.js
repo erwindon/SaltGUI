@@ -475,7 +475,7 @@ export class JobPanel extends Panel {
       return "Signal job...";
     }, () => {
       const cmdArr = ["saltutil.signal_job", this.jobid, "signal=", "<signalnumber>"];
-      this.runCommand(this.targettype, this.target, cmdArr);
+      this.runCommand(this.targettype, this.target, cmdArr, "signal");
     });
   }
 
@@ -540,7 +540,7 @@ export class JobPanel extends Panel {
         });
         menu.addMenuItem("Signal process...", () => {
           const cmdArr = ["ps.kill_pid", pid, "signal=", "<signalnumber>"];
-          this.runCommand("", minionId, cmdArr);
+          this.runCommand("", minionId, cmdArr, "signal");
         });
 
         noResponseSpan.classList.remove("noresponse");

@@ -351,7 +351,7 @@ export class CommandBox {
       return;
     }
 
-    const func = this.getRunParams(targetType, targetValue, commandValue);
+    const func = this.getRunParams(targetType, targetValue, commandValue, pExtraInfo);
     if (func === null) {
       return;
     }
@@ -503,7 +503,7 @@ export class CommandBox {
     CommandBox.onRunReturn("ERROR:\n\n" + pMessage, "");
   }
 
-  getRunParams (pTargetType, pTarget, pToRun, pisRunTypeNormalOnly = false, pCanUseFullReturn = true) {
+  getRunParams (pTargetType, pTarget, pToRun, pisRunTypeNormalOnly = false, pCanUseFullReturn = true, pExtraHelp) {
 
     // The leading # was used to indicate a nodegroup
     if (pTargetType === "nodegroup" && pTarget.startsWith("#")) {
@@ -521,7 +521,7 @@ export class CommandBox {
     // collection for named parameters
     const argsObject = {};
 
-    const ret = ParseCommandLine.parseCommandLine(pToRun, argsArray, argsObject);
+    const ret = ParseCommandLine.parseCommandLine(pToRun, argsArray, argsObject, pExtraHelp);
     if (ret !== null) {
       // that is an error message being returned
       CommandBox._showError(ret);

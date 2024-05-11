@@ -76,14 +76,14 @@ export class Issues {
     Utils.addToolTip(desc, pErrorMsg);
   }
 
-  static addIssueCmd (pTr, pTitle, pTarget, pCommand) {
+  static addIssueCmd (pTr, pTitle, pTarget, pCommand, pExtraHelp) {
     pTr.menu.addMenuItem(pTitle + "...", () => {
-      pTr.panel.runCommand("", pTarget, pCommand);
+      pTr.panel.runCommand("", pTarget, pCommand, pExtraHelp);
     });
 
     if (pTr.hasClick !== true) {
       pTr.addEventListener("click", (pClickEvent) => {
-        pTr.panel.runCommand("", pTarget, pCommand);
+        pTr.panel.runCommand("", pTarget, pCommand, pExtraHelp);
         pClickEvent.stopPropagation();
       });
     }

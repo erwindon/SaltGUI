@@ -30,7 +30,7 @@ export class ParseCommandLine {
     return argsArray[0];
   }
 
-  static parseCommandLine (pToRun, pArgsArray, pArgsObject) {
+  static parseCommandLine (pToRun, pArgsArray, pArgsObject, pExtraInfo) {
 
     const patPlaceHolder = /^<[a-z]+>/;
 
@@ -67,7 +67,8 @@ export class ParseCommandLine {
 
       if (patPlaceHolder.test(pToRun)) {
         const placeHolder = pToRun.replace(/>.*/, ">");
-        return "Must fill in all placeholders, e.g. " + placeHolder;
+console.trace();
+        return "Must fill in all placeholders (or remove them when possible), e.g. " + placeHolder + pExtraInfo;
       }
 
       // Determine whether the JSON string starts with a known

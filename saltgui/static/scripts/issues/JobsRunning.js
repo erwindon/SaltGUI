@@ -51,7 +51,7 @@ export class JobsRunningIssues extends Issues {
       Issues.addIssueNav(tr, "job", {"id": jobId});
       Issues.addIssueCmd(tr, "Terminate job", "*", ["saltutil.term_job", jobId]);
       Issues.addIssueCmd(tr, "Kill job", "*", ["saltutil.kill_job", jobId]);
-      Issues.addIssueCmd(tr, "Signal job", "*", ["saltutil.signal_job", jobId, "signal=", "<signalnumber>"]);
+      Issues.addIssueCmd(tr, "Signal job", "*", ["saltutil.signal_job", jobId, "signal=", "<signalnumber>"], "signal");
     }
   }
 }
