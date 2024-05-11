@@ -171,7 +171,7 @@ export class SchedulesMinionPanel extends Panel {
         "hours=", "<hours>",
         "days=", "<days>"
       ];
-      this.runCommand("", minionId, cmdArr);
+      this.runCommand("", minionId, cmdArr, "schedule-interval");
     });
   }
 
@@ -184,7 +184,7 @@ export class SchedulesMinionPanel extends Panel {
         "function=", "<function>",
         "cron=", "*/15 * * * *"
       ];
-      this.runCommand("", minionId, cmdArr);
+      this.runCommand("", minionId, cmdArr, "schedule-cron");
     });
   }
 
@@ -199,7 +199,7 @@ export class SchedulesMinionPanel extends Panel {
           replace(/[.].*/, ""),
         "once_format=", "%Y-%m-%dT%H:%M:%S"
       ];
-      this.runCommand("", minionId, cmdArr);
+      this.runCommand("", minionId, cmdArr, "schedule-once");
     });
   }
 
