@@ -826,7 +826,7 @@ export class Panel {
     return commandString;
   }
 
-  runCommand (pTargetType, pTargetString, pCommandString) {
+  runCommand (pTargetType, pTargetString, pCommandString, pExtraHelp) {
     if (typeof pCommandString !== "string") {
       // assume it is an array
       pCommandString = Panel.makeCommandString(pCommandString);
