@@ -392,6 +392,12 @@ export class Panel {
     minionTr.id = Utils.getIdFromMinionId(pMinionId);
     minionTr.dataset.minionId = pMinionId;
 
+    // drop down menu
+    const menuTd = Utils.createTd();
+    const menu = new DropDownMenu(menuTd, true);
+    minionTr.dropdownmenu = menu;
+    minionTr.appendChild(menuTd);
+
     minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 
     const minionTd = Utils.createTd(["status", "accepted"], "accepted");
@@ -425,6 +431,12 @@ export class Panel {
     while (minionTr.firstChild) {
       minionTr.removeChild(minionTr.firstChild);
     }
+
+    // drop down menu
+    const menuTd = Utils.createTd();
+    const menu = new DropDownMenu(menuTd, true);
+    minionTr.dropdownmenu = menu;
+    minionTr.appendChild(menuTd);
 
     return minionTr;
   }

@@ -1,7 +1,6 @@
 /* global */
 
 import {Character} from "../Character.js";
-import {DropDownMenu} from "../DropDown.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
 
@@ -23,7 +22,7 @@ export class MinionsPanel extends Panel {
     this._addMenuItemStateApplyTest(this.panelMenu, "*");
     this.addSearchButton();
     this.addWarningField();
-    this.addTable(["Minion", "Status", "Salt version", "OS version", "-menu-"]);
+    this.addTable(["-menu-", "Minion", "Status", "Salt version", "OS version"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable("cmd");
     this.addMsg();
@@ -91,16 +90,15 @@ export class MinionsPanel extends Panel {
 
     const minionIds = keys.minions.sort();
     for (const minionId of minionIds) {
-      const minionTr = this.addMinion(minionId, 1);
+      const minionTr = this.addMinion(minionId);
 
       // preliminary dropdown menu
-      const menu = new DropDownMenu(minionTr, true);
-      this._addMenuItemStateApply(menu, minionId);
-      this._addMenuItemStateApplyTest(menu, minionId);
-      this._addMenuItemShowGrains(menu, minionId);
-      this._addMenuItemShowPillars(menu, minionId);
-      this._addMenuItemShowSchedules(menu, minionId);
-      this._addMenuItemShowBeacons(menu, minionId);
+      this._addMenuItemStateApply(minionTr.dropdownmenu, minionId);
+      this._addMenuItemStateApplyTest(minionTr.dropdownmenu, minionId);
+      this._addMenuItemShowGrains(minionTr.dropdownmenu, minionId);
+      this._addMenuItemShowPillars(minionTr.dropdownmenu, minionId);
+      this._addMenuItemShowSchedules(minionTr.dropdownmenu, minionId);
+      this._addMenuItemShowBeacons(minionTr.dropdownmenu, minionId);
     }
 
     this.updateFooter();
@@ -190,13 +188,12 @@ export class MinionsPanel extends Panel {
     super.updateMinion(pMinionData, pMinionId, pAllMinionsGrains);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
-    const menu = new DropDownMenu(minionTr, true);
-    this._addMenuItemStateApply(menu, pMinionId);
-    this._addMenuItemStateApplyTest(menu, pMinionId);
-    this._addMenuItemShowGrains(menu, pMinionId);
-    this._addMenuItemShowPillars(menu, pMinionId);
-    this._addMenuItemShowSchedules(menu, pMinionId);
-    this._addMenuItemShowBeacons(menu, pMinionId);
+    this._addMenuItemStateApply(minionTr.dropdownmenu, pMinionId);
+    this._addMenuItemStateApplyTest(minionTr.dropdownmenu, pMinionId);
+    this._addMenuItemShowGrains(minionTr.dropdownmenu, pMinionId);
+    this._addMenuItemShowPillars(minionTr.dropdownmenu, pMinionId);
+    this._addMenuItemShowSchedules(minionTr.dropdownmenu, pMinionId);
+    this._addMenuItemShowBeacons(minionTr.dropdownmenu, pMinionId);
 
     minionTr.addEventListener("click", (pClickEvent) => {
       const cmdArr = ["state.apply"];

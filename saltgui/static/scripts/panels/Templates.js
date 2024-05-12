@@ -12,7 +12,7 @@ export class TemplatesPanel extends Panel {
 
     this.addTitle("Templates");
     this.addSearchButton();
-    this.addTable(["Name", "Category", "Key", "Description", "Target", "Command", "-menu-"], "data-list-templates");
+    this.addTable(["-menu-", "Name", "Category", "Key", "Description", "Target", "Command"], "data-list-templates");
     this.setTableSortable("Name", "asc");
     this.setTableClickable("cmd");
     this.addMsg();
@@ -113,6 +113,8 @@ export class TemplatesPanel extends Panel {
   _addTemplate (pTemplateName, template) {
     const tr = Utils.createTr();
 
+    const menu = new DropDownMenu(tr, true);
+
     tr.appendChild(Utils.createTd("name", pTemplateName));
 
     const categories = TemplatesPanel.getTemplateCategories(template);
@@ -166,7 +168,6 @@ export class TemplatesPanel extends Panel {
       tr.appendChild(Utils.createTd("command value-none", "(none)"));
     }
 
-    const menu = new DropDownMenu(tr, true);
     this._addMenuItemApplyTemplate(menu, targetType, target, command);
 
     const tbody = this.table.tBodies[0];

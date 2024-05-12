@@ -1,7 +1,6 @@
 /* global */
 
 import {Character} from "../Character.js";
-import {DropDownMenu} from "../DropDown.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
 
@@ -28,7 +27,7 @@ export class KeysPanel extends Panel {
       "automatically refreshed."
     ]);
     this.addWarningField();
-    this.addTable(["Minion", "Status", "-menu-", "Fingerprint"], "data-list-keys");
+    this.addTable(["-menu-", "Minion", "Status", "Fingerprint"], "data-list-keys");
     this.setTableSortable("Status", "asc");
     this.addMsg();
 
@@ -255,7 +254,7 @@ export class KeysPanel extends Panel {
       }
     }
 
-    const minionIdTd = pMinionTr.querySelector("td");
+    const minionIdTd = pMinionTr.querySelectorAll("td")[1];
     const minionIdSpan = minionIdTd.querySelector("span");
 
     if (txt) {
@@ -399,12 +398,10 @@ export class KeysPanel extends Panel {
 
   _addDropDownMenu (pMinionTr, pMinionId, pStatusField) {
     // final dropdownmenu
-    const menu = new DropDownMenu(pMinionTr, true);
-    this._addMenuItemWheelKeyAccept1(menu, pMinionId, pStatusField);
-    this._addMenuItemWheelKeyReject(menu, pMinionId, pStatusField);
-    this._addMenuItemWheelKeyDelete(menu, pMinionId, pStatusField);
-    this._addMenuItemWheelKeyAccept2(menu, pMinionId, pStatusField);
-    pMinionTr.saltguidropdownmenu = menu;
+    this._addMenuItemWheelKeyAccept1(pMinionTr.dropdownmenu, pMinionId, pStatusField);
+    this._addMenuItemWheelKeyReject(pMinionTr.dropdownmenu, pMinionId, pStatusField);
+    this._addMenuItemWheelKeyDelete(pMinionTr.dropdownmenu, pMinionId, pStatusField);
+    this._addMenuItemWheelKeyAccept2(pMinionTr.dropdownmenu, pMinionId, pStatusField);
   }
 
   _addMenuItemWheelKeyAccept1 (pMenu, pMinionId, pStatusField) {
@@ -648,7 +645,7 @@ export class KeysPanel extends Panel {
       }
       // keep the fingerprint
       // update the menu because it may be in a hidden state
-      tr.saltguidropdownmenu.verifyAll();
+      tr.dropdownmenu.verifyAll();
       this.panelMenu.verifyAll();
     } else if (this.table.querySelector("tr") === null) {
       // only when the full list is already available

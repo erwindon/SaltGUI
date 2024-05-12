@@ -36,6 +36,9 @@ export class JobsSummaryPanel extends JobsPanel {
     const tr = Utils.createTr();
     tr.id = Utils.getIdFromJobId(job.id);
 
+    // menu on left side to prevent it from going past end of window
+    const menu = new DropDownMenu(tr, true);
+
     const td = Utils.createTd();
 
     let targetText = TargetType.makeTargetText(job);
@@ -70,7 +73,7 @@ export class JobsSummaryPanel extends JobsPanel {
 
     tr.appendChild(td);
 
-    const menu = new DropDownMenu(tr, true);
+    // complete the menu
     this._addMenuItemShowDetails(menu, job);
     this._addMenuItemUpdateStatus(menu, statusSpan);
 

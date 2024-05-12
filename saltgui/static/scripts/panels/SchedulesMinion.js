@@ -23,7 +23,7 @@ export class SchedulesMinionPanel extends Panel {
     if (Utils.getQueryParam("popup") !== "true") {
       this.addCloseButton();
     }
-    this.addTable(["Name", "-menu-", "Details"]);
+    this.addTable(["-menu-", "Name", "Details"]);
     this.setTableSortable("Name", "asc");
     this.setTableClickable("cmd");
     this.addMsg();
@@ -95,10 +95,11 @@ export class SchedulesMinionPanel extends Panel {
 
       const tr = Utils.createTr();
 
+      const scheduleMenu = new DropDownMenu(tr, true);
+
       const nameTd = Utils.createTd("schedule-name", scheduleName);
       tr.appendChild(nameTd);
 
-      const scheduleMenu = new DropDownMenu(tr, true);
       const scheduleModifyCmdArr = ["schedule.modify", scheduleName];
       for (const key in schedule) {
         const value = schedule[key];

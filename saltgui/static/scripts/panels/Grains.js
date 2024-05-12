@@ -1,6 +1,5 @@
 /* global jsonPath */
 
-import {DropDownMenu} from "../DropDown.js";
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
@@ -18,7 +17,7 @@ export class GrainsPanel extends Panel {
       "See README.md for more details."
     ]);
     this.addWarningField();
-    this.addTable(["Minion", "Status", "Salt version", "OS version", "Grains", "-menu-"]);
+    this.addTable(["-menu-", "Minion", "Status", "Salt version", "OS version", "Grains"]);
 
     // cannot initialize sorting before all columns are present
     // this.setTableSortable("Minion", "asc");
@@ -83,11 +82,10 @@ export class GrainsPanel extends Panel {
 
     const minionIds = keys.minions.sort();
     for (const minionId of minionIds) {
-      const minionTr = this.addMinion(minionId, 1 + this.previewGrains.length);
+      const minionTr = this.addMinion(minionId, this.previewGrains.length);
 
       // preliminary dropdown menu
-      const menu = new DropDownMenu(minionTr, true);
-      this._addMenuItemShowGrains(menu, minionId);
+      this._addMenuItemShowGrains(minionTr.dropdownmenu, minionId);
 
       for (let i = 0; i < this.previewGrains.length; i++) {
         minionTr.appendChild(Utils.createTd());
@@ -134,8 +132,7 @@ export class GrainsPanel extends Panel {
       minionTr.appendChild(grainInfoTd);
     }
 
-    const menu = new DropDownMenu(minionTr, true);
-    this._addMenuItemShowGrains(menu, pMinionId);
+    this._addMenuItemShowGrains(minionTr.dropdownmenu, pMinionId);
 
     // add the preview columns
     /* eslint-disable max-depth */

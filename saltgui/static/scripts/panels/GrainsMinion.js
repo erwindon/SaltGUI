@@ -21,7 +21,7 @@ export class GrainsMinionPanel extends Panel {
       this.addCloseButton();
     }
     this.addWarningField();
-    this.addTable(["Name", "-menu-", "Value"]);
+    this.addTable(["-menu-", "Name", "Value"]);
     this.setTableSortable("Name", "asc");
     this.setTableClickable("cmd");
     this.addMsg();
@@ -69,12 +69,13 @@ export class GrainsMinionPanel extends Panel {
     for (const grainName of grainNames) {
       const grainTr = Utils.createTr();
 
+      const grainMenu = new DropDownMenu(grainTr, true);
+
       const grainNameTd = Utils.createTd("grain-name", grainName);
       grainTr.appendChild(grainNameTd);
 
       const grainValue = Output.formatObject(grains[grainName]);
 
-      const grainMenu = new DropDownMenu(grainTr, true);
       this._addMenuItemGrainsSetValUpdate(grainMenu, pMinionId, grainName, grains);
       this._addMenuItemGrainsAppendWhenNeeded(grainMenu, pMinionId, grainName, grainValue);
       this._addMenuItemGrainsDelKey(grainMenu, pMinionId, grainName, grains[grainName]);

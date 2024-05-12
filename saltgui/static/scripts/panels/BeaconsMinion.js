@@ -30,7 +30,7 @@ export class BeaconsMinionPanel extends Panel {
       "Note that some beacons produce multiple values, e.g. one per disk.",
       "In that case, effectively only one of the values is visible here."
     ]);
-    this.addTable(["Name", "-menu-", "Config", "Timestamp", "Value", "-help-"]);
+    this.addTable(["-menu-", "Name", "Config", "Timestamp", "Value", "-help-"]);
     this.setTableSortable("Name", "asc");
     this.setTableClickable("cmd");
     this.addMsg();
@@ -141,6 +141,8 @@ export class BeaconsMinionPanel extends Panel {
     for (const beaconName of keys) {
       const tr = Utils.createTr("", "", "beacon-" + beaconName);
 
+      const beaconMenu = new DropDownMenu(tr, true);
+
       const nameTd = Utils.createTd("beacon-name", beaconName);
       tr.appendChild(nameTd);
 
@@ -154,7 +156,6 @@ export class BeaconsMinionPanel extends Panel {
         delete beacon.enabled;
       }
 
-      const beaconMenu = new DropDownMenu(tr, true);
       this._addMenuItemBeaconsDisableBeaconWhenNeeded(beaconMenu, pMinionId, beaconName, beacon);
       this._addMenuItemBeaconsEnableBeaconWhenNeeded(beaconMenu, pMinionId, beaconName, beacon);
       this._addMenuItemBeaconsDelete(beaconMenu, pMinionId, beaconName);
