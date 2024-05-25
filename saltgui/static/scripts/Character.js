@@ -25,13 +25,12 @@ export class Character {
     Character.WHITE_RIGHT_POINTING_TRIANGLE = "\u25B7";
     Character.BLACK_RIGHT_POINTING_POINTER = "\u25BA";
     Character.WHITE_DOWN_POINTING_TRIANGLE = "\u25BD";
-    Character.BLACK_CIRCLE_WITH_OUTLINE = "\u25C9";
+    Character.BLACK_DIAMOND = "\u25C6";
     Character.BLACK_CIRCLE = "\u25CF";
     Character.GEAR = "\u2699";
     Character.WARNING_SIGN = "\u26A0" + Character._VARIATION_SELECTOR_16;
     Character.HEAVY_CHECK_MARK = "\u2714";
     Character.HEAVY_MULTIPLICATION_X = "\u2716" + Character._VARIATION_SELECTOR_15;
-    Character.HEAVY_BALLOT_X = "\u2718";
     Character.BLACK_QUESTION_MARK_ORNAMENT = "\u2753" + Character._VARIATION_SELECTOR_15;
     Character._BLACK_MEDIUM_RIGHT_POINTING_TRIANGLE = "\u2BC8";
 

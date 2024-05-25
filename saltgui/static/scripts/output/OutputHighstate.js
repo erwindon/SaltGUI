@@ -126,20 +126,8 @@ export class OutputHighstate {
 
       const functionName = components[0] + "." + components[3];
 
-      let hasChanges = false;
-      let chgs = null;
-      if (task["changes"] !== undefined) {
-        chgs = task.changes;
-        const keys = Object.keys(chgs);
-        if (keys.length === 2 && keys[0] === "out" && keys[1] === "ret") {
-          chgs = chgs["ret"];
-        }
-        const str = JSON.stringify(chgs);
-        if (str !== "{}") {
-          hasChanges = true;
-        }
-        changesDetail += Object.keys(chgs).length;
-      }
+      const nrChanges = Output.getTaskNrChanges(task);
+      changesDetail += nrChanges;
 
       const taskId = components[1];
       let taskName = components[2];
@@ -156,7 +144,7 @@ export class OutputHighstate {
         taskSpan = OutputHighstateTaskTerse.getStateOutput(task, taskName, functionName);
       } else if (Output.isStateOutputSelected("mixed") && task.result) {
         taskSpan = OutputHighstateTaskTerse.getStateOutput(task, taskName, functionName);
-      } else if (Output.isStateOutputSelected("changes") && task.result && hasChanges) {
+      } else if (Output.isStateOutputSelected("changes") && task.result && nrChanges) {
         taskSpan = OutputHighstateTaskTerse.getStateOutput(task, taskName, functionName);
       } else if (Output.isOutputFormatAllowed("saltguihighstate")) {
         taskSpan = OutputHighstateTaskSaltGui.getStateOutput(task, taskId, taskName, functionName, pMinionId, pJobId);
@@ -164,15 +152,13 @@ export class OutputHighstate {
         taskSpan = OutputHighstateTaskFull.getStateOutput(task, taskId, taskName, functionName);
       }
 
+      taskSpan.classList.add(Output.getTaskClass(task));
       if (task.result === null) {
-        taskSpan.classList.add("task-skipped");
+        // VOID
       } else if (!task.result) {
-        taskSpan.classList.add("task-failure");
-      } else if (hasChanges) {
-        taskSpan.classList.add("task-changes");
+        // VOID
+      } else if (nrChanges) {
         changesSummary += 1;
-      } else {
-        taskSpan.classList.add("task-success");
       }
       const taskDiv = Utils.createDiv("", "", Utils.getIdFromMinionId(pMinionId + "." + nr));
       taskDiv.append(taskSpan);
