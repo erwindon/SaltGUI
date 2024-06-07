@@ -332,7 +332,9 @@ export class OptionsPanel extends Panel {
       }
 
       if (category === "session" && name === "expire") {
+console.log("set panels/Options", "setInterval 1000");
         this.updateExpiresTimer = window.setInterval(() => {
+console.log("handle panels/Options", "setInterval 1000");
           // just redo the whole text-block
           OptionsPanel._enhanceSessionExpire(td, value, sessionStart);
         }, 1000);
