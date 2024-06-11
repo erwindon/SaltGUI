@@ -10,6 +10,7 @@ IMPORTANT: since Salt version 3006, it is needed to add configuration option `ne
 packages that the SaltStack installation also depends on, must be installed with `salt-pip`. This includes authentication plugins
 such as `yubico_client`, or execution modules such as `boto3_sns`.
 
+[![CodeQL](https://github.com/erwindon/SaltGUI/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/erwindon/SaltGUI/actions/workflows/codeql-analysis.yml)
 
 ## Screenshots
 ![overview](screenshots/overview.png)
