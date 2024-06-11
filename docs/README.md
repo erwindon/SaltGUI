@@ -45,7 +45,7 @@ such as `yubico_client`, or execution modules such as `boto3_sns`.
 
 
 ## Quick start using PAM as authentication method
-- Install `salt-api` - this is available in the Salt PPA package which should already been installed if you're using Salt
+- Install `salt-api` - this is available in the Salt repo which should already be known if you're using Salt
 - Open the master config /etc/salt/master
 - Find `external_auth` and configure as following (see the note below!):
 
