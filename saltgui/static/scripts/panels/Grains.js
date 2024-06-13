@@ -109,7 +109,6 @@ export class GrainsPanel extends Panel {
     minionTr.appendChild(Utils.createTd("saltversion"));
     minionTr.appendChild(Utils.createTd("os"));
     minionTr.appendChild(Utils.createTd("graininfo"));
-    minionTr.appendChild(Utils.createTd("run-command-button"));
     for (let i = 0; i < this.previewGrains.length; i++) {
       minionTr.appendChild(Utils.createTd());
     }

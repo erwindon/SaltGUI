@@ -76,7 +76,6 @@ export class PillarsPanel extends Panel {
 
     // force same columns on all rows
     minionTr.appendChild(Utils.createTd("pillarinfo"));
-    minionTr.appendChild(Utils.createTd("run-command-button"));
   }
 
   updateMinion (pMinionData, pMinionId, pAllMinionsGrains) {

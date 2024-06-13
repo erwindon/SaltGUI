@@ -110,7 +110,6 @@ export class BeaconsPanel extends Panel {
 
     // force same columns on all rows
     minionTr.appendChild(Utils.createTd("beaconinfo"));
-    minionTr.appendChild(Utils.createTd("run-command-button"));
   }
 
   updateMinion (pMinionData, pMinionId, pAllMinionsGrains) {
