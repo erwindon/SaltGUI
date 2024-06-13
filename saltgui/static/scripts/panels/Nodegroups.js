@@ -234,7 +234,7 @@ export class NodegroupsPanel extends Panel {
     this.setPlayPauseButton("none");
     this.todoNodegroups = null;
 
-    const titleElement = this.table.querySelector("#ng-" + null + " td");
+    const titleElement = this.table.querySelectorAll("#ng-" + null + " td")[1];
     const cnt = this.table.rows.length - titleElement.parentElement.rowIndex - 1;
 
     if (cnt === 0) {
