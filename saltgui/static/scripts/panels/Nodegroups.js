@@ -156,8 +156,6 @@ export class NodegroupsPanel extends Panel {
           this._addMenuItemShowPillars(minionTr2.dropdownmenu, pMinionId);
           this._addMenuItemShowSchedules(minionTr2.dropdownmenu, pMinionId);
           this._addMenuItemShowBeacons(minionTr2.dropdownmenu, pMinionId);
-        } else {
-          this._addMenuItemShowKeys(minionTr2.dropdownmenu);
         }
       }
 
@@ -272,7 +270,7 @@ export class NodegroupsPanel extends Panel {
     // user can decide
     // system can decide to remove the play/pause button
     if (this.playOrPause !== "play") {
-      // try again lkater for more
+      // try again later for more
       window.setTimeout(() => {
         this._handleStep(pWheelKeyListAllSimpleData);
       }, 100);
