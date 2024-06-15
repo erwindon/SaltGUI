@@ -24,7 +24,7 @@ export class DropDownMenu {
 
   // Creates an empty dropdown menu
   // The visual clue for the menu is added to the given element
-  constructor (pParentElement, pIsSmall) {
+  constructor (pParentElement, pStyle) {
 
     // allow reduced code on the caller side
     if (pParentElement.tagName === "TR") {
@@ -48,8 +48,8 @@ export class DropDownMenu {
       this.menuButton = Utils.createDiv("", Character.CH_HAMBURGER);
     }
     this.menuButton.classList.add("small-button", "small-button-for-hover", "menu-dropdown");
-    if (pIsSmall) {
-      this.menuButton.classList.add("small-small-button");
+    if (pStyle) {
+      this.menuButton.classList.add(pStyle + "-small-button");
     }
     this.menuButton.addEventListener("click", (pClickEvent) => {
       // better support for touch screens where user touch

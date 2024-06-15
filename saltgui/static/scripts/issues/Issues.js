@@ -49,7 +49,7 @@ export class Issues {
 
     const theTr = Utils.createTr();
 
-    const menu = new DropDownMenu(theTr, true);
+    const menu = new DropDownMenu(theTr, "smaller");
     theTr.menu = menu;
 
     const descTd = Utils.createTd();

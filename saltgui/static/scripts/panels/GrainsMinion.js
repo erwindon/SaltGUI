@@ -69,7 +69,7 @@ export class GrainsMinionPanel extends Panel {
     for (const grainName of grainNames) {
       const grainTr = Utils.createTr();
 
-      const grainMenu = new DropDownMenu(grainTr, true);
+      const grainMenu = new DropDownMenu(grainTr, "smaller");
 
       const grainNameTd = Utils.createTd("grain-name", grainName);
       grainTr.appendChild(grainNameTd);

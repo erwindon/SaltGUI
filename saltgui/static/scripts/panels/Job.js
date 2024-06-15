@@ -19,6 +19,7 @@ export class JobPanel extends Panel {
     }
     this.addPanelMenu();
     this.addSearchButton();
+    this.addPlayPauseButton();
 
     // 1: re-run with original target pattern
     this._addPanelMenuItemJobRerunJob();
@@ -57,6 +58,31 @@ export class JobPanel extends Panel {
     this.div.append(this.output);
   }
 
+  updateFooter () {
+    // PlayPause uses this as call-back
+    if (this.playOrPause === "play" || this.playOrPause === "pause") {
+      // store the user preference for next time
+      Utils.setStorageItem("local", "jobrefresh", this.playOrPause);
+    }
+  }
+
+  _scheduleRefreshJob () {
+    const jobsActiveSpan = document.getElementById("summary-jobs-active");
+    if (jobsActiveSpan && jobsActiveSpan.innerText === "done") {
+      // no updates after "done"
+      this.setPlayPauseButton("none");
+      return;
+    }
+
+    window.setTimeout(() => {
+      if (this.playOrPause === "play") {
+        this.onShow();
+      } else {
+        this._scheduleRefreshJob();
+      }
+    }, 5000);
+  }
+
   onShow () {
     const jobId = decodeURIComponent(Utils.getQueryParam("id"));
     const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
@@ -70,17 +96,26 @@ export class JobPanel extends Panel {
       this._handleJobRunnerJobsListJob(pRunnerJobsListJobData, jobId, minionId);
       runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
         this._handleRunnerJobsActive(jobId, pRunnerJobsActiveData);
+        this._scheduleRefreshJob();
         return true;
       }, (pRunnerJobsActiveMsg) => {
         this._handleRunnerJobsActive(jobId, JSON.stringify(pRunnerJobsActiveMsg));
+        this.setPlayPauseButton("none");
         return false;
       });
       return true;
     }, (pRunnerJobsListJobsMsg) => {
       this._handleJobRunnerJobsListJob(JSON.stringify(pRunnerJobsListJobsMsg), jobId, undefined);
       Utils.ignorePromise(runnerJobsActivePromise);
+      this.setPlayPauseButton("none");
       return false;
     });
+
+    let jobRefresh = Utils.getStorageItem("local", "jobrefresh", "pause");
+    if (jobRefresh !== "play" && jobRefresh !== "pause") {
+      jobRefresh = "pause";
+    }
+    this.setPlayPauseButton(jobRefresh);
   }
 
   static _isResultOk (result) {
@@ -488,6 +523,7 @@ export class JobPanel extends Panel {
     if (typeof pData !== "object") {
       summaryJobsActiveSpan.innerText = "(error)";
       Utils.addToolTip(summaryJobsActiveSpan, pData, "bottom-left");
+      this.setPlayPauseButton("none");
       return;
     }
 
@@ -497,6 +533,7 @@ export class JobPanel extends Panel {
     if (!info) {
       summaryJobsActiveSpan.innerText = "done";
       this.jobIsTerminated = true;
+      this.setPlayPauseButton("none");
       return;
     }
     this.jobIsTerminated = false;
@@ -525,7 +562,7 @@ export class JobPanel extends Panel {
         // show that this minion is still active on the request
         noResponseSpan.innerText = "(active) ";
 
-        const menu = new DropDownMenu(noResponseSpan, true);
+        const menu = new DropDownMenu(noResponseSpan, "verysmall");
         menu.addMenuItem("Show process info...", () => {
           const cmdArr = ["ps.proc_info", pid];
           this.runCommand("", minionId, cmdArr);

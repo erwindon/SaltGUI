@@ -125,10 +125,19 @@ h1 {
   padding-right: 10px;
 }
 
-.small-small-button {
+.smaller-small-button {
   padding-left: 5px;
   padding-right: 5px;
   min-width: 0;
+}
+
+.verysmall-small-button {
+  padding-left: 5px;
+  padding-right: 5px;
+  min-width: 0;
+  display: inherit;
+  font-size: inherit;
+  height: inherit;
 }
 
 .small-button-left {

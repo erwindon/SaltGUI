@@ -257,7 +257,7 @@ export class Utils {
 
     const menuAndFieldDiv = Utils.createDiv("search-menu-and-field", "");
 
-    const searchOptionsMenu = new DropDownMenu(menuAndFieldDiv, true);
+    const searchOptionsMenu = new DropDownMenu(menuAndFieldDiv, "smaller");
 
     const input = Utils.createElem("input", "filter-text");
     input.type = "text";

@@ -148,7 +148,7 @@ export class NodegroupsPanel extends Panel {
         oldMenuButton.parentElement.remove();
         const newMenuButton = Utils.createTd();
         minionTr2.insertBefore(newMenuButton, minionTr2.firstChild);
-        minionTr2.dropdownmenu = new DropDownMenu(newMenuButton, true);
+        minionTr2.dropdownmenu = new DropDownMenu(newMenuButton, "smaller");
         if (minionIsOk) {
           this._addMenuItemStateApplyMinion(minionTr2.dropdownmenu, pMinionId);
           this._addMenuItemStateApplyTestMinion(minionTr2.dropdownmenu, pMinionId);
@@ -300,7 +300,7 @@ export class NodegroupsPanel extends Panel {
     tr.style.borderTop = "4px double #ddd";
 
     const menuTd = Utils.createTd();
-    tr.dropdownmenu = new DropDownMenu(menuTd, true);
+    tr.dropdownmenu = new DropDownMenu(menuTd, "smaller");
     tr.appendChild(menuTd);
 
     const titleTd = Utils.createTd();

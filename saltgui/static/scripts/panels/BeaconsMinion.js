@@ -141,7 +141,7 @@ export class BeaconsMinionPanel extends Panel {
     for (const beaconName of keys) {
       const tr = Utils.createTr("", "", "beacon-" + beaconName);
 
-      const beaconMenu = new DropDownMenu(tr, true);
+      const beaconMenu = new DropDownMenu(tr, "smaller");
 
       const nameTd = Utils.createTd("beacon-name", beaconName);
       tr.appendChild(nameTd);
