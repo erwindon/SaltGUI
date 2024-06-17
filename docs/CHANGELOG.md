@@ -1,7 +1,20 @@
 # Changelog
 
-## 1.30.0 (2023-11-11)
+## 1.31.0 (2024-06-17)
+- fixes and improvements for highstate task-indicators (thx AntonOvseenko)
+- allow job info to be updated when job was still running (thx gseguinbourgeois)
+- fixed sorting of minions list for async runs (erwindon)
+- allow configuration of highstate page (thx AntonOvseenko)
+- moved all in-table menus to the left-hand-side (erwindon)
+- added small help to explain effect of table-row-click (erwindon)
+- open new tab on ctrl-click or alt-click (erwindon)
+- choose between live info and cached info for grains/pillar (thx mbgevers)
+- updated list of CVEs and improved presentation (erwindon)
+- upgraded eslint and fixed related issues (erwindon)
+- upgraded stylelint and fixed related issues (erwindon)
+- various small fixes and improvements (erwindon)
 
+## 1.30.0 (2023-11-11)
 - show long target list and/or long command in output panel as wrapped (erwindon)
 - fixed documentation for custom grain display (erwindon, thx sharkmerry7)
 - fixed visibility of of templates/nodegroups/reactors when no such info present (erwindon)
