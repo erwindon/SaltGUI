@@ -10,7 +10,7 @@
     "@babel/core": "^7.24.8",
     "@babel/preset-env": "^7.24.8",
     "@babel/register": "^7.24.6",
-    "babel-plugin-istanbul": "^6.0.0",
+    "babel-plugin-istanbul": "^7.0.0",
     "chai": "^5.1.1",
     "eslint": "^8.0.1",
     "eslint-plugin-compat": "^5.0.0",
