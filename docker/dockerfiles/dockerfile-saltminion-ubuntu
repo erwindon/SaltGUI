@@ -3,9 +3,9 @@ FROM ubuntu:22.04
 LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
 LABEL name=salt-minion
 LABEL project="SaltGUI testing"
-LABEL version=3007.0
+LABEL version=3007.1
 
-ENV SALT_VERSION=3007.0
+ENV SALT_VERSION=3007.1
 ENV DEBIAN_FRONTEND=noninteractive
 
 # fix ubuntu

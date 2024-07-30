@@ -3,15 +3,15 @@ FROM dokken/centos-stream-9:latest
 LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
 LABEL name=salt-minion
 LABEL project="SaltGUI testing"
-LABEL version=3007.0
+LABEL version=3007.1
 
-ENV SALT_VERSION=3007.0
+ENV SALT_VERSION=3007.1
 ENV DEBIAN_FRONTEND=noninteractive
 
 # add saltstack repo
 RUN yum install --assumeyes epel-release curl gnupg2 net-tools
 RUN rpm --import https://repo.saltproject.io/salt/py3/redhat/9/x86_64/SALT-PROJECT-GPG-PUBKEY-2023.pub
-RUN curl -fsSL https://repo.saltproject.io/salt/py3/redhat/9/x86_64/minor/3007.0.repo > /etc/yum.repos.d/salt.repo
+RUN curl -fsSL https://repo.saltproject.io/salt/py3/redhat/9/x86_64/minor/3007.1.repo > /etc/yum.repos.d/salt.repo
 RUN yum update --assumeyes
 
 # install salt-minion
