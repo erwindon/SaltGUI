@@ -720,7 +720,11 @@ export class CommandBox {
   static _prepareForAsyncResults (pResponse) {
     const ret = pResponse.return[0];
     CommandBox.jid = ret.jid;
-    CommandBox.minionIds = ret.minions.sort();
+    if (ret.minions) {
+      CommandBox.minionIds = ret.minions.sort();
+    } else {
+      CommandBox.minionIds = [];
+    }
 
     const output = document.querySelector(".run-command pre");
 
