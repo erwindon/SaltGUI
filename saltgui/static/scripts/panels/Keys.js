@@ -55,7 +55,14 @@ export class KeysPanel extends Panel {
         this._handleWheelKeyFinger(pWheelKeyFingerData);
         return true;
       }, (pWheelKeyFingerMsg) => {
-        const allMinionsErr = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, JSON.stringify(pWheelKeyFingerMsg));
+        const msg = JSON.stringify(pWheelKeyFingerMsg);
+        const allMinionsErr1 = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, msg);
+        const allMinionsErr2 = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions_pre, msg);
+        const allMinionsErr3 = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions_rejected, msg);
+        const allMinionsErr4 = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions_denied, msg);
+        /* eslint-disable prefer-object-spread */
+        const allMinionsErr = Object.assign({}, allMinionsErr1, allMinionsErr2, allMinionsErr3, allMinionsErr4);
+        /* eslint-enable prefer-object-spread */
         this._handleWheelKeyFinger({"return": [{"data": {"return": {"minions": allMinionsErr}}}]});
         return false;
       });
