@@ -8,6 +8,12 @@ import {OutputNested} from "./OutputNested.js";
 import {OutputYaml} from "./OutputYaml.js";
 import {ParseCommandLine} from "../ParseCommandLine.js";
 import {Utils} from "../Utils.js";
+import hljs from "../../highlight/es/core.js";
+import json from "../../highlight/es/languages/json.js";
+import yaml from "../../highlight/es/languages/yaml.js";
+
+hljs.registerLanguage("json", json);
+hljs.registerLanguage("yaml", yaml);
 
 // Functions to turn responses from the salt system into visual information
 // The following variations exist:
@@ -108,6 +114,36 @@ export class Output {
     return OutputJson.formatJSON(pObject);
   }
 
+  static setHighlightObject (pParent, pObject, pStyleWhiteSpace = "pre-wrap", pLanguage = null) {
+    const code = Utils.createElem("code");
+    code.style.whiteSpace = pStyleWhiteSpace;
+    // light-yellow, but lighter
+    pParent.style.backgroundColor = "#FFFFF8";
+
+    if (pLanguage !== null) {
+      const outputFormats = Utils.getStorageItem("session", "output_formats");
+      Utils.setStorageItem("session", "output_formats", pLanguage);
+      code.innerHTML = hljs.highlight(Output.formatObject(pObject), {language:pLanguage}).value;
+      Utils.setStorageItem("session", "output_formats", outputFormats);
+    } else if (Output.isOutputFormatAllowed("json")) {
+      code.innerHTML = hljs.highlight(Output.formatObject(pObject), {language:'json'}).value;
+    } else if (Output.isOutputFormatAllowed("nested")) {
+      // yes, yaml
+      code.innerHTML = hljs.highlight(Output.formatObject(pObject), {language:'yaml'}).value;
+    } else if (Output.isOutputFormatAllowed("yaml")) {
+      code.innerHTML = hljs.highlight(Output.formatObject(pObject), {language:'yaml'}).value;
+    } else {
+      code.innerText = Output.formatObject(pObject);
+    }
+
+    if (pParent.firstElementChild) {
+      pParent.replaceChild(code, pParent.firstElementChild);
+    } else {
+      // empty or only a text-node
+      pParent.innerText = "";
+      pParent.appendChild(code);
+    }
+  }
 
   // this is the default output form
   // just format the returned objects

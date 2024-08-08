@@ -195,8 +195,9 @@ export class OrchestrationsPanel extends Panel {
         // nothing more to show
         tr1.appendChild(Utils.createTd("details value-none", "(none)"));
       } else {
-        const formattedStep = Output.formatObject(step);
-        tr1.appendChild(Utils.createTd("grain-value", formattedStep));
+        const td = Utils.createTd();
+        Output.setHighlightObject(td, step);
+        tr1.appendChild(td);
       }
 
       this.table.tBodies[0].appendChild(tr1);
