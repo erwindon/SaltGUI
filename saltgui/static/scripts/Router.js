@@ -293,7 +293,7 @@ export class Router {
   static updateMainMenu () {
     const pages = Router._getPagesList();
 
-    Router._showMenuItem(pages, Router.minionsPage, ["grains", "schedules", "pillars", "beacons"]);
+    Router._showMenuItem(pages, Router.minionsPage, ["grains", "schedules", "pillars", "beacons", "nodegroups"]);
     Router._showMenuItem(pages, Router.grainsPage);
     Router._showMenuItem(pages, Router.schedulesPage);
     Router._showMenuItem(pages, Router.pillarsPage);
@@ -303,9 +303,9 @@ export class Router {
     Router._showMenuItem(pages, Router.jobsPage, ["highstate", "templates"]);
     Router._showMenuItem(pages, Router.highStatePage);
     Router._showMenuItem(pages, Router.templatesPage);
-    Router._showMenuItem(pages, Router.issuesPage);
     Router._showMenuItem(pages, Router.eventsPage, ["reactors"]);
     Router._showMenuItem(pages, Router.reactorsPage);
+    Router._showMenuItem(pages, Router.issuesPage);
     Router._showMenuItem(pages, Router.logoutPage);
   }
 
