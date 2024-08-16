@@ -304,13 +304,21 @@ export class LoginPanel extends Panel {
 
     // We need these functions to populate the dropdown boxes
     const wheelConfigValuesPromise = this.api.getWheelConfigValues();
+    const runnerStateOrchestrateShowSlsPromise = this.api.getRunnerStateOrchestrateShowSls();
 
     // these may have been hidden on a previous logout
     Utils.hideAllMenus(false);
 
     // We need these functions to populate the dropdown boxes
+    // or determine visibility of menu items
     wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
       LoginPanel._handleLoginWheelConfigValues(pWheelConfigValuesData);
+      Router.updateMainMenu();
+      return true;
+    }, () => false);
+    runnerStateOrchestrateShowSlsPromise.then((pRunnerStateOrchestrateShowSlsData) => {
+      LoginPanel._handleRunnerStateOrchestrateShowSls(pRunnerStateOrchestrateShowSlsData);
+      Router.updateMainMenu();
       return true;
     }, () => false);
 
@@ -337,6 +345,27 @@ export class LoginPanel extends Panel {
         }
       }
     }, 1000);
+  }
+
+  static _handleRunnerStateOrchestrateShowSls (pRunnerStateOrchestrateShowSlsData) {
+    // until we prove it it available
+    Utils.setStorageItem("session", "orchestrations", "false");
+
+    const ret = pRunnerStateOrchestrateShowSlsData.return[0];
+    for (const key in ret) {
+      const obj = ret[key];
+      for (const stepkey in obj) {
+        const step = obj[stepkey].salt;
+        if (step !== undefined) {
+          for (const item of step) {
+            if (item === "function" || item === "state" || item === "runner" || item === "wheel") {
+              Utils.setStorageItem("session", "orchestrations", "true");
+              return;
+            }
+          }
+        }
+      }
+    }
   }
 
   static _handleLoginWheelConfigValues (pWheelConfigValuesData) {
@@ -443,8 +472,6 @@ export class LoginPanel extends Panel {
 
     const fullReturn = wheelConfigValuesData.saltgui_full_return;
     Utils.setStorageItem("session", "full_return", fullReturn);
-
-    Router.updateMainMenu();
   }
 
   _onLoginFailure (error) {

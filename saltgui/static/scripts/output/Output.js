@@ -906,6 +906,10 @@ export class Output {
 
       let minionResponse = pResponse[minionId];
 
+      if (commandCmd === "runner.state.orchestrate" && minionResponse.return && minionResponse.return.return && minionResponse.return.return.data) {
+        minionResponse = minionResponse.return.return.data[minionId];
+      }
+
       const isSuccess = Output._getIsSuccess(minionResponse);
       minionResponse = Output._getMinionResponse(pCommand, minionResponse);
       // provide the same (simplified) object for download
@@ -960,8 +964,10 @@ export class Output {
         // first put all the values in an array
         Object.keys(minionResponse).forEach(
           (taskKey) => {
-            minionResponse[taskKey].___key___ = taskKey;
-            tasks.push(minionResponse[taskKey]);
+            if (typeof minionResponse[taskKey] === "object") {
+              minionResponse[taskKey].___key___ = taskKey;
+              tasks.push(minionResponse[taskKey]);
+            }
           }
         );
         // then sort the array

@@ -175,6 +175,8 @@ export class JobsPanel extends Panel {
     this._hideJobs.push("runner.jobs.list_job");
     this._hideJobs.push("runner.jobs.list_jobs");
     this._hideJobs.push("runner.manage.versions");
+    // do not hide "runner.state.orchestrate"
+    this._hideJobs.push("runner.state.orchestrate_show_sls");
     // wheel jobs
     this._hideJobs.push("wheel.config.values");
     this._hideJobs.push("wheel.key.accept");
