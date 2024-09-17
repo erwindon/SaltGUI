@@ -12,7 +12,7 @@
     "@babel/register": "^7.24.6",
     "babel-plugin-istanbul": "^7.0.0",
     "chai": "^5.1.1",
-    "eslint": "^8.0.1",
+    "eslint": "^8.57.1",
     "eslint-plugin-compat": "^6.0.1",
     "mocha": "^10.7.3",
     "nightmare": "^3.0.2",
