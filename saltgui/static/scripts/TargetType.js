@@ -1,33 +1,31 @@
 /* global */
 
 import {Character} from "./Character.js";
-import {DropDownMenu} from "./DropDown.js";
+import {DropDownMenuRadio} from "./DropDownRadio.js";
 import {Utils} from "./Utils.js";
 
 export class TargetType {
 
   static createMenu () {
     const targetbox = document.getElementById("target-box");
-    TargetType.menuTargetType = new DropDownMenu(targetbox);
+    TargetType.menuTargetType = new DropDownMenuRadio(targetbox);
     // do not show the menu title at first
-    TargetType.menuTargetType.addMenuItem("Normal", TargetType._manualUpdateTargetTypeText, "glob");
-    TargetType.menuTargetType.addMenuItem("List", TargetType._manualUpdateTargetTypeText, "list");
-    TargetType.menuTargetType.addMenuItem(TargetType._targetTypeNodeGroupPrepare, TargetType._manualUpdateTargetTypeText, "nodegroup");
-    TargetType.menuTargetType.addMenuItem("Compound", TargetType._manualUpdateTargetTypeText, "compound");
-    TargetType.setTargetTypeDefault();
+    TargetType.menuTargetType.setTitle("");
+    TargetType.menuTargetType.setDefaultValue("glob");
+    TargetType.menuTargetType.addMenuItemRadio("glob", "Normal");
+    TargetType.menuTargetType.addMenuItemRadio("list", "List");
+    TargetType.menuTargetType.addMenuItemRadio("nodegroup", () => TargetType._targetTypeNodeGroupPrepare());
+    TargetType.menuTargetType.addMenuItemRadio("compound", "Compound");
+    TargetType.autoSelectTargetType("");
   }
 
   // It takes a while before we known the list of nodegroups
   // so this conclusion must be re-evaluated each time
-  static _targetTypeNodeGroupPrepare (pMenuItem) {
+  static _targetTypeNodeGroupPrepare () {
     const nodeGroups = Utils.getStorageItemObject("session", "nodegroups");
     if (!nodeGroups || Object.keys(nodeGroups).length === 0) {
       return null;
     }
-
-    // optimization as the list of nodegroups will not change until the next login
-    // but mainly to preserve the highlight marker
-    pMenuItem.verifyCallBack = null;
 
     return "Nodegroup";
   }
@@ -85,10 +83,10 @@ export class TargetType {
       }
       menuItem.innerText = menuItemText;
     }
+    return null;
   }
 
   static autoSelectTargetType (pTarget) {
-
     if (!TargetType.menuTargetType._system) {
       // user has selected the value, do not touch it
       return;
@@ -100,34 +98,25 @@ export class TargetType {
       pTarget.includes("(") || pTarget.includes(")")) {
       // "@" is a strong indicator for compound target
       // but "space", "(" and ")" are also typical for compound target
-      TargetType.menuTargetType._value = "compound";
+      TargetType.menuTargetType.setDefaultValue("compound");
     } else if (pTarget.includes(",")) {
       // "," is a strong indicator for list target (when it is also not compound)
-      TargetType.menuTargetType._value = "list";
+      TargetType.menuTargetType.setDefaultValue("list");
     } else if (pTarget.startsWith("#")) {
       // "#" at the start of a line is a strong indicator for nodegroup target
       // this is not a SALTSTACK standard, but our own invention
-      TargetType.menuTargetType._value = "nodegroup";
+      TargetType.menuTargetType.setDefaultValue("nodegroup");
     } else {
-      TargetType.menuTargetType._value = "glob";
+      TargetType.menuTargetType.setDefaultValue("glob");
     }
-
-    // show the new title
-    TargetType._updateTargetTypeText();
   }
 
   static setTargetType (pTargetType) {
-    TargetType.menuTargetType._value = pTargetType;
-    TargetType.menuTargetType._system = true;
-    TargetType._updateTargetTypeText();
+    TargetType.menuTargetType.setValue(pTargetType);
   }
 
   static _getTargetType () {
-    const targetType = TargetType.menuTargetType._value;
-    if (targetType === undefined || targetType === "") {
-      return "glob";
-    }
-    return targetType;
+    return TargetType.menuTargetType.getValue();
   }
 
   static makeTargetText (pObj) {
