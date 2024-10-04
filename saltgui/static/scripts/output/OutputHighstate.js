@@ -21,8 +21,11 @@ export class OutputHighstate {
     case "state.highstate":
     case "state.sls":
     case "state.sls_id":
-    case "runners.state.orchestrate":
       break;
+    case "runner.state.orchestrate":
+    case "runners.state.orchestrate":
+      // we need command-names in both variants
+      return true;
     case "state.low":
       // almost, but it is only one task
       // and we can handle only an object with tasks

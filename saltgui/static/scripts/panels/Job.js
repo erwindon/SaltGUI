@@ -144,7 +144,7 @@ export class JobPanel extends Panel {
     return JSON.stringify(pObj);
   }
 
-  static decodeArgumentsArray (rawArguments) {
+  static decodeArgumentsArray (rawArguments, dictsAreKwArgs = false) {
 
     if (rawArguments === undefined) {
       // no arguments
@@ -166,7 +166,9 @@ export class JobPanel extends Panel {
     let ret = "";
     for (const obj of rawArguments) {
       // all KWARGS are one entry in the parameters array
-      if (obj && typeof obj === "object" && "__kwarg__" in obj) {
+      // not all dicts have __kwarg__ to recognize them
+      // in that case, the caller must decide
+      if (obj && typeof obj === "object" && (dictsAreKwArgs || "__kwarg__" in obj)) {
         const keys = Object.keys(obj).sort();
         for (const key of keys) {
           if (key === "__kwarg__") {
@@ -217,6 +219,11 @@ export class JobPanel extends Panel {
 
     // use same formatter as direct commands
     let argumentsText = JobPanel.decodeArgumentsArray(info.Arguments);
+    if (!argumentsText && info.Function.startsWith("runner.")) {
+      // runners keep the given arguments elsewhere
+      const fakeMinion = Object.keys(info.Result)[0];
+      argumentsText = JobPanel.decodeArgumentsArray(info.Result[fakeMinion].return.fun_args, true);
+    }
 
     this.targettype = info["Target-type"];
     if (Array.isArray(info.Target)) {
@@ -224,7 +231,10 @@ export class JobPanel extends Panel {
     } else {
       this.target = info.Target;
     }
-    this.commandtext = info.Function + argumentsText;
+    // runner commands are sometimes "runner." and sometimes "runners.".
+    // it is a big mismatch between documentation and system.
+    // we just compensate for that everywhere.
+    this.commandtext = info.Function.replace(/^runner[.]/, "runners.") + argumentsText;
     this.jobid = pJobId;
     this.minions = info.Minions;
     this.result = info.Result;
@@ -263,8 +273,12 @@ export class JobPanel extends Panel {
     } else if (info.Function.startsWith("wheel.")) {
       minions = ["WHEEL"];
       this.setWarningText("info", "WHEEL jobs are not associated with minions");
-    } else if (info.Function.startsWith("runners.")) {
-      minions = ["RUNNER"];
+    } else if (info.Function.startsWith("runner.")) {
+      if (typeof info.Result === "object") {
+        minions = Object.keys(info.Result);
+      } else {
+        minions = ["RUNNER"];
+      }
       this.setWarningText("info", "RUNNER jobs are not associated with minions");
     } else {
       minions = Object.keys(this.result);
