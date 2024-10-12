@@ -356,12 +356,13 @@ export class LoginPanel extends Panel {
       const obj = ret[key];
       for (const stepkey in obj) {
         const step = obj[stepkey].salt;
-        if (step !== undefined) {
-          for (const item of step) {
-            if (item === "function" || item === "state" || item === "runner" || item === "wheel") {
-              Utils.setStorageItem("session", "orchestrations", "true");
-              return;
-            }
+        if (step === undefined) {
+          continue;
+        }
+        for (const item of step) {
+          if (item === "function" || item === "state" || item === "runner" || item === "wheel") {
+            Utils.setStorageItem("session", "orchestrations", "true");
+            return;
           }
         }
       }

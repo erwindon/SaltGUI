@@ -135,8 +135,16 @@ export class OrchestrationsPanel extends Panel {
     for (const step of steps) {
       const tr1 = Utils.createTr();
 
-      // no menu per item
-      tr1.appendChild(Utils.createTd());
+      // menu per item
+      const smenu = new DropDownMenu(tr1, "smaller");
+      this._addMenuItemApplyOrchestrationStep(smenu, step);
+      this._addMenuItemApplyOrchestrationStepTest(smenu, step);
+
+      const cmdArr = OrchestrationsPanel._makeCmdArr(step, false);
+      tr1.addEventListener("click", (pClickEvent) => {
+        this.runCommand("", "", cmdArr);
+        pClickEvent.stopPropagation();
+      });
 
       tr1.appendChild(Utils.createTd("name", Character.NO_BREAK_SPACE.repeat(3) + step.__key__));
 
@@ -207,6 +215,44 @@ export class OrchestrationsPanel extends Panel {
   _addMenuItemApplyOrchestrationTest (pMenu, pOrchestrationName) {
     pMenu.addMenuItem("Test orchestration...", () => {
       const cmdArr = ["runners.state.orchestrate", "test=", true, pOrchestrationName];
+      this.runCommand("", "", cmdArr);
+    });
+  }
+
+  static _makeCmdArr (pSteps, pTest) {
+    /* eslint-disable prefer-object-spread */
+    const kwArgs = Object.assign({}, pSteps);
+    /* eslint-enable prefer-object-spread */
+    delete kwArgs["require"];
+    delete kwArgs["salt"];
+    delete kwArgs["__sls__"];
+    delete kwArgs["__env__"];
+    delete kwArgs["__key__"];
+    delete kwArgs["__type__"];
+    delete kwArgs["order"];
+    if(!kwArgs["name"]) {
+      // orchestrate_single has his as mandatory parameter
+      kwArgs["name"] = "dummy";
+    }
+    kwArgs["fun"] = "salt." + pSteps.__type__;
+    if(pTest) {
+      kwArgs["test"] = true;
+    }
+    const cmdArr = ["runners.state.orchestrate_single"];
+    cmdArr.push("kwarg=", kwArgs);
+    return cmdArr;
+  }
+
+  _addMenuItemApplyOrchestrationStep (pMenu, pSteps) {
+    const cmdArr = OrchestrationsPanel._makeCmdArr(pSteps, false);
+    pMenu.addMenuItem("Apply orchestration step...", () => {
+      this.runCommand("", "", cmdArr);
+    });
+  }
+
+  _addMenuItemApplyOrchestrationStepTest (pMenu, pSteps) {
+    const cmdArr = OrchestrationsPanel._makeCmdArr(pSteps, true);
+    pMenu.addMenuItem("Test orchestration step...", () => {
       this.runCommand("", "", cmdArr);
     });
   }
