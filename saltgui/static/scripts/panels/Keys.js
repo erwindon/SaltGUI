@@ -412,7 +412,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMenuItemWheelKeyAccept1 (pMenu, pMinionId, pStatusField) {
-    pMenu.addMenuItem(() => {
+    pMenu.addMenuItemCmd(() => {
       const status = pStatusField.innerText;
       if (status === "denied" || status === "unaccepted") {
         return "Accept key...";
@@ -431,7 +431,7 @@ export class KeysPanel extends Panel {
   }
 
   _addPanelMenuItemWheelKeyAcceptAllUnaccepted () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (this.nrUnaccepted > 0) {
         return "Accept all unaccepted keys...";
       }
@@ -443,7 +443,7 @@ export class KeysPanel extends Panel {
   }
 
   _addPanelMenuItemWheelKeyAcceptAllUnacceptedRejected () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (!this.nrRejected) {
         return null;
       }
@@ -458,7 +458,7 @@ export class KeysPanel extends Panel {
   }
 
   _addPanelMenuItemWheelKeyAcceptAllUnacceptedDenied () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (!this.nrDenied) {
         return null;
       }
@@ -473,7 +473,7 @@ export class KeysPanel extends Panel {
   }
 
   _addPanelMenuItemWheelKeyAcceptAllUnacceptedRejectedDenied () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (!this.nrRejected || !this.nrDenied) {
         return null;
       }
@@ -488,7 +488,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMenuItemWheelKeyAccept2 (pMenu, pMinionId, pStatusField) {
-    pMenu.addMenuItem(() => {
+    pMenu.addMenuItemCmd(() => {
       const status = pStatusField.innerText;
       if (status === "rejected") {
         return "Accept key...";
@@ -507,7 +507,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMenuItemWheelKeyReject (pMenu, pMinionId, pStatusField) {
-    pMenu.addMenuItem(() => {
+    pMenu.addMenuItemCmd(() => {
       const status = pStatusField.innerText;
       if (status === "accepted" || status === "denied" || status === "unaccepted") {
         return "Reject key...";
@@ -526,7 +526,7 @@ export class KeysPanel extends Panel {
   }
 
   _addPanelMenuItemWheelKeyRejectAllUnaccepted () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (this.nrUnaccepted > 0) {
         return "Reject all unaccepted keys...";
       }
@@ -538,7 +538,7 @@ export class KeysPanel extends Panel {
   }
 
   _addPanelMenuItemWheelKeyRejectAllUnacceptedAccepted () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (!this.nrAccepted) {
         return null;
       }
@@ -553,7 +553,7 @@ export class KeysPanel extends Panel {
   }
 
   _addPanelMenuItemWheelKeyRejectAllUnacceptedDenied () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (!this.nrDenied) {
         return null;
       }
@@ -568,7 +568,7 @@ export class KeysPanel extends Panel {
   }
 
   _addPanelMenuItemWheelKeyRejectAllUnacceptedAcceptedDenied () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (!this.nrAccepted || !this.nrDenied) {
         return null;
       }
@@ -582,9 +582,9 @@ export class KeysPanel extends Panel {
     });
   }
 
-  _addMenuItemWheelKeyDelete (pMenu, pMinionId, pStatusField) {
-    pMenu.addMenuItem(() => {
-      const status = pStatusField.innerText;
+  _addMenuItemWheelKeyDelete (pMenu, pMinionId, pMinionTr) {
+    pMenu.addMenuItemCmd(() => {
+      const status = pMinionTr.dataset.status;
       if (status === "accepted" || status === "rejected" || status === "unaccepted" || status === "denied") {
         return "Delete key...";
       }
@@ -596,7 +596,7 @@ export class KeysPanel extends Panel {
   }
 
   _addPanelMenuItemWheelKeyDeleteAll () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (this.nrAccepted > 0 || this.nrUnaccepted > 0 || this.nrRejected > 0 || this.nrDenied > 0) {
         return "Delete all keys...";
       }
