@@ -85,7 +85,9 @@ export class StateIssues extends Issues {
     }
 
     if (pPanel.playOrPause !== "play") {
+console.log("set issues/State1", "setTimeout 1000");
       window.setTimeout(() => {
+console.log("set issues/State1", "setTimeout 1000");
         this._updateNextJob(pPanel, pMsg, pKeys);
       }, 1000);
       return;
@@ -97,7 +99,9 @@ export class StateIssues extends Issues {
 
     runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
       StateIssues._handleJobRunnerJobsListJob(pPanel, pRunnerJobsListJobData, pKeys);
+console.log("set issues/State2", "setTimeout 100");
       window.setTimeout(() => {
+console.log("set issues/State2", "setTimeout 100");
         this._updateNextJob(pPanel, pMsg, pKeys);
       }, 100);
       return true;
