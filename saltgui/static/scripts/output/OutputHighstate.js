@@ -16,6 +16,7 @@ export class OutputHighstate {
       return false;
     }
     switch (pCommand) {
+    case "runner.state.orchestrate_single":
     case "state.apply":
     case "state.high":
     case "state.highstate":

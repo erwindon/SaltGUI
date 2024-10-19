@@ -418,7 +418,7 @@ export class Output {
 
     let txt = "";
 
-    if ("__sls__" in pTask) {
+    if ("__sls__" in pTask && pTask.__sls__) {
       txt += "\n" + pTask.__sls__.replace(/[.]/g, "/") + ".sls";
     }
 
@@ -908,6 +908,9 @@ export class Output {
 
       if (commandCmd === "runner.state.orchestrate" && minionResponse.return && minionResponse.return.return && minionResponse.return.return.data) {
         minionResponse = minionResponse.return.return.data[minionId];
+      }
+      if (commandCmd === "runner.state.orchestrate_single" && minionResponse.return && minionResponse.return.return && typeof minionResponse.return.return === "object") {
+        minionResponse = Object.values(minionResponse.return.return)[0];
       }
 
       const isSuccess = Output._getIsSuccess(minionResponse);
