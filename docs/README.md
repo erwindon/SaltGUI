@@ -42,6 +42,7 @@ such as `yubico_client`, or execution modules such as `boto3_sns`.
 - Keyboard control for top-level navigation
 - Keyboard control to apply templates
 - Choose between live info and cached info for grains/pillar
+- View details of orchestrations and allow to start them
 
 
 ## Quick start using PAM as authentication method
@@ -353,9 +354,9 @@ All other details will be visible in the details column. The steps are listed in
 But note that additional dependencies may cause an alternative execution sequence.
 
 In the configuration files, SaltStack does not clearly distingish between state-configuration and orchestration-configuration.
-SaltGUI only shows information that has the orechestration format.
+SaltGUI only shows information that has the orchestration format.
 
-An orchestration can be executed. The output resembles the output of highstate commands, but now each step is a whole salt command instead of a state.
+An orchestration can be executed or tested. The output resembles the output of highstate commands, but now each step is a whole salt command instead of a state.
 Since the orchestration is run by the salt-master, the results are organized for only this host.
 Note that SaltStack uses a slightly different minion-name for that.
 
