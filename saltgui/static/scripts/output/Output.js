@@ -516,7 +516,9 @@ export class Output {
 
         // show where the information is
         taskDiv.classList.add("highlight-task");
+console.log("set output/Output1", "setTimeout 1000");
         window.setTimeout(() => {
+console.log("handle output/Output1", "setTimeout 1000");
           taskDiv.classList.remove("highlight-task");
           if (!taskDiv.classList.length) {
             taskDiv.removeAttribute("class");
@@ -1066,7 +1068,9 @@ export class Output {
         minionOutput.addEventListener("click", (pClickEvent) => {
           // show where we are scrolling back to
           minionRow.classList.add("highlight-task");
+console.log("set output/Output2", "setTimeout 1000");
           window.setTimeout(() => {
+console.log("handle output/Output2", "setTimeout 1000");
             minionRow.classList.remove("highlight-task");
             if (!minionRow.classList.length) {
               minionRow.removeAttribute("class");
@@ -1096,7 +1100,9 @@ export class Output {
       if (div) {
         const minionRow = div.querySelector("span");
         minionRow.classList.add("highlight-task");
+console.log("set output/Output3", "setTimeout 1000");
         window.setTimeout(() => {
+console.log("handle output/Output3", "setTimeout 1000");
           minionRow.classList.remove("highlight-task");
           if (!minionRow.classList.length) {
             minionRow.removeAttribute("class");

@@ -33,7 +33,9 @@ export class StatsPanel extends Panel {
 
     this.onShowNow();
 
+console.log("set panels/Stats", "setInterval 5000");
     this.updateStatsTimer = window.setInterval(() => {
+console.log("handle panels/Stats", "setInterval 5000");
       this.onShowNow();
     }, 5000);
   }
