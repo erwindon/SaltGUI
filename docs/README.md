@@ -116,6 +116,9 @@ In that case, that method will always be used.
 Note that SaltGUI cannot inspect the `master` file to see which authentication methods are actually in use.
 This is because the salt-api can only read the file after login.
 
+Note that adding the `rest` authentication method in configuration section `external_auth` forces the parameter `keep_acl_in_token` to become `true`.
+That again changes the behavior of the other authentication methods and may lead to unexpected authentication problems.
+
 See the [EAUTH documentation](https://docs.saltstack.com/en/latest/topics/eauth/index.html) and the [Salt auth source code](https://github.com/saltstack/salt/tree/master/salt/auth) for more information.
 
 
