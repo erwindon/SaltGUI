@@ -7,7 +7,7 @@
   "private": true,
   "type": "module",
   "devDependencies": {
-    "@babel/core": "^7.25.8",
+    "@babel/core": "^7.25.9",
     "@babel/preset-env": "^7.25.8",
     "@babel/register": "^7.25.7",
     "babel-plugin-istanbul": "^7.0.0",
