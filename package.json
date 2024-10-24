@@ -11,7 +11,7 @@
     "@babel/preset-env": "^7.25.9",
     "@babel/register": "^7.25.9",
     "babel-plugin-istanbul": "^7.0.0",
-    "chai": "^5.1.1",
+    "chai": "^5.1.2",
     "eslint": "^8.57.1",
     "eslint-plugin-compat": "^6.0.1",
     "mocha": "^10.7.3",
