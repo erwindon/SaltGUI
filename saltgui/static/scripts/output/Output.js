@@ -685,8 +685,9 @@ export class Output {
     }
 
     // it might be documentation
+    const commandCmd = pCommand.trim().replace(/ .*/, "");
     const commandArg = pCommand.trim().replace(/^[a-z.]* */i, "");
-    const isDocumentationOutput = OutputDocumentation.isDocumentationOutput(pResponse, commandArg);
+    const isDocumentationOutput = OutputDocumentation.isDocumentationOutput(pResponse, commandCmd, commandArg);
     if (isDocumentationOutput) {
       OutputDocumentation.reduceDocumentationOutput(pResponse, commandArg, commandArg);
       OutputDocumentation.addDocumentationOutput(pOutputContainer, pResponse);
@@ -892,8 +893,6 @@ export class Output {
     const downloadLabel = Utils.createSpan("no-print", "download as:");
     downloadLabel.style = "float:right";
     topSummaryDiv.appendChild(downloadLabel);
-
-    const commandCmd = pCommand.trim().replace(/ .*/, "");
 
     if (Output._hasStartTimeField(pResponse)) {
       const span = Utils.createDiv("", "\n" + Character.CIRCLED_INFORMATION_SOURCE + " start-time of tasks is using local-time from the minion");

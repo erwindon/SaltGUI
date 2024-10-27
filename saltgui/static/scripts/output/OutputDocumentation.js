@@ -39,16 +39,24 @@ export class OutputDocumentation {
   // and when its key matches the requested documentation
   // empty values are allowed due to errors in the documentation
   // 'output' is needed like this to prevent an error during testing
-  static isDocumentationOutput (pResponse, pCommand) {
+  static isDocumentationOutput (pResponse, pCommandCmd, pCommandArg) {
 
     if (!Output.isOutputFormatAllowed("doc")) {
+      return false;
+    }
+
+    // only for the known documentation commands
+    // too many false positives otherwise
+    // actually so limited that no one noticed for 5 years
+    // e.g. pillar.items
+    if (["sys.doc", "runners.doc.runner", "runners.doc.wheel"].indexOf(pCommandCmd) < 0) {
       return false;
     }
 
     let result = false;
 
     // reduce the search key to match the data in the response
-    pCommand = OutputDocumentation._reduceFilterKey(pCommand);
+    const commandArg = OutputDocumentation._reduceFilterKey(pCommandArg);
 
     for (const minionId of Object.keys(pResponse)) {
 
@@ -83,7 +91,7 @@ export class OutputDocumentation {
         }
 
         // is this what we were looking for?
-        if (OutputDocumentation._isDocuKeyMatch(key, pCommand)) {
+        if (OutputDocumentation._isDocuKeyMatch(key, commandArg)) {
           result = true;
         }
       }
