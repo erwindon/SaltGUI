@@ -30,7 +30,7 @@ export class Documentation {
       () => Documentation._manualRunMenuCustomHelpPrepare(),
       () => Documentation._manualRunMenuCustomHelpRun());
 
-    Documentation.DOCUMENTATION_URL = "https://docs.saltstack.com/en/latest/ref/";
+    Documentation.DOCUMENTATION_URL = "https://docs.saltproject.io/en/latest/ref/";
     Documentation.EXTERNAL_LINK = Character.NO_BREAK_SPACE + Character.EXTERNAL_LINK_IMG;
 
     Documentation.PROVIDERS = { };
@@ -311,7 +311,7 @@ export class Documentation {
       }
     }
 
-    // See https://docs.saltstack.com/en/latest/ref/modules/all/index.html
+    // See https://docs.saltproject.io/en/latest/ref/modules/all/index.html
     const knownVirtualModules = [
       "group",
       "kernelpkg",

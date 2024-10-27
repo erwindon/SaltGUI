@@ -240,7 +240,7 @@ export class MinionsPanel extends Panel {
   }
 
   static _getCveData () {
-    // See https://docs.saltstack.com/en/master/topics/releases/version_numbers.html
+    // See https://docs.saltproject.io/en/master/topics/releases/version_numbers.html
     // See https://cve.mitre.org/cve/search_cve_list.html
     // See e.g. https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-11652
     // We do not distinguish between different tools like master/minion/api

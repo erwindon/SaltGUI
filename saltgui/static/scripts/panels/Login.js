@@ -46,7 +46,7 @@ export class LoginPanel extends Panel {
     form.append(password);
     this.passwordField = password;
 
-    // see https://docs.saltstack.com/en/latest/ref/auth/all/index.html
+    // see https://docs.saltproject.io/en/latest/ref/auth/all/index.html
     const select = Utils.createElem("select");
     form.append(select);
     this.eauthField = select;

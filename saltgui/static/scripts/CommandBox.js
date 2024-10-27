@@ -147,15 +147,15 @@ export class CommandBox {
 
     txt += "<h2>Target field</h2>";
     txt += "<p>";
-    txt += "Entries that contain a @, (, ) or space are assumed to be a compound target selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/#compound-targeting' target='_blank' rel='noopener'>Compound Targeting" + Documentation.EXTERNAL_LINK + "</a>.";
+    txt += "Entries that contain a @, (, ) or space are assumed to be a compound target selection. See <a href='https://docs.saltproject.io/en/latest/topics/targeting/#compound-targeting' target='_blank' rel='noopener'>Compound Targeting" + Documentation.EXTERNAL_LINK + "</a>.";
     txt += "<br/>";
-    txt += "Entries that contain a COMMA are assumed to be a list target selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/globbing.html#lists' target='_blank' rel='noopener'>List Targeting" + Documentation.EXTERNAL_LINK + "</a>.";
+    txt += "Entries that contain a COMMA are assumed to be a list target selection. See <a href='https://docs.saltproject.io/en/latest/topics/targeting/globbing.html#lists' target='_blank' rel='noopener'>List Targeting" + Documentation.EXTERNAL_LINK + "</a>.";
     txt += "<br/>";
-    txt += "Entries that start with a # are assumed to be a nodegroup target selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/nodegroups.html' target='_blank' rel='noopener'>Nodegroup Targeting" + Documentation.EXTERNAL_LINK + "</a>.";
+    txt += "Entries that start with a # are assumed to be a nodegroup target selection. See <a href='https://docs.saltproject.io/en/latest/topics/targeting/nodegroups.html' target='_blank' rel='noopener'>Nodegroup Targeting" + Documentation.EXTERNAL_LINK + "</a>.";
     txt += "<br/>";
     txt += "Target '##connected' will immediately be replaced by the latest known list of connected minions.";
     txt += "<br/>";
-    txt += "Otherwise, the target is assumed to be a regular glob selection. See <a href='https://docs.saltstack.com/en/latest/topics/targeting/globbing.html#globbing' target='_blank' rel='noopener'>Globbing Targeting" + Documentation.EXTERNAL_LINK + "</a>.";
+    txt += "Otherwise, the target is assumed to be a regular glob selection. See <a href='https://docs.saltproject.io/en/latest/topics/targeting/globbing.html#globbing' target='_blank' rel='noopener'>Globbing Targeting" + Documentation.EXTERNAL_LINK + "</a>.";
     txt += "<br/>";
     txt += "The dropdown-box to the right of the field is automatically updated with the assumed target type. When you do not agree, it is possible to manually select a value. That value will then be left alone by the system. Note that the dropdown-box only contains the choice 'Nodegroup' when nodegroups are configured in the <b>master</b> file.";
     txt += "<br/>";
