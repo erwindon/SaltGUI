@@ -79,7 +79,7 @@ export class Documentation {
       return "Run 'runners.doc.wheel" + arg + "'";
     }
 
-    return "Run 'sys.doc " + arg + "' on " + target;
+    return "Run 'sys.doc" + arg + "' on " + target;
   }
 
   _manualRunMenuSysDocRun () {
