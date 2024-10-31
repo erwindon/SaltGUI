@@ -117,8 +117,6 @@ export class Output {
   static setHighlightObject (pParent, pObject, pStyleWhiteSpace = "pre-wrap", pLanguage = null) {
     const code = Utils.createElem("code");
     code.style.whiteSpace = pStyleWhiteSpace;
-    // light-yellow, but lighter
-    pParent.style.backgroundColor = "#FFFFF8";
 
     if (pLanguage !== null) {
       const outputFormats = Utils.getStorageItem("session", "output_formats");
@@ -1113,14 +1111,21 @@ export class Output {
         });
       }
 
+      Output.setHighlightObject(minionOutput, minionResponse);
+
+      /*
       minionOutput.classList.add(
         "minion-output",
         minionMultiLine ? "minion-output-multiple" : "minion-output-single");
       // hide the per-minion details when we have so many minions
+      */
       if (triangle && triangle.innerText === Character.WHITE_RIGHT_POINTING_TRIANGLE) {
         minionOutput.style.display = "none";
       }
       div.append(minionOutput);
+
+      minionOutput.innerText = "";
+      Output.setHighlightObject(minionOutput, minionResponse);
 
       pOutputContainer.append(div);
     }
