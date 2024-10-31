@@ -20,10 +20,16 @@ export class JobsSummaryPanel extends JobsPanel {
     this.addTable(["-dummy-", "-dummy-"]);
     this.setTableClickable("page");
     this.addMsg();
+    /* eslint-disable no-console */
+    console.log("constructor");
+    /* eslint-enable no-console */
   }
 
   onShow () {
     super.onShow(MAX_JOBS_SUMMARY);
+    /* eslint-disable no-console */
+    console.log("onShow");
+    /* eslint-enable no-console */
   }
 
   /* eslint-disable class-methods-use-this */
@@ -33,6 +39,9 @@ export class JobsSummaryPanel extends JobsPanel {
   /* eslint-enable class-methods-use-this */
 
   addJob (job) {
+    /* eslint-disable no-console */
+    console.log("addJob");
+    /* eslint-enable no-console */
     const tr = Utils.createTr();
     tr.id = Utils.getIdFromJobId(job.id);
 
