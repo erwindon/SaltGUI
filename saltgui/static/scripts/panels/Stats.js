@@ -33,7 +33,7 @@ export class StatsPanel extends Panel {
 
     this.onShowNow();
 
-    this.updateStatsTimer = window.setInterval(() => {
+    this.updateStatsInterval = window.setInterval(() => {
       this.onShowNow();
     }, 5000);
   }
@@ -51,10 +51,10 @@ export class StatsPanel extends Panel {
   }
 
   onHide () {
-    if (this.updateStatsTimer) {
-      // stop the timer when noone is looking
-      window.clearInterval(this.updateStatsTimer);
-      this.updateStatsTimer = null;
+    if (this.updateStatsInterval) {
+      // stop the timer when nobody is looking
+      window.clearInterval(this.updateStatsInterval);
+      this.updateStatsInterval = null;
     }
   }
 
@@ -70,8 +70,8 @@ export class StatsPanel extends Panel {
   _handleStats (pStatsData) {
     if (this.showErrorRowInstead(pStatsData)) {
       this.statsTd.innerHTML = "<span style='color:red'>this error is typically caused by using the <tt>collect_stats: True</tt> setting in the master configuration file, which is broken in at least the recent versions of salt-api</span>";
-      window.clearInterval(this.updateStatsTimer);
-      this.updateStatsTimer = null;
+      window.clearInterval(this.updateStatsInterval);
+      this.updateStatsInterval = null;
       return;
     }
 

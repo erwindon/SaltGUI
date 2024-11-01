@@ -65,7 +65,7 @@ export class StateIssues extends Issues {
       jobs = jobs.slice(0, MAX_HIGHSTATE_JOBS);
     }
 
-    this.jobs = jobs;
+    pPanel.jobs = jobs;
     // this is good only while "State" is the only issue-provider that uses play/pause
     pPanel.setPlayPauseButton(jobs.length === 0 ? "none" : "play");
 
@@ -73,31 +73,33 @@ export class StateIssues extends Issues {
   }
 
   _updateNextJob (pPanel, pMsg, pKeys) {
-    if (!this.jobs) {
+    if (!pPanel.jobs) {
       return;
     }
-    if (!this.jobs.length) {
+    if (!pPanel.jobs.length) {
       // this is good only while "State" is the only issue-provider
       pPanel.setPlayPauseButton("none");
-      this.jobs = null;
+      pPanel.jobs = null;
       Issues.readyCategory(pPanel, pMsg);
       return;
     }
 
     if (pPanel.playOrPause !== "play") {
-      window.setTimeout(() => {
+      pPanel.issuesStateTimeout = window.setTimeout(() => {
+        pPanel.issuesStateTimeout = null;
         this._updateNextJob(pPanel, pMsg, pKeys);
       }, 1000);
       return;
     }
 
-    const job = this.jobs.pop();
+    const job = pPanel.jobs.pop();
 
     const runnerJobsListJobPromise = this.api.getRunnerJobsListJob(job.id);
 
     runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
       StateIssues._handleJobRunnerJobsListJob(pPanel, pRunnerJobsListJobData, pKeys);
-      window.setTimeout(() => {
+      pPanel.issuesStateTimeout = window.setTimeout(() => {
+        pPanel.issuesStateTimeout = null;
         this._updateNextJob(pPanel, pMsg, pKeys);
       }, 100);
       return true;

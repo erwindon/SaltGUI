@@ -15,4 +15,8 @@ export class JobPage extends Page {
   handleSaltJobRetEvent (pData) {
     this.job.handleSaltJobRetEvent(pData);
   }
+
+  onHide () {
+    this.job.onHide();
+  }
 }

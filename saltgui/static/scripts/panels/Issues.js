@@ -66,4 +66,15 @@ export class IssuesPanel extends Panel {
       Utils.addToolTip(this.msgDiv, pErrorMsg);
     });
   }
+
+  onHide () {
+    // from StateIssues
+    this.jobs = null;
+
+    if (this.issuesStateTimeout) {
+      // stop the timer when nobody is looking
+      window.clearTimeout(this.issuesStateTimeout);
+      this.issuesStateTimeout = null;
+    }
+  }
 }

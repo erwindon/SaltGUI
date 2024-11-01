@@ -74,7 +74,8 @@ export class JobPanel extends Panel {
       return;
     }
 
-    window.setTimeout(() => {
+    this.refreshJobTimeout = window.setTimeout(() => {
+      this.refreshJobTimeout = null;
       if (this.playOrPause === "play") {
         this.onShow();
       } else {
@@ -116,6 +117,14 @@ export class JobPanel extends Panel {
       jobRefresh = "pause";
     }
     this.setPlayPauseButton(jobRefresh);
+  }
+
+  onHide () {
+    if (this.refreshJobTimeout) {
+      // stop the timer when nobody is looking
+      window.clearTimeout(this.refreshJobTimeout);
+      this.refreshJobTimeout = null;
+    }
   }
 
   static _isResultOk (result) {

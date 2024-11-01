@@ -64,6 +64,14 @@ export class JobsDetailsPanel extends JobsPanel {
     super.onShow(cnt);
   }
 
+  onHide () {
+    if (this.updateNextJobInterval) {
+      // stop the timer when nobody is looking
+      window.clearInterval(this.updateNextJobInterval);
+      this.updateNextJobInterval = null;
+    }
+  }
+
   jobsListIsReady () {
     this.nrErrors = 0;
 
@@ -185,6 +193,7 @@ export class JobsDetailsPanel extends JobsPanel {
       // only update one item at a time
       return;
     }
+
     if (!workLeft) {
       this.setPlayPauseButton("none");
       this.updateFooter();
