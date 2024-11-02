@@ -23,4 +23,8 @@ export class IssuesPage extends Page {
       this.jobs.handleSaltJobRetEvent(pData);
     }
   }
+
+  onHide () {
+    this.issues.onHide();
+  }
 }

@@ -85,6 +85,14 @@ export class HighStatePanel extends Panel {
     });
   }
 
+  onHide () {
+    if (this.nextJobTimeout) {
+      // stop the timer when nobody is looking
+      window.clearTimeout(this.nextJobTimeout);
+      this.nextJobTimeout = null;
+    }
+  }
+
   _addMenuItemStateApply (pMenu, pMinionId) {
     pMenu.addMenuItem("Apply state...", () => {
       const cmdArr = ["state.apply"];
@@ -205,7 +213,8 @@ export class HighStatePanel extends Panel {
       this._handleJob(job);
     }
 
-    window.setTimeout(() => {
+    this.nextJobTimeout = window.setTimeout(() => {
+      this.nextJobTimeout = null;
       this._updateNextJob();
     }, 1000);
   }

@@ -43,7 +43,8 @@ export class NodegroupsPanel extends Panel {
 
       localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
         this.updateMinions(pLocalGrainsItemsData);
-        window.setTimeout(() => {
+        this.nodeGroupTimeout = window.setTimeout(() => {
+          this.nodeGroupTimeout = null;
           this._handleStep(pWheelKeyListAllData.return[0].data.return);
         }, 100);
         return true;
@@ -59,6 +60,14 @@ export class NodegroupsPanel extends Panel {
       Utils.ignorePromise(localGrainsItemsPromise);
       return false;
     });
+  }
+
+  onHide () {
+    if (this.nodeGroupTimeout) {
+      // stop the timer when nobody is looking
+      window.clearTimeout(this.nodeGroupTimeout);
+      this.nodeGroupTimeout = null;
+    }
   }
 
   updateFooter () {
@@ -222,7 +231,8 @@ export class NodegroupsPanel extends Panel {
       titleElement.innerHTML = titleElement.innerHTML.replace("(loading)", txt);
 
       // try again for more
-      window.setTimeout(() => {
+      this.nodeGroupTimeout = window.setTimeout(() => {
+        this.nodeGroupTimeout = null;
         this._handleStep(pWheelKeyListAllSimpleData);
       }, 100);
     }, (pLocalTestVersionMsg) => {
@@ -271,7 +281,8 @@ export class NodegroupsPanel extends Panel {
     // system can decide to remove the play/pause button
     if (this.playOrPause !== "play") {
       // try again later for more
-      window.setTimeout(() => {
+      this.nodeGroupTimeout = window.setTimeout(() => {
+        this.nodeGroupTimeout = null;
         this._handleStep(pWheelKeyListAllSimpleData);
       }, 100);
       return;

@@ -12,7 +12,7 @@ export class LogoutPage extends Page {
   onRegister () {
     // don't verify for invalid sessions too often
     // this happens only when the server was reset
-    this.logoutTimer = window.setInterval(() => {
+    this.logoutInterval = window.setInterval(() => {
       this._logoutTimer();
     }, 60000);
 
@@ -51,9 +51,9 @@ export class LogoutPage extends Page {
         // not to any regular api functions
         // may happen due to https://github.com/saltstack/salt/issues/59620
         // repeating this is not so useful
-        if (this.logoutTimer) {
-          clearInterval(this.logoutTimer);
-          this.logoutTimer = null;
+        if (this.logoutInterval) {
+          clearInterval(this.logoutInterval);
+          this.logoutInterval = null;
         }
         return;
       }

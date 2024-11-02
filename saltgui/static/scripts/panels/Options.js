@@ -278,14 +278,6 @@ export class OptionsPanel extends Panel {
     }
   }
 
-  onHide () {
-    if (this.updateExpiresTimer) {
-      // stop the timer when noone is looking
-      window.clearInterval(this.updateExpiresTimer);
-      this.updateExpiresTimer = null;
-    }
-  }
-
   onShow () {
     // build the controls for all options
     for (const option of this.options) {
@@ -332,7 +324,7 @@ export class OptionsPanel extends Panel {
       }
 
       if (category === "session" && name === "expire") {
-        this.updateExpiresTimer = window.setInterval(() => {
+        this.updateExpiresInterval = window.setInterval(() => {
           // just redo the whole text-block
           OptionsPanel._enhanceSessionExpire(td, value, sessionStart);
         }, 1000);
@@ -374,6 +366,14 @@ export class OptionsPanel extends Panel {
           }
         }
       }
+    }
+  }
+
+  onHide () {
+    if (this.updateExpiresInterval) {
+      // stop the timer when nobody is looking
+      window.clearInterval(this.updateExpiresInterval);
+      this.updateExpiresInterval = null;
     }
   }
 

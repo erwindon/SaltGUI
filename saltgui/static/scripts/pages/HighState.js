@@ -23,4 +23,8 @@ export class HighStatePage extends Page {
       this.jobs.handleSaltJobRetEvent(pData);
     }
   }
+
+  onHide () {
+    this.highstate.onHide();
+  }
 }

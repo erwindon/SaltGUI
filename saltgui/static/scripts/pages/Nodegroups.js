@@ -31,4 +31,8 @@ export class NodegroupsPage extends Page {
     const nodegroups = Utils.getStorageItemObject("session", "nodegroups");
     return Object.keys(nodegroups).length > 0;
   }
+
+  onHide () {
+    this.nodegroups.onHide();
+  }
 }
