@@ -1,5 +1,6 @@
 /* global */
 
+import {BeaconsMinionPanel} from "../panels/BeaconsMinion.js";
 import {Character} from "../Character.js";
 import {Panel} from "./Panel.js";
 import {Router} from "../Router.js";
@@ -345,6 +346,8 @@ export class LoginPanel extends Panel {
         }
       }
     }, 1000);
+
+    BeaconsMinionPanel.getAvailableBeacons(this.api);
   }
 
   static _handleRunnerStateOrchestrateShowSls (pRunnerStateOrchestrateShowSlsData) {

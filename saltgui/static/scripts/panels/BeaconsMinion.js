@@ -54,10 +54,14 @@ export class BeaconsMinionPanel extends Panel {
       return false;
     });
 
+    BeaconsMinionPanel.getAvailableBeacons(this.api);
+  }
+
+  static getAvailableBeacons (pApi) {
     const beaconsListAvailable = Utils.getStorageItem("session", "beacons_list_available");
     if (!beaconsListAvailable) {
       // yes, we want the list from *all* minions
-      const localBeaconsListAvailablePromise = this.api.getLocalBeaconsListAvailable(null);
+      const localBeaconsListAvailablePromise = pApi.getLocalBeaconsListAvailable(null);
 
       localBeaconsListAvailablePromise.then((pLocalBeaconsListAvailableData) => {
         BeaconsMinionPanel._handleBeaconsListAvailable(pLocalBeaconsListAvailableData);

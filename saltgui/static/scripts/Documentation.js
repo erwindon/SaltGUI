@@ -416,7 +416,7 @@ export class Documentation {
 
   static _manualRunMenuBeaconNamePrepare () {
     const commandLine = document.querySelector(".run-command #command").value;
-    if (!commandLine.startsWith("beacons.add ")) {
+    if (commandLine !== "beacons.add" && !commandLine.startsWith("beacons.add ")) {
       return null;
     }
     return "List standard beacon names";
