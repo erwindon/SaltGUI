@@ -476,6 +476,14 @@ export class LoginPanel extends Panel {
 
     const fullReturn = wheelConfigValuesData.saltgui_full_return;
     Utils.setStorageItem("session", "full_return", fullReturn);
+
+    const id = wheelConfigValuesData.id;
+    const clusterId = wheelConfigValuesData.cluster_id;
+    const clusterPeers = wheelConfigValuesData.cluster_peers;
+    if (id && clusterId && clusterPeers) {
+      const clusterInfo = "This is node " + id + " from cluster " + clusterId + " " + JSON.stringify(clusterPeers).replace(/"/g, "");
+      Utils.setStorageItem("session", "cluster_info", clusterInfo);
+    }
   }
 
   _onLoginFailure (error) {
