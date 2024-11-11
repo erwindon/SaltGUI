@@ -46,6 +46,7 @@ export class KeysPanel extends Panel {
     this.nrRejected = 0;
 
     this.showSyndicInfo(false);
+    this.showClusterInfo();
 
     this.loadMinionsTxt();
 
@@ -99,6 +100,13 @@ export class KeysPanel extends Panel {
       warningText += " Keys for minions that are connected to other salt-masters are not always shown in this SaltGUI.";
       warningText += " Commands issued from this salt-master may involve minions that are not listed in SaltGUI.";
       this.setWarningText("info", warningText.trim());
+    }
+  }
+
+  showClusterInfo () {
+    const clusterInfo = Utils.getStorageItem("session", "cluster_info");
+    if (clusterInfo) {
+      this.setWarningText("info", clusterInfo);
     }
   }
 
