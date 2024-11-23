@@ -119,6 +119,9 @@ This is because the salt-api can only read the file after login.
 Note that adding the `rest` authentication method in configuration section `external_auth` forces the parameter `keep_acl_in_token` to become `true`.
 That again changes the behavior of the other authentication methods and may lead to unexpected authentication problems.
 
+When the file is absent or empty, the defaults apply.
+Use an empty file to prevent the otherwise harmless [404](https://www.wikipedia.org/wiki/HTTP_404) error.
+
 See the [EAUTH documentation](https://docs.saltstack.com/en/latest/topics/eauth/index.html) and the [Salt auth source code](https://github.com/saltstack/salt/tree/master/salt/auth) for more information.
 
 
@@ -415,7 +418,11 @@ It can be used for any information, e.g.:
 - informing users about system availability
 - etc.
 
-The text is stored in file `saltgui/static/salt-motd.txt` or `saltgui/static/salt-motd.html`. The first must be pre-formatted text only. The second one can contain full HTML text. Both are shown when they are present. Note that the message should not contain sensitive data, as its content is shown before logging in.
+The text is stored in file `saltgui/static/salt-motd.txt` or `saltgui/static/salt-motd.html`.
+The first must be pre-formatted text only. The second one can contain full HTML text. Both are shown when they are present.
+When the files are absent or empty, no message is shown.
+Use empty files to prevent the otherwise harmless [404](https://www.wikipedia.org/wiki/HTTP_404) error.
+Note that the message should not contain sensitive data, as its content is shown before logging in.
 
 Alternatively, or additionally, the text can be retrieved from the `master` file entries `saltgui_motd_txt` and `saltgui_motd_html`. These entries can contain sensitive information because its content can only be retrieved after login. But it is still recommended to not let the text contain any sensitive data.
 
@@ -493,6 +500,7 @@ The filename is `saltgui/static/minions.txt`.
 Differences with this file are highlighted on the Keys page.
 Minions that are unexpectedly down are highlighted on the Minions page.
 When the file is absent or empty, no such validation is done.
+Use an empty file to prevent the otherwise harmless [404](https://www.wikipedia.org/wiki/HTTP_404) error.
 It is suggested that the file is generated from a central source,
 e.g. the Azure, AWS or similar cloud portals; or from a company asset management list.
 
