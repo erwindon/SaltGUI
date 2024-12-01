@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo apt install -y libxss1 libgconf-2-4 libnss3 libasound2
+
 # always cleanup the docker images when something goes wrong
 function cleanupdocker {
     docker-compose --file docker/docker-compose.yml rm --force --stop
