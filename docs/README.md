@@ -6,7 +6,7 @@ The version tagged `release` is the latest released version. The version `master
 
 See [SaltGUI documentation](https://erwindon.github.io/SaltGUI/) for the complete documentation.
 
-IMPORTANT: since Salt version 3006, it is needed to add the configuration option `netapi_enable_clients` to allow salt-api - and thus SaltGUI - to work. See also [netapi-enable-clients.html](https://docs.saltproject.io/en/3006.0/topics/netapi/netapi-enable-clients.html#netapi-enable-clients). Additionally, any Python
+IMPORTANT: since Salt version 3006, it is needed to add the configuration option `netapi_enable_clients` to allow salt-api - and thus SaltGUI - to work. See also [netapi-enable-clients.html](https://docs.saltproject.io/en/latest/topics/netapi/netapi-enable-clients.html#netapi-enable-clients). Additionally, any Python
 packages that the SaltStack installation also depends on, must be installed with `salt-pip`. This includes authentication plugins
 such as `yubico_client`, or execution modules such as `boto3_sns`.
 
