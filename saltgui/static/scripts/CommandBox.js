@@ -477,12 +477,14 @@ export class CommandBox {
     CommandBox._populateTemplateCatMenu();
     CommandBox._populateTemplateTmplMenu();
 
-    const localTestProviders = pApi.getLocalTestProviders();
+    targetField.addEventListener('change', (evt) => {
+      const localTestProviders = pApi.getLocalTestProviders(targetField.value);
 
-    localTestProviders.then((pData) => {
-      Documentation._handleLocalTestProviders(pData);
-    }, () => {
-      // VOID
+      localTestProviders.then((pData) => {
+        Documentation._handleLocalTestProviders(pData);
+      }, () => {
+        // VOID
+      });
     });
   }
 

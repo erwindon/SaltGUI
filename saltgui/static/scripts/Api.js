@@ -180,11 +180,11 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getLocalTestProviders () {
+  getLocalTestProviders (pTgt) {
     const params = {
       "client": "local",
       "fun": "test.providers",
-      "tgt": "*"
+      "tgt": pTgt || "*"
     };
     return this.apiRequest("POST", "/", params);
   }
