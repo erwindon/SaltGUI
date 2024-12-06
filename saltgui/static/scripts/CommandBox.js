@@ -477,15 +477,18 @@ export class CommandBox {
     CommandBox._populateTemplateCatMenu();
     CommandBox._populateTemplateTmplMenu();
 
-    targetField.addEventListener('change', (evt) => {
-      const localTestProviders = pApi.getLocalTestProviders(targetField.value);
+    const refreshTestProviders = (evt) => {
+      const targetType = TargetType.menuTargetType._value;
+      const localTestProviders = pApi.getLocalTestProviders(targetField.value, targetType);
 
       localTestProviders.then((pData) => {
         Documentation._handleLocalTestProviders(pData);
       }, () => {
         // VOID
       });
-    });
+      TargetType._callback = refreshTestProviders;
+    };
+    targetField.addEventListener('change', refreshTestProviders);
   }
 
   static hideManualRun () {
