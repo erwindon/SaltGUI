@@ -180,12 +180,25 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getLocalTestProviders () {
+  getLocalTestProviders (pTgt, pTgtType) {
+    pTgtType = pTgtType || 'glob';
+
+    switch (pTgtType) {
+      case 'glob':
+        pTgt = pTgt || '*';
+        break;
+      case 'list':
+        pTgt = pTgt.split(',').map(t => t.trim());
+        break;
+    }
+
     const params = {
       "client": "local",
       "fun": "test.providers",
-      "tgt": "*"
+      "tgt": pTgt || "*",
+      "tgt_type": pTgtType || 'glob'
     };
+
     return this.apiRequest("POST", "/", params);
   }
 

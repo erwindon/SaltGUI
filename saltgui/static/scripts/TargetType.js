@@ -72,6 +72,10 @@ export class TargetType {
     TargetType.menuTargetType._value = targetType;
 
     TargetType._setMenuMarker();
+
+    if (this._callback) {
+      this._callback(targetType);
+    }
   }
 
   static _setMenuMarker () {

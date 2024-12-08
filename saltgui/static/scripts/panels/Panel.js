@@ -875,6 +875,7 @@ export class Panel {
     TargetType.autoSelectTargetType(pTargetString);
 
     target.value = pTargetString;
+    target.dispatchEvent(new Event('change'));
     command.value = pCommandString;
     // the menu may become (in)visible due to content of command field
     this.router.commandbox.cmdmenu.verifyAll();
