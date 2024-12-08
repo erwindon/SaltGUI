@@ -476,6 +476,15 @@ export class CommandBox {
 
     CommandBox._populateTemplateCatMenu();
     CommandBox._populateTemplateTmplMenu();
+    CommandBox._populateProviders(pApi);
+  }
+
+  static _populateProviders (pApi) {
+
+    if (Object.keys(Documentation.PROVIDERS).length > 0) {
+      // no need to collect it again
+      return;
+    }
 
     const localTestProviders = pApi.getLocalTestProviders();
 
