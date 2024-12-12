@@ -87,6 +87,28 @@ export class TargetType {
     }
   }
 
+  static getTargetTypeFromTarget (pTarget) {
+    if (Array.isArray(pTarget)) {
+      return "list";
+    }
+    if (pTarget.includes("@") || pTarget.includes(" ") ||
+      pTarget.includes("(") || pTarget.includes(")")) {
+      // "@" is a strong indicator for compound target
+      // but "space", "(" and ")" are also typical for compound target
+      return "compound";
+    }
+    if (pTarget.includes(",")) {
+      // "," is a strong indicator for list target (when it is also not compound)
+      return "list";
+    }
+    if (pTarget.startsWith("#")) {
+      // "#" at the start of a line is a strong indicator for nodegroup target
+      // this is not a SALTSTACK standard, but our own invention
+      return "nodegroup";
+    }
+    return "glob";
+  }
+
   static autoSelectTargetType (pTarget) {
 
     if (!TargetType.menuTargetType._system) {
@@ -94,23 +116,8 @@ export class TargetType {
       return;
     }
 
-    if (Array.isArray(pTarget)) {
-      TargetType.menuTargetType._value = "list";
-    } else if (pTarget.includes("@") || pTarget.includes(" ") ||
-      pTarget.includes("(") || pTarget.includes(")")) {
-      // "@" is a strong indicator for compound target
-      // but "space", "(" and ")" are also typical for compound target
-      TargetType.menuTargetType._value = "compound";
-    } else if (pTarget.includes(",")) {
-      // "," is a strong indicator for list target (when it is also not compound)
-      TargetType.menuTargetType._value = "list";
-    } else if (pTarget.startsWith("#")) {
-      // "#" at the start of a line is a strong indicator for nodegroup target
-      // this is not a SALTSTACK standard, but our own invention
-      TargetType.menuTargetType._value = "nodegroup";
-    } else {
-      TargetType.menuTargetType._value = "glob";
-    }
+    const targetType = TargetType.getTargetTypeFromTarget (pTarget);
+    TargetType.menuTargetType._value = targetType;
 
     // show the new title
     TargetType._updateTargetTypeText();

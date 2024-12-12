@@ -485,12 +485,17 @@ export class CommandBox {
       return;
     }
 
-    const localTestProviders = pApi.getLocalTestProviders();
+    const target = Utils.getStorageItem("session", "test_providers_target", "*");
+    if (target === "SKIP") {
+      Documentation.PROVIDERS = {"SKIPPED": []};
+      return;
+    }
 
+    const localTestProviders = pApi.getLocalTestProviders(target);
     localTestProviders.then((pData) => {
       Documentation._handleLocalTestProviders(pData);
     }, () => {
-      // VOID
+      Documentation.PROVIDERS = {"ERROR": []};
     });
   }
 

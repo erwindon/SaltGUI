@@ -484,6 +484,12 @@ export class LoginPanel extends Panel {
       const clusterInfo = "This is node " + id + " from cluster " + clusterId + " " + JSON.stringify(clusterPeers).replace(/"/g, "");
       Utils.setStorageItem("session", "cluster_info", clusterInfo);
     }
+
+    let testProvidersTarget = wheelConfigValuesData.test_providers_target;
+    if (!testProvidersTarget) {
+      testProvidersTarget = "*";
+    }
+    Utils.setStorageItem("session", "test_providers_target", testProvidersTarget);
   }
 
   _onLoginFailure (error) {

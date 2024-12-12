@@ -291,6 +291,12 @@ export class Documentation {
       if (Object.keys(Documentation.PROVIDERS).length === 0) {
         html += "<p>The documentation index has not been retrieved yet. We'll just assume this is a regular command.</p>";
         concreteModules = [cmd[1]];
+      } else if ("SKIPPED" in Documentation.PROVIDERS) {
+        html += "<p>The documentation index is skipped on this system. We'll just assume this is a regular command.</p>";
+        concreteModules = [cmd[1]];
+      } else if ("ERROR" in Documentation.PROVIDERS) {
+        html += "<p>The documentation index could not be retrieved. We'll just assume this is a regular command.</p>";
+        concreteModules = [cmd[1]];
       }
 
       switch (concreteModules.length) {
