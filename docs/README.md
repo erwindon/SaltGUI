@@ -392,7 +392,35 @@ Each issue has its own dropdown-menu, which typically contains:
 But note that there might be more possible solutions, some of which may actually be more preferred.
 * A navigation-command to go to a page for more details.
 
-## Custom command documentation
+## Command documentation
+
+### Internal documentation
+When at least a part of a command is entered, the documentation will have a menu item to run a salt command that collects the internal documentation.
+When the target field is still empty, all minions are asked to produce the documentation.
+Otherwise the given target is used. When using identical minions, there is not much difference, but with minions on different operating systems,  this helps to get the best matching documentation.
+Although multiple minions may return the documentation, only the first answer is actually presented.
+When some minions are offline, it may be useful to specify a target that does not include the offline minions, e.g. by specifying a single minion that is known to be online.
+
+### External documentation
+When the function "Online reference for ..." is used, a set of URLs is produced. The URLs point to the SaltStack documentation on the `docs.saltproject.io` website.
+When more parts of the command are already typed in, then more specific URLs become available.
+This function does not execute a command to any minion.
+When the command-box is opened for the first time, a list of command-providers is retrieved from all minions to determine which providers (categories) are available.
+An alternative target can be specified in the configurationfile for retrieving the list.
+
+To skip retrieving this information, use value `SKIP`.
+```
+test_providers_target: "SKIP"
+```
+
+To specify an alternative target to retrieve this information, use any other value.
+This may be single minion-id, or any other minion pattern.
+The target-type is automatically decided, just like in the "Target" field.
+```
+test_providers_target: "minion7"
+```
+
+### Custom command documentation
 A custom HTML help text can be shown from the "Manual Run" overlay.
 
 To use it,

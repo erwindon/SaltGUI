@@ -3,6 +3,7 @@
 import {Character} from "./Character.js";
 import {CommandBox} from "./CommandBox.js";
 import {Router} from "./Router.js";
+import {TargetType} from "./TargetType.js";
 import {Utils} from "./Utils.js";
 
 export class HTTPError extends Error {
@@ -180,11 +181,12 @@ export class API {
     return this.apiRequest("POST", "/", params);
   }
 
-  getLocalTestProviders () {
+  getLocalTestProviders (pTgt) {
     const params = {
       "client": "local",
       "fun": "test.providers",
-      "tgt": "*"
+      "tgt": pTgt,
+      "tgt_type": TargetType.getTargetTypeFromTarget(pTgt)
     };
     return this.apiRequest("POST", "/", params);
   }

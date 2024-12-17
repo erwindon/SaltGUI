@@ -476,13 +476,26 @@ export class CommandBox {
 
     CommandBox._populateTemplateCatMenu();
     CommandBox._populateTemplateTmplMenu();
+    CommandBox._populateTestProviders(pApi);
+  }
 
-    const localTestProviders = pApi.getLocalTestProviders();
+  static _populateTestProviders (pApi) {
+    if (Object.keys(Documentation.PROVIDERS).length > 0) {
+      // no need to collect it again
+      return;
+    }
 
+    const target = Utils.getStorageItem("session", "test_providers_target", "*");
+    if (target === "SKIP") {
+      Documentation.PROVIDERS = {"SKIPPED": []};
+      return;
+    }
+
+    const localTestProviders = pApi.getLocalTestProviders(target);
     localTestProviders.then((pData) => {
       Documentation._handleLocalTestProviders(pData);
     }, () => {
-      // VOID
+      Documentation.PROVIDERS = {"ERROR": []};
     });
   }
 
