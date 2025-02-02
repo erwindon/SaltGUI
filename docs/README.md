@@ -10,6 +10,10 @@ IMPORTANT: since Salt version 3006, it is needed to add the configuration option
 packages that the SaltStack installation also depends on, must be installed with `salt-pip`. This includes authentication plugins
 such as `yubico_client`, or execution modules such as `boto3_sns`.
 
+IMPORTANT: The SaltGUI team can only support SaltStack versions 3006 and higher. Versions before that are no longer published by the SaltStack team.
+That makes it very hard to perform proper testing for SaltGUI releases.
+We suggest to upgrade the SaltStack installation when you are still using a version that is older than that.
+
 [![CodeQL](https://github.com/erwindon/SaltGUI/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/erwindon/SaltGUI/actions/workflows/codeql-analysis.yml)
 
 ## Screenshots
