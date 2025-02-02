@@ -8,21 +8,20 @@ LABEL version=3007.1
 ENV SALT_VERSION=3007.1
 ENV DEBIAN_FRONTEND=noninteractive
 
-# add saltstack repo
-RUN yum install --assumeyes epel-release curl gnupg2 net-tools
-RUN rpm --import https://repo.saltproject.io/salt/py3/redhat/9/x86_64/SALT-PROJECT-GPG-PUBKEY-2023.pub
-RUN curl -fsSL https://repo.saltproject.io/salt/py3/redhat/9/x86_64/minor/3007.1.repo > /etc/yum.repos.d/salt.repo
-RUN yum update --assumeyes
+# get saltstack software
+RUN yum install --assumeyes epel-release curl
 
 # install salt-minion
-RUN yum install --assumeyes salt-minion-${SALT_VERSION}
+# not using repo, so must explicitly do all packages
+RUN yum install --assumeyes https://packages.broadcom.com/artifactory/saltproject-rpm/salt-${SALT_VERSION}-0.x86_64.rpm
+RUN yum install --assumeyes https://packages.broadcom.com/artifactory/saltproject-rpm/salt-minion-${SALT_VERSION}-0.x86_64.rpm
 
 # cleanup temporary files
-RUN rm -rf /var/lib/yum/* /var/cache/yum \
+RUN rm -rf /var/lib/yum/* /var/cache/yum *.rpm \
   && yum clean all
 
 # copy the minion configuration
 COPY ./conf/minion /etc/salt/minion
 
 # define main container command
-CMD /usr/bin/salt-minion
+CMD ["/usr/bin/salt-minion"]

@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
 LABEL name=salt-minion
@@ -8,27 +8,25 @@ LABEL version=3007.1
 ENV SALT_VERSION=3007.1
 ENV DEBIAN_FRONTEND=noninteractive
 
-# fix ubuntu
-# see https://askubuntu.com/questions/1235914/hash-sum-mismatch-error-due-to-identical-sha1-and-md5-but-different-sha256
-RUN mkdir /etc/gcrypt && echo all >> /etc/gcrypt/hwf.deny
-
-# add saltstack repo
+# make download possible
 RUN apt-get update
-RUN apt-get install --yes --no-install-recommends curl ca-certificates gnupg2 net-tools
-RUN curl -fsSL -o /etc/apt/keyrings/salt-archive-keyring-2023.gpg https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/SALT-PROJECT-GPG-PUBKEY-2023.gpg
-RUN echo "deb [signed-by=/etc/apt/keyrings/salt-archive-keyring-2023.gpg arch=amd64] https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/minor/${SALT_VERSION} jammy main" > /etc/apt/sources.list.d/salt.list
-RUN apt-get update
+RUN apt-get install --yes --no-install-recommends curl
 
 # install salt-minion
-RUN apt-get install salt-minion=${SALT_VERSION} --yes --no-install-recommends
+# not using repo, so must explicitly do all packages
+RUN curl -k -L -o salt-common_${SALT_VERSION}.deb https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-common_${SALT_VERSION}_amd64.deb
+RUN curl -k -L -o salt-minion_${SALT_VERSION}.deb https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-minion_${SALT_VERSION}_amd64.deb
+RUN apt install --yes --no-install-recommends ./salt-common_${SALT_VERSION}.deb ./salt-minion_${SALT_VERSION}.deb
 
 # cleanup temporary files
-RUN rm -rf /var/lib/apt/lists/* \
+RUN rm -rf /var/lib/apt/lists/* *.deb \
   && apt-get -y autoremove \
   && apt-get clean
 
 # copy the minion configuration
 COPY ./conf/minion /etc/salt/minion
 
+ENV CRYPTOGRAPHY_OPENSSL_NO_LEGACY=true
+
 # define main container command
-CMD /usr/bin/salt-minion
+CMD ["/usr/bin/salt-minion"]
