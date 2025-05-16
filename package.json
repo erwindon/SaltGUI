@@ -9,7 +9,7 @@
   "devDependencies": {
     "@babel/core": "^7.27.1",
     "@babel/preset-env": "^7.26.9",
-    "@babel/register": "^7.25.9",
+    "@babel/register": "^7.27.1",
     "babel-plugin-istanbul": "^7.0.0",
     "chai": "^5.2.0",
     "eslint": "^8.57.1",
