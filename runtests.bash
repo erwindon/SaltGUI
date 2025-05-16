@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo systemctl stop salt-master salt-api
+
 sudo apt install -y libxss1 libgconf-2-4 libnss3 libasound2
 
 # always cleanup the docker images when something goes wrong
