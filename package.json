@@ -14,13 +14,13 @@
     "chai": "^5.2.0",
     "eslint": "^8.57.1",
     "eslint-plugin-compat": "^6.0.2",
-    "mocha": "^11.3.0",
+    "mocha": "^11.0.1",
     "nightmare": "^3.0.2",
     "nyc": "^17.1.0",
-    "stylelint": "^16.19.1",
+    "stylelint": "^14.0.1",
     "stylelint-config-standard": "^29.0.0",
     "stylelint-csstree-validator": "^2.0.0",
-    "stylelint-scss": "^6.12.0"
+    "stylelint-scss": "^5.3.2"
   },
   "eslintConfig": {
     "env": {
