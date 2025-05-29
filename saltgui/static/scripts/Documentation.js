@@ -10,6 +10,15 @@ import {Utils} from "./Utils.js";
 
 export class Documentation {
 
+  static _escapeHtml(unsafe) {
+    return unsafe
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
   // formatting of the documentation is done as a regular output type
   // that is therefore in output.js
 
@@ -412,8 +421,8 @@ export class Documentation {
 
     if (cmd.length >= 3 && cmd[0] === "modules" && cmd[1] === "beacons" && ["add", "modify"].indexOf(cmd[2]) >= 0 && argsArray.length >= 2 && typeof argsArray[1] === "string") {
       const beaconName = argsArray[1];
-      html += "<p>Beacon-name '" + beaconName + "' cannot be verified. We'll just assume it actually exists. The link below might not work.</p>";
-      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "beacons/all/salt.beacons." + beaconName + ".html' target='_blank' rel='noopener'>Beacon Module '" + beaconName + "'</a>" + Documentation.EXTERNAL_LINK + "</p>";
+      html += "<p>Beacon-name '" + Documentation._escapeHtml(beaconName) + "' cannot be verified. We'll just assume it actually exists. The link below might not work.</p>";
+      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "beacons/all/salt.beacons." + Documentation._escapeHtml(beaconName) + ".html' target='_blank' rel='noopener'>Beacon Module '" + Documentation._escapeHtml(beaconName) + "'</a>" + Documentation.EXTERNAL_LINK + "</p>";
     }
 
     const output = document.querySelector(".run-command pre");
