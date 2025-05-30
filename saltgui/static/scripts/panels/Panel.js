@@ -707,7 +707,7 @@ export class Panel {
 
     const minions = pData.return[0];
     const minionIds = Object.keys(minions).sort();
-    const minionsDict = Utils.getStorageItemObject("session", "minions-txt");
+    const minionsDict = Utils.getStorageItemObject("session", "minions_txt");
 
     // save for the autocompletion
     // This callback will also be called after LOGOUT due to the regular error handling
