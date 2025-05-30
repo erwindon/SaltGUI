@@ -37,3 +37,12 @@ jobs:
     - run: npm run eslint
 
     - run: npm run test:coverage
+
+    - run: |
+        echo "--- searching for 'replaceAll' ---"
+        CNT=`find saltgui/static/scripts -name "*.js" | xargs fgrep "replaceAll" | wc -l`
+        if [ $CNT != 0 ]; then
+          find saltgui/static/scripts -name "*.js" | xargs fgrep "replaceAll"
+          echo "'replaceAll' must be replaced with 'replace(//g, ...)' due to regression test"
+          exit 1
+        fi
