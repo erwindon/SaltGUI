@@ -273,9 +273,15 @@ export class Router {
     for (let nr = 1; nr <= 2; nr++) {
       const item = document.getElementById("button-" + pPage.path + nr);
       item.style.color = !visible && hasVisibleChild ? "lightgray" : "black";
+      if (!visible) {
+        // hide the shortcut indicator
+        item.classList.remove("menu-item-first-letter");
+      }
       if (visible || hasVisibleChild) {
+        // show the menu item
         item.classList.remove("menu-item-hidden");
       } else {
+        // hide the menu item
         item.classList.add("menu-item-hidden");
       }
     }
