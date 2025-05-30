@@ -34,7 +34,7 @@ export class GrainsPanel extends Panel {
       // the div is not added to the DOM yet
       const tr = this.div.querySelector("#grains-table-thead-tr");
       for (const previewGrain of this.previewGrains) {
-        const previewGrainTitle = previewGrain.replaceAll(/[=].*$/g, "");
+        const previewGrainTitle = previewGrain.replace(/[=].*$/g, "");
         const th = Utils.createElem("th", "", previewGrainTitle);
         tr.appendChild(th);
       }
@@ -138,7 +138,7 @@ export class GrainsPanel extends Panel {
     for (const previewGrain of this.previewGrains) {
       const td = Utils.createTd();
       if (typeof pMinionData === "object") {
-        const previewGrainValue = previewGrain.replaceAll(/^[^=]*=/g, "");
+        const previewGrainValue = previewGrain.replace(/^[^=]*=/g, "");
         if (previewGrainValue.startsWith("$")) {
           // it is a json path
           const obj = jsonPath(pMinionData, previewGrainValue);
