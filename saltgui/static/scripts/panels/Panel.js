@@ -765,7 +765,7 @@ export class Panel {
       txt += ", press " + Character.buttonInText(Character.CH_PAUSE) + " to pause";
     }
 
-    txt = txt.replaceAll(/^, /g, "");
+    txt = txt.replace(/^, /g, "");
 
     this.setMsg(txt.length > 0 ? txt : "(???)");
   }

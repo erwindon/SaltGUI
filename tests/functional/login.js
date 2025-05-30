@@ -1,4 +1,4 @@
-/* global beforeEach describe it process */
+/* global afterEach beforeEach describe it process */
 
 import Nightmare from "nightmare";
 import {assert} from "chai";
@@ -26,18 +26,37 @@ describe("Funtional tests", function () {
     };
 
     if (process.env.NIGHTMARE_DEBUG === "1") {
+      console.log("NIGHTMARE_DEBUG=1, setting additional options");
+
       // show the browser and the debug window
       options.openDevTools = true;
       // to show in a separate window
       // options.openDevTools = { mode: "detach" };
-      options.show = true;
     }
 
     browser = new Nightmare(options);
-    browser.
+
+    browser.on('console', (type, message) => {
+      console.log(`[console][${type}] ` + JSON.stringify(message, null, 2));
+    });
+
+    browser.on('page', (type, message, stack) => {
+      console.error(`[page-error][${type}] ${JSON.stringify(message)}`);
+      if (stack) {
+        console.error('stack:', stack);
+      }
+    });
+
+    return browser.
       goto(url).
       wait(1000);
   });
+
+  /* eslint-disable arrow-body-style */
+  afterEach(() => {
+    return browser.end();
+  });
+  /* eslint-enable arrow-body-style */
 
   describe("Login and logout", () => {
 
@@ -46,14 +65,12 @@ describe("Funtional tests", function () {
         wait(() => document.location.href.includes("login")).
         wait(500).
         evaluate(() => document.location.href).
-        end().
         then((href) => {
           href = href.replace(/[?]reason=.*/, "");
-          assert.equal(href, url + "login");
-          return true;
+          assert.equal(href, url);
         }).
         then(done).
-        catch(done);
+        catch((err) => done(err));
     });
 
     it("we cannot login with false credentials", (done) => {
@@ -67,10 +84,8 @@ describe("Funtional tests", function () {
         wait("#notice-wrapper div.notice_auth_failed").
         wait(1000).
         evaluate(() => document.querySelector("#notice-wrapper div").textContent).
-        end().
         then((message) => {
           assert.equal(message, "Authentication failed");
-          return true;
         }).
         then(done).
         catch(done);
@@ -91,10 +106,8 @@ describe("Funtional tests", function () {
         }).
         wait(1000).
         evaluate(() => document.location.href).
-        end().
         then((href) => {
-          assert.equal(href, url);
-          return true;
+          assert.equal(href, url + "#minions");
         }).
         then(done).
         catch(done);
@@ -125,11 +138,9 @@ describe("Funtional tests", function () {
         wait(() => document.location.href.includes("login")).
         wait(1000).
         evaluate(() => document.location.href).
-        end().
         then((href) => {
           // and we redirected to the login page
-          assert.equal(href, url + "login?reason=logout");
-          return true;
+          assert.equal(href, url + "?reason=logout#login");
         }).
         then(done).
         catch(done);
