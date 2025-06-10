@@ -310,15 +310,15 @@ export class Documentation {
 
       switch (concreteModules.length) {
       case 0:
-        html += "<p>'" + cmd[1] + "' is an unknown module name. We'll just assume it actually exists. The links below (if any) might not work.</p>";
+        html += "<p>'" + Documentation._escapeHtml(cmd[1]) + "' is an unknown module name. We'll just assume it actually exists. The links below (if any) might not work.</p>";
         break;
       case 1:
         // simple modules case
         // wheel/runners cases are always simple
         if (cmd[0] !== "modules") {
-          html += "<p>Module-name '" + cmd[0] + "." + cmd[1] + "' cannot be verified. We'll just assume it actually exists. The links below might not work.</p>";
+          html += "<p>Module-name '" + Documentation._escapeHtml(cmd[0]) + "." + Documentation._escapeHtml(cmd[1]) + "' cannot be verified. We'll just assume it actually exists. The links below might not work.</p>";
         } else if (cmd[1] !== concreteModules[0]) {
-          html += "<p>The internal name for '" + cmd[1] + "' is '" + concreteModules[0] + "'.</p>";
+          html += "<p>The internal name for '" + Documentation._escapeHtml(cmd[1]) + "' is '" + Documentation._escapeHtml(concreteModules[0]) + "'.</p>";
         }
         break;
       default:
