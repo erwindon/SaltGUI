@@ -257,7 +257,7 @@ export class Documentation {
 
     // title line
     let html = "";
-    html += "<h3>Documentation for '" + cmd.join(".").replace(/^modules[.]/, "") + "':</h3>";
+    html += "<h3>Documentation for '" + Documentation._escapeHtml(cmd.join(".").replace(/^modules[.]/, "")) + "':</h3>";
 
     // level 0
     html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "' target='_blank' rel='noopener'>Salt Module Reference</a>" + Documentation.EXTERNAL_LINK + "</p>";
@@ -266,13 +266,13 @@ export class Documentation {
     // Function getKeywordFragments makes sure that
     // the cmd array has at least one element.
     // The default is "modules"
-    let pageTitle = "All '" + cmd[0] + "' modules";
+    let pageTitle = "All '" + Documentation._escapeHtml(cmd[0]) + "' modules";
     if (cmd[0] === "modules") {
       // the page title is different for this page
       // the link to the page must use the same title
       pageTitle = "All 'execution' modules";
     }
-    html += "<p><a href='" + Documentation.DOCUMENTATION_URL + cmd[0] + "/all/index.html' target='_blank' rel='noopener'>" + pageTitle + "</a>" + Documentation.EXTERNAL_LINK + "</p>";
+    html += "<p><a href='" + Documentation.DOCUMENTATION_URL + Documentation._escapeHtml(cmd[0]) + "/all/index.html' target='_blank' rel='noopener'>" + Documentation._escapeHtml(pageTitle) + "</a>" + Documentation.EXTERNAL_LINK + "</p>";
 
     // When the module is a virtual module, we want
     // to show all relevant concrete modules
