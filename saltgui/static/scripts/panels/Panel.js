@@ -709,13 +709,6 @@ export class Panel {
     const minionIds = Object.keys(minions).sort();
     const minionsDict = Utils.getStorageItemObject("session", "minions_txt");
 
-    // save for the autocompletion
-    // This callback will also be called after LOGOUT due to the regular error handling
-    // Do not store the information in that case
-    if (Utils.getStorageItem("session", "token")) {
-      Utils.setStorageItem("session", "minions", JSON.stringify(minionIds));
-    }
-
     this.nrOnline = 0;
     this.nrOffline = 0;
     for (const minionId of minionIds) {

@@ -459,17 +459,6 @@ export class CommandBox {
       targetList.appendChild(option);
     }
 
-    if (Utils.getStorageItem("session", "minions", "N/A") === "N/A") {
-      const wheelKeyListAllPromise = pApi.getWheelKeyListAll();
-      /* eslint-disable no-unused-vars */
-      wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
-        const minions = pWheelKeyListAllData.return[0].data.return.minions;
-        Utils.setStorageItem("session", "minions", JSON.stringify(minions));
-      }, (pWheelKeyListAllMsg) => {
-        // VOID
-      });
-      /* eslint-enable no-unused-vars */
-    }
     const minions = Utils.getStorageItemList("session", "minions");
     for (const minionId of [...minions].sort()) {
       const option = Utils.createElem("option");
