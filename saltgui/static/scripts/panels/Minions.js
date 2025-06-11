@@ -542,11 +542,16 @@ export class MinionsPanel extends Panel {
 
       // unclear for which older saltstack versions also
       ["CVE-2024-26130", MASTER + MINION, ["3006", "7"]],
+
       ["CVE-2024-27306", MASTER + MINION, ["3006", "7"]],
+
+      ["CVE-2024-34064", MASTER + MINION, ["3006", "[0-8]"]],
       ["CVE-2024-34064", MASTER + MINION, ["3007", "0"]],
+
+      ["CVE-2024-37088", MASTER + MINION, ["3006", "[0-8]"]],
     ];
 
-    // the above table is up-to-date until (including) 3006.8 and 3007.1
+    // the above table is up-to-date until (including) 3006.11 and 3007.3
   }
 
   static _getCveBugs (pVersion, pNodeType) {
