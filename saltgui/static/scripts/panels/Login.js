@@ -306,6 +306,7 @@ export class LoginPanel extends Panel {
     // We need these functions to populate the dropdown boxes
     const wheelConfigValuesPromise = this.api.getWheelConfigValues();
     const runnerStateOrchestrateShowSlsPromise = this.api.getRunnerStateOrchestrateShowSls();
+    const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
 
     // these may have been hidden on a previous logout
     Utils.hideAllMenus(false);
@@ -322,6 +323,16 @@ export class LoginPanel extends Panel {
       Router.updateMainMenu();
       return true;
     }, () => false);
+
+    // save for the autocompletion
+    /* eslint-disable no-unused-vars */
+    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
+      const minions = pWheelKeyListAllData.return[0].data.return.minions;
+      Utils.setStorageItem("session", "minions", JSON.stringify(minions));
+    }, (pWheelKeyListAllMsg) => {
+      // VOID
+    });
+    /* eslint-enable no-unused-vars */
 
     // allow the success message to be seen
     window.setTimeout(() => {
