@@ -9,7 +9,7 @@ import {Utils} from "../Utils.js";
 export class LoginPanel extends Panel {
 
   constructor () {
-    LoginPanel.version = "SaltGUI v1.32.0";
+    LoginPanel.version = "SaltGUI v1.33.0-SNAPSHOT";
 
     super("login");
 
