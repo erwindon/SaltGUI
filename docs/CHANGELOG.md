@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.32.0 (2025-06-12)
+- updated github pipeline (erwindon)
+- moved/fixed regression test to a github pipeline (erwindon)
+- updated docker containers for testing (erwindon)
+- end of support for any salt version up to 3005.x (erwindon)
+- added icon for fedora-asahi-remix (erwindon, thx vemilyus)
+- fix minion-list in cmd-box under restricted cicumstances (erwindon, thx sunderjayaraj)
+- fix display of on-purpose offline minions (erwindon)
+- added some support for master-clusters (erwindon)
+- added some support for orchestrations (erwindon)
+- documentation fixes (erwindon, thx Jiayang-Lai)
+- updated CVE information (erwindon)
+- small visual fixes (erwindon)
+- general component version upgrades (erwindon)
+
 ## 1.31.0 (2024-06-17)
 - fixes and improvements for highstate task-indicators (thx AntonOvseenko)
 - allow job info to be updated when job was still running (thx gseguinbourgeois)
