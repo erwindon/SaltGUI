@@ -549,9 +549,49 @@ export class MinionsPanel extends Panel {
       ["CVE-2024-34064", MASTER + MINION, ["3007", "0"]],
 
       ["CVE-2024-37088", MASTER + MINION, ["3006", "[0-8]"]],
+
+      ["CVE-2024-38822", MASTER, ["3006", "[0-9]"]],
+      ["CVE-2024-38822", MASTER, ["3006", "1[0-1]"]],
+      ["CVE-2024-38822", MASTER, ["3007", "[0-3]"]],
+
+      ["CVE-2024-38823", MASTER + MINION, ["3006", "[0-9]"]],
+      ["CVE-2024-38823", MASTER + MINION, ["3006", "1[0-1]"]],
+      ["CVE-2024-38823", MASTER + MINION, ["3007", "[0-3]"]],
+
+      ["CVE-2024-38824", MASTER, ["3006", "[0-9]"]],
+      ["CVE-2024-38824", MASTER, ["3006", "1[0-1]"]],
+      ["CVE-2024-38824", MASTER, ["3007", "[0-3]"]],
+
+      ["CVE-2024-38825", MASTER + MINION, ["3006", "[0-9]"]],
+      ["CVE-2024-38825", MASTER + MINION, ["3006", "1[0-1]"]],
+      ["CVE-2024-38825", MASTER + MINION, ["3007", "[0-3]"]],
+
+      ["CVE-2025-22236", MINION, ["3006", "[0-9]"]],
+      ["CVE-2025-22236", MINION, ["3006", "1[0-1]"]],
+      ["CVE-2025-22236", MINION, ["3007", "[0-3]"]],
+
+      ["CVE-2025-22237", MASTER + MINION, ["3006", "[0-9]"]],
+      ["CVE-2025-22237", MASTER + MINION, ["3006", "1[0-1]"]],
+      ["CVE-2025-22237", MASTER + MINION, ["3007", "[0-3]"]],
+
+      ["CVE-2025-22238", MASTER + MINION, ["3006", "[0-9]"]],
+      ["CVE-2025-22238", MASTER + MINION, ["3006", "1[0-1]"]],
+      ["CVE-2025-22238", MASTER + MINION, ["3007", "[0-3]"]],
+
+      ["CVE-2025-22239", MASTER, ["3006", "[0-9]"]],
+      ["CVE-2025-22239", MASTER, ["3006", "1[0-1]"]],
+      ["CVE-2025-22239", MASTER, ["3007", "[0-3]"]],
+
+      ["CVE-2025-22240", MASTER, ["3006", "[0-9]"]],
+      ["CVE-2025-22240", MASTER, ["3006", "1[0-1]"]],
+      ["CVE-2025-22240", MASTER, ["3007", "[0-3]"]],
+
+      ["CVE-2025-22241", MASTER + MINION, ["3006", "[0-9]"]],
+      ["CVE-2025-22241", MASTER + MINION, ["3006", "1[0-1]"]],
+      ["CVE-2025-22241", MASTER + MINION, ["3007", "[0-3]"]],
     ];
 
-    // the above table is up-to-date until (including) 3006.11 and 3007.3
+    // the above table is up-to-date until (including) 3006.12 and 3007.4
   }
 
   static _getCveBugs (pVersion, pNodeType) {
