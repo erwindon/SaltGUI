@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.32.1 (2025-06-15)
+- updated CVE information (erwindon)
+
 ## 1.32.0 (2025-06-12)
 - updated github pipeline (erwindon)
 - moved/fixed regression test to a github pipeline (erwindon)
