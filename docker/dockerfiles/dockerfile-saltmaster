@@ -3,9 +3,9 @@ FROM ubuntu:24.04
 LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
 LABEL name=salt-master
 LABEL project="SaltGUI testing"
-LABEL version=3007.1
+LABEL version=3007.4
 
-ENV SALT_VERSION=3007.1
+ENV SALT_VERSION=3007.4
 ENV DEBIAN_FRONTEND=noninteractive
 
 # make download possible, make encrypted password generation possible
