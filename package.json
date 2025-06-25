@@ -14,7 +14,7 @@
     "chai": "^5.2.0",
     "eslint": "^8.57.1",
     "eslint-plugin-compat": "^6.0.2",
-    "mocha": "^11.7.0",
+    "mocha": "^11.7.1",
     "nightmare": "^3.0.2",
     "nyc": "^17.1.0",
     "stylelint": "^14.0.1",
