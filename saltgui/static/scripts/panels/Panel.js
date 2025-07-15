@@ -728,7 +728,7 @@ export class Panel {
     this.updateFooter();
   }
 
-  updateFooter (txt = "") {
+  updateFooter (txt = "", showUnacceptedKeysCount = true) {
 
     if (this.nrMinions !== undefined) {
       txt += ", " + Utils.txtZeroOneMany(this.nrMinions, "no minions", "{0} minion", "{0} minions");
@@ -742,7 +742,7 @@ export class Panel {
       txt += ", " + Utils.txtZeroOneMany(this.nrOffline, "none offline", "{0} offline", "{0} offline");
     }
 
-    if (this.nrUnaccepted > 0) {
+    if (showUnacceptedKeysCount && this.nrUnaccepted > 0) {
       txt += ", " + Utils.txtZeroOneMany(this.nrUnaccepted, "{0} unaccepted keys", "{0} unaccepted key", "{0} unaccepted keys");
     }
 

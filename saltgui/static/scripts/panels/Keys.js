@@ -232,7 +232,7 @@ export class KeysPanel extends Panel {
     this.nrDenied = cnt["denied"];
     this.nrRejected = cnt["rejected"];
 
-    super.updateFooter(txt);
+    super.updateFooter(txt, false);
   }
 
   static _flagMinion (pMinionId, pStatusField, pMinionTr, pMinionsDict, pIsMissing = false) {
