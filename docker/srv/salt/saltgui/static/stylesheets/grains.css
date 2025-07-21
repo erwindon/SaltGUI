@@ -1,0 +1,8 @@
+td.grain-value {
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+
+#page-grains {
+  width: 100%;
+}

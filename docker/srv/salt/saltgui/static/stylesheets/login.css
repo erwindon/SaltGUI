@@ -1,0 +1,125 @@
+#page-login {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  top: 0;
+}
+
+@media not print {
+  #page-login {
+    background-color: #263238;
+  }
+}
+
+#login-panel {
+  align-self: center;
+  background-color: white;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 70%);
+  border-radius: 2px;
+
+  /* 1px needed to prevent bottom margin to disappear when using small screens */
+  padding: 0 50px 1px;
+}
+
+#login-panel h1 {
+  text-align: center;
+  margin: 38px 0;
+  margin-bottom: 23px;
+  font-weight: lighter;
+  font-size: 60px;
+  width: 100%;
+  color: #505050;
+}
+
+#login-panel input {
+  width: 100%;
+  display: block;
+  font-size: 18px;
+}
+
+#login-panel select {
+  width: 100%;
+  font-size: 14px;
+}
+
+#login-panel select option#eauth-default {
+  color: gray;
+}
+
+.attribution {
+  display: block;
+  opacity: 0.4;
+  font-size: 15px;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.attribution img {
+  width: 25px;
+}
+
+#notice {
+  height: 0;
+  overflow-y: hidden;
+  color: white;
+  padding: 0;
+  border-radius: 2px;
+  text-align: center;
+  animation-name: show-notice;
+  animation-iteration-count: 1;
+  animation-duration: 5s;
+}
+
+@keyframes show-notice {
+  0% {
+    height: 0;
+    padding: 0;
+    margin-bottom: 15px;
+  }
+
+  20% {
+    height: 38px;
+    padding: 9px 0;
+    margin-bottom: 15px;
+  }
+
+  80% {
+    height: 38px;
+    padding: 9px 0;
+    margin-bottom: 15px;
+  }
+
+  100% {
+    height: 0;
+    padding: 0;
+    margin-bottom: 0;
+  }
+}
+
+#notice.notice-session-expired,
+#notice.notice-session-cancelled {
+  /* keep these visible because user is likely not present when this happens */
+  animation-name: show-notice-stay;
+  height: 38px;
+  padding: 9px 0;
+  margin-bottom: 15px;
+}
+
+@keyframes show-notice-stay {
+  0% {
+    height: 0;
+    padding: 0;
+  }
+
+  20% {
+    height: 38px;
+    padding: 9px 0;
+  }
+}
+
+.motd {
+  margin-bottom: 15px;
+}

@@ -1,0 +1,20 @@
+.beacon-config {
+  white-space: pre;
+}
+
+.beacon-value {
+  white-space: pre;
+}
+
+#page-beacons {
+  width: 100%;
+}
+
+.beacons {
+  padding: 0;
+}
+
+.beacon-disabled,
+.beacon-waiting {
+  color: gray;
+}
