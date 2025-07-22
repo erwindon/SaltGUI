@@ -1,17 +1,30 @@
 # SaltGUI Deployment State
-# This state configures both the SaltGUI files and master configuration
+# This state configures SaltGUI files and master configuration
 
-# Deploy SaltGUI files
-saltgui_files:
-  file.recurse:
+# Ensure SaltGUI directory exists with correct permissions
+# Works with existing saltgui files (no copying required)
+saltgui_directory:
+  file.directory:
     - name: /saltgui
-    - source: salt://saltgui
     - user: root
     - group: root
-    - file_mode: 644
-    - dir_mode: 755
-    - clean: False
+    - mode: 755
     - makedirs: True
+
+# Set correct permissions on existing SaltGUI files
+saltgui_permissions:
+  cmd.run:
+    - name: |
+        if [ -d /saltgui ]; then
+          find /saltgui -type f -exec chmod 644 {} \;
+          find /saltgui -type d -exec chmod 755 {} \;
+          echo "SaltGUI file permissions updated"
+        else
+          echo "SaltGUI directory not found at /saltgui"
+          exit 1
+        fi
+    - require:
+      - file: saltgui_directory
 
 # Configure salt-master for SaltGUI (only on masters)
 {% if 'master' in grains.get('roles', []) or grains.get('saltgui_master', False) %}
@@ -141,7 +154,7 @@ saltgui_credentials_info:
     - group: root
     - mode: 644
     - require:
-      - file: saltgui_files
+      - file: saltgui_directory
 
 # Create nginx configuration for SaltGUI (optional reverse proxy)
 /etc/nginx/sites-available/saltgui:

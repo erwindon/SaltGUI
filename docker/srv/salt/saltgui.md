@@ -27,22 +27,19 @@ The end-to-end testing validates that the `saltgui.sls` state file can:
 │   ├── srv/
 │   │   ├── salt/
 │   │   │   ├── saltgui.sls          # Main state file under test
-│   │   │   ├── saltgui/             # Copied SaltGUI source files
 │   │   │   └── top.sls
 │   │   └── pillar/
 │   │       └── top.sls
 │   ├── docker-compose-test.yml      # Test environment config
 │   └── conf/
 │       └── master                   # Base master configuration
-└── saltgui/                        # Original SaltGUI source files
+└── saltgui/                        # Original SaltGUI source files (mounted directly)
 ```
 
 ## Test Preparation
 
-### 1. Copy SaltGUI Files to Salt File Server
-```bash
-cp -r saltgui/ docker/srv/salt/saltgui
-```
+### 1. Ensure SaltGUI Files Are Available
+The state file works with SaltGUI files mounted directly in the container at `/saltgui`. No copying to the Salt file server is required.
 
 ### 2. Create Test Docker Compose Configuration
 Create `docker-compose-test.yml` without the direct SaltGUI mount to test clean deployment:
@@ -69,8 +66,10 @@ services:
 ## Key Features
 
 ### Self-Contained State
-The `saltgui.sls` state file is completely self-contained and requires no external pillar configuration. It uses sensible defaults that work out of the box:
+The `saltgui.sls` state file is completely self-contained and works with existing SaltGUI files:
 
+- **Direct file access**: Works with SaltGUI files mounted at `/saltgui`
+- **No file server copying**: Uses existing files without duplication
 - **Built-in credentials**: Username `salt` with password `saltgui`
 - **Hardcoded password hash**: Pre-generated SHA512 hash for immediate use
 - **No pillar dependencies**: State runs independently without requiring pillar data
