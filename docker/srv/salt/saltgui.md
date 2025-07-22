@@ -161,16 +161,7 @@ After successful deployment:
 - ✅ Salt commands working through the master
 - ✅ Authentication tokens working properly
 
-## Simplified Configuration Benefits
 
-The removal of pillar dependencies provides several advantages:
-
-- **Easier deployment**: No need to manage separate pillar files
-- **Reduced complexity**: Single state file contains everything needed
-- **Faster testing**: No pillar refresh or configuration required
-- **Self-documenting**: Default values are clearly visible in the state
-- **Production ready**: Still secure with proper password hashing
-- **Maintainable**: Fewer files to track and update
 
 ## Test Environment Cleanup
 
