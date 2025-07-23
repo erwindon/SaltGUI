@@ -2,6 +2,8 @@
 
 SaltGUI is an open source web interface for managing a SaltStack server and its minions. Built using vanilla ES6 and implemented as a wrapper around the rest_cherrypy server a.k.a. salt-api.
 
+**🔒 Security Note**: For production deployments, SSL/TLS encryption is strongly recommended. See [SSL/TLS Configuration](#ssltls-configuration) for complete setup instructions.
+
 The version tagged `release` is the latest released version. The version `master` should be fine, but it may contain changes that are not yet in these release-notes.
 
 See [SaltGUI documentation](https://erwindon.github.io/SaltGUI/) for the complete documentation.
@@ -92,7 +94,9 @@ rest_cherrypy:
 - Replace each of the `/srv/saltgui` in the above config with the actual `saltgui` directory from the GIT repository. Alternatively, you can create a soft-link /src/saltgui that points to the actual saltgui directory.
 - To successfully use `salt-api` with a default PAM setup, if may be needed to grant read access on `/etc/shadow` to the `salt` user. This is best done using `sudo usermod --append --groups shadow salt`.
 - Restart everything with ``pkill salt-master && pkill salt-api && salt-master -d && salt-api -d``
-- You should be good to go. If you have any problems, open a GitHub issue. As always, SSL is recommended wherever possible but setup is beyond the scope of this guide.
+- You should be good to go. If you have any problems, open a GitHub issue. 
+
+**For SSL/TLS configuration**, see the dedicated [SSL/TLS Configuration](#ssltls-configuration) section below for comprehensive setup instructions including enterprise best practices.
 
 **Note: With this configuration, the user has access to all salt modules available, maybe this is not what you want**
 
@@ -629,3 +633,73 @@ SaltGUI includes these libraries (with possible modifications):
 * [sorttable](https://www.kryogenix.org/code/browser/sorttable/)
 * [search-highlight](https://www.the-art-of-web.com/javascript/search-highlight/)
 * [jsonpath](https://www.w3resource.com/JSON/JSONPath-with-JavaScript.php)
+
+## SSL/TLS Configuration
+
+**Security Note**: SSL/TLS is strongly recommended for production deployments to protect authentication credentials and sensitive data in transit.
+
+### Quick SSL Setup for Testing
+
+For development and testing environments, you can quickly set up SSL using self-signed certificates:
+
+```bash
+# Navigate to SaltGUI directory
+cd /path/to/SaltGUI
+
+# Generate SSL certificates and run automated test
+chmod +x docker/scripts/generate-ssl-certs.sh docker/scripts/test-ssl-deployment.sh
+./docker/scripts/test-ssl-deployment.sh
+```
+
+#### Manual Testing Steps
+
+```bash
+# 1. Generate certificates
+./docker/scripts/generate-ssl-certs.sh
+
+# 2. Start SSL environment
+cd docker && docker-compose -f docker-compose-ssl.yml up -d
+
+# 3. Apply SSL configuration
+docker exec docker-saltmaster-ssl-1 salt-call --local grains.setval saltgui_master True
+docker exec docker-saltmaster-ssl-1 salt-call --local state.apply saltgui-ssl
+
+# 4. Test HTTPS access
+curl -k -I https://localhost:8443/
+
+# 5. Test authentication
+curl -k -X POST https://localhost:8443/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "salt", "password": "saltgui"}'
+```
+
+#### Access & Credentials
+
+- **URL**: https://localhost:8443
+- **Username**: salt  
+- **Password**: saltgui
+- **Browser**: Accept certificate warning for self-signed cert
+
+#### Expected Results
+
+✅ HTTPS endpoint responds (200 OK)  
+✅ Authentication returns token  
+✅ SaltGUI web interface loads  
+✅ Minions connect and respond  
+
+#### Cleanup
+
+```bash
+cd docker && docker-compose -f docker-compose-ssl.yml down
+```
+
+#### Common Issues
+
+- **Auth fails**: Reset password with `docker exec docker-saltmaster-ssl-1 passwd salt`
+- **Browser warning**: Expected with self-signed certs - click "Proceed"
+- **SSL errors**: Regenerate certificates with the script
+
+
+### Enterprise SSL Best Practices
+
+**⚠️ Important**: Self-signed certificates are for testing only. Use trusted CA certificates in production.

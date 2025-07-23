@@ -1,0 +1,55 @@
+# /etc/salt/master with SSL configuration
+
+# REST API Configuration for SaltGUI with SSL
+rest_cherrypy:
+    port: 8443
+    host: 0.0.0.0
+    ssl_crt: /etc/ssl/saltgui/saltgui.crt
+    ssl_key: /etc/ssl/saltgui/saltgui.key
+    disable_ssl: false
+    app: /saltgui/index.html
+    static: /saltgui/static
+    static_path: /static
+
+# Security headers
+rest_cherrypy_config:
+    'tools.response_headers.on': True
+    'tools.response_headers.headers': [
+        ['X-Content-Type-Options', 'nosniff'],
+        ['X-Frame-Options', 'DENY'],
+        ['X-XSS-Protection', '1; mode=block'],
+        ['Strict-Transport-Security', 'max-age=31536000; includeSubDomains'],
+        ['Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'"]
+    ]
+
+# External Authentication
+external_auth:
+    pam:
+        salt:
+            - .*
+            - '@runner'
+            - '@wheel'
+            - '@jobs'
+
+# Enable required clients
+netapi_enable_clients:
+    - local
+    - local_async
+    - runner
+    - wheel
+
+# Session security
+session_timeout: 1800
+max_request_body_size: 1048576
+
+# SaltGUI Templates
+saltgui_templates:
+    system_info:
+        description: "System Information"
+        command: "grains.items"
+    test_connectivity:
+        description: "Test Minion Connectivity"
+        command: "test.ping"
+    disk_usage:
+        description: "Check Disk Usage"
+        command: "disk.usage"
