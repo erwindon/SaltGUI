@@ -616,24 +616,6 @@ You'll need at least:
 - `yarn` 1.7 or above
 
 
-## Known issues
-At least in Chrome 96 and Edge 96, the "pause" icon is shown in its "emoji" form and appears in its coloured form. This also happens for the looking-glass icon in the search field.
-
-
-## Contributing
-Open a PR! Try to use no dependencies where possible, as vanilla JS is the aim. Any libraries will need to be heavily considered first. Please see the section above as PRs won't be reviewed if they don't pass the tests.
-
-
-## Credits
-This excellent frontend is originally written by [Oliver Dunk](https://github.com/oliverdunk).<br>
-It was then further developed by [Martijn Jacobs](https://github.com/maerteijn).<br>
-It is currently maintained by [Erwin Dondorp](https://github.com/erwindon).
-
-SaltGUI includes these libraries (with possible modifications):
-* [sorttable](https://www.kryogenix.org/code/browser/sorttable/)
-* [search-highlight](https://www.the-art-of-web.com/javascript/search-highlight/)
-* [jsonpath](https://www.w3resource.com/JSON/JSONPath-with-JavaScript.php)
-
 ## SSL/TLS Configuration
 
 **Security Note**: SSL/TLS is strongly recommended for production deployments to protect authentication credentials and sensitive data in transit.
@@ -703,3 +685,21 @@ cd docker && docker-compose -f docker-compose-ssl.yml down
 ### Enterprise SSL Best Practices
 
 **⚠️ Important**: Self-signed certificates are for testing only. Use trusted CA certificates in production.
+
+## Known issues
+At least in Chrome 96 and Edge 96, the "pause" icon is shown in its "emoji" form and appears in its coloured form. This also happens for the looking-glass icon in the search field.
+
+
+## Contributing
+Open a PR! Try to use no dependencies where possible, as vanilla JS is the aim. Any libraries will need to be heavily considered first. Please see the section above as PRs won't be reviewed if they don't pass the tests.
+
+
+## Credits
+This excellent frontend is originally written by [Oliver Dunk](https://github.com/oliverdunk).<br>
+It was then further developed by [Martijn Jacobs](https://github.com/maerteijn).<br>
+It is currently maintained by [Erwin Dondorp](https://github.com/erwindon).
+
+SaltGUI includes these libraries (with possible modifications):
+* [sorttable](https://www.kryogenix.org/code/browser/sorttable/)
+* [search-highlight](https://www.the-art-of-web.com/javascript/search-highlight/)
+* [jsonpath](https://www.w3resource.com/JSON/JSONPath-with-JavaScript.php)
