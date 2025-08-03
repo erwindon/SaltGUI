@@ -199,6 +199,8 @@ export class Utils {
     // show representation of the object
     if (typeof pErrorMessage === "object") {
       pErrorMessage = JSON.stringify(pErrorMessage);
+    } else if (pErrorMessage === false) {
+      pErrorMessage = "minion probably not reachable";
     }
 
     // the TD may contain text such as "loading...", clear that first
