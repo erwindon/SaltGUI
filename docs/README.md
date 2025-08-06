@@ -582,12 +582,58 @@ Note that the main page of SaltGUI is then located at `/app/`. When you want `/a
 
 
 ## Development environment with Docker
-To make life a bit easier for testing SaltGUI or setting up a local development environment you can use the provided docker-compose setup in this repository to run a saltmaster with three minions, including SaltGUI:
+To make life a bit easier for testing SaltGUI or setting up a local development environment, you can use the provided docker-compose setups in this repository:
+
+**For basic testing (HTTP):**
 ```
 cd docker
 docker-compose up
 ```
 Then browse to [http://localhost:3333/](http://localhost:3333/), you can login with `salt:salt`.
+
+**For SSL/HTTPS testing:**
+```
+cd docker
+docker-compose -f docker-compose-ssl.yml up
+```
+Then browse to [https://localhost:3334/](https://localhost:3334/), you can login with `salt:salt`.
+
+
+## SSL-enabled Docker Environment
+For production use or testing with SSL/TLS encryption, you can use the SSL-enabled Docker configuration:
+
+```bash
+cd docker
+docker-compose -f docker-compose-ssl.yml up
+```
+
+This will start:
+- A SaltGUI master with SSL/TLS enabled on port 3334
+- Three minions (Ubuntu, Debian, CentOS)
+- Self-signed SSL certificates (automatically generated)
+
+**Connecting to SSL-enabled SaltGUI:**
+- Browse to [https://localhost:3334/](https://localhost:3334/)
+- You will see a security warning about the self-signed certificate
+- Accept the certificate to proceed (for testing purposes)
+- Login with `salt:salt`
+
+**Important Notes for SSL Setup:**
+- The SSL configuration uses self-signed certificates generated during the Docker build
+- For production use, replace the self-signed certificates with proper CA-signed certificates
+- You can mount your own certificates by modifying the `ssl_certs` volume in `docker-compose-ssl.yml`
+- The SSL master configuration is located in `docker/conf/master-ssl`
+
+**Custom SSL Certificates:**
+To use your own SSL certificates, place them in a directory and mount it to the container:
+```yaml
+volumes:
+  - /path/to/your/certs:/etc/ssl/saltgui
+```
+
+Your certificate directory should contain:
+- `server.crt` - SSL certificate file
+- `server.key` - Private key file
 
 
 ## Testing
@@ -610,158 +656,6 @@ You'll need at least:
 - `docker-compose` 1.12 or above
 - `nodejs` 8.11 or above
 - `yarn` 1.7 or above
-
-
-## Automated Deployment using Salt States `saltgui.sls`
-
-### Who Should Use `saltgui.sls`?
-
-**👥 Target Users:**
-- **Salt Administrators** deploying SaltGUI in production environments
-- **DevOps Engineers** automating SaltGUI setup across multiple Salt masters
-- **Infrastructure Teams** managing Salt at enterprise scale
-- **System Engineers** who need consistent, repeatable SaltGUI deployments
-
-
-### When to Use the Salt State?
-
-**🕐 Use Cases:**
-- **Fresh Salt Master Setup** - Clean deployment of SaltGUI from scratch
-- **Disaster Recovery** - Rebuilding Salt masters with SaltGUI consistently
-- **Environment Standardization** - Ensuring identical configuration across dev/staging/prod
-- **Configuration Management** - Maintaining consistent SaltGUI setups across infrastructure
-
-### How to Use `saltgui.sls`
-
-#### Basic Deployment:
-```bash
-# 1. Ensure SaltGUI files are available at /saltgui
-# (via git clone, Docker volume, or file copy)
-
-# 2. Set grain to identify this as a Salt master
-salt-call --local grains.setval saltgui_master True
-
-# 3. Deploy SaltGUI automatically
-salt-call --local state.apply saltgui
-
-# 4. Access SaltGUI
-# URL: http://localhost:3333
-# Default credentials: salt / saltgui
-```
-
-
-### State File Functionality
-
-The `saltgui.sls` state provides comprehensive automation including:
-
-**📁 File Management:**
-- Creates `/saltgui` directory with proper permissions (755)
-- Sets correct file permissions (644 for files, 755 for directories)
-
-**👤 User Management:**
-- Creates authentication user with configurable username/password
-- Adds user to sudo group for administrative access
-- Sets up PAM authentication compatibility
-- Validates user authentication works correctly
-
-**⚙️ Salt Master Configuration:**
-- Backs up original master configuration with timestamps
-- Configures `rest_cherrypy` for SaltGUI web interface
-- Sets up `external_auth` with PAM authentication
-- Enables required `netapi_enable_clients`
-- Configures session security and timeouts
-- Creates useful SaltGUI command templates
-
-**🔒 Security Features:**
-- Configures secure session management
-- Sets appropriate file ownership and permissions
-- Validates configuration syntax
-
-
-### State File Configuration Options
-
-The state supports extensive customization via pillar data:
-
-```yaml
-# Complete configuration example
-saltgui_config:
-  # User settings
-  username: saltadmin                    # Default: salt
-  plain_password: SecurePassword123     # Default: saltgui
-  password_hash: $6$rounds=656000$...   # Auto-generated if not provided
-  
-  # Network settings
-  port: 3333                            # Default: 3333
-  ssl_enabled: false                    # Default: false
-  
-  # Security settings
-  session_timeout: 3600                 # Default: 3600 (1 hour)
-  max_body_size: 1048576               # Default: 1MB
-  
-  # UI settings
-  debug: false                          # Default: false
-  page_size: 25                        # Default: 25
-  refresh_rate: 5000                   # Default: 5000ms
-  datetime_format: local               # Default: local
-  
-  # Template grains for preview
-  preview_grains:
-    - saltversion
-    - os
-    - osrelease
-    - kernel
-```
-
-### Testing the Salt State
-
-```bash
-# 1. Syntax validation
-salt-call --local state.show_sls saltgui
-
-# 2. Dry run test
-salt-call --local state.apply saltgui test=True
-
-# 3. Full deployment test
-salt-call --local grains.setval saltgui_master True
-salt-call --local state.apply saltgui
-
-# 4. Idempotency test
-salt-call --local state.apply saltgui
-
-# 5. Functionality test
-curl -I http://localhost:3333/
-curl -X POST http://localhost:3333/login \
-  -H "Content-Type: application/json" \
-  -d '{"username": "salt", "password": "saltgui"}'
-```
-
-#### Docker-based Testing:
-```bash
-# Start test environment
-cd docker
-docker-compose -f docker-compose-test.yml up -d
-
-# Test in clean container
-docker exec docker-saltmaster-local-1 salt-call --local grains.setval saltgui_master True
-docker exec docker-saltmaster-local-1 salt-call --local state.apply saltgui
-
-# Verify deployment
-curl -I http://localhost:3333/
-```
-
-
-### Benefits of Using Salt States
-
-**🚀 Advantages over Manual Setup:**
-- **Consistency**: Identical deployments across all environments
-- **Speed**: Automated deployment in seconds vs. manual hours
-- **Reliability**: Tested, validated configuration every time
-- **Scalability**: Deploy to multiple masters simultaneously
-- **Rollback**: Easy to modify and redeploy configurations
-- **Compliance**: Auditable, version-controlled deployments
-
-The Salt state approach transforms SaltGUI deployment from a manual, error-prone process into a reliable, automated infrastructure component suitable at scale.
-
 
 ## Known issues
 At least in Chrome 96 and Edge 96, the "pause" icon is shown in its "emoji" form and appears in its coloured form. This also happens for the looking-glass icon in the search field.
