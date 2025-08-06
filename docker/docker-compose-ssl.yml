@@ -1,36 +1,38 @@
 version: '3'
 services:
-  saltmaster-ssl:
-    image: erwindon/saltgui-saltmaster:3007.4
-    hostname: saltmaster-ssl
+  saltmaster-local-ssl:
+    image: erwindon/saltgui-saltmaster-ssl:3007.4
+    hostname: saltmaster-local-ssl
     ports:
       - 4505:4505
       - 4506:4506
-      - 8443:8443   # HTTPS SaltGUI direct
+      - 3334:3334
     volumes:
-      - ./srv/:/srv/
-      - ./conf/master-ssl:/etc/salt/master
-      - ./ssl:/etc/ssl/saltgui:ro
-    environment:
-      - SALTGUI_SSL_ENABLED=true
+    - ./srv/:/srv/
+    - ./conf/master-ssl:/etc/salt/master
+    - ../saltgui:/saltgui
+    - ssl_certs:/etc/ssl/saltgui
 
-  saltminion-ubuntu-ssl:
+  saltminion-ubuntu:
     image: erwindon/saltgui-saltminion-ubuntu:3007.4
-    hostname: saltminion-ubuntu-ssl
+    hostname: saltminion-ubuntu
     depends_on:
-      - saltmaster-ssl
+      - saltmaster-local-ssl
     restart: on-failure
 
-  saltminion-debian-ssl:
+  saltminion-debian:
     image: erwindon/saltgui-saltminion-debian:3007.4
-    hostname: saltminion-debian-ssl
+    hostname: saltminion-debian
     depends_on:
-      - saltmaster-ssl
+      - saltmaster-local-ssl
     restart: on-failure
 
-  saltminion-centos-ssl:
+  saltminion-centos:
     image: erwindon/saltgui-saltminion-centos:3007.4
-    hostname: saltminion-centos-ssl
+    hostname: saltminion-centos
     depends_on:
-      - saltmaster-ssl
+      - saltmaster-local-ssl
     restart: on-failure
+
+volumes:
+  ssl_certs:
