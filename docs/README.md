@@ -582,12 +582,58 @@ Note that the main page of SaltGUI is then located at `/app/`. When you want `/a
 
 
 ## Development environment with Docker
-To make life a bit easier for testing SaltGUI or setting up a local development environment you can use the provided docker-compose setup in this repository to run a saltmaster with three minions, including SaltGUI:
+To make life a bit easier for testing SaltGUI or setting up a local development environment, you can use the provided docker-compose setups in this repository:
+
+**For basic testing (HTTP):**
 ```
 cd docker
 docker-compose up
 ```
 Then browse to [http://localhost:3333/](http://localhost:3333/), you can login with `salt:salt`.
+
+**For SSL/HTTPS testing:**
+```
+cd docker
+docker-compose -f docker-compose-ssl.yml up
+```
+Then browse to [https://localhost:3334/](https://localhost:3334/), you can login with `salt:salt`.
+
+
+## SSL-enabled Docker Environment
+For production use or testing with SSL/TLS encryption, you can use the SSL-enabled Docker configuration:
+
+```bash
+cd docker
+docker-compose -f docker-compose-ssl.yml up
+```
+
+This will start:
+- A SaltGUI master with SSL/TLS enabled on port 3334
+- Three minions (Ubuntu, Debian, CentOS)
+- Self-signed SSL certificates (automatically generated)
+
+**Connecting to SSL-enabled SaltGUI:**
+- Browse to [https://localhost:3334/](https://localhost:3334/)
+- You will see a security warning about the self-signed certificate
+- Accept the certificate to proceed (for testing purposes)
+- Login with `salt:salt`
+
+**Important Notes for SSL Setup:**
+- The SSL configuration uses self-signed certificates generated during the Docker build
+- For production use, replace the self-signed certificates with proper CA-signed certificates
+- You can mount your own certificates by modifying the `ssl_certs` volume in `docker-compose-ssl.yml`
+- The SSL master configuration is located in `docker/conf/master-ssl`
+
+**Custom SSL Certificates:**
+To use your own SSL certificates, place them in a directory and mount it to the container:
+```yaml
+volumes:
+  - /path/to/your/certs:/etc/ssl/saltgui
+```
+
+Your certificate directory should contain:
+- `server.crt` - SSL certificate file
+- `server.key` - Private key file
 
 
 ## Testing
@@ -610,7 +656,6 @@ You'll need at least:
 - `docker-compose` 1.12 or above
 - `nodejs` 8.11 or above
 - `yarn` 1.7 or above
-
 
 ## Known issues
 At least in Chrome 96 and Edge 96, the "pause" icon is shown in its "emoji" form and appears in its coloured form. This also happens for the looking-glass icon in the search field.
