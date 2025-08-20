@@ -4,7 +4,7 @@
 set -x
 
 # get the needed software
-sudo apt install -y libxss1 libgconf-2-4 libnss3 libasound2 xvfb psmisc
+sudo apt install -y libxss1 libgconf-2-4 libnss3 libasound2 libgtk-3-0 xvfb psmisc
 
 # prevent conflict with a running salt installation
 sudo systemctl stop salt-master salt-api
