@@ -12,11 +12,11 @@ docker container ls -aq | xargs --no-run-if-empty docker container rm --force
 docker images | awk '/^<none>/ {print $3;}' | xargs --no-run-if-empty docker rmi
 for t in $tag latest; do
 	# this needs "docker login"
-	docker push erwindon/saltgui-saltmaster:$t
-	docker push erwindon/saltgui-saltmaster-tls:$t
-	docker push erwindon/saltgui-saltminion-ubuntu:$t
-	docker push erwindon/saltgui-saltminion-debian:$t
-	docker push erwindon/saltgui-saltminion-centos:$t
+	: docker push erwindon/saltgui-saltmaster:$t
+	: docker push erwindon/saltgui-saltmaster-tls:$t
+	: docker push erwindon/saltgui-saltminion-ubuntu:$t
+	: docker push erwindon/saltgui-saltminion-debian:$t
+	: docker push erwindon/saltgui-saltminion-centos:$t
 done
 docker system prune --force --filter "until=12h"
 docker images

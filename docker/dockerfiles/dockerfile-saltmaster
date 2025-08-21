@@ -13,7 +13,7 @@ RUN apt-get update
 RUN apt-get install --yes --no-install-recommends curl openssl adduser
 
 # add a user for the frontend salt:salt
-RUN adduser salt
+RUN adduser --disabled-password --gecos "" salt
 RUN usermod -s /bin/bash -p "$(openssl passwd -1 salt)" salt
 
 # install salt-master with salt-api
@@ -24,7 +24,7 @@ RUN curl -k -L -o salt-master_${SALT_VERSION}.deb https://packages.broadcom.com/
 RUN apt install --yes --no-install-recommends ./salt-common_${SALT_VERSION}.deb ./salt-master_${SALT_VERSION}.deb ./salt-api_${SALT_VERSION}.deb
 
 # install supervisor
-# becausewe need to run salt-master and salt-api
+# because we need to run salt-master and salt-api
 RUN apt-get install --yes --no-install-recommends supervisor
 
 # cleanup temporary files

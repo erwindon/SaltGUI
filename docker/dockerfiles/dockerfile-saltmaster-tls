@@ -13,7 +13,7 @@ RUN apt-get update
 RUN apt-get install --yes --no-install-recommends curl openssl adduser
 
 # add a user for the frontend salt:salt
-RUN adduser salt
+RUN adduser --disabled-password --gecos "" salt
 RUN usermod -s /bin/bash -p "$(openssl passwd -1 salt)" salt
 
 # install salt-master with salt-api
@@ -33,10 +33,10 @@ RUN rm -rf /var/lib/apt/lists/* *.deb \
   && apt-get clean
 
 # Create SSL directory and generate self-signed certificates
-RUN mkdir -p /etc/ssl/saltgui
+RUN mkdir -p /etc/tls/saltgui
 
 # Generate SSL certificates using a single RUN command
-RUN cd /etc/ssl/saltgui && \
+RUN cd /etc/tls/saltgui && \
     openssl genrsa -out server.key 2048 && \
     openssl req -new -key server.key -out server.csr -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=saltgui" && \
     openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt && \
@@ -49,7 +49,7 @@ RUN cd /etc/ssl/saltgui && \
 COPY ./conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # some volume configuration for the saltmaster
-VOLUME ["/pki", "/var/cache/salt", "/var/log/salt", "/etc/ssl/saltgui"]
+VOLUME ["/pki", "/var/cache/salt", "/var/log/salt", "/etc/tls/saltgui"]
 EXPOSE 3334 4505 4506
 
 # define main container command

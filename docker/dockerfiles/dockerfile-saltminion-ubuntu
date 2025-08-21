@@ -13,7 +13,7 @@ RUN apt-get update
 RUN apt-get install --yes --no-install-recommends curl openssl adduser
 
 # add a user for the frontend salt:salt
-RUN adduser salt
+RUN adduser --disabled-password --gecos "" salt
 RUN usermod -s /bin/bash -p "$(openssl passwd -1 salt)" salt
 
 # install salt-minion

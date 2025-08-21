@@ -4,14 +4,12 @@ services:
     image: erwindon/saltgui-saltmaster-tls:3007.4
     hostname: saltmaster-local
     ports:
-      - 4505:4505
-      - 4506:4506
       - 3334:3334
     volumes:
     - ./srv/:/srv/
-    - ./conf/master-ssl:/etc/salt/master
+    - ./conf/master-tls:/etc/salt/master
     - ../saltgui:/saltgui
-    - ssl_certs:/etc/ssl/saltgui
+    - ssl_certs:/etc/tls/saltgui
 
   saltminion-ubuntu:
     image: erwindon/saltgui-saltminion-ubuntu:3007.4
