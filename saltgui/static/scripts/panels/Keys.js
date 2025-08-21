@@ -45,10 +45,13 @@ export class KeysPanel extends Panel {
     this.nrDenied = 0;
     this.nrRejected = 0;
 
-    this.showSyndicInfo(false);
-    this.showClusterInfo();
+    this.updateWarningText();
 
     this.loadMinionsTxt();
+
+    Utils.setStorageItem("session", "keys_syndic_seen", "false");
+    Utils.setStorageItem("session", "keys_updates_seen", "false");
+    this.updateWarningText();
 
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       this._handleKeysWheelKeyListAll(pWheelKeyListAllData);
@@ -75,11 +78,12 @@ export class KeysPanel extends Panel {
     });
   }
 
-  showSyndicInfo (pSyndicEventFound) {
+  updateWarningText () {
+    let warningText = "";
+
+    const pSyndicEventFound = Utils.getStorageItemBoolean("session", "keys_syndic_seen");
     const syndicMaster = Utils.getStorageItem("session", "syndic_master", "");
     const orderMasters = Utils.getStorageItemBoolean("session", "order_masters");
-
-    let warningText = "";
 
     if (syndicMaster !== "" && syndicMaster !== "masterofmasters") {
       warningText += " The syndic-master of this salt-master is '" + syndicMaster + "'.";
@@ -93,20 +97,25 @@ export class KeysPanel extends Panel {
       warningText += " Events related to salt-syndic are seen in the salt-event-bus.";
     }
 
-    if (warningText === "") {
-      this.setWarningText();
-    } else {
+    if (warningText !== "") {
       warningText += " This overview contains only the keys of minions that are connected to this salt-master.";
       warningText += " Keys for minions that are connected to other salt-masters are not always shown in this SaltGUI.";
       warningText += " Commands issued from this salt-master may involve minions that are not listed in SaltGUI.";
-      this.setWarningText("info", warningText.trim());
     }
-  }
 
-  showClusterInfo () {
     const clusterInfo = Utils.getStorageItem("session", "cluster_info");
     if (clusterInfo) {
-      this.setWarningText("info", clusterInfo);
+      warningText += " " + clusterInfo;
+    }
+
+    if (Utils.getStorageItem("session", "keys_updates_seen") === "true") {
+      warningText += " One or more keys were updated while the panel was paused.";
+    }
+
+    if (warningText) {
+      this.setWarningText("info", warningText.trim());
+    } else {
+      this.setWarningText();
     }
   }
 
@@ -618,6 +627,8 @@ export class KeysPanel extends Panel {
   handleSaltAuthEvent (pData) {
 
     if (this.playOrPause !== "play") {
+      Utils.setStorageItem("session", "keys_updates_seen", "true");
+      this.updateWarningText();
       return;
     }
 
@@ -724,6 +735,7 @@ export class KeysPanel extends Panel {
   }
 
   handleSyndicEvent () {
-    this.showSyndicInfo(true);
+    Utils.setStorageItem("session", "keys_syndic_seen", "true");
+    this.updateWarningText();
   }
 }
