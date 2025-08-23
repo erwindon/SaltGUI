@@ -2,7 +2,7 @@
 
 SaltGUI is an open source web interface for managing a SaltStack server and its minions. Built using vanilla ES6 and implemented as a wrapper around the rest_cherrypy server a.k.a. salt-api.
 
-**🔒 Security Note**: For production deployments, SSL/TLS encryption is strongly recommended. See [SSL/TLS Configuration](#ssltls-configuration) for complete setup instructions.
+**Security Note**: For production deployments, TLS encryption is strongly recommended. See [TLS Configuration](#tls-configuration) for complete setup instructions.
 
 The version tagged `release` is the latest released version. The version `master` should be fine, but it may contain changes that are not yet in these release-notes.
 
@@ -96,7 +96,7 @@ rest_cherrypy:
 - Restart everything with ``pkill salt-master && pkill salt-api && salt-master -d && salt-api -d``
 - You should be good to go. If you have any problems, open a GitHub issue. 
 
-**For SSL/TLS configuration**, see the dedicated [SSL/TLS Configuration](#ssltls-configuration) section below for comprehensive setup instructions including enterprise best practices.
+**For TLS configuration**, see the dedicated [TLS Configuration](#tls-configuration) section below for comprehensive setup instructions including enterprise best practices.
 
 **Note: With this configuration, the user has access to all salt modules available, maybe this is not what you want**
 
@@ -595,38 +595,38 @@ docker-compose up
 ```
 Then browse to [http://localhost:3333/](http://localhost:3333/), you can login with `salt:salt`.
 
-**For SSL/HTTPS testing:**
+**For TLS testing:**
 ```
 cd docker
-docker-compose -f docker-compose-ssl.yml up
+docker-compose -f docker-compose-tls.yml up
 ```
 Then browse to [https://localhost:3334/](https://localhost:3334/), you can login with `salt:salt`.
 
 
-## SSL-enabled Docker Environment
-For production use or testing with SSL/TLS encryption, you can use the SSL-enabled Docker configuration:
+## TLS-enabled Docker Environment
+For production use or testing with TLS encryption, you can use the TLS-enabled Docker configuration:
 
 ```bash
 cd docker
-docker-compose -f docker-compose-ssl.yml up
+docker-compose -f docker-compose-tls.yml up
 ```
 
 This will start:
-- A SaltGUI master with SSL/TLS enabled on port 3334
+- A SaltGUI master with TLS enabled on port 3334
 - Three minions (Ubuntu, Debian, CentOS)
 - Self-signed SSL certificates (automatically generated)
 
-**Connecting to SSL-enabled SaltGUI:**
+**Connecting to TLS-enabled SaltGUI:**
 - Browse to [https://localhost:3334/](https://localhost:3334/)
 - You will see a security warning about the self-signed certificate
 - Accept the certificate to proceed (for testing purposes)
 - Login with `salt:salt`
 
-**Important Notes for SSL Setup:**
-- The SSL configuration uses self-signed certificates generated during the Docker build
+**Important Notes for TLS Setup:**
+- The TLS configuration uses self-signed certificates generated during the Docker build
 - For production use, replace the self-signed certificates with proper CA-signed certificates
-- You can mount your own certificates by modifying the `ssl_certs` volume in `docker-compose-ssl.yml`
-- The SSL master configuration is located in `docker/conf/master-ssl`
+- You can mount your own certificates by modifying the `ssl_certs` volume in `docker-compose-tls.yml`
+- The TLS master configuration is located in `docker/conf/master-tls`
 
 **Custom SSL Certificates:**
 To use your own SSL certificates, place them in a directory and mount it to the container:
@@ -658,8 +658,6 @@ We use the following testing libraries:
 
 You'll need at least:
 - `docker-compose` 1.12 or above
-- `nodejs` 8.11 or above
-- `yarn` 1.7 or above
 
 ## Known issues
 At least in Chrome 96 and Edge 96, the "pause" icon is shown in its "emoji" form and appears in its coloured form. This also happens for the looking-glass icon in the search field.
