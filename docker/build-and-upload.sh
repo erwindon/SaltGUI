@@ -4,7 +4,7 @@ cd dockerfiles
 set -e
 tag=3007.4
 docker build -f dockerfile-saltmaster --tag erwindon/saltgui-saltmaster:$tag --tag erwindon/saltgui-saltmaster:latest .
-docker build -f dockerfile-saltmaster-ssl --tag erwindon/saltgui-saltmaster-ssl:$tag --tag erwindon/saltgui-saltmaster-ssl:latest .
+docker build -f dockerfile-saltmaster-tls --tag erwindon/saltgui-saltmaster-tls:$tag --tag erwindon/saltgui-saltmaster-tls:latest .
 docker build -f dockerfile-saltminion-ubuntu --tag erwindon/saltgui-saltminion-ubuntu:$tag --tag erwindon/saltgui-saltminion-ubuntu:latest .
 docker build -f dockerfile-saltminion-debian --tag erwindon/saltgui-saltminion-debian:$tag --tag erwindon/saltgui-saltminion-debian:latest .
 docker build -f dockerfile-saltminion-centos --tag erwindon/saltgui-saltminion-centos:$tag --tag erwindon/saltgui-saltminion-centos:latest .
@@ -13,7 +13,7 @@ docker images | awk '/^<none>/ {print $3;}' | xargs --no-run-if-empty docker rmi
 for t in $tag latest; do
 	# this needs "docker login"
 	docker push erwindon/saltgui-saltmaster:$t
-	docker push erwindon/saltgui-saltmaster-ssl:$t
+	docker push erwindon/saltgui-saltmaster-tls:$t
 	docker push erwindon/saltgui-saltminion-ubuntu:$t
 	docker push erwindon/saltgui-saltminion-debian:$t
 	docker push erwindon/saltgui-saltminion-centos:$t
