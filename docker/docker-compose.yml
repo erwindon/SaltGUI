@@ -4,8 +4,6 @@ services:
     image: erwindon/saltgui-saltmaster:3007.4
     hostname: saltmaster-local
     ports:
-      - 4505:4505
-      - 4506:4506
       - 3333:3333
     volumes:
     - ./srv/:/srv/

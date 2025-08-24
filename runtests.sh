@@ -6,10 +6,8 @@ set -x
 # get the needed software
 sudo apt install -y libxss1 libgconf-2-4 libnss3 libasound2 libgtk-3-0 xvfb psmisc
 
-# prevent conflict with a running salt installation
-sudo systemctl stop salt-master salt-api
-# or a previous running xvfb
-killall Xvfb
+# prevent conflict with a previous running xvfb
+killall --quiet Xvfb
 
 set -e
 
@@ -46,8 +44,5 @@ xvfb-run npm run test:functional
 
 # remove the containers
 docker-compose --file docker/docker-compose.yml rm --force --stop
-
-# start the usual software again
-sudo systemctl start salt-master salt-api
 
 echo "DONE!"
