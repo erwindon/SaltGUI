@@ -1,8 +1,8 @@
 version: '3'
 services:
-  saltmaster-local-tls:
+  saltmaster-local:
     image: erwindon/saltgui-saltmaster-tls:3007.4
-    hostname: saltmaster-local-tls
+    hostname: saltmaster-local
     ports:
       - 4505:4505
       - 4506:4506
@@ -17,21 +17,21 @@ services:
     image: erwindon/saltgui-saltminion-ubuntu:3007.4
     hostname: saltminion-ubuntu
     depends_on:
-      - saltmaster-local-tls
+      - saltmaster-local
     restart: on-failure
 
   saltminion-debian:
     image: erwindon/saltgui-saltminion-debian:3007.4
     hostname: saltminion-debian
     depends_on:
-      - saltmaster-local-tls
+      - saltmaster-local
     restart: on-failure
 
   saltminion-centos:
     image: erwindon/saltgui-saltminion-centos:3007.4
     hostname: saltminion-centos
     depends_on:
-      - saltmaster-local-tls
+      - saltmaster-local
     restart: on-failure
 
 volumes:
