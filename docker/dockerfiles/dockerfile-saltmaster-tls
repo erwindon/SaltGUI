@@ -1,0 +1,57 @@
+FROM ubuntu:24.04
+
+LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
+LABEL name=salt-master-tls
+LABEL project="SaltGUI testing with TLS"
+LABEL version=3007.4
+
+ENV SALT_VERSION=3007.4
+ENV DEBIAN_FRONTEND=noninteractive
+
+# make download possible, make encrypted password generation possible
+RUN apt-get update
+RUN apt-get install --yes --no-install-recommends curl openssl adduser
+
+# add a user for the frontend salt:salt
+RUN adduser salt
+RUN usermod -s /bin/bash -p "$(openssl passwd -1 salt)" salt
+
+# install salt-master with salt-api
+# not using repo, so must explicitly do all packages
+RUN curl -k -L -o salt-common_${SALT_VERSION}.deb https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-common_${SALT_VERSION}_amd64.deb
+RUN curl -k -L -o salt-api_${SALT_VERSION}.deb https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-api_${SALT_VERSION}_amd64.deb
+RUN curl -k -L -o salt-master_${SALT_VERSION}.deb https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-master_${SALT_VERSION}_amd64.deb
+RUN apt install --yes --no-install-recommends ./salt-common_${SALT_VERSION}.deb ./salt-master_${SALT_VERSION}.deb ./salt-api_${SALT_VERSION}.deb
+
+# install supervisor
+# because we need to run salt-master and salt-api
+RUN apt-get install --yes --no-install-recommends supervisor
+
+# cleanup temporary files
+RUN rm -rf /var/lib/apt/lists/* *.deb \
+  && apt-get --yes autoremove \
+  && apt-get clean
+
+# Create SSL directory and generate self-signed certificates
+RUN mkdir -p /etc/ssl/saltgui
+
+# Generate SSL certificates using a single RUN command
+RUN cd /etc/ssl/saltgui && \
+    openssl genrsa -out server.key 2048 && \
+    openssl req -new -key server.key -out server.csr -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=saltgui" && \
+    openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt && \
+    chmod 600 server.key && \
+    chmod 644 server.crt && \
+    rm server.csr && \
+    echo "SSL certificates generated successfully"
+
+# copy supervisord configuration
+COPY ./conf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# some volume configuration for the saltmaster
+VOLUME ["/pki", "/var/cache/salt", "/var/log/salt", "/etc/ssl/saltgui"]
+EXPOSE 3334 4505 4506
+
+# define main container command
+# explicitly mentioning the (default) configuration file saves a warning
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
