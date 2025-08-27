@@ -602,6 +602,8 @@ docker-compose -f docker-compose-tls.yml up
 ```
 Then browse to [https://localhost:3334/](https://localhost:3334/), you can login with `salt:salt`.
 
+For convenience, you can also simply start the shell script `runstd.sh`.
+
 
 ## TLS-enabled Docker Environment
 For production use or testing with TLS encryption, you can use the TLS-enabled Docker configuration:
@@ -639,6 +641,7 @@ Your certificate directory should contain:
 - `server.crt` - SSL certificate file
 - `server.key` - Private key file
 
+For convenience, you can also simply start the shell script `runtls.sh`.
 
 ## Testing
 We provide some functional tests and unit tests. They use the docker setup to run the functional tests. You will also need [yarn](https://yarnpkg.com) and [node.js](https://nodejs.org/en/) to run them. When you have docker, yarn and node.js installed, you can run the tests from the root of the repository like this:
