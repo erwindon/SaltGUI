@@ -2,6 +2,8 @@
 
 SaltGUI is an open source web interface for managing a SaltStack server and its minions. Built using vanilla ES6 and implemented as a wrapper around the rest_cherrypy server a.k.a. salt-api.
 
+**Security Note**: For production deployments, TLS encryption is strongly recommended. See [TLS Configuration](#tls-configuration) for complete setup instructions.
+
 The version tagged `release` is the latest released version. The version `master` should be fine, but it may contain changes that are not yet in these release-notes.
 
 See [SaltGUI documentation](https://erwindon.github.io/SaltGUI/) for the complete documentation.
@@ -92,7 +94,9 @@ rest_cherrypy:
 - Replace each of the `/srv/saltgui` in the above config with the actual `saltgui` directory from the GIT repository. Alternatively, you can create a soft-link /src/saltgui that points to the actual saltgui directory.
 - To successfully use `salt-api` with a default PAM setup, if may be needed to grant read access on `/etc/shadow` to the `salt` user. This is best done using `sudo usermod --append --groups shadow salt`.
 - Restart everything with ``pkill salt-master && pkill salt-api && salt-master -d && salt-api -d``
-- You should be good to go. If you have any problems, open a GitHub issue. As always, SSL is recommended wherever possible but setup is beyond the scope of this guide.
+- You should be good to go. If you have any problems, open a GitHub issue.
+
+**For TLS configuration**, see the dedicated [TLS Configuration](#tls-configuration) section below for comprehensive setup instructions including enterprise best practices.
 
 **Note: With this configuration, the user has access to all salt modules available, maybe this is not what you want**
 
@@ -582,12 +586,58 @@ Note that the main page of SaltGUI is then located at `/app/`. When you want `/a
 
 
 ## Development environment with Docker
-To make life a bit easier for testing SaltGUI or setting up a local development environment you can use the provided docker-compose setup in this repository to run a saltmaster with three minions, including SaltGUI:
+To make life a bit easier for testing SaltGUI or setting up a local development environment, you can use the provided docker-compose setups in this repository:
+
+**For basic testing (HTTP):**
 ```
 cd docker
 docker-compose up
 ```
 Then browse to [http://localhost:3333/](http://localhost:3333/), you can login with `salt:salt`.
+
+**For TLS testing:**
+```
+cd docker
+docker-compose -f docker-compose-tls.yml up
+```
+Then browse to [https://localhost:3334/](https://localhost:3334/), you can login with `salt:salt`.
+
+
+## TLS-enabled Docker Environment
+For production use or testing with TLS encryption, you can use the TLS-enabled Docker configuration:
+
+```bash
+cd docker
+docker-compose -f docker-compose-tls.yml up
+```
+
+This will start:
+- A SaltGUI master with TLS enabled on port 3334
+- Three minions (Ubuntu, Debian, CentOS)
+- Self-signed SSL certificates (automatically generated)
+
+**Connecting to TLS-enabled SaltGUI:**
+- Browse to [https://localhost:3334/](https://localhost:3334/)
+- You will see a security warning about the self-signed certificate
+- Accept the certificate to proceed (for testing purposes)
+- Login with `salt:salt`
+
+**Important Notes for TLS Setup:**
+- The TLS configuration uses self-signed certificates generated during the Docker build
+- For production use, replace the self-signed certificates with proper CA-signed certificates
+- You can mount your own certificates by modifying the `ssl_certs` volume in `docker-compose-tls.yml`
+- The TLS master configuration is located in `docker/conf/master-tls`
+
+**Custom SSL Certificates:**
+To use your own SSL certificates, place them in a directory and mount it to the container:
+```yaml
+volumes:
+  - /path/to/your/certs:/etc/ssl/saltgui
+```
+
+Your certificate directory should contain:
+- `server.crt` - SSL certificate file
+- `server.key` - Private key file
 
 
 ## Testing

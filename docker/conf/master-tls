@@ -1,0 +1,51 @@
+# /etc/salt/master
+
+file_roots:
+  base:
+    - /srv/salt/
+
+pillar_roots:
+  base:
+    - /srv/pillar
+
+external_auth:
+  pam:
+    salt:
+      - .*
+      - '@runner'
+      - '@wheel'
+      - '@jobs'
+
+rest_cherrypy:
+    port: 3334
+    host: 0.0.0.0
+    disable_ssl: false
+    ssl_crt: /etc/ssl/saltgui/server.crt
+    ssl_key: /etc/ssl/saltgui/server.key
+    app: /saltgui/index.html
+    static: /saltgui/static
+    static_path: /static
+
+netapi_enable_clients:
+    - local
+    - local_async
+    - runner
+    - wheel
+
+saltgui_templates:
+    template1:
+        description: First template
+        target: "*"
+        command: test.fib num=10
+    template2:
+        description: Second template
+        targettype: glob
+        target: "*ubuntu*"
+        command: test.version
+    template3:
+        description: Empty template
+    template4:
+        description: Fourth template
+        targettype: compound
+        target: "G@os:Ubuntu"
+        command: test.version
