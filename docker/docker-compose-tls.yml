@@ -1,0 +1,38 @@
+version: '3'
+services:
+  saltmaster-local:
+    image: erwindon/saltgui-saltmaster-tls:3007.4
+    hostname: saltmaster-local
+    ports:
+      - 4505:4505
+      - 4506:4506
+      - 3334:3334
+    volumes:
+    - ./srv/:/srv/
+    - ./conf/master-tls:/etc/salt/master
+    - ../saltgui:/saltgui
+    - ssl_certs:/etc/ssl/saltgui
+
+  saltminion-ubuntu:
+    image: erwindon/saltgui-saltminion-ubuntu:3007.4
+    hostname: saltminion-ubuntu
+    depends_on:
+      - saltmaster-local
+    restart: on-failure
+
+  saltminion-debian:
+    image: erwindon/saltgui-saltminion-debian:3007.4
+    hostname: saltminion-debian
+    depends_on:
+      - saltmaster-local
+    restart: on-failure
+
+  saltminion-centos:
+    image: erwindon/saltgui-saltminion-centos:3007.4
+    hostname: saltminion-centos
+    depends_on:
+      - saltmaster-local
+    restart: on-failure
+
+volumes:
+  ssl_certs:
