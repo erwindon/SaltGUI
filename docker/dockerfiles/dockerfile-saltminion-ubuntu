@@ -3,9 +3,9 @@ FROM ubuntu:24.04
 LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
 LABEL name=salt-minion
 LABEL project="SaltGUI testing"
-LABEL version=3007.4
+LABEL version=3007.6
 
-ENV SALT_VERSION=3007.4
+ENV SALT_VERSION=3007.6
 ENV DEBIAN_FRONTEND=noninteractive
 
 # make download possible, make encrypted password generation possible

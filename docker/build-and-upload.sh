@@ -2,7 +2,7 @@
 set -x
 cd dockerfiles
 set -e
-tag=3007.4
+tag=3007.6
 docker build -f dockerfile-saltmaster --tag erwindon/saltgui-saltmaster:$tag --tag erwindon/saltgui-saltmaster:latest .
 docker build -f dockerfile-saltmaster-tls --tag erwindon/saltgui-saltmaster-tls:$tag --tag erwindon/saltgui-saltmaster-tls:latest .
 docker build -f dockerfile-saltminion-ubuntu --tag erwindon/saltgui-saltminion-ubuntu:$tag --tag erwindon/saltgui-saltminion-ubuntu:latest .
