@@ -4,7 +4,12 @@ services:
     image: erwindon/saltgui-saltmaster:3007.6
     hostname: saltmaster-local
     ports:
+      # for SaltGUI (http)
       - 3333:3333
+      # for additional minions, enable as needed
+      # but note that this may conflict a local saltstack
+      #- 4505:4505
+      #- 4506:4506
     volumes:
     - ./srv/:/srv/
     - ./conf/master:/etc/salt/master
