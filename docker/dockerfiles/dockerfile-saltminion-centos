@@ -13,8 +13,12 @@ RUN yum install --assumeyes epel-release curl
 
 # install salt-minion
 # not using repo, so must explicitly do all packages
-RUN yum install --assumeyes https://packages.broadcom.com/artifactory/saltproject-rpm/salt-${SALT_VERSION}-0.x86_64.rpm
-RUN yum install --assumeyes https://packages.broadcom.com/artifactory/saltproject-rpm/salt-minion-${SALT_VERSION}-0.x86_64.rpm
+# Use TARGETARCH to get the correct architecture for multi-platform builds
+ARG TARGETARCH
+# Map TARGETARCH to RPM architecture (amd64->x86_64, arm64->aarch64)
+RUN if [ "$TARGETARCH" = "amd64" ]; then RPM_ARCH="x86_64"; else RPM_ARCH="aarch64"; fi && \
+    yum install --assumeyes https://packages.broadcom.com/artifactory/saltproject-rpm/salt-${SALT_VERSION}-0.${RPM_ARCH}.rpm && \
+    yum install --assumeyes https://packages.broadcom.com/artifactory/saltproject-rpm/salt-minion-${SALT_VERSION}-0.${RPM_ARCH}.rpm
 
 # cleanup temporary files
 RUN rm -rf /var/lib/yum/* /var/cache/yum *.rpm \

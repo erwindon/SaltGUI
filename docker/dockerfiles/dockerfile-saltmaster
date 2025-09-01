@@ -18,9 +18,11 @@ RUN usermod -s /bin/bash -p "$(openssl passwd -1 salt)" salt
 
 # install salt-master with salt-api
 # not using repo, so must explicitly do all packages
-RUN curl -k -L -o salt-common_${SALT_VERSION}.deb https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-common_${SALT_VERSION}_amd64.deb
-RUN curl -k -L -o salt-api_${SALT_VERSION}.deb https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-api_${SALT_VERSION}_amd64.deb
-RUN curl -k -L -o salt-master_${SALT_VERSION}.deb https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-master_${SALT_VERSION}_amd64.deb
+# Use TARGETARCH to get the correct architecture for multi-platform builds
+ARG TARGETARCH
+RUN curl -k -L -o salt-common_${SALT_VERSION}.deb https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-common_${SALT_VERSION}_${TARGETARCH}.deb
+RUN curl -k -L -o salt-api_${SALT_VERSION}.deb https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-api_${SALT_VERSION}_${TARGETARCH}.deb
+RUN curl -k -L -o salt-master_${SALT_VERSION}.deb https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-master_${SALT_VERSION}_${TARGETARCH}.deb
 RUN apt install --yes --no-install-recommends ./salt-common_${SALT_VERSION}.deb ./salt-master_${SALT_VERSION}.deb ./salt-api_${SALT_VERSION}.deb
 
 # install supervisor
