@@ -1,23 +1,52 @@
 #!/bin/sh
-set -x
+# build script with multi-architecture support (linux/amd64 and linux/arm64)
+# Usage: ./build-and-upload.sh [--push]
+#   Default: Build images locally only
+#   --push:  Build and push images to Docker registry
+set -ex
+
 cd dockerfiles
-set -e
 tag=3007.6
-docker build -f dockerfile-saltmaster --tag erwindon/saltgui-saltmaster:$tag --tag erwindon/saltgui-saltmaster:latest .
-docker build -f dockerfile-saltmaster-tls --tag erwindon/saltgui-saltmaster-tls:$tag --tag erwindon/saltgui-saltmaster-tls:latest .
-docker build -f dockerfile-saltminion-ubuntu --tag erwindon/saltgui-saltminion-ubuntu:$tag --tag erwindon/saltgui-saltminion-ubuntu:latest .
-docker build -f dockerfile-saltminion-debian --tag erwindon/saltgui-saltminion-debian:$tag --tag erwindon/saltgui-saltminion-debian:latest .
-docker build -f dockerfile-saltminion-centos --tag erwindon/saltgui-saltminion-centos:$tag --tag erwindon/saltgui-saltminion-centos:latest .
+# Check if push is requested
+PUSH_IMAGES=""
+if [ "$1" = "--push" ]; then
+  PUSH_IMAGES="--push"
+  echo "Push mode enabled - images will be pushed to registry"
+else
+  echo "Build only mode - use '--push' parameter to push images to registry"
+fi
+
+# Setup buildx for multi-architecture builds
+# Remove any existing problematic builder
+docker buildx rm multiarch 2>/dev/null || true
+# Create a fresh builder with multi-platform support
+docker buildx create --name multiarch --driver docker-container --use
+docker buildx inspect --bootstrap
+
+# Build function for multi-architecture images
+build_multiarch_image() {
+  dockerfile="dockerfile-$1"
+  imagename="erwindon/saltgui-$1"
+  echo "Building $imagename for multiple architectures (linux/amd64,linux/arm64)"
+  docker buildx build --platform linux/amd64,linux/arm64 \
+    -f "$dockerfile" \
+    -t "$imagename:$tag" \
+    -t "$imagename:latest" \
+    $PUSH_IMAGES .
+}
+
+# Build all images with multi-architecture support
+build_multiarch_image saltmaster
+build_multiarch_image saltmaster-tls
+build_multiarch_image saltminion-ubuntu
+build_multiarch_image saltminion-debian
+build_multiarch_image saltminion-centos
+
+# Cleanup containers and dangling images
 docker container ls -aq | xargs --no-run-if-empty docker container rm --force
 docker images | awk '/^<none>/ {print $3;}' | xargs --no-run-if-empty docker rmi
-for t in $tag latest; do
-	# this needs "docker login"
-	docker push erwindon/saltgui-saltmaster:$t
-	docker push erwindon/saltgui-saltmaster-tls:$t
-	docker push erwindon/saltgui-saltminion-ubuntu:$t
-	docker push erwindon/saltgui-saltminion-debian:$t
-	docker push erwindon/saltgui-saltminion-centos:$t
-done
+
+# Final cleanup
 docker system prune --force --filter "until=12h"
 docker images
 # End
