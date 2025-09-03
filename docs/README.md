@@ -682,3 +682,4 @@ SaltGUI includes these libraries (with possible modifications):
 * [sorttable](https://www.kryogenix.org/code/browser/sorttable/)
 * [search-highlight](https://www.the-art-of-web.com/javascript/search-highlight/)
 * [jsonpath](https://www.w3resource.com/JSON/JSONPath-with-JavaScript.php)
+* [highlight](https://www.highlightjs.org/)
