@@ -33,7 +33,7 @@ export class Utils {
     let theWindow = null;
     try {
       theWindow = window;
-    } catch (error) {
+    } catch (err) { // eslint-disable-line no-unused-vars
       // VOID
     }
     if (!theWindow || !theWindow.location) {
@@ -51,7 +51,7 @@ export class Utils {
       /* eslint-disable no-unused-vars */
       const theWindow = window;
       /* eslint-enable no-unused-vars */
-    } catch (error) {
+    } catch (err) { // eslint-disable-line no-unused-vars
       return null;
     }
     /* istanbul ignore next */

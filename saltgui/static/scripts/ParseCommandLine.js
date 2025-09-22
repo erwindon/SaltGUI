@@ -115,7 +115,7 @@ export class ParseCommandLine {
               const fndStr = pToRun.substring(0, endCharPos + endChar.length);
               value = JSON.parse(fndStr);
             }
-          } catch (err) {
+          } catch (err) { // eslint-disable-line no-unused-vars
             // the string that we tried to parse is not valid json
             // continue to add more text from the input
             charPos = endCharPos + 1;
