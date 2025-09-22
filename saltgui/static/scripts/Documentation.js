@@ -10,7 +10,7 @@ import {Utils} from "./Utils.js";
 
 export class Documentation {
 
-  static _escapeHtml(unsafe) {
+  static _escapeHtml (unsafe) {
     return unsafe
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")

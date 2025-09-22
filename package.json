@@ -99,7 +99,8 @@
       "prefer-destructuring": 0,
       "prefer-named-capture-group": 0,
       "prefer-template": 0,
-      "require-unicode-regexp": 0
+      "require-unicode-regexp": 0,
+      "space-before-function-paren": ["error", "always"]
     }
   },
   "stylelint": {
