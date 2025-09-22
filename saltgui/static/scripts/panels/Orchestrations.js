@@ -230,12 +230,12 @@ export class OrchestrationsPanel extends Panel {
     delete kwArgs["__key__"];
     delete kwArgs["__type__"];
     delete kwArgs["order"];
-    if(!kwArgs["name"]) {
+    if (!kwArgs["name"]) {
       // orchestrate_single has his as mandatory parameter
       kwArgs["name"] = "dummy";
     }
     kwArgs["fun"] = "salt." + pSteps.__type__;
-    if(pTest) {
+    if (pTest) {
       kwArgs["test"] = true;
     }
     const cmdArr = ["runners.state.orchestrate_single"];
