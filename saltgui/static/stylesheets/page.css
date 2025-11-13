@@ -20,7 +20,7 @@ pre a.disabled:hover {
 }
 
 pre.output a {
-  color: yellow;
+  color: blue;
   cursor: pointer;
 }
 
@@ -44,7 +44,7 @@ pre.output div:first-of-type {
 
 pre .minion-id.host-success,
 pre #summary-jobs-active .host-success {
-  color: lime;
+  color: #4caf50;
 }
 
 pre .minion-id.host-failure,
@@ -279,7 +279,7 @@ table tr td:last-of-type {
 /* tasks */
 
 .task-success {
-  color: lime;
+  color: #4caf50;
 }
 
 .task-success-changes {
