@@ -74,5 +74,8 @@
     "test:unit": "mocha --require @babel/register --trace-warnings --check-leaks --reporter spec tests/unit/",
     "test:functional": "mocha --bail --trace-warnings --check-leaks --reporter spec tests/functional/",
     "test:coverage": "nyc mocha --require @babel/register --trace-warnings --check-leaks --reporter spec tests/unit/"
+  },
+  "dependencies": {
+    "tough-cookie": "^4.1.3"
   }
 }
