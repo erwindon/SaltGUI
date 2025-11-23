@@ -399,8 +399,6 @@ export class HighStatePanel extends Panel {
       functionField.cmd = jobData.Function + argumentsText;
       minionTr.appendChild(functionField);
 
-      /* eslint-enable max-depth */
-
       const startTimeTd = Utils.createTd();
       const startTimeSpan = Utils.createSpan("starttime");
       Output.dateTimeStr(jobData.StartTime, startTimeSpan);

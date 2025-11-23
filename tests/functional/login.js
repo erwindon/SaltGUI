@@ -26,7 +26,9 @@ describe("Funtional tests", function () {
     };
 
     if (process.env.NIGHTMARE_DEBUG === "1") {
+      /* eslint-disable no-console */
       console.log("NIGHTMARE_DEBUG=1, setting additional options");
+      /* eslint-enable no-console */
 
       // show the browser and the debug window
       options.openDevTools = true;
@@ -36,6 +38,7 @@ describe("Funtional tests", function () {
 
     browser = new Nightmare(options);
 
+    /* eslint-disable no-console */
     browser.on('console', (type, message) => {
       console.log(`[console][${type}] ` + JSON.stringify(message, null, 2));
     });
@@ -46,6 +49,7 @@ describe("Funtional tests", function () {
         console.error('stack:', stack);
       }
     });
+    /* eslint-enable no-console */
 
     return browser.
       goto(url).

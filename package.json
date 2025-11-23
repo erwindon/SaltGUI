@@ -10,9 +10,11 @@
     "@babel/core": "^7.28.5",
     "@babel/preset-env": "^7.28.5",
     "@babel/register": "^7.28.3",
+    "@eslint/js": "^9.39.1",
     "babel-plugin-istanbul": "^7.0.1",
     "chai": "^6.2.1",
-    "eslint": "^8.57.1",
+    "eslint": "^9.39.1",
+    "eslint-define-config": "^2.1.0",
     "eslint-plugin-compat": "^6.0.2",
     "mocha": "^11.7.5",
     "nightmare": "^3.0.2",
@@ -21,87 +23,6 @@
     "stylelint-config-standard": "^29.0.0",
     "stylelint-csstree-validator": "^2.0.0",
     "stylelint-scss": "^5.3.2"
-  },
-  "eslintConfig": {
-    "env": {
-      "es6": true
-    },
-    "extends": [
-      "eslint:all",
-      "plugin:compat/recommended"
-    ],
-    "parserOptions": {
-      "ecmaVersion": 6,
-      "sourceType": "module"
-    },
-    "rules": {
-      "array-element-newline": 0,
-      "capitalized-comments": 0,
-      "class-methods-use-this": 2,
-      "complexity": 0,
-      "dot-notation": 0,
-      "function-call-argument-newline": 0,
-      "function-paren-newline": 0,
-      "guard-for-in": 0,
-      "id-length": [
-        "error",
-        {
-          "exceptions": [
-            "i"
-          ]
-        }
-      ],
-      "indent": [
-        "error",
-        2
-      ],
-      "init-declarations": 0,
-      "keyword-spacing": 1,
-      "max-classes-per-file": 0,
-      "max-len": 0,
-      "max-lines": 0,
-      "max-lines-per-function": 0,
-      "max-params": 0,
-      "max-statements": 0,
-      "multiline-comment-style": 0,
-      "multiline-ternary": 0,
-      "no-console": 0,
-      "no-continue": 0,
-      "no-invalid-this": 2,
-      "no-loss-of-precision": 0,
-      "no-magic-numbers": 0,
-      "no-mixed-operators": 0,
-      "no-param-reassign": 0,
-      "no-plusplus": [
-        "error",
-        {
-          "allowForLoopAfterthoughts": true
-        }
-      ],
-      "no-redeclare": 2,
-      "no-ternary": 0,
-      "no-undef-init": 2,
-      "no-undefined": 0,
-      "no-underscore-dangle": 0,
-      "no-unused-vars": [
-        "error",
-        {
-          "args": "all",
-          "caughtErrors": "all",
-          "vars": "all"
-        }
-      ],
-      "no-warning-comments": 0,
-      "object-property-newline": 0,
-      "object-shorthand": 0,
-      "one-var": 0,
-      "padded-blocks": 0,
-      "prefer-destructuring": 0,
-      "prefer-named-capture-group": 0,
-      "prefer-template": 0,
-      "require-unicode-regexp": 0,
-      "space-before-function-paren": ["error", "always"]
-    }
   },
   "stylelint": {
     "extends": "stylelint-config-standard",

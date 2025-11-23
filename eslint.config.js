@@ -1,0 +1,77 @@
+// eslint.config.js
+import js from "@eslint/js";
+import pluginCompat from "eslint-plugin-compat";
+
+export default [
+  {
+    files: ["saltgui/static/scripts/**/*.js", "tests/**/*.js"],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+    },
+    plugins: {
+      compat: pluginCompat,
+    },
+    rules: {
+      "array-element-newline": 0,
+      "capitalized-comments": 0,
+      "class-methods-use-this": 2,
+      "complexity": 0,
+      "dot-notation": 0,
+      "function-call-argument-newline": 0,
+      "function-paren-newline": 0,
+      "guard-for-in": 0,
+      "id-length": ["error", { "exceptions": ["i"] }],
+      "indent": ["error", 2],
+      "init-declarations": 0,
+      "keyword-spacing": "warn",
+      "max-classes-per-file": "off",
+      "max-len": "off",
+      "max-lines": "off",
+      "max-lines-per-function": "off",
+      "max-params": "off",
+      "max-statements": "off",
+      "multiline-comment-style": "off",
+      "multiline-ternary": "off",
+      "no-console": "error",
+      "no-continue": "off",
+      "no-invalid-this": "error",
+      "no-loss-of-precision": "off",
+      "no-magic-numbers": "off",
+      "no-mixed-operators": "off",
+      "no-param-reassign": "off",
+      "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+      "no-redeclare": "error",
+      "no-ternary": "off",
+      "no-undef-init": "error",
+      "no-undefined": "off",
+      "no-underscore-dangle": "off",
+      "no-unused-vars": ["error", { "args": "all", "caughtErrors": "all", "vars": "all" }],
+      "no-warning-comments": "off",
+      "object-property-newline": "off",
+      "object-shorthand": "off",
+      "one-var": "off",
+      "padded-blocks": "off",
+      "prefer-destructuring": "off",
+      "prefer-named-capture-group": "off",
+      "prefer-template": "off",
+      "require-unicode-regexp": "off",
+      "space-before-function-paren": ["error", "always"],
+
+      "arrow-body-style": ["error", "as-needed"],
+      "compat/compat": "error",
+      "curly": ["error", "all"],
+      "func-names": ["error", "always"],
+      "line-comment-position": ["error", { "position": "above" }],
+      "max-depth": ["error", 4],
+      "no-bitwise": "error",
+      "no-extra-parens": ["error"],
+      "no-inline-comments": "error",
+      "no-labels": "error",
+      "no-lonely-if": "error",
+      "no-self-assign": ["error", { "props": true }],
+      "prefer-object-spread": "error",
+      "sort-keys": ["error", "asc", { "caseSensitive": true, "natural": false }]
+    }
+  }
+];
