@@ -76,6 +76,7 @@
     "test:coverage": "nyc mocha --require @babel/register --trace-warnings --check-leaks --reporter spec tests/unit/"
   },
   "dependencies": {
+    "form-data": "^2.5.5",
     "tough-cookie": "^4.1.3"
   }
 }
