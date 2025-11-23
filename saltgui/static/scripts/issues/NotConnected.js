@@ -44,7 +44,9 @@ export class NotConnectedIssues extends Issues {
       NotConnectedIssues._handleNotConnected(pPanel, wheelKeyListAllData, wheelMinionsConnectedData);
     }, (error) => {
       Issues.readyCategory(pPanel, msg);
+      /* eslint-disable no-console */
       console.error(error);
+      /* eslint-enable no-console */
     });
 
     return allPromise;

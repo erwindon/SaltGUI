@@ -402,9 +402,7 @@ export class API {
 
     let source;
     try {
-      /* eslint-disable compat/compat */
       source = new EventSource(config.API_URL + "/events?token=" + tokenOnSetup);
-      /* eslint-enable compat/compat */
     } catch (err) { // eslint-disable-line no-unused-vars
       Utils.error("Cannot read the Salt-EventBus with this browser version, browser upgrade recommended");
       return;

@@ -239,7 +239,9 @@ export class JobsPanel extends Panel {
     if (typeof jobs === "string") {
       // typically when special returner is misconfigured
       // the warning may help solve that too
+      /* eslint-disable no-console */
       console.warn(jobs);
+      /* eslint-enable no-console */
       return [];
     }
     const keys = Object.keys(jobs);

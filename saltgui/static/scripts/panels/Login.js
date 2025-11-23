@@ -127,7 +127,9 @@ export class LoginPanel extends Panel {
       saltAuth = saltAuth.filter((item) => item !== "CLEAR");
       if (saltAuth.length === 0) {
         // no cheating
-        console.warn("salt-auth-txt has no extries, except 'CLEAR', assuming 'pam'");
+        /* eslint-disable no-console */
+        console.warn("salt-auth-txt has no entries, except 'CLEAR', assuming 'pam'");
+        /* eslint-enable no-console */
         saltAuth = ["pam"];
       }
       this.eauthField.innerHTML = "";
@@ -184,7 +186,9 @@ export class LoginPanel extends Panel {
           if (fields.length === 1) {
             saltAuth.push(fields[0]);
           } else {
+            /* eslint-disable no-console */
             console.warn("lines in 'salt-auth.txt' must have 1 word, not " + fields.length + " like in: " + line);
+            /* eslint-enable no-console */
           }
         }
         Utils.setStorageItem("local", "salt-auth-txt", JSON.stringify(saltAuth));
