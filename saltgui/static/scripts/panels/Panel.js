@@ -594,7 +594,9 @@ export class Panel {
   }
 
   static _copyAddress (pTarget, useMultiAddress) {
-    if (useMultiAddress && pTarget.dataset.multiIpNumber !== pTarget.dataset.singleIpNumber) {
+    if (!navigator.clipboard) {
+      Utils.addToolTip(pTarget, "Clipboard not available\nonly for https or localhost");
+    } else if (useMultiAddress && pTarget.dataset.multiIpNumber !== pTarget.dataset.singleIpNumber) {
       navigator.clipboard.writeText(pTarget.dataset.multiIpNumber);
       Utils.addToolTip(pTarget, "Copied all!");
     } else {
@@ -638,6 +640,7 @@ export class Panel {
         addressTd.setAttribute("sorttable_customkey", sorttableCustomkey);
       }
       addressTd.setAttribute("tabindex", -1);
+      // clipboard may not be available, but we warn for that in the click handler
       addressSpan.addEventListener("click", (pClickEvent) => {
         Panel._copyAddress(addressSpan, pClickEvent.ctrlKey || pClickEvent.altKey);
         pClickEvent.stopPropagation();
