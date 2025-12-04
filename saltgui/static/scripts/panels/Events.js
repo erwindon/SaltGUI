@@ -74,7 +74,8 @@ export class EventsPanel extends Panel {
     const pDataObj = {};
     Object.assign(pDataObj, pData);
     delete pDataObj._stamp;
-    const dataTd = Utils.createTd("event-data", Output.formatObject(pDataObj));
+    const dataTd = Utils.createTd();
+    Output.setHighlightObject(dataTd, pDataObj);
     tr.append(dataTd);
 
     tbody.prepend(tr);

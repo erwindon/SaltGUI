@@ -278,11 +278,10 @@ h1 {
 }
 
 pre.output {
-  background-color: #272727;
-  color: white;
   margin: 0;
   padding: 10px;
   border-radius: 2px;
+  border: 1px solid black;
   white-space: pre-wrap;
 }
 
