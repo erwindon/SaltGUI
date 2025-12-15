@@ -661,7 +661,7 @@ We use the following testing libraries:
 
 You'll need at least:
 - `docker-compose` 1.12 or above
-- `nodejs` 8.11 or above
+- `nodejs` 18 or above
 - `yarn` 1.7 or above
 
 
