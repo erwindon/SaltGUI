@@ -34,10 +34,10 @@ docker-compose --file docker/docker-compose.yml up -d
 # wait until all are up
 npm run wait-for-docker
 
-# run the nightmare.js functional tests
+# run the puppeteer functional tests
 # when debugging is needed:
-#export DEBUG=nightmare:*,electron:*
-#export NIGHTMARE_DEBUG=1
+#export DEBUG=puppeteer:*,electron:*
+#export PUPPETEER_DEBUG=1
 # suppress Electron Security Warnings:
 export ELECTRON_DISABLE_SECURITY_WARNINGS=true
 xvfb-run npm run test:functional
