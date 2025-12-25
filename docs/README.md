@@ -651,11 +651,11 @@ sh runtests.sh
 
 To show the browser window + a debugger while running the functional tests you can run:
 ```
-NIGHTMARE_DEBUG=1 sh runtests.sh
+PUPPETEER_DEBUG=1 sh runtests.sh
 ```
 
 We use the following testing libraries:
-- [nightmare.js](https://github.com/segmentio/nightmare), for functional/browser tests
+- [puppeteer](https://pptr.dev/), for functional/browser tests
 - [mocha](https://mochajs.org/), a well documented testing framework for javascript
 - [chai](http://www.chaijs.com/), the preferred assertion library for testing
 
