@@ -7,7 +7,7 @@
   "private": true,
   "type": "module",
   "devDependencies": {
-    "@babel/core": "^7.28.5",
+    "@babel/core": "^7.28.6",
     "@babel/preset-env": "^7.28.6",
     "@babel/register": "^7.28.3",
     "@eslint/js": "^9.39.2",
