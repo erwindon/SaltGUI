@@ -66,7 +66,9 @@ export class ReactorsPanel extends Panel {
   _addReactor (pEvent, pReactor) {
     const tr = Utils.createTr();
     tr.appendChild(Utils.createTd("", pEvent));
-    tr.appendChild(Utils.createTd("", Output.formatObject(pReactor)));
+    const td = Utils.createTd();
+    Output.setHighlightObject(td, pReactor);
+    tr.appendChild(td);
 
     const tbody = this.table.tBodies[0];
     tbody.appendChild(tr);

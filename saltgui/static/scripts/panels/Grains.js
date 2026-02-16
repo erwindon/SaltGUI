@@ -143,8 +143,9 @@ export class GrainsPanel extends Panel {
           // it is a json path
           const obj = jsonPath(pMinionData, previewGrainValue);
           if (Array.isArray(obj)) {
-            td.innerText = Output.formatObject(obj[0]);
-            td.classList.add("grain-value");
+            // jsonpath returns array when result is skalar
+            // compensate by taking the first item
+            Output.setHighlightObject(td, obj[0]);
           }
         } else {
           // a plain grain-name or a path in the grains.get style
@@ -156,8 +157,7 @@ export class GrainsPanel extends Panel {
             }
           }
           if (obj) {
-            td.innerText = Output.formatObject(obj);
-            td.classList.add("grain-value");
+            Output.setHighlightObject(td, obj);
           }
         }
       } else {
