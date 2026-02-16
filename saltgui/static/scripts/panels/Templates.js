@@ -1,6 +1,6 @@
 /* global */
 
-import {DropDownMenu} from "../DropDown.js";
+import {DropDownMenuCmd} from "../DropDownCmd.js";
 import {Panel} from "./Panel.js";
 import {Router} from "../Router.js";
 import {Utils} from "../Utils.js";
@@ -113,7 +113,7 @@ export class TemplatesPanel extends Panel {
   _addTemplate (pTemplateName, template) {
     const tr = Utils.createTr();
 
-    const menu = new DropDownMenu(tr, "smaller");
+    const menu = new DropDownMenuCmd(tr, "smaller");
 
     tr.appendChild(Utils.createTd("name", pTemplateName));
 
@@ -180,7 +180,7 @@ export class TemplatesPanel extends Panel {
   }
 
   _addMenuItemApplyTemplate (pMenu, pTargetType, target, pCommand) {
-    pMenu.addMenuItem("Apply template...", () => {
+    pMenu.addMenuItemCmd("Apply template...", () => {
       this.runCommand(pTargetType, target, pCommand);
     });
   }
