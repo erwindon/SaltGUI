@@ -34,8 +34,10 @@ export class MinionsPanel extends Panel {
     const useCacheGrains = Utils.getStorageItemBoolean("session", "use_cache_for_grains", false);
     this.setWarningText("info", useCacheGrains ? "the content of this screen is based on cached grains info, minion status or grain info may not be accurate" : "");
 
+    const skipWheelMinionsConnected = Utils.getStorageItemBoolean("session", "skip_wheel_minions_connected", false);
+
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
-    const wheelMinionsConnectedPromise = this.api.getWheelMinionsConnected();
+    const wheelMinionsConnectedPromise = skipWheelMinionsConnected ? null : this.api.getWheelMinionsConnected();
     const localGrainsItemsPromise = useCacheGrains ? this.api.getRunnerCacheGrains(null) : this.api.getLocalGrainsItems(null);
 
     const runnerManageVersionsPromise = this.api.getRunnerManageVersions();
@@ -45,13 +47,15 @@ export class MinionsPanel extends Panel {
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       this._handleMinionsWheelKeyListAll(pWheelKeyListAllData);
 
-      wheelMinionsConnectedPromise.then((pWheelMinionsConnectedData) => {
-        this._handlewheelMinionsConnected(pWheelMinionsConnectedData, pWheelKeyListAllData);
-        return true;
-      }, (pWheelMinionsConnectedMsg) => {
-        Utils.debug("pWheelMinionsConnectedMsg", pWheelMinionsConnectedMsg);
-        return false;
-      });
+      if (wheelMinionsConnectedPromise != null) {
+        wheelMinionsConnectedPromise.then((pWheelMinionsConnectedData) => {
+          this._handlewheelMinionsConnected(pWheelMinionsConnectedData, pWheelKeyListAllData);
+          return true;
+        }, (pWheelMinionsConnectedMsg) => {
+          Utils.debug("pWheelMinionsConnectedMsg", pWheelMinionsConnectedMsg);
+          return false;
+        });
+      }
 
       localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
         this.updateMinions(pLocalGrainsItemsData);
@@ -72,7 +76,9 @@ export class MinionsPanel extends Panel {
       return true;
     }, (pWheelKeyListAllMsg) => {
       this._handleMinionsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
-      Utils.ignorePromise(wheelMinionsConnectedPromise);
+      if (wheelMinionsConnectedPromise != null) {
+        Utils.ignorePromise(wheelMinionsConnectedPromise);
+      }
       Utils.ignorePromise(localGrainsItemsPromise);
       Utils.ignorePromise(runnerManageVersionsPromise);
       return false;

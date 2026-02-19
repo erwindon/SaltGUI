@@ -8,8 +8,10 @@ export class NotConnectedIssues extends Issues {
 
     const msg = super.onGetIssues(pPanel, "NOT-CONNECTED");
 
+    const skipWheelMinionsConnected = Utils.getStorageItemBoolean("session", "skip_wheel_minions_connected", false);
+
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
-    const wheelMinionsConnectedPromise = this.api.getWheelMinionsConnected();
+    const wheelMinionsConnectedPromise = skipWheelMinionsConnected ? null : this.api.getWheelMinionsConnected();
 
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       Issues.removeCategory(pPanel, "not-connected");
@@ -22,16 +24,18 @@ export class NotConnectedIssues extends Issues {
       return false;
     });
 
-    wheelMinionsConnectedPromise.then((pWheelMinionsConnectedData) => {
-      Issues.removeCategory(pPanel, "not-connected");
-      return pWheelMinionsConnectedData;
-    }, (pWheelMinionsConnectedMsg) => {
-      Issues.removeCategory(pPanel, "not-connected");
-      const tr = Issues.addIssue(pPanel, "not-connected", "retrieving-connected");
-      Issues.addIssueMsg(tr, "Could not retrieve list of connected minions");
-      Issues.addIssueErr(tr, pWheelMinionsConnectedMsg);
-      return false;
-    });
+    if (wheelMinionsConnectedPromise != null) {
+      wheelMinionsConnectedPromise.then((pWheelMinionsConnectedData) => {
+        Issues.removeCategory(pPanel, "not-connected");
+        return pWheelMinionsConnectedData;
+      }, (pWheelMinionsConnectedMsg) => {
+        Issues.removeCategory(pPanel, "not-connected");
+        const tr = Issues.addIssue(pPanel, "not-connected", "retrieving-connected");
+        Issues.addIssueMsg(tr, "Could not retrieve list of connected minions");
+        Issues.addIssueErr(tr, pWheelMinionsConnectedMsg);
+        return false;
+      });
+    }
 
     /* eslint-disable compat/compat */
     /* Promise.all() is not supported in op_mini all, IE 11  compat/compat */
