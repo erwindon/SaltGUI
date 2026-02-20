@@ -57,6 +57,10 @@ export class OptionsPanel extends Panel {
         [["digits", "0", "1", "2", "3", "4", "5", "6"]]
       ],
       [
+        "skip-wheel-minions-connected", null, "false",
+        [["skip", "true", "false"]]
+      ],
+      [
         "datetime-representation", "saltgui", "utc",
         [["representation", "utc", "local", "utc-localtime:utc+localtime", "local-utctime:local+utctime"]]
       ],
@@ -177,6 +181,10 @@ export class OptionsPanel extends Panel {
           } else if (pName === "datetime-fraction-digits") {
             radio.addEventListener("change", () => {
               this._newDatetimeFractionDigits();
+            });
+          } else if (pName === "skip-wheel-minions-connected") {
+            radio.addEventListener("change", () => {
+              this._newSkipWheelMinionsConnected();
             });
           } else if (pName === "datetime-representation") {
             radio.addEventListener("change", () => {
@@ -517,6 +525,18 @@ export class OptionsPanel extends Panel {
     const datetimeFractionDigitsTd = this.div.querySelector("#option-datetime-fraction-digits-value");
     datetimeFractionDigitsTd.innerText = value;
     Utils.setStorageItem("session", "datetime_fraction_digits", value);
+  }
+
+  _newSkipWheelMinionsConnected () {
+    let value = "";
+    /* eslint-disable curly */
+    if (this._isSelected("skip-wheel-minions-connected", "skip", "false")) value = "false";
+    if (this._isSelected("skip-wheel-minions-connected", "skip", "true")) value = "true";
+    value = value.replace(/^,/, "");
+    /* eslint-enable curly */
+    const skipWheelMinionsConnectedTd = this.div.querySelector("#option-skip-wheel-minions-connected-value");
+    skipWheelMinionsConnectedTd.innerText = value || "(none)";
+    Utils.setStorageItem("session", "skip_wheel_minions_connected", value);
   }
 
   _newDatetimeRepresentation () {

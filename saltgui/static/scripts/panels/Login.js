@@ -474,6 +474,9 @@ export class LoginPanel extends Panel {
     const dateTimeFractionDigits = wheelConfigValuesData.saltgui_datetime_fraction_digits;
     Utils.setStorageItem("session", "datetime_fraction_digits", JSON.stringify(dateTimeFractionDigits));
 
+    const skipWheelMinionsConnected = wheelConfigValuesData.saltgui_skip_wheel_minions_connected;
+    Utils.setStorageItem("session", "skip_wheel_minions_connected", JSON.stringify(skipWheelMinionsConnected));
+
     const dateTimeRepresentation = wheelConfigValuesData.saltgui_datetime_representation;
     Utils.setStorageItem("session", "datetime_representation", dateTimeRepresentation);
 
