@@ -507,6 +507,20 @@ Typical effect is that it is shown slightly delayed and that is looks a bit prim
 The only other allowed value is "none", with the effect that no tooltips are shown at all.
 
 
+## Complex networks
+In cases where NAT is in use, the salt-api call `wheel.minions.connected` may not report the proper information, as SaltStack
+cannot match the observed IP-numbers to minions. This causes no information to be returned by that call.
+But that call is used to collect a first indication of connection problems by SaltGUI.
+In the given scenario, that would mean that all (or most) of the minions get a warning-icon to indicate that they are no longer connected.
+That false information may be suppressed with the following setting:
+
+```
+saltgui_skip_wheel_minions_connected: True
+```
+
+In that case the connection-test is no longer executed on the Minions (main) page and also not on the Issues page.
+
+
 ## Settings and statistics
 By using ctrl-click on the SaltGUI logo in the top-left corner, an otherwise hidden page is made visible. The page shows the relevant settings from 3 categories on the left side and the api statistics on the right side.
 
