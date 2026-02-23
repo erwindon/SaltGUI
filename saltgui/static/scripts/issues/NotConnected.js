@@ -1,6 +1,7 @@
 /* global */
 
 import {Issues} from "./Issues.js";
+import {Utils} from "../Utils.js";
 
 export class NotConnectedIssues extends Issues {
 
@@ -57,6 +58,10 @@ export class NotConnectedIssues extends Issues {
   }
 
   static _handleNotConnected (pPanel, pWheelKeyListAllData, pWheelMinionsConnectedData) {
+    if (pWheelMinionsConnectedData === null) {
+      // with saltgui_skip_wheel_minions_connected=true
+      return;
+    }
     const allMinions = pWheelKeyListAllData.return[0].data.return.minions;
     const allConnected = pWheelMinionsConnectedData.return[0].data.return;
     for (const minionId of allMinions) {
