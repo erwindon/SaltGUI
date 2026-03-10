@@ -373,7 +373,7 @@
 
 ## 1.3.0 (2018-09-28)
 - Improved command parser (erwindon)
-- Loads of ES6 code improvements and testing including linting (erwindon/maerteijn)
+- Loads of ES6 code improvements and testing including linting (erwindon/mj026)
 - Documentation view option in the command box (erwindon)
 - Show job progress in job list (erwindon)
 - Improved job detail (erwindon)
@@ -404,10 +404,10 @@
 - Now sort the jobs correctly on ``StartDate`` in the overview window (erwindon)
 
 ## 1.0.0 (2018-03-07)
-- Original release with some styling fixes and with enabled highstate functionality (maerteijn)
+- Original release with some styling fixes and with enabled highstate functionality (mj026)
 
 ## (2017-11-15)
-- New maintainer (maerteijn)
+- New maintainer (mj026)
 
 ## (2016-07-20)
 - Initial version (oliverdunk)
