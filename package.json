@@ -77,6 +77,6 @@
   },
   "dependencies": {
     "form-data": "^4.0.5",
-    "tough-cookie": "^6.0.0"
+    "tough-cookie": "^6.0.1"
   }
 }
