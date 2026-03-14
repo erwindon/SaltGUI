@@ -10,6 +10,7 @@ export class PillarsPanel extends Panel {
 
     this.addTitle("Pillars");
     this.addSearchButton();
+    this.addFilterButton();
     this.addWarningField();
     this.addTable(["-menu-", "Minion", "Status", "Pillars"]);
     this.setTableSortable("Minion", "asc");
