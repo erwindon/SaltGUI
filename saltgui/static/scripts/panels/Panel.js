@@ -179,26 +179,27 @@ export class Panel {
   addTable (pColumnNames, pFieldList = null) {
     const table = Utils.createElem("table", this.key, "", this.key + "-table");
 
-    if (pColumnNames) {
-      const thead = Utils.createElem("thead");
-      thead.id = this.key + "-table-thead";
-      const tr = Utils.createTr();
-      tr.id = this.key + "-table-thead-tr";
+    const thead = Utils.createElem("thead");
+    thead.id = this.key + "-table-thead";
+    const tr = Utils.createTr();
+    tr.id = this.key + "-table-thead-tr";
 
-      for (const columnName of pColumnNames) {
-        const th = Utils.createElem("th");
-        let cn = columnName;
-        if (cn && cn.startsWith("@")) {
-          cn = cn.substring(1);
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    for (const columnName of pColumnNames) {
+      const th = Utils.createElem("th");
+      // e.g. "-summary-", "-help-", "-menu-" and "-select-"
+      if (columnName === "-select-") {
+        th.innerText = Character.HEAVY_CHECK_MARK;
+        if (!selectVisible) {
+          th.style.display = "none";
         }
-        if (cn && !cn.startsWith("-")) {
-          th.innerText = cn;
-        }
-        tr.appendChild(th);
+      } else if (!columnName.startsWith("-")) {
+        th.innerText = columnName;
       }
-      thead.appendChild(tr);
-      table.appendChild(thead);
+      tr.appendChild(th);
     }
+    thead.appendChild(tr);
+    table.appendChild(thead);
 
     const tbody = Utils.createElem("tbody");
     // not needed yet
