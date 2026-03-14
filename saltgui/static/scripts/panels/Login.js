@@ -495,6 +495,9 @@ export class LoginPanel extends Panel {
     const fullReturn = wheelConfigValuesData.saltgui_full_return;
     Utils.setStorageItem("session", "full_return", fullReturn);
 
+    Utils.setStorageItem("session", "select_visible", "false");
+    Utils.setStorageItem("session", "select_minions", "");
+
     const id = wheelConfigValuesData.id;
     const clusterId = wheelConfigValuesData.cluster_id;
     const clusterPeers = wheelConfigValuesData.cluster_peers;
