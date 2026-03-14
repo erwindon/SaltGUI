@@ -477,6 +477,22 @@ export class CommandBox {
     CommandBox._populateTemplateCatMenu();
     CommandBox._populateTemplateTmplMenu();
     CommandBox._populateTestProviders(pApi);
+
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    if (selectVisible) {
+      // only when the selection is visible
+      const selectMinions = Utils.getStorageItem("session", "select_minions", "");
+      const lst = selectMinions.split(",").sort();
+      while (lst.length > 0 && lst[0] === "") {
+        lst.shift();
+      }
+      // and only when there is a selection
+      if (lst.length > 0) {
+        const targetField = document.getElementById("target");
+        targetField.value = lst.join(",");
+        TargetType.autoSelectTargetType(targetField.value);
+      }
+    }
   }
 
   static _populateTestProviders (pApi) {
