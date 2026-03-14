@@ -27,6 +27,7 @@ export class HighStatePanel extends Panel {
     this._addMenuItemUseStateHighstate();
     this._addMenuItemUseStateApply();
     this.addSearchButton();
+    this.addFilterButton();
     this.addPlayPauseButton();
     this.addHelpButton([
       "This panel shows the latest state.highstate or state.apply job for each minion.",

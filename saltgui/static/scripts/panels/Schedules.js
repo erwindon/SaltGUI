@@ -10,6 +10,7 @@ export class SchedulesPanel extends Panel {
 
     this.addTitle("Schedules");
     this.addSearchButton();
+    this.addFilterButton();
     this.addTable(["-menu-", "Minion", "Status", "Schedules"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable("page");

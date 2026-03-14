@@ -71,6 +71,15 @@ export class Panel {
     this.searchButton = span;
   }
 
+  addFilterButton () {
+    const span = Utils.createSpan(
+      ["filter-button", "small-button", "small-button-left", "small-button-for-click", "no-print"],
+      Character.HEAVY_CHECK_MARK,
+      this.key + "-filter-button");
+    this.div.appendChild(span);
+    this.filterButton = span;
+  }
+
   addPlayPauseButton () {
     const playButton = Utils.createSpan(
       ["small-button", "small-button-left", "small-button-for-click", "no-print"],
