@@ -11,6 +11,7 @@ export class GrainsPanel extends Panel {
 
     this.addTitle("Grains");
     this.addSearchButton();
+    this.addFilterButton();
     this.addHelpButton([
       "The content of specific well-known grains can be made visible in",
       "columns by configuring their name in the server-side configuration file.",
