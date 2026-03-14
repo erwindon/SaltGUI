@@ -25,8 +25,8 @@ export class TemplatesPanel extends Panel {
 
     wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
       this._handleTemplatesWheelConfigValues(pWheelConfigValuesData);
-      this.hideColumn("Category");
-      this.hideColumn("Key");
+      this.hideColumnWhenNone("Category");
+      this.hideColumnWhenNone("Key");
       return true;
     }, (pWheelConfigValuesMsg) => {
       this._handleTemplatesWheelConfigValues(JSON.stringify(pWheelConfigValuesMsg));
