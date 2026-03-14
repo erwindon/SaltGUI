@@ -52,7 +52,7 @@ export class OrchestrationsPanel extends Panel {
       for (const msg of orchestrations) {
         const tr0 = Utils.createTr();
         const td = Utils.createTd("name", msg);
-        td.colSpan = 4;
+        td.colSpan = 99;
         tr0.appendChild(td);
         this.table.tBodies[0].appendChild(tr0);
       }

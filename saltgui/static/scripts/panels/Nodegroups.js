@@ -320,7 +320,7 @@ export class NodegroupsPanel extends Panel {
     } else {
       titleTd.innerText = Character.EM_DASH + " not in any nodegroup " + Character.EM_DASH + " (loading) " + Character.EM_DASH;
     }
-    titleTd.colSpan = 4;
+    titleTd.colSpan = 99;
     tr.append(titleTd);
 
     this._addMenuItemStateApplyGroup(tr.dropdownmenu, pNodegroup, pAllNodegroups);
