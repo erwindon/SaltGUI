@@ -21,6 +21,7 @@ export class MinionsPanel extends Panel {
     this._addMenuItemStateApply(this.panelMenu, "*");
     this._addMenuItemStateApplyTest(this.panelMenu, "*");
     this.addSearchButton();
+    this.addFilterButton();
     this.addWarningField();
     this.addTable(["-menu-", "Minion", "Status", "Salt version", "OS version"]);
     this.setTableSortable("Minion", "asc");

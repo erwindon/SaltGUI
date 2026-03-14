@@ -244,6 +244,10 @@ export class CommandBox {
         if (targetField.value === "##connected") {
           // just replace it with the actual value
           targetField.value = Utils.getStorageItem("session", "connected", "");
+        } else if (targetField.value.startsWith("##selected-minion")) {
+          // just replace it with the actual value
+          // this item is only visible when it has a value
+          targetField.value = Utils.getStorageItem("session", "select_minions", "");
         }
         const targetType = targetField.value;
         TargetType.autoSelectTargetType(targetType);
@@ -453,6 +457,27 @@ export class CommandBox {
     optionConnected.value = "##connected";
     targetList.appendChild(optionConnected);
 
+    // TODO
+    // variation B
+    // the selected minions get an indication in the dropdown of the field
+    // pro: previous value is maintained as before
+    // con: user must do a little navigation to get the value
+    // con: the dropdown will only appear when field is still empty (-->rejected)
+    // const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    // if (selectVisible) {
+    //   const selectMinions = Utils.getStorageItem("session", "select_minions", "");
+    //   if (selectMinions !== "") {
+    //     const optionSelectedMinions = Utils.createElem("option");
+    //     const minionCnt = selectMinions.split(",").length;
+    //     if (minionCnt === 1) {
+    //       optionSelectedMinions.value = "##selected-minion (" + selectMinions + ")";
+    //     } else {
+    //       optionSelectedMinions.value = "##selected-minions (" + minionCnt + " minions)";
+    //     }
+    //     targetList.appendChild(optionSelectedMinions);
+    //   }
+    // }
+
     for (const nodeGroup of Object.keys(nodeGroups).sort()) {
       const option = Utils.createElem("option");
       option.value = "#" + nodeGroup;
@@ -477,6 +502,22 @@ export class CommandBox {
     CommandBox._populateTemplateCatMenu();
     CommandBox._populateTemplateTmplMenu();
     CommandBox._populateTestProviders(pApi);
+
+    // TODO
+    // variation A
+    // the field is populated with the list of selected
+    // con: this always discards the previous value
+    // pro: no extra clicks needed
+    // when minions were pre-selected, populate the target fields with matching target-type
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    if (selectVisible) {
+      const selectMinions = Utils.getStorageItem("session", "select_minions", "");
+      if (selectMinions !== "") {
+        const targetField = document.getElementById("target");
+        targetField.value = selectMinions;
+        TargetType.autoSelectTargetType(selectMinions);
+      }
+    }
   }
 
   static _populateTestProviders (pApi) {
