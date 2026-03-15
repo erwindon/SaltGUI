@@ -76,6 +76,21 @@ export class Panel {
       Character.HEAVY_CHECK_MARK,
       this.key + "-filter-button");
     this.div.appendChild(span);
+    span.addEventListener("click", (pClickEvent) => {
+      const selectVisible = !Utils.getStorageItemBoolean("session", "select_visible", false);
+      Utils.setStorageItem("session", "select_visible", selectVisible);
+      const tbody = this.table.tBodies[0];
+      const str = Utils.getStorageItem("session", "select_minions", "");
+      for (const tr of tbody.rows) {
+        const td = tr.children[0];
+        if (str.includes("," + tr.dataset.minionId + ",")) {
+          td.innerText = Character.BALLOT_BOX_WITH_CHECK;
+        } else {
+          td.innerText = Character.BALLOT_BOX_UNCHECKED;
+        }
+      }
+      pClickEvent.stopPropagation();
+    });
   }
 
   addPlayPauseButton () {
@@ -183,6 +198,22 @@ export class Panel {
     }
   }
 
+  toggleSelection () {
+    let selectMinions = Utils.getStorageItem("session", "select_minions", ",");
+    for (const tr of this.table.tBodies[0].children) {
+      const td = tr.children[0];
+      if (td.innerText === Character.BALLOT_BOX_UNCHECKED) {
+        td.innerText = Character.BALLOT_BOX_WITH_CHECK;
+        selectMinions += tr.dataset.minionId + ",";
+      } else {
+        td.innerText = Character.BALLOT_BOX_UNCHECKED;
+        selectMinions = selectMinions.replace("," + tr.dataset.minionId + ",", ",");
+        selectMinions = selectMinions.replace("," + tr.dataset.minionId + ",", ",");
+      }
+      Utils.setStorageItem("session", "select_minions", selectMinions);
+    }
+  }
+
   addTable (pColumnNames, pFieldList = null) {
     const table = Utils.createElem("table", this.key, "", this.key + "-table");
 
@@ -197,6 +228,10 @@ export class Panel {
       if (columnName === "-select-") {
         th.innerText = Character.HEAVY_CHECK_MARK;
         th.style.cursor = "pointer";
+        th.addEventListener("click", (pClickEvent) => {
+          this.toggleSelection();
+          pClickEvent.stopPropagation();
+        });
       } else if (!columnName.startsWith("-")) {
         th.innerText = columnName;
       }
@@ -449,6 +484,20 @@ export class Panel {
     if (pUseSelect) {
       const selectTd = Utils.createTd();
       selectTd.innerText = Character.BALLOT_BOX_UNCHECKED;
+      selectTd.addEventListener("click", (pClickEvent) => {
+        let selectMinions = Utils.getStorageItem("session", "select_minions", ",");
+        const tr = pClickEvent.target.parentElement;
+        if (pClickEvent.target.innerText === Character.BALLOT_BOX_UNCHECKED) {
+          pClickEvent.target.innerText = Character.BALLOT_BOX_WITH_CHECK;
+          selectMinions += tr.dataset.minionId + ",";
+        } else {
+          pClickEvent.target.innerText = Character.BALLOT_BOX_UNCHECKED;
+          selectMinions = selectMinions.replace("," + tr.dataset.minionId + ",", ",");
+          selectMinions = selectMinions.replace("," + tr.dataset.minionId + ",", ",");
+        }
+        Utils.setStorageItem("session", "select_minions", selectMinions);
+        pClickEvent.stopPropagation();
+      });
       minionTr.appendChild(selectTd);
     }
 
