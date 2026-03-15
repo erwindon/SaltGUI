@@ -23,7 +23,7 @@ export class MinionsPanel extends Panel {
     this.addSearchButton();
     this.addFilterButton();
     this.addWarningField();
-    this.addTable(["-menu-", "Minion", "Status", "Salt version", "OS version"]);
+    this.addTable(["-select-", "-menu-", "Minion", "Status", "Salt version", "OS version"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable("cmd");
     this.addMsg();
@@ -191,7 +191,7 @@ export class MinionsPanel extends Panel {
   }
 
   updateMinion (pMinionData, pMinionId, pAllMinionsGrains) {
-    super.updateMinion(pMinionData, pMinionId, pAllMinionsGrains);
+    super.updateMinion(pMinionData, pMinionId, pAllMinionsGrains, true);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
     this._addMenuItemStateApply(minionTr.dropdownmenu, pMinionId);

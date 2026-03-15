@@ -12,7 +12,7 @@ export class PillarsPanel extends Panel {
     this.addSearchButton();
     this.addFilterButton();
     this.addWarningField();
-    this.addTable(["-menu-", "Minion", "Status", "Pillars"]);
+    this.addTable(["-select-", "-menu-", "Minion", "Status", "Pillars"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable("page");
     this.addMsg();
@@ -80,7 +80,7 @@ export class PillarsPanel extends Panel {
   }
 
   updateMinion (pMinionData, pMinionId, pAllMinionsGrains) {
-    super.updateMinion(null, pMinionId, pAllMinionsGrains);
+    super.updateMinion(null, pMinionId, pAllMinionsGrains, true);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 

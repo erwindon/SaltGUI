@@ -36,7 +36,7 @@ export class HighStatePanel extends Panel {
       "Click on an individual state to re-apply only that state."
     ]);
     this.addWarningField();
-    this.addTable(["-menu-", "Minion", "State", "Latest JID", "Target", "Function", "Start Time", "States"]);
+    this.addTable(["-select-", "-menu-", "Minion", "State", "Latest JID", "Target", "Function", "Start Time", "States"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable("cmd");
     this.addMsg();
@@ -363,7 +363,7 @@ export class HighStatePanel extends Panel {
 
       // we already have the TR
       // but this function also clears the row
-      this.getElement(trId);
+      this.getElement(trId, true);
 
       // mark the TR as populated
       minionTr.jid = pJobId;

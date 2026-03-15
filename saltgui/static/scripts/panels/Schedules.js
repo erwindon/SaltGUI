@@ -11,7 +11,7 @@ export class SchedulesPanel extends Panel {
     this.addTitle("Schedules");
     this.addSearchButton();
     this.addFilterButton();
-    this.addTable(["-menu-", "Minion", "Status", "Schedules"]);
+    this.addTable(["-select-", "-menu-", "Minion", "Status", "Schedules"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable("page");
     this.addMsg();
@@ -113,9 +113,9 @@ export class SchedulesPanel extends Panel {
 
     pMinionData = SchedulesPanel.fixSchedulesMinion(pMinionData);
 
-    super.updateMinion(pMinionData, pMinionId, pAllMinionsGrains);
+    super.updateMinion(pMinionData, pMinionId, pAllMinionsGrains, true);
 
-    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
+    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), true);
 
     minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 
