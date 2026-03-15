@@ -179,26 +179,25 @@ export class Panel {
   addTable (pColumnNames, pFieldList = null) {
     const table = Utils.createElem("table", this.key, "", this.key + "-table");
 
-    if (pColumnNames) {
-      const thead = Utils.createElem("thead");
-      thead.id = this.key + "-table-thead";
-      const tr = Utils.createTr();
-      tr.id = this.key + "-table-thead-tr";
+    const thead = Utils.createElem("thead");
+    thead.id = this.key + "-table-thead";
+    const tr = Utils.createTr();
+    tr.id = this.key + "-table-thead-tr";
 
-      for (const columnName of pColumnNames) {
-        const th = Utils.createElem("th");
-        let cn = columnName;
-        if (cn && cn.startsWith("@")) {
-          cn = cn.substring(1);
-        }
-        if (cn && !cn.startsWith("-")) {
-          th.innerText = cn;
-        }
-        tr.appendChild(th);
+    for (const columnName of pColumnNames) {
+      const th = Utils.createElem("th");
+      let cn = columnName;
+      if (cn && cn.startsWith("@")) {
+        cn = cn.substring(1);
       }
-      thead.appendChild(tr);
-      table.appendChild(thead);
+      if (cn && !cn.startsWith("-")) {
+        th.innerText = cn;
+      }
+      tr.appendChild(th);
     }
+
+    thead.appendChild(tr);
+    table.appendChild(thead);
 
     const tbody = Utils.createElem("tbody");
     // not needed yet
