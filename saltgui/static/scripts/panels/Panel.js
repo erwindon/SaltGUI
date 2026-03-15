@@ -917,22 +917,19 @@ export class Panel {
     }
   }
 
-  hideColumn (colTitle) {
+  hideColumnWhenNone (pColTitle) {
 
     let colNr = -1;
     // find a column with this name
     for (let i = 0; i < this.table.tHead.children[0].children.length; i++) {
       const td = this.table.tHead.children[0].children[i];
-      if (td.innerText === colTitle) {
+      if (td.innerText === pColTitle) {
         colNr = i;
         break;
       }
     }
-    if (colNr < 0) {
-      // column by that name already gone
-      return;
-    }
 
+    // verify whether all values are not interesting
     for (const tr of this.table.tBodies[0].children) {
       const td = tr.children[colNr];
       if (!td.classList.contains("value-none")) {
@@ -942,16 +939,16 @@ export class Panel {
       }
     }
 
-    // all column-values are trivial, remove the column
+    // all column-values are trivial, hide the column
     // title
     for (const tr of this.table.tHead.children) {
       const td = tr.children[colNr];
-      td.remove();
+      td.style.display = "none";
     }
     // data
     for (const tr of this.table.tBodies[0].children) {
       const td = tr.children[colNr];
-      td.remove();
+      td.style.display = "none";
     }
   }
 }
