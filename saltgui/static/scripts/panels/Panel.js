@@ -229,10 +229,12 @@ export class Panel {
     tr.id = this.key + "-table-thead-tr";
 
     const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    this.usesSelect = false;
     for (const columnName of pColumnNames) {
       const th = Utils.createElem("th");
       // e.g. "-summary-", "-help-", "-menu-" and "-select-"
       if (columnName === "-select-") {
+        this.usesSelect = true;
         th.innerText = Character.HEAVY_CHECK_MARK;
         th.style.cursor = "pointer";
         if (!selectVisible) {
@@ -446,7 +448,18 @@ export class Panel {
     // optional select button
     if (pUseSelect) {
       const selectTd = Utils.createTd();
-      selectTd.innerText = Character.BALLOT_BOX_UNCHECKED;
+      const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+      if (selectVisible) {
+        selectTd.style.display = "";
+      } else {
+        selectTd.style.display = "none";
+      }
+      const selectMinions = Utils.getStorageItem("session", "select_minions", ",");
+      if (selectMinions.includes("," + pMinionId + ",")) {
+        selectTd.innerText = Character.BALLOT_BOX_WITH_CHECK;
+      } else {
+        selectTd.innerText = Character.BALLOT_BOX_UNCHECKED;
+      }
       minionTr.appendChild(selectTd);
     }
 
@@ -493,11 +506,19 @@ export class Panel {
     // (room for) selection box
     if (pUseSelect) {
       const selectTd = Utils.createTd();
-      selectTd.innerText = Character.BALLOT_BOX_UNCHECKED;
+
+      const selectMinions = Utils.getStorageItem("session", "select_minions", ",");
+      if (selectMinions.includes("," + minionTr.dataset.minionId + ",")) {
+        selectTd.innerText = Character.BALLOT_BOX_WITH_CHECK;
+      } else {
+        selectTd.innerText = Character.BALLOT_BOX_UNCHECKED;
+      }
+
       const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
       if (!selectVisible) {
         selectTd.style.display = "none";
       }
+
       selectTd.addEventListener("click", (pClickEvent) => {
         let selectMinions = Utils.getStorageItem("session", "select_minions", ",");
         const tr = pClickEvent.target.parentElement;
