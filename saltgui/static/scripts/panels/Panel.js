@@ -90,6 +90,9 @@ export class Panel {
           td.innerText = Character.BALLOT_BOX_UNCHECKED;
         }
       }
+
+      this.updateFooter();
+
       pClickEvent.stopPropagation();
     });
   }
@@ -212,6 +215,8 @@ export class Panel {
         selectMinions = selectMinions.replace("," + tr.dataset.minionId + ",", ",");
       }
       Utils.setStorageItem("session", "select_minions", selectMinions);
+
+      this.updateFooter();
     }
   }
 
@@ -505,8 +510,12 @@ export class Panel {
           selectMinions = selectMinions.replace("," + tr.dataset.minionId + ",", ",");
         }
         Utils.setStorageItem("session", "select_minions", selectMinions);
+
+        this.updateFooter();
+
         pClickEvent.stopPropagation();
       });
+
       minionTr.appendChild(selectTd);
     }
 
@@ -844,6 +853,16 @@ export class Panel {
       txt += noprint_b;
       txt += ", press " + Character.buttonInText(Character.CH_PAUSE) + " to pause";
       txt += noprint_e;
+    }
+
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    if (selectVisible && this.usesSelect) {
+      const selectMinions = Utils.getStorageItem("session", "select_minions", "");
+      const lst = selectMinions.split(",").sort();
+      while (lst.length > 0 && lst[0] === "") {
+        lst.shift();
+      }
+      txt += ", " + Utils.txtZeroOneMany(lst.length, "no minions selected", "{0} minion selected", "{0} minions selected");
     }
 
     txt = txt.replace(/^, /g, "");
