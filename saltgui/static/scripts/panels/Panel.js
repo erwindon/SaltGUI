@@ -187,9 +187,6 @@ export class Panel {
     for (const columnName of pColumnNames) {
       const th = Utils.createElem("th");
       let cn = columnName;
-      if (cn && cn.startsWith("@")) {
-        cn = cn.substring(1);
-      }
       if (cn && !cn.startsWith("-")) {
         th.innerText = cn;
       }
