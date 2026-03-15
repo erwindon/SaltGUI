@@ -193,7 +193,11 @@ export class Panel {
 
     for (const columnName of pColumnNames) {
       const th = Utils.createElem("th");
-      if (!columnName.startsWith("-")) {
+      // e.g. "-summary-", "-help-", "-menu-" and "-select-"
+      if (columnName === "-select-") {
+        th.innerText = Character.HEAVY_CHECK_MARK;
+        th.style.cursor = "pointer";
+      } else if (!columnName.startsWith("-")) {
         th.innerText = columnName;
       }
       tr.appendChild(th);
@@ -263,7 +267,7 @@ export class Panel {
 
     // mark columns as click-able
     for (const th of thArr) {
-      if (th.innerText !== "") {
+      if (th.innerText !== "" && th.innerText != Character.HEAVY_CHECK_MARK) {
         th.classList.add("sorttable_sortable");
       }
     }
@@ -382,7 +386,7 @@ export class Panel {
     return true;
   }
 
-  addMinion (pMinionId, freeColumns = 0) {
+  addMinion (pMinionId, pUseSelect = true, freeColumns = 0) {
 
     let minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
     if (minionTr !== null) {
@@ -393,6 +397,13 @@ export class Panel {
     minionTr = Utils.createTr();
     minionTr.id = Utils.getIdFromMinionId(pMinionId);
     minionTr.dataset.minionId = pMinionId;
+
+    // optional select button
+    if (pUseSelect) {
+      const selectTd = Utils.createTd();
+      selectTd.innerText = Character.BALLOT_BOX_UNCHECKED;
+      minionTr.appendChild(selectTd);
+    }
 
     // drop down menu
     const menuTd = Utils.createTd();
@@ -418,7 +429,7 @@ export class Panel {
     return minionTr;
   }
 
-  getElement (id) {
+  getElement (id, pUseSelect) {
     let minionTr = this.table.querySelector("#" + id);
 
     if (minionTr === null) {
@@ -432,6 +443,13 @@ export class Panel {
     // remove existing content
     while (minionTr.firstChild) {
       minionTr.removeChild(minionTr.firstChild);
+    }
+
+    // (room for) selection box
+    if (pUseSelect) {
+      const selectTd = Utils.createTd();
+      selectTd.innerText = Character.BALLOT_BOX_UNCHECKED;
+      minionTr.appendChild(selectTd);
     }
 
     // drop down menu
@@ -607,9 +625,9 @@ export class Panel {
     }
   }
 
-  updateMinion (pMinionData, pMinionId, pAllMinionsGrains) {
+  updateMinion (pMinionData, pMinionId, pAllMinionsGrains, pUseSelect) {
 
-    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
+    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), pUseSelect);
 
     const minionSpan = Utils.createSpan("minion-id", pMinionId);
     const minionTd = Utils.createTd();
@@ -775,8 +793,8 @@ export class Panel {
     this.setMsg(txt.length > 0 ? txt : "(???)");
   }
 
-  updateOfflineMinion (pMinionId, pMinionsDict) {
-    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
+  updateOfflineMinion (pMinionId, pMinionsDict, pUseSelect) {
+    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), pUseSelect);
 
     minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 

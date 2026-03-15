@@ -11,7 +11,7 @@ export class BeaconsPanel extends Panel {
     this.addTitle("Beacons");
     this.addSearchButton();
     this.addFilterButton();
-    this.addTable(["-menu-", "Minion", "Status", "Beacons"]);
+    this.addTable(["-select-", "-menu-", "Minion", "Status", "Beacons"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable("page");
     this.addMsg();
@@ -117,7 +117,7 @@ export class BeaconsPanel extends Panel {
 
     pMinionData = BeaconsPanel.fixBeaconsMinion(pMinionData);
 
-    super.updateMinion(null, pMinionId, pAllMinionsGrains);
+    super.updateMinion(null, pMinionId, pAllMinionsGrains, true);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
