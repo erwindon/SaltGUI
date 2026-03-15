@@ -79,6 +79,7 @@ export class Panel {
     span.addEventListener("click", (pClickEvent) => {
       const selectVisible = !Utils.getStorageItemBoolean("session", "select_visible", false);
       Utils.setStorageItem("session", "select_visible", selectVisible);
+      this.showColumn (Character.HEAVY_CHECK_MARK, selectVisible);
       const tbody = this.table.tBodies[0];
       const str = Utils.getStorageItem("session", "select_minions", "");
       for (const tr of tbody.rows) {
@@ -222,12 +223,16 @@ export class Panel {
     const tr = Utils.createTr();
     tr.id = this.key + "-table-thead-tr";
 
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
     for (const columnName of pColumnNames) {
       const th = Utils.createElem("th");
       // e.g. "-summary-", "-help-", "-menu-" and "-select-"
       if (columnName === "-select-") {
         th.innerText = Character.HEAVY_CHECK_MARK;
         th.style.cursor = "pointer";
+        if (!selectVisible) {
+          th.style.display = "none";
+        }
         th.addEventListener("click", (pClickEvent) => {
           this.toggleSelection();
           pClickEvent.stopPropagation();
@@ -484,6 +489,10 @@ export class Panel {
     if (pUseSelect) {
       const selectTd = Utils.createTd();
       selectTd.innerText = Character.BALLOT_BOX_UNCHECKED;
+      const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+      if (!selectVisible) {
+        selectTd.style.display = "none";
+      }
       selectTd.addEventListener("click", (pClickEvent) => {
         let selectMinions = Utils.getStorageItem("session", "select_minions", ",");
         const tr = pClickEvent.target.parentElement;
@@ -1023,6 +1032,30 @@ export class Panel {
     for (const tr of this.table.tBodies[0].children) {
       const td = tr.children[colNr];
       td.style.display = "none";
+    }
+  }
+
+  showColumn (pColTitle, pShow) {
+
+    let colNr = -1;
+    // find a column with this name
+    for (let i = 0; i < this.table.tHead.children[0].children.length; i++) {
+      const td = this.table.tHead.children[0].children[i];
+      if (td.innerText === pColTitle) {
+        colNr = i;
+        break;
+      }
+    }
+
+    // title
+    for (const tr of this.table.tHead.children) {
+      const td = tr.children[colNr];
+      td.style.display = pShow ? "" : "none";
+    }
+    // data
+    for (const tr of this.table.tBodies[0].children) {
+      const td = tr.children[colNr];
+      td.style.display = pShow ? "" : "none";
     }
   }
 }
