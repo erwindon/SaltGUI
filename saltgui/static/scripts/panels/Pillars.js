@@ -1,5 +1,6 @@
 /* global */
 
+import {Character} from "../Character.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
 
@@ -19,6 +20,9 @@ export class PillarsPanel extends Panel {
   }
 
   onShow () {
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    this.showColumn(Character.HEAVY_CHECK_MARK, selectVisible);
+
     const useCachePillar = Utils.getStorageItemBoolean("session", "use_cache_for_pillar", false);
     this.setWarningText("info", useCachePillar ? "the content of this screen is based on cached grains info, minion status or pillar info may not be accurate" : "");
 

@@ -1,5 +1,6 @@
 /* global jsonPath */
 
+import {Character} from "../Character.js";
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
@@ -27,6 +28,9 @@ export class GrainsPanel extends Panel {
   }
 
   onShow () {
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    this.showColumn(Character.HEAVY_CHECK_MARK, selectVisible);
+
     if (this.previewColumsAdded !== true) {
       // collect the list of displayed extra grains
       this.previewGrains = Utils.getStorageItemList("session", "preview_grains");
