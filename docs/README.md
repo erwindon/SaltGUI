@@ -404,6 +404,7 @@ But note that there might be more possible solutions, some of which may actually
 ## Minion selection
 Pages that show a simple list of minions allow individual miniuns to be selected.
 Use panel button [✔] to show an extra column with checkboxes in the table.
+Minions can be selected one-by-one or the selection can be inverted by clicking on the column header.
 The list of selected minions will be used in the command-box and for commands from a panel-menu.
 When the column is hidden, the selection-values are ignored.
 
