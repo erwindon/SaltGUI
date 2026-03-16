@@ -316,8 +316,7 @@ export class Panel {
     // mark columns as click-able
     for (const th of thArr) {
       if (th.innerText !== "" && th.innerText != Character.HEAVY_CHECK_MARK) {
-        th.classList.add("sorttable_sortable");
-        th.classList.add("tooltip");
+        th.classList.add("sorttable_sortable", "tooltip");
       }
     }
 
