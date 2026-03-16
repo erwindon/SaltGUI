@@ -864,7 +864,7 @@ export class Panel {
     const lst = CommandBox.getSelectedMinionList();
     if (lst !== null) {
       const nrSelected = lst.split(",").length;
-      txt += ", " + Utils.txtZeroOneMany(nrSelected, "no minions selected", "{0} minion selected", "{0} minions selected");
+      txt += ", " + Utils.txtZeroOneMany(nrSelected, "none selected", "{0} selected", "{0} selected");
     }
 
     txt = txt.replace(/^, /g, "");
