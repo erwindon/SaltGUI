@@ -447,7 +447,7 @@ export class Panel {
 
     // optional select button
     if (pUseSelect) {
-      const selectTd = Utils.createTd();
+      const selectTd = Utils.createTd("tooltip");
       const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
       if (selectVisible) {
         selectTd.style.display = "";
@@ -505,7 +505,7 @@ export class Panel {
 
     // (room for) selection box
     if (pUseSelect) {
-      const selectTd = Utils.createTd();
+      const selectTd = Utils.createTd("tooltip");
 
       const selectMinions = Utils.getStorageItem("session", "select_minions", ",");
       if (selectMinions.includes("," + minionTr.dataset.minionId + ",")) {
