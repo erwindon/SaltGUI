@@ -204,6 +204,7 @@ export class Panel {
 
   toggleSelection () {
     let selectMinions = Utils.getStorageItem("session", "select_minions", ",");
+
     for (const tr of this.table.tBodies[0].children) {
       const td = tr.children[0];
       if (td.innerText === Character.BALLOT_BOX_UNCHECKED) {
@@ -212,12 +213,12 @@ export class Panel {
       } else {
         td.innerText = Character.BALLOT_BOX_UNCHECKED;
         selectMinions = selectMinions.replace("," + tr.dataset.minionId + ",", ",");
-        selectMinions = selectMinions.replace("," + tr.dataset.minionId + ",", ",");
       }
-      Utils.setStorageItem("session", "select_minions", selectMinions);
-
-      this.updateFooter();
     }
+
+    Utils.setStorageItem("session", "select_minions", selectMinions);
+
+    this.updateFooter();
   }
 
   addTable (pColumnNames, pFieldList = null) {
