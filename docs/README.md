@@ -49,6 +49,7 @@ We suggest to upgrade the SaltStack installation when you are still using a vers
 - Keyboard control to apply templates
 - Choose between live info and cached info for grains/pillar
 - View details of orchestrations and allow to start them
+- Act on multiple minions by first selecting them
 
 
 ## Quick start using PAM as authentication method
@@ -399,6 +400,12 @@ Each issue has its own dropdown-menu, which typically contains:
 * One or more salt-commands to fix the situation;
 But note that there might be more possible solutions, some of which may actually be more preferred.
 * A navigation-command to go to a page for more details.
+
+## Minion selection
+Pages that show a simple list of minions allow individual miniuns to be selected.
+Use panel button [✔] to show an extra column with checkboxes in the table.
+The list of selected minions will be used in the command-box and for commands from a panel-menu.
+When the column is hidden, the selection-values are ignored.
 
 ## Command documentation
 
