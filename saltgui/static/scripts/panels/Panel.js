@@ -236,6 +236,7 @@ export class Panel {
       if (columnName === "-select-") {
         this.usesSelect = true;
         th.innerText = Character.HEAVY_CHECK_MARK;
+        th.classList.add("tooltip");
         th.style.cursor = "pointer";
         if (!selectVisible) {
           th.style.display = "none";
@@ -448,20 +449,7 @@ export class Panel {
 
     // optional select button
     if (pUseSelect) {
-      const selectTd = Utils.createTd("tooltip");
-      const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
-      if (selectVisible) {
-        selectTd.style.display = "";
-      } else {
-        selectTd.style.display = "none";
-      }
-      const selectMinions = Utils.getStorageItem("session", "select_minions", ",");
-      if (selectMinions.includes("," + pMinionId + ",")) {
-        selectTd.innerText = Character.BALLOT_BOX_WITH_CHECK;
-      } else {
-        selectTd.innerText = Character.BALLOT_BOX_UNCHECKED;
-      }
-      minionTr.appendChild(selectTd);
+      this._addSelectionCheckbox (minionTr);
     }
 
     // drop down menu
@@ -488,6 +476,42 @@ export class Panel {
     return minionTr;
   }
 
+  _addSelectionCheckbox (pMinionTr) {
+    const selectTd = Utils.createTd("tooltip");
+
+    const selectMinions = Utils.getStorageItem("session", "select_minions", ",");
+    if (selectMinions.includes("," + pMinionTr.dataset.minionId + ",")) {
+      selectTd.innerText = Character.BALLOT_BOX_WITH_CHECK;
+    } else {
+      selectTd.innerText = Character.BALLOT_BOX_UNCHECKED;
+    }
+
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    if (!selectVisible) {
+      selectTd.style.display = "none";
+    }
+
+    selectTd.addEventListener("click", (pClickEvent) => {
+      let selectMinions = Utils.getStorageItem("session", "select_minions", ",");
+      const tr = pClickEvent.target.parentElement;
+      if (pClickEvent.target.innerText === Character.BALLOT_BOX_UNCHECKED) {
+        pClickEvent.target.innerText = Character.BALLOT_BOX_WITH_CHECK;
+        selectMinions += tr.dataset.minionId + ",";
+      } else {
+        pClickEvent.target.innerText = Character.BALLOT_BOX_UNCHECKED;
+        selectMinions = selectMinions.replace("," + tr.dataset.minionId + ",", ",");
+        selectMinions = selectMinions.replace("," + tr.dataset.minionId + ",", ",");
+      }
+      Utils.setStorageItem("session", "select_minions", selectMinions);
+
+      this.updateFooter();
+
+      pClickEvent.stopPropagation();
+    });
+
+    pMinionTr.appendChild(selectTd);
+  }
+
   getElement (id, pUseSelect) {
     let minionTr = this.table.querySelector("#" + id);
 
@@ -506,39 +530,7 @@ export class Panel {
 
     // (room for) selection box
     if (pUseSelect) {
-      const selectTd = Utils.createTd("tooltip");
-
-      const selectMinions = Utils.getStorageItem("session", "select_minions", ",");
-      if (selectMinions.includes("," + minionTr.dataset.minionId + ",")) {
-        selectTd.innerText = Character.BALLOT_BOX_WITH_CHECK;
-      } else {
-        selectTd.innerText = Character.BALLOT_BOX_UNCHECKED;
-      }
-
-      const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
-      if (!selectVisible) {
-        selectTd.style.display = "none";
-      }
-
-      selectTd.addEventListener("click", (pClickEvent) => {
-        let selectMinions = Utils.getStorageItem("session", "select_minions", ",");
-        const tr = pClickEvent.target.parentElement;
-        if (pClickEvent.target.innerText === Character.BALLOT_BOX_UNCHECKED) {
-          pClickEvent.target.innerText = Character.BALLOT_BOX_WITH_CHECK;
-          selectMinions += tr.dataset.minionId + ",";
-        } else {
-          pClickEvent.target.innerText = Character.BALLOT_BOX_UNCHECKED;
-          selectMinions = selectMinions.replace("," + tr.dataset.minionId + ",", ",");
-          selectMinions = selectMinions.replace("," + tr.dataset.minionId + ",", ",");
-        }
-        Utils.setStorageItem("session", "select_minions", selectMinions);
-
-        this.updateFooter();
-
-        pClickEvent.stopPropagation();
-      });
-
-      minionTr.appendChild(selectTd);
+      this._addSelectionCheckbox(minionTr);
     }
 
     // drop down menu
