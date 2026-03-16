@@ -20,14 +20,14 @@ export class PillarsPanel extends Panel {
   }
 
   onShow () {
-    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
-    this.showColumn(Character.HEAVY_CHECK_MARK, selectVisible);
-
     const useCachePillar = Utils.getStorageItemBoolean("session", "use_cache_for_pillar", false);
     this.setWarningText("info", useCachePillar ? "the content of this screen is based on cached grains info, minion status or pillar info may not be accurate" : "");
 
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const localPillarObfuscatePromise = useCachePillar ? this.api.getRunnerCachePillar(null) : this.api.getLocalPillarObfuscate(null);
+
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    this.showColumn(Character.HEAVY_CHECK_MARK, selectVisible);
 
     this.nrMinions = 0;
 

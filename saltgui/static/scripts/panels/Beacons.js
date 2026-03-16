@@ -19,11 +19,11 @@ export class BeaconsPanel extends Panel {
   }
 
   onShow () {
-    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
-    this.showColumn(Character.HEAVY_CHECK_MARK, selectVisible);
-
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const localBeaconsListPromise = this.api.getLocalBeaconsList(null);
+
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    this.showColumn(Character.HEAVY_CHECK_MARK, selectVisible);
 
     this.nrMinions = 0;
 

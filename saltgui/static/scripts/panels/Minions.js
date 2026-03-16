@@ -30,9 +30,6 @@ export class MinionsPanel extends Panel {
   }
 
   onShow () {
-    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
-    this.showColumn(Character.HEAVY_CHECK_MARK, selectVisible);
-
     this.nrMinions = 0;
 
     const useCacheGrains = Utils.getStorageItemBoolean("session", "use_cache_for_grains", false);
@@ -45,6 +42,9 @@ export class MinionsPanel extends Panel {
     const localGrainsItemsPromise = useCacheGrains ? this.api.getRunnerCacheGrains(null) : this.api.getLocalGrainsItems(null);
 
     const runnerManageVersionsPromise = this.api.getRunnerManageVersions();
+
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    this.showColumn(Character.HEAVY_CHECK_MARK, selectVisible);
 
     this.loadMinionsTxt();
 
