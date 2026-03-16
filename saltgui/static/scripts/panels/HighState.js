@@ -100,14 +100,14 @@ export class HighStatePanel extends Panel {
   _addMenuItemStateApply (pMenu, pMinionId) {
     pMenu.addMenuItem("Apply state...", () => {
       const cmdArr = ["state.apply"];
-      this.runCommand("", pMinionId, cmdArr);
+      this.runCommand("", pMinionId, cmdArr, true);
     });
   }
 
   _addMenuItemStateApplyTest (pMenu, pMinionId) {
     pMenu.addMenuItem("Test state...", () => {
       const cmdArr = ["state.apply", "test=", true];
-      this.runCommand("", pMinionId, cmdArr);
+      this.runCommand("", pMinionId, cmdArr, true);
     });
   }
 

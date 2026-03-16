@@ -81,10 +81,10 @@ export class Panel {
       Utils.setStorageItem("session", "select_visible", selectVisible);
       this.showColumn (Character.HEAVY_CHECK_MARK, selectVisible);
       const tbody = this.table.tBodies[0];
-      const str = Utils.getStorageItem("session", "select_minions", "");
+      const selectMinions = Utils.getStorageItem("session", "select_minions", "");
       for (const tr of tbody.rows) {
         const td = tr.children[0];
-        if (str.includes("," + tr.dataset.minionId + ",")) {
+        if (selectMinions.includes("," + tr.dataset.minionId + ",")) {
           td.innerText = Character.BALLOT_BOX_WITH_CHECK;
         } else {
           td.innerText = Character.BALLOT_BOX_UNCHECKED;
@@ -876,14 +876,10 @@ export class Panel {
       txt += noprint_e;
     }
 
-    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
-    if (selectVisible && this.usesSelect) {
-      const selectMinions = Utils.getStorageItem("session", "select_minions", "");
-      const lst = selectMinions.split(",").sort();
-      while (lst.length > 0 && lst[0] === "") {
-        lst.shift();
-      }
-      txt += ", " + Utils.txtZeroOneMany(lst.length, "no minions selected", "{0} minion selected", "{0} minions selected");
+    const lst = CommandBox.getSelectedMinionList();
+    if (lst !== null) {
+      const nrSelected = lst.split(",").length;
+      txt += ", " + Utils.txtZeroOneMany(nrSelected, "no minions selected", "{0} minion selected", "{0} minions selected");
     }
 
     txt = txt.replace(/^, /g, "");
@@ -947,10 +943,18 @@ export class Panel {
     return commandString;
   }
 
-  runCommand (pTargetType, pTargetString, pCommandString) {
+  runCommand (pTargetType, pTargetString, pCommandString, pUseSelection = false) {
     if (typeof pCommandString !== "string") {
       // assume it is an array
       pCommandString = Panel.makeCommandString(pCommandString);
+    }
+
+    // replace with the selection if any
+    if (pUseSelection) {
+      const lst = CommandBox.getSelectedMinionList()
+      if (lst !== null) {
+        pTargetString = lst;
+      }
     }
 
     CommandBox.showManualRun(this.api);

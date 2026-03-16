@@ -423,6 +423,26 @@ export class CommandBox {
     button.disabled = false;
   }
 
+  static getSelectedMinionList () {
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    if (!selectVisible) {
+      return null;
+    }
+
+    // only when the selection is visible
+    const selectMinions = Utils.getStorageItem("session", "select_minions", "");
+    const lst = selectMinions.split(",").sort();
+    while (lst.length > 0 && lst[0] === "") {
+      lst.shift();
+    }
+    // and only when there is a selection
+    if (lst.length == 0) {
+      return null;
+    }
+
+    return lst.join(",");
+  }
+
   static showManualRun (pApi) {
     const manualRun = document.getElementById("popup-run-command");
     manualRun.style.display = "block";
@@ -478,20 +498,11 @@ export class CommandBox {
     CommandBox._populateTemplateTmplMenu();
     CommandBox._populateTestProviders(pApi);
 
-    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
-    if (selectVisible) {
-      // only when the selection is visible
-      const selectMinions = Utils.getStorageItem("session", "select_minions", "");
-      const lst = selectMinions.split(",").sort();
-      while (lst.length > 0 && lst[0] === "") {
-        lst.shift();
-      }
-      // and only when there is a selection
-      if (lst.length > 0) {
-        const targetField = document.getElementById("target");
-        targetField.value = lst.join(",");
-        TargetType.autoSelectTargetType(targetField.value);
-      }
+    const lst = CommandBox.getSelectedMinionList()
+    if (lst) {
+      const targetField = document.getElementById("target");
+      targetField.value = lst;
+      TargetType.autoSelectTargetType(lst);
     }
   }
 
