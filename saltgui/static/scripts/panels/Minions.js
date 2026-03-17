@@ -44,7 +44,7 @@ export class MinionsPanel extends Panel {
     const runnerManageVersionsPromise = this.api.getRunnerManageVersions();
 
     const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
-    this.showColumn(Character.HEAVY_CHECK_MARK, selectVisible);
+    this.showSelectColumn(selectVisible);
 
     this.loadMinionsTxt();
 

@@ -1,6 +1,5 @@
 /* global */
 
-import {Character} from "../Character.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
 
@@ -27,7 +26,7 @@ export class PillarsPanel extends Panel {
     const localPillarObfuscatePromise = useCachePillar ? this.api.getRunnerCachePillar(null) : this.api.getLocalPillarObfuscate(null);
 
     const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
-    this.showColumn(Character.HEAVY_CHECK_MARK, selectVisible);
+    this.showSelectColumn(selectVisible);
 
     this.nrMinions = 0;
 

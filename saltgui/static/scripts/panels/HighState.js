@@ -50,7 +50,7 @@ export class HighStatePanel extends Panel {
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
 
     const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
-    this.showColumn(Character.HEAVY_CHECK_MARK, selectVisible);
+    this.showSelectColumn(selectVisible);
 
     this.nrMinions = 0;
 

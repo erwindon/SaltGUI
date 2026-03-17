@@ -1,6 +1,5 @@
 /* global */
 
-import {Character} from "../Character.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
 
@@ -23,7 +22,7 @@ export class SchedulesPanel extends Panel {
     const localScheduleListPromise = this.api.getLocalScheduleList(null);
 
     const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
-    this.showColumn(Character.HEAVY_CHECK_MARK, selectVisible);
+    this.showSelectColumn(selectVisible);
 
     this.nrMinions = 0;
 

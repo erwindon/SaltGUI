@@ -79,7 +79,7 @@ export class Panel {
     span.addEventListener("click", (pClickEvent) => {
       const selectVisible = !Utils.getStorageItemBoolean("session", "select_visible", false);
       Utils.setStorageItem("session", "select_visible", selectVisible);
-      this.showColumn (Character.HEAVY_CHECK_MARK, selectVisible);
+      this.showSelectColumn(selectVisible);
       const tbody = this.table.tBodies[0];
       const selectMinions = Utils.getStorageItem("session", "select_minions", "");
       for (const tr of tbody.rows) {
@@ -221,6 +221,33 @@ export class Panel {
     this.updateFooter();
   }
 
+  selectAllNone () {
+    const lst = CommandBox.getSelectedMinionList();
+
+    let selectAll;
+    if (lst === null) {
+      selectAll = true;
+    } else {
+      const nrSelected = lst.split(",").length;
+      selectAll = nrSelected !== this.nrMinions;
+    }
+
+    let selectMinions = ",";
+    for (const tr of this.table.tBodies[0].children) {
+      const td = tr.children[0];
+      if (selectAll) {
+        td.innerText = Character.BALLOT_BOX_WITH_CHECK;
+        selectMinions += tr.dataset.minionId + ",";
+      } else {
+        td.innerText = Character.BALLOT_BOX_UNCHECKED;
+      }
+    }
+
+    Utils.setStorageItem("session", "select_minions", selectMinions);
+
+    this.updateFooter();
+  }
+
   addTable (pColumnNames, pFieldList = null) {
     const table = Utils.createElem("table", this.key, "", this.key + "-table");
 
@@ -242,8 +269,13 @@ export class Panel {
         if (!selectVisible) {
           th.style.display = "none";
         }
+        Utils.addToolTip(th, "Click here to select all/none\nCTRL-click to invert selection", "bottom-left");
         th.addEventListener("click", (pClickEvent) => {
-          this.toggleSelection();
+          if (pClickEvent.ctrlKey || pClickEvent.altKey) {
+            this.toggleSelection();
+          } else {
+            this.selectAllNone();
+          }
           pClickEvent.stopPropagation();
         });
       } else if (!columnName.startsWith("-")) {
@@ -1079,17 +1111,9 @@ export class Panel {
     }
   }
 
-  showColumn (pColTitle, pShow) {
+  showSelectColumn (pShow) {
 
-    let colNr = -1;
-    // find a column with this name
-    for (let i = 0; i < this.table.tHead.children[0].children.length; i++) {
-      const th = this.table.tHead.children[0].children[i];
-      if (th.innerText === pColTitle) {
-        colNr = i;
-        break;
-      }
-    }
+    const colNr = 0;
 
     // title
     for (const tr of this.table.tHead.children) {
