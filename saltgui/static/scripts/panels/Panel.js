@@ -1077,8 +1077,8 @@ export class Panel {
     let colNr = -1;
     // find a column with this name
     for (let i = 0; i < this.table.tHead.children[0].children.length; i++) {
-      const td = this.table.tHead.children[0].children[i];
-      if (td.innerText === pColTitle) {
+      const th = this.table.tHead.children[0].children[i];
+      if (th.innerText === pColTitle) {
         colNr = i;
         break;
       }
@@ -1086,8 +1086,8 @@ export class Panel {
 
     // title
     for (const tr of this.table.tHead.children) {
-      const td = tr.children[colNr];
-      td.style.display = pShow ? "" : "none";
+      const th = tr.children[colNr];
+      th.style.display = pShow ? "" : "none";
     }
     // data
     for (const tr of this.table.tBodies[0].children) {
