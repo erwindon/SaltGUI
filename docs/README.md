@@ -402,11 +402,12 @@ But note that there might be more possible solutions, some of which may actually
 * A navigation-command to go to a page for more details.
 
 ## Minion selection
-Pages that show a simple list of minions allow individual miniuns to be selected.
+Pages that show a simple list of minions allow individual minions to be selected.
 Use panel button [✔] to show an extra column with checkboxes in the table.
-Minions can be selected one-by-one or the selection can be inverted by clicking on the column header.
+Minions can be selected one-by-one or you can use select-all, select-none by clicking on the column header.
+The selection can be inverted by using CTRL-click.
 The list of selected minions will be used in the command-box and for commands from a panel-menu.
-When the column is hidden, the selection-values are ignored.
+When the column is hidden, the selection-values are just ignored.
 
 ## Command documentation
 
