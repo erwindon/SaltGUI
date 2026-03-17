@@ -9,10 +9,9 @@ import {Utils} from "../Utils.js";
 
 export class Panel {
 
-  constructor (pKey, pContextInfo = null) {
+  constructor (pKey) {
 
     this.key = pKey;
-    this.contextInfo = pContextInfo;
 
     const div = Utils.createDiv("panel", "", pKey + "-panel");
     this.div = div;
