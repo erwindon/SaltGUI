@@ -423,24 +423,65 @@ export class CommandBox {
     button.disabled = false;
   }
 
-  static getSelectedMinionList () {
+  static getSelectedItemList (pSessionKeys) {
     const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
     if (!selectVisible) {
       return null;
     }
 
-    // only when the selection is visible
-    const selectMinions = Utils.getStorageItem("session", "select_minions", "");
-    const lst = selectMinions.split(",").sort();
-    while (lst.length > 0 && lst[0] === "") {
-      lst.shift();
+    let target = "";
+
+    if (pSessionKeys.includes("select_nodegroups")) {
+      const lst_nodegroups = Utils.getStorageItem("session", "select_nodegroups", null);
+      if (lst_nodegroups) {
+        for (const nodegroup of lst_nodegroups.split(",")) {
+          if (nodegroup) {
+            target += " or N@" + nodegroup;
+          }
+        }
+      }
     }
-    // and only when there is a selection
-    if (lst.length == 0) {
+
+    if (pSessionKeys.includes("select_minions")) {
+      const lst_minions = Utils.getStorageItem("session", "select_minions", null);
+      if (lst_minions) {
+        let minionlist = "";
+        for (const minion of lst_minions.split(",")) {
+          if (minion) {
+            minionlist += "," + minion;
+          }
+        }
+        // substring removes the extra ","
+        target += " or L@" + minionlist.substring(1);
+      }
+    }
+
+    if (pSessionKeys.includes("select_keys")) {
+      const lst_keys = Utils.getStorageItem("session", "select_keys", null);
+      if (lst_keys) {
+        let keylist = "";
+        for (const key of lst_keys.split(",")) {
+          if (key) {
+            keylist += "," + key;
+          }
+        }
+        // substring removes the extra ","
+        target += " or " + keylist.substring(1);
+      }
+    }
+
+    // remove the extra " or "
+    target = target.substring(4);
+    if (target.startsWith("L@")) {
+      // simplify when we only have the list of minions
+      target = target.substring(2);
+    }
+
+    if (target === "") {
       return null;
     }
 
-    return lst.join(",");
+    return target;
   }
 
   static showManualRun (pApi) {
@@ -498,7 +539,8 @@ export class CommandBox {
     CommandBox._populateTemplateTmplMenu();
     CommandBox._populateTestProviders(pApi);
 
-    const lst = CommandBox.getSelectedMinionList()
+    // TODO use full selection
+    const lst = CommandBox.getSelectedItemList("select_minions")
     if (lst) {
       const targetField = document.getElementById("target");
       targetField.value = lst;

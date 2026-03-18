@@ -497,6 +497,8 @@ export class LoginPanel extends Panel {
 
     Utils.setStorageItem("session", "select_visible", "false");
     Utils.setStorageItem("session", "select_minions", ",");
+    Utils.setStorageItem("session", "select_keys", ",");
+    Utils.setStorageItem("session", "select_nodegroups", ",");
 
     const id = wheelConfigValuesData.id;
     const clusterId = wheelConfigValuesData.cluster_id;
