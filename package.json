@@ -17,8 +17,8 @@
     "eslint-define-config": "^2.1.0",
     "eslint-plugin-compat": "^7.0.1",
     "mocha": "^11.7.5",
-    "puppeteer": "^24.39.1",
     "nyc": "^18.0.0",
+    "puppeteer": "^24.39.1",
     "stylelint": "^14.0.1",
     "stylelint-config-standard": "^29.0.0",
     "stylelint-csstree-validator": "^3.1.0",
@@ -76,7 +76,6 @@
     "test:coverage": "nyc mocha --require @babel/register --trace-warnings --check-leaks --reporter spec tests/unit/"
   },
   "dependencies": {
-    "form-data": "^4.0.5",
     "tough-cookie": "^6.0.1"
   }
 }
