@@ -1,4 +1,3 @@
-version: '3'
 services:
   saltmaster-local:
     image: erwindon/saltgui-saltmaster-tls:3007.6

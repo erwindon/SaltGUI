@@ -3,8 +3,8 @@
 # show what is going on
 set -x
 
-# get the needed software
-sudo apt install -y libxss1 libgconf-2-4 libnss3 libasound2 libgtk-3-0 xvfb psmisc
+# get the needed software (for Debian 13)
+sudo apt install -y libxss1 libnss3 libasound2t64 libgtk-3-0t64 xvfb psmisc docker-ce docker-compose-plugin
 
 # prevent conflict with a previous running xvfb
 killall --quiet Xvfb
@@ -29,7 +29,7 @@ npm run test:coverage
 
 # start a salt master, three salt minions and saltgui to run tests on
 # Don't use --detach; travis docker does not understand it
-docker-compose --file docker/docker-compose.yml up -d
+docker compose --file docker/docker-compose.yml up -d
 
 # wait until all are up
 npm run wait-for-docker
@@ -43,6 +43,6 @@ export ELECTRON_DISABLE_SECURITY_WARNINGS=true
 xvfb-run npm run test:functional
 
 # remove the containers
-docker-compose --file docker/docker-compose.yml rm --force --stop
+docker compose --file docker/docker-compose.yml rm --force --stop
 
 echo "DONE!"
