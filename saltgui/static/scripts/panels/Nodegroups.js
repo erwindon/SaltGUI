@@ -79,7 +79,7 @@ export class NodegroupsPanel extends Panel {
   }
 
   updateOfflineMinion (pMinionId, pMinionsDict) {
-    super.updateOfflineMinion(pMinionId, pMinionsDict);
+    super.updateOfflineMinion(pMinionId, pMinionsDict, false);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
@@ -121,7 +121,7 @@ export class NodegroupsPanel extends Panel {
         Utils.addToolTip(minionSpan, "This minion is listed for this nodegroup,\nbut the minion is unknown", "bottom-left");
         this.unknown += 1;
       }
-      minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
+      minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), false);
       minionTr.appendChild(minionTd);
       minionTr.appendChild(status);
       minionTr.appendChild(Utils.createTd());
@@ -346,7 +346,7 @@ export class NodegroupsPanel extends Panel {
 
     const minionIds = keys.minions.sort();
     for (const minionId of minionIds) {
-      const minionTr = this.addMinion(minionId);
+      const minionTr = this.addMinion(minionId, false);
 
       // preliminary dropdown menu
       this._addMenuItemStateApplyMinion(minionTr.dropdownmenu, minionId);
@@ -361,7 +361,7 @@ export class NodegroupsPanel extends Panel {
   }
 
   updateMinion (pMinionData, pMinionId, pAllNodegroupsGrains) {
-    super.updateMinion(pMinionData, pMinionId, pAllNodegroupsGrains);
+    super.updateMinion(pMinionData, pMinionId, pAllNodegroupsGrains, false);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
     this._addMenuItemStateApplyMinion(minionTr.dropdownmenu, pMinionId);

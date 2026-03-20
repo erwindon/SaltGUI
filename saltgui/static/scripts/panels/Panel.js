@@ -70,6 +70,33 @@ export class Panel {
     this.searchButton = span;
   }
 
+  addFilterButton () {
+    const span = Utils.createSpan(
+      ["filter-button", "small-button", "small-button-left", "small-button-for-click", "no-print"],
+      Character.HEAVY_CHECK_MARK,
+      this.key + "-filter-button");
+    this.div.appendChild(span);
+    span.addEventListener("click", (pClickEvent) => {
+      const selectVisible = !Utils.getStorageItemBoolean("session", "select_visible", false);
+      Utils.setStorageItem("session", "select_visible", selectVisible);
+      this.showSelectColumn(selectVisible);
+      const tbody = this.table.tBodies[0];
+      const selectMinions = Utils.getStorageItem("session", "select_minions", "");
+      for (const tr of tbody.rows) {
+        const td = tr.children[0];
+        if (selectMinions.includes("," + tr.dataset.minionId + ",")) {
+          td.innerText = Character.BALLOT_BOX_WITH_CHECK;
+        } else {
+          td.innerText = Character.BALLOT_BOX_UNCHECKED;
+        }
+      }
+
+      this.updateFooter();
+
+      pClickEvent.stopPropagation();
+    });
+  }
+
   addPlayPauseButton () {
     const playButton = Utils.createSpan(
       ["small-button", "small-button-left", "small-button-for-click", "no-print"],
@@ -175,6 +202,52 @@ export class Panel {
     }
   }
 
+  toggleSelection () {
+    let selectMinions = Utils.getStorageItem("session", "select_minions", ",");
+
+    for (const tr of this.table.tBodies[0].children) {
+      const td = tr.children[0];
+      if (td.innerText === Character.BALLOT_BOX_UNCHECKED) {
+        td.innerText = Character.BALLOT_BOX_WITH_CHECK;
+        selectMinions += tr.dataset.minionId + ",";
+      } else {
+        td.innerText = Character.BALLOT_BOX_UNCHECKED;
+        selectMinions = selectMinions.replace("," + tr.dataset.minionId + ",", ",");
+      }
+    }
+
+    Utils.setStorageItem("session", "select_minions", selectMinions);
+
+    this.updateFooter();
+  }
+
+  selectAllNone () {
+    const lst = CommandBox.getSelectedMinionList();
+
+    let selectAll;
+    if (lst === null) {
+      selectAll = true;
+    } else {
+      const nrSelected = lst.split(",").length;
+      selectAll = nrSelected !== this.nrMinions;
+    }
+
+    let selectMinions = ",";
+    for (const tr of this.table.tBodies[0].children) {
+      const td = tr.children[0];
+      if (selectAll) {
+        td.innerText = Character.BALLOT_BOX_WITH_CHECK;
+        selectMinions += tr.dataset.minionId + ",";
+      } else {
+        td.innerText = Character.BALLOT_BOX_UNCHECKED;
+      }
+    }
+
+    Utils.setStorageItem("session", "select_minions", selectMinions);
+
+    this.updateFooter();
+  }
+
   addTable (pColumnNames, pFieldList = null) {
     const table = Utils.createElem("table", this.key, "", this.key + "-table");
 
@@ -183,9 +256,29 @@ export class Panel {
     const tr = Utils.createTr();
     tr.id = this.key + "-table-thead-tr";
 
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    this.usesSelect = false;
     for (const columnName of pColumnNames) {
       const th = Utils.createElem("th");
-      if (!columnName.startsWith("-")) {
+      // e.g. "-summary-", "-help-", "-menu-" and "-select-"
+      if (columnName === "-select-") {
+        this.usesSelect = true;
+        th.innerText = Character.HEAVY_CHECK_MARK;
+        th.classList.add("tooltip");
+        th.style.cursor = "pointer";
+        if (!selectVisible) {
+          th.style.display = "none";
+        }
+        Utils.addToolTip(th, "Click here to select all/none\nCTRL-click to invert selection", "bottom-left");
+        th.addEventListener("click", (pClickEvent) => {
+          if (pClickEvent.ctrlKey || pClickEvent.altKey) {
+            this.toggleSelection();
+          } else {
+            this.selectAllNone();
+          }
+          pClickEvent.stopPropagation();
+        });
+      } else if (!columnName.startsWith("-")) {
         th.innerText = columnName;
       }
       tr.appendChild(th);
@@ -255,8 +348,8 @@ export class Panel {
 
     // mark columns as click-able
     for (const th of thArr) {
-      if (th.innerText !== "") {
-        th.classList.add("sorttable_sortable");
+      if (th.innerText !== "" && !th.innerText.startsWith(Character.HEAVY_CHECK_MARK)) {
+        th.classList.add("sorttable_sortable", "tooltip");
       }
     }
 
@@ -374,7 +467,7 @@ export class Panel {
     return true;
   }
 
-  addMinion (pMinionId, freeColumns = 0) {
+  addMinion (pMinionId, pUseSelect = true, freeColumns = 0) {
 
     let minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
     if (minionTr !== null) {
@@ -385,6 +478,11 @@ export class Panel {
     minionTr = Utils.createTr();
     minionTr.id = Utils.getIdFromMinionId(pMinionId);
     minionTr.dataset.minionId = pMinionId;
+
+    // optional select button
+    if (pUseSelect) {
+      this._addSelectionCheckbox (minionTr);
+    }
 
     // drop down menu
     const menuTd = Utils.createTd();
@@ -410,7 +508,43 @@ export class Panel {
     return minionTr;
   }
 
-  getElement (id) {
+  _addSelectionCheckbox (pMinionTr) {
+    const selectTd = Utils.createTd("tooltip");
+
+    const selectMinions = Utils.getStorageItem("session", "select_minions", ",");
+    if (selectMinions.includes("," + pMinionTr.dataset.minionId + ",")) {
+      selectTd.innerText = Character.BALLOT_BOX_WITH_CHECK;
+    } else {
+      selectTd.innerText = Character.BALLOT_BOX_UNCHECKED;
+    }
+
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    if (!selectVisible) {
+      selectTd.style.display = "none";
+    }
+
+    selectTd.addEventListener("click", (pClickEvent) => {
+      let selectMinions = Utils.getStorageItem("session", "select_minions", ",");
+      const tr = pClickEvent.target.parentElement;
+      if (pClickEvent.target.innerText === Character.BALLOT_BOX_UNCHECKED) {
+        pClickEvent.target.innerText = Character.BALLOT_BOX_WITH_CHECK;
+        selectMinions += tr.dataset.minionId + ",";
+      } else {
+        pClickEvent.target.innerText = Character.BALLOT_BOX_UNCHECKED;
+        selectMinions = selectMinions.replace("," + tr.dataset.minionId + ",", ",");
+        selectMinions = selectMinions.replace("," + tr.dataset.minionId + ",", ",");
+      }
+      Utils.setStorageItem("session", "select_minions", selectMinions);
+
+      this.updateFooter();
+
+      pClickEvent.stopPropagation();
+    });
+
+    pMinionTr.appendChild(selectTd);
+  }
+
+  getElement (id, pUseSelect) {
     let minionTr = this.table.querySelector("#" + id);
 
     if (minionTr === null) {
@@ -424,6 +558,11 @@ export class Panel {
     // remove existing content
     while (minionTr.firstChild) {
       minionTr.removeChild(minionTr.firstChild);
+    }
+
+    // (room for) selection box
+    if (pUseSelect) {
+      this._addSelectionCheckbox(minionTr);
     }
 
     // drop down menu
@@ -599,9 +738,9 @@ export class Panel {
     }
   }
 
-  updateMinion (pMinionData, pMinionId, pAllMinionsGrains) {
+  updateMinion (pMinionData, pMinionId, pAllMinionsGrains, pUseSelect) {
 
-    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
+    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), pUseSelect);
 
     const minionSpan = Utils.createSpan("minion-id", pMinionId);
     const minionTd = Utils.createTd();
@@ -755,13 +894,19 @@ export class Panel {
       txt += ", press " + Character.buttonInText(Character.CH_PAUSE) + " to pause";
     }
 
+    const lst = CommandBox.getSelectedMinionList();
+    if (lst !== null) {
+      const nrSelected = lst.split(",").length;
+      txt += ", " + Utils.txtZeroOneMany(nrSelected, "none selected", "{0} selected", "{0} selected");
+    }
+
     txt = txt.replace(/^, /g, "");
 
     this.setMsg(txt.length > 0 ? txt : "(???)");
   }
 
-  updateOfflineMinion (pMinionId, pMinionsDict) {
-    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
+  updateOfflineMinion (pMinionId, pMinionsDict, pUseSelect) {
+    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), pUseSelect);
 
     minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 
@@ -816,10 +961,18 @@ export class Panel {
     return commandString;
   }
 
-  runCommand (pTargetType, pTargetString, pCommandString) {
+  runCommand (pTargetType, pTargetString, pCommandString, pUseSelection = false) {
     if (typeof pCommandString !== "string") {
       // assume it is an array
       pCommandString = Panel.makeCommandString(pCommandString);
+    }
+
+    // replace with the selection if any
+    if (pUseSelection) {
+      const lst = CommandBox.getSelectedMinionList()
+      if (lst !== null) {
+        pTargetString = lst;
+      }
     }
 
     CommandBox.showManualRun(this.api);
@@ -948,6 +1101,22 @@ export class Panel {
     for (const tr of this.table.tBodies[0].children) {
       const td = tr.children[colNr];
       td.style.display = "none";
+    }
+  }
+
+  showSelectColumn (pShow) {
+
+    const colNr = 0;
+
+    // title
+    for (const tr of this.table.tHead.children) {
+      const th = tr.children[colNr];
+      th.style.display = pShow ? "" : "none";
+    }
+    // data
+    for (const tr of this.table.tBodies[0].children) {
+      const td = tr.children[colNr];
+      td.style.display = pShow ? "" : "none";
     }
   }
 }

@@ -287,7 +287,7 @@ export class KeysPanel extends Panel {
   }
 
   _addAcceptedMinion (pMinionId, pMinionsDict) {
-    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
+    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), false);
 
     const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
@@ -309,7 +309,7 @@ export class KeysPanel extends Panel {
   }
 
   _addRejectedMinion (pMinionId, pMinionsDict) {
-    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
+    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), false);
 
     const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
@@ -334,7 +334,7 @@ export class KeysPanel extends Panel {
   }
 
   _addDeniedMinion (pMinionId, pMinionsDict) {
-    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
+    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), false);
 
     const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
@@ -359,7 +359,7 @@ export class KeysPanel extends Panel {
   }
 
   _addPreMinion (pMinionId, pMinionsDict, pInsertAtTop = false) {
-    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
+    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), false);
 
     const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
@@ -392,7 +392,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMissingMinion (pMinionId, pMinionsDict) {
-    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), "UNKNOWN");
+    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), false);
 
     const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
