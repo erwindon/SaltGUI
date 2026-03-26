@@ -743,16 +743,23 @@ export class Panel {
       txt += ", " + Utils.txtZeroOneMany(this.nrUnaccepted, "{0} unaccepted keys", "{0} unaccepted key", "{0} unaccepted keys");
     }
 
+    const noprint_b = "<span class='no-print'>";
+    const noprint_e = "</span>";
+
     if (this.playOrPause === "pause" && this.pauseButton) {
+      txt += noprint_b;
       if (this.table && this.table.tBodies[0].rows.length) {
         txt += ", press " + Character.buttonInText(Character.CH_PLAY) + " to continue";
       } else {
         txt += ", press " + Character.buttonInText(Character.CH_PLAY) + " to begin";
       }
+      txt += noprint_e;
     }
 
     if (this.playOrPause === "play" && this.playButton) {
+      txt += noprint_b;
       txt += ", press " + Character.buttonInText(Character.CH_PAUSE) + " to pause";
+      txt += noprint_e;
     }
 
     txt = txt.replace(/^, /g, "");

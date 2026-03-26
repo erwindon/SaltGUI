@@ -31,17 +31,22 @@ export class EventsPanel extends Panel {
   }
 
   updateFooter () {
+    const noprint_b = "<span class='no-print'>";
+    const noprint_e = "</span>";
+
     // when there are more than a screen-ful of events, the user
     // will not see the "press play" message. but the user already
     // knows that because that caused the events to be shown...
     let txt = Utils.txtZeroOneMany(this.nrEvents, "No events", "{0} event", "{0} events");
     if (this.playOrPause === "play") {
       const tbody = this.table.tBodies[0];
+      txt += noprint_b;
       if (tbody.rows.length) {
         txt += ", waiting for more events";
       } else {
         txt += ", waiting for events";
       }
+      txt += noprint_e;
     }
     super.updateFooter(txt);
   }
