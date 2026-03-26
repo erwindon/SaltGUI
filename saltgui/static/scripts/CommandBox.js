@@ -147,11 +147,11 @@ export class CommandBox {
 
     txt += "<h2>Target field</h2>";
     txt += "<p>";
-    txt += "Entries that contain a @, (, ) or space are assumed to be a compound target selection. See <a href='https://docs.saltproject.io/en/latest/topics/targeting/#compound-targeting' target='_blank' rel='noopener'>Compound Targeting" + Documentation.EXTERNAL_LINK + "</a>.";
+    txt += "Entries that contain a '@', '(', ')' or space are assumed to be a compound target selection. See <a href='https://docs.saltproject.io/en/latest/topics/targeting/#compound-targeting' target='_blank' rel='noopener'>Compound Targeting" + Documentation.EXTERNAL_LINK + "</a>.";
     txt += "<br/>";
     txt += "Entries that contain a COMMA are assumed to be a list target selection. See <a href='https://docs.saltproject.io/en/latest/topics/targeting/globbing.html#lists' target='_blank' rel='noopener'>List Targeting" + Documentation.EXTERNAL_LINK + "</a>.";
     txt += "<br/>";
-    txt += "Entries that start with a # are assumed to be a nodegroup target selection. See <a href='https://docs.saltproject.io/en/latest/topics/targeting/nodegroups.html' target='_blank' rel='noopener'>Nodegroup Targeting" + Documentation.EXTERNAL_LINK + "</a>.";
+    txt += "Entries that start with a '#' are assumed to be a nodegroup target selection. See <a href='https://docs.saltproject.io/en/latest/topics/targeting/nodegroups.html' target='_blank' rel='noopener'>Nodegroup Targeting" + Documentation.EXTERNAL_LINK + "</a>.";
     txt += "<br/>";
     txt += "Target '##connected' will immediately be replaced by the latest known list of connected minions.";
     txt += "<br/>";
