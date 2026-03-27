@@ -27,6 +27,7 @@ export class HighStatePanel extends Panel {
     this._addMenuItemUseStateHighstate();
     this._addMenuItemUseStateApply();
     this.addSearchButton();
+    this.addFilterButton();
     this.addPlayPauseButton();
     this.addHelpButton([
       "This panel shows the latest state.highstate or state.apply job for each minion.",
@@ -35,7 +36,7 @@ export class HighStatePanel extends Panel {
       "Click on an individual state to re-apply only that state."
     ]);
     this.addWarningField();
-    this.addTable(["-menu-", "Minion", "State", "Latest JID", "Target", "Function", "Start Time", "States"]);
+    this.addTable(["-select-", "-menu-", "Minion", "State", "Latest JID", "Target", "Function", "Start Time", "States"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable("cmd");
     this.addMsg();
@@ -47,6 +48,9 @@ export class HighStatePanel extends Panel {
 
   onShow () {
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
+
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    this.showSelectColumn(selectVisible);
 
     this.nrMinions = 0;
 
@@ -96,14 +100,14 @@ export class HighStatePanel extends Panel {
   _addMenuItemStateApply (pMenu, pMinionId) {
     pMenu.addMenuItem("Apply state...", () => {
       const cmdArr = ["state.apply"];
-      this.runCommand("", pMinionId, cmdArr);
+      this.runCommand("", pMinionId, cmdArr, true);
     });
   }
 
   _addMenuItemStateApplyTest (pMenu, pMinionId) {
     pMenu.addMenuItem("Test state...", () => {
       const cmdArr = ["state.apply", "test=", true];
-      this.runCommand("", pMinionId, cmdArr);
+      this.runCommand("", pMinionId, cmdArr, true);
     });
   }
 
@@ -362,7 +366,7 @@ export class HighStatePanel extends Panel {
 
       // we already have the TR
       // but this function also clears the row
-      this.getElement(trId);
+      this.getElement(trId, true);
 
       // mark the TR as populated
       minionTr.jid = pJobId;

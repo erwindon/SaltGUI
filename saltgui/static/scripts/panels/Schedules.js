@@ -10,7 +10,8 @@ export class SchedulesPanel extends Panel {
 
     this.addTitle("Schedules");
     this.addSearchButton();
-    this.addTable(["-menu-", "Minion", "Status", "Schedules"]);
+    this.addFilterButton();
+    this.addTable(["-select-", "-menu-", "Minion", "Status", "Schedules"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable("page");
     this.addMsg();
@@ -19,6 +20,9 @@ export class SchedulesPanel extends Panel {
   onShow () {
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const localScheduleListPromise = this.api.getLocalScheduleList(null);
+
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    this.showSelectColumn(selectVisible);
 
     this.nrMinions = 0;
 
@@ -100,7 +104,7 @@ export class SchedulesPanel extends Panel {
   }
 
   updateOfflineMinion (pMinionId, pMinionsDict) {
-    super.updateOfflineMinion(pMinionId, pMinionsDict);
+    super.updateOfflineMinion(pMinionId, pMinionsDict, true);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
@@ -112,9 +116,9 @@ export class SchedulesPanel extends Panel {
 
     pMinionData = SchedulesPanel.fixSchedulesMinion(pMinionData);
 
-    super.updateMinion(pMinionData, pMinionId, pAllMinionsGrains);
+    super.updateMinion(pMinionData, pMinionId, pAllMinionsGrains, true);
 
-    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId));
+    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), true);
 
     minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 

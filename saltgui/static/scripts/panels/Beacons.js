@@ -10,7 +10,8 @@ export class BeaconsPanel extends Panel {
 
     this.addTitle("Beacons");
     this.addSearchButton();
-    this.addTable(["-menu-", "Minion", "Status", "Beacons"]);
+    this.addFilterButton();
+    this.addTable(["-select-", "-menu-", "Minion", "Status", "Beacons"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable("page");
     this.addMsg();
@@ -19,6 +20,9 @@ export class BeaconsPanel extends Panel {
   onShow () {
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const localBeaconsListPromise = this.api.getLocalBeaconsList(null);
+
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    this.showSelectColumn(selectVisible);
 
     this.nrMinions = 0;
 
@@ -104,7 +108,7 @@ export class BeaconsPanel extends Panel {
   }
 
   updateOfflineMinion (pMinionId, pMinionsDict) {
-    super.updateOfflineMinion(pMinionId, pMinionsDict);
+    super.updateOfflineMinion(pMinionId, pMinionsDict, true);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
@@ -116,7 +120,7 @@ export class BeaconsPanel extends Panel {
 
     pMinionData = BeaconsPanel.fixBeaconsMinion(pMinionData);
 
-    super.updateMinion(null, pMinionId, pAllMinionsGrains);
+    super.updateMinion(null, pMinionId, pAllMinionsGrains, true);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 

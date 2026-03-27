@@ -11,13 +11,14 @@ export class GrainsPanel extends Panel {
 
     this.addTitle("Grains");
     this.addSearchButton();
+    this.addFilterButton();
     this.addHelpButton([
       "The content of specific well-known grains can be made visible in",
       "columns by configuring their name in the server-side configuration file.",
       "See README.md for more details."
     ]);
     this.addWarningField();
-    this.addTable(["-menu-", "Minion", "Status", "Salt version", "OS version", "Grains"]);
+    this.addTable(["-select-", "-menu-", "Minion", "Status", "Salt version", "OS version", "Grains"]);
 
     // cannot initialize sorting before all columns are present
     // this.setTableSortable("Minion", "asc");
@@ -26,6 +27,9 @@ export class GrainsPanel extends Panel {
   }
 
   onShow () {
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    this.showSelectColumn(selectVisible);
+
     if (this.previewColumsAdded !== true) {
       // collect the list of displayed extra grains
       this.previewGrains = Utils.getStorageItemList("session", "preview_grains");
@@ -82,7 +86,7 @@ export class GrainsPanel extends Panel {
 
     const minionIds = keys.minions.sort();
     for (const minionId of minionIds) {
-      const minionTr = this.addMinion(minionId, this.previewGrains.length);
+      const minionTr = this.addMinion(minionId, true, this.previewGrains.length);
 
       // preliminary dropdown menu
       this._addMenuItemShowGrains(minionTr.dropdownmenu, minionId);
@@ -101,7 +105,7 @@ export class GrainsPanel extends Panel {
   }
 
   updateOfflineMinion (pMinionId, pMinionsDict) {
-    super.updateOfflineMinion(pMinionId, pMinionsDict);
+    super.updateOfflineMinion(pMinionId, pMinionsDict, true);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
@@ -115,7 +119,7 @@ export class GrainsPanel extends Panel {
   }
 
   updateMinion (pMinionData, pMinionId, pAllMinionsGrains) {
-    super.updateMinion(pMinionData, pMinionId, pAllMinionsGrains);
+    super.updateMinion(pMinionData, pMinionId, pAllMinionsGrains, true);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 

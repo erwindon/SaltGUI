@@ -10,8 +10,9 @@ export class PillarsPanel extends Panel {
 
     this.addTitle("Pillars");
     this.addSearchButton();
+    this.addFilterButton();
     this.addWarningField();
-    this.addTable(["-menu-", "Minion", "Status", "Pillars"]);
+    this.addTable(["-select-", "-menu-", "Minion", "Status", "Pillars"]);
     this.setTableSortable("Minion", "asc");
     this.setTableClickable("page");
     this.addMsg();
@@ -23,6 +24,9 @@ export class PillarsPanel extends Panel {
 
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const localPillarObfuscatePromise = useCachePillar ? this.api.getRunnerCachePillar(null) : this.api.getLocalPillarObfuscate(null);
+
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    this.showSelectColumn(selectVisible);
 
     this.nrMinions = 0;
 
@@ -70,7 +74,7 @@ export class PillarsPanel extends Panel {
   }
 
   updateOfflineMinion (pMinionId, pMinionsDict) {
-    super.updateOfflineMinion(pMinionId, pMinionsDict);
+    super.updateOfflineMinion(pMinionId, pMinionsDict, true);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
@@ -79,7 +83,7 @@ export class PillarsPanel extends Panel {
   }
 
   updateMinion (pMinionData, pMinionId, pAllMinionsGrains) {
-    super.updateMinion(null, pMinionId, pAllMinionsGrains);
+    super.updateMinion(null, pMinionId, pAllMinionsGrains, true);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
