@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.33.0 (2026-03-29)
+- allow operations on selected minions (erwindon, thx sx98083714)
+- added multi-architecture Docker build support (intekhab1025)
+- added SSL/TLS Support for Secure SaltGUI Deployment (intekhab1025)
+- modernized docker-compose and OS for testing (erwindon)
+- fixed orchestration columns (erwindon)
+- fixed nat-networks reporting all minions disconnected (erwindon, thx mena-smeup)
+- properly warn when clipboard not available (erwindon)
+- ugraded several standard packages (erwindon)
+- updated known issues section with current status (erwindon)
+- various small fixes, cleaups and improvements (erwindon)
+- Several eslint fixes (erwindon)
+- Celebrating 600+ stars on GitHub
+
 ## 1.32.1 (2025-06-15)
 - updated CVE information (erwindon)
 
