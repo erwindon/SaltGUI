@@ -2,7 +2,7 @@
   "name": "saltgui-test",
   "description": "Code linting and testing package for SaltGUI",
   "author": "(initial) Oliver Dunk, (next) Martijn Jacobs, (current) Erwin Dondorp",
-  "version": "0.0.1",
+  "version": "1.33.0-SNAPSHOT",
   "license": "MIT",
   "private": true,
   "type": "module",
