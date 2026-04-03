@@ -14,7 +14,7 @@ const MINION = 2;
 export class MinionsPanel extends Panel {
 
   constructor () {
-    super("minions");
+    super("minions", ["select_minions"]);
 
     this.addTitle("Minions");
     this.addPanelMenu();
@@ -30,6 +30,8 @@ export class MinionsPanel extends Panel {
   }
 
   onShow () {
+    super.onShow();
+
     this.nrMinions = 0;
 
     const useCacheGrains = Utils.getStorageItemBoolean("session", "use_cache_for_grains", false);
@@ -42,9 +44,6 @@ export class MinionsPanel extends Panel {
     const localGrainsItemsPromise = useCacheGrains ? this.api.getRunnerCacheGrains(null) : this.api.getLocalGrainsItems(null);
 
     const runnerManageVersionsPromise = this.api.getRunnerManageVersions();
-
-    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
-    this.showSelectColumn(selectVisible);
 
     this.loadMinionsTxt();
 
@@ -184,7 +183,7 @@ export class MinionsPanel extends Panel {
   }
 
   updateOfflineMinion (pMinionId, pMinionsDict) {
-    super.updateOfflineMinion(pMinionId, pMinionsDict, true);
+    super.updateOfflineMinion(pMinionId, pMinionsDict);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
@@ -194,7 +193,7 @@ export class MinionsPanel extends Panel {
   }
 
   updateMinion (pMinionData, pMinionId, pAllMinionsGrains) {
-    super.updateMinion(pMinionData, pMinionId, pAllMinionsGrains, true);
+    super.updateMinion(pMinionData, pMinionId, pAllMinionsGrains);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
     this._addMenuItemStateApply(minionTr.dropdownmenu, pMinionId);
@@ -214,14 +213,14 @@ export class MinionsPanel extends Panel {
   _addMenuItemStateApply (pMenu, pMinionId) {
     pMenu.addMenuItem("Apply state...", () => {
       const cmdArr = ["state.apply"];
-      this.runCommand("", pMinionId, cmdArr, true);
+      this.runCommand("", pMinionId, cmdArr, ["select_minions"]);
     });
   }
 
   _addMenuItemStateApplyTest (pMenu, pMinionId) {
     pMenu.addMenuItem("Test state...", () => {
       const cmdArr = ["state.apply", "test=", true];
-      this.runCommand("", pMinionId, cmdArr, true);
+      this.runCommand("", pMinionId, cmdArr, ["select_minions"]);
     });
   }
 
