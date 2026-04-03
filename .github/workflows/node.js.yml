@@ -41,6 +41,8 @@ jobs:
 
     - run: npm run eslint
 
+    - run: npm run test:year
+
     - run: npm run test:coverage
 
     - run: |
