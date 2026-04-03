@@ -18,11 +18,10 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x, 24.x, 25.x]
+        node-version: [20.x, 22.x, 24.x, 25.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        # 18 oldest supported version by nodejs
-        # 18 current version on my Debian 12
-        # 20,22: Maintenance LTS
+        # 20: Maintenance LTS
+        # 22: Maintenance LTS
         # 24: Active LTS
         # 25: Current
 
