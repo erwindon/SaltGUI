@@ -20,6 +20,9 @@ npm run eslint
 # and if our css is sane
 npm run stylelint
 
+# verify the copyright
+npm run test:year
+
 # run the unittests tests before docker for failing fast
 # the coverage test will repeat all this
 #npm run test:unit
