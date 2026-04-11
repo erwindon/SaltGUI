@@ -6,7 +6,7 @@ import {Utils} from "../Utils.js";
 export class BeaconsPanel extends Panel {
 
   constructor () {
-    super("beacons");
+    super("beacons", ["select_minions"]);
 
     this.addTitle("Beacons");
     this.addSearchButton();
@@ -18,11 +18,10 @@ export class BeaconsPanel extends Panel {
   }
 
   onShow () {
+    super.onShow();
+
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const localBeaconsListPromise = this.api.getLocalBeaconsList(null);
-
-    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
-    this.showSelectColumn(selectVisible);
 
     this.nrMinions = 0;
 
@@ -108,7 +107,7 @@ export class BeaconsPanel extends Panel {
   }
 
   updateOfflineMinion (pMinionId, pMinionsDict) {
-    super.updateOfflineMinion(pMinionId, pMinionsDict, true);
+    super.updateOfflineMinion(pMinionId, pMinionsDict);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
@@ -120,7 +119,7 @@ export class BeaconsPanel extends Panel {
 
     pMinionData = BeaconsPanel.fixBeaconsMinion(pMinionData);
 
-    super.updateMinion(null, pMinionId, pAllMinionsGrains, true);
+    super.updateMinion(null, pMinionId, pAllMinionsGrains);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
