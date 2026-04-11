@@ -7,27 +7,37 @@ import {Utils} from "../Utils.js";
 export class KeysPanel extends Panel {
 
   constructor () {
-    super("keys");
+    super("keys", ["select_keys"]);
 
     this.addTitle("Keys");
     this.addPanelMenu();
     this._addPanelMenuItemWheelKeyAcceptAllUnaccepted();
+    this._addPanelMenuItemWheelKeyAcceptSelectedUnaccepted();
     this._addPanelMenuItemWheelKeyAcceptAllUnacceptedRejected();
+    this._addPanelMenuItemWheelKeyAcceptSelectedUnacceptedRejected();
     this._addPanelMenuItemWheelKeyAcceptAllUnacceptedDenied();
+    this._addPanelMenuItemWheelKeyAcceptSelectedUnacceptedDenied();
     this._addPanelMenuItemWheelKeyAcceptAllUnacceptedRejectedDenied();
+    this._addPanelMenuItemWheelKeyAcceptSelectedUnacceptedRejectedDenied();
     this._addPanelMenuItemWheelKeyRejectAllUnaccepted();
+    this._addPanelMenuItemWheelKeyRejectSelectedUnaccepted();
     this._addPanelMenuItemWheelKeyRejectAllUnacceptedAccepted();
+    this._addPanelMenuItemWheelKeyRejectSelectedUnacceptedAccepted();
     this._addPanelMenuItemWheelKeyRejectAllUnacceptedDenied();
+    this._addPanelMenuItemWheelKeyRejectSelectedUnacceptedDenied();
     this._addPanelMenuItemWheelKeyRejectAllUnacceptedAcceptedDenied();
+    this._addPanelMenuItemWheelKeyRejectSelectedUnacceptedAcceptedDenied();
     this._addPanelMenuItemWheelKeyDeleteAll();
+    this._addPanelMenuItemWheelKeyDeleteSelected();
     this.addSearchButton();
+    this.addFilterButton();
     this.addPlayPauseButton();
     this.addHelpButton([
       "The content of this page is",
       "automatically refreshed."
     ]);
     this.addWarningField();
-    this.addTable(["-menu-", "Minion", "Status", "Fingerprint"], "data-list-keys");
+    this.addTable(["-select-", "-menu-", "Minion", "Status", "Fingerprint"], "data-list-keys");
     this.setTableSortable("Status", "asc");
     this.addMsg();
 
@@ -37,13 +47,19 @@ export class KeysPanel extends Panel {
   }
 
   onShow () {
+    super.onShow();
+
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const wheelKeyFingerPromise = this.api.getWheelKeyFinger();
 
     this.nrUnaccepted = 0;
+    this.nrUnacceptedSelected = 0;
     this.nrAccepted = 0;
+    this.nrAcceptedSelected = 0;
     this.nrDenied = 0;
+    this.nrDeniedSelected = 0;
     this.nrRejected = 0;
+    this.nrRejectedSelected = 0;
 
     this.showSyndicInfo(false);
     this.showClusterInfo();
@@ -215,6 +231,21 @@ export class KeysPanel extends Panel {
           "{0} " + key + " key",
           "{0} " + key + " keys");
       }
+
+      const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+      if (selectVisible) {
+        for (const tr of tbody.children) {
+	  if (tr.firstChild.innerText !== Character.BALLOT_BOX_WITH_CHECK) {
+            continue;
+          }
+          const statusTd = tr.querySelector(".status");
+          const statusText = statusTd.innerText + "-selected";
+          if (cnt[statusText] === undefined) {
+            cnt[statusText] = 0;
+          }
+          cnt[statusText] += 1;
+        }
+      }
     }
 
     if (Object.keys(cnt).length === 0) {
@@ -227,9 +258,13 @@ export class KeysPanel extends Panel {
     txt = txt.replace(/^no/, "No");
 
     this.nrUnaccepted = cnt["unaccepted"];
+    this.nrUnacceptedSelected = cnt["unaccepted-selected"];
     this.nrAccepted = cnt["accepted"];
+    this.nrAcceptedSelected = cnt["accepted-selected"];
     this.nrDenied = cnt["denied"];
+    this.nrDeniedSelected = cnt["denied-selected"];
     this.nrRejected = cnt["rejected"];
+    this.nrRejectedSelected = cnt["rejected-selected"];
 
     super.updateFooter(txt, false);
   }
@@ -266,7 +301,8 @@ export class KeysPanel extends Panel {
       }
     }
 
-    const minionIdTd = pMinionTr.querySelectorAll("td")[1];
+    // td[0]=select, td[1]=menu, td[2]=name
+    const minionIdTd = pMinionTr.querySelectorAll("td")[2];
     const minionIdSpan = minionIdTd.querySelector("span");
 
     if (txt) {
@@ -284,7 +320,9 @@ export class KeysPanel extends Panel {
   }
 
   _addAcceptedMinion (pMinionId, pMinionsDict) {
-    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), false);
+    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), "select_keys", pMinionId);
+    minionTr.dataset.sessionKey = "select_keys";
+    minionTr.dataset.selectKey = pMinionId;
 
     const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
@@ -306,7 +344,9 @@ export class KeysPanel extends Panel {
   }
 
   _addRejectedMinion (pMinionId, pMinionsDict) {
-    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), false);
+    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), "select_keys", pMinionId);
+    minionTr.dataset.sessionKey = "select_keys";
+    minionTr.dataset.selectKey = pMinionId;
 
     const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
@@ -331,7 +371,9 @@ export class KeysPanel extends Panel {
   }
 
   _addDeniedMinion (pMinionId, pMinionsDict) {
-    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), false);
+    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), "select_keys", pMinionId);
+    minionTr.dataset.sessionKey = "select_keys";
+    minionTr.dataset.selectKey = pMinionId;
 
     const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
@@ -356,7 +398,9 @@ export class KeysPanel extends Panel {
   }
 
   _addPreMinion (pMinionId, pMinionsDict, pInsertAtTop = false) {
-    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), false);
+    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), "select_keys", pMinionId);
+    minionTr.dataset.sessionKey = "select_keys";
+    minionTr.dataset.selectKey = pMinionId;
 
     const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
@@ -389,7 +433,9 @@ export class KeysPanel extends Panel {
   }
 
   _addMissingMinion (pMinionId, pMinionsDict) {
-    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), false);
+    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), "select_keys", pMinionId);
+    minionTr.dataset.sessionKey = "select_keys";
+    minionTr.dataset.selectKey = pMinionId;
 
     const minionIdTd = Utils.createTd();
     const minionIdSpan = Utils.createSpan("minion-id", pMinionId);
@@ -437,6 +483,9 @@ export class KeysPanel extends Panel {
 
   _addPanelMenuItemWheelKeyAcceptAllUnaccepted () {
     this.panelMenu.addMenuItem(() => {
+      if (this.nrUnacceptedSelected || this.nrAcceptedSelected || this.nrDeniedSelected || this.nrRejectedSelected) {
+        return null;
+      }
       if (this.nrUnaccepted > 0) {
         return "Accept all unaccepted keys...";
       }
@@ -447,8 +496,23 @@ export class KeysPanel extends Panel {
     });
   }
 
+  _addPanelMenuItemWheelKeyAcceptSelectedUnaccepted () {
+    this.panelMenu.addMenuItem(() => {
+      if (this.nrUnacceptedSelected > 0) {
+        return "Accept selected unaccepted keys...";
+      }
+      return null;
+    }, () => {
+      const cmdArr = ["wheel.key.accept"];
+      this.runCommand("", "*", cmdArr, ["select_keys"]);
+    });
+  }
+
   _addPanelMenuItemWheelKeyAcceptAllUnacceptedRejected () {
     this.panelMenu.addMenuItem(() => {
+      if (this.nrUnacceptedSelected || this.nrAcceptedSelected || this.nrDeniedSelected || this.nrRejectedSelected) {
+        return null;
+      }
       if (!this.nrRejected) {
         return null;
       }
@@ -462,8 +526,26 @@ export class KeysPanel extends Panel {
     });
   }
 
+  _addPanelMenuItemWheelKeyAcceptSelectedUnacceptedRejected () {
+    this.panelMenu.addMenuItem(() => {
+      if (!this.nrRejectedSelected) {
+        return null;
+      }
+      if (this.nrUnacceptedSelected > 0) {
+        return "Accept selected unaccepted+rejected keys...";
+      }
+      return "Accept selected rejected keys...";
+    }, () => {
+      const cmdArr = ["wheel.key.accept", "include_rejected=", true];
+      this.runCommand("", "*", cmdArr, ["select_keys"]);
+    });
+  }
+
   _addPanelMenuItemWheelKeyAcceptAllUnacceptedDenied () {
     this.panelMenu.addMenuItem(() => {
+      if (this.nrUnacceptedSelected || this.nrAcceptedSelected || this.nrDeniedSelected || this.nrRejectedSelected) {
+        return null;
+      }
       if (!this.nrDenied) {
         return null;
       }
@@ -477,8 +559,26 @@ export class KeysPanel extends Panel {
     });
   }
 
+  _addPanelMenuItemWheelKeyAcceptSelectedUnacceptedDenied () {
+    this.panelMenu.addMenuItem(() => {
+      if (!this.nrDeniedSelected) {
+        return null;
+      }
+      if (this.nrUnacceptedSelected > 0) {
+        return "Accept selected unaccepted+denied keys...";
+      }
+      return "Accept selected denied keys...";
+    }, () => {
+      const cmdArr = ["wheel.key.accept", "include_denied=", true];
+      this.runCommand("", "*", cmdArr, ["select_keys"]);
+    });
+  }
+
   _addPanelMenuItemWheelKeyAcceptAllUnacceptedRejectedDenied () {
     this.panelMenu.addMenuItem(() => {
+      if (this.nrUnacceptedSelected || this.nrAcceptedSelected || this.nrDeniedSelected || this.nrRejectedSelected) {
+        return null;
+      }
       if (!this.nrRejected || !this.nrDenied) {
         return null;
       }
@@ -489,6 +589,21 @@ export class KeysPanel extends Panel {
     }, () => {
       const cmdArr = ["wheel.key.accept", "include_denied=", true, "include_rejected=", true];
       this.runCommand("", "*", cmdArr);
+    });
+  }
+
+  _addPanelMenuItemWheelKeyAcceptSelectedUnacceptedRejectedDenied () {
+    this.panelMenu.addMenuItem(() => {
+      if (!this.nrRejectedSelected || !this.nrDeniedSelected) {
+        return null;
+      }
+      if (this.nrUnacceptedSelected > 0) {
+        return "Accept selected unaccepted+denied+rejected keys...";
+      }
+      return "Accept selected denied+rejected keys...";
+    }, () => {
+      const cmdArr = ["wheel.key.accept", "include_denied=", true, "include_rejected=", true];
+      this.runCommand("", "*", cmdArr, ["select_keys"]);
     });
   }
 
@@ -532,6 +647,9 @@ export class KeysPanel extends Panel {
 
   _addPanelMenuItemWheelKeyRejectAllUnaccepted () {
     this.panelMenu.addMenuItem(() => {
+      if (this.nrUnacceptedSelected || this.nrAcceptedSelected || this.nrDeniedSelected || this.nrRejectedSelected) {
+        return null;
+      }
       if (this.nrUnaccepted > 0) {
         return "Reject all unaccepted keys...";
       }
@@ -542,8 +660,23 @@ export class KeysPanel extends Panel {
     });
   }
 
+  _addPanelMenuItemWheelKeyRejectSelectedUnaccepted () {
+    this.panelMenu.addMenuItem(() => {
+      if (this.nrUnacceptedSelectd > 0) {
+        return "Reject selected unaccepted keys...";
+      }
+      return null;
+    }, () => {
+      const cmdArr = ["wheel.key.reject"];
+      this.runCommand("", "*", cmdArr, ["select_keys"]);
+    });
+  }
+
   _addPanelMenuItemWheelKeyRejectAllUnacceptedAccepted () {
     this.panelMenu.addMenuItem(() => {
+      if (this.nrUnacceptedSelected || this.nrAcceptedSelected || this.nrDeniedSelected || this.nrRejectedSelected) {
+        return null;
+      }
       if (!this.nrAccepted) {
         return null;
       }
@@ -557,8 +690,26 @@ export class KeysPanel extends Panel {
     });
   }
 
+  _addPanelMenuItemWheelKeyRejectSelectedUnacceptedAccepted () {
+    this.panelMenu.addMenuItem(() => {
+      if (!this.nrAcceptedSelected) {
+        return null;
+      }
+      if (this.nrUnacceptedSelected > 0) {
+        return "Reject selected unaccepted+accepted keys...";
+      }
+      return "Reject selected accepted keys...";
+    }, () => {
+      const cmdArr = ["wheel.key.reject", "include_accepted=", true];
+      this.runCommand("", "*", cmdArr, ["select_keys"]);
+    });
+  }
+
   _addPanelMenuItemWheelKeyRejectAllUnacceptedDenied () {
     this.panelMenu.addMenuItem(() => {
+      if (this.nrUnacceptedSelected || this.nrAcceptedSelected || this.nrDeniedSelected || this.nrRejectedSelected) {
+        return null;
+      }
       if (!this.nrDenied) {
         return null;
       }
@@ -572,8 +723,26 @@ export class KeysPanel extends Panel {
     });
   }
 
+  _addPanelMenuItemWheelKeyRejectSelectedUnacceptedDenied () {
+    this.panelMenu.addMenuItem(() => {
+      if (!this.nrDeniedSelected) {
+        return null;
+      }
+      if (this.nrUnacceptedSelected > 0) {
+        return "Reject selected unaccepted+denied keys...";
+      }
+      return "Reject selected denied keys...";
+    }, () => {
+      const cmdArr = ["wheel.key.reject", "include_denied=", true];
+      this.runCommand("", "*", cmdArr, ["select_keys"]);
+    });
+  }
+
   _addPanelMenuItemWheelKeyRejectAllUnacceptedAcceptedDenied () {
     this.panelMenu.addMenuItem(() => {
+      if (this.nrUnacceptedSelected || this.nrAcceptedSelected || this.nrDeniedSelected || this.nrRejectedSelected) {
+        return null;
+      }
       if (!this.nrAccepted || !this.nrDenied) {
         return null;
       }
@@ -584,6 +753,21 @@ export class KeysPanel extends Panel {
     }, () => {
       const cmdArr = ["wheel.key.reject", "include_accepted=", true, "include_denied=", true];
       this.runCommand("", "*", cmdArr);
+    });
+  }
+
+  _addPanelMenuItemWheelKeyRejectSelectedUnacceptedAcceptedDenied () {
+    this.panelMenu.addMenuItem(() => {
+      if (!this.nrAcceptedSelected || !this.nrDeniedSelected) {
+        return null;
+      }
+      if (this.nrUnacceptedSelected > 0) {
+        return "Reject selected unaccepted+accepted+denied keys...";
+      }
+      return "Reject selected accepted+denied keys...";
+    }, () => {
+      const cmdArr = ["wheel.key.reject", "include_accepted=", true, "include_denied=", true];
+      this.runCommand("", "*", cmdArr, ["select_keys"]);
     });
   }
 
@@ -602,6 +786,9 @@ export class KeysPanel extends Panel {
 
   _addPanelMenuItemWheelKeyDeleteAll () {
     this.panelMenu.addMenuItem(() => {
+      if (this.nrUnacceptedSelected || this.nrAcceptedSelected || this.nrDeniedSelected || this.nrRejectedSelected) {
+        return null;
+      }
       if (this.nrAccepted > 0 || this.nrUnaccepted > 0 || this.nrRejected > 0 || this.nrDenied > 0) {
         return "Delete all keys...";
       }
@@ -609,6 +796,18 @@ export class KeysPanel extends Panel {
     }, () => {
       const cmdArr = ["wheel.key.delete"];
       this.runCommand("", "*", cmdArr);
+    });
+  }
+
+  _addPanelMenuItemWheelKeyDeleteSelected () {
+    this.panelMenu.addMenuItem(() => {
+      if (this.nrAcceptedSelected > 0 || this.nrUnacceptedSelected > 0 || this.nrRejectedSelected > 0 || this.nrDeniedSelected > 0) {
+        return "Delete selected keys...";
+      }
+      return null;
+    }, () => {
+      const cmdArr = ["wheel.key.delete"];
+      this.runCommand("", "*", cmdArr, ["select_keys"]);
     });
   }
 

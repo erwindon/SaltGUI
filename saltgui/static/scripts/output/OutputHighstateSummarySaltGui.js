@@ -48,6 +48,7 @@ export class OutputHighstateSummarySaltGui {
     }
 
     if (line) {
+      // strip the prefix ", "
       const txtDiv = Utils.createDiv("", line.substring(2));
       pDiv.append(txtDiv);
     }
