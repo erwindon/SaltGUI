@@ -49,7 +49,7 @@ We suggest to upgrade the SaltStack installation when you are still using a vers
 - Keyboard control to apply templates
 - Choose between live info and cached info for grains/pillar
 - View details of orchestrations and allow to start them
-- Act on multiple minions by first selecting them
+- Act on multiple minions/keys/nodegroups by first selecting them
 
 
 ## Quick start using PAM as authentication method
@@ -401,12 +401,15 @@ Each issue has its own dropdown-menu, which typically contains:
 But note that there might be more possible solutions, some of which may actually be more preferred.
 * A navigation-command to go to a page for more details.
 
-## Minion selection
+## Row selection
 Pages that show a simple list of minions allow individual minions to be selected.
+The Keys page allows individual keys to be selected.
+The NodeGroups page allows individual nodegroups and/or minions to be selected.
+
 Use panel button [✔] to show an extra column with checkboxes in the table.
-Minions can be selected one-by-one or you can use select-all, select-none by clicking on the column header.
+Rows can be selected one-by-one or you can use select-all, select-none by clicking on the column header.
 The selection can be inverted by using CTRL-click.
-The list of selected minions will be used in the command-box and for commands from a panel-menu.
+The list of selected rows will be used in the command-box and for commands from a panel-menu.
 When the column is hidden, the selection-values are just ignored.
 
 ## Command documentation

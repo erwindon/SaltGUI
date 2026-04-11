@@ -6,7 +6,7 @@ import {Utils} from "../Utils.js";
 export class PillarsPanel extends Panel {
 
   constructor () {
-    super("pillars");
+    super("pillars", ["select_minions"]);
 
     this.addTitle("Pillars");
     this.addSearchButton();
@@ -19,14 +19,13 @@ export class PillarsPanel extends Panel {
   }
 
   onShow () {
+    super.onShow();
+
     const useCachePillar = Utils.getStorageItemBoolean("session", "use_cache_for_pillar", false);
     this.setWarningText("info", useCachePillar ? "the content of this screen is based on cached grains info, minion status or pillar info may not be accurate" : "");
 
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const localPillarObfuscatePromise = useCachePillar ? this.api.getRunnerCachePillar(null) : this.api.getLocalPillarObfuscate(null);
-
-    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
-    this.showSelectColumn(selectVisible);
 
     this.nrMinions = 0;
 
@@ -74,7 +73,7 @@ export class PillarsPanel extends Panel {
   }
 
   updateOfflineMinion (pMinionId, pMinionsDict) {
-    super.updateOfflineMinion(pMinionId, pMinionsDict, true);
+    super.updateOfflineMinion(pMinionId, pMinionsDict);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
@@ -83,7 +82,7 @@ export class PillarsPanel extends Panel {
   }
 
   updateMinion (pMinionData, pMinionId, pAllMinionsGrains) {
-    super.updateMinion(null, pMinionId, pAllMinionsGrains, true);
+    super.updateMinion(null, pMinionId, pAllMinionsGrains);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 

@@ -7,7 +7,7 @@ import {Utils} from "../Utils.js";
 export class GrainsPanel extends Panel {
 
   constructor () {
-    super("grains");
+    super("grains", ["select_minions"]);
 
     this.addTitle("Grains");
     this.addSearchButton();
@@ -27,8 +27,7 @@ export class GrainsPanel extends Panel {
   }
 
   onShow () {
-    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
-    this.showSelectColumn(selectVisible);
+    super.onShow();
 
     if (this.previewColumsAdded !== true) {
       // collect the list of displayed extra grains
@@ -86,7 +85,7 @@ export class GrainsPanel extends Panel {
 
     const minionIds = keys.minions.sort();
     for (const minionId of minionIds) {
-      const minionTr = this.addMinion(minionId, true, this.previewGrains.length);
+      const minionTr = this.addMinion(minionId, this.previewGrains.length);
 
       // preliminary dropdown menu
       this._addMenuItemShowGrains(minionTr.dropdownmenu, minionId);
@@ -105,7 +104,7 @@ export class GrainsPanel extends Panel {
   }
 
   updateOfflineMinion (pMinionId, pMinionsDict) {
-    super.updateOfflineMinion(pMinionId, pMinionsDict, true);
+    super.updateOfflineMinion(pMinionId, pMinionsDict);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
@@ -119,7 +118,7 @@ export class GrainsPanel extends Panel {
   }
 
   updateMinion (pMinionData, pMinionId, pAllMinionsGrains) {
-    super.updateMinion(pMinionData, pMinionId, pAllMinionsGrains, true);
+    super.updateMinion(pMinionData, pMinionId, pAllMinionsGrains);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
