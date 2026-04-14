@@ -200,6 +200,21 @@ In all cases, a tooltip is added to a date+time field that shows the full repres
 When using very old browsers, the required date/time functions may not be present. In that case SaltGUI reverts to simply displaying the reported time from the Salt system. The tooltip is then not shown.
 
 
+## Theme
+SaltGUI can follow the browser preference automatically, or it can be forced to a specific theme by adding the following parameter to salt master configuration file `/etc/salt/master`.
+e.g.:
+```
+saltgui_theme: auto
+```
+
+Allowed values are `auto`, `light`, and `dark`.
+With `auto`, SaltGUI follows the browser color-scheme preference and also uses theme hints from an embedding parent frame when those are available.
+With `light` and `dark`, SaltGUI uses the selected theme unconditionally.
+
+The current value is also visible on the Settings page.
+Changes made there are session-only and do not modify `/etc/salt/master`.
+
+
 ## Templates
 SaltGUI supports command templates for easier command entry into the command-box.
 The menu item for that becomes visible there when you define one or more templates

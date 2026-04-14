@@ -266,16 +266,16 @@ export class JobsDetailsPanel extends JobsPanel {
     if (pData.Minions.length === 0) {
       detailsHTML += "<span>";
     } else if (keyCount === pData.Minions.length) {
-      detailsHTML += "<span style='color: green'>";
+      detailsHTML += "<span class='job-details-success'>";
     } else {
-      detailsHTML += "<span style='color: red'>";
+      detailsHTML += "<span class='job-details-failure'>";
     }
     detailsHTML += Utils.txtZeroOneMany(keyCount,
       "no results", "{0} result", "{0} results");
     detailsHTML += "</span>";
 
     if (keyCount < pData.Minions.length) {
-      detailsHTML += ", <span style='color: red'>";
+      detailsHTML += ", <span class='job-details-failure'>";
       detailsHTML += pData.Minions.length - keyCount;
       detailsHTML += " missing</span>";
     }
@@ -299,13 +299,13 @@ export class JobsDetailsPanel extends JobsPanel {
     for (const key of keys) {
       detailsHTML += ", ";
       if (key === "0-0") {
-        detailsHTML += "<span style='color: green'>";
+        detailsHTML += "<span class='job-details-success'>";
         detailsHTML += Utils.txtZeroOneMany(summary[key], "", "{0} success", "{0} successes");
       } else if (key.startsWith("0-")) {
-        detailsHTML += "<span style='color: orange'>";
+        detailsHTML += "<span class='job-details-warning'>";
         detailsHTML += Utils.txtZeroOneMany(summary[key], "", "{0} success", "{0} successes");
       } else if (key.startsWith("1-")) {
-        detailsHTML += "<span style='color: red'>";
+        detailsHTML += "<span class='job-details-failure'>";
         detailsHTML += Utils.txtZeroOneMany(summary[key], "", "{0} failure", "{0} failures");
       } else {
         // if (key.startsWith("2-"))

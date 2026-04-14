@@ -5,8 +5,8 @@
 .tooltip > .tooltip-text {
   display: none;
   font-size: 14px;
-  background-color: rgba(76, 175, 80, 80%); /* #4caf50 */
-  color: white;
+  background-color: var(--color-background-tooltip);
+  color: var(--color-text-tooltip);
   padding: 7px;
   border-radius: 3px;
   position: absolute;
@@ -36,7 +36,8 @@
 .tooltip > .tooltip-text-error-bottom-left {
   text-align: left;
   transform: translate(-5%, 0);
-  background-color: red;
+  background-color: var(--color-background-tooltip-error);
+  color: var(--color-text-tooltip-error);
   font-weight: bold;
 }
 
@@ -56,8 +57,7 @@
 }
 
 .tooltip:hover {
-  /* only slightly darker than 'whitesmoke(#f5f5f5)' */
-  background-color: #e0e0e0;
+  background-color: var(--color-background-tooltip-hover);
 }
 
 .tooltip:hover > .tooltip-text {
@@ -65,12 +65,11 @@
 }
 
 pre.output .tooltip > .tooltip-text {
-  background-color: rgba(76, 175, 80, 80%); /* #4caf50 */
+  background-color: var(--color-background-tooltip);
 }
 
 pre.output .tooltip:hover {
-  /* only slightly lighter than '#272727' */
-  background-color: #484848;
+  background-color: var(--color-background-tooltip-hover-code);
 }
 
 /* The arrow/triangle of the tooltip */
@@ -83,7 +82,7 @@ pre.output .tooltip:hover {
   border-width: 5px;
   border-style: solid;
   top: 100%;
-  border-color: rgba(76, 175, 80, 80%) transparent transparent transparent;
+  border-color: var(--color-background-tooltip) transparent transparent transparent;
 }
 
 .tooltip > .tooltip-text-logo {
@@ -108,7 +107,7 @@ pre.output .tooltip:hover {
 
 .tooltip > .tooltip-text-error-bottom-left::after {
   left: calc(5% - 2.5px);
-  border-color: red transparent transparent;
+  border-color: var(--color-background-tooltip-error) transparent transparent;
 }
 
 .tooltip > .tooltip-text-bottom-center::after {
@@ -120,5 +119,5 @@ pre.output .tooltip:hover {
 }
 
 pre.output .tooltip > .tooltip-text::after {
-  border-color: rgba(76, 175, 80, 80%) transparent transparent transparent; /* #4caf50 */
+  border-color: var(--color-background-tooltip) transparent transparent transparent;
 }

@@ -108,6 +108,10 @@ export class OptionsPanel extends Panel {
         "tooltip-mode", "saltgui", "full",
         [["mode", "full", "simple", "none"]]
       ],
+      [
+        "theme", "saltgui", "auto",
+        [["theme", "auto", "light", "dark"]]
+      ],
 
       /* last because it might be very long */
       ["custom-command-help", "saltgui", "(none)"]
@@ -197,6 +201,10 @@ export class OptionsPanel extends Panel {
           } else if (pName === "full-return") {
             radio.addEventListener("change", () => {
               this._newFullReturn();
+            });
+          } else if (pName === "theme") {
+            radio.addEventListener("change", () => {
+              this._newTheme();
             });
           } else if (pName === "use-cache-for-grains") {
             radio.addEventListener("change", () => {
@@ -582,5 +590,20 @@ export class OptionsPanel extends Panel {
     const fullReturnTd = this.div.querySelector("#option-full-return-value");
     fullReturnTd.innerText = value;
     Utils.setStorageItem("session", "full_return", value);
+  }
+
+  _newTheme () {
+    let value = "";
+    /* eslint-disable curly */
+    if (this._isSelected("theme", "theme", "auto")) value = "auto";
+    if (this._isSelected("theme", "theme", "light")) value = "light";
+    if (this._isSelected("theme", "theme", "dark")) value = "dark";
+    /* eslint-enable curly */
+    const themeTd = this.div.querySelector("#option-theme-value");
+    themeTd.innerText = value;
+    Utils.setStorageItem("session", "theme", value);
+    if (globalThis.SaltGUITheme && globalThis.SaltGUITheme.applyTheme) {
+      globalThis.SaltGUITheme.applyTheme();
+    }
   }
 }

@@ -64,6 +64,6 @@ export class Character {
   }
 
   static buttonInText (txt) {
-    return "<span style=\"background-color:#eee\">&nbsp;" + txt + "&nbsp;</span>";
+    return "<span class=\"button-in-text\">&nbsp;" + txt + "&nbsp;</span>";
   }
 }

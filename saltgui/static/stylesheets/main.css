@@ -10,23 +10,25 @@ body {
   margin: 0;
   padding: 0;
   font-family: Roboto, Helvetica, Arial, sans-serif;
+  color: var(--color-text-primary);
 }
 
 @media not print {
   body {
-    background-color: #263238;
+    background-color: var(--color-background-page);
   }
 }
 
 header {
-  border-top: 2px solid #4caf50;
-  background-color: white;
+  border-top: 2px solid var(--color-border-accent);
+  background-color: var(--color-background-header);
+  box-shadow: var(--color-shadow-header);
   margin-top: 0;
 }
 
 .logo {
   cursor: pointer;
-  color: #4caf50;
+  color: var(--color-text-accent);
   font-size: 30px;
   font-weight: normal;
   display: inline-block;
@@ -42,7 +44,7 @@ header {
 
 .docu {
   cursor: pointer;
-  color: gray;
+  color: var(--color-text-muted);
   font-size: 30px;
   font-weight: normal;
   display: inline-block;
@@ -58,11 +60,11 @@ header {
 }
 
 .docu:hover {
-  color: #4caf50;
+  color: var(--color-text-accent);
 }
 
 h1 {
-  color: #4caf50;
+  color: var(--color-text-accent);
   font-weight: lighter;
   font-size: 20px;
   margin: 0 10px 0 0;
@@ -70,12 +72,13 @@ h1 {
 }
 
 .msg {
-  color: #505050;
+  color: var(--color-text-primary);
   padding-top: 5px;
 }
 
 .panel {
-  background-color: white;
+  background-color: var(--color-background-panel);
+  color: var(--color-text-primary);
   padding: 20px;
   border-radius: 1px;
 
@@ -114,11 +117,11 @@ h1 {
   display: inline-block;
   min-width: 50px;
   text-align: center;
-  background-color: #eee;
+  background-color: var(--color-background-control-muted);
   margin: 0;
   cursor: pointer;
   font-size: 18px;
-  color: #666;
+  color: var(--color-text-quiet);
   height: 24px;
   vertical-align: middle;
   padding-left: 10px;
@@ -150,7 +153,7 @@ h1 {
 }
 
 .small-button:hover {
-  color: #4caf50;
+  color: var(--color-text-accent);
 }
 
 .small-button-for-hover {
@@ -174,13 +177,14 @@ h1 {
 
 .search-error {
   display: block;
-  color: red;
+  color: var(--color-status-failure);
   margin-bottom: 10px;
   margin-left: 10px;
 }
 
 .menu-item {
   display: inline-block;
+  color: var(--color-text-default);
   font-size: 18px;
   font-weight: lighter;
   padding: 15px 30px;
@@ -191,8 +195,8 @@ h1 {
 }
 
 .menu-item:hover {
-  background: rgba(0, 0, 0, 15%);
-  color: #4caf50;
+  background: var(--color-background-hover);
+  color: var(--color-text-accent);
   cursor: pointer;
 }
 
@@ -203,7 +207,7 @@ h1 {
 }
 
 .menu-item-first-letter:hover::first-letter {
-  text-decoration: underline #4caf50 double;
+  text-decoration: underline var(--color-text-accent) double;
   text-decoration-skip-ink: none;
 }
 
@@ -218,7 +222,8 @@ h1 {
 }
 
 #warning {
-  background: yellow;
+  background: var(--color-background-warning);
+  color: var(--color-text-warning);
   margin-top: 5px;
   padding: 5px 10px 5px 20px;
 }
@@ -253,7 +258,7 @@ h1 {
   width: 100%;
   height: 100%;
   z-index: 2;
-  background-color: rgba(0, 0, 0, 86%);
+  background-color: var(--color-background-overlay);
 }
 
 .popup h1 {
@@ -265,7 +270,8 @@ h1 {
 .run-command {
   padding: 30px;
   z-index: 3;
-  background-color: white;
+  background-color: var(--color-background-popup);
+  color: var(--color-text-primary);
   position: relative;
   top: 5px;
   margin-left: 15px;
@@ -278,8 +284,8 @@ h1 {
 }
 
 pre.output {
-  background-color: #272727;
-  color: white;
+  background-color: var(--color-background-code);
+  color: var(--color-text-inverse);
   margin: 0;
   padding: 10px;
   border-radius: 2px;
@@ -304,10 +310,10 @@ pre.output {
 }
 
 .warning-button:hover {
-  color: #4caf50;
+  color: var(--color-text-accent);
   cursor: pointer;
 }
 
 .state-details-compressed {
-  color: gray;
+  color: var(--color-text-muted);
 }

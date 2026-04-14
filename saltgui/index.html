@@ -3,7 +3,8 @@
 
   <head>
     <title>SaltGUI</title>
-    <script src="static/scripts/ha-theme.js"></script>
+    <script src="static/scripts/theme.js"></script>
+    <link rel='stylesheet' type='text/css' href='static/stylesheets/theme.css'/>
     <link rel='stylesheet' type='text/css' href='static/stylesheets/controls.css'/>
     <link rel='stylesheet' type='text/css' href='static/stylesheets/main.css'/>
     <link rel='stylesheet' type='text/css' href='static/stylesheets/login.css'/>
@@ -18,7 +19,6 @@
     <link rel='stylesheet' type='text/css' href='static/stylesheets/tooltip.css'/>
     <link rel='stylesheet' type='text/css' href='static/stylesheets/options.css'/>
     <link rel='stylesheet' type='text/css' href='static/stylesheets/events.css'/>
-    <link rel='stylesheet' type='text/css' href='static/stylesheets/ha-theme.css'/>
     <link rel='stylesheet' type='text/css' href='static/sorttable/sorttable.css'/>
     <link rel='shortcut icon' href='static/images/icon.png'/>
   </head>
@@ -28,8 +28,8 @@
       <h1 class='logo'><div id="logo">SaltGUI</div></h1>
       <h1 class='fab'>
         <svg width="36" height="36">
-          <circle id='button-manual-run' cx="18" cy="18" r="18" fill="#4caf50" />
-          <text style='pointer-events: none' fill="white" font-weight="bold" font-size="20" x="6" y="23">&gt;_</text>
+          <circle id='button-manual-run' cx="18" cy="18" r="18" fill="var(--color-text-accent)" />
+          <text style='pointer-events: none' fill="var(--color-text-inverse)" font-weight="bold" font-size="20" x="6" y="23">&gt;_</text>
         </svg>
       </h1>
       <!-- 1F4D6 = OPEN BOOK -->

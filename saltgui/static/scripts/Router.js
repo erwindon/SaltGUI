@@ -272,7 +272,7 @@ export class Router {
     // perform the hiding/showing
     for (let nr = 1; nr <= 2; nr++) {
       const item = document.getElementById("button-" + pPage.path + nr);
-      item.style.color = !visible && hasVisibleChild ? "lightgray" : "black";
+      item.classList.toggle("menu-item-dimmed", !visible && hasVisibleChild);
       if (!visible) {
         // hide the shortcut indicator
         item.classList.remove("menu-item-first-letter");

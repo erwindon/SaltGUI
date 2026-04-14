@@ -270,12 +270,12 @@ export class OutputDocumentation {
         // replace ``......``
         // e.g. in "sys.doc state.apply"
         // named groups are only introduced in ES9/2018
-        out = out.replace(/``([^`]*)``/g, "<span style='background-color: #575757'>$1</span>");
+        out = out.replace(/``([^`]*)``/g, "<span class='doc-inline-code'>$1</span>");
 
         // replace `......`
         // e.g. in "sys.doc state.apply"
         // named groups are only introduced in ES9/2018
-        out = out.replace(/`([^`]*)`/g, "<span style='color: yellow'>$1</span>");
+        out = out.replace(/`([^`]*)`/g, "<span class='doc-inline-highlight'>$1</span>");
 
         // remove whitespace at end of lines
         out = out.replace(/  *\n/gm, "");
