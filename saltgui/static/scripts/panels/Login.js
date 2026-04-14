@@ -308,6 +308,35 @@ export class LoginPanel extends Panel {
     Utils.setStorageItem("local", "salt-motd-txt", "");
     Utils.setStorageItem("local", "salt-motd-html", "");
 
+    this.bootstrapSession();
+
+    // allow the success message to be seen
+    window.setTimeout(() => {
+      // erase credentials since we don't do page-refresh
+      this.usernameField.value = "";
+      this.passwordField.value = "";
+      if (Utils.getStorageItem("session", "login_response") !== null) {
+        // we might have been logged out in this first second
+        // e.g. when clock between client and server differs more than the session timout
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("page")) {
+          // a redirect page is specified
+          const params = {};
+          for (const pair of urlParams.entries()) {
+            params[pair[0]] = pair[1];
+          }
+          const page = params["page"];
+          delete params["page"];
+          this.router.goTo(page, params);
+        } else {
+          this.router.goTo("");
+        }
+      }
+    }, 1000);
+
+  }
+
+  bootstrapSession () {
     // We need these functions to populate the dropdown boxes
     const wheelConfigValuesPromise = this.api.getWheelConfigValues();
     const runnerStateOrchestrateShowSlsPromise = this.api.getRunnerStateOrchestrateShowSls();
@@ -338,30 +367,6 @@ export class LoginPanel extends Panel {
       // VOID
     });
     /* eslint-enable no-unused-vars */
-
-    // allow the success message to be seen
-    window.setTimeout(() => {
-      // erase credentials since we don't do page-refresh
-      this.usernameField.value = "";
-      this.passwordField.value = "";
-      if (Utils.getStorageItem("session", "login_response") !== null) {
-        // we might have been logged out in this first second
-        // e.g. when clock between client and server differs more than the session timout
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get("page")) {
-          // a redirect page is specified
-          const params = {};
-          for (const pair of urlParams.entries()) {
-            params[pair[0]] = pair[1];
-          }
-          const page = params["page"];
-          delete params["page"];
-          this.router.goTo(page, params);
-        } else {
-          this.router.goTo("");
-        }
-      }
-    }, 1000);
 
     BeaconsMinionPanel.getAvailableBeacons(this.api);
   }
