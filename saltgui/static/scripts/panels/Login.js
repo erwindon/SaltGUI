@@ -394,9 +394,7 @@ export class LoginPanel extends Panel {
 
     Utils.setStorageItem("session", "theme", theme);
     Utils.setStorageItem("local", "theme_default", theme);
-    if (globalThis.SaltGUITheme && globalThis.SaltGUITheme.applyTheme) {
-      globalThis.SaltGUITheme.applyTheme();
-    }
+    globalThis.SaltGUITheme?.applyTheme?.();
 
     // store for later use
 

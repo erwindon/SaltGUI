@@ -1,9 +1,13 @@
-(function () {
+(function initializeTheme () {
   const context = globalThis;
   const root = document.documentElement;
   const mediaQuery = context.matchMedia ? context.matchMedia("(prefers-color-scheme: dark)") : null;
 
-  function getStoredTheme() {
+  function reportIgnoredError (message, error) {
+    context.console?.debug?.(message, error);
+  }
+
+  function getStoredTheme () {
     try {
       const sessionTheme = context.sessionStorage ? context.sessionStorage.getItem("theme") : null;
       if (sessionTheme) {
@@ -13,14 +17,15 @@
       if (defaultTheme) {
         return defaultTheme;
       }
-    } catch (_error) {
+    } catch (error) {
       // Storage access can fail in restricted browser environments.
+      reportIgnoredError("SaltGUI theme: storage unavailable", error);
     }
 
     return "auto";
   }
 
-  function getConfiguredTheme() {
+  function getConfiguredTheme () {
     const theme = (getStoredTheme() || "auto").toLowerCase();
     if (theme === "light" || theme === "dark") {
       return theme;
@@ -28,25 +33,34 @@
     return "auto";
   }
 
-  function getParentHints() {
-    const values = [];
-
-    try {
-      const parentDoc = context.parent && context.parent !== context ? context.parent.document : null;
-      if (parentDoc) {
-        values.push(parentDoc.documentElement.dataset.theme || "");
-        values.push(parentDoc.documentElement.getAttribute("theme") || "");
-        values.push(parentDoc.documentElement.className || "");
-        values.push(parentDoc.body ? parentDoc.body.className || "" : "");
-      }
-    } catch (_error) {
-      // Access to the parent frame can fail outside an embedded environment.
+  function getParentDocument () {
+    if (context.self === context.top) {
+      return null;
     }
-
-    return values.join(" ").toLowerCase();
+    try {
+      return context.parent.document;
+    } catch (error) {
+      // Access to the parent frame can fail outside an embedded environment.
+      reportIgnoredError("SaltGUI theme: parent frame unavailable", error);
+      return null;
+    }
   }
 
-  function wantsDarkTheme(configuredTheme) {
+  function getParentHints () {
+    const parentDoc = getParentDocument();
+    if (!parentDoc) {
+      return "";
+    }
+
+    return [
+      parentDoc.documentElement.dataset.theme || "",
+      parentDoc.documentElement.getAttribute("theme") || "",
+      parentDoc.documentElement.className || "",
+      parentDoc.body?.className || "",
+    ].join(" ").toLowerCase();
+  }
+
+  function wantsDarkTheme (configuredTheme) {
     if (configuredTheme === "dark") {
       return true;
     }
@@ -65,7 +79,7 @@
     return mediaQuery ? mediaQuery.matches : false;
   }
 
-  function applyTheme() {
+  function applyTheme () {
     const configuredTheme = getConfiguredTheme();
     root.dataset.themePreference = configuredTheme;
     root.dataset.theme = wantsDarkTheme(configuredTheme) ? "dark" : "light";
@@ -77,31 +91,27 @@
   };
 
   applyTheme();
-
-  if (mediaQuery && mediaQuery.addEventListener) {
-    mediaQuery.addEventListener("change", applyTheme);
-  } else if (mediaQuery && mediaQuery.addListener) {
-    mediaQuery.addListener(applyTheme);
-  }
-
+  mediaQuery?.addEventListener("change", applyTheme);
   context.addEventListener("storage", applyTheme);
 
+  const parentDoc = getParentDocument();
+  if (!parentDoc) {
+    return;
+  }
+
   try {
-    const parentDoc = context.parent && context.parent !== context ? context.parent.document : null;
-    if (parentDoc) {
-      const observer = new MutationObserver(applyTheme);
-      observer.observe(parentDoc.documentElement, {
-        attributes: true,
+    const observer = new MutationObserver(applyTheme);
+    observer.observe(parentDoc.documentElement, {
+      attributeFilter: ["class", "data-theme", "theme"],
+      attributes: true,
+    });
+    if (parentDoc.body) {
+      observer.observe(parentDoc.body, {
         attributeFilter: ["class", "data-theme", "theme"],
+        attributes: true,
       });
-      if (parentDoc.body) {
-        observer.observe(parentDoc.body, {
-          attributes: true,
-          attributeFilter: ["class", "data-theme", "theme"],
-        });
-      }
     }
-  } catch (_error) {
-    // Ignore parent observer failures outside embedded use.
+  } catch (error) {
+    reportIgnoredError("SaltGUI theme: parent observer unavailable", error);
   }
 })();

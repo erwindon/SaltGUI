@@ -63,6 +63,11 @@ td.tasks span {
   padding-bottom: 3px;
 }
 
+td.tasks span.task,
+td.tasks span.tasksummary {
+  background-color: var(--color-background-code);
+}
+
 td.tasks span.task:first-child,
 td.tasks span.tasksummary {
   padding-left: 2px;
@@ -71,11 +76,6 @@ td.tasks span.tasksummary {
 td.tasks span.task:last-child,
 td.tasks span.tasksummary {
   padding-right: 2px;
-}
-
-td.tasks span.task,
-td.tasks span.tasksummary {
-  background-color: var(--color-background-code);
 }
 
 pre .minion-id.host-skips,

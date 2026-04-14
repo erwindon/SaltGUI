@@ -602,8 +602,6 @@ export class OptionsPanel extends Panel {
     const themeTd = this.div.querySelector("#option-theme-value");
     themeTd.innerText = value;
     Utils.setStorageItem("session", "theme", value);
-    if (globalThis.SaltGUITheme && globalThis.SaltGUITheme.applyTheme) {
-      globalThis.SaltGUITheme.applyTheme();
-    }
+    globalThis.SaltGUITheme?.applyTheme?.();
   }
 }
