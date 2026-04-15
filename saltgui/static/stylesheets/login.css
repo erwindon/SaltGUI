@@ -39,6 +39,19 @@
   font-size: 18px;
 }
 
+#login-panel input,
+#login-panel select {
+  background-color: var(--color-background-control);
+  color: var(--color-text-strong);
+  caret-color: var(--color-text-strong);
+  -webkit-text-fill-color: var(--color-text-strong);
+}
+
+#login-panel input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1;
+}
+
 #login-panel select {
   width: 100%;
   font-size: 14px;
