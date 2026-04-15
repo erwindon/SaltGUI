@@ -2,17 +2,8 @@
 import js from "@eslint/js";
 import pluginCompat from "eslint-plugin-compat";
 
-export default [
-  {
-    files: ["saltgui/static/scripts/**/*.js", "tests/**/*.js"],
-    languageOptions: {
-      ecmaVersion: "latest",
-      sourceType: "module",
-    },
-    plugins: {
-      compat: pluginCompat,
-    },
-    rules: {
+const baseConfig = {
+  rules: {
       "array-element-newline": 0,
       "capitalized-comments": 0,
       "class-methods-use-this": 2,
@@ -72,6 +63,29 @@ export default [
       "no-self-assign": ["error", { "props": true }],
       "prefer-object-spread": "error",
       "sort-keys": ["error", "asc", { "caseSensitive": true, "natural": false }]
+  },
+
+  plugins: {
+    compat: pluginCompat,
+  }
+};
+
+export default [
+  baseConfig,
+
+  {
+    files: ["saltgui/static/scripts/**/*.js"],
+    languageOptions: {
+      ecmaVersion: 2015,
+      sourceType: "module",
+    }
+  },
+
+  {
+    files: ["tests/**/*.js"],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
     }
   }
 ];
