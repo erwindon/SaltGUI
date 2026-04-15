@@ -66,7 +66,8 @@ export class LoginPanel extends Panel {
     aa.rel = "noopener";
 
     const img = Utils.createElem("img");
-    img.src = "static/images/github.png";
+    img.src = "static/images/GitHub_Invertocat_Black.png";
+    img.style = "width: 1em; margin-right: 5px";
     aa.append(img);
 
     const txt = document.createTextNode(LoginPanel.version);
