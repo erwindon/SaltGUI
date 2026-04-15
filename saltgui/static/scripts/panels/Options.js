@@ -331,9 +331,18 @@ export class OptionsPanel extends Panel {
         td.innerText = this._parseAndFormat(name, value);
       }
 
+      if (category === "session" && name === "start") {
+        this.updateExpiresInterval = window.setInterval(() => {
+          // just redo the whole text-block
+          // nr-digits may have changed
+          OptionsPanel._enhanceSessionStart(td, value, sessionStart);
+        }, 1000);
+      }
       if (category === "session" && name === "expire") {
         this.updateExpiresInterval = window.setInterval(() => {
           // just redo the whole text-block
+          // expiry interval always changes
+          // nr-digits may also have changed
           OptionsPanel._enhanceSessionExpire(td, value, sessionStart);
         }, 1000);
       }
