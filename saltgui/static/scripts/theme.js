@@ -60,6 +60,65 @@
     ].join(" ").toLowerCase();
   }
 
+  function parseColor (value) {
+    if (!value || value === "transparent") {
+      return null;
+    }
+
+    const rgbMatch = value.match(/^rgba?\(([^)]+)\)$/i);
+    if (!rgbMatch) {
+      return null;
+    }
+
+    const channels = rgbMatch[1].split(",").map((channel) => Number.parseFloat(channel.trim()));
+    if (channels.length < 3 || channels.slice(0, 3).some((channel) => Number.isNaN(channel))) {
+      return null;
+    }
+
+    const alpha = channels.length > 3 ? channels[3] : 1;
+    if (Number.isNaN(alpha) || alpha <= 0) {
+      return null;
+    }
+
+    return channels.slice(0, 3);
+  }
+
+  function isDarkColor (value) {
+    const channels = parseColor(value);
+    if (!channels) {
+      return null;
+    }
+
+    const [red, green, blue] = channels;
+    const brightness = (red * 299 + green * 587 + blue * 114) / 1000;
+    return brightness < 140;
+  }
+
+  function getParentComputedTheme () {
+    const parentDoc = getParentDocument();
+    if (!parentDoc || !context.getComputedStyle) {
+      return null;
+    }
+
+    try {
+      const candidates = [context.getComputedStyle(parentDoc.documentElement).backgroundColor];
+      if (parentDoc.body) {
+        candidates.push(context.getComputedStyle(parentDoc.body).backgroundColor);
+      }
+
+      for (const candidate of candidates) {
+        const isDark = isDarkColor(candidate);
+        if (isDark !== null) {
+          return isDark;
+        }
+      }
+    } catch (error) {
+      reportIgnoredError("SaltGUI theme: parent style unavailable", error);
+    }
+
+    return null;
+  }
+
   function wantsDarkTheme (configuredTheme) {
     if (configuredTheme === "dark") {
       return true;
@@ -74,6 +133,11 @@
     }
     if (/(^|\s)(dark|night)(\s|$)/.test(hints)) {
       return true;
+    }
+
+    const computedTheme = getParentComputedTheme();
+    if (computedTheme !== null) {
+      return computedTheme;
     }
 
     return mediaQuery ? mediaQuery.matches : false;
