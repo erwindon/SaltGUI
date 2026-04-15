@@ -40,7 +40,7 @@ export class Router {
     this.pages = [];
     Router.currentPage = undefined;
 
-    this._registerPage(new LoginPage(this));
+    this._registerPage(Router.loginPage = new LoginPage(this));
     this._registerPage(Router.minionsPage = new MinionsPage(this));
     this._registerPage(Router.keysPage = new KeysPage(this));
     this._registerPage(Router.grainsPage = new GrainsPage(this));
@@ -72,6 +72,12 @@ export class Router {
     Utils.addToolTip(fab, "Click here or type 'c'\nto show manual run", "fab");
 
     Router.updateMainMenu();
+
+    // In embedded ingress mode, the login callback path may not run.
+    // Load session-dependent settings (including theme preference) when already authenticated.
+    if (Utils.getStorageItem("session", "login_response") !== null) {
+      Router.loginPage.login.bootstrapSession();
+    }
 
     const hash = window.location.hash.replace(/^#/, "");
     const search = window.location.search;

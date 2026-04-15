@@ -4,7 +4,9 @@
   const mediaQuery = context.matchMedia ? context.matchMedia("(prefers-color-scheme: dark)") : null;
 
   function reportIgnoredError (message, error) {
-    context.console?.debug?.(message, error);
+    if (context.console && typeof context.console.debug === "function") {
+      context.console.debug(message, error);
+    }
   }
 
   function getStoredTheme () {
@@ -56,7 +58,7 @@
       parentDoc.documentElement.dataset.theme || "",
       parentDoc.documentElement.getAttribute("theme") || "",
       parentDoc.documentElement.className || "",
-      parentDoc.body?.className || "",
+      parentDoc.body ? parentDoc.body.className : "",
     ].join(" ").toLowerCase();
   }
 
@@ -65,12 +67,22 @@
       return null;
     }
 
+    // Newer engines can return space-separated rgb syntax such as:
+    // rgb(12 34 56 / 0.9)
+    value = value.replace(/\s*\/\s*/g, ", ").replace(/\s+/g, " ");
+
     const rgbMatch = value.match(/^rgba?\(([^)]+)\)$/i);
     if (!rgbMatch) {
       return null;
     }
 
-    const channels = rgbMatch[1].split(",").map((channel) => Number.parseFloat(channel.trim()));
+    let channelParts = rgbMatch[1].split(",").map((channel) => channel.trim()).filter((channel) => channel !== "");
+    if (channelParts.length === 1) {
+      // Legacy fallback for plain space-separated rgb without commas.
+      channelParts = channelParts[0].split(" ").map((channel) => channel.trim()).filter((channel) => channel !== "");
+    }
+
+    const channels = channelParts.map((channel) => Number.parseFloat(channel));
     if (channels.length < 3 || channels.slice(0, 3).some((channel) => Number.isNaN(channel))) {
       return null;
     }
@@ -155,7 +167,11 @@
   };
 
   applyTheme();
-  mediaQuery?.addEventListener("change", applyTheme);
+  if (mediaQuery && typeof mediaQuery.addEventListener === "function") {
+    mediaQuery.addEventListener("change", applyTheme);
+  } else if (mediaQuery && typeof mediaQuery.addListener === "function") {
+    mediaQuery.addListener(applyTheme);
+  }
   context.addEventListener("storage", applyTheme);
 
   const parentDoc = getParentDocument();
