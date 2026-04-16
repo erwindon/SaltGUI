@@ -83,12 +83,12 @@
   --color-text-quiet: #9ab8b5;
   --color-text-accent: #22c7bd;
   --color-text-link: #8fc4ff;
-  --color-text-inverse: #062126;
+  --color-text-inverse: #c8dde0;
   --color-text-code-link: #ffe38f;
   --color-text-tooltip: #062126;
   --color-text-tooltip-error: #24050a;
   --color-text-warning: #ffe3a2;
-  --color-border-accent: rgba(34, 199, 189, 45%);
+  --color-border-accent: rgba(34, 199, 189, 20%);
   --color-border-default: rgba(154, 184, 181, 18%);
   --color-border-control: rgba(154, 184, 181, 18%);
   --color-shadow-panel: 0 18px 40px rgba(0, 0, 0, 38%);
