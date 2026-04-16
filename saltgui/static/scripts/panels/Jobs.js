@@ -296,8 +296,8 @@ export class JobsPanel extends Panel {
     // This element only exists when the user happens to look at the output of that jobId.
     const spans = this.div.querySelectorAll("#status" + jid);
     for (const span of spans) {
-      let oldLevel = Number(span.dataset.level);
-      if (Number.isNaN(oldLevel)) {
+      let oldLevel = span.dataset.level;
+      if (oldLevel === undefined) {
         oldLevel = 0;
       }
       if (newLevel > oldLevel) {

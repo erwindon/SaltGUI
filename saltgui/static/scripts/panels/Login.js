@@ -395,6 +395,7 @@ export class LoginPanel extends Panel {
 
   static _handleLoginWheelConfigValues (pWheelConfigValuesData) {
     const wheelConfigValuesData = pWheelConfigValuesData.return[0].data.return;
+
     const theme = wheelConfigValuesData.saltgui_theme || "auto";
 
     Utils.setStorageItem("session", "theme", theme);
