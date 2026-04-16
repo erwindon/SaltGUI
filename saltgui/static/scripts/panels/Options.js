@@ -205,6 +205,9 @@ export class OptionsPanel extends Panel {
           } else if (pName === "theme") {
             radio.addEventListener("change", () => {
               this._newTheme();
+              if (globalThis.SaltGUITheme && typeof globalThis.SaltGUITheme.applyTheme === "function") {
+                globalThis.SaltGUITheme.applyTheme();
+              }
             });
           } else if (pName === "use-cache-for-grains") {
             radio.addEventListener("change", () => {
@@ -602,6 +605,5 @@ export class OptionsPanel extends Panel {
     const themeTd = this.div.querySelector("#option-theme-value");
     themeTd.innerText = value;
     Utils.setStorageItem("session", "theme", value);
-    globalThis.SaltGUITheme?.applyTheme?.();
   }
 }
