@@ -211,9 +211,6 @@ Allowed values are `auto`, `light`, and `dark`.
 With `auto`, SaltGUI follows the browser color-scheme preference and also uses theme hints from an embedding parent frame when those are available.
 With `light` and `dark`, SaltGUI uses the selected theme unconditionally.
 
-The current value is also visible on the Settings page.
-Changes made there are session-only and do not modify `/etc/salt/master`.
-
 
 ## Templates
 SaltGUI supports command templates for easier command entry into the command-box.

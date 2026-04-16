@@ -163,6 +163,13 @@ table tr td:last-of-type {
   opacity: 0.4;
 }
 
+.button-in-text {
+  background-color: var(--color-background-control-muted);
+  border-radius: 2px;
+  color: var(--color-text-strong);
+  padding: 0 0.25em;
+}
+
 .menu-item-hidden {
   display: none;
 }
@@ -184,6 +191,26 @@ table tr td:last-of-type {
 .jobs td.details > span,
 .jobs td.job-status > span {
   position: relative;
+}
+
+.job-details-success,
+.text-success {
+  color: var(--color-status-accepted);
+}
+
+.job-details-warning,
+.text-warning {
+  color: var(--color-status-caution);
+}
+
+.job-details-failure,
+.text-error {
+  color: var(--color-status-failure);
+}
+
+.job-details-info,
+.text-info {
+  color: var(--color-status-info);
 }
 
 .accepted {
@@ -308,6 +335,17 @@ pre .task-skipped-changes,
 pre .task-failure,
 pre .task-failure-changes {
   cursor: pointer;
+}
+
+.doc-inline-code {
+  background-color: var(--color-background-control-muted);
+  border-radius: 2px;
+  color: var(--color-text-primary);
+  padding: 0 0.25em;
+}
+
+.doc-inline-highlight {
+  color: var(--color-text-code-link);
 }
 
 @media print {

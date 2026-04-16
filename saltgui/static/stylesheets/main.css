@@ -190,6 +190,10 @@ h1 {
   padding: 15px 30px;
 }
 
+.menu-item-dimmed {
+  color: var(--color-menu-dimmed);
+}
+
 .menu-item-active {
   font-weight: bold;
 }
