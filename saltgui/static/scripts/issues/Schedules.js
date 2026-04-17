@@ -38,6 +38,13 @@ export class SchedulesIssues extends Issues {
 
     for (const minionId in allSchedules) {
       const minionData = allSchedules[minionId];
+
+      if (!minionData) {
+        const tr = Issues.addIssue(pPanel, "offline", minionId);
+        Issues.addIssueMsg(tr, "Minion '" + minionId + "' is offline");
+        continue;
+      }
+
       for (const key in minionData) {
         if (key === "enabled") {
           // scheduler flag

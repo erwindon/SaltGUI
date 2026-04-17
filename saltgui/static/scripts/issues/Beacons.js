@@ -49,6 +49,13 @@ export class BeaconsIssues extends Issues {
     const allBeacons = pLocalBeaconsListData.return[0];
     for (const minionId in allBeacons) {
       const minionData = allBeacons[minionId];
+
+      if (!minionData) {
+        const tr = Issues.addIssue(pPanel, "offline", minionId);
+        Issues.addIssueMsg(tr, "Minion '" + minionId + "' is offline");
+        continue;
+      }
+
       for (const beaconName in minionData) {
         if (beaconName === "enabled") {
           // beacons flag
