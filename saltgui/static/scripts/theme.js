@@ -2,7 +2,6 @@
   const context = globalThis;
   const root = document.documentElement;
   const mediaQuery = context.matchMedia ? context.matchMedia("(prefers-color-scheme: dark)") : null;
-  const configuredTheme = "auto";
 
   function reportIgnoredError (message, error) {
     if (context.console && typeof context.console.debug === "function") {
@@ -107,13 +106,6 @@
   }
 
   function wantsDarkTheme () {
-    if (configuredTheme === "dark") {
-      return true;
-    }
-    if (configuredTheme === "light") {
-      return false;
-    }
-
     const hints = getParentHints();
     if (/(^|\s)(light)(\s|$)/.test(hints)) {
       return false;
@@ -131,7 +123,6 @@
   }
 
   function applyTheme () {
-    root.dataset.themePreference = configuredTheme;
     root.dataset.theme = wantsDarkTheme() ? "dark" : "light";
   }
 
