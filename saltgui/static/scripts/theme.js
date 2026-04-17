@@ -2,37 +2,12 @@
   const context = globalThis;
   const root = document.documentElement;
   const mediaQuery = context.matchMedia ? context.matchMedia("(prefers-color-scheme: dark)") : null;
+  const configuredTheme = "auto";
 
   function reportIgnoredError (message, error) {
     if (context.console && typeof context.console.debug === "function") {
       context.console.debug(message, error);
     }
-  }
-
-  function getStoredTheme () {
-    try {
-      const sessionTheme = context.sessionStorage ? context.sessionStorage.getItem("theme") : null;
-      if (sessionTheme) {
-        return sessionTheme;
-      }
-      const defaultTheme = context.localStorage ? context.localStorage.getItem("theme_default") : null;
-      if (defaultTheme) {
-        return defaultTheme;
-      }
-    } catch (error) {
-      // Storage access can fail in restricted browser environments.
-      reportIgnoredError("SaltGUI theme: storage unavailable", error);
-    }
-
-    return "auto";
-  }
-
-  function getConfiguredTheme () {
-    const theme = (getStoredTheme() || "auto").toLowerCase();
-    if (theme === "light" || theme === "dark") {
-      return theme;
-    }
-    return "auto";
   }
 
   function getParentDocument () {
@@ -131,7 +106,7 @@
     return null;
   }
 
-  function wantsDarkTheme (configuredTheme) {
+  function wantsDarkTheme () {
     if (configuredTheme === "dark") {
       return true;
     }
@@ -156,15 +131,9 @@
   }
 
   function applyTheme () {
-    const configuredTheme = getConfiguredTheme();
     root.dataset.themePreference = configuredTheme;
-    root.dataset.theme = wantsDarkTheme(configuredTheme) ? "dark" : "light";
+    root.dataset.theme = wantsDarkTheme() ? "dark" : "light";
   }
-
-  context.SaltGUITheme = {
-    applyTheme,
-    getConfiguredTheme,
-  };
 
   applyTheme();
   if (mediaQuery && typeof mediaQuery.addEventListener === "function") {
@@ -172,7 +141,6 @@
   } else if (mediaQuery && typeof mediaQuery.addListener === "function") {
     mediaQuery.addListener(applyTheme);
   }
-  context.addEventListener("storage", applyTheme);
 
   const parentDoc = getParentDocument();
   if (!parentDoc) {

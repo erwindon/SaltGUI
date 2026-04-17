@@ -201,15 +201,8 @@ When using very old browsers, the required date/time functions may not be presen
 
 
 ## Theme
-SaltGUI can follow the browser preference automatically, or it can be forced to a specific theme by adding the following parameter to salt master configuration file `/etc/salt/master`.
-e.g.:
-```
-saltgui_theme: auto
-```
-
-Allowed values are `auto`, `light`, and `dark`.
-With `auto`, SaltGUI follows the browser color-scheme preference and also uses theme hints from an embedding parent frame when those are available.
-With `light` and `dark`, SaltGUI uses the selected theme unconditionally.
+SaltGUI follows the browser color-scheme preference.
+When SaltGUI is embedded, it also uses theme hints from the parent frame when those are available.
 
 
 ## Templates
