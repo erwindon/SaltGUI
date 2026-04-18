@@ -85,7 +85,7 @@ export class MineMinionPanel extends Panel {
       pDetailsField.innerText = "(none)";
       pDetailsField.classList.add("value-none");
     } else {
-      pDetailsField.innerText = Output.formatObject(data);
+      Output.setHighlightObject(pDetailsField, data);
       pDetailsField.classList.remove("value-none");
     }
   }
@@ -127,12 +127,12 @@ export class MineMinionPanel extends Panel {
       if (Array.isArray(parameters) && parameters.length === 1) {
         parameters = parameters[0];
       }
-      const functionParameter = Output.formatObject(parameters);
 
       this._addMenuItemMineDelete(mineTr.dropdownmenu, pMinionId, mineName);
 
       // menu comes before this data on purpose
-      const functionParameterTd = Utils.createTd("function-parameter", functionParameter);
+      const functionParameterTd = Utils.createTd("function-parameter");
+      Output.setHighlightObject(functionParameterTd, parameters);
       mineTr.appendChild(functionParameterTd);
 
       const functionDataTd = Utils.createTd("function-data", "(click)");

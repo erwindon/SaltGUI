@@ -396,31 +396,40 @@ export class OptionsPanel extends Panel {
     }
   }
 
-  _parseAndFormat (id, valueStr) {
+  _parseAndFormat (pTd, id, valueStr) {
     /* eslint-disable curly */
     if (valueStr === null) valueStr = undefined;
     if (valueStr === "undefined") valueStr = undefined;
     /* eslint-enable curly */
+
     if (valueStr === undefined) {
       const tr = this.div.querySelector("#option-" + id);
       if (tr.dataset.defaultValue) {
-        return "(undefined) " + Character.RIGHTWARDS_ARROW + " " + tr.dataset.defaultValue;
+        pTd.innerText = "(undefined) " + Character.RIGHTWARDS_ARROW + " " + tr.dataset.defaultValue;
+        return;
       }
-      return "(undefined)";
+      pTd.innerText = "(undefined)";
+      return;
     }
+
     if (valueStr.length === 0) {
-      return "(empty string)";
+      pTd.innerText = "(empty string)";
+      return;
     }
+
     if (valueStr[0] !== "{" && valueStr[0] !== "[") {
-      return valueStr;
+      pTd.innerText = valueStr;
+      return;
     }
+
     let value;
     try {
       value = JSON.parse(valueStr);
     } catch (err) {
       value = err + " in \"" + valueStr + "\"";
     }
-    return OutputYaml.formatYAML(value);
+    // because the "master" file is also in YAML
+    Output.setHighlightObject(pTd, value, null, "yaml");
   }
 
   _isSelected (pCategory, pRow, pName) {

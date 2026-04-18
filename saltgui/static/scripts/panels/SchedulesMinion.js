@@ -118,11 +118,12 @@ export class SchedulesMinionPanel extends Panel {
     this._addMenuItemScheduleRunJob(scheduleMenu, pMinionId, scheduleName, schedule);
 
     // menu comes before this data on purpose
-    const scheduleValue = Output.formatObject(schedule);
-    const scheduleValueTd = Utils.createTd("schedule-value", scheduleValue);
+    const scheduleValueTd = Utils.createTd();
+    scheduleValueTd.classList.add("schedule-value");
     if (schedule.enabled === false || schedules.enabled === false) {
       scheduleValueTd.classList.add("schedule-disabled");
     }
+    Output.setHighlightObject(scheduleValueTd, schedule);
     tr.appendChild(scheduleValueTd);
 
     const tbody = this.table.tBodies[0];
