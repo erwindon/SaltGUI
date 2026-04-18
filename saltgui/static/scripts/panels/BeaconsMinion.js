@@ -164,31 +164,44 @@ export class BeaconsMinionPanel extends Panel {
       this._addMenuItemBeaconsEnableBeaconWhenNeeded(beaconMenu, pMinionId, beaconName, beacon);
       this._addMenuItemBeaconsDelete(beaconMenu, pMinionId, beaconName);
 
-      // menu comes before this data on purpose
-      const beaconConfig = Output.formatObject(beacon);
-      const beaconConfigTd = Utils.createTd("beacon-config", beaconConfig);
-      let initialTimestamp = "(waiting)";
-      let initialValue = "(waiting)";
+      const beaconConfigTd = Utils.createTd();
+      Output.setHighlightObject(beaconConfigTd, beacon, "pre");
+      tr.appendChild(beaconConfigTd);
+
+      let initialTimestamp;
+      let initialValue;
+      let initialClass;
       if (beacon.enabled === false) {
-        beaconConfigTd.classList.add("beacon-disabled");
+        initialClass = "beacon-disabled";
         initialTimestamp = Character.EM_DASH;
         initialValue = "(beacon" + Character.NO_BREAK_SPACE + "disabled)";
       } else if (beacons.enabled === false) {
-        beaconConfigTd.classList.add("beacon-disabled");
+        initialClass = "beacon-disabled";
         initialTimestamp = Character.EM_DASH;
         initialValue = "(beacons" + Character.NO_BREAK_SPACE + "disabled)";
+      } else {
+        initialClass = "beacon-waiting";
+        initialTimestamp = "(waiting)";
+        initialValue = "(waiting)";
       }
-      tr.appendChild(beaconConfigTd);
 
       const beaconTimestampTd = Utils.createTd();
-      const beaconTimestampSpan = Utils.createSpan(["beacon-timestamp", "beacon-waiting"], initialTimestamp);
+      const beaconTimestampSpan = Utils.createSpan(["beacon-timestamp", initialClass], initialTimestamp);
       beaconTimestampTd.appendChild(beaconTimestampSpan);
       tr.appendChild(beaconTimestampTd);
       tr.beaconTimestampSpan = beaconTimestampSpan;
 
-      const beaconValueTd = Utils.createTd(["beacon-value", "beacon-waiting"], initialValue);
+      const beaconValueTd = Utils.createTd();
+      const beaconValueLabelDiv = Utils.createDiv();
+      beaconValueLabelDiv.style.display = "none";
+      beaconValueTd.appendChild(beaconValueLabelDiv);
+      const beaconValueValueDiv = Utils.createDiv();
+      beaconValueValueDiv.innerText = initialValue;
+      beaconValueValueDiv.classList.add("beacon-value", initialClass);
+      beaconValueTd.appendChild(beaconValueValueDiv);
       tr.appendChild(beaconValueTd);
-      tr.beaconValueTd = beaconValueTd;
+      tr.beaconValueLabelDiv = beaconValueLabelDiv;
+      tr.beaconValueValueDiv = beaconValueValueDiv;
 
       const tbody = this.table.tBodies[0];
       tbody.appendChild(tr);
@@ -313,7 +326,6 @@ export class BeaconsMinionPanel extends Panel {
       return;
     }
 
-    let value = "";
     let stamp = "";
     if (pData["_stamp"]) {
       // keep timestamp for further logic
@@ -325,13 +337,13 @@ export class BeaconsMinionPanel extends Panel {
 
     if (pTag !== prefix + beaconName + "/") {
       // Show the tag when it has extra information
-      value = pTag + "\n";
+      tr.beaconValueLabelDiv.style.display = "";
+      tr.beaconValueLabelDiv.innerText = pTag;
     }
     if (pData["id"] === minionId) {
       delete pData["id"];
     }
-    value += Output.formatObject(pData);
-    tr.beaconValueTd.classList.remove("beacon-waiting");
+    tr.beaconValueValueDiv.classList.remove("beacon-waiting");
 
     // round down to 0.1 second
     // secondary events are close, but rarely exact on the same time
@@ -370,7 +382,7 @@ export class BeaconsMinionPanel extends Panel {
       tr.helpButtonSpan.style.display = "none";
     }
 
-    tr.beaconValueTd.innerText = value;
+    Output.setHighlightObject(tr.beaconValueValueDiv, pData, "pre");
 
     tr.prevStamp = stamp;
     tr.prevTag = pTag;
