@@ -6,7 +6,7 @@ import {Utils} from "../Utils.js";
 export class SchedulesPanel extends Panel {
 
   constructor () {
-    super("schedules");
+    super("schedules", ["select_minions"]);
 
     this.addTitle("Schedules");
     this.addSearchButton();
@@ -18,11 +18,10 @@ export class SchedulesPanel extends Panel {
   }
 
   onShow () {
+    super.onShow();
+
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const localScheduleListPromise = this.api.getLocalScheduleList(null);
-
-    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
-    this.showSelectColumn(selectVisible);
 
     this.nrMinions = 0;
 
@@ -104,7 +103,7 @@ export class SchedulesPanel extends Panel {
   }
 
   updateOfflineMinion (pMinionId, pMinionsDict) {
-    super.updateOfflineMinion(pMinionId, pMinionsDict, true);
+    super.updateOfflineMinion(pMinionId, pMinionsDict);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
@@ -116,9 +115,9 @@ export class SchedulesPanel extends Panel {
 
     pMinionData = SchedulesPanel.fixSchedulesMinion(pMinionData);
 
-    super.updateMinion(pMinionData, pMinionId, pAllMinionsGrains, true);
+    super.updateMinion(pMinionData, pMinionId, pAllMinionsGrains);
 
-    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), true);
+    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), "select_minions", pMinionId);
 
     minionTr.appendChild(Utils.createTd("minion-id", pMinionId));
 

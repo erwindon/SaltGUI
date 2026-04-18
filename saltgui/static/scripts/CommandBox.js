@@ -423,24 +423,93 @@ export class CommandBox {
     button.disabled = false;
   }
 
-  static getSelectedMinionList () {
+  static _getNodegroupsSelection () {
+    const allNodeGroups = Utils.getStorageItemObject("session", "nodegroups");
+    const allNodeGroupsKeys = Object.keys(allNodeGroups);
+
+    let ret = "";
+    const lst_nodegroups = Utils.getStorageItem("session", "select_nodegroups", null);
+    if (lst_nodegroups) {
+      for (const nodegroup of lst_nodegroups.split(",")) {
+        if (nodegroup === "null") {
+          // the spaces around '(' and before ')' are mandatory
+          // salt-api returns 500-InternalServerError when missing
+          // see also https://docs.saltproject.io/en/latest/topics/targeting/compound.html#precedence-matching
+          ret += " or not ( "
+          let grplst = "";
+          for (const grp of allNodeGroupsKeys) {
+            grplst += " or N@" + grp;
+          }
+          // strip the prefix " or "
+          ret += grplst.substring(4) + " )";
+        } else if (nodegroup) {
+          ret += " or N@" + nodegroup;
+        }
+      }
+    }
+    return ret;
+  }
+
+  static _getMinionSelection () {
+    let ret = "";
+    const lst_minions = Utils.getStorageItem("session", "select_minions", null);
+    if (lst_minions) {
+      let minionlist = "";
+      for (const minion of lst_minions.split(",")) {
+        if (minion) {
+          minionlist += "," + minion;
+        }
+      }
+      if (minionlist) {
+        // substring removes the extra ","
+        ret += " or L@" + minionlist.substring(1);
+      }
+    }
+    return ret;
+  }
+
+  static getSelectedItemList (pSessionKeys) {
     const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
     if (!selectVisible) {
       return null;
     }
 
-    // only when the selection is visible
-    const selectMinions = Utils.getStorageItem("session", "select_minions", "");
-    const lst = selectMinions.split(",").sort();
-    while (lst.length > 0 && lst[0] === "") {
-      lst.shift();
+    let target = "";
+
+    if (pSessionKeys.includes("select_nodegroups")) {
+      target += CommandBox._getNodegroupsSelection();
     }
-    // and only when there is a selection
-    if (lst.length == 0) {
+
+    if (pSessionKeys.includes("select_minions")) {
+      target += CommandBox._getMinionSelection();
+    }
+
+    if (pSessionKeys.includes("select_keys")) {
+      const lst_keys = Utils.getStorageItem("session", "select_keys", null);
+      if (lst_keys) {
+        let keylist = "";
+        for (const key of lst_keys.split(",")) {
+          if (key) {
+            keylist += "," + key;
+          }
+        }
+        // substring removes the extra ","
+        target += " or " + keylist.substring(1);
+      }
+    }
+
+    // remove the extra " or "
+    target = target.substring(4);
+    if (target.startsWith("L@")) {
+      // simplify when we only have the list of minions
+      target = target.substring(2);
+    }
+
+    if (target === "") {
       return null;
     }
 
-    return lst.join(",");
+    return target;
   }
 
   static showManualRun (pApi) {
@@ -498,7 +567,26 @@ export class CommandBox {
     CommandBox._populateTemplateTmplMenu();
     CommandBox._populateTestProviders(pApi);
 
-    const lst = CommandBox.getSelectedMinionList()
+    let lst = null;
+    // different pages have different selection-types
+    // but run-command is available from every page
+    switch (window.location.hash) {
+    case "#minions":
+    case "#grains":
+    case "#schedules":
+    case "#pillars":
+    case "#beacons":
+    case "#highstate":
+      lst = CommandBox.getSelectedItemList(["select_minions"]);
+      break;
+    case "#keys":
+      lst = CommandBox.getSelectedItemList(["select_keys"]);
+      break;
+    case "#nodegroups":
+      lst = CommandBox.getSelectedItemList(["select_minions", "select_nodegroups"]);
+      break;
+    }
+
     if (lst) {
       const targetField = document.getElementById("target");
       targetField.value = lst;
@@ -547,6 +635,7 @@ export class CommandBox {
 
     // The leading # was used to indicate a nodegroup
     if (pTargetType === "nodegroup" && pTarget.startsWith("#")) {
+      // remove the leading "#" as that is not part of the syntax for nodegroups
       pTarget = pTarget.substring(1);
     }
 
