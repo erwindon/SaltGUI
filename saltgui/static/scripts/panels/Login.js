@@ -66,15 +66,7 @@ export class LoginPanel extends Panel {
     aa.rel = "noopener";
 
     const img = Utils.createElem("img");
-    const setGitHubLogo = () => {
-      const isDarkTheme = document.documentElement.dataset.theme === "dark";
-      img.src = isDarkTheme ? "static/images/GitHub_Invertocat_White.png" : "static/images/GitHub_Invertocat_Black.png";
-    };
-    setGitHubLogo();
-    new MutationObserver(setGitHubLogo).observe(document.documentElement, {
-      attributeFilter: ["data-theme"],
-      attributes: true,
-    });
+    img.src = "static/images/GitHub_Invertocat_Black.png";
     img.style = "width: 1em; margin-right: 5px";
     aa.append(img);
 
