@@ -66,13 +66,11 @@ export class OrchestrationsPanel extends Panel {
     for (const key of Object.keys(orchestrations)) {
       keys[orchestrations[key].__sls__] = [];
     }
-    for (const key of Object.keys(orchestrations)) {
-      const orchestration = orchestrations[key];
+    for (const [key,orchestration] of Object.entries(orchestrations)) {
       keys[orchestration.__sls__][key] = orchestration;
     }
     let nrOrchestrations = 0;
-    for (const key of Object.keys(keys).sort()) {
-      const orchestration = keys[key];
+    for (const [key,orchestration] of Object.entries(keys).sort()) {
       if (this._addOrchestration(key, orchestration)) {
         nrOrchestrations += 1;
       }
@@ -87,8 +85,7 @@ export class OrchestrationsPanel extends Panel {
 
     const steps = [];
     let ok = false;
-    for (const name of Object.keys(pOrchestrations)) {
-      const step = pOrchestrations[name];
+    for (const [name,step] of Object.entries(pOrchestrations)) {
       // add key-name to object itself
       step.__key__ = name;
       const salt = step.salt || [];

@@ -58,9 +58,7 @@ export class OutputDocumentation {
     // reduce the search key to match the data in the response
     const commandArg = OutputDocumentation._reduceFilterKey(pCommandArg);
 
-    for (const minionId of Object.keys(pResponse)) {
-
-      const output = pResponse[minionId];
+    for (const output of Object.values(pResponse)) {
 
       if (!output) {
         // some commands do not have help-text
@@ -79,14 +77,14 @@ export class OutputDocumentation {
         return false;
       }
 
-      for (const key of Object.keys(output)) {
+      for (const [key,out] of Object.entries(output)) {
         // e.g. for "test.rand_str"
-        if (output[key] === null) {
+        if (out === null) {
           continue;
         }
 
         // but otherwise it must be a (documentation)string
-        if (typeof output[key] !== "string") {
+        if (typeof out !== "string") {
           return false;
         }
 
@@ -147,7 +145,7 @@ export class OutputDocumentation {
     pFilterKey = OutputDocumentation._reduceFilterKey(pFilterKey);
 
     let selectedMinion = null;
-    for (const minionId of Object.keys(pResponse)) {
+    for (const [minionId,minionResponse] of Object.entries(pResponse)) {
 
       // When we already found the documentation ignore all others
       if (selectedMinion) {
@@ -157,7 +155,7 @@ export class OutputDocumentation {
 
       // make sure it is an object (instead of e.g. "false" for an offline minion)
       // when it is not, the whole entry is ignored
-      if (!pResponse[minionId] || typeof pResponse[minionId] !== "object") {
+      if (!minionResponse || typeof minionResponse !== "object") {
         delete pResponse[minionId];
         continue;
       }
@@ -165,7 +163,6 @@ export class OutputDocumentation {
       // make sure that the entry matches with the requested command or prefix
       // that's always the case for SYS.DOC output, but not for RUNNERS.DOC.RUNNER
       // and/or RUNNERS.DOC.WHEEL.
-      const minionResponse = pResponse[minionId];
       for (const key of Object.keys(minionResponse)) {
 
         // is this what we were looking for?
@@ -205,13 +202,10 @@ export class OutputDocumentation {
 
     // we expect no minionIds present
     // as it should have been reduced already
-    for (const minionId of Object.keys(pResponse)) {
+    for (const minionResponse of Object.values(pResponse)) {
 
-      const minionResponse = pResponse[minionId];
+      for (let [key,out] of Object.entries(minionResponse).sort()) {
 
-      for (const key of Object.keys(minionResponse).sort()) {
-
-        let out = minionResponse[key];
         if (out === null) {
           continue;
         }

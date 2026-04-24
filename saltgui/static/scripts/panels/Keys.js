@@ -117,11 +117,10 @@ export class KeysPanel extends Panel {
 
     const allKeys = pWheelKeyFingerData.return[0].data.return;
 
-    for (const property of Object.keys(allKeys)) {
+    for (const [property,hosts] of Object.entries(allKeys)) {
       if (property === "local") {
         continue;
       }
-      const hosts = allKeys[property];
       for (const minionId of Object.keys(hosts)) {
         const item = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId) + " .os");
         if (item) {
