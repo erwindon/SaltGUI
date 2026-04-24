@@ -78,8 +78,7 @@ export class Page {
 
     const pages = Router._getPagesList();
     const page = Utils.getStorageItem("session", "menu_" + keyUpEvent.key, "");
-    // Arrays.includes() is only available from ES7/2016
-    if (page && (pages.length === 0 || pages.indexOf(page) >= 0)) {
+    if (page && (pages.length === 0 || pages.includes(page))) {
       this.router.goTo(page);
       return true;
     }

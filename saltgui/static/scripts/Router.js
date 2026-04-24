@@ -142,8 +142,7 @@ export class Router {
       document.getElementById("button-" + pButtonId + nr).
         addEventListener("click", (pClickEvent) => {
           const pages = Router._getPagesList();
-          // Arrays.includes() is only available from ES7/2016
-          if (pUrl && (pButtonId === "logout" || pages.length === 0 || pages.indexOf(pButtonId) >= 0)) {
+          if (pUrl && (pButtonId === "logout" || pages.length === 0 || pages.includes(pButtonId))) {
             this.goTo(pUrl);
           }
           // hide the menu, it will stay hidden when the mouse is not over it
@@ -244,8 +243,7 @@ export class Router {
     let visible = true;
 
     // do not show unwanted menu items
-    // Arrays.includes() is only available from ES7/2016
-    if (pPages.length && pPages.indexOf(pPage.path) < 0) {
+    if (pPages.length && !pPages.includes(pPage.path)) {
       visible = false;
     }
 
@@ -262,8 +260,7 @@ export class Router {
     // still show a menu item when a child is visible
     let hasVisibleChild = false;
     for (const page of pChildren) {
-      // Arrays.includes() is only available from ES7/2016
-      if (pPages.indexOf(page) >= 0) {
+      if (pPages.includes(page)) {
         hasVisibleChild = true;
         break;
       }

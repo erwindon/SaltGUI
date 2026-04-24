@@ -1,6 +1,6 @@
 # SaltGUI
 
-SaltGUI is an open source web interface for managing a SaltStack server and its minions. Built using vanilla ES6 and implemented as a wrapper around the rest_cherrypy server a.k.a. salt-api.
+SaltGUI is an open source web interface for managing a SaltStack server and its minions. Built using plain ES2016 and implemented as a wrapper around the rest_cherrypy server a.k.a. salt-api.
 
 **Security Note**: For production deployments, TLS encryption is strongly recommended. See [TLS Configuration](#tls-configuration) for complete setup instructions.
 
@@ -15,6 +15,11 @@ such as `yubico_client`, or execution modules such as `boto3_sns`.
 IMPORTANT: The SaltGUI team can only support SaltStack versions 3006 and higher. Versions before that are no longer published by the SaltStack team.
 That makes it very hard to perform proper testing for SaltGUI releases.
 We suggest to upgrade the SaltStack installation when you are still using a version that is older than that.
+
+IMPORTANT: Since the start of SaltGUI in 2016 and until early 2026, the SaltGUI team used ES6/ES2015 only.
+As time passes, that has now become an old version. We now upgrade SaltGUI to use the ES version that was current 5 years ago.
+That means we do not force that the latest browser is used.
+But note that browsers that are older than that are not detected and failures may then occur.
 
 [![CodeQL](https://github.com/erwindon/SaltGUI/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/erwindon/SaltGUI/actions/workflows/codeql-analysis.yml)
 
@@ -696,7 +701,7 @@ So the simple advice is to upgrade when this occurs.
 
 
 ## Contributing
-Open a PR! Try to use no dependencies where possible, as vanilla JS is the aim. Any libraries will need to be heavily considered first. Please see the section above as PRs won't be reviewed if they don't pass the tests.
+Open a PR! Try to use no dependencies where possible, as plain JS is the aim. Any libraries will need to be heavily considered first. Please see the section above as PRs won't be reviewed if they don't pass the tests.
 
 
 ## Credits
