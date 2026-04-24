@@ -295,7 +295,18 @@ export class CommandBox {
     CommandBox.applyTemplateByTemplate(template);
   }
 
+  static getReadOnlyScreens () {
+    return [
+      "events",
+      "options",
+      "reactors",
+      "templates"
+    ];
+  }
+
   static getScreenModifyingCommands () {
+    // commands marked with "*" can change any page
+    // read-only screens are already filtered out
     return {
       "beacons.add": ["beacons", "beacons-minion"],
       "beacons.delete": ["beacons", "beacons-minion"],
@@ -323,9 +334,9 @@ export class CommandBox {
       "schedule.enable_job": ["schedules-minion", "issues"],
       "schedule.modify": ["schedules", "schedules-minion"],
       "schedule.run_job": ["*"],
-      "state.apply": ["highstate"],
-      "state.highstate": ["highstate"],
-      "state.sls_id": ["issues"]
+      "state.apply": ["*"],
+      "state.highstate": ["*"],
+      "state.sls_id": ["*"]
     };
   }
 
@@ -361,13 +372,16 @@ export class CommandBox {
     button.disabled = true;
     output.innerText = "loading" + Character.HORIZONTAL_ELLIPSIS;
 
+    const readOnlyScreens = CommandBox.getReadOnlyScreens();
     const screenModifyingCommands = CommandBox.getScreenModifyingCommands();
     // test whether the command may have caused an update to the list
     const command = commandValue.split(" ")[0];
     if (command in screenModifyingCommands) {
       // update panel when it may have changed
       for (const panel of Router.currentPage.panels) {
-        if (screenModifyingCommands[command].indexOf(panel.key) >= 0) {
+        if (readOnlyScreens.includes(panel.key)) {
+          // nothing changed on this screen
+        } else if (screenModifyingCommands[command].indexOf(panel.key) >= 0) {
           // Arrays.includes() is only available from ES7/2016
           // the command may have changed a specific panel
           panel.needsRefresh = true;
