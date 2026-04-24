@@ -11,8 +11,7 @@ export class OutputHighstateSummaryOriginal {
 
     let txt = "\nSummary for " + pMinionId;
     txt += "\n------------";
-    const summarySpan = Utils.createSpan("", txt);
-    summarySpan.style.color = "aqua";
+    const summarySpan = Utils.createSpan("text-info", txt);
     pDiv.append(summarySpan);
 
     const total = pSucceeded + pSkipped + pFailed;
@@ -24,7 +23,6 @@ export class OutputHighstateSummaryOriginal {
     if (pChangesSummary > 0) {
       txt = " (";
       const oSpan = Utils.createSpan("", txt);
-      oSpan.style.color = "white";
       pDiv.append(oSpan);
 
       txt = "changed=" + pChangesSummary;
@@ -33,7 +31,6 @@ export class OutputHighstateSummaryOriginal {
 
       txt = ")";
       const cSpan = Utils.createSpan("", txt);
-      cSpan.style.color = "white";
       pDiv.append(cSpan);
     }
 
@@ -42,7 +39,7 @@ export class OutputHighstateSummaryOriginal {
     if (pFailed > 0) {
       failedSpan.classList.add("task-failure");
     } else {
-      failedSpan.style.color = "aqua";
+      failedSpan.classList.add("text-info");
     }
     pDiv.append(failedSpan);
 
@@ -57,7 +54,7 @@ export class OutputHighstateSummaryOriginal {
       if (pFailed > 0) {
         failureSpan.classList.add("task-failure");
       } else {
-        failureSpan.style.color = "aqua";
+        failureSpan.classList.add("text-info");
       }
       pDiv.append(failureSpan);
     }
@@ -65,8 +62,7 @@ export class OutputHighstateSummaryOriginal {
     txt = "\n------------";
     txt += "\nTotal states run: " + total;
     txt += "\nTotal run time: " + Output.getDuration(pTotalMilliSeconds);
-    const totalsSpan = Utils.createSpan("", txt);
-    totalsSpan.style.color = "aqua";
+    const totalsSpan = Utils.createSpan("text-info", txt);
     pDiv.append(totalsSpan);
     pDiv.style.cursor = "pointer";
   }

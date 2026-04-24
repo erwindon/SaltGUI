@@ -17,7 +17,7 @@
 }
 
 .highlight-task {
-  background-color: gray;
+  background-color: var(--color-background-highlight);
 }
 
 #summary-list-job {

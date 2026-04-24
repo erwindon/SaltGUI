@@ -7,5 +7,5 @@ td.schedule-value {
 }
 
 td.schedule-disabled {
-  color: gray;
+  color: var(--color-text-muted);
 }

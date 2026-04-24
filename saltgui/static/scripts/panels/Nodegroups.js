@@ -308,7 +308,7 @@ export class NodegroupsPanel extends Panel {
 
   _addNodegroupRow (pNodegroup, pAllNodegroups) {
     const tr = Utils.createTr("no-search", null, "ng-" + pNodegroup);
-    tr.style.borderTop = "4px double #ddd";
+    tr.style.borderTop = "4px double var(--color-border-default)";
 
     const menuTd = Utils.createTd();
     tr.dropdownmenu = new DropDownMenu(menuTd, "smaller");

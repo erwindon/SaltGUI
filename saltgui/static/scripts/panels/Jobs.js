@@ -302,12 +302,13 @@ export class JobsPanel extends Panel {
       }
       if (newLevel > oldLevel) {
         span.dataset.level = newLevel;
+        span.classList.remove("text-success", "text-warning", "text-error");
         if (newLevel === 1) {
-          span.style.color = "green";
+          span.classList.add("text-success");
         } else if (newLevel === 2) {
-          span.style.color = "orange";
+          span.classList.add("text-warning");
         } else if (newLevel === 3) {
-          span.style.color = "red";
+          span.classList.add("text-error");
         }
       }
       span.style.removeProperty("display");

@@ -260,21 +260,21 @@ export class LoginPanel extends Panel {
       break;
     case "no-session":
       // gray because we cannot prove that the user was/wasnt logged in
-      this._showNoticeText("gray", "Not logged in", "notice_not_logged_in");
+      this._showNoticeText("var(--color-notice-muted)", "Not logged in", "notice_not_logged_in");
       break;
     case "session-cancelled":
-      this._showNoticeText("#F44336", "Session cancelled", "notice-session-cancelled");
+      this._showNoticeText("var(--color-notice-danger)", "Session cancelled", "notice-session-cancelled");
       break;
     case "session-expired":
-      this._showNoticeText("#F44336", "Session expired", "notice-session-expired");
+      this._showNoticeText("var(--color-notice-danger)", "Session expired", "notice-session-expired");
       break;
     case "logout":
       // gray because this is the result of a user action
-      this._showNoticeText("gray", "Logout", "notice_logout");
+      this._showNoticeText("var(--color-notice-muted)", "Logout", "notice_logout");
       break;
     default:
       // should not occur
-      this._showNoticeText("#F44336", reason, "notice_other:" + reason);
+      this._showNoticeText("var(--color-notice-danger)", reason, "notice_other:" + reason);
     }
 
     this._enableLoginControls(true);
@@ -303,11 +303,40 @@ export class LoginPanel extends Panel {
   }
 
   _onLoginSuccess () {
-    this._showNoticeText("#4CAF50", "Please wait" + Character.HORIZONTAL_ELLIPSIS, "notice_please_wait");
+    this._showNoticeText("var(--color-text-accent)", "Please wait" + Character.HORIZONTAL_ELLIPSIS, "notice_please_wait");
 
     Utils.setStorageItem("local", "salt-motd-txt", "");
     Utils.setStorageItem("local", "salt-motd-html", "");
 
+    this.bootstrapSession();
+
+    // allow the success message to be seen
+    window.setTimeout(() => {
+      // erase credentials since we don't do page-refresh
+      this.usernameField.value = "";
+      this.passwordField.value = "";
+      if (Utils.getStorageItem("session", "login_response") !== null) {
+        // we might have been logged out in this first second
+        // e.g. when clock between client and server differs more than the session timout
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("page")) {
+          // a redirect page is specified
+          const params = {};
+          for (const pair of urlParams.entries()) {
+            params[pair[0]] = pair[1];
+          }
+          const page = params["page"];
+          delete params["page"];
+          this.router.goTo(page, params);
+        } else {
+          this.router.goTo("");
+        }
+      }
+    }, 1000);
+
+  }
+
+  bootstrapSession () {
     // We need these functions to populate the dropdown boxes
     const wheelConfigValuesPromise = this.api.getWheelConfigValues();
     const runnerStateOrchestrateShowSlsPromise = this.api.getRunnerStateOrchestrateShowSls();
@@ -338,30 +367,6 @@ export class LoginPanel extends Panel {
       // VOID
     });
     /* eslint-enable no-unused-vars */
-
-    // allow the success message to be seen
-    window.setTimeout(() => {
-      // erase credentials since we don't do page-refresh
-      this.usernameField.value = "";
-      this.passwordField.value = "";
-      if (Utils.getStorageItem("session", "login_response") !== null) {
-        // we might have been logged out in this first second
-        // e.g. when clock between client and server differs more than the session timout
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get("page")) {
-          // a redirect page is specified
-          const params = {};
-          for (const pair of urlParams.entries()) {
-            params[pair[0]] = pair[1];
-          }
-          const page = params["page"];
-          delete params["page"];
-          this.router.goTo(page, params);
-        } else {
-          this.router.goTo("");
-        }
-      }
-    }, 1000);
 
     BeaconsMinionPanel.getAvailableBeacons(this.api);
   }
@@ -517,19 +522,19 @@ export class LoginPanel extends Panel {
   _onLoginFailure (error) {
     if (typeof error === "string") {
       // something detected before trying to login
-      this._showNoticeText("#F44336", error, "notice_login_string_error");
+      this._showNoticeText("var(--color-notice-danger)", error, "notice_login_string_error");
     } else if (error && error.status === 503) {
       // Service Unavailable
       // e.g. salt-api running but salt-master not running
-      this._showNoticeText("#F44336", error.message, "notice_login_service_unavailable");
+      this._showNoticeText("var(--color-notice-danger)", error.message, "notice_login_service_unavailable");
     } else if (error && error.status === -1) {
       // No permissions: login valid, but no api functions executable
       // e.g. PAM says OK and /etc/salt/master says NO
-      this._showNoticeText("#F44336", error.message, "notice_login_other_error");
+      this._showNoticeText("var(--color-notice-danger)", error.message, "notice_login_other_error");
     } else if (error.toString().startsWith("TypeError: NetworkError")) {
-      this._showNoticeText("#F44336", "Network Error", "notice_login_other_error");
+      this._showNoticeText("var(--color-notice-danger)", "Network Error", "notice_login_other_error");
     } else {
-      this._showNoticeText("#F44336", "Authentication failed", "notice_auth_failed");
+      this._showNoticeText("var(--color-notice-danger)", "Authentication failed", "notice_auth_failed");
     }
 
     this._enableLoginControls(true);

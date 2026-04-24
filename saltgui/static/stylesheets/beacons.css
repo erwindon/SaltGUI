@@ -16,5 +16,5 @@
 
 .beacon-disabled,
 .beacon-waiting {
-  color: gray;
+  color: var(--color-text-muted);
 }

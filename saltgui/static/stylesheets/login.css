@@ -9,14 +9,14 @@
 
 @media not print {
   #page-login {
-    background-color: #263238;
+    background-color: var(--color-background-page);
   }
 }
 
 #login-panel {
   align-self: center;
-  background-color: white;
-  box-shadow: 0 0 24px rgba(0, 0, 0, 70%);
+  background-color: var(--color-background-panel);
+  box-shadow: var(--color-shadow-panel);
   border-radius: 2px;
 
   /* 1px needed to prevent bottom margin to disappear when using small screens */
@@ -30,7 +30,7 @@
   font-weight: lighter;
   font-size: 60px;
   width: 100%;
-  color: #505050;
+  color: var(--color-text-primary);
 }
 
 #login-panel input {
@@ -39,13 +39,26 @@
   font-size: 18px;
 }
 
+#login-panel input,
+#login-panel select {
+  background-color: var(--color-background-control);
+  color: var(--color-text-strong);
+  caret-color: var(--color-text-strong);
+  -webkit-text-fill-color: var(--color-text-strong);
+}
+
+#login-panel input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1;
+}
+
 #login-panel select {
   width: 100%;
   font-size: 14px;
 }
 
 #login-panel select option#eauth-default {
-  color: gray;
+  color: var(--color-text-muted);
 }
 
 .attribution {
@@ -64,7 +77,7 @@
 #notice {
   height: 0;
   overflow-y: hidden;
-  color: white;
+  color: var(--color-text-inverse);
   padding: 0;
   border-radius: 2px;
   text-align: center;

@@ -40,7 +40,7 @@ export class Router {
     this.pages = [];
     Router.currentPage = undefined;
 
-    this._registerPage(new LoginPage(this));
+    this._registerPage(Router.loginPage = new LoginPage(this));
     this._registerPage(Router.minionsPage = new MinionsPage(this));
     this._registerPage(Router.keysPage = new KeysPage(this));
     this._registerPage(Router.grainsPage = new GrainsPage(this));
@@ -272,7 +272,7 @@ export class Router {
     // perform the hiding/showing
     for (let nr = 1; nr <= 2; nr++) {
       const item = document.getElementById("button-" + pPage.path + nr);
-      item.style.color = !visible && hasVisibleChild ? "lightgray" : "black";
+      item.classList.toggle("menu-item-dimmed", !visible && hasVisibleChild);
       if (!visible) {
         // hide the shortcut indicator
         item.classList.remove("menu-item-first-letter");

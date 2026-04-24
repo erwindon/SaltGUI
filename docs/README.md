@@ -200,6 +200,11 @@ In all cases, a tooltip is added to a date+time field that shows the full repres
 When using very old browsers, the required date/time functions may not be present. In that case SaltGUI reverts to simply displaying the reported time from the Salt system. The tooltip is then not shown.
 
 
+## Theme
+SaltGUI follows the browser color-scheme preference.
+When SaltGUI is embedded, it also uses theme hints from the parent frame when those are available.
+
+
 ## Templates
 SaltGUI supports command templates for easier command entry into the command-box.
 The menu item for that becomes visible there when you define one or more templates

@@ -440,7 +440,6 @@ export class HighStatePanel extends Panel {
         // for information (keys.length > this._maxHighstateStates)
 
         const span = Utils.createSpan("task");
-        span.style.backgroundColor = "black";
 
         // this also sets the span's class(es)
         Output._setTaskToolTip(span, data);
@@ -516,7 +515,6 @@ export class HighStatePanel extends Panel {
 
           // remove the priority indicator from the key
           const itemSpan = Utils.createSpan(["tasksummary", className], character);
-          itemSpan.style.backgroundColor = "black";
           summarySpan.append(itemSpan);
           Utils.addToolTip(itemSpan, className.replace("task-", "").replace("-", " with "));
         }

@@ -13,12 +13,13 @@ div.search-box .menu-dropdown {
   position: absolute;
   max-height: 300px;
   overflow-y: auto;
-  background: #fff;
-  box-shadow: 0 3px 10px -2px rgba(0, 0, 0, 30%);
-  border: 1px solid rgba(0, 0, 0, 10%);
+  background: var(--color-background-panel);
+  box-shadow: var(--color-shadow-dropdown);
+  border: 1px solid var(--color-border-default);
   z-index: 5;
   cursor: pointer;
   text-align: left;
+  color: var(--color-text-primary);
 }
 
 /* Links inside the menu-dropdown */
@@ -37,7 +38,7 @@ div.search-box .menu-dropdown {
 
 /* Change color of menu-dropdown links on hover */
 .run-command-button .menu-dropdown-content div.run-command-button:hover {
-  background: rgba(0, 0, 0, 15%);
+  background: var(--color-background-hover);
   cursor: pointer;
 }
 
@@ -60,8 +61,8 @@ pre.output .run-command-button {
 }
 
 pre.output .run-command-button:hover .menu-dropdown {
-  background-color: #f9f9f9;
-  color: black;
+  background-color: var(--color-background-control-soft);
+  color: var(--color-text-default);
 }
 
 .dropdown {
@@ -72,8 +73,8 @@ pre.output .run-command-button:hover .menu-dropdown {
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #f9f9f9;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 20%);
+  background-color: var(--color-background-control-soft);
+  box-shadow: var(--color-shadow-dropdown-large);
   z-index: 3;
 }
 
