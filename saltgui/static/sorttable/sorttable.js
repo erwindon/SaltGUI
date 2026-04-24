@@ -60,7 +60,7 @@ export class SortTable {
     const theadrow = clickElement.parentNode;
     for(const cell of theadrow.childNodes) {
       if (cell.nodeType === 1) { // an element
-        if(cell.className.includes("sorttable_sorted")) prev_sorttable_columnindex = cell.sorttable_columnindex;
+        if(cell.classList.contains("sorttable_sorted")) prev_sorttable_columnindex = cell.sorttable_columnindex;
         cell.classList.remove("sorttable_sorted_reverse");
         cell.classList.remove("sorttable_sorted");
       }
