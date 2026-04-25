@@ -518,11 +518,11 @@ export class LoginPanel extends Panel {
     if (typeof error === "string") {
       // something detected before trying to login
       this._showNoticeText("#F44336", error, "notice_login_string_error");
-    } else if (error && error.status === 503) {
+    } else if (error?.status === 503) {
       // Service Unavailable
       // e.g. salt-api running but salt-master not running
       this._showNoticeText("#F44336", error.message, "notice_login_service_unavailable");
-    } else if (error && error.status === -1) {
+    } else if (error?.status === -1) {
       // No permissions: login valid, but no api functions executable
       // e.g. PAM says OK and /etc/salt/master says NO
       this._showNoticeText("#F44336", error.message, "notice_login_other_error");

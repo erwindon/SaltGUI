@@ -801,7 +801,7 @@ export class Panel {
     let saltversion = Character.EM_DASH;
     if (typeof pMinionData === "string") {
       saltversion = "";
-    } else if (pMinionData && pMinionData.saltversion) {
+    } else if (pMinionData?.saltversion) {
       saltversion = pMinionData.saltversion;
       minionTr.dataset.saltversion = saltversion;
     }
@@ -819,9 +819,9 @@ export class Panel {
     let os = Character.EM_DASH;
     if (typeof pMinionData === "string") {
       os = "";
-    } else if (pMinionData && pMinionData.os && pMinionData.osrelease) {
+    } else if (pMinionData?.os && pMinionData?.osrelease) {
       os = pMinionData.os + " " + pMinionData.osrelease;
-    } else if (pMinionData && pMinionData.os) {
+    } else if (pMinionData?.os) {
       os = pMinionData.os;
     }
     if (pMinionData) {

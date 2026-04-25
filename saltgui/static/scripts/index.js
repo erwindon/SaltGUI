@@ -10,7 +10,7 @@ window.onerror = function (msg, url, lineNo, columnNo, error) {
   /* eslint-disable no-console */
   console.log("JS Error:" + msg + ",error:" + error + ",url:" + url + "@" + lineNo + ":" + columnNo);
   /* eslint-enable no-console */
-  if (error && error.stack) {
+  if (error?.stack) {
     /* eslint-disable no-console */
     console.log("Stack:" + error.stack);
     /* eslint-enable no-console */

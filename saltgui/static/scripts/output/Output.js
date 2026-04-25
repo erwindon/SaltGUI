@@ -555,7 +555,7 @@ export class Output {
       // note that really old minions do not return 'retcode'
       return pMinionResponse.retcode === 0;
     }
-    if (pMinionResponse && pMinionResponse.Error) {
+    if (pMinionResponse?.Error) {
       // e.g. runners.jobs.list_job blahblah
       return false;
     }
@@ -1081,7 +1081,7 @@ export class Output {
         "minion-output",
         minionMultiLine ? "minion-output-multiple" : "minion-output-single");
       // hide the per-minion details when we have so many minions
-      if (triangle && triangle.innerText === Character.WHITE_RIGHT_POINTING_TRIANGLE) {
+      if (triangle?.innerText === Character.WHITE_RIGHT_POINTING_TRIANGLE) {
         minionOutput.style.display = "none";
       }
       div.append(minionOutput);

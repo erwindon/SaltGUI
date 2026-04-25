@@ -631,10 +631,10 @@ export class Utils {
     if (!pItem) {
       return true;
     }
-    if (pAllowList && pAllowList.length > 0) {
+    if (pAllowList?.length > 0) {
       return pAllowList.includes(pItem);
     }
-    if (pDenyList && pDenyList.length > 0) {
+    if (pDenyList?.length > 0) {
       return !pDenyList.includes(pItem);
     }
     return true;

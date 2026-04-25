@@ -107,7 +107,7 @@ export class PillarsMinionPanel extends Panel {
 
       // show public pillars immediatelly
       for (const publicPillar of publicPillars) {
-        if (publicPillar && publicPillar.test(pillarName)) {
+        if (publicPillar?.test(pillarName)) {
           // same code as when clicking the hidden value
           pillarHiddenDiv.style.display = "none";
           pillarShownDiv.style.display = "inline-block";

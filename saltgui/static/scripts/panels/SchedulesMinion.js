@@ -61,7 +61,7 @@ export class SchedulesMinionPanel extends Panel {
 
     this.schedulesEnabled = schedules.enabled;
 
-    if (schedules && schedules.enabled === false) {
+    if (schedules?.enabled === false) {
       this.updateTitle("Schedules on " + pMinionId + " (disabled)");
     }
 

@@ -157,7 +157,7 @@ export class HighStatePanel extends Panel {
 
       minionTr.addEventListener("click", (pClickEvent) => {
         const functionField = minionTr.querySelector(".function");
-        if (functionField && functionField.cmd) {
+        if (functionField?.cmd) {
           this.runCommand("", minionId, functionField.cmd);
         } else {
           const cmdArr = ["state.apply"];

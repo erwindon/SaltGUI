@@ -128,7 +128,7 @@ export class BeaconsMinionPanel extends Panel {
 
     this.beaconsEnabled = beacons.enabled;
 
-    if (beacons && beacons.enabled === false) {
+    if (beacons?.enabled === false) {
       this.updateTitle("Beacons on " + pMinionId + " (disabled)");
     }
 

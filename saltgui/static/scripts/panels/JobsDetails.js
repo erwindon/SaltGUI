@@ -325,7 +325,7 @@ export class JobsDetailsPanel extends JobsPanel {
       refreshVisible = false;
     }
     const statusSpan = jobTr.querySelector("td span.job-status");
-    if (statusSpan && statusSpan.innerText === "done") {
+    if (statusSpan?.innerText === "done") {
       // the system said that the job was done
       // but still maybe some results are missing
       // but these are not underway

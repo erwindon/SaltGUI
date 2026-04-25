@@ -10,7 +10,7 @@ export class OutputDocumentation {
 
     // user may already have typed the "."
     // but does not know what to type next
-    if (pFilterKey && pFilterKey.endsWith(".")) {
+    if (pFilterKey?.endsWith(".")) {
       pFilterKey = pFilterKey.replace(/[.]$/, "");
     }
 

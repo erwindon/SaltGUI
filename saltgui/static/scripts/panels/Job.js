@@ -68,7 +68,7 @@ export class JobPanel extends Panel {
 
   _scheduleRefreshJob () {
     const jobsActiveSpan = document.getElementById("summary-jobs-active");
-    if (jobsActiveSpan && jobsActiveSpan.innerText === "done") {
+    if (jobsActiveSpan?.innerText === "done") {
       // no updates after "done"
       this.setPlayPauseButton("none");
       return;
