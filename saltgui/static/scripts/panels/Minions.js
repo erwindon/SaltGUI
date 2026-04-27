@@ -576,6 +576,20 @@ export class MinionsPanel extends Panel {
       ["CVE-2024-38825", MASTER + MINION, ["3006", "1[0-1]"]],
       ["CVE-2024-38825", MASTER + MINION, ["3007", "[0-3]"]],
 
+      ["CVE-2025-6965", MASTER + MINION, ["3006", "[0-9]"]],
+      ["CVE-2025-6965", MASTER + MINION, ["3006", "1[0-4]"]],
+      ["CVE-2025-6965", MASTER + MINION, ["3007", "[0-6]"]],
+
+      ["CVE-2023-13836", MASTER + MINION, ["3006", "[0-9]"]],
+      ["CVE-2023-13836", MASTER + MINION, ["3006", "1[0-8]"]],
+      ["CVE-2023-13836", MASTER + MINION, ["3007", "[0-9]"]],
+      ["CVE-2023-13836", MASTER + MINION, ["3007", "10"]],
+
+      ["CVE-2025-15467", MASTER + MINION, ["3006", "[0-9]"]],
+      ["CVE-2025-15467", MASTER + MINION, ["3006", "1[0-9]"]],
+      ["CVE-2025-15467", MASTER + MINION, ["3007", "[0-9]"]],
+      ["CVE-2025-15467", MASTER + MINION, ["3007", "1[0-1]"]],
+
       ["CVE-2025-22236", MINION, ["3006", "[0-9]"]],
       ["CVE-2025-22236", MINION, ["3006", "1[0-1]"]],
       ["CVE-2025-22236", MINION, ["3007", "[0-3]"]],
@@ -599,9 +613,24 @@ export class MinionsPanel extends Panel {
       ["CVE-2025-22241", MASTER + MINION, ["3006", "[0-9]"]],
       ["CVE-2025-22241", MASTER + MINION, ["3006", "1[0-1]"]],
       ["CVE-2025-22241", MASTER + MINION, ["3007", "[0-3]"]],
+
+      ["CVE-2023-28370", MASTER + MINION, ["3006", "[0-9]"]],
+      ["CVE-2023-28370", MASTER + MINION, ["3006", "1[0-7]"]],
+      ["CVE-2023-28370", MASTER + MINION, ["3007", "[0-9]"]],
+
+      ["CVE-2025-62348", MASTER + MINION, ["3006", "[0-9]"]],
+      ["CVE-2025-62348", MASTER + MINION, ["3006", "1[0-6]"]],
+      ["CVE-2025-62348", MASTER + MINION, ["3007", "[0-8]"]],
+
+      ["CVE-2025-62349", MASTER + MINION, ["3006", "[0-9]"]],
+      ["CVE-2025-62349", MASTER + MINION, ["3006", "1[0-6]"]],
+      ["CVE-2025-62349", MASTER + MINION, ["3007", "[0-8]"]],
     ];
 
-    // the above table is up-to-date until (including) 3006.13 and 3007.5
+    // ADD_RELEASE
+    // the above table is up-to-date until (including) 3006.20 and 3007.13
+    // please file an issue for SaltGUI when a saltstack version newer than that exists
+    // https://github.com/erwindon/SaltGUI/issues/new?template=add_release.md
   }
 
   static _getCveBugs (pVersion, pNodeType) {
