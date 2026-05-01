@@ -628,7 +628,7 @@ export class MinionsPanel extends Panel {
     ];
 
     // ADD_RELEASE
-    // the above table is up-to-date until (including) 3006.20 and 3007.13
+    // the above table is up-to-date until (including) 3006.20 and 3007.14
     // please file an issue for SaltGUI when a saltstack version newer than that exists
     // https://github.com/erwindon/SaltGUI/issues/new?template=add_release.md
   }
