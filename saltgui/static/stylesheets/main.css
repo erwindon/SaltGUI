@@ -284,6 +284,8 @@ pre.output {
   padding: 10px;
   border-radius: 2px;
   white-space: pre-wrap;
+
+  /* border: 1px solid black; */
 }
 
 .run-command pre.output {
