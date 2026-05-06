@@ -34,6 +34,7 @@ export class Character {
     Character.HEAVY_CHECK_MARK = "\u2714";
     Character.HEAVY_MULTIPLICATION_X = "\u2716" + Character._VARIATION_SELECTOR_15;
     Character.BLACK_QUESTION_MARK_ORNAMENT = "\u2753" + Character._VARIATION_SELECTOR_15;
+    Character.HEAVY_NORTH_EAST_ARROW = "\u279A";
     Character._BLACK_MEDIUM_RIGHT_POINTING_TRIANGLE = "\u2BC8";
 
     // D83D DCD6 = 1F4D6 = OPEN BOOK
@@ -57,10 +58,6 @@ export class Character {
 
     Character.CH_SORT_NORMAL = Character._DOWNWARDS_ARROW;
     Character.CH_SORT_REVERSE = Character._UPWARDS_ARROW;
-
-
-    // Images
-    Character.EXTERNAL_LINK_IMG = "<img src='static/images/externallink.png' width='12px'>";
   }
 
   static buttonInText (txt) {
