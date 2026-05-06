@@ -1,5 +1,6 @@
 /* global */
 
+import {Character} from "../Character.js";
 import {DropDownMenu} from "../DropDown.js";
 import {Utils} from "../Utils.js";
 
@@ -105,6 +106,22 @@ export class Issues {
     if (pTr.hasClick !== true) {
       pTr.addEventListener("click", (pClickEvent) => {
         pTr.panel.router.goTo(pPage, pArgs);
+        pClickEvent.stopPropagation();
+      });
+    }
+    pTr.hasClick = true;
+  }
+
+  static addIssueUrl (pTr, pTitle, pUrl) {
+    const title = "Go to " + pTitle + " " + Character.HEAVY_NORTH_EAST_ARROW;
+    pTr.menu.addMenuItem(title, (pClickEvent) => {
+      window.open(pUrl, "_blank");
+      pClickEvent.stopPropagation();
+    });
+
+    if (pTr.hasClick !== true) {
+      pTr.addEventListener("click", (pClickEvent) => {
+        window.open(pUrl, "_blank");
         pClickEvent.stopPropagation();
       });
     }

@@ -402,6 +402,10 @@ this should be solved by fixing the minion, the minion's host or the connection 
 this should be solved by enabling or removing that schedule.
 * States that contain one or more failed tasks
 this should be solved by retrying that state. Note that only all tasks of that state can be retried together.
+* Minions that are not the same version as the master
+this should be solved by upgrading the minion or the master
+* Minions, or the master, for which CVEs are known
+this should be solved by upgrading the minion or the master
 
 Each issue has its own dropdown-menu, which typically contains:
 * One or more salt-commands to fix the situation;

@@ -251,8 +251,8 @@ export class MinionsPanel extends Panel {
 
   static _getCveData () {
     // See https://docs.saltproject.io/en/master/topics/releases/version_numbers.html
-    // See https://cve.mitre.org/cve/search_cve_list.html
-    // See e.g. https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-11652
+    // See https://www.cve.org/
+    // See e.g. https://www.cve.org/CVERecord?id=CVE-2020-11652
     // We do not distinguish between different tools like master/minion/api
     // We compare only the master and minion version and also
     // the master vs. minion version
@@ -784,18 +784,19 @@ export class MinionsPanel extends Panel {
 
         if (txt) {
           txt += "\nUpgrade is highly recommended!";
-          if (allCveKeys.length > 0) {
-            txt += "\nClick to show these CVEs on cve.mitre.org";
-            versionSpan.addEventListener("click", (pClickEvent) => {
-              let url = "https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=";
-              for (let i = 0; i < allCveKeys.length; i++) {
-                url += (i === 0 ? "" : "%20") + allCveKeys[i];
-              }
-              window.open(url);
-              // prevent the click to open the run-dialog
-              pClickEvent.stopPropagation();
-            });
-          }
+          // multi-item search is no longer available on that site
+          // if (allCveKeys.length > 0) {
+          //  txt += "\nClick to show these CVEs on www.cve.org";
+          //  versionSpan.addEventListener("click", (pClickEvent) => {
+          //    let url = "https://www.cve.org/cgi-bin/cvekey.cgi?keyword=";
+          //    for (let i = 0; i < allCveKeys.length; i++) {
+          //      url += (i === 0 ? "" : "%20") + allCveKeys[i];
+          //    }
+          //    window.open(url);
+          //    // prevent the click to open the run-dialog
+          //    pClickEvent.stopPropagation();
+          //  });
+          // }
           Utils.addToolTip(versionSpan, txt.trim(), "error-bottom-left");
         }
       }
