@@ -19,11 +19,11 @@ export class BeaconsIssues extends Issues {
     }, (pLocalBeaconsListMsg) => {
       Issues.removeCategory(pPanel, "disabled-beacons");
       const tr1 = Issues.addIssue(pPanel, "disabled-beacons", "retrieving");
-      Issues.addIssueMsg(tr1, "Could not retrieve list of beacons");
+      Issues.addIssueMsg(tr1, "Could not retrieve list of beacon schedulers");
       Issues.addIssueErr(tr1, pLocalBeaconsListMsg);
       Issues.removeCategory(pPanel, "disabled-beacon");
       const tr2 = Issues.addIssue(pPanel, "disabled-beacon", "retrieving");
-      Issues.addIssueMsg(tr2, "Could not retrieve list of beacon");
+      Issues.addIssueMsg(tr2, "Could not retrieve list of beacons");
       Issues.addIssueErr(tr2, pLocalBeaconsListMsg);
       Issues.readyCategory(pPanel, msg);
       return false;
