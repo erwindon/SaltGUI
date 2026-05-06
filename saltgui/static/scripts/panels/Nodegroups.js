@@ -8,21 +8,24 @@ import {Utils} from "../Utils.js";
 export class NodegroupsPanel extends Panel {
 
   constructor () {
-    super("nodegroups");
+    super("nodegroups", ["select_nodegroups", "select_minions"]);
 
     this.addTitle("Nodegroups");
     this.addPanelMenu();
     this._addMenuItemStateApplyMinion(this.panelMenu, "*");
     this._addMenuItemStateApplyTestMinion(this.panelMenu, "*");
     this.addSearchButton();
+    this.addFilterButton();
     this.addPlayPauseButton();
     this.addWarningField();
-    this.addTable(["-menu-", "Minion", "Status", "Salt version", "OS version"]);
+    this.addTable(["-select-", "-menu-", "Minion", "Status", "Salt version", "OS version"]);
     this.setTableClickable("cmd");
     this.addMsg();
   }
 
   onShow () {
+    super.onShow();
+
     this.nrMinions = 0;
 
     const useCacheGrains = Utils.getStorageItemBoolean("session", "use_cache_for_grains", false);
@@ -79,7 +82,7 @@ export class NodegroupsPanel extends Panel {
   }
 
   updateOfflineMinion (pMinionId, pMinionsDict) {
-    super.updateOfflineMinion(pMinionId, pMinionsDict, false);
+    super.updateOfflineMinion(pMinionId, pMinionsDict);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
@@ -121,7 +124,7 @@ export class NodegroupsPanel extends Panel {
         Utils.addToolTip(minionSpan, "This minion is listed for this nodegroup,\nbut the minion is unknown", "bottom-left");
         this.unknown += 1;
       }
-      minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), false);
+      minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), "select_minions", pMinionId);
       minionTr.appendChild(minionTd);
       minionTr.appendChild(status);
       minionTr.appendChild(Utils.createTd());
@@ -135,6 +138,10 @@ export class NodegroupsPanel extends Panel {
       // duplicate it to put it in its 2nd (3rd,etc) group
       const minionTr2 = minionTr.cloneNode(true);
       nodegroupTr.parentNode.insertBefore(minionTr2, nodegroupTr.nextSibling);
+
+      // fix the select logic
+      const selectTd = minionTr2.querySelector("td");
+      this._addSelectionCheckbox (minionTr2, "select_minions", selectTd);
 
       // fix the click-to-copy-logic
       const addressSpan = minionTr2.querySelector("td.address span");
@@ -156,7 +163,7 @@ export class NodegroupsPanel extends Panel {
       if (oldMenuButton) {
         oldMenuButton.parentElement.remove();
         const newMenuButton = Utils.createTd();
-        minionTr2.insertBefore(newMenuButton, minionTr2.firstChild);
+        minionTr2.insertBefore(newMenuButton, minionTr2.firstChild.nextSibling);
         minionTr2.dropdownmenu = new DropDownMenu(newMenuButton, "smaller");
         if (minionIsOk) {
           this._addMenuItemStateApplyMinion(minionTr2.dropdownmenu, pMinionId);
@@ -199,7 +206,7 @@ export class NodegroupsPanel extends Panel {
         this._moveMinionToNodegroup(minionId, nodegroup, pWheelKeyListAllSimpleData);
       }
 
-      const titleElement = this.table.querySelector("#ng-" + nodegroup + " td:nth-child(2)");
+      const titleElement = this.table.querySelector("#ng-" + nodegroup + " td:nth-child(3)");
       const cnt = nodelist.length;
 
       let txt = Utils.txtZeroOneMany(cnt, "no minions", cnt + " minion", cnt + " minions");
@@ -244,7 +251,7 @@ export class NodegroupsPanel extends Panel {
     this.setPlayPauseButton("none");
     this.todoNodegroups = null;
 
-    const titleElement = this.table.querySelectorAll("#ng-" + null + " td")[1];
+    const titleElement = this.table.querySelectorAll("#ng-" + null + " td")[2];
     const cnt = this.table.rows.length - titleElement.parentElement.rowIndex - 1;
 
     if (cnt === 0) {
@@ -308,7 +315,11 @@ export class NodegroupsPanel extends Panel {
 
   _addNodegroupRow (pNodegroup, pAllNodegroups) {
     const tr = Utils.createTr("no-search", null, "ng-" + pNodegroup);
+    tr.dataset.sessionKey = "select_nodegroups";
+    tr.dataset.selectKey = pNodegroup;
     tr.style.borderTop = "4px double #ddd";
+
+    this._addSelectionCheckbox (tr, "select_nodegroups");
 
     const menuTd = Utils.createTd();
     tr.dropdownmenu = new DropDownMenu(menuTd, "smaller");
@@ -346,7 +357,7 @@ export class NodegroupsPanel extends Panel {
 
     const minionIds = keys.minions.sort();
     for (const minionId of minionIds) {
-      const minionTr = this.addMinion(minionId, false);
+      const minionTr = this.addMinion(minionId);
 
       // preliminary dropdown menu
       this._addMenuItemStateApplyMinion(minionTr.dropdownmenu, minionId);
@@ -361,7 +372,7 @@ export class NodegroupsPanel extends Panel {
   }
 
   updateMinion (pMinionData, pMinionId, pAllNodegroupsGrains) {
-    super.updateMinion(pMinionData, pMinionId, pAllNodegroupsGrains, false);
+    super.updateMinion(pMinionData, pMinionId, pAllNodegroupsGrains);
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
     this._addMenuItemStateApplyMinion(minionTr.dropdownmenu, pMinionId);
@@ -412,14 +423,14 @@ export class NodegroupsPanel extends Panel {
   _addMenuItemStateApplyMinion (pMenu, pMinionId) {
     pMenu.addMenuItem("Apply state...", () => {
       const cmdArr = ["state.apply"];
-      this.runCommand("", pMinionId, cmdArr);
+      this.runCommand("", pMinionId, cmdArr, ["select_minions", "select_nodegroups"]);
     });
   }
 
   _addMenuItemStateApplyTestMinion (pMenu, pMinionId) {
     pMenu.addMenuItem("Test state...", () => {
       const cmdArr = ["state.apply", "test=", true];
-      this.runCommand("", pMinionId, cmdArr);
+      this.runCommand("", pMinionId, cmdArr, ["select_minions", "select_nodegroups"]);
     });
   }
 

@@ -12,7 +12,7 @@ import {Utils} from "../Utils.js";
 export class HighStatePanel extends Panel {
 
   constructor () {
-    super("highstate");
+    super("highstate", ["select_minions"]);
 
     // only consider this number of latest highstate jobs
     this._maxShowHighstates = Utils.getStorageItem("session", "max_show_highstates", 10);
@@ -47,10 +47,9 @@ export class HighStatePanel extends Panel {
   }
 
   onShow () {
-    const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
+    super.onShow();
 
-    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
-    this.showSelectColumn(selectVisible);
+    const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
 
     this.nrMinions = 0;
 
@@ -100,14 +99,14 @@ export class HighStatePanel extends Panel {
   _addMenuItemStateApply (pMenu, pMinionId) {
     pMenu.addMenuItem("Apply state...", () => {
       const cmdArr = ["state.apply"];
-      this.runCommand("", pMinionId, cmdArr, true);
+      this.runCommand("", pMinionId, cmdArr, ["select_minions"]);
     });
   }
 
   _addMenuItemStateApplyTest (pMenu, pMinionId) {
     pMenu.addMenuItem("Test state...", () => {
       const cmdArr = ["state.apply", "test=", true];
-      this.runCommand("", pMinionId, cmdArr, true);
+      this.runCommand("", pMinionId, cmdArr, ["select_minions"]);
     });
   }
 
@@ -366,7 +365,7 @@ export class HighStatePanel extends Panel {
 
       // we already have the TR
       // but this function also clears the row
-      this.getElement(trId, true);
+      this.getElement(trId, "select_minions", minionId);
 
       // mark the TR as populated
       minionTr.jid = pJobId;

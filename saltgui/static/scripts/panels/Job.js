@@ -372,6 +372,7 @@ export class JobPanel extends Panel {
       return null;
     }
 
+    // remove the first comma
     return minionList.substring(1);
   }
 
@@ -419,6 +420,7 @@ export class JobPanel extends Panel {
       return null;
     }
 
+    // remove the first comma
     return minionList.substring(1);
   }
 
@@ -452,6 +454,7 @@ export class JobPanel extends Panel {
       return null;
     }
 
+    // remove the first comma
     return minionList.substring(1);
   }
 
@@ -485,6 +488,7 @@ export class JobPanel extends Panel {
       return null;
     }
 
+    // remove the first comma
     return minionList.substring(1);
   }
 
