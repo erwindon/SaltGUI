@@ -82,7 +82,8 @@ export class GrainsMinionPanel extends Panel {
       this._addMenuItemGrainsDelVal(grainMenu, pMinionId, grainName, grains[grainName]);
 
       // menu comes before this data on purpose
-      const grainValueTd = Utils.createTd("grain-value", grainValue);
+      const grainValueTd = Utils.createTd();
+      Output.setHighlightObject(grainValueTd, grains[grainName]);
       grainTr.appendChild(grainValueTd);
 
       const tbody = this.table.tBodies[0];
