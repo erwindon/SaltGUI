@@ -30,6 +30,7 @@ export class ParseCommandLine {
     return argsArray[0];
   }
 
+  /* eslint-disable max-depth */
   static parseCommandLine (pToRun, pArgsArray, pArgsObject) {
 
     const patPlaceHolder = /^<[a-z]+>/;
@@ -183,4 +184,5 @@ export class ParseCommandLine {
     // succesfull (no error message return)
     return null;
   }
+  /* eslint-enable max-depth */
 }
