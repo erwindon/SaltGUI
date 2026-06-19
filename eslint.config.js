@@ -77,7 +77,7 @@ export default [
   {
     files: ["saltgui/static/scripts/**/*.js"],
     languageOptions: {
-      ecmaVersion: 2021,
+      ecmaVersion: 2025,
       sourceType: "module",
     }
   },
