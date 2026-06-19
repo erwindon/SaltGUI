@@ -2,7 +2,7 @@
 
 **ALERT: SaltGUI does NOT work with SALT 3008.0 (including its 4 RCs) as these releases are broken.**
 
-SaltGUI is an open source web interface for managing a SaltStack server and its minions. Built using plain ES2022 and implemented as a wrapper around the rest_cherrypy server a.k.a. salt-api.
+SaltGUI is an open source web interface for managing a SaltStack server and its minions. Built using plain ES2023 and implemented as a wrapper around the rest_cherrypy server a.k.a. salt-api.
 
 **Security Note**: For production deployments, TLS encryption is strongly recommended. See [TLS Configuration](#tls-configuration) for complete setup instructions.
 
