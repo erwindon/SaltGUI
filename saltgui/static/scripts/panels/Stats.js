@@ -69,7 +69,7 @@ export class StatsPanel extends Panel {
 
   _handleStats (pStatsData) {
     if (this.showErrorRowInstead(pStatsData)) {
-      this.statsTd.innerHTML = "<span style='color:red'>this error is typically caused by using the <tt>collect_stats: True</tt> setting in the master configuration file, which is broken in at least the recent versions of salt-api</span>";
+      this.statsTd.innerHTML = "<span style='color:red'>This error is typically caused by using the <tt>collect_stats: True</tt> setting in the master configuration file, which is broken in at least the recent versions of salt-api</span>";
       window.clearInterval(this.updateStatsInterval);
       this.updateStatsInterval = null;
       return;
@@ -141,6 +141,6 @@ export class StatsPanel extends Panel {
       }
     }
 
-    this.statsTd.innerText = Output.formatObject(pStatsData);
+    Output.setHighlightObject(this.statsTd, pStatsData);
   }
 }
