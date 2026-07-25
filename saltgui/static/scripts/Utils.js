@@ -503,8 +503,7 @@ export class Utils {
   // btoa is the base64 encoder
   static getIdFromMinionId (pMinionId) {
     // prevent eslint: A regular expression literal can be confused with '/='
-    const patEqualSigns = /[=]=*/;
-    return "m" + window.btoa(pMinionId).replace(patEqualSigns, "");
+    return "m" + window.btoa(pMinionId).replace(/[+/=]/g, "_");
   }
 
   // JobIds are in the format 20190529175411210984
