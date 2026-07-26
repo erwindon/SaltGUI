@@ -503,7 +503,7 @@ export class Utils {
   // btoa uses +, / and = which are not valid in CSS selectors
   // use base64url (RFC 4648 §5): replace + with -, / with _, strip padding =
   static getIdFromMinionId (pMinionId) {
-    return "m" + window.btoa(pMinionId).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+    return "m" + window.btoa(pMinionId).replaceAll("+", "-").replaceAll("/", "_").replaceAll("=", "");
   }
 
   // JobIds are in the format 20190529175411210984
