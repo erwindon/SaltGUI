@@ -36,6 +36,7 @@ export class LoginPanel extends Panel {
     username.type = "text";
     username.id = "username";
     username.placeholder = "Username";
+    username.autocomplete = "username";
     username.autofocus = "";
     form.append(username);
     this.usernameField = username;
@@ -44,6 +45,7 @@ export class LoginPanel extends Panel {
     password.type = "password";
     password.id = "password";
     password.placeholder = "Password";
+    password.autocomplete = "current-password";
     form.append(password);
     this.passwordField = password;
 
