@@ -461,23 +461,24 @@ export class API {
       } else if (tag.startsWith("salt/job/") && tag.includes("/ret/")) {
         // return value
         CommandBox.handleSaltJobRetEvent(tag, data);
-        Router.keysPage.handleSaltJobRetEvent(data);
-        Router.jobPage.handleSaltJobRetEvent(data);
-        Router.minionsPage.handleSaltJobRetEvent(data);
-        Router.grainsPage.handleSaltJobRetEvent(data);
-        Router.grainsMinionPage.handleSaltJobRetEvent(data);
-        Router.pillarsPage.handleSaltJobRetEvent(data);
-        Router.pillarsMinionPage.handleSaltJobRetEvent(data);
-        Router.beaconsPage.handleSaltJobRetEvent(data);
         Router.beaconsMinionPage.handleSaltJobRetEvent(data);
-        Router.schedulesPage.handleSaltJobRetEvent(data);
-        Router.schedulesMinionPage.handleSaltJobRetEvent(data);
-        Router.nodegroupsPage.handleSaltJobRetEvent(data);
-        Router.jobsPage.handleSaltJobRetEvent(data);
-        Router.templatesPage.handleSaltJobRetEvent(data);
-        Router.reactorsPage.handleSaltJobRetEvent(data);
+        Router.beaconsPage.handleSaltJobRetEvent(data);
+        Router.grainsMinionPage.handleSaltJobRetEvent(data);
+        Router.grainsPage.handleSaltJobRetEvent(data);
         Router.highStatePage.handleSaltJobRetEvent(data);
         Router.issuesPage.handleSaltJobRetEvent(data);
+        Router.jobPage.handleSaltJobRetEvent(data);
+        Router.jobsPage.handleSaltJobRetEvent(data);
+        Router.keysPage.handleSaltJobRetEvent(data);
+        Router.minionsPage.handleSaltJobRetEvent(data);
+        Router.nodegroupsPage.handleSaltJobRetEvent(data);
+        Router.orchestrationsPage.handleSaltJobRetEvent(data);
+        Router.pillarsMinionPage.handleSaltJobRetEvent(data);
+        Router.pillarsPage.handleSaltJobRetEvent(data);
+        Router.reactorsPage.handleSaltJobRetEvent(data);
+        Router.schedulesMinionPage.handleSaltJobRetEvent(data);
+        Router.schedulesPage.handleSaltJobRetEvent(data);
+        Router.templatesPage.handleSaltJobRetEvent(data);
       } else if (tag.startsWith("salt/job/") && tag.includes("/prog/")) {
         // progress value (exists only for states)
         CommandBox.handleSaltJobProgEvent(tag, data);

@@ -22,4 +22,10 @@ export class OrchestrationsPage extends Page {
     // show orchestrations menu item if orchestrations defined
     return Utils.getStorageItemBoolean("session", "orchestrations");
   }
+
+  handleSaltJobRetEvent (pData) {
+    if (this.jobs) {
+      this.jobs.handleSaltJobRetEvent(pData);
+    }
+  }
 }
