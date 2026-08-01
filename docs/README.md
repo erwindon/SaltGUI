@@ -41,8 +41,8 @@ But note that browsers that are older than that are not detected and failures ma
 - View highstate for all minions with details
 - View issues for all minions with trivial solutions
 - View the values for grains for a particular minion
-- View the schedules for a particular minion
 - View the values for pillars for a particular minion
+- View the schedules for a particular minion
 - View the beacons for a particular minion
 - View the live events on the salt-event bus
 - View internal documentation for any salt command

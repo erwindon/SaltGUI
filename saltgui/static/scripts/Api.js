@@ -466,12 +466,12 @@ export class API {
         Router.minionsPage.handleSaltJobRetEvent(data);
         Router.grainsPage.handleSaltJobRetEvent(data);
         Router.grainsMinionPage.handleSaltJobRetEvent(data);
-        Router.schedulesPage.handleSaltJobRetEvent(data);
-        Router.schedulesMinionPage.handleSaltJobRetEvent(data);
         Router.pillarsPage.handleSaltJobRetEvent(data);
         Router.pillarsMinionPage.handleSaltJobRetEvent(data);
         Router.beaconsPage.handleSaltJobRetEvent(data);
         Router.beaconsMinionPage.handleSaltJobRetEvent(data);
+        Router.schedulesPage.handleSaltJobRetEvent(data);
+        Router.schedulesMinionPage.handleSaltJobRetEvent(data);
         Router.nodegroupsPage.handleSaltJobRetEvent(data);
         Router.jobsPage.handleSaltJobRetEvent(data);
         Router.templatesPage.handleSaltJobRetEvent(data);

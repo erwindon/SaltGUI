@@ -585,9 +585,9 @@ export class CommandBox {
     switch (window.location.hash) {
     case "#minions":
     case "#grains":
-    case "#schedules":
     case "#pillars":
     case "#beacons":
+    case "#schedules":
     case "#highstate":
       lst = CommandBox.getSelectedItemList(["select_minions"]);
       break;

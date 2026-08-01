@@ -170,8 +170,8 @@ export class NodegroupsPanel extends Panel {
           this._addMenuItemStateApplyTestMinion(minionTr2.dropdownmenu, pMinionId);
           this._addMenuItemShowGrains(minionTr2.dropdownmenu, pMinionId);
           this._addMenuItemShowPillars(minionTr2.dropdownmenu, pMinionId);
-          this._addMenuItemShowSchedules(minionTr2.dropdownmenu, pMinionId);
           this._addMenuItemShowBeacons(minionTr2.dropdownmenu, pMinionId);
+          this._addMenuItemShowSchedules(minionTr2.dropdownmenu, pMinionId);
         }
       }
 
@@ -364,8 +364,8 @@ export class NodegroupsPanel extends Panel {
       this._addMenuItemStateApplyTestMinion(minionTr.dropdownmenu, minionId);
       this._addMenuItemShowGrains(minionTr.dropdownmenu, minionId);
       this._addMenuItemShowPillars(minionTr.dropdownmenu, minionId);
-      this._addMenuItemShowSchedules(minionTr.dropdownmenu, minionId);
       this._addMenuItemShowBeacons(minionTr.dropdownmenu, minionId);
+      this._addMenuItemShowSchedules(minionTr.dropdownmenu, minionId);
     }
 
     this.updateFooter();
@@ -379,8 +379,8 @@ export class NodegroupsPanel extends Panel {
     this._addMenuItemStateApplyTestMinion(minionTr.dropdownmenu, pMinionId);
     this._addMenuItemShowGrains(minionTr.dropdownmenu, pMinionId);
     this._addMenuItemShowPillars(minionTr.dropdownmenu, pMinionId);
-    this._addMenuItemShowSchedules(minionTr.dropdownmenu, pMinionId);
     this._addMenuItemShowBeacons(minionTr.dropdownmenu, pMinionId);
+    this._addMenuItemShowSchedules(minionTr.dropdownmenu, pMinionId);
 
     minionTr.addEventListener("click", (pClickEvent) => {
       const cmdArr = ["state.apply"];
@@ -446,12 +446,6 @@ export class NodegroupsPanel extends Panel {
     });
   }
 
-  _addMenuItemShowSchedules (pMenu, pMinionId) {
-    pMenu.addMenuItem("Show schedules", (pClickEvent) => {
-      this.router.goTo("schedules-minion", {"minionid": pMinionId}, undefined, pClickEvent);
-    });
-  }
-
   _addMenuItemShowPillars (pMenu, pMinionId) {
     pMenu.addMenuItem("Show pillars", (pClickEvent) => {
       this.router.goTo("pillars-minion", {"minionid": pMinionId}, undefined, pClickEvent);
@@ -461,6 +455,12 @@ export class NodegroupsPanel extends Panel {
   _addMenuItemShowBeacons (pMenu, pMinionId) {
     pMenu.addMenuItem("Show beacons", (pClickEvent) => {
       this.router.goTo("beacons-minion", {"minionid": pMinionId}, undefined, pClickEvent);
+    });
+  }
+
+  _addMenuItemShowSchedules (pMenu, pMinionId) {
+    pMenu.addMenuItem("Show schedules", (pClickEvent) => {
+      this.router.goTo("schedules-minion", {"minionid": pMinionId}, undefined, pClickEvent);
     });
   }
 }

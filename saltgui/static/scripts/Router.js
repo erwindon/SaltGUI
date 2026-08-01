@@ -45,12 +45,12 @@ export class Router {
     this._registerPage(Router.keysPage = new KeysPage(this));
     this._registerPage(Router.grainsPage = new GrainsPage(this));
     this._registerPage(Router.grainsMinionPage = new GrainsMinionPage(this));
-    this._registerPage(Router.schedulesPage = new SchedulesPage(this));
-    this._registerPage(Router.schedulesMinionPage = new SchedulesMinionPage(this));
     this._registerPage(Router.pillarsPage = new PillarsPage(this));
     this._registerPage(Router.pillarsMinionPage = new PillarsMinionPage(this));
     this._registerPage(Router.beaconsPage = new BeaconsPage(this));
     this._registerPage(Router.beaconsMinionPage = new BeaconsMinionPage(this));
+    this._registerPage(Router.schedulesPage = new SchedulesPage(this));
+    this._registerPage(Router.schedulesMinionPage = new SchedulesMinionPage(this));
     this._registerPage(Router.nodegroupsPage = new NodegroupsPage(this));
     this._registerPage(Router.jobPage = new JobPage(this));
     this._registerPage(Router.jobsPage = new JobsPage(this));
@@ -202,9 +202,9 @@ export class Router {
 
     this._registerMenuItem(null, "minions", "minions", "m");
     this._registerMenuItem("minions", "grains", "grains", "g");
-    this._registerMenuItem("minions", "schedules", "schedules", "s");
     this._registerMenuItem("minions", "pillars", "pillars", "p");
     this._registerMenuItem("minions", "beacons", "beacons", "b");
+    this._registerMenuItem("minions", "schedules", "schedules", "s");
     this._registerMenuItem("minions", "nodegroups", "nodegroups", "n");
     this._registerMenuItem(null, "keys", "keys", "k");
     this._registerMenuItem(null, "jobs", "jobs", "j");
@@ -299,11 +299,11 @@ export class Router {
   static updateMainMenu () {
     const pages = Router._getPagesList();
 
-    Router._showMenuItem(pages, Router.minionsPage, ["grains", "schedules", "pillars", "beacons", "nodegroups"]);
+    Router._showMenuItem(pages, Router.minionsPage, ["grains", "pillars", "beacons", "schedules", "nodegroups"]);
     Router._showMenuItem(pages, Router.grainsPage);
-    Router._showMenuItem(pages, Router.schedulesPage);
     Router._showMenuItem(pages, Router.pillarsPage);
     Router._showMenuItem(pages, Router.beaconsPage);
+    Router._showMenuItem(pages, Router.schedulesPage);
     Router._showMenuItem(pages, Router.nodegroupsPage);
     Router._showMenuItem(pages, Router.keysPage);
     Router._showMenuItem(pages, Router.jobsPage, ["highstate", "orchestrations", "templates"]);

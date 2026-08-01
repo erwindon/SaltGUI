@@ -409,11 +409,11 @@ export class LoginPanel extends Panel {
     const pages = wheelConfigValuesData.saltgui_pages;
     Utils.setStorageItem("session", "pages", JSON.stringify(pages));
 
-    const publicPillars = wheelConfigValuesData.saltgui_public_pillars;
-    Utils.setStorageItem("session", "public_pillars", JSON.stringify(publicPillars));
-
     const previewGrains = wheelConfigValuesData.saltgui_preview_grains;
     Utils.setStorageItem("session", "preview_grains", JSON.stringify(previewGrains));
+
+    const publicPillars = wheelConfigValuesData.saltgui_public_pillars;
+    Utils.setStorageItem("session", "public_pillars", JSON.stringify(publicPillars));
 
     const ipNumberField = wheelConfigValuesData.saltgui_ipnumber_field;
     Utils.setStorageItem("session", "ipnumber_field", ipNumberField);
