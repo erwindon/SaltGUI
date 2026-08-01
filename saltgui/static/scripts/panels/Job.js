@@ -120,6 +120,8 @@ export class JobPanel extends Panel {
   }
 
   onHide () {
+    super.onHide();
+
     if (this.refreshJobTimeout) {
       // stop the timer when nobody is looking
       window.clearTimeout(this.refreshJobTimeout);

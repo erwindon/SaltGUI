@@ -1,4 +1,4 @@
-/* global window */
+/* global */
 
 import {Character} from "../Character.js";
 import {DropDownMenu} from "../DropDown.js";
@@ -39,17 +39,13 @@ export class NodegroupsPanel extends Panel {
     this._addNodegroupsRows();
     this.updateFooter();
 
-    this.setPlayPauseButton("play");
-
     wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
       this._handleNodegroupsWheelKeyListAll(pWheelKeyListAllData);
 
       localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
         this.updateMinions(pLocalGrainsItemsData);
-        this.nodeGroupTimeout = window.setTimeout(() => {
-          this.nodeGroupTimeout = null;
-          this._handleStep(pWheelKeyListAllData.return[0].data.return);
-        }, 100);
+        this.wheelKeyListAllSimpleData = pWheelKeyListAllData.return[0].data.return;
+        this.startLoop(this, 100);
         return true;
       }, (pLocalGrainsItemsMsg) => {
         const allNodegroupsErr = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, JSON.stringify(pLocalGrainsItemsMsg));
@@ -63,14 +59,6 @@ export class NodegroupsPanel extends Panel {
       Utils.ignorePromise(localGrainsItemsPromise);
       return false;
     });
-  }
-
-  onHide () {
-    if (this.nodeGroupTimeout) {
-      // stop the timer when nobody is looking
-      window.clearTimeout(this.nodeGroupTimeout);
-      this.nodeGroupTimeout = null;
-    }
   }
 
   updateFooter () {
@@ -190,23 +178,26 @@ export class NodegroupsPanel extends Panel {
     }
   }
 
-  _handleStepGroup (pWheelKeyListAllSimpleData) {
-    const nodegroup = this.todoNodegroups.shift();
+  loopInit () {
+    return this.todoNodegroups;
+  }
+
+  loopItem (pNodegroup) {
 
     // test group membership with function that is typically hidden
     // note: uses full_data=true
-    const localTestVersion = this.api.getLocalTestVersion(nodegroup);
-    localTestVersion.then((pLocalTestVersionData) => {
+    const localTestVersion = this.api.getLocalTestVersion(pNodegroup);
+    return localTestVersion.then((pLocalTestVersionData) => {
       const retdata = pLocalTestVersionData.return[0];
       // handle the list in reverse order
       const nodelist = Object.keys(retdata).sort().
         reverse();
 
       for (const minionId of nodelist) {
-        this._moveMinionToNodegroup(minionId, nodegroup, pWheelKeyListAllSimpleData);
+        this._moveMinionToNodegroup(minionId, pNodegroup, this.wheelKeyListAllSimpleData);
       }
 
-      const titleElement = this.table.querySelector("#ng-" + nodegroup + " td:nth-child(3)");
+      const titleElement = this.table.querySelector("#ng-" + pNodegroup + " td:nth-child(3)");
       const cnt = nodelist.length;
 
       let txt = Utils.txtZeroOneMany(cnt, "no minions", cnt + " minion", cnt + " minions");
@@ -237,20 +228,15 @@ export class NodegroupsPanel extends Panel {
 
       titleElement.innerHTML = titleElement.innerHTML.replace("(loading)", txt);
 
-      // try again for more
-      this.nodeGroupTimeout = window.setTimeout(() => {
-        this.nodeGroupTimeout = null;
-        this._handleStep(pWheelKeyListAllSimpleData);
-      }, 100);
+      return true;
     }, (pLocalTestVersionMsg) => {
       this.showErrorRowInstead(pLocalTestVersionMsg.toString());
+      // the remaining nodegroups will fail just the same
+      return false;
     });
   }
 
-  _handleStepNoGroup () {
-    this.setPlayPauseButton("none");
-    this.todoNodegroups = null;
-
+  loopEnd () {
     const titleElement = this.table.querySelectorAll("#ng-" + null + " td")[2];
     const cnt = this.table.rows.length - titleElement.parentElement.rowIndex - 1;
 
@@ -280,27 +266,6 @@ export class NodegroupsPanel extends Panel {
     }
 
     titleElement.innerHTML = titleElement.innerHTML.replace("(loading)", txt);
-  }
-
-  _handleStep (pWheelKeyListAllSimpleData) {
-
-    // user can decide
-    // system can decide to remove the play/pause button
-    if (this.playOrPause !== "play") {
-      // try again later for more
-      this.nodeGroupTimeout = window.setTimeout(() => {
-        this.nodeGroupTimeout = null;
-        this._handleStep(pWheelKeyListAllSimpleData);
-      }, 100);
-      return;
-    }
-
-    if (this.todoNodegroups.length === 0) {
-      this._handleStepNoGroup();
-      return;
-    }
-
-    this._handleStepGroup(pWheelKeyListAllSimpleData);
   }
 
   _addNodegroupsRows () {

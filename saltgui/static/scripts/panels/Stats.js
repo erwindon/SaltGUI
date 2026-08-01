@@ -51,6 +51,8 @@ export class StatsPanel extends Panel {
   }
 
   onHide () {
+    super.onHide();
+
     if (this.updateStatsInterval) {
       // stop the timer when nobody is looking
       window.clearInterval(this.updateStatsInterval);

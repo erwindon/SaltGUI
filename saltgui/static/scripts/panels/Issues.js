@@ -1,4 +1,4 @@
-/* global window */
+/* global */
 
 import {BeaconsIssues} from "../issues/Beacons.js";
 import {CveIssues} from "../issues/CVEs.js";
@@ -70,14 +70,4 @@ export class IssuesPanel extends Panel {
     });
   }
 
-  onHide () {
-    // from StateIssues
-    this.jobs = null;
-
-    if (this.issuesStateTimeout) {
-      // stop the timer when nobody is looking
-      window.clearTimeout(this.issuesStateTimeout);
-      this.issuesStateTimeout = null;
-    }
-  }
 }

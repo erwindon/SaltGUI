@@ -1,4 +1,4 @@
-/* global document navigator */
+/* global document navigator window */
 
 import {Character} from "../Character.js";
 import {CommandBox} from "../CommandBox.js";
@@ -1113,6 +1113,9 @@ export class Panel {
   }
 
   clearPanel () {
+    // whatever the loop was collecting, it was for the previous content
+    this.stopLoop();
+
     if (this.title && this.originalTitle.includes(Character.HORIZONTAL_ELLIPSIS)) {
       this.title.innerText = this.originalTitle;
     }
@@ -1209,8 +1212,90 @@ export class Panel {
     }
   }
 
+  // Framework for panels that collect their data with a series of api calls.
+  // The owner provides three functions:
+  //   loopInit()       returns the array with the items to process
+  //   loopItem(pItem)  processes one item and returns a promise; the next
+  //                    item starts when that promise settles; resolve to
+  //                    false to end the loop before all items are done
+  //   loopEnd()        called once, after the last item
+  // The owner is usually the panel itself, but it can also be another object
+  // that fills the panel; e.g. one of the issue-providers.
+  // The play/pause button is maintained here and the loop suspends while the
+  // user has pressed pause. The loop stops when the panel is hidden or
+  // cleared; loopEnd is not called in that case.
+
+  startLoop (pOwner, pIntervalMillis) {
+    // never run two loops in the same panel
+    this.stopLoop();
+    this.loopOwner = pOwner;
+    this.loopIntervalMillis = pIntervalMillis;
+    this.loopItems = pOwner.loopInit() || [];
+    this.setPlayPauseButton(this.loopItems.length === 0 ? "none" : "play");
+    this._loopStep();
+  }
+
+  stopLoop () {
+    if (this.loopTimeout) {
+      // stop the timer when nobody is looking
+      window.clearTimeout(this.loopTimeout);
+    }
+    this.loopTimeout = null;
+    this.loopOwner = null;
+  }
+
+  _loopSchedule (pMillis) {
+    this.loopTimeout = window.setTimeout(() => {
+      this.loopTimeout = null;
+      this._loopStep();
+    }, pMillis);
+  }
+
+  _loopStep () {
+    const owner = this.loopOwner;
+    if (!owner) {
+      // the loop was stopped
+      return;
+    }
+
+    if (this.loopItems.length === 0) {
+      this.stopLoop();
+      this.setPlayPauseButton("none");
+      owner.loopEnd();
+      return;
+    }
+
+    // user can decide to halt screen updates
+    // system can decide to remove the play/pause button
+    if (this.playOrPause !== "play") {
+      // verify again later, without using an item
+      this._loopSchedule(1000);
+      return;
+    }
+
+    const whenDone = (pResult) => {
+      if (this.loopOwner !== owner) {
+        // stopped or restarted while the item was in progress
+        return;
+      }
+      if (pResult === false) {
+        // the owner decided that the other items are no longer needed
+        this.loopItems = [];
+      }
+      this._loopSchedule(this.loopItems.length === 0 ? 0 : this.loopIntervalMillis);
+    };
+
+    // the owner reports its own errors, but when it does not handle
+    // them at all, then at least end the loop properly
+    owner.loopItem(this.loopItems.shift()).then(whenDone, () => whenDone(false));
+  }
+
   onShow () {
     const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
     this.showSelectColumn(selectVisible);
+  }
+
+  onHide () {
+    this.stopLoop();
   }
 }

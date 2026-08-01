@@ -65,6 +65,8 @@ export class JobsDetailsPanel extends JobsPanel {
   }
 
   onHide () {
+    super.onHide();
+
     if (this.updateNextJobInterval) {
       // stop the timer when nobody is looking
       window.clearInterval(this.updateNextJobInterval);

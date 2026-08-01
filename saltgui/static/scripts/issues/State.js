@@ -1,4 +1,4 @@
-/* global window */
+/* global */
 
 import {Issues} from "./Issues.js";
 import {JobsPanel} from "../panels/Jobs.js";
@@ -54,7 +54,7 @@ export class StateIssues extends Issues {
   }
 
   _handleLowstateRunnerJobsListJobs (pPanel, pData, pKeys, pMsg) {
-    // due to filter, all jobs are state.apply jobs
+    // due to filter, all jobs are state jobs
 
     pKeys = pKeys.return[0].data.return.minions;
 
@@ -65,50 +65,41 @@ export class StateIssues extends Issues {
       jobs = jobs.slice(0, MAX_HIGHSTATE_JOBS);
     }
 
-    pPanel.jobs = jobs;
-    // this is good only while "State" is the only issue-provider that uses play/pause
-    pPanel.setPlayPauseButton(jobs.length === 0 ? "none" : "play");
+    // the jobs are sorted newest-first, but they must be handled
+    // oldest-first, so that a problem that was solved in a later
+    // job is removed again from the list of issues
+    jobs.reverse();
 
-    this._updateNextJob(pPanel, pMsg, pKeys);
+    this.panel = pPanel;
+    this.jobs = jobs;
+    this.msg = pMsg;
+    this.keys = pKeys;
+
+    // this is good only while "State" is the only issue-provider that uses play/pause
+    pPanel.startLoop(this, 100);
   }
 
-  _updateNextJob (pPanel, pMsg, pKeys) {
-    if (!pPanel.jobs) {
-      return;
-    }
-    if (!pPanel.jobs.length) {
-      // this is good only while "State" is the only issue-provider
-      pPanel.setPlayPauseButton("none");
-      pPanel.jobs = null;
-      Issues.readyCategory(pPanel, pMsg);
-      return;
-    }
+  loopInit () {
+    return this.jobs;
+  }
 
-    if (pPanel.playOrPause !== "play") {
-      pPanel.issuesStateTimeout = window.setTimeout(() => {
-        pPanel.issuesStateTimeout = null;
-        this._updateNextJob(pPanel, pMsg, pKeys);
-      }, 1000);
-      return;
-    }
+  loopItem (pJob) {
+    const runnerJobsListJobPromise = this.api.getRunnerJobsListJob(pJob.id);
 
-    const job = pPanel.jobs.pop();
-
-    const runnerJobsListJobPromise = this.api.getRunnerJobsListJob(job.id);
-
-    runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
-      StateIssues._handleJobRunnerJobsListJob(pPanel, pRunnerJobsListJobData, pKeys);
-      pPanel.issuesStateTimeout = window.setTimeout(() => {
-        pPanel.issuesStateTimeout = null;
-        this._updateNextJob(pPanel, pMsg, pKeys);
-      }, 100);
+    return runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
+      StateIssues._handleJobRunnerJobsListJob(this.panel, pRunnerJobsListJobData, this.keys);
       return true;
     }, (pRunnerJobsListJobsMsg) => {
-      const tr = Issues.addIssue(pPanel, "state", "retrieving");
-      Issues.addIssueMsg(tr, "Could not retrieve details of job " + job.id);
+      const tr = Issues.addIssue(this.panel, "state", "retrieving");
+      Issues.addIssueMsg(tr, "Could not retrieve details of job " + pJob.id);
       Issues.addIssueErr(tr, pRunnerJobsListJobsMsg);
+      // the remaining jobs will fail just the same
       return false;
     });
+  }
+
+  loopEnd () {
+    Issues.readyCategory(this.panel, this.msg);
   }
 
   static _handleJobRunnerJobsListJob (pPanel, pJobData, pKeys) {

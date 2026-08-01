@@ -1,4 +1,4 @@
-/* global window */
+/* global */
 
 import {Character} from "../Character.js";
 import {JobPanel} from "./Job.js";
@@ -86,14 +86,6 @@ export class HighStatePanel extends Panel {
       Utils.ignorePromise(runnerJobsListJobsPromise);
       return false;
     });
-  }
-
-  onHide () {
-    if (this.nextJobTimeout) {
-      // stop the timer when nobody is looking
-      window.clearTimeout(this.nextJobTimeout);
-      this.nextJobTimeout = null;
-    }
   }
 
   _addMenuItemStateApply (pMenu, pMinionId) {
@@ -191,71 +183,39 @@ export class HighStatePanel extends Panel {
     this.jobs = jobs;
     this.jobsCnt = jobs.length;
 
-    this.setPlayPauseButton(jobs.length === 0 ? "none" : "play");
-
-    this._updateNextJob();
+    this.startLoop(this, 1000);
   }
 
-  _updateNextJob () {
-
-    if (!this.jobs) {
-      // no more work
-      return;
-    }
-
-    // we might have no relevant jobs
-    if (this.jobs.length === 0) {
-      this._afterJob();
-      return;
-    }
-
-    // user can decide to halt screen updates
-    // system can decide to remove the play/pause button
-    if (this.playOrPause === "play") {
-      const job = this.jobs.shift();
-      this._handleJob(job);
-    }
-
-    this.nextJobTimeout = window.setTimeout(() => {
-      this.nextJobTimeout = null;
-      this._updateNextJob();
-    }, 1000);
+  loopInit () {
+    return this.jobs;
   }
 
-  _handleJob (pJob) {
+  loopItem (pJob) {
     const runnerJobsListJobPromise = this.api.getRunnerJobsListJob(pJob.id);
 
-    runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
+    return runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
       this._handleJobsRunnerJobsListJob(pJob.id, pRunnerJobsListJobData);
-      return true;
+      // stop when all minions have a most recent job
+      return !this._allMinionsHaveJob();
     }, (pRunnerJobsListJobMsg) => {
       this._handleJobsRunnerJobsListJob(pJob.id, JSON.stringify(pRunnerJobsListJobMsg));
-      this.jobs = undefined;
+      // the remaining jobs will fail just the same
       return false;
     });
   }
 
-  _afterJob () {
-    let cnt = 0;
+  _allMinionsHaveJob () {
     const tbody = this.table.tBodies[0];
     for (const tr of tbody.rows) {
       if (tr.jid === undefined) {
-        cnt += 1;
+        return false;
       }
     }
-    if (cnt === 0) {
-      // all minions have a most recent job
-      this.jobs = [];
-    }
+    return true;
+  }
 
-    if (this.jobs && this.jobs.length !== 0) {
-      // more work later
-      return;
-    }
-
-    // cause timer to stop
-    this.jobs = undefined;
-    this.setPlayPauseButton("none");
+  loopEnd () {
+    const tbody = this.table.tBodies[0];
 
     let foundMinionWithoutJob = false;
     for (const tr of tbody.rows) {
@@ -339,7 +299,6 @@ export class HighStatePanel extends Panel {
 
     const saltEnv = HighStatePanel._getJobNamedParam("saltenv", jobData, "default");
     if (!Utils.isIncluded(saltEnv, this._showSaltEnvs, this._hideSaltEnvs)) {
-      this._afterJob();
       return;
     }
 
@@ -418,7 +377,6 @@ export class HighStatePanel extends Panel {
       if (typeof minionResult.return !== "object" || Array.isArray(minionResult.return)) {
         Utils.addErrorToTableCell(tasksTd, minionResult.return);
         minionTr.appendChild(tasksTd);
-        this._afterJob();
         return;
       }
 
@@ -531,8 +489,6 @@ export class HighStatePanel extends Panel {
 
       minionTr.appendChild(tasksTd);
     }
-
-    this._afterJob();
   }
 
   _addJobsMenuItemShowDetails (pMenu, pJob, pMinionId) {

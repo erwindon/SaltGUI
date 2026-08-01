@@ -386,6 +386,8 @@ export class OptionsPanel extends Panel {
   }
 
   onHide () {
+    super.onHide();
+
     if (this.updateExpiresInterval) {
       // stop the timer when nobody is looking
       window.clearInterval(this.updateExpiresInterval);
