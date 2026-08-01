@@ -5,7 +5,7 @@ import {assert} from "chai";
 
 describe("Unittests for Utils.js", () => {
 
-  it("test getQueryParam2", (done) => {
+  it("test getQueryParam2", () => {
     let result;
 
     // no parameters
@@ -48,8 +48,6 @@ describe("Unittests for Utils.js", () => {
     // it has implicit parameter windows.location which we will not fake
     result = Utils.getQueryParam("lkhlkfhlaskdhfljk");
     assert.equal(result, undefined);
-
-    done();
   });
 
 });

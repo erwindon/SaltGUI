@@ -11,7 +11,7 @@ Character.init();
 
 describe("Unittests for Output.js", () => {
 
-  it("test formatJSON", (done) => {
+  it("test formatJSON", () => {
 
     let outputData, result;
 
@@ -106,11 +106,9 @@ describe("Unittests for Output.js", () => {
       "        \"lo\": [ \"::1\" ]\n" +
       "    }\n" +
       "}");
-
-    done();
   });
 
-  it("test formatYAML", (done) => {
+  it("test formatYAML", () => {
 
     let outputData, result;
 
@@ -205,11 +203,9 @@ describe("Unittests for Output.js", () => {
       "  -\u00A0fe80::20d:3aff:fe38:576b\n" +
       "  lo:\n" +
       "  -\u00A0::1");
-
-    done();
   });
 
-  it("test formatNESTED", (done) => {
+  it("test formatNESTED", () => {
 
     let outputData, result;
 
@@ -308,11 +304,9 @@ describe("Unittests for Output.js", () => {
       "        -\u00A0fe80::20d:3aff:fe38:576b\n" +
       "    lo:\n" +
       "        -\u00A0::1");
-
-    done();
   });
 
-  it("test isDocumentationOutput", (done) => {
+  it("test isDocumentationOutput", () => {
 
     let outputData, result;
 
@@ -355,11 +349,9 @@ describe("Unittests for Output.js", () => {
     outputData = {"host1": null, "host2": {"keyword": "explanation"}};
     result = OutputDocumentation.isDocumentationOutput(outputData, "sys.doc", "keyword");
     assert.isTrue(result);
-
-    done();
   });
 
-  it("test isDocuKeyMatch", (done) => {
+  it("test isDocuKeyMatch", () => {
 
     let result;
 
@@ -386,11 +378,9 @@ describe("Unittests for Output.js", () => {
     // wrong match (even though text prefix)
     result = OutputDocumentation._isDocuKeyMatch("food", "foo");
     assert.isFalse(result);
-
-    done();
   });
 
-  it("test reduceDocumentationOutput", (done) => {
+  it("test reduceDocumentationOutput", () => {
     let out;
 
     // normal case, hostname replaced by search key
@@ -422,11 +412,9 @@ describe("Unittests for Output.js", () => {
     out = {"host1": 123, "host2": 321};
     OutputDocumentation.reduceDocumentationOutput(out, "DUMMY", "topic");
     assert.deepEqual(out, {"dummy": {"DUMMY": "no documentation found"}});
-
-    done();
   });
 
-  it("test documentation external link conversion", (done) => {
+  it("test documentation external link conversion", () => {
     // external links will be converted to html
     const container = {"innerHTML": ""};
     const output = {"host1": {"pkg.install": "`systemd-run(1)`_\n .. _`systemd-run(1)`: https://www.freedesktop.org/software/systemd/man/systemd-run.html"}};
@@ -434,8 +422,6 @@ describe("Unittests for Output.js", () => {
     assert.isTrue(
       container.innerHTML.includes(
         "<a href='https://www.freedesktop.org/software/systemd/man/systemd-run.html' target='_blank' rel='noopener'><span style='color: yellow'>systemd-run(1)</span></a>"));
-
-    done();
   });
 
 

@@ -14,7 +14,7 @@ const testTargetType = function (targetType, targetPattern) {
 
 describe("Unittests for TargetType.js", () => {
 
-  it("test makeTargetText", (done) => {
+  it("test makeTargetText", () => {
 
     let result;
 
@@ -64,8 +64,6 @@ describe("Unittests for TargetType.js", () => {
     // ipcidr - Match based on Subnet (CIDR notation) or IPv4 address.
     result = testTargetType("ipcidr", "10.0.0.0/24");
     assert.equal(result, "ipcidr 10.0.0.0/24");
-
-    done();
   });
 
 });

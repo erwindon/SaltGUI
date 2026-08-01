@@ -8,7 +8,7 @@ Character.init();
 
 describe("Unittests for ParseCommandLine.js", () => {
 
-  it("test parseCommandLine", (done) => {
+  it("test parseCommandLine", () => {
     let args = [];
     let params = {};
     let result;
@@ -468,8 +468,6 @@ describe("Unittests for ParseCommandLine.js", () => {
     assert.equal(args.length, 1);
     assert.equal(args[0], "FAlse");
     assert.equal(Object.keys(params).length, 0);
-
-    done();
   });
 
 });
