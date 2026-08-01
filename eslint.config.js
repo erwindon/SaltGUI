@@ -72,6 +72,8 @@ const baseConfig = {
 export default [
   baseConfig,
 
+  // the application runs in the browser and therefore uses the ES version
+  // that was current 5 years ago, so that older browsers keep working
   {
     files: ["saltgui/static/scripts/**/*.js"],
     languageOptions: {
@@ -80,10 +82,14 @@ export default [
     }
   },
 
+  // the tests run in nodejs and not in a browser,
+  // so they may use a newer ES version
+  // this version may not be lower than the web-application
+  // this version may be increased at any moment without notice
   {
     files: ["tests/**/*.js"],
     languageOptions: {
-      ecmaVersion: "latest",
+      ecmaVersion: 2022,
       sourceType: "module",
     }
   }
