@@ -5,6 +5,11 @@ const timeoutMs = 60_000;
 const intervalMs = 1000;
 const start = Date.now();
 
+/* eslint-disable compat/compat */
+/* Promise is not supported in op_mini all */
+const sleep = (ms) => new Promise(resolve => globalThis.setTimeout(resolve, ms));
+/* eslint-enable compat/compat */
+
 for (;;) {
   try {
     /* eslint-disable compat/compat */
@@ -31,9 +36,6 @@ for (;;) {
     break;
   }
 
-  /* eslint-disable compat/compat */
-  /* Promise is not supported in op_mini all */
   // wait before trying again
-  await new Promise(resolve => globalThis.setTimeout(resolve, intervalMs));
-  /* eslint-enable compat/compat */
+  await sleep(intervalMs);
 }
