@@ -220,9 +220,7 @@ export class Router {
 
   _registerPage (pPage) {
     this.pages.push(pPage);
-    if (pPage.onRegister) {
-      pPage.onRegister();
-    }
+    pPage.onRegister();
   }
 
   static _getPagesList () {
@@ -468,8 +466,6 @@ export class Router {
       // Hide element after fade, so it does not expand the body
       page.style.display = "none";
     }, 500);
-    if (pPage.onHide) {
-      pPage.onHide();
-    }
+    pPage.onHide();
   }
 }

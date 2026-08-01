@@ -151,11 +151,23 @@ export class Page {
     });
   }
 
+  /* eslint-disable class-methods-use-this */
+  onRegister () {
+  /* eslint-enable class-methods-use-this */
+    // a page does nothing when registered, unless the page decides otherwise
+  }
+
   onShow () {
     for (const panel of this.panels) {
       panel.onShow();
     }
     Page._updateMotd();
+  }
+
+  /* eslint-disable class-methods-use-this */
+  onHide () {
+  /* eslint-enable class-methods-use-this */
+    // a page does nothing when hidden, unless the page decides otherwise
   }
 
   clearPage () {
