@@ -500,11 +500,10 @@ export class Utils {
 
   // MinionIds cannot directly be used as IDs for HTML elements
   // the id may contain characters that are not allowed in an ID
-  // btoa is the base64 encoder
+  // btoa (the base64 encoder) uses +, / and = which are not valid in CSS selectors
+  // use base64url (RFC 4648 §5): replace + with -, / with _, strip padding =
   static getIdFromMinionId (pMinionId) {
-    // prevent eslint: A regular expression literal can be confused with '/='
-    const patEqualSigns = /[=]=*/;
-    return "m" + window.btoa(pMinionId).replace(patEqualSigns, "");
+    return "m" + window.btoa(pMinionId).replaceAll("+", "-").replaceAll("/", "_").replaceAll("=", "");
   }
 
   // JobIds are in the format 20190529175411210984
