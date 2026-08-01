@@ -1,4 +1,4 @@
-/* global */
+/* global console window */
 
 /* istanbul ignore file */
 import {Router} from "./Router.js";

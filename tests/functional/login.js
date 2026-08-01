@@ -1,4 +1,4 @@
-/* global afterEach beforeEach describe it process */
+/* global afterEach beforeEach console document describe it process */
 
 import puppeteer from "puppeteer";
 import {assert} from "chai";
@@ -7,7 +7,7 @@ const url = "http://localhost:3333/";
 
 /* eslint-disable compat/compat */
 /* Promise is not supported in op_mini all */
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const sleep = (ms) => new Promise(resolve => globalThis.setTimeout(resolve, ms));
 /* eslint-enable compat/compat */
 
 /* eslint-disable func-names */

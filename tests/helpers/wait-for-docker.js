@@ -1,4 +1,4 @@
-/* global process */
+/* global console process */
 
 const url = process.env.DOCKER_URL || "http://localhost:3333/";
 const timeoutMs = 60_000;
@@ -9,7 +9,7 @@ for (;;) {
   try {
     /* eslint-disable compat/compat */
     /* fetch is not supported in op_mini all */
-    const res = await fetch(url);
+    const res = await globalThis.fetch(url);
     /* eslint-enable compat/compat */
 
     if (res.ok) {
@@ -34,6 +34,6 @@ for (;;) {
   /* eslint-disable compat/compat */
   /* Promise is not supported in op_mini all */
   // wait before trying again
-  await new Promise(resolve => setTimeout(resolve, intervalMs));
+  await new Promise(resolve => globalThis.setTimeout(resolve, intervalMs));
   /* eslint-enable compat/compat */
 }

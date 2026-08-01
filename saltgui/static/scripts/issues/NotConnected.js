@@ -1,4 +1,4 @@
-/* global */
+/* global console */
 
 import {Issues} from "./Issues.js";
 import {Utils} from "../Utils.js";

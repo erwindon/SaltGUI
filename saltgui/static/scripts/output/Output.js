@@ -1,4 +1,4 @@
-/* global */
+/* global Blob document MouseEvent window */
 
 import {Character} from "../Character.js";
 import {OutputDocumentation} from "./OutputDocumentation.js";

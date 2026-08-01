@@ -1,4 +1,4 @@
-/* global */
+/* global console */
 
 import {Character} from "../Character.js";
 import {Panel} from "./Panel.js";

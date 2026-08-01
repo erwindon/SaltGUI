@@ -1,4 +1,4 @@
-/* global config */
+/* global config EventSource window */
 
 import {Character} from "./Character.js";
 import {CommandBox} from "./CommandBox.js";

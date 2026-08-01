@@ -1,4 +1,4 @@
-/* global config */
+/* global config document URLSearchParams window */
 
 import {API} from "./Api.js";
 import {BeaconsMinionPage} from "./pages/BeaconsMinion.js";
@@ -190,7 +190,7 @@ export class Router {
         pClickEvent.stopPropagation();
       });
 
-    addEventListener("popstate", (popstate) => {
+    window.addEventListener("popstate", (popstate) => {
       const hash = popstate.target.location.hash.replace(/^#/, "");
       const search = popstate.target.location.search;
       /* eslint-disable compat/compat */

@@ -1,4 +1,4 @@
-/* global */
+/* global document navigator */
 
 import {Character} from "../Character.js";
 import {CommandBox} from "../CommandBox.js";

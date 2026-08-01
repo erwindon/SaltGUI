@@ -1,4 +1,4 @@
-/* global */
+/* global document */
 
 import {CommandBox} from "../CommandBox.js";
 import {Router} from "../Router.js";

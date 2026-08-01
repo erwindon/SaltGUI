@@ -1,4 +1,4 @@
-/* global */
+/* global console document URLSearchParams window */
 
 import {BeaconsMinionPanel} from "../panels/BeaconsMinion.js";
 import {Character} from "../Character.js";

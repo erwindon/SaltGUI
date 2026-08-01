@@ -1,4 +1,4 @@
-/* global */
+/* global document window */
 
 import {Page} from "./Page.js";
 import {Utils} from "../Utils.js";
@@ -52,7 +52,7 @@ export class LogoutPage extends Page {
         // may happen due to https://github.com/saltstack/salt/issues/59620
         // repeating this is not so useful
         if (this.logoutInterval) {
-          clearInterval(this.logoutInterval);
+          window.clearInterval(this.logoutInterval);
           this.logoutInterval = null;
         }
         return;

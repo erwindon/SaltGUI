@@ -1,4 +1,4 @@
-/* global */
+/* global window */
 
 import {Issues} from "./Issues.js";
 import {JobsPanel} from "../panels/Jobs.js";

@@ -1,4 +1,4 @@
-/* global */
+/* global document */
 
 import {DropDownMenu} from "../DropDown.js";
 import {Panel} from "./Panel.js";

@@ -1,4 +1,4 @@
-/* global */
+/* global window */
 
 import {BeaconsIssues} from "../issues/Beacons.js";
 import {CveIssues} from "../issues/CVEs.js";

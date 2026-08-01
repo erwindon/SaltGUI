@@ -34,6 +34,7 @@ const baseConfig = {
       "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
       "no-redeclare": "error",
       "no-ternary": "off",
+      "no-undef": "error",
       "no-undef-init": "error",
       "no-undefined": "off",
       "no-underscore-dangle": "off",

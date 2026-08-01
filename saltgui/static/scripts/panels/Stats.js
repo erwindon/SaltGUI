@@ -1,4 +1,4 @@
-/* global */
+/* global window */
 
 import {Character} from "../Character.js";
 import {Output} from "../output/Output.js";

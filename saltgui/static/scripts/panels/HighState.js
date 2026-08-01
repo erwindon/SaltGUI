@@ -1,4 +1,4 @@
-/* global */
+/* global window */
 
 import {Character} from "../Character.js";
 import {JobPanel} from "./Job.js";
