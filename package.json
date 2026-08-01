@@ -10,7 +10,6 @@
     "@babel/core": "^7.29.7",
     "@babel/preset-env": "^7.29.7",
     "@babel/register": "^7.29.7",
-    "@eslint/js": "^9.39.2",
     "babel-plugin-istanbul": "^8.0.0",
     "chai": "^6.2.2",
     "eslint": "^10.8.0",
@@ -66,8 +65,8 @@
     ]
   },
   "scripts": {
-    "eslint": "eslint saltgui/static/scripts tests/",
-    "eslint:fix": "eslint saltgui/static/scripts tests/ --fix",
+    "eslint": "eslint saltgui/static/scripts tests/ eslint.config.js",
+    "eslint:fix": "eslint saltgui/static/scripts tests/ eslint.config.js --fix",
     "stylelint": "stylelint 'saltgui/static/stylesheets/*.css'",
     "wait-for-docker": "node tests/helpers/wait-for-docker.js",
     "test:unit": "mocha --trace-warnings --check-leaks --reporter spec tests/unit/",
