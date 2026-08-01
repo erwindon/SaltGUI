@@ -24,6 +24,11 @@ const optionalFiles = [
 const isMissingOptionalFile = (msg) => msg.text().includes("404") &&
   optionalFiles.some((file) => msg.location().url.endsWith(file));
 
+// one test logs in with invalid credentials on purpose
+// the browser reports the rejection as a 401 on the console
+const isRejectedLogin = (msg) => msg.text().includes("401") &&
+  msg.location().url.endsWith("/login");
+
 /* eslint-disable func-names */
 describe("Functional tests", function () {
 /* eslint-enable func-names */
@@ -55,8 +60,8 @@ describe("Functional tests", function () {
 
     // Capture console logs
     page.on("console", (msg) => {
-      if (isMissingOptionalFile(msg)) {
-        // the absence of an optional file is not a problem
+      if (isMissingOptionalFile(msg) || isRejectedLogin(msg)) {
+        // this message is expected, it is not a problem
         return;
       }
       /* eslint-disable no-console */
