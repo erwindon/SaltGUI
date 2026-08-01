@@ -8,7 +8,7 @@ import {Utils} from "../Utils.js";
 export class IssuesPage extends Page {
 
   constructor (pRouter) {
-    super("issues", "issues", "page-issues", "button-issues", pRouter);
+    super("issues", "Issues", "page-issues", "button-issues", pRouter);
 
     this.issues = new IssuesPanel();
     super.addPanel(this.issues);
