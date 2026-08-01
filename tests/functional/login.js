@@ -10,6 +10,20 @@ const url = "http://localhost:3333/";
 const sleep = (ms) => new Promise(resolve => globalThis.setTimeout(resolve, ms));
 /* eslint-enable compat/compat */
 
+// these files are optional and are not present during test
+// the browser reports their absence as a 404 on the console
+// see the SaltGUI documentation for their purpose
+const optionalFiles = [
+  "/static/minions.txt",
+  "/static/salt-auth.txt",
+  "/static/salt-motd.html",
+  "/static/salt-motd.txt"
+];
+
+// note that the text after the status code varies per webserver
+const isMissingOptionalFile = (msg) => msg.text().includes("404") &&
+  optionalFiles.some((file) => msg.location().url.endsWith(file));
+
 /* eslint-disable func-names */
 describe("Functional tests", function () {
 /* eslint-enable func-names */
@@ -41,6 +55,10 @@ describe("Functional tests", function () {
 
     // Capture console logs
     page.on("console", (msg) => {
+      if (isMissingOptionalFile(msg)) {
+        // the absence of an optional file is not a problem
+        return;
+      }
       /* eslint-disable no-console */
       console.log(`[console][${msg.type()}] ${msg.text()} in ${msg.location().url}`);
       /* eslint-enable no-console */
