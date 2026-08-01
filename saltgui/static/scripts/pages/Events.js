@@ -6,7 +6,7 @@ import {Page} from "./Page.js";
 export class EventsPage extends Page {
 
   constructor (pRouter) {
-    // don't use /events for the page, that url is reserved
+    // there is no (technical) confusion with API call "/events" because we use only "#events"
     super("events", "Events", "page-events", "button-events", pRouter);
 
     this.events = new EventsPanel();
