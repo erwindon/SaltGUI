@@ -13,7 +13,7 @@ export class EventsPage extends Page {
     super.addPanel(this.events);
   }
 
-  handleAnyEvent (tag, data) {
-    this.events.handleAnyEvent(tag, data);
+  handleAnyEvent (pTag, pData) {
+    this.events.handleAnyEvent(pTag, pData);
   }
 }
