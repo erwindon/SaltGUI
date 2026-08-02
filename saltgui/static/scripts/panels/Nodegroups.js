@@ -205,17 +205,24 @@ export class NodegroupsPanel extends Panel {
       let txt = Utils.txtZeroOneMany(cnt, "no minions", cnt + " minion", cnt + " minions");
       let online = 0;
       let offline = 0;
-      let problems = 0;
+      let nrUnaccepted = 0;
+      let nrRejected = 0;
+      let nrDenied = 0;
+      let nrUnknown = 0;
       for (const minionId of nodelist) {
         const minionData = retdata[minionId];
         if (minionData === false) {
           offline += 1;
         } else if (minionData.retcode === 0) {
           online += 1;
+        } else if (this.wheelKeyListAllSimpleData.minions_pre.indexOf(minionId) >= 0) {
+          nrUnaccepted += 1;
+        } else if (this.wheelKeyListAllSimpleData.minions_rejected.indexOf(minionId) >= 0) {
+          nrRejected += 1;
+        } else if (this.wheelKeyListAllSimpleData.minions_denied.indexOf(minionId) >= 0) {
+          nrDenied += 1;
         } else {
-          // that's an error message
-          // e.g. unaccepted minion or unknown minion
-          problems += 1;
+          nrUnknown += 1;
         }
       }
       if (online !== cnt) {
@@ -224,8 +231,17 @@ export class NodegroupsPanel extends Panel {
       if (offline !== 0) {
         txt += ", " + offline + " offline";
       }
-      if (problems !== 0) {
-        txt += ", " + Utils.txtZeroOneMany(problems, "no problems", "{0} problem", "{0} problems");
+      if (nrUnaccepted !== 0) {
+        txt += ", " + nrUnaccepted + " unaccepted";
+      }
+      if (nrRejected !== 0) {
+        txt += ", " + nrRejected + " rejected";
+      }
+      if (nrDenied !== 0) {
+        txt += ", " + nrDenied + " denied";
+      }
+      if (nrUnknown !== 0) {
+        txt += ", " + nrUnknown + " unknown";
       }
 
       titleElement.innerHTML = titleElement.innerHTML.replace("(loading)", txt);
