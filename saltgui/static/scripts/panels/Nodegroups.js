@@ -150,17 +150,19 @@ export class NodegroupsPanel extends Panel {
 
       if (oldMenuButton) {
         oldMenuButton.parentElement.remove();
-        const newMenuButton = Utils.createTd();
-        minionTr2.insertBefore(newMenuButton, minionTr2.firstChild.nextSibling);
-        minionTr2.dropdownmenu = new DropDownMenu(newMenuButton, "smaller");
-        if (minionIsOk) {
-          this._addMenuItemStateApplyMinion(minionTr2.dropdownmenu, pMinionId);
-          this._addMenuItemStateApplyTestMinion(minionTr2.dropdownmenu, pMinionId);
-          this._addMenuItemShowGrains(minionTr2.dropdownmenu, pMinionId);
-          this._addMenuItemShowPillars(minionTr2.dropdownmenu, pMinionId);
-          this._addMenuItemShowBeacons(minionTr2.dropdownmenu, pMinionId);
-          this._addMenuItemShowSchedules(minionTr2.dropdownmenu, pMinionId);
-        }
+      }
+      const newMenuButton = Utils.createTd();
+      minionTr2.insertBefore(newMenuButton, minionTr2.firstChild.nextSibling);
+      minionTr2.dropdownmenu = new DropDownMenu(newMenuButton, "smaller");
+      if (minionIsOk) {
+        this._addMenuItemStateApplyMinion(minionTr2.dropdownmenu, pMinionId);
+        this._addMenuItemStateApplyTestMinion(minionTr2.dropdownmenu, pMinionId);
+        this._addMenuItemShowGrains(minionTr2.dropdownmenu, pMinionId);
+        this._addMenuItemShowPillars(minionTr2.dropdownmenu, pMinionId);
+        this._addMenuItemShowBeacons(minionTr2.dropdownmenu, pMinionId);
+        this._addMenuItemShowSchedules(minionTr2.dropdownmenu, pMinionId);
+      } else {
+        this._addMenuItemShowKeys(minionTr2.dropdownmenu);
       }
 
       if (minionIsOk) {
