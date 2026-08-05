@@ -1,6 +1,6 @@
 # SaltGUI
 
-**ALERT: SaltGUI does NOT work with SALT 3008.0 (including its 4 RCs) as these releases are broken.**
+**ALERT: SaltGUI does not work with SALT 3008.0 or 3008.1 as these releases are broken. 3008.2 is mostly ok. See below for details. **
 
 SaltGUI is an open source web interface for managing a SaltStack server and its minions. Built using plain ES2021 and implemented as a wrapper around the rest_cherrypy server a.k.a. salt-api.
 
@@ -707,6 +707,26 @@ In older versions of Chrome and Edge, the "pause" icon is shown in its "emoji" f
 This also happens for the looking-glass icon in the search field.
 This problem does not occur in recent versions of these browsers.
 So the simple advice is to upgrade when this occurs.
+
+### SALT 3008
+SaltGUI does not work well with SALT 3008.X on at least Debian Linux.
+The reason is that these versions have bugs in the API that SaltGUI uses.
+Normal commandline use may be unaffected though.
+Results may be different on other platforms.
+
+Here is a list of versions that we tested and their result:
+
+| Version | Result |
+| --- | --- |
+| 3008.0rc1 | Broken: invalid session after about one minute |
+| 3008.0rc2 | Broken: invalid session after about one minute |
+| 3008.0rc3 | Broken: invalid session after about one minute |
+| 3008.0rc4 | Broken: invalid session after about one minute |
+| 3008.0 | Broken: invalid session after about one minute |
+| 3008.1 | Broken: invalid session after about one minute |
+| 3008.1-1 | Broken: invalid session after about one minute |
+| 3008.1-2 | Broken: invalid session after about one minute |
+| 3008.2 | Mostly useable. event-api is broken, so Events screen does not work |
 
 
 ## Contributing
