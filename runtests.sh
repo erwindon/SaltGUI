@@ -12,7 +12,7 @@ killall --quiet Xvfb
 set -e
 
 # add testing packages
-npm install
+npm install --ignore-scripts
 
 # first see if we write es6 compatible js
 npm run eslint
