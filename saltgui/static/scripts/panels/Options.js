@@ -108,6 +108,10 @@ export class OptionsPanel extends Panel {
         "tooltip-mode", "saltgui", "full",
         [["mode", "full", "simple", "none"]]
       ],
+      [
+        "show-all-menuitems", "saltgui", "false",
+        [["show-all-menuitems", "true", "false"]]
+      ],
 
       /* last because it might be very long */
       ["custom-command-help", "saltgui", "(none)"]
@@ -197,6 +201,10 @@ export class OptionsPanel extends Panel {
           } else if (pName === "full-return") {
             radio.addEventListener("change", () => {
               this._newFullReturn();
+            });
+          } else if (pName === "show-all-menuitems") {
+            radio.addEventListener("change", () => {
+              this._newShowAllMenuItems();
             });
           } else if (pName === "use-cache-for-grains") {
             radio.addEventListener("change", () => {
@@ -583,5 +591,17 @@ export class OptionsPanel extends Panel {
     const fullReturnTd = this.div.querySelector("#option-full-return-value");
     fullReturnTd.innerText = value;
     Utils.setStorageItem("session", "full_return", value);
+  }
+
+  _newShowAllMenuItems () {
+    let value = "";
+    /* eslint-disable curly */
+    if (this._isSelected("show-all-menuitems", "show-all-menuitems", "false")) value = "false";
+    if (this._isSelected("show-all-menuitems", "show-all-menuitems", "true")) value = "true";
+    /* eslint-enable curly */
+    const showAllMenuItemsTd = this.div.querySelector("#option-show-all-menuitems-value");
+    showAllMenuItemsTd.innerText = value;
+    Utils.setStorageItem("session", "show_all_menuitems", value);
+    Router.updateMainMenu();
   }
 }

@@ -109,8 +109,8 @@ export class Router {
       }
       const itemDiv = Utils.createDiv("run-command-button menu-item", pButtonId, "button-" + pButtonId + "1");
       if (pKey) {
-        // currently applies to all, but just in case
         itemDiv.classList.add("menu-item-first-letter");
+        itemDiv.dataset.hasShortcut = "true";
       }
       dropdownContent.append(itemDiv);
     } else {
@@ -118,6 +118,7 @@ export class Router {
       dropDownDiv.append(topItemDiv);
       if (pKey) {
         topItemDiv.classList.add("menu-item-first-letter");
+        topItemDiv.dataset.hasShortcut = "true";
       }
     }
 
@@ -131,6 +132,7 @@ export class Router {
     }
     if (pKey) {
       menuItemDiv.classList.add("menu-item-first-letter");
+      menuItemDiv.dataset.hasShortcut = "true";
     }
     dropdownContent2.append(menuItemDiv);
 
@@ -245,8 +247,9 @@ export class Router {
       visible = false;
     }
 
-    // do not show pages that have no actual content
-    if (!pPage.isVisible()) {
+    // do not show pages that have no actual content (unless forced)
+    const showAllMenuItems = Utils.getStorageItemBoolean("session", "show_all_menuitems");
+    if (!showAllMenuItems && !pPage.isVisible()) {
       visible = false;
     }
 
@@ -268,8 +271,11 @@ export class Router {
     for (let nr = 1; nr <= 2; nr++) {
       const item = document.getElementById("button-" + pPage.path + nr);
       item.style.color = !visible && hasVisibleChild ? "lightgray" : "black";
-      if (!visible) {
-        // hide the shortcut indicator
+      if (visible && item.dataset.hasShortcut === "true") {
+        // show the shortcut indicator only when item is enabled
+        item.classList.add("menu-item-first-letter");
+      } else {
+        // hide the shortcut indicator when item is disabled or hidden
         item.classList.remove("menu-item-first-letter");
       }
       if (visible || hasVisibleChild) {

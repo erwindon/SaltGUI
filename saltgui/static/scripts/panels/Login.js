@@ -498,6 +498,9 @@ export class LoginPanel extends Panel {
     const fullReturn = wheelConfigValuesData.saltgui_full_return;
     Utils.setStorageItem("session", "full_return", fullReturn);
 
+    const showAllMenuItems = wheelConfigValuesData.saltgui_show_all_menuitems;
+    Utils.setStorageItem("session", "show_all_menuitems", showAllMenuItems);
+
     Utils.setStorageItem("session", "select_visible", "false");
     Utils.setStorageItem("session", "select_minions", ",");
     Utils.setStorageItem("session", "select_keys", ",");
