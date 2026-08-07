@@ -9,7 +9,7 @@ ENV SALT_VERSION=3007.6
 ENV DEBIAN_FRONTEND=noninteractive
 
 # get saltstack software
-RUN yum install --assumeyes epel-release curl
+RUN yum install --assumeyes ca-certificates epel-release curl
 
 # install salt-minion
 # not using repo, so must explicitly do all packages
