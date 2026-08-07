@@ -6,7 +6,7 @@
 set -ex
 
 cd dockerfiles
-tag=3007.6
+tag=3007.14
 # Check if push is requested
 PUSH_IMAGES=""
 if [ "$1" = "--push" ]; then
