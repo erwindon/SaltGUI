@@ -1,4 +1,4 @@
-FROM dokken/centos-stream-9:latest
+FROM dokken/centos-stream-10:latest
 
 LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
 LABEL name=salt-minion
