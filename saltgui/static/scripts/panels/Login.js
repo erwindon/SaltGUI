@@ -409,7 +409,12 @@ export class LoginPanel extends Panel {
     Utils.setStorageItem("session", "reactors", JSON.stringify(reactors));
 
     const pages = wheelConfigValuesData.saltgui_pages;
-    Utils.setStorageItem("session", "pages", JSON.stringify(pages));
+    // Filter pages to only current user for privacy
+    const loginResponse = Utils.getStorageItemObject("session", "login_response");
+    if (loginResponse && loginResponse.user && typeof pages === "object" && loginResponse.user in pages) {
+      const filteredPages = pages[loginResponse.user];
+      Utils.setStorageItem("session", "pages", JSON.stringify(filteredPages));
+    }
 
     const previewGrains = wheelConfigValuesData.saltgui_preview_grains;
     Utils.setStorageItem("session", "preview_grains", JSON.stringify(previewGrains));

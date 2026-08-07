@@ -108,6 +108,7 @@ export class OptionsPanel extends Panel {
         "tooltip-mode", "saltgui", "full",
         [["mode", "full", "simple", "none"]]
       ],
+      ["pages", "saltgui", "(all)"],
       [
         "show-all-menuitems", "saltgui", "false",
         [["show-all-menuitems", "true", "false"]]

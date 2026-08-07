@@ -226,16 +226,16 @@ export class Router {
   }
 
   static _getPagesList () {
-    const pages = Utils.getStorageItemObject("session", "pages");
-    const userName = Utils.getStorageItemObject("session", "login_response").user;
-    if (!userName || typeof pages !== "object" || !(userName in pages)) {
+    const pages = Utils.getStorageItem("session", "pages");
+    if (!pages) {
       return [];
     }
-    const ret = pages[userName];
-    if (!ret || ret[0] === "*") {
+    try {
+      const result = JSON.parse(pages);
+      return Array.isArray(result) ? result : [];
+    } catch (err) { // eslint-disable-line no-unused-vars
       return [];
     }
-    return ret;
   }
 
   static _showMenuItem (pPages, pPage, pChildren = []) {
