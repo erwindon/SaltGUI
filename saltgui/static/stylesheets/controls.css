@@ -2,7 +2,8 @@
 
 input,
 select {
-  color: #272727;
+  color: var(--text-primary);
+  background-color: var(--bg-panel);
   padding: 7px 10px;
   display: inline-block;
   margin-bottom: 15px;
@@ -14,24 +15,24 @@ select {
 input[type="text"],
 input[type="password"],
 select {
-  border: 2px solid #e2e2e2;
+  border: 2px solid var(--border-color-input);
   border-radius: 2px;
 }
 
 input[type="text"]:focus,
 input[type="password"]:focus,
 select:focus {
-  border: 2px solid #4caf50;
+  border: 2px solid var(--border-color-focus);
 }
 
 input[type="submit"] {
-  background-color: #4caf50;
+  background-color: var(--color-primary);
   color: white;
   border: 0;
   margin-top: 5px;
   margin-bottom: 0;
   cursor: pointer;
-  box-shadow: 0 0 5px rgba(33, 33, 33, 50%);
+  box-shadow: 0 0 5px var(--shadow-color);
   width: 20%;
   min-width: 200px;
 }

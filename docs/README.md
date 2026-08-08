@@ -57,6 +57,7 @@ But note that browsers that are older than that are not detected and failures ma
 - Choose between live info and cached info for grains/pillar
 - View details of orchestrations and allow to start them
 - Act on multiple minions/keys/nodegroups by first selecting them
+- Follows dark-mode selection from the browser
 
 
 ## Quick start using PAM as authentication method

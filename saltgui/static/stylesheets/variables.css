@@ -1,0 +1,115 @@
+/* CSS Variables for light and dark modes */
+
+:root {
+  /* Light mode colors (default) */
+  --bg-body: #263238;
+  --bg-header: white;
+  --bg-panel: white;
+  --bg-panel-hover: whitesmoke;
+  --bg-dropdown: #f9f9f9;
+  --bg-output: #272727;
+  --bg-output-hover: #484848;
+  --bg-tooltip: rgba(76, 175, 80, 80%);
+  --bg-small-button: #eee;
+  --bg-table-hover: whitesmoke;
+  --bg-popup-overlay: rgba(0, 0, 0, 86%);
+  --bg-menu-hover: rgba(0, 0, 0, 15%);
+  --bg-login-panel: white;
+  --bg-warning: yellow;
+
+  /* text */
+  --text-primary: black;
+  --text-secondary: #505050;
+  --text-tertiary: #666;
+  --text-light: gray;
+  --text-output: white;
+  --text-small-button: #666;
+  --text-logo: #4caf50;
+  --text-login: #505050;
+
+  /* color */
+  --color-primary: #4caf50;
+  --color-primary-dark: #2e7d32;
+  --color-link-output: yellow;
+  --color-address: #3f51b5;
+  --color-success: lime;
+  --color-success-active: greenyellow;
+  --color-failure: red;
+  --color-skipped: yellow;
+  --color-changed: aqua;
+  --color-accepted: green;
+  --color-denied: magenta;
+  --color-unaccepted: red;
+  --color-rejected: blue;
+  --color-offline: red;
+
+  /* border */
+  --border-color: #ddd;
+  --border-color-input: #e2e2e2;
+  --border-color-focus: #4caf50;
+  --border-color-header: #4caf50;
+
+  /* shadow */
+  --shadow-color: rgba(33, 33, 33, 50%);
+  --shadow-dropdown: rgba(0, 0, 0, 20%);
+  --shadow-dropdown-dark: rgba(0, 0, 0, 30%);
+  --shadow-login: rgba(0, 0, 0, 70%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark mode colors */
+    --bg-body: #1a1a1a;
+    --bg-header: #2a2a2a;
+    --bg-panel: #2a2a2a;
+    --bg-panel-hover: #3a3a3a;
+    --bg-dropdown: #3a3a3a;
+    --bg-output: #1a1a1a;
+    --bg-output-hover: #2a2a2a;
+    --bg-tooltip: rgba(76, 175, 80, 90%);
+    --bg-small-button: #3a3a3a;
+    --bg-table-hover: #3a3a3a;
+    --bg-popup-overlay: rgba(0, 0, 0, 93%);
+    --bg-menu-hover: rgba(255, 255, 255, 15%);
+    --bg-login-panel: #2a2a2a;
+    --bg-warning: #650;
+
+    /* text */
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --text-tertiary: #909090;
+    --text-light: gray;
+    --text-output: #e0e0e0;
+    --text-small-button: #b0b0b0;
+    --text-logo: #4caf50;
+    --text-login: #b0b0b0;
+
+    /* color */
+    --color-primary: #4caf50;
+    --color-primary-dark: #66bb6a;
+    --color-link-output: yellow;
+    --color-address: #7986cb;
+    --color-success: lime;
+    --color-success-active: greenyellow;
+    --color-failure: red;
+    --color-skipped: yellow;
+    --color-changed: aqua;
+    --color-accepted: lime;
+    --color-denied: magenta;
+    --color-unaccepted: red;
+    --color-rejected: blue;
+    --color-offline: red;
+
+    /* border */
+    --border-color: #4a4a4a;
+    --border-color-input: #5a5a5a;
+    --border-color-focus: #4caf50;
+    --border-color-header: #4caf50;
+
+    /* shadow */
+    --shadow-color: rgba(0, 0, 0, 70%);
+    --shadow-dropdown: rgba(0, 0, 0, 40%);
+    --shadow-dropdown-dark: rgba(0, 0, 0, 50%);
+    --shadow-login: rgba(0, 0, 0, 90%);
+  }
+}
