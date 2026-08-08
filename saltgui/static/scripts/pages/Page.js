@@ -77,7 +77,7 @@ export class Page {
     }
 
     const pages = Router._getPagesList();
-    const page = Utils.getStorageItem("session", "menu_" + keyUpEvent.key, "");
+    const page = Router.keyBindings[keyUpEvent.key];
     if (page && (pages.length === 0 || pages.includes(page))) {
       this.router.goTo(page);
       return true;
