@@ -270,7 +270,11 @@ export class Router {
     // perform the hiding/showing
     for (let nr = 1; nr <= 2; nr++) {
       const item = document.getElementById("button-" + pPage.path + nr);
-      item.style.color = !visible && hasVisibleChild ? "lightgray" : "black";
+      if (!visible && hasVisibleChild) {
+        item.classList.add("menu-item-dimmed");
+      } else {
+        item.classList.remove("menu-item-dimmed");
+      }
       if (visible && item.dataset.hasShortcut === "true") {
         // show the shortcut indicator only when item is enabled
         item.classList.add("menu-item-first-letter");

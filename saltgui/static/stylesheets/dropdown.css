@@ -13,12 +13,13 @@ div.search-box .menu-dropdown {
   position: absolute;
   max-height: 300px;
   overflow-y: auto;
-  background: #fff;
-  box-shadow: 0 3px 10px -2px rgba(0, 0, 0, 30%);
+  background: var(--bg-dropdown);
+  box-shadow: 0 3px 10px -2px var(--shadow-dropdown-dark);
   border: 1px solid rgba(0, 0, 0, 10%);
   z-index: 5;
   cursor: pointer;
   text-align: left;
+  color: var(--text-primary);
 }
 
 /* Links inside the menu-dropdown */
@@ -60,8 +61,8 @@ pre.output .run-command-button {
 }
 
 pre.output .run-command-button:hover .menu-dropdown {
-  background-color: #f9f9f9;
-  color: black;
+  background-color: var(--bg-dropdown);
+  color: var(--text-primary);
 }
 
 .dropdown {
@@ -72,9 +73,10 @@ pre.output .run-command-button:hover .menu-dropdown {
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #f9f9f9;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 20%);
+  background-color: var(--bg-dropdown);
+  box-shadow: 0 8px 16px 0 var(--shadow-dropdown);
   z-index: 3;
+  color: var(--text-primary);
 }
 
 .dropdown:hover .dropdown-content {
