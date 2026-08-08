@@ -39,6 +39,7 @@ export class Router {
     this.commandbox = new CommandBox(this, this.api);
     this.pages = [];
     Router.currentPage = undefined;
+    Router.keyBindings = {};
 
     this._registerPage(new LoginPage(this));
     this._registerPage(Router.minionsPage = new MinionsPage(this));
@@ -87,7 +88,7 @@ export class Router {
     // shortcut
 
     if (pKey) {
-      Utils.setStorageItem("session", "menu_" + pKey, pUrl);
+      Router.keyBindings[pKey] = pUrl;
     }
 
     // full menu
@@ -218,6 +219,12 @@ export class Router {
     this._registerMenuItem(null, "issues", "issues", "i");
     // no shortcut for logout
     this._registerMenuItem(null, "logout", "logout");
+
+    // not a menu item, hidden page
+    Router.keyBindings["O"] = "options";
+
+    // not a menu item, not a page, but reserve key
+    // Router.keyBindings["c"] = "commandbox";
   }
 
   _registerPage (pPage) {
