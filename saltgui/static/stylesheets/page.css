@@ -20,7 +20,7 @@ pre a.disabled:hover {
 }
 
 pre.output a {
-  color: yellow;
+  color: var(--color-link-output);
   cursor: pointer;
 }
 
@@ -44,16 +44,16 @@ pre.output div:first-of-type {
 
 pre .minion-id.host-success,
 pre #summary-jobs-active .host-success {
-  color: lime;
+  color: var(--color-success);
 }
 
 pre .minion-id.host-failure,
 pre #summary-jobs-active .host-failure {
-  color: red;
+  color: var(--color-failure);
 }
 
 td.address > span {
-  color: #3f51b5;
+  color: var(--color-address);
   cursor: copy;
   position: relative;
 }
@@ -77,11 +77,11 @@ pre .minion-id.host-skips,
 pre #summary-jobs-active .host-skips,
 pre .minion-id.host-no-response,
 pre #summary-jobs-active .host-no-response {
-  color: yellow;
+  color: var(--color-skipped);
 }
 
 pre .minion-id {
-  color: #4caf50;
+  color: var(--color-primary);
 }
 
 .task-summary {
@@ -90,7 +90,7 @@ pre .minion-id {
 }
 
 pre span.active {
-  color: greenyellow;
+  color: var(--color-success-active);
   font-weight: bold;
 }
 
@@ -98,10 +98,11 @@ table {
   min-width: 100%;
   border-spacing: 5px;
   border-collapse: collapse;
+  color: var(--text-primary);
 }
 
 table tr th {
-  border-bottom: 3px double #4caf50;
+  border-bottom: 3px double var(--color-primary);
   padding-right: 20px;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -119,23 +120,23 @@ table tr td {
 }
 
 .no-job-status {
-  color: gray;
+  color: var(--text-light);
 }
 
 .no-job-details {
-  color: gray;
+  color: var(--text-light);
 }
 
 table thead th,
 table tbody td {
   padding: 8px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
-  color: #505050;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-secondary);
 }
 
 table thead th {
-  border-bottom: 2px solid #ddd;
+  border-bottom: 2px solid var(--border-color);
 }
 
 table tr th:last-child {
@@ -163,12 +164,16 @@ table tr td:last-of-type {
 }
 
 .run-command-button {
-  color: #263238;
+  color: var(--text-secondary);
   cursor: pointer;
 }
 
 .run-command-button:hover {
-  color: #2e7d32;
+  color: var(--color-primary-dark);
+}
+
+.run-command-button.menu-item {
+  color: var(--text-primary);
 }
 
 #template-catmenu-here,
@@ -182,24 +187,24 @@ table tr td:last-of-type {
 }
 
 .accepted {
-  color: #00a000;
+  color: var(--color-accepted);
 }
 
 .denied {
-  color: #f0f;
+  color: var(--color-denied);
 }
 
 .unaccepted,
 .keyunknown {
-  color: #f00;
+  color: var(--color-unaccepted);
 }
 
 .rejected {
-  color: #00f;
+  color: var(--color-rejected);
 }
 
 .offline {
-  color: red;
+  color: var(--color-offline);
 }
 
 .prefiximage {
@@ -217,14 +222,14 @@ table tr td:last-of-type {
 .jobs td .target {
   font-weight: 500;
   font-size: 18px;
-  color: #505050;
+  color: var(--text-secondary);
   white-space: nowrap;
 }
 
 .jobs td .function {
   font-weight: 500;
   font-size: 14px;
-  color: #3a3a3a;
+  color: var(--text-primary);
 }
 
 .jobs td .time {
@@ -250,7 +255,7 @@ table tr td:last-of-type {
 }
 
 .highlight-rows tbody tr:hover {
-  background-color: whitesmoke;
+  background-color: var(--bg-table-hover);
   cursor: pointer;
 }
 
@@ -279,21 +284,21 @@ table tr td:last-of-type {
 /* tasks */
 
 .task-success {
-  color: lime;
+  color: var(--color-success);
 }
 
 .task-success-changes {
-  color: aqua;
+  color: var(--color-changed);
 }
 
 .task-failure,
 .task-failure-changes {
-  color: red;
+  color: var(--color-failure);
 }
 
 .task-skipped,
 .task-skipped-changes {
-  color: yellow;
+  color: var(--color-skipped);
 }
 
 pre .task-success,

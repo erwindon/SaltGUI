@@ -68,7 +68,12 @@ export class LoginPanel extends Panel {
     aa.rel = "noopener";
 
     const img = Utils.createElem("img");
-    img.src = "static/images/GitHub_Invertocat_Black.png";
+    const darkModeQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const updateGithubLogo = () => {
+      img.src = darkModeQuery.matches ? "static/images/GitHub_Invertocat_White.png" : "static/images/GitHub_Invertocat_Black.png";
+    };
+    updateGithubLogo();
+    darkModeQuery.addEventListener("change", updateGithubLogo);
     img.style = "width: 1em; margin-right: 5px";
     aa.append(img);
 
