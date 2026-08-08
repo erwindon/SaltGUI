@@ -463,7 +463,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMenuItemWheelKeyAccept1 (pMenu, pMinionId, pStatusField) {
-    pMenu.addMenuItem(() => {
+    pMenu.addMenuItemCmd(() => {
       const status = pStatusField.innerText;
       if (status === "denied" || status === "unaccepted") {
         return "Accept key...";
@@ -482,7 +482,7 @@ export class KeysPanel extends Panel {
   }
 
   _addPanelMenuItemWheelKeyAcceptAllUnaccepted () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (this.nrUnacceptedSelected || this.nrAcceptedSelected || this.nrDeniedSelected || this.nrRejectedSelected) {
         return null;
       }
@@ -509,7 +509,7 @@ export class KeysPanel extends Panel {
   }
 
   _addPanelMenuItemWheelKeyAcceptAllUnacceptedRejected () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (this.nrUnacceptedSelected || this.nrAcceptedSelected || this.nrDeniedSelected || this.nrRejectedSelected) {
         return null;
       }
@@ -542,7 +542,7 @@ export class KeysPanel extends Panel {
   }
 
   _addPanelMenuItemWheelKeyAcceptAllUnacceptedDenied () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (this.nrUnacceptedSelected || this.nrAcceptedSelected || this.nrDeniedSelected || this.nrRejectedSelected) {
         return null;
       }
@@ -575,7 +575,7 @@ export class KeysPanel extends Panel {
   }
 
   _addPanelMenuItemWheelKeyAcceptAllUnacceptedRejectedDenied () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (this.nrUnacceptedSelected || this.nrAcceptedSelected || this.nrDeniedSelected || this.nrRejectedSelected) {
         return null;
       }
@@ -608,7 +608,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMenuItemWheelKeyAccept2 (pMenu, pMinionId, pStatusField) {
-    pMenu.addMenuItem(() => {
+    pMenu.addMenuItemCmd(() => {
       const status = pStatusField.innerText;
       if (status === "rejected") {
         return "Accept key...";
@@ -627,7 +627,7 @@ export class KeysPanel extends Panel {
   }
 
   _addMenuItemWheelKeyReject (pMenu, pMinionId, pStatusField) {
-    pMenu.addMenuItem(() => {
+    pMenu.addMenuItemCmd(() => {
       const status = pStatusField.innerText;
       if (status === "accepted" || status === "denied" || status === "unaccepted") {
         return "Reject key...";
@@ -646,7 +646,7 @@ export class KeysPanel extends Panel {
   }
 
   _addPanelMenuItemWheelKeyRejectAllUnaccepted () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (this.nrUnacceptedSelected || this.nrAcceptedSelected || this.nrDeniedSelected || this.nrRejectedSelected) {
         return null;
       }
@@ -673,7 +673,7 @@ export class KeysPanel extends Panel {
   }
 
   _addPanelMenuItemWheelKeyRejectAllUnacceptedAccepted () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (this.nrUnacceptedSelected || this.nrAcceptedSelected || this.nrDeniedSelected || this.nrRejectedSelected) {
         return null;
       }
@@ -706,7 +706,7 @@ export class KeysPanel extends Panel {
   }
 
   _addPanelMenuItemWheelKeyRejectAllUnacceptedDenied () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (this.nrUnacceptedSelected || this.nrAcceptedSelected || this.nrDeniedSelected || this.nrRejectedSelected) {
         return null;
       }
@@ -739,7 +739,7 @@ export class KeysPanel extends Panel {
   }
 
   _addPanelMenuItemWheelKeyRejectAllUnacceptedAcceptedDenied () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (this.nrUnacceptedSelected || this.nrAcceptedSelected || this.nrDeniedSelected || this.nrRejectedSelected) {
         return null;
       }
@@ -785,7 +785,7 @@ export class KeysPanel extends Panel {
   }
 
   _addPanelMenuItemWheelKeyDeleteAll () {
-    this.panelMenu.addMenuItem(() => {
+    this.panelMenu.addMenuItemCmd(() => {
       if (this.nrUnacceptedSelected || this.nrAcceptedSelected || this.nrDeniedSelected || this.nrRejectedSelected) {
         return null;
       }

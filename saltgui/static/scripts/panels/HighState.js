@@ -89,21 +89,21 @@ export class HighStatePanel extends Panel {
   }
 
   _addMenuItemStateApply (pMenu, pMinionId) {
-    pMenu.addMenuItem("Apply state...", () => {
+    pMenu.addMenuItemCmd("Apply state...", () => {
       const cmdArr = ["state.apply"];
       this.runCommand("", pMinionId, cmdArr, ["select_minions"]);
     });
   }
 
   _addMenuItemStateApplyTest (pMenu, pMinionId) {
-    pMenu.addMenuItem("Test state...", () => {
+    pMenu.addMenuItemCmd("Test state...", () => {
       const cmdArr = ["state.apply", "test=", true];
       this.runCommand("", pMinionId, cmdArr, ["select_minions"]);
     });
   }
 
   _addMenuItemUseStateHighstate () {
-    this.settingsMenu.addMenuItem(
+    this.settingsMenu.addMenuItemCmd(
       () => {
         const stateHighstateFlag = Utils.getStorageItem("local", "use_state_highstate", "true");
         return (stateHighstateFlag === "true" ? Character.HEAVY_CHECK_MARK + Character.NO_BREAK_SPACE : "") + "Include state.highstate";
@@ -116,7 +116,7 @@ export class HighStatePanel extends Panel {
   }
 
   _addMenuItemUseStateApply () {
-    this.settingsMenu.addMenuItem(
+    this.settingsMenu.addMenuItemCmd(
       () => {
         const stateApplyFlag = Utils.getStorageItem("local", "use_state_apply", "true");
         return (stateApplyFlag === "true" ? Character.HEAVY_CHECK_MARK + Character.NO_BREAK_SPACE : "") + "Include state.apply";
@@ -492,7 +492,7 @@ export class HighStatePanel extends Panel {
   }
 
   _addJobsMenuItemShowDetails (pMenu, pJob, pMinionId) {
-    pMenu.addMenuItem("Show details", (pClickEvent) => {
+    pMenu.addMenuItemCmd("Show details", (pClickEvent) => {
       this.router.goTo("job", {"id": pJob.jid, "minionid": pMinionId}, undefined, pClickEvent);
     });
   }
