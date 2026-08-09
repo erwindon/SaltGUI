@@ -914,11 +914,14 @@ export class Panel {
 
   getFooterForNodeGroups () {
     if (this.selectionSessionKeys.includes("select_nodegroups")) {
-      const lst_nodegroups = Utils.getStorageItem("session", "select_nodegroups", null);
-      if (lst_nodegroups !== null && lst_nodegroups !== ",") {
-        // so the "0" case actually does not occur here, adjust count for the extra ','s
-        const nrSelected = lst_nodegroups.split(",").length - 2;
-        return ", " + Utils.txtZeroOneMany(nrSelected, "no selected nodegroups", "{0} selected nodegroup", "{0} selected nodegroups");
+      const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+      if (selectVisible) {
+        const lst_nodegroups = Utils.getStorageItem("session", "select_nodegroups", null);
+        if (lst_nodegroups !== null && lst_nodegroups !== ",") {
+          // so the "0" case actually does not occur here, adjust count for the extra ','s
+          const nrSelected = lst_nodegroups.split(",").length - 2;
+          return ", " + Utils.txtZeroOneMany(nrSelected, "no selected nodegroups", "{0} selected nodegroup", "{0} selected nodegroups");
+        }
       }
     }
     return "";
@@ -926,11 +929,14 @@ export class Panel {
 
   getFooterForMinions () {
     if (this.selectionSessionKeys.includes("select_minions")) {
-      const lst_minions = Utils.getStorageItem("session", "select_minions", null);
-      if (lst_minions !== null && lst_minions !== ",") {
-        // so the "0" case actually does not occur here, adjust count for the extra ','s
-        const nrSelected = lst_minions.split(",").length - 2;
-        return ", " + Utils.txtZeroOneMany(nrSelected, "no selected minions", "{0} selected minion", "{0} selected minions");
+      const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+      if (selectVisible) {
+        const lst_minions = Utils.getStorageItem("session", "select_minions", null);
+        if (lst_minions !== null && lst_minions !== ",") {
+          // so the "0" case actually does not occur here, adjust count for the extra ','s
+          const nrSelected = lst_minions.split(",").length - 2;
+          return ", " + Utils.txtZeroOneMany(nrSelected, "no selected minions", "{0} selected minion", "{0} selected minions");
+        }
       }
     }
     return "";
@@ -938,11 +944,14 @@ export class Panel {
 
   getFooterForKeys () {
     if (this.selectionSessionKeys.includes("select_keys")) {
-      const lst_keys = Utils.getStorageItem("session", "select_keys", null);
-      if (lst_keys !== null && lst_keys !== ",") {
-        // so the "0" case actually does not occur here, adjust count for the extra ','s
-        const nrSelected = lst_keys.split(",").length - 2;
-        return ", " + Utils.txtZeroOneMany(nrSelected, "no selected keys", "{0} selected key", "{0} selected keys");
+      const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+      if (selectVisible) {
+        const lst_keys = Utils.getStorageItem("session", "select_keys", null);
+        if (lst_keys !== null && lst_keys !== ",") {
+          // so the "0" case actually does not occur here, adjust count for the extra ','s
+          const nrSelected = lst_keys.split(",").length - 2;
+          return ", " + Utils.txtZeroOneMany(nrSelected, "no selected keys", "{0} selected key", "{0} selected keys");
+        }
       }
     }
     return "";
