@@ -1,12 +1,14 @@
 FROM debian:13
 
-LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
-LABEL name=salt-minion
-LABEL project="SaltGUI testing"
-LABEL version=3007.14
+# SONARQUBE disable-check S7031
 
-ENV SALT_VERSION=3007.14
-ENV DEBIAN_FRONTEND=noninteractive
+LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
+LABEL name="salt-minion"
+LABEL project="SaltGUI testing"
+LABEL version="3007.14"
+
+ENV SALT_VERSION="3007.14"
+ENV DEBIAN_FRONTEND="noninteractive"
 
 # make download possible
 RUN apt-get update
