@@ -143,6 +143,11 @@ export class JobsPanel extends Panel {
     this._hideJobs.push("grains.delval");
     this._hideJobs.push("grains.items");
     this._hideJobs.push("grains.setval");
+    this._hideJobs.push("mine.delete");
+    this._hideJobs.push("mine.flush");
+    this._hideJobs.push("mine.get");
+    this._hideJobs.push("mine.update");
+    this._hideJobs.push("mine.valid");
     this._hideJobs.push("pillar.items");
     this._hideJobs.push("pillar.obfuscate");
     this._hideJobs.push("ps.kill_pid");
@@ -185,9 +190,6 @@ export class JobsPanel extends Panel {
     this._hideJobs.push("wheel.key.list_all");
     this._hideJobs.push("wheel.key.reject");
     this._hideJobs.push("wheel.minions.connected");
-
-    // this was automatically executed by really old minions
-    this._hideJobs.push("mine.update");
 
     let numberOfJobsShown = 0;
     let numberOfJobsEligible = 0;

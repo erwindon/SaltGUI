@@ -104,7 +104,6 @@ export class BeaconsMinionPanel extends Panel {
   }
 
   updateFooter () {
-    // update the footer
     const txt = Utils.txtZeroOneMany(this.nrBeacons, "No beacons", "{0} beacon", "{0} beacons");
     this.setMsg(txt);
   }
