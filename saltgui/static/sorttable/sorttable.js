@@ -160,10 +160,7 @@ export class SortTable {
 
   static reverse (tbody) {
     // reverse the rows in a tbody
-    const newrows = [];
-    for (let i=0; i<tbody.rows.length; i++) {
-      newrows[newrows.length] = tbody.rows[i];
-    }
+    const newrows = Array.from(tbody.rows);
     for (let i=newrows.length-1; i>=0; i--) {
       tbody.appendChild(newrows[i]);
     }

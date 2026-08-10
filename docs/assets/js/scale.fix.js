@@ -1,9 +1,9 @@
 (function(document) {
     const metas = document.getElementsByTagName('meta'),
         changeViewportContent = function(content) {
-            for (let i = 0; i < metas.length; i++) {
-                if (metas[i].name == "viewport") {
-                    metas[i].content = content;
+            for (const meta of metas) {
+                if (meta.name === "viewport") {
+                    meta.content = content;
                 }
             }
         },
