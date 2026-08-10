@@ -13,7 +13,7 @@ ENV DEBIAN_FRONTEND="noninteractive"
 
 # make download possible, make encrypted password generation possible
 RUN apt-get update
-RUN apt-get install --yes --no-install-recommends ca-certificates curl openssl adduser
+RUN apt-get install --yes --no-install-recommends adduser ca-certificates curl openssl
 
 # add a user for the frontend salt:salt
 RUN adduser --disabled-password --gecos "" salt
@@ -25,13 +25,15 @@ RUN usermod -s /bin/bash -p "$(openssl passwd -1 salt)" salt
 ARG TARGETARCH
 RUN curl -o "salt-common_${SALT_VERSION}.deb" \
   "https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-common_${SALT_VERSION}_${TARGETARCH}.deb"
-RUN curl -o "salt-api_${SALT_VERSION}.deb" \
-  "https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-api_${SALT_VERSION}_${TARGETARCH}.deb"
 RUN curl -o "salt-master_${SALT_VERSION}.deb" \
   "https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-master_${SALT_VERSION}_${TARGETARCH}.deb"
+RUN curl -o "salt-api_${SALT_VERSION}.deb" \
+  "https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-api_${SALT_VERSION}_${TARGETARCH}.deb"
 RUN apt install --yes --no-install-recommends \
-   "./salt-common_${SALT_VERSION}.deb" \
-   "./salt-master_${SALT_VERSION}.deb" \
+   "./salt-common_${SALT_VERSION}.deb"
+RUN apt install --yes --no-install-recommends \
+   "./salt-master_${SALT_VERSION}.deb"
+RUN apt install --yes --no-install-recommends \
    "./salt-api_${SALT_VERSION}.deb"
 
 # install supervisor

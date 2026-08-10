@@ -24,7 +24,8 @@ RUN curl -o "salt-common_${SALT_VERSION}.deb" \
 RUN curl -o "salt-minion_${SALT_VERSION}.deb" \
   "https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-minion_${SALT_VERSION}_${TARGETARCH}.deb"
 RUN apt install --yes --no-install-recommends \
-  "./salt-common_${SALT_VERSION}.deb" \
+  "./salt-common_${SALT_VERSION}.deb"
+RUN apt install --yes --no-install-recommends \
   "./salt-minion_${SALT_VERSION}.deb"
 
 # cleanup temporary files
