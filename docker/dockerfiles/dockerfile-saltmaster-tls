@@ -23,10 +23,16 @@ RUN usermod -s /bin/bash -p "$(openssl passwd -1 salt)" salt
 # not using repo, so must explicitly do all packages
 # Use TARGETARCH to get the correct architecture for multi-platform builds
 ARG TARGETARCH
-RUN curl -o "salt-common_${SALT_VERSION}.deb" "https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-common_${SALT_VERSION}_${TARGETARCH}.deb"
-RUN curl -o "salt-api_${SALT_VERSION}.deb" "https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-api_${SALT_VERSION}_${TARGETARCH}.deb"
-RUN curl -o "salt-master_${SALT_VERSION}.deb" "https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-master_${SALT_VERSION}_${TARGETARCH}.deb"
-RUN apt install --yes --no-install-recommends "./salt-common_${SALT_VERSION}.deb" "./salt-master_${SALT_VERSION}.deb" "./salt-api_${SALT_VERSION}.deb"
+RUN curl -o "salt-common_${SALT_VERSION}.deb" \
+  "https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-common_${SALT_VERSION}_${TARGETARCH}.deb"
+RUN curl -o "salt-api_${SALT_VERSION}.deb" \
+  "https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-api_${SALT_VERSION}_${TARGETARCH}.deb"
+RUN curl -o "salt-master_${SALT_VERSION}.deb" \
+  "https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-master_${SALT_VERSION}_${TARGETARCH}.deb"
+RUN apt install --yes --no-install-recommends \
+  "./salt-common_${SALT_VERSION}.deb" \
+  "./salt-master_${SALT_VERSION}.deb" \
+  "./salt-api_${SALT_VERSION}.deb"
 
 # install supervisor
 # because we need to run salt-master and salt-api
@@ -43,7 +49,8 @@ RUN mkdir -p /etc/ssl/saltgui
 # Generate SSL certificates using a single RUN command
 RUN cd /etc/ssl/saltgui && \
     openssl genrsa -out server.key 2048 && \
-    openssl req -new -key server.key -out server.csr -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=saltgui" && \
+    openssl req -new -key server.key -out server.csr \
+        -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=saltgui" && \
     openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt && \
     chmod 600 server.key && \
     chmod 644 server.crt && \
