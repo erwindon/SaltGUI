@@ -22,9 +22,9 @@ export class SortTable {
   static makeSortable (table) {
     // remove any previous sorting
     let sortfwdind = table.querySelector('#sorttable_sortfwdind');
-    if (sortfwdind) { sortfwdind.parentNode.removeChild(sortfwdind); }
+    if (sortfwdind) { sortfwdind.remove(); }
     let sortrevind = table.querySelector('#sorttable_sortrevind');
-    if (sortrevind) { sortrevind.parentNode.removeChild(sortrevind); }
+    if (sortrevind) { sortrevind.remove(); }
 
     if (table.getElementsByTagName('thead').length === 0) {
       // table doesn't have a tHead. Since it should have, create one and
@@ -65,9 +65,9 @@ export class SortTable {
       }
     }
     let sortfwdind = clickElement.parentElement.querySelector('#sorttable_sortfwdind');
-    if (sortfwdind) { sortfwdind.parentNode.removeChild(sortfwdind); }
+    if (sortfwdind) { sortfwdind.remove(); }
     let sortrevind = clickElement.parentElement.querySelector('#sorttable_sortrevind');
-    if (sortrevind) { sortrevind.parentNode.removeChild(sortrevind); }
+    if (sortrevind) { sortrevind.remove(); }
 
     if(prev_sorttable_columnindex !== clickElement.sorttable_columnindex) {
       // pretend reverse sorting when sorting on another column,

@@ -174,7 +174,7 @@ export class LoginPanel extends Panel {
     const noticeDiv = Utils.createDiv(pInfoClass, pText, "notice");
     noticeDiv.style.backgroundColor = pBackgroundColour;
     while (this.noticeWrapperDiv.hasChildNodes()) {
-      this.noticeWrapperDiv.removeChild(this.noticeWrapperDiv.firstChild);
+      this.noticeWrapperDiv.firstChild.remove();
     }
     this.noticeWrapperDiv.appendChild(noticeDiv);
   }

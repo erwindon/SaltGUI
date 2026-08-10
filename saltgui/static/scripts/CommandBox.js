@@ -549,7 +549,7 @@ export class CommandBox {
     // (re-)populate the dropdown box
     const targetList = document.getElementById("data-list-target");
     while (targetList.firstChild) {
-      targetList.removeChild(targetList.firstChild);
+      targetList.firstChild.remove();
     }
     const nodeGroups = Utils.getStorageItemObject("session", "nodegroups");
 

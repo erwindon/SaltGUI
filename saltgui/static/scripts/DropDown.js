@@ -183,7 +183,7 @@ export class DropDownMenu {
 
   clearMenu () {
     while (this.menuDropdownContent.firstChild) {
-      this.menuDropdownContent.removeChild(this.menuDropdownContent.firstChild);
+      this.menuDropdownContent.firstChild.remove();
     }
   }
 }

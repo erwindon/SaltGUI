@@ -170,7 +170,7 @@ export class Utils {
     for (let i = pToolTipHost.children.length - 1; i >= 0; i--) {
       const child = pToolTipHost.children[i];
       if (child.classList.contains("tooltip-text")) {
-        pToolTipHost.removeChild(child);
+        child.remove();
       }
     }
 

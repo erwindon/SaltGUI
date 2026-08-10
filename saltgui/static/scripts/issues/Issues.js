@@ -10,7 +10,7 @@ export class Issues {
     const rows = pPanel.table.tBodies[0].childNodes;
     for (const tr of rows) {
       if (tr.myCatName === pCatName) {
-        tr.parentNode.removeChild(tr);
+        tr.remove();
       }
     }
   }
@@ -19,7 +19,7 @@ export class Issues {
     const rows = pPanel.table.tBodies[0].childNodes;
     for (const tr of rows) {
       if (tr.myCatName === pCatName && tr.myIssueName === pIssueName) {
-        tr.parentNode.removeChild(tr);
+        tr.remove();
       }
     }
   }
@@ -27,7 +27,7 @@ export class Issues {
   static readyCategory (pPanel, pMsg) {
 
     // remove the "loading info..." message
-    pPanel.msg2.removeChild(pMsg);
+    pMsg.remove();
 
     pPanel.issuesStatus = Utils.txtZeroOneMany(
       pPanel.table.tBodies[0].children.length,

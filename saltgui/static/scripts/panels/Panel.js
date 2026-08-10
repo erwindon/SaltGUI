@@ -602,7 +602,7 @@ export class Panel {
 
     // remove existing content
     while (minionTr.firstChild) {
-      minionTr.removeChild(minionTr.firstChild);
+      minionTr.firstChild.remove();
     }
 
     minionTr.dataset.sessionKey = pSessionKey;
