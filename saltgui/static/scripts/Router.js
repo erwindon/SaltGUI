@@ -408,7 +408,6 @@ export class Router {
       }
       if (inNewWindow) {
         url += sep + "popup=true";
-        sep = "&";
       }
       url += "#" + pHash;
       if (parentHash === route.path) {

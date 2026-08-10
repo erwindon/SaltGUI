@@ -50,7 +50,7 @@ export class RunType {
     let runType = Utils.getStorageItem("local", "runtype");
     // Set default if previous runtype not stored
     if (runType !== "normal" && runType !== "async") {
-      runType = "normal";
+      Utils.setStorageItem("local", "runtype", "normal");
     }
     RunType._updateRunTypeText();
     // reset the title to the absolute minimum

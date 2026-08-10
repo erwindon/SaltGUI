@@ -47,11 +47,7 @@ export class Utils {
 
   static _getStorage (pStorage) {
     // "window" is not defined during unit testing
-    try {
-      /* eslint-disable no-unused-vars */
-      const theWindow = window;
-      /* eslint-enable no-unused-vars */
-    } catch (err) { // eslint-disable-line no-unused-vars
+    if (typeof window === "undefined") {
       return null;
     }
     /* istanbul ignore next */
