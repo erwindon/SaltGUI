@@ -54,7 +54,7 @@ export class JobsDetailsPanel extends JobsPanel {
       // magic value to ignore all filters
       cnt = 99999;
     } else if (cnt.match(patInteger)) {
-      cnt = parseInt(cnt, 10);
+      cnt = Number.parseInt(cnt, 10);
     } else {
       // pretend parameter was not present
       cnt = MAX_JOBS_DETAILS;

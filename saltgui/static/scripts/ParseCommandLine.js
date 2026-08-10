@@ -155,10 +155,10 @@ export class ParseCommandLine {
           // jobIds look like numbers but must be strings
           value = str;
         } else if (patInteger.test(str)) {
-          value = parseInt(str, 10);
+          value = Number.parseInt(str, 10);
         } else if (patFloat.test(str)) {
-          value = parseFloat(str);
-          if (!isFinite(value)) {
+          value = Number.parseFloat(str);
+          if (!Number.isFinite(value)) {
             return "Numeric argument has overflowed or is infinity";
           }
         } else {

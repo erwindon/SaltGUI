@@ -833,7 +833,7 @@ export class CommandBox {
 
     const eventJid = part[2];
     const eventMinionId = part[4];
-    const eventSeqNr = parseInt(part[5], 10);
+    const eventSeqNr = Number.parseInt(part[5], 10);
 
     if (CommandBox.jid !== eventJid) {
       // not the job that we are looking at

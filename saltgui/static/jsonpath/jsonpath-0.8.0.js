@@ -66,7 +66,7 @@ function jsonPath(obj, expr, arg) {
       slice: function(loc, expr, val, path) {
          if (val instanceof Array) {
             var len=val.length, start=0, end=len, step=1;
-            loc.replace(/^(-?\d*):(-?\d*):?(-?\d*)$/g, function($0,$1,$2,$3){start=parseInt($1||start);end=parseInt($2||end);step=parseInt($3||step);});
+            loc.replace(/^(-?\d*):(-?\d*):?(-?\d*)$/g, function($0,$1,$2,$3){start=Number.parseInt($1||start);end=Number.parseInt($2||end);step=Number.parseInt($3||step);});
             start = (start < 0) ? Math.max(0,start+len) : Math.min(len,start);
             end   = (end < 0)   ? Math.max(0,end+len)   : Math.min(len,end);
             for (var i=start; i<end; i+=step)

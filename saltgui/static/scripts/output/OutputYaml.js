@@ -27,7 +27,7 @@ export class OutputYaml {
         needQuotes = true;
       }
 
-      if (!isNaN(Number(pValue))) {
+      if (!Number.isNaN(Number(pValue))) {
         needQuotes = true;
       }
 

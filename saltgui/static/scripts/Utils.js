@@ -105,7 +105,7 @@ export class Utils {
   static getStorageItemInteger (pStorage, pKeyName, pDefaultValue = 0) {
     const value = Utils.getStorageItem(pStorage, pKeyName, null);
     const obj = Number.parseInt(value, 10);
-    if (isNaN(obj)) {
+    if (Number.isNaN(obj)) {
       return pDefaultValue;
     }
     return obj;
