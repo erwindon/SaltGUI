@@ -416,7 +416,7 @@ export class LoginPanel extends Panel {
     const pages = wheelConfigValuesData.saltgui_pages;
     // Filter pages to only current user for privacy
     const loginResponse = Utils.getStorageItemObject("session", "login_response");
-    if (loginResponse && loginResponse.user && typeof pages === "object" && loginResponse.user in pages) {
+    if (typeof pages === "object" && loginResponse?.user && loginResponse.user in pages) {
       const filteredPages = pages[loginResponse.user];
       Utils.setStorageItem("session", "pages", JSON.stringify(filteredPages));
     }

@@ -36,7 +36,7 @@ export class Utils {
     } catch (err) { // eslint-disable-line no-unused-vars
       // VOID
     }
-    if (!theWindow || !theWindow.location) {
+    if (!theWindow?.location) {
       return undefined;
     }
     /* istanbul ignore next */

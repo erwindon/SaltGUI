@@ -122,7 +122,7 @@ describe("Functional tests", function () {
 
       await page.waitForFunction(() => {
         const loginpage = document.querySelector("#page-login");
-        return loginpage && loginpage.style.display === "none";
+        return loginpage?.style.display === "none";
       });
 
       await sleep(1000);
@@ -143,7 +143,7 @@ describe("Functional tests", function () {
 
       await page.waitForFunction(() => {
         const loginpage = document.querySelector("#page-login");
-        return loginpage && loginpage.style.display === "none";
+        return loginpage?.style.display === "none";
       });
 
       // logout
@@ -155,7 +155,7 @@ describe("Functional tests", function () {
 
       await page.waitForFunction(() => {
         const loginpage = document.querySelector("#page-login");
-        return loginpage && loginpage.style.display === "";
+        return loginpage?.style.display === "";
       });
 
       await page.waitForFunction(() => document.location.href.includes("login"));

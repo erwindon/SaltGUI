@@ -571,7 +571,7 @@ export class Output {
       // e.g. wheel.keys.list_all (after data+tag reduction above)
       return pMinionResponse.return;
     }
-    if (pCommand.startsWith("runner.") && pMinionResponse && pMinionResponse["return"] !== undefined) {
+    if (pCommand.startsWith("runner.") && pMinionResponse?.return !== undefined) {
       // ???
       return pMinionResponse.return.return;
     }
@@ -841,7 +841,7 @@ export class Output {
     let nrMultiLineBlocks = 0;
 
     // convert state.orchestrate output back to regular highstate
-    if (pResponse.RUNNER && pResponse.RUNNER.outputter === "highstate") {
+    if (pResponse.RUNNER?.outputter === "highstate") {
       pResponse = pResponse.RUNNER.data;
       pMinionData = Object.keys(pResponse);
     }
@@ -905,10 +905,10 @@ export class Output {
 
       let minionResponse = pResponse[minionId];
 
-      if (commandCmd === "runner.state.orchestrate" && minionResponse.return && minionResponse.return.return && minionResponse.return.return.data) {
+      if (commandCmd === "runner.state.orchestrate" && minionResponse.return?.return?.data) {
         minionResponse = minionResponse.return.return.data[minionId];
       }
-      if (commandCmd === "runner.state.orchestrate_single" && minionResponse.return && minionResponse.return.return && typeof minionResponse.return.return === "object") {
+      if (commandCmd === "runner.state.orchestrate_single" && typeof minionResponse.return?.return === "object") {
         minionResponse = Object.values(minionResponse.return.return)[0];
       }
 
