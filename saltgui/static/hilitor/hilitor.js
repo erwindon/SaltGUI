@@ -72,7 +72,7 @@ function Hilitor(start, id, tag)
       matchRegExp = new RegExp(re, isCaseSensitive ? "" : "i");
       return matchRegExp;
     }
-    return false;
+    return null;
   };
 
   this.getRegex = function()

@@ -413,7 +413,7 @@ export class API {
         }
         if (pResponse.status === 404 && pPage.endsWith(".txt")) {
           // ok
-          return "";
+          return null;
         }
         throw new HTTPError(pResponse.status, pResponse.statusText);
       });
