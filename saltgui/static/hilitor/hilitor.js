@@ -24,7 +24,7 @@ function Hilitor(start, id, tag)
   var endRegExp = /^[^\\w]+|[^\\w]+$/g;
 
   // characters used to break up the input string into words
-  var breakRegExp = /[^\\w\'-]+/g;
+  var breakRegExp = /[^\\w'-]+/g;
 
   this.setEndRegExp = function(regex) {
     endRegExp = regex;
