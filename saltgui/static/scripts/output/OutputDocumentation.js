@@ -240,8 +240,8 @@ export class OutputDocumentation {
         while (out.includes(".. _")) {
           // take only a line containing ".. _"
           const reference = out.
-            replace(/^(?:.|\n|\r)*[.][.] _/m, "").
-            replace(/(?:\n|\r)(?:.|\n|\r)*$/m, "");
+            replace(/^(?:.|[\n\r])*[.][.] _/m, "").
+            replace(/(?:[\n\r])(?:.|[\n\r])*$/m, "");
           const words = reference.split(": ");
           if (words.length !== 2) {
             /* istanbul ignore next */

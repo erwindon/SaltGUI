@@ -75,7 +75,7 @@ export class Output {
   // note: do not return a text-node
   static _getTextOutput (pMinionResponse) {
     // strip trailing whitespace
-    pMinionResponse = pMinionResponse.replace(/[ \r\n]+$/g, "");
+    pMinionResponse = pMinionResponse.replace(/[\n\r ]+$/g, "");
 
     // replace all returned JIDs to links
     // typically found in the output of an async job
