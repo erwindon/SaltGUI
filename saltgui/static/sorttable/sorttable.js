@@ -127,13 +127,13 @@ export class SortTable {
     if (node.getAttribute("sorttable_customkey") !== null) {
       return node.getAttribute("sorttable_customkey");
     }
-    else if (typeof node.textContent !== 'undefined' && !hasInputs) {
+    else if (node.textContent !== undefined && !hasInputs) {
       return node.textContent.replace(/^\s+|\s+$/g, '');
     }
-    else if (typeof node.innerText !== 'undefined' && !hasInputs) {
+    else if (node.innerText !== undefined && !hasInputs) {
       return node.innerText.replace(/^\s+|\s+$/g, '');
     }
-    else if (typeof node.text !== 'undefined' && !hasInputs) {
+    else if (node.text !== undefined && !hasInputs) {
       return node.text.replace(/^\s+|\s+$/g, '');
     }
     else {
