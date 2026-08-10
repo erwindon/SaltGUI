@@ -43,7 +43,7 @@ export class ParseCommandLine {
 
     const patInteger = /^(?:(?:0)|(?:[-+]?[1-9]\d*))$/;
 
-    const patFloat = /^(?:[-+]?(?:(?:\d+)|(?:\d+[.]\d*)|(?:\d*[.]\d+))(?:[eE][-+]?\d+)?)$/;
+    const patFloat = /^[-+]?(?:\d+[.]?\d*|[.]\d+)(?:[eE][-+]?\d+)?$/;
 
     // just in case the user typed some extra whitespace
     // at the start of the line
