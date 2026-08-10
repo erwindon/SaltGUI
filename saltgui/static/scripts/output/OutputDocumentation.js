@@ -272,7 +272,7 @@ export class OutputDocumentation {
         out = out.replace(/`([^`]*)`/g, "<span style='color: yellow'>$1</span>");
 
         // remove whitespace at end of lines
-        out = out.replace(/  *\n/gm, "");
+        out = out.replace(/ +\n/gm, "");
 
         // remove duplicate empty lines (usually due to previous rule)
         out = out.replace(/\n\n\n*/gm, "\n\n");
