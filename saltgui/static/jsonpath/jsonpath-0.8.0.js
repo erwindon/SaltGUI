@@ -52,7 +52,7 @@ function jsonPath(obj, expr, arg) {
             P.store(path, val);
       },
       walk: function(loc, expr, val, path, f) {
-         if (val instanceof Array) {
+         if (Array.isArray(val)) {
             for (var i=0,n=val.length; i<n; i++)
                if (i in val)
                   f(i,loc,expr,val,path);
@@ -64,7 +64,7 @@ function jsonPath(obj, expr, arg) {
          }
       },
       slice: function(loc, expr, val, path) {
-         if (val instanceof Array) {
+         if (Array.isArray(val)) {
             var len=val.length, start=0, end=len, step=1;
             loc.replace(/^(-?\d*):(-?\d*):?(-?\d*)$/g, function($0,$1,$2,$3){start=Number.parseInt($1||start);end=Number.parseInt($2||end);step=Number.parseInt($3||step);});
             start = (start < 0) ? Math.max(0,start+len) : Math.min(len,start);
