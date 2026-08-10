@@ -147,7 +147,7 @@ export class SortTable {
           return node.nodeValue.replace(/^\s+|\s+$/g, '');
         case 1:
         case 11:
-          var innerText = '';
+          let innerText = '';
           for (const childNode of node.childNodes) {
             innerText += SortTable.getInnerText(childNode);
           }
@@ -182,9 +182,9 @@ export class SortTable {
     // A stable sort function to allow multi-level sorting of data
     // see: http://en.wikipedia.org/wiki/Cocktail_sort
     // thanks to Joseph Nahmias
-    var b = 0;
-    var t = list.length - 1;
-    var swap = true;
+    let b = 0;
+    let t = list.length - 1;
+    let swap = true;
 
     while(swap) {
         swap = false;
