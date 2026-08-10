@@ -46,11 +46,11 @@ export class BeaconsMinionPanel extends Panel {
 
     const localBeaconsListPromise = this.api.getLocalBeaconsList(minionId);
 
-    localBeaconsListPromise.then((pLocalBeaconsListData) => {
-      this._handleLocalBeaconsList(pLocalBeaconsListData, minionId);
+    localBeaconsListPromise.then((ok_LocalBeaconsList) => {
+      this._handleLocalBeaconsList(ok_LocalBeaconsList, minionId);
       return true;
-    }, (pLocalBeaconsListMsg) => {
-      this._handleLocalBeaconsList(JSON.stringify(pLocalBeaconsListMsg), minionId);
+    }, (_error_LocalBeaconsList) => {
+      this._handleLocalBeaconsList(JSON.stringify(_error_LocalBeaconsList), minionId);
       return false;
     });
 
@@ -63,12 +63,12 @@ export class BeaconsMinionPanel extends Panel {
       // yes, we want the list from *all* minions
       const localBeaconsListAvailablePromise = pApi.getLocalBeaconsListAvailable(null);
 
-      localBeaconsListAvailablePromise.then((pLocalBeaconsListAvailableData) => {
-        BeaconsMinionPanel._handleBeaconsListAvailable(pLocalBeaconsListAvailableData);
+      localBeaconsListAvailablePromise.then((ok_LocalBeaconsListAvailable) => {
+        BeaconsMinionPanel._handleBeaconsListAvailable(ok_LocalBeaconsListAvailable);
         return true;
-      }, (pLocalBeaconsListAvailableMsg) => {
+      }, (_error_LocalBeaconsListAvailable) => {
         // pretend nothing is available
-        Utils.warn("cannot retrieve beacons.list_available:", pLocalBeaconsListAvailableMsg);
+        Utils.warn("cannot retrieve beacons.list_available:", _error_LocalBeaconsListAvailable);
         Utils.setStorageItem("session", "beacons_list_available", "{\"_cnt\": 0}");
         return false;
       });

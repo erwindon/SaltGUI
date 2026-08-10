@@ -25,19 +25,19 @@ export class BeaconsPanel extends Panel {
 
     this.nrMinions = 0;
 
-    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
-      this._handleBeaconsWheelKeyListAll(pWheelKeyListAllData);
-      localBeaconsListPromise.then((pLocalBeaconsListData) => {
-        this.updateMinions(pLocalBeaconsListData);
+    wheelKeyListAllPromise.then((ok_WheelKeyListAll) => {
+      this._handleBeaconsWheelKeyListAll(ok_WheelKeyListAll);
+      localBeaconsListPromise.then((ok_LocalBeaconsList) => {
+        this.updateMinions(ok_LocalBeaconsList);
         return true;
-      }, (pLocalBeaconsListMsg) => {
-        const allMinionsErr = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, JSON.stringify(pLocalBeaconsListMsg));
+      }, (_error_LocalBeaconsList) => {
+        const allMinionsErr = Utils.msgPerMinion(ok_WheelKeyListAll.return[0].data.return.minions, JSON.stringify(_error_LocalBeaconsList));
         this.updateMinions({"return": [allMinionsErr]});
         return false;
       });
       return true;
-    }, (pWheelKeyListAllMsg) => {
-      this._handleBeaconsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+    }, (_error_WheelKeyListAll) => {
+      this._handleBeaconsWheelKeyListAll(JSON.stringify(_error_WheelKeyListAll));
       Utils.ignorePromise(localBeaconsListPromise);
       return false;
     });

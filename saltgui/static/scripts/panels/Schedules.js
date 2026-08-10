@@ -25,19 +25,19 @@ export class SchedulesPanel extends Panel {
 
     this.nrMinions = 0;
 
-    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
-      this._handleSchedulesWheelKeyListAll(pWheelKeyListAllData);
-      localScheduleListPromise.then((pLocalScheduleListData) => {
-        this.updateMinions(pLocalScheduleListData);
+    wheelKeyListAllPromise.then((ok_WheelKeyListAll) => {
+      this._handleSchedulesWheelKeyListAll(ok_WheelKeyListAll);
+      localScheduleListPromise.then((ok_LocalScheduleList) => {
+        this.updateMinions(ok_LocalScheduleList);
         return true;
-      }, (pLocalScheduleListMsg) => {
-        const allMinionsErr = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, JSON.stringify(pLocalScheduleListMsg));
+      }, (_error_LocalScheduleList) => {
+        const allMinionsErr = Utils.msgPerMinion(ok_WheelKeyListAll.return[0].data.return.minions, JSON.stringify(_error_LocalScheduleList));
         this.updateMinions({"return": [allMinionsErr]});
         return false;
       });
       return true;
-    }, (pWheelKeyListAllMsg) => {
-      this._handleSchedulesWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+    }, (_error_WheelKeyListAll) => {
+      this._handleSchedulesWheelKeyListAll(JSON.stringify(_error_WheelKeyListAll));
       Utils.ignorePromise(localScheduleListPromise);
       return false;
     });

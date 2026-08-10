@@ -64,9 +64,9 @@ export class IssuesPanel extends Panel {
     /* eslint-enable compat/compat */
     allPromise.then(() => {
       // VOID
-    }, (pErrorMsg) => {
+    }, (_error_Error) => {
       this.setMsg("(error)");
-      Utils.addToolTip(this.msgDiv, pErrorMsg);
+      Utils.addToolTip(this.msgDiv, _error_Error);
     });
   }
 

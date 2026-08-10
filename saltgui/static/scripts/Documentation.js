@@ -135,11 +135,11 @@ export class Documentation {
     if (func === null) {
       return;
     }
-    func.then((pResponse) => {
-      CommandBox.onRunReturn(pResponse.return[0], dummyCommand);
+    func.then((ok_response) => {
+      CommandBox.onRunReturn(ok_response.return[0], dummyCommand);
       return true;
-    }, (pResponse) => {
-      CommandBox.onRunReturn("DOCUMENTATION ERROR:\n\n" + JSON.stringify(pResponse), dummyCommand);
+    }, (_error_response) => {
+      CommandBox.onRunReturn("DOCUMENTATION ERROR:\n\n" + JSON.stringify(_error_response), dummyCommand);
       return false;
     });
   }

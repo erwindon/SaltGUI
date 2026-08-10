@@ -10,16 +10,16 @@ export class KeysIssues extends Issues {
 
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
 
-    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
+    wheelKeyListAllPromise.then((ok_WheelKeyListAll) => {
       Issues.removeCategory(pPanel, "unaccepted-key");
-      KeysIssues._handleKeysWheelKeyListAll(pPanel, pWheelKeyListAllData);
+      KeysIssues._handleKeysWheelKeyListAll(pPanel, ok_WheelKeyListAll);
       Issues.readyCategory(pPanel, msg);
       return true;
-    }, (pWheelKeyListAllMsg) => {
+    }, (_error_WheelKeyListAll) => {
       Issues.removeCategory(pPanel, "unaccepted-key");
       const tr = Issues.addIssue(pPanel, "unaccepted-key", "retrieving");
       Issues.addIssueMsg(tr, "Could not retrieve list of unaccepted keys");
-      Issues.addIssueErr(tr, pWheelKeyListAllMsg);
+      Issues.addIssueErr(tr, _error_WheelKeyListAll);
       Issues.readyCategory(pPanel, msg);
       return false;
     });

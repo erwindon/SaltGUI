@@ -10,21 +10,21 @@ export class SchedulesIssues extends Issues {
 
     const localScheduleListPromise = this.api.getLocalScheduleList(null);
 
-    localScheduleListPromise.then((pLocalScheduleListData) => {
+    localScheduleListPromise.then((ok_LocalScheduleList) => {
       Issues.removeCategory(pPanel, "disabled-schedulers");
       Issues.removeCategory(pPanel, "disabled-schedules");
-      SchedulesIssues._handleLocalScheduleList(pPanel, pLocalScheduleListData);
+      SchedulesIssues._handleLocalScheduleList(pPanel, ok_LocalScheduleList);
       Issues.readyCategory(pPanel, msg);
       return true;
-    }, (pLocalScheduleListMsg) => {
+    }, (_error_LocalScheduleList) => {
       Issues.removeCategory(pPanel, "disabled-schedulers");
       const tr1 = Issues.addIssue(pPanel, "disabled-schedulers", "retrieving");
       Issues.addIssueMsg(tr1, "Could not retrieve list of schedulers");
-      Issues.addIssueErr(tr1, pLocalScheduleListMsg);
+      Issues.addIssueErr(tr1, _error_LocalScheduleList);
       Issues.removeCategory(pPanel, "disabled-schedules");
       const tr2 = Issues.addIssue(pPanel, "disabled-schedules", "retrieving");
       Issues.addIssueMsg(tr2, "Could not retrieve list of schedules");
-      Issues.addIssueErr(tr2, pLocalScheduleListMsg);
+      Issues.addIssueErr(tr2, _error_LocalScheduleList);
       Issues.readyCategory(pPanel, msg);
       return false;
     });

@@ -39,23 +39,23 @@ export class NodegroupsPanel extends Panel {
     this._addNodegroupsRows();
     this.updateFooter();
 
-    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
-      this._handleNodegroupsWheelKeyListAll(pWheelKeyListAllData);
+    wheelKeyListAllPromise.then((ok_WheelKeyListAll) => {
+      this._handleNodegroupsWheelKeyListAll(ok_WheelKeyListAll);
 
-      localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
-        this.updateMinions(pLocalGrainsItemsData);
-        this.wheelKeyListAllSimpleData = pWheelKeyListAllData.return[0].data.return;
+      localGrainsItemsPromise.then((ok_LocalGrainsItems) => {
+        this.updateMinions(ok_LocalGrainsItems);
+        this.wheelKeyListAllSimpleData = ok_WheelKeyListAll.return[0].data.return;
         this.startLoop(this, 100);
         return true;
-      }, (pLocalGrainsItemsMsg) => {
-        const allNodegroupsErr = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, JSON.stringify(pLocalGrainsItemsMsg));
+      }, (_error_LocalGrainsItems) => {
+        const allNodegroupsErr = Utils.msgPerMinion(ok_WheelKeyListAll.return[0].data.return.minions, JSON.stringify(_error_LocalGrainsItems));
         this.updateMinions({"return": [allNodegroupsErr]});
         return false;
       });
 
       return true;
-    }, (pWheelKeyListAllMsg) => {
-      this._handleNodegroupsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+    }, (_error_WheelKeyListAll) => {
+      this._handleNodegroupsWheelKeyListAll(JSON.stringify(_error_WheelKeyListAll));
       Utils.ignorePromise(localGrainsItemsPromise);
       return false;
     });
@@ -189,8 +189,8 @@ export class NodegroupsPanel extends Panel {
     // test group membership with function that is typically hidden
     // note: uses full_data=true
     const localTestVersion = this.api.getLocalTestVersion(pNodegroup);
-    return localTestVersion.then((pLocalTestVersionData) => {
-      const retdata = pLocalTestVersionData.return[0];
+    return localTestVersion.then((ok_LocalTestVersion) => {
+      const retdata = ok_LocalTestVersion.return[0];
       // handle the list in reverse order
       const nodelist = Object.keys(retdata).sort().
         reverse();
@@ -247,8 +247,8 @@ export class NodegroupsPanel extends Panel {
       titleElement.innerHTML = titleElement.innerHTML.replace("(loading)", txt);
 
       return true;
-    }, (pLocalTestVersionMsg) => {
-      this.showErrorRowInstead(pLocalTestVersionMsg.toString());
+    }, (_error_LocalTestVersion) => {
+      this.showErrorRowInstead(_error_LocalTestVersion.toString());
       // the remaining nodegroups will fail just the same
       return false;
     });

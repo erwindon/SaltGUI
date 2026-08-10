@@ -325,23 +325,23 @@ export class LoginPanel extends Panel {
 
     // We need these functions to populate the dropdown boxes
     // or determine visibility of menu items
-    wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
-      LoginPanel._handleLoginWheelConfigValues(pWheelConfigValuesData);
+    wheelConfigValuesPromise.then((ok_WheelConfigValues) => {
+      LoginPanel._handleLoginWheelConfigValues(ok_WheelConfigValues);
       Router.updateMainMenu();
       return true;
     }, () => false);
-    runnerStateOrchestrateShowSlsPromise.then((pRunnerStateOrchestrateShowSlsData) => {
-      LoginPanel._handleRunnerStateOrchestrateShowSls(pRunnerStateOrchestrateShowSlsData);
+    runnerStateOrchestrateShowSlsPromise.then((ok_RunnerStateOrchestrateShowSls) => {
+      LoginPanel._handleRunnerStateOrchestrateShowSls(ok_RunnerStateOrchestrateShowSls);
       Router.updateMainMenu();
       return true;
     }, () => false);
 
     // save for the autocompletion
     /* eslint-disable no-unused-vars */
-    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
-      const minions = pWheelKeyListAllData.return[0].data.return.minions;
+    wheelKeyListAllPromise.then((ok_WheelKeyListAll) => {
+      const minions = ok_WheelKeyListAll.return[0].data.return.minions;
       Utils.setStorageItem("session", "minions", JSON.stringify(minions));
-    }, (pWheelKeyListAllMsg) => {
+    }, (_error_WheelKeyListAll) => {
       // VOID
     });
     /* eslint-enable no-unused-vars */

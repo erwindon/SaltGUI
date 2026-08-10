@@ -61,8 +61,7 @@ export class SortTable {
     for(const cell of theadrow.childNodes) {
       if (cell.nodeType === 1) { // an element
         if(cell.classList.contains("sorttable_sorted")) prev_sorttable_columnindex = cell.sorttable_columnindex;
-        cell.classList.remove("sorttable_sorted_reverse");
-        cell.classList.remove("sorttable_sorted");
+        cell.classList.remove("sorttable_sorted", "sorttable_sorted_reverse");
       }
     }
     let sortfwdind = clickElement.parentElement.querySelector('#sorttable_sortfwdind');

@@ -406,16 +406,16 @@ export class CommandBox {
       }
     }
 
-    func.then((pResponse) => {
-      if (pResponse) {
-        CommandBox.onRunReturn(pResponse.return[0], commandValue);
-        CommandBox._prepareForAsyncResults(pResponse);
+    func.then((ok_response) => {
+      if (ok_response) {
+        CommandBox.onRunReturn(ok_response.return[0], commandValue);
+        CommandBox._prepareForAsyncResults(ok_response);
       } else {
         CommandBox._showError("null response");
       }
       return true;
-    }, (pResponse) => {
-      CommandBox._showError(JSON.stringify(pResponse));
+    }, (_error_response) => {
+      CommandBox._showError(JSON.stringify(_error_response));
       return false;
     });
   }

@@ -56,19 +56,19 @@ export class GrainsPanel extends Panel {
 
     this.nrMinions = 0;
 
-    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
-      this._handleGrainsWheelKeyListAll(pWheelKeyListAllData);
-      localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
-        this.updateMinions(pLocalGrainsItemsData);
+    wheelKeyListAllPromise.then((ok_WheelKeyListAll) => {
+      this._handleGrainsWheelKeyListAll(ok_WheelKeyListAll);
+      localGrainsItemsPromise.then((ok_LocalGrainsItems) => {
+        this.updateMinions(ok_LocalGrainsItems);
         return true;
-      }, (pLocalGrainsItemsMsg) => {
-        const allMinionsErr = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, JSON.stringify(pLocalGrainsItemsMsg));
+      }, (_error_LocalGrainsItems) => {
+        const allMinionsErr = Utils.msgPerMinion(ok_WheelKeyListAll.return[0].data.return.minions, JSON.stringify(_error_LocalGrainsItems));
         this.updateMinions({"return": [allMinionsErr]});
         return false;
       });
       return true;
-    }, (pWheelKeyListAllMsg) => {
-      this._handleGrainsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+    }, (_error_WheelKeyListAll) => {
+      this._handleGrainsWheelKeyListAll(JSON.stringify(_error_WheelKeyListAll));
       Utils.ignorePromise(localGrainsItemsPromise);
       return false;
     });

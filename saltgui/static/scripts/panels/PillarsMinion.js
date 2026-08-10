@@ -39,11 +39,11 @@ export class PillarsMinionPanel extends Panel {
 
     const localPillarItemsPromise = useCachePillar ? this.api.getRunnerCachePillar(minionId) : this.api.getLocalPillarItems(minionId);
 
-    localPillarItemsPromise.then((pLocalPillarItemsData) => {
-      this._handleLocalPillarItems(pLocalPillarItemsData, minionId);
+    localPillarItemsPromise.then((ok_LocalPillarItems) => {
+      this._handleLocalPillarItems(ok_LocalPillarItems, minionId);
       return true;
-    }, (pLocalPillarItemsMsg) => {
-      this._handleLocalPillarItems(JSON.stringify(pLocalPillarItemsMsg), minionId);
+    }, (_error_LocalPillarItems) => {
+      this._handleLocalPillarItems(JSON.stringify(_error_LocalPillarItems), minionId);
       return false;
     });
   }

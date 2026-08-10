@@ -45,8 +45,8 @@ export class LogoutPage extends Page {
     const statsPromise = this.api.getStats();
     // don't act in the callbacks
     // Api.apiRequest will do all the work
-    statsPromise.then(() => true, (pHttpResponse) => {
-      if (pHttpResponse.status === 500) {
+    statsPromise.then(() => true, (_error_HttpResponse) => {
+      if (_error_HttpResponse.status === 500) {
         // assume this error applies only to /stats and
         // not to any regular api functions
         // may happen due to https://github.com/saltstack/salt/issues/59620

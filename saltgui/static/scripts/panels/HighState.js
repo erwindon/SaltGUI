@@ -67,22 +67,22 @@ export class HighStatePanel extends Panel {
     // and show this while loading more info
     super.setWarningText("info", "loading" + Character.HORIZONTAL_ELLIPSIS);
 
-    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
-      this._handleMinionsWheelKeyListAll(pWheelKeyListAllData);
+    wheelKeyListAllPromise.then((ok_WheelKeyListAll) => {
+      this._handleMinionsWheelKeyListAll(ok_WheelKeyListAll);
       if (cmdList.length === 0) {
         this._handleHighstateRunnerJobsListJobs({"return": [{}]});
       } else {
-        runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
-          this._handleHighstateRunnerJobsListJobs(pRunnerJobsListJobsData);
+        runnerJobsListJobsPromise.then((ok_RunnerJobsListJobs) => {
+          this._handleHighstateRunnerJobsListJobs(ok_RunnerJobsListJobs);
           return true;
-        }, (pRunnerJobsListJobsMsg) => {
-          this._handleHighstateRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
+        }, (_error_RunnerJobsListJobs) => {
+          this._handleHighstateRunnerJobsListJobs(JSON.stringify(_error_RunnerJobsListJobs));
           return false;
         });
       }
       return true;
-    }, (pWheelKeyListAllMsg) => {
-      this._handleMinionsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+    }, (_error_WheelKeyListAll) => {
+      this._handleMinionsWheelKeyListAll(JSON.stringify(_error_WheelKeyListAll));
       Utils.ignorePromise(runnerJobsListJobsPromise);
       return false;
     });
@@ -193,12 +193,12 @@ export class HighStatePanel extends Panel {
   loopItem (pJob) {
     const runnerJobsListJobPromise = this.api.getRunnerJobsListJob(pJob.id);
 
-    return runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
-      this._handleJobsRunnerJobsListJob(pJob.id, pRunnerJobsListJobData);
+    return runnerJobsListJobPromise.then((ok_RunnerJobsListJob) => {
+      this._handleJobsRunnerJobsListJob(pJob.id, ok_RunnerJobsListJob);
       // stop when all minions have a most recent job
       return !this._allMinionsHaveJob();
-    }, (pRunnerJobsListJobMsg) => {
-      this._handleJobsRunnerJobsListJob(pJob.id, JSON.stringify(pRunnerJobsListJobMsg));
+    }, (_error_RunnerJobsListJob) => {
+      this._handleJobsRunnerJobsListJob(pJob.id, JSON.stringify(_error_RunnerJobsListJob));
       // the remaining jobs will fail just the same
       return false;
     });

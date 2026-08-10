@@ -23,13 +23,13 @@ export class TemplatesPanel extends Panel {
 
     this.nrTemplates = 0;
 
-    wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
-      this._handleTemplatesWheelConfigValues(pWheelConfigValuesData);
+    wheelConfigValuesPromise.then((ok_WheelConfigValues) => {
+      this._handleTemplatesWheelConfigValues(ok_WheelConfigValues);
       this.hideColumnWhenNone("Category");
       this.hideColumnWhenNone("Key");
       return true;
-    }, (pWheelConfigValuesMsg) => {
-      this._handleTemplatesWheelConfigValues(JSON.stringify(pWheelConfigValuesMsg));
+    }, (_error_WheelConfigValues) => {
+      this._handleTemplatesWheelConfigValues(JSON.stringify(_error_WheelConfigValues));
       return false;
     });
   }

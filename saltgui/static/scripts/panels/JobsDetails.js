@@ -206,12 +206,12 @@ export class JobsDetailsPanel extends JobsPanel {
   _getJobDetails (pJobId) {
     const runnerJobsListJobPromise = this.api.getRunnerJobsListJob(pJobId);
 
-    runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
-      this._handleJobsRunnerJobsListJob(pJobId, pRunnerJobsListJobData);
+    runnerJobsListJobPromise.then((ok_RunnerJobsListJob) => {
+      this._handleJobsRunnerJobsListJob(pJobId, ok_RunnerJobsListJob);
       return true;
-    }, (pRunnerJobsListJobMsg) => {
+    }, (_error_RunnerJobsListJob) => {
       this.nrErrors += 1;
-      this._handleJobsRunnerJobsListJob(pJobId, JSON.stringify(pRunnerJobsListJobMsg));
+      this._handleJobsRunnerJobsListJob(pJobId, JSON.stringify(_error_RunnerJobsListJob));
       return false;
     });
   }

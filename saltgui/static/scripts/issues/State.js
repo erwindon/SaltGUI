@@ -23,26 +23,26 @@ export class StateIssues extends Issues {
 
     const runnerJobsListJobsPromise = this.api.getRunnerJobsListJobs(["state.apply", "state.highstate", "state.sls_id"]);
 
-    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
-      runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
+    wheelKeyListAllPromise.then((ok_WheelKeyListAll) => {
+      runnerJobsListJobsPromise.then((ok_RunnerJobsListJobs) => {
         Issues.removeCategory(pPanel, "state");
-        this._handleLowstateRunnerJobsListJobs(pPanel, pRunnerJobsListJobsData, pWheelKeyListAllData, msg);
+        this._handleLowstateRunnerJobsListJobs(pPanel, ok_RunnerJobsListJobs, ok_WheelKeyListAll, msg);
         return true;
-      }, (pRunnerJobsListJobsMsg) => {
+      }, (_error_RunnerJobsListJobs) => {
         Issues.removeCategory(pPanel, "state");
         const tr = Issues.addIssue(pPanel, "state", "retrieving");
         Issues.addIssueMsg(tr, "Could not retrieve list of jobs");
-        Issues.addIssueErr(tr, pRunnerJobsListJobsMsg);
+        Issues.addIssueErr(tr, _error_RunnerJobsListJobs);
         Issues.readyCategory(pPanel, msg);
         return false;
       });
       return true;
-    }, (pWheelKeyListAllMsg) => {
+    }, (_error_WheelKeyListAll) => {
       Utils.ignorePromise(runnerJobsListJobsPromise);
       Issues.removeCategory(pPanel, "state");
       const tr = Issues.addIssue(pPanel, "state", "retrieving");
       Issues.addIssueMsg(tr, "Could not retrieve list of keys");
-      Issues.addIssueErr(tr, pWheelKeyListAllMsg);
+      Issues.addIssueErr(tr, _error_WheelKeyListAll);
       Issues.readyCategory(pPanel, msg);
       return false;
     });
@@ -86,13 +86,13 @@ export class StateIssues extends Issues {
   loopItem (pJob) {
     const runnerJobsListJobPromise = this.api.getRunnerJobsListJob(pJob.id);
 
-    return runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
-      StateIssues._handleJobRunnerJobsListJob(this.panel, pRunnerJobsListJobData, this.keys);
+    return runnerJobsListJobPromise.then((ok_RunnerJobsListJob) => {
+      StateIssues._handleJobRunnerJobsListJob(this.panel, ok_RunnerJobsListJob, this.keys);
       return true;
-    }, (pRunnerJobsListJobsMsg) => {
+    }, (_error_RunnerJobsListJobs) => {
       const tr = Issues.addIssue(this.panel, "state", "retrieving");
       Issues.addIssueMsg(tr, "Could not retrieve details of job " + pJob.id);
-      Issues.addIssueErr(tr, pRunnerJobsListJobsMsg);
+      Issues.addIssueErr(tr, _error_RunnerJobsListJobs);
       // the remaining jobs will fail just the same
       return false;
     });

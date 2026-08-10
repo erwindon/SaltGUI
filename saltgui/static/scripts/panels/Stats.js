@@ -41,11 +41,11 @@ export class StatsPanel extends Panel {
   onShowNow () {
     const statsPromise = this.api.getStats();
 
-    statsPromise.then((pStatsData) => {
-      this._handleStats(pStatsData);
+    statsPromise.then((ok_Stats) => {
+      this._handleStats(ok_Stats);
       return true;
-    }, (pStatsMsg) => {
-      this._handleStats(JSON.stringify(pStatsMsg));
+    }, (_error_Stats) => {
+      this._handleStats(JSON.stringify(_error_Stats));
       return false;
     });
   }

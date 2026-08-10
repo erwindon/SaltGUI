@@ -66,17 +66,17 @@ export class KeysPanel extends Panel {
 
     this.loadMinionsTxt();
 
-    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
-      this._handleKeysWheelKeyListAll(pWheelKeyListAllData);
-      wheelKeyFingerPromise.then((pWheelKeyFingerData) => {
-        this._handleWheelKeyFinger(pWheelKeyFingerData);
+    wheelKeyListAllPromise.then((ok_WheelKeyListAll) => {
+      this._handleKeysWheelKeyListAll(ok_WheelKeyListAll);
+      wheelKeyFingerPromise.then((ok_WheelKeyFinger) => {
+        this._handleWheelKeyFinger(ok_WheelKeyFinger);
         return true;
-      }, (pWheelKeyFingerMsg) => {
-        const msg = JSON.stringify(pWheelKeyFingerMsg);
-        const allMinionsErr1 = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, msg);
-        const allMinionsErr2 = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions_pre, msg);
-        const allMinionsErr3 = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions_rejected, msg);
-        const allMinionsErr4 = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions_denied, msg);
+      }, (_error_WheelKeyFinger) => {
+        const msg = JSON.stringify(_error_WheelKeyFinger);
+        const allMinionsErr1 = Utils.msgPerMinion(ok_WheelKeyListAll.return[0].data.return.minions, msg);
+        const allMinionsErr2 = Utils.msgPerMinion(ok_WheelKeyListAll.return[0].data.return.minions_pre, msg);
+        const allMinionsErr3 = Utils.msgPerMinion(ok_WheelKeyListAll.return[0].data.return.minions_rejected, msg);
+        const allMinionsErr4 = Utils.msgPerMinion(ok_WheelKeyListAll.return[0].data.return.minions_denied, msg);
         /* eslint-disable prefer-object-spread */
         const allMinionsErr = Object.assign({}, allMinionsErr1, allMinionsErr2, allMinionsErr3, allMinionsErr4);
         /* eslint-enable prefer-object-spread */
@@ -84,8 +84,8 @@ export class KeysPanel extends Panel {
         return false;
       });
       return true;
-    }, (pWheelKeyListAllMsg) => {
-      this._handleKeysWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+    }, (_error_WheelKeyListAll) => {
+      this._handleKeysWheelKeyListAll(JSON.stringify(_error_WheelKeyListAll));
       Utils.ignorePromise(wheelKeyFingerPromise);
       return false;
     });
@@ -903,12 +903,12 @@ export class KeysPanel extends Panel {
     if (!tr2.dataset.fingerprintKnown) {
       fingerprintSpan.innerText = "(refresh page for fingerprint)";
       const wheelKeyFingerPromise = this.api.getWheelKeyFinger(pData.id);
-      wheelKeyFingerPromise.then((pWheelKeyFingerData) => {
-        this._handleWheelKeyFinger(pWheelKeyFingerData);
+      wheelKeyFingerPromise.then((ok_WheelKeyFinger) => {
+        this._handleWheelKeyFinger(ok_WheelKeyFinger);
         return true;
-      }, (pWheelKeyFingerMsg) => {
+      }, (_error_WheelKeyFinger) => {
         const wheelKeyFingerData = {"return": [{"data": {"return": {"minions": {}}}}]};
-        wheelKeyFingerData.return[0]["data"]["return"]["minions"][pData.id] = JSON.stringify(pWheelKeyFingerMsg);
+        wheelKeyFingerData.return[0]["data"]["return"]["minions"][pData.id] = JSON.stringify(_error_WheelKeyFinger);
         this._handleWheelKeyFinger(wheelKeyFingerData);
         return false;
       });

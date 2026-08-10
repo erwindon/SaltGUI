@@ -10,21 +10,21 @@ export class BeaconsIssues extends Issues {
 
     const localBeaconsListPromise = this.api.getLocalBeaconsList(null);
 
-    localBeaconsListPromise.then((pLocalBeaconsListData) => {
+    localBeaconsListPromise.then((ok_LocalBeaconsList) => {
       Issues.removeCategory(pPanel, "disabled-beacons");
       Issues.removeCategory(pPanel, "disabled-beacon");
-      BeaconsIssues._handleLocalBeaconsList(pPanel, pLocalBeaconsListData);
+      BeaconsIssues._handleLocalBeaconsList(pPanel, ok_LocalBeaconsList);
       Issues.readyCategory(pPanel, msg);
       return true;
-    }, (pLocalBeaconsListMsg) => {
+    }, (_error_LocalBeaconsList) => {
       Issues.removeCategory(pPanel, "disabled-beacons");
       const tr1 = Issues.addIssue(pPanel, "disabled-beacons", "retrieving");
       Issues.addIssueMsg(tr1, "Could not retrieve list of beacon schedulers");
-      Issues.addIssueErr(tr1, pLocalBeaconsListMsg);
+      Issues.addIssueErr(tr1, _error_LocalBeaconsList);
       Issues.removeCategory(pPanel, "disabled-beacon");
       const tr2 = Issues.addIssue(pPanel, "disabled-beacon", "retrieving");
       Issues.addIssueMsg(tr2, "Could not retrieve list of beacons");
-      Issues.addIssueErr(tr2, pLocalBeaconsListMsg);
+      Issues.addIssueErr(tr2, _error_LocalBeaconsList);
       Issues.readyCategory(pPanel, msg);
       return false;
     });

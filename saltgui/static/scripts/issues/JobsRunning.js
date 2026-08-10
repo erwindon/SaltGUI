@@ -10,16 +10,16 @@ export class JobsRunningIssues extends Issues {
 
     const runnerJobsActivePromise = this.api.getRunnerJobsActive();
 
-    runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
+    runnerJobsActivePromise.then((ok_RunnerJobsActive) => {
       Issues.removeCategory(pPanel, "active-jobs");
-      JobsRunningIssues._handleRunnerJobsActive(pPanel, pRunnerJobsActiveData);
+      JobsRunningIssues._handleRunnerJobsActive(pPanel, ok_RunnerJobsActive);
       Issues.readyCategory(pPanel, msg);
       return true;
-    }, (pRunnerJobsActiveMsg) => {
+    }, (_error_RunnerJobsActive) => {
       Issues.removeCategory(pPanel, "active-jobs");
       const tr = Issues.addIssue(pPanel, "active-jobs", "retrieving");
       Issues.addIssueMsg(tr, "Could not retrieve list of jobs");
-      Issues.addIssueErr(tr, pRunnerJobsActiveMsg);
+      Issues.addIssueErr(tr, _error_RunnerJobsActive);
       Issues.readyCategory(pPanel, msg);
       return false;
     });

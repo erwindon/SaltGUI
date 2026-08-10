@@ -47,38 +47,38 @@ export class MinionsPanel extends Panel {
 
     this.loadMinionsTxt();
 
-    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
-      this._handleMinionsWheelKeyListAll(pWheelKeyListAllData);
+    wheelKeyListAllPromise.then((ok_WheelKeyListAll) => {
+      this._handleMinionsWheelKeyListAll(ok_WheelKeyListAll);
 
       if (wheelMinionsConnectedPromise != null) {
-        wheelMinionsConnectedPromise.then((pWheelMinionsConnectedData) => {
-          this._handlewheelMinionsConnected(pWheelMinionsConnectedData, pWheelKeyListAllData);
+        wheelMinionsConnectedPromise.then((ok_WheelMinionsConnected) => {
+          this._handlewheelMinionsConnected(ok_WheelMinionsConnected, ok_WheelKeyListAll);
           return true;
-        }, (pWheelMinionsConnectedMsg) => {
-          Utils.debug("pWheelMinionsConnectedMsg", pWheelMinionsConnectedMsg);
+        }, (_error_WheelMinionsConnected) => {
+          Utils.debug("_error_WheelMinionsConnected", _error_WheelMinionsConnected);
           return false;
         });
       }
 
-      localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
-        this.updateMinions(pLocalGrainsItemsData);
+      localGrainsItemsPromise.then((ok_LocalGrainsItems) => {
+        this.updateMinions(ok_LocalGrainsItems);
         return true;
-      }, (pLocalGrainsItemsMsg) => {
-        const allMinionsErr = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, JSON.stringify(pLocalGrainsItemsMsg));
+      }, (_error_LocalGrainsItems) => {
+        const allMinionsErr = Utils.msgPerMinion(ok_WheelKeyListAll.return[0].data.return.minions, JSON.stringify(_error_LocalGrainsItems));
         this.updateMinions({"return": [allMinionsErr]});
         return false;
       });
 
-      runnerManageVersionsPromise.then((pRunnerManageVersionsData) => {
-        this._handleRunnerManageVersions(pRunnerManageVersionsData);
+      runnerManageVersionsPromise.then((ok_RunnerManageVersions) => {
+        this._handleRunnerManageVersions(ok_RunnerManageVersions);
         return true;
-      }, (pRunnerManageVersionsMsg) => {
-        this._handleRunnerManageVersions(JSON.stringify(pRunnerManageVersionsMsg));
+      }, (_error_RunnerManageVersions) => {
+        this._handleRunnerManageVersions(JSON.stringify(_error_RunnerManageVersions));
         return false;
       });
       return true;
-    }, (pWheelKeyListAllMsg) => {
-      this._handleMinionsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+    }, (_error_WheelKeyListAll) => {
+      this._handleMinionsWheelKeyListAll(JSON.stringify(_error_WheelKeyListAll));
       if (wheelMinionsConnectedPromise != null) {
         Utils.ignorePromise(wheelMinionsConnectedPromise);
       }

@@ -29,19 +29,19 @@ export class PillarsPanel extends Panel {
 
     this.nrMinions = 0;
 
-    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
-      this._handlePillarsWheelKeyListAll(pWheelKeyListAllData);
-      localPillarObfuscatePromise.then((pLocalPillarObfuscateData) => {
-        this.updateMinions(pLocalPillarObfuscateData);
+    wheelKeyListAllPromise.then((ok_WheelKeyListAll) => {
+      this._handlePillarsWheelKeyListAll(ok_WheelKeyListAll);
+      localPillarObfuscatePromise.then((ok_LocalPillarObfuscate) => {
+        this.updateMinions(ok_LocalPillarObfuscate);
         return true;
-      }, (pLocalPillarObfuscateMsg) => {
-        const allMinionsErr = Utils.msgPerMinion(pWheelKeyListAllData.return[0].data.return.minions, JSON.stringify(pLocalPillarObfuscateMsg));
+      }, (_error_LocalPillarObfuscate) => {
+        const allMinionsErr = Utils.msgPerMinion(ok_WheelKeyListAll.return[0].data.return.minions, JSON.stringify(_error_LocalPillarObfuscate));
         this.updateMinions({"return": [allMinionsErr]});
         return false;
       });
       return true;
-    }, (pWheelKeyListAllMsg) => {
-      this._handlePillarsWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+    }, (_error_WheelKeyListAll) => {
+      this._handlePillarsWheelKeyListAll(JSON.stringify(_error_WheelKeyListAll));
       Utils.ignorePromise(localPillarObfuscatePromise);
       return false;
     });

@@ -37,11 +37,11 @@ export class GrainsMinionPanel extends Panel {
 
     const localGrainsItemsPromise = useCacheGrains ? this.api.getRunnerCacheGrains(minionId) : this.api.getLocalGrainsItems(minionId);
 
-    localGrainsItemsPromise.then((pLocalGrainsItemsData) => {
-      this._handleLocalGrainsItems(pLocalGrainsItemsData, minionId);
+    localGrainsItemsPromise.then((ok_LocalGrainsItems) => {
+      this._handleLocalGrainsItems(ok_LocalGrainsItems, minionId);
       return true;
-    }, (pLocalGrainsItemsMsg) => {
-      this._handleLocalGrainsItems(JSON.stringify(pLocalGrainsItemsMsg), minionId);
+    }, (_error_LocalGrainsItems) => {
+      this._handleLocalGrainsItems(JSON.stringify(_error_LocalGrainsItems), minionId);
       return false;
     });
   }

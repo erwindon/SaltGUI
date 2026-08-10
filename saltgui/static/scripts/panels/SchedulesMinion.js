@@ -37,11 +37,11 @@ export class SchedulesMinionPanel extends Panel {
 
     const localScheduleListPromise = this.api.getLocalScheduleList(minionId);
 
-    localScheduleListPromise.then((pLocalScheduleListData) => {
-      this._handleLocalScheduleList(pLocalScheduleListData, minionId);
+    localScheduleListPromise.then((ok_LocalScheduleList) => {
+      this._handleLocalScheduleList(ok_LocalScheduleList, minionId);
       return true;
-    }, (pLocalScheduleListMsg) => {
-      this._handleLocalScheduleList(JSON.stringify(pLocalScheduleListMsg), minionId);
+    }, (_error_LocalScheduleList) => {
+      this._handleLocalScheduleList(JSON.stringify(_error_LocalScheduleList), minionId);
       return false;
     });
   }

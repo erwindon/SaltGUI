@@ -14,26 +14,26 @@ export class NotConnectedIssues extends Issues {
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const wheelMinionsConnectedPromise = skipWheelMinionsConnected ? null : this.api.getWheelMinionsConnected();
 
-    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
+    wheelKeyListAllPromise.then((ok_WheelKeyListAll) => {
       Issues.removeCategory(pPanel, "not-connected");
-      return pWheelKeyListAllData;
-    }, (pWheelKeyListAllMsg) => {
+      return ok_WheelKeyListAll;
+    }, (_error_WheelKeyListAll) => {
       Issues.removeCategory(pPanel, "not-connected");
       const tr = Issues.addIssue(pPanel, "not-connected", "retrieving-keys");
       Issues.addIssueMsg(tr, "Could not retrieve list of keys");
-      Issues.addIssueErr(tr, pWheelKeyListAllMsg);
+      Issues.addIssueErr(tr, _error_WheelKeyListAll);
       return false;
     });
 
     if (wheelMinionsConnectedPromise != null) {
-      wheelMinionsConnectedPromise.then((pWheelMinionsConnectedData) => {
+      wheelMinionsConnectedPromise.then((ok_WheelMinionsConnected) => {
         Issues.removeCategory(pPanel, "not-connected");
-        return pWheelMinionsConnectedData;
-      }, (pWheelMinionsConnectedMsg) => {
+        return ok_WheelMinionsConnected;
+      }, (_error_WheelMinionsConnected) => {
         Issues.removeCategory(pPanel, "not-connected");
         const tr = Issues.addIssue(pPanel, "not-connected", "retrieving-connected");
         Issues.addIssueMsg(tr, "Could not retrieve list of connected minions");
-        Issues.addIssueErr(tr, pWheelMinionsConnectedMsg);
+        Issues.addIssueErr(tr, _error_WheelMinionsConnected);
         return false;
       });
     }

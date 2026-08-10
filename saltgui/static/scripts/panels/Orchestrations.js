@@ -22,10 +22,10 @@ export class OrchestrationsPanel extends Panel {
   onShow () {
     const runnerStateOrchestrateShowSlsPromise = this.router.api.getRunnerStateOrchestrateShowSls();
 
-    runnerStateOrchestrateShowSlsPromise.then((pStateOrchestrateShowSlsData) => {
-      this._handleOrchestrationsStateOrchestrateShowSls(pStateOrchestrateShowSlsData);
-    }, (pStateOrchestrateShowSlsMsg) => {
-      this._handleOrchestrationsStateOrchestrateShowSls(JSON.stringify(pStateOrchestrateShowSlsMsg));
+    runnerStateOrchestrateShowSlsPromise.then((ok_StateOrchestrateShowSls) => {
+      this._handleOrchestrationsStateOrchestrateShowSls(ok_StateOrchestrateShowSls);
+    }, (_error_StateOrchestrateShowSls) => {
+      this._handleOrchestrationsStateOrchestrateShowSls(JSON.stringify(_error_StateOrchestrateShowSls));
     });
   }
 

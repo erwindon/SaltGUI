@@ -21,11 +21,11 @@ export class ReactorsPanel extends Panel {
   onShow () {
     const wheelConfigValuesPromise = this.api.getWheelConfigValues();
 
-    wheelConfigValuesPromise.then((pWheelConfigValuesData) => {
-      this._handleReactorsWheelConfigValues(pWheelConfigValuesData);
+    wheelConfigValuesPromise.then((ok_WheelConfigValues) => {
+      this._handleReactorsWheelConfigValues(ok_WheelConfigValues);
       return true;
-    }, (pWheelConfigValuesMsg) => {
-      this._handleReactorsWheelConfigValues(JSON.stringify(pWheelConfigValuesMsg));
+    }, (_error_WheelConfigValues) => {
+      this._handleReactorsWheelConfigValues(JSON.stringify(_error_WheelConfigValues));
       return false;
     });
   }

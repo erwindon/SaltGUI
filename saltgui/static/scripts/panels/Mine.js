@@ -24,20 +24,20 @@ export class MinePanel extends Panel {
     const wheelKeyListAllPromise = this.api.getWheelKeyListAll();
     const localMineValidPromise = this.api.getLocalMineValid();
 
-    wheelKeyListAllPromise.then((pWheelKeyListAllData) => {
-      this._handleMineWheelKeyListAll(pWheelKeyListAllData);
+    wheelKeyListAllPromise.then((ok_WheelKeyListAll) => {
+      this._handleMineWheelKeyListAll(ok_WheelKeyListAll);
 
-      localMineValidPromise.then((pLocalMineValidData) => {
-        this.updateMinions(pLocalMineValidData);
-      }, (pLocalMineValidMsg) => {
-        const localMineValidData = {"return": [{}]};
-        for (const minionId of pWheelKeyListAllData.return[0].data.return.minions) {
-          localMineValidData.return[0][minionId] = JSON.stringify(pLocalMineValidMsg);
+      localMineValidPromise.then((ok_LocalMineValid) => {
+        this.updateMinions(ok_LocalMineValid);
+      }, (_error_LocalMineValid) => {
+        const localMineValid= {"return": [{}]};
+        for (const minionId of ok_WheelKeyListAll.return[0].data.return.minions) {
+          localMineValid.return[0][minionId] = JSON.stringify(_error_LocalMineValid);
         }
-        this.updateMinions(localMineValidData);
+        this.updateMinions(localMineValid);
       });
-    }, (pWheelKeyListAllMsg) => {
-      this._handleMineWheelKeyListAll(JSON.stringify(pWheelKeyListAllMsg));
+    }, (_error_WheelKeyListAll) => {
+      this._handleMineWheelKeyListAll(JSON.stringify(_error_WheelKeyListAll));
     });
   }
 

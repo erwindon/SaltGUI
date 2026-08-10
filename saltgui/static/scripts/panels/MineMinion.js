@@ -31,10 +31,10 @@ export class MineMinionPanel extends Panel {
 
     const localMineValidPromise = this.router.api.getLocalMineValid(minionId);
 
-    localMineValidPromise.then((pLocalMineValidData) => {
-      this._handleLocalMineValid(pLocalMineValidData, minionId);
-    }, (pLocalMineValidMsg) => {
-      this._handleLocalMineValid(JSON.stringify(pLocalMineValidMsg), minionId);
+    localMineValidPromise.then((ok_LocalMineValid) => {
+      this._handleLocalMineValid(ok_LocalMineValid, minionId);
+    }, (_error_LocalMineValid) => {
+      this._handleLocalMineValid(JSON.stringify(_error_LocalMineValid), minionId);
     });
   }
 
@@ -67,12 +67,12 @@ export class MineMinionPanel extends Panel {
     // we just assume that the master and all minions are synchronized with that
     const localMineGetPromise = this.router.api.getLocalMineGet(minionId, minionId, pMineId);
 
-    return localMineGetPromise.then((pLocalMineGetData) => {
-      MineMinionPanel._handleLocalMineGet(pDetailsField, pLocalMineGetData.return[0][minionId]);
+    return localMineGetPromise.then((ok_LocalMineGet) => {
+      MineMinionPanel._handleLocalMineGet(pDetailsField, ok_LocalMineGet.return[0][minionId]);
       // the other functions are independent, continue with them
       return true;
-    }, (pLocalMineGetData) => {
-      MineMinionPanel._handleLocalMineGet(pDetailsField, JSON.stringify(pLocalMineGetData));
+    }, (_error_LocalMineGet) => {
+      MineMinionPanel._handleLocalMineGet(pDetailsField, JSON.stringify(_error_LocalMineGet));
       // the other functions are independent, continue with them
       return true;
     });

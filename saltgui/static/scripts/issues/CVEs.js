@@ -15,23 +15,23 @@ export class CveIssues extends Issues {
 
     const runnerManageVersionsPromise = this.api.getRunnerManageVersions();
 
-    runnerManageVersionsPromise.then((pRunnerManageVersionsData) => {
+    runnerManageVersionsPromise.then((ok_RunnerManageVersions) => {
       Issues.removeCategory(pPanel, "minion-older");
       Issues.removeCategory(pPanel, "minion-newer");
       Issues.removeCategory(pPanel, "minion-bug");
       Issues.removeCategory(pPanel, "master-bug");
       Issues.removeCategory(pPanel, "versions");
-      CveIssues._handleManageVersions(pPanel, pRunnerManageVersionsData);
+      CveIssues._handleManageVersions(pPanel, ok_RunnerManageVersions);
       Issues.readyCategory(pPanel, msg);
       return true;
-    }, (pRunnerManageVersionsMsg) => {
+    }, (_error_RunnerManageVersions) => {
       Issues.removeCategory(pPanel, "minion-older");
       Issues.removeCategory(pPanel, "minion-newer");
       Issues.removeCategory(pPanel, "minion-bug");
       Issues.removeCategory(pPanel, "master-bug");
       const tr = Issues.addIssue(pPanel, "versions", "retrieving");
       Issues.addIssueMsg(tr, "Could not retrieve list of versions");
-      Issues.addIssueErr(tr, pRunnerManageVersionsMsg);
+      Issues.addIssueErr(tr, _error_RunnerManageVersions);
       Issues.readyCategory(pPanel, msg);
       return false;
     });

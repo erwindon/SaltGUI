@@ -93,20 +93,20 @@ export class JobPanel extends Panel {
     const runnerJobsListJobPromise = this.api.getRunnerJobsListJob(jobId);
     const runnerJobsActivePromise = this.api.getRunnerJobsActive();
 
-    runnerJobsListJobPromise.then((pRunnerJobsListJobData) => {
-      this._handleJobRunnerJobsListJob(pRunnerJobsListJobData, jobId, minionId);
-      runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
-        this._handleRunnerJobsActive(jobId, pRunnerJobsActiveData);
+    runnerJobsListJobPromise.then((ok_RunnerJobsListJob) => {
+      this._handleJobRunnerJobsListJob(ok_RunnerJobsListJob, jobId, minionId);
+      runnerJobsActivePromise.then((ok_RunnerJobsActive) => {
+        this._handleRunnerJobsActive(jobId, ok_RunnerJobsActive);
         this._scheduleRefreshJob();
         return true;
-      }, (pRunnerJobsActiveMsg) => {
-        this._handleRunnerJobsActive(jobId, JSON.stringify(pRunnerJobsActiveMsg));
+      }, (_error_RunnerJobsActive) => {
+        this._handleRunnerJobsActive(jobId, JSON.stringify(_error_RunnerJobsActive));
         this.setPlayPauseButton("none");
         return false;
       });
       return true;
-    }, (pRunnerJobsListJobsMsg) => {
-      this._handleJobRunnerJobsListJob(JSON.stringify(pRunnerJobsListJobsMsg), jobId, undefined);
+    }, (_error_RunnerJobsListJobs) => {
+      this._handleJobRunnerJobsListJob(JSON.stringify(_error_RunnerJobsListJobs), jobId, undefined);
       Utils.ignorePromise(runnerJobsActivePromise);
       this.setPlayPauseButton("none");
       return false;

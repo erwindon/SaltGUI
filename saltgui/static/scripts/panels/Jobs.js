@@ -14,18 +14,18 @@ export class JobsPanel extends Panel {
     const runnerJobsListJobsPromise = this.api.getRunnerJobsListJobs();
     const runnerJobsActivePromise = this.api.getRunnerJobsActive();
 
-    runnerJobsListJobsPromise.then((pRunnerJobsListJobsData) => {
-      this._handleRunnerJobsListJobs(pRunnerJobsListJobsData, cnt);
-      runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
-        this._handleRunnerJobsActive(pRunnerJobsActiveData);
+    runnerJobsListJobsPromise.then((ok_RunnerJobsListJobs) => {
+      this._handleRunnerJobsListJobs(ok_RunnerJobsListJobs, cnt);
+      runnerJobsActivePromise.then((ok_RunnerJobsActive) => {
+        this._handleRunnerJobsActive(ok_RunnerJobsActive);
         return true;
-      }, (pRunnerJobsActiveMsg) => {
-        this._handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
+      }, (_error_RunnerJobsActive) => {
+        this._handleRunnerJobsActive(JSON.stringify(_error_RunnerJobsActive));
         return false;
       });
       return true;
-    }, (pRunnerJobsListJobsMsg) => {
-      this._handleRunnerJobsListJobs(JSON.stringify(pRunnerJobsListJobsMsg));
+    }, (_error_RunnerJobsListJobs) => {
+      this._handleRunnerJobsListJobs(JSON.stringify(_error_RunnerJobsListJobs));
       Utils.ignorePromise(runnerJobsActivePromise);
       return false;
     });
@@ -34,11 +34,11 @@ export class JobsPanel extends Panel {
   startRunningJobs () {
     const runnerJobsActivePromise = this.api.getRunnerJobsActive();
 
-    runnerJobsActivePromise.then((pRunnerJobsActiveData) => {
-      this._handleRunnerJobsActive(pRunnerJobsActiveData);
+    runnerJobsActivePromise.then((ok_RunnerJobsActive) => {
+      this._handleRunnerJobsActive(ok_RunnerJobsActive);
       return true;
-    }, (pRunnerJobsActiveMsg) => {
-      this._handleRunnerJobsActive(JSON.stringify(pRunnerJobsActiveMsg));
+    }, (_error_RunnerJobsActive) => {
+      this._handleRunnerJobsActive(JSON.stringify(_error_RunnerJobsActive));
       return false;
     });
   }
