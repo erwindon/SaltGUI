@@ -1,5 +1,8 @@
 FROM ubuntu:26.04
 
+# Reduce the amount of consecutive RUN instructions:
+# SONARQUBE disable-check S7031
+
 LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
 LABEL name="salt-master"
 LABEL project="SaltGUI testing"
