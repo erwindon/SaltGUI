@@ -127,69 +127,71 @@ export class JobsPanel extends Panel {
 
     // These jobs are likely started by the SaltGUI
     // do not display them
-    this._hideJobs.push("beacons.add");
-    this._hideJobs.push("beacons.delete");
-    this._hideJobs.push("beacons.disable");
-    this._hideJobs.push("beacons.disable_beacon");
-    this._hideJobs.push("beacons.enable");
-    this._hideJobs.push("beacons.enable_beacon");
-    this._hideJobs.push("beacons.list");
-    this._hideJobs.push("beacons.list_available");
-    this._hideJobs.push("beacons.modify");
-    this._hideJobs.push("beacons.reset");
-    this._hideJobs.push("beacons.save");
-    this._hideJobs.push("grains.append");
-    this._hideJobs.push("grains.delkey");
-    this._hideJobs.push("grains.delval");
-    this._hideJobs.push("grains.items");
-    this._hideJobs.push("grains.setval");
-    this._hideJobs.push("mine.delete");
-    this._hideJobs.push("mine.flush");
-    this._hideJobs.push("mine.get");
-    this._hideJobs.push("mine.update");
-    this._hideJobs.push("mine.valid");
-    this._hideJobs.push("pillar.items");
-    this._hideJobs.push("pillar.obfuscate");
-    this._hideJobs.push("ps.kill_pid");
-    this._hideJobs.push("ps.proc_info");
-    this._hideJobs.push("test.providers");
-    this._hideJobs.push("test.version");
-    this._hideJobs.push("saltutil.find_job");
-    this._hideJobs.push("saltutil.kill_job");
-    this._hideJobs.push("saltutil.refresh_grains");
-    this._hideJobs.push("saltutil.refresh_pillar");
-    this._hideJobs.push("saltutil.running");
-    this._hideJobs.push("saltutil.signal_job");
-    this._hideJobs.push("saltutil.term_job");
-    this._hideJobs.push("schedule.add");
-    this._hideJobs.push("schedule.delete");
-    this._hideJobs.push("schedule.disable");
-    this._hideJobs.push("schedule.disable_job");
-    this._hideJobs.push("schedule.enable");
-    this._hideJobs.push("schedule.enable_job");
-    this._hideJobs.push("schedule.list");
-    this._hideJobs.push("schedule.modify");
-    this._hideJobs.push("schedule.run_job");
-    this._hideJobs.push("sys.doc");
-    // runner jobs
-    this._hideJobs.push("runner.cache.grains");
-    this._hideJobs.push("runner.cache.pillar");
-    this._hideJobs.push("runner.doc.runner");
-    this._hideJobs.push("runner.doc.wheel");
-    this._hideJobs.push("runner.jobs.active");
-    this._hideJobs.push("runner.jobs.list_job");
-    this._hideJobs.push("runner.jobs.list_jobs");
-    this._hideJobs.push("runner.manage.versions");
-    // do not hide "runner.state.orchestrate"
-    this._hideJobs.push("runner.state.orchestrate_show_sls");
-    // wheel jobs
-    this._hideJobs.push("wheel.config.values");
-    this._hideJobs.push("wheel.key.accept");
-    this._hideJobs.push("wheel.key.delete");
-    this._hideJobs.push("wheel.key.finger");
-    this._hideJobs.push("wheel.key.list_all");
-    this._hideJobs.push("wheel.key.reject");
-    this._hideJobs.push("wheel.minions.connected");
+    this._hideJobs.push(
+      "beacons.add",
+      "beacons.delete",
+      "beacons.disable",
+      "beacons.disable_beacon",
+      "beacons.enable",
+      "beacons.enable_beacon",
+      "beacons.list",
+      "beacons.list_available",
+      "beacons.modify",
+      "beacons.reset",
+      "beacons.save",
+      "grains.append",
+      "grains.delkey",
+      "grains.delval",
+      "grains.items",
+      "grains.setval",
+      "mine.delete",
+      "mine.flush",
+      "mine.get",
+      "mine.update",
+      "mine.valid",
+      "pillar.items",
+      "pillar.obfuscate",
+      "ps.kill_pid",
+      "ps.proc_info",
+      "test.providers",
+      "test.version",
+      "saltutil.find_job",
+      "saltutil.kill_job",
+      "saltutil.refresh_grains",
+      "saltutil.refresh_pillar",
+      "saltutil.running",
+      "saltutil.signal_job",
+      "saltutil.term_job",
+      "schedule.add",
+      "schedule.delete",
+      "schedule.disable",
+      "schedule.disable_job",
+      "schedule.enable",
+      "schedule.enable_job",
+      "schedule.list",
+      "schedule.modify",
+      "schedule.run_job",
+      "sys.doc",
+      // runner jobs
+      // do not hide "runner.state.orchestrate"
+      "runner.cache.grains",
+      "runner.cache.pillar",
+      "runner.doc.runner",
+      "runner.doc.wheel",
+      "runner.jobs.active",
+      "runner.jobs.list_job",
+      "runner.jobs.list_jobs",
+      "runner.manage.versions",
+      "runner.state.orchestrate_show_sls",
+      // wheel jobs
+      "wheel.config.values",
+      "wheel.key.accept",
+      "wheel.key.delete",
+      "wheel.key.finger",
+      "wheel.key.list_all",
+      "wheel.key.reject",
+      "wheel.minions.connected"
+    );
 
     let numberOfJobsShown = 0;
     let numberOfJobsEligible = 0;
