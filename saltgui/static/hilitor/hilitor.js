@@ -15,10 +15,10 @@ function Hilitor(start, id, tag)
   var wordColor = [];
   var colorIdx = 0;
   var matchRegExp = "";
-  var openLeft = false;
-  var openRight = false;
 
-  var nrHilites = 0;
+  this.openLeft = false;
+  this.openRight = false;
+  this.nrHilites = 0;
 
   // characters to strip from start and end of the input string
   var endRegExp = /^[^\\w]+|[^\\w]+$/g;
@@ -101,7 +101,7 @@ function Hilitor(start, id, tag)
       // limit the number of highlighted matches to 25 otherwise the DOM grows rediculously
       // and performance drops with it. and it is still a good first indication.
       let nv, regs;
-      if(this.nrHilites <= 25 && (nv = node.nodeValue) && (regs = matchRegExp.exec(nv)) && regs[0].length > 0) {
+      if(this.nrHilites < 25 && (nv = node.nodeValue) && (regs = matchRegExp.exec(nv)) && regs[0].length > 0) {
         const found = isCaseSensitive ? regs[0] : regs[0].toLowerCase();
         if(!wordColor[found]) {
           wordColor[found] = colors[colorIdx++ % colors.length];
