@@ -74,8 +74,8 @@ function jsonPath(obj, expr, arg) {
          }
       },
       eval: function(x, _v, _vname) {
-         try { return $ && _v && eval(x.replace(/@/g, "_v")); }
-         catch(e) { throw new SyntaxError("jsonPath: " + e.message + ": " + x.replace(/@/g, "_v").replace(/\^/g, "_a")); }
+         try { return $ && _v && eval(x.replaceAll("@", "_v")); }
+         catch(e) { throw new SyntaxError("jsonPath: " + e.message + ": " + x.replaceAll("@", "_v").replaceAll("^", "_a")); }
       }
    };
 

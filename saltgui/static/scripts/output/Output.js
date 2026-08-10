@@ -419,7 +419,7 @@ export class Output {
     let txt = "";
 
     if ("__sls__" in pTask && pTask.__sls__) {
-      txt += "\n" + pTask.__sls__.replace(/[.]/g, "/") + ".sls";
+      txt += "\n" + pTask.__sls__.replaceAll(".", "/") + ".sls";
     }
 
     if ("__id__" in pTask && pTask.__id__ !== pTask.name) {

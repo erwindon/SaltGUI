@@ -520,7 +520,7 @@ export class LoginPanel extends Panel {
     const clusterId = wheelConfigValuesData.cluster_id;
     const clusterPeers = wheelConfigValuesData.cluster_peers;
     if (id && clusterId && clusterPeers) {
-      const clusterInfo = "This is node " + id + " from cluster " + clusterId + " " + JSON.stringify(clusterPeers).replace(/"/g, "");
+      const clusterInfo = "This is node " + id + " from cluster " + clusterId + " " + JSON.stringify(clusterPeers).replaceAll("\"", "");
       Utils.setStorageItem("session", "cluster_info", clusterInfo);
     }
 

@@ -1154,7 +1154,7 @@ export class Panel {
 
   static addPrefixImage (pElem, pImageName) {
     const img = Utils.createElem("img", "prefiximage");
-    const pngName = pImageName.replace(/ /g, "-").toLowerCase() + ".png";
+    const pngName = pImageName.replaceAll(" ", "-").toLowerCase() + ".png";
     img.setAttribute("src", "static/images/" + pngName);
     img.setAttribute("onerror", "this.onerror=null; this.title='Unknown image, please report to SaltGUI team that image \\'" + pngName + "\\' is missing'; this.src='static/images/UNKNOWN.png'");
     pElem.prepend(img);

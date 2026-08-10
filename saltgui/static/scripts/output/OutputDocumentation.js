@@ -225,15 +225,15 @@ export class OutputDocumentation {
 
         // turn text into html
         // e.g. in "sys.doc cmd.run"
-        out = out.replace(/&/g, "&amp;");
+        out = out.replaceAll("&", "&amp;");
 
         // turn text into html
         // e.g. in "sys.doc state.template"
-        out = out.replace(/</g, "&lt;");
+        out = out.replaceAll("<", "&lt;");
 
         // turn text into html
         // e.g. in "sys.doc state.template"
-        out = out.replace(/>/g, "&gt;");
+        out = out.replaceAll(">", "&gt;");
 
         // external links
         // e.g. in "sys.doc pkg.install"

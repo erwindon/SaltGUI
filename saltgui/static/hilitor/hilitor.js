@@ -79,7 +79,7 @@ function Hilitor(start, id, tag)
   {
     var retval = matchRegExp.toString();
     retval = retval.replace(/(^\/(\\b)?|\(|\)|(\\b)?\/i$)/g, "");
-    retval = retval.replace(/\|/g, " ");
+    retval = retval.replaceAll("|", " ");
     return retval;
   };
 

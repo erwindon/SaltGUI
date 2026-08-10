@@ -124,7 +124,7 @@ export class OptionsPanel extends Panel {
     tr.id = "option-" + pName;
     tr.dataset.defaultValue = pDefaultValue;
 
-    const labelTxt = (pCategory ? pCategory + "_" : "") + pName.replace(/-/g, "_");
+    const labelTxt = (pCategory ? pCategory + "_" : "") + pName.replaceAll("-", "_");
     const tdName = Utils.createTd("", labelTxt + ":", "option-" + pName + "-name");
     tdName.style.whiteSpace = "normal";
     tr.appendChild(tdName);
@@ -320,9 +320,9 @@ export class OptionsPanel extends Panel {
       } else if (category === "session") {
         value = loginResponse[name];
       } else if (category === null) {
-        value = Utils.getStorageItem("session", name.replace(/-/g, "_"));
+        value = Utils.getStorageItem("session", name.replaceAll("-", "_"));
       } else if (category === "saltgui") {
-        value = Utils.getStorageItem("session", name.replace(/-/g, "_"));
+        value = Utils.getStorageItem("session", name.replaceAll("-", "_"));
       } else {
         value = category + "[" + name + "]";
       }
@@ -375,7 +375,7 @@ export class OptionsPanel extends Panel {
         value = defaultValue;
       }
 
-      const varr = value.replace(/"/g, "").split(",");
+      const varr = value.replaceAll("\"", "").split(",");
 
       // then select the other values
       for (const valueArr of valuesArr) {
