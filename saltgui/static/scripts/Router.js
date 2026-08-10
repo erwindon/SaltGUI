@@ -44,29 +44,31 @@ export class Router {
     Router.keyBindings = {};
 
     this._registerPage(new LoginPage(this));
-    this._registerPage(Router.minionsPage = new MinionsPage(this));
-    this._registerPage(Router.keysPage = new KeysPage(this));
-    this._registerPage(Router.grainsPage = new GrainsPage(this));
-    this._registerPage(Router.grainsMinionPage = new GrainsMinionPage(this));
-    this._registerPage(Router.pillarsPage = new PillarsPage(this));
-    this._registerPage(Router.pillarsMinionPage = new PillarsMinionPage(this));
-    this._registerPage(Router.minePage = new MinePage(this));
-    this._registerPage(Router.mineMinionPage = new MineMinionPage(this));
-    this._registerPage(Router.beaconsPage = new BeaconsPage(this));
-    this._registerPage(Router.beaconsMinionPage = new BeaconsMinionPage(this));
-    this._registerPage(Router.schedulesPage = new SchedulesPage(this));
-    this._registerPage(Router.schedulesMinionPage = new SchedulesMinionPage(this));
-    this._registerPage(Router.nodegroupsPage = new NodegroupsPage(this));
-    this._registerPage(Router.jobPage = new JobPage(this));
-    this._registerPage(Router.jobsPage = new JobsPage(this));
-    this._registerPage(Router.highStatePage = new HighStatePage(this));
-    this._registerPage(Router.templatesPage = new TemplatesPage(this));
-    this._registerPage(Router.eventsPage = new EventsPage(this));
-    this._registerPage(Router.reactorsPage = new ReactorsPage(this));
-    this._registerPage(Router.orchestrationsPage = new OrchestrationsPage(this));
-    this._registerPage(Router.optionsPage = new OptionsPage(this));
-    this._registerPage(Router.issuesPage = new IssuesPage(this));
-    this._registerPage(Router.logoutPage = new LogoutPage(this));
+    /* eslint-disable no-inline-comments,line-comment-position */
+    this._registerPage(Router.minionsPage = new MinionsPage(this)); // NOSONAR S1121
+    this._registerPage(Router.keysPage = new KeysPage(this)); // NOSONAR S1121
+    this._registerPage(Router.grainsPage = new GrainsPage(this)); // NOSONAR S1121
+    this._registerPage(Router.grainsMinionPage = new GrainsMinionPage(this)); // NOSONAR S1121
+    this._registerPage(Router.pillarsPage = new PillarsPage(this)); // NOSONAR S1121
+    this._registerPage(Router.pillarsMinionPage = new PillarsMinionPage(this)); // NOSONAR S1121
+    this._registerPage(Router.minePage = new MinePage(this)); // NOSONAR S1121
+    this._registerPage(Router.mineMinionPage = new MineMinionPage(this)); // NOSONAR S1121
+    this._registerPage(Router.beaconsPage = new BeaconsPage(this)); // NOSONAR S1121
+    this._registerPage(Router.beaconsMinionPage = new BeaconsMinionPage(this)); // NOSONAR S1121
+    this._registerPage(Router.schedulesPage = new SchedulesPage(this)); // NOSONAR S1121
+    this._registerPage(Router.schedulesMinionPage = new SchedulesMinionPage(this)); // NOSONAR S1121
+    this._registerPage(Router.nodegroupsPage = new NodegroupsPage(this)); // NOSONAR S1121
+    this._registerPage(Router.jobPage = new JobPage(this)); // NOSONAR S1121
+    this._registerPage(Router.jobsPage = new JobsPage(this)); // NOSONAR S1121
+    this._registerPage(Router.highStatePage = new HighStatePage(this)); // NOSONAR S1121
+    this._registerPage(Router.templatesPage = new TemplatesPage(this)); // NOSONAR S1121
+    this._registerPage(Router.eventsPage = new EventsPage(this)); // NOSONAR S1121
+    this._registerPage(Router.reactorsPage = new ReactorsPage(this)); // NOSONAR S1121
+    this._registerPage(Router.orchestrationsPage = new OrchestrationsPage(this)); // NOSONAR S1121
+    this._registerPage(Router.optionsPage = new OptionsPage(this)); // NOSONAR S1121
+    this._registerPage(Router.issuesPage = new IssuesPage(this)); // NOSONAR S1121
+    this._registerPage(Router.logoutPage = new LogoutPage(this)); // NOSONAR S1121
+    /* eslint-enable no-inline-comments */
 
     this._registerRouterEventListeners();
 
