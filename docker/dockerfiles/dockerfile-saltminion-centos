@@ -24,7 +24,7 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then RPM_ARCH="x86_64"; else RPM_ARCH="aarch
     yum install --assumeyes "https://packages.broadcom.com/artifactory/saltproject-rpm/salt-minion-${SALT_VERSION}-0.${RPM_ARCH}.rpm"
 
 # cleanup temporary files
-RUN rm -rf /var/lib/yum/* /var/cache/yum *.rpm \
+RUN rm -rf /var/lib/yum/* /var/cache/yum ./*.rpm \
   && yum clean all
 
 # copy the minion configuration

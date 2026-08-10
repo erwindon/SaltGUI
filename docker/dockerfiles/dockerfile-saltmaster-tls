@@ -39,7 +39,7 @@ RUN apt install --yes --no-install-recommends \
 RUN apt-get install --yes --no-install-recommends supervisor
 
 # cleanup temporary files
-RUN rm -rf /var/lib/apt/lists/* *.deb \
+RUN rm -rf /var/lib/apt/lists/* ./*.deb \
   && apt-get --yes autoremove \
   && apt-get clean
 

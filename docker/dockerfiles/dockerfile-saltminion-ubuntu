@@ -32,7 +32,7 @@ RUN apt install --yes --no-install-recommends \
   "./salt-minion_${SALT_VERSION}.deb"
 
 # cleanup temporary files
-RUN rm -rf /var/lib/apt/lists/* *.deb \
+RUN rm -rf /var/lib/apt/lists/* ./*.deb \
   && apt-get -y autoremove \
   && apt-get clean
 
