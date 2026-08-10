@@ -254,7 +254,8 @@ export class Router {
     try {
       const result = JSON.parse(pages);
       return Array.isArray(result) ? result : [];
-    } catch (err) { // eslint-disable-line no-unused-vars
+    } catch (err) {
+      Utils.log("Failed to parse session variable 'pages': " + err);
       return [];
     }
   }
