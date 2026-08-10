@@ -209,7 +209,7 @@ export class OutputDocumentation {
         if (out === null) {
           continue;
         }
-        out = out.trimRight();
+        out = out.trimEnd();
 
         // internal links: remove the ".. rubric::" prefix
         // e.g. in "sys.doc state.apply"
