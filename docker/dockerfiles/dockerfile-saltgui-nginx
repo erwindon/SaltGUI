@@ -1,16 +1,16 @@
 FROM ubuntu:26.04
 
 LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
-LABEL name=saltgui-nginx
+LABEL name="saltgui-nginx"
 LABEL project="SaltGUI testing"
-LABEL version=1.18.0
+LABEL version="1.18.0"
 
-ENV NGINX_VERSION=1.18.0
-ENV DEBIAN_FRONTEND=noninteractive
+ENV NGINX_VERSION="1.18.0"
+ENV DEBIAN_FRONTEND="noninteractive"
 
 RUN apt-get update \
   # install nginx
-  && apt-get install -y nginx=${NGINX_VERSION}* --no-install-recommends \
+  && apt-get install -y nginx="${NGINX_VERSION}*" --no-install-recommends \
   # show which versions are installed
   && dpkg -l | grep nginx \
   # cleanup temporary files

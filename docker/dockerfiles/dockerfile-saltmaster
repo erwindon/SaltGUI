@@ -1,12 +1,12 @@
 FROM ubuntu:26.04
 
 LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
-LABEL name=salt-master
+LABEL name="salt-master"
 LABEL project="SaltGUI testing"
-LABEL version=3007.14
+LABEL version="3007.14"
 
-ENV SALT_VERSION=3007.14
-ENV DEBIAN_FRONTEND=noninteractive
+ENV SALT_VERSION="3007.14"
+ENV DEBIAN_FRONTEND="noninteractive"
 
 # make download possible, make encrypted password generation possible
 RUN apt-get update
@@ -20,10 +20,10 @@ RUN usermod -s /bin/bash -p "$(openssl passwd -1 salt)" salt
 # not using repo, so must explicitly do all packages
 # Use TARGETARCH to get the correct architecture for multi-platform builds
 ARG TARGETARCH
-RUN curl -o salt-common_${SALT_VERSION}.deb https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-common_${SALT_VERSION}_${TARGETARCH}.deb
-RUN curl -o salt-api_${SALT_VERSION}.deb https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-api_${SALT_VERSION}_${TARGETARCH}.deb
-RUN curl -o salt-master_${SALT_VERSION}.deb https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-master_${SALT_VERSION}_${TARGETARCH}.deb
-RUN apt install --yes --no-install-recommends ./salt-common_${SALT_VERSION}.deb ./salt-master_${SALT_VERSION}.deb ./salt-api_${SALT_VERSION}.deb
+RUN curl -o "salt-common_${SALT_VERSION}.deb" "https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-common_${SALT_VERSION}_${TARGETARCH}.deb"
+RUN curl -o "salt-api_${SALT_VERSION}.deb" "https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-api_${SALT_VERSION}_${TARGETARCH}.deb"
+RUN curl -o "salt-master_${SALT_VERSION}.deb" "https://packages.broadcom.com/artifactory/saltproject-deb/pool/salt-master_${SALT_VERSION}_${TARGETARCH}.deb"
+RUN apt install --yes --no-install-recommends "./salt-common_${SALT_VERSION}.deb" "./salt-master_${SALT_VERSION}.deb" "./salt-api_${SALT_VERSION}.deb"
 
 # install supervisor
 # because we need to run salt-master and salt-api

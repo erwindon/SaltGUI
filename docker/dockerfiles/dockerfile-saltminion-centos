@@ -1,12 +1,12 @@
 FROM dokken/centos-stream-10:latest
 
 LABEL maintainer="Erwin Dondorp <saltgui@dondorp.com>"
-LABEL name=salt-minion
+LABEL name="salt-minion"
 LABEL project="SaltGUI testing"
-LABEL version=3007.14
+LABEL version="3007.14"
 
-ENV SALT_VERSION=3007.14
-ENV DEBIAN_FRONTEND=noninteractive
+ENV SALT_VERSION="3007.14"
+ENV DEBIAN_FRONTEND="noninteractive"
 
 # get saltstack software
 RUN yum install --assumeyes ca-certificates epel-release curl
@@ -17,8 +17,8 @@ RUN yum install --assumeyes ca-certificates epel-release curl
 ARG TARGETARCH
 # Map TARGETARCH to RPM architecture (amd64->x86_64, arm64->aarch64)
 RUN if [ "$TARGETARCH" = "amd64" ]; then RPM_ARCH="x86_64"; else RPM_ARCH="aarch64"; fi && \
-    yum install --assumeyes https://packages.broadcom.com/artifactory/saltproject-rpm/salt-${SALT_VERSION}-0.${RPM_ARCH}.rpm && \
-    yum install --assumeyes https://packages.broadcom.com/artifactory/saltproject-rpm/salt-minion-${SALT_VERSION}-0.${RPM_ARCH}.rpm
+    yum install --assumeyes "https://packages.broadcom.com/artifactory/saltproject-rpm/salt-${SALT_VERSION}-0.${RPM_ARCH}.rpm" && \
+    yum install --assumeyes "https://packages.broadcom.com/artifactory/saltproject-rpm/salt-minion-${SALT_VERSION}-0.${RPM_ARCH}.rpm"
 
 # cleanup temporary files
 RUN rm -rf /var/lib/yum/* /var/cache/yum *.rpm \
