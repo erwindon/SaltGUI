@@ -70,7 +70,12 @@ function Hilitor(start, id, tag)
       var re = "(?:" + input + ")";
       if(!this.openLeft) re = "\\b" + re;
       if(!this.openRight) re = re + "\\b";
-      matchRegExp = new RegExp(re, isCaseSensitive ? "" : "i");
+      try {
+        matchRegExp = new RegExp(re, isCaseSensitive ? "" : "i");
+      } catch (err) {
+        console.error("Regexp error: " + re + ": " + err);
+        return null;
+      }
       return matchRegExp;
     }
     return null;
