@@ -79,7 +79,7 @@ export class Output {
 
     // replace all returned JIDs to links
     // typically found in the output of an async job
-    if (pMinionResponse.match(ParseCommandLine.getPatJid())) {
+    if (ParseCommandLine.getPatJid().test(pMinionResponse)) {
       const link = Utils.createElem("a", "", pMinionResponse);
       link.href = "?id=" + encodeURIComponent(pMinionResponse) + "#job";
       return link;
@@ -216,7 +216,7 @@ export class Output {
     pDtStr = pDtStr.replace(/[.][0-9]*$/, "");
 
     // original was formatted as iso-date-time
-    if (pDtStr.match(/T/)) {
+    if (/T/.test(pDtStr)) {
       pDtStr += "Z";
     } else {
       pDtStr += " UTC";

@@ -1036,7 +1036,7 @@ export class Panel {
         commandString += JSON.stringify(cmd);
         continue;
       }
-      if (cmd.match(/^[a-z_]+=$/i)) {
+      if (/^[a-z_]+=$/i.test(cmd)) {
         // handle key-value pairs
         const pos = cmd.indexOf("=");
         commandString += cmd.substring(0, pos + 1);
@@ -1044,12 +1044,12 @@ export class Panel {
         separator = "";
         continue;
       }
-      if (cmd.match(/^<[a-z]*>$/)) {
+      if (/^<[a-z]*>$/.test(cmd)) {
         // It's a placeholder
         commandString += cmd;
         continue;
       }
-      if (cmd.match(/^[a-z_][a-z0-9_]*(?:[.][a-z0-9_]+)*$/i)) {
+      if (/^[a-z_][a-z0-9_]*(?:[.][a-z0-9_]+)*$/i.test(cmd)) {
         // It's a simple string or a command
         commandString += cmd;
         continue;

@@ -18,7 +18,7 @@
         };
 
 
-    if (navigator.userAgent.match(/iPhone/i)) {
+    if (/iPhone/i.test(navigator.userAgent)) {
         initialize();
 
         document.addEventListener("touchstart", gestureStart, false);

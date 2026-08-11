@@ -53,7 +53,7 @@ export class JobsDetailsPanel extends JobsPanel {
     } else if (cnt === "all") {
       // magic value to ignore all filters
       cnt = 99999;
-    } else if (cnt.match(patInteger)) {
+    } else if (patInteger.test(cnt)) {
       cnt = Number.parseInt(cnt, 10);
     } else {
       // pretend parameter was not present

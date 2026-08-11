@@ -23,7 +23,7 @@ export class OutputYaml {
       let needQuotes = false;
 
       // simple number with extra 0's at the start is still a string
-      if (pValue.match(/^0[0-9]+$/)) {
+      if (/^0[0-9]+$/.test(pValue)) {
         needQuotes = true;
       }
 
@@ -31,31 +31,31 @@ export class OutputYaml {
         needQuotes = true;
       }
 
-      if (pValue.match(/^$/)) {
+      if (/^$/.test(pValue)) {
         needQuotes = true;
       }
 
-      if (pValue.match(/^ /)) {
+      if (/^ /.test(pValue)) {
         needQuotes = true;
       }
-      if (pValue.match(/ $/)) {
-        needQuotes = true;
-      }
-
-      if (pValue.match(/^@/)) {
-        needQuotes = true;
-      }
-      if (pValue.match(/^`/)) {
-        needQuotes = true;
-      }
-      if (pValue.match(/'/)) {
-        needQuotes = true;
-      }
-      if (pValue.match(/^%/)) {
+      if (/ $/.test(pValue)) {
         needQuotes = true;
       }
 
-      if (!pValue.match(/^[-a-z0-9_()./:+ ]+$/i)) {
+      if (/^@/.test(pValue)) {
+        needQuotes = true;
+      }
+      if (/^`/.test(pValue)) {
+        needQuotes = true;
+      }
+      if (/'/.test(pValue)) {
+        needQuotes = true;
+      }
+      if (/^%/.test(pValue)) {
+        needQuotes = true;
+      }
+
+      if (!/^[-a-z0-9_()./:+ ]+$/i.test(pValue)) {
         needQuotes = true;
       }
 

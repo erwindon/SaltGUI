@@ -147,7 +147,7 @@ export class JobPanel extends Panel {
       // prevent quotes being added on JIDs
       return pObj;
     }
-    if (pObj.match(/^[a-z_][a-z0-9_]*(?:[.][a-z0-9_]+)*$/i)) {
+    if (/^[a-z_][a-z0-9_]*(?:[.][a-z0-9_]+)*$/i.test(pObj)) {
       // simple string that cannot be confused with
       // another object type
       return pObj;
