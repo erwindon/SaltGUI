@@ -66,11 +66,11 @@ export class SchedulesMinionPanel extends Panel {
     }
 
     if (schedules === undefined) {
-      this.setMsg("Unknown minion '" + pMinionId + "'");
+      this.setMsgTxt("Unknown minion '" + pMinionId + "'");
       return;
     }
     if (schedules === false) {
-      this.setMsg("Minion '" + pMinionId + "' did not answer");
+      this.setMsgTxt("Minion '" + pMinionId + "' did not answer");
       return;
     }
 
@@ -130,7 +130,7 @@ export class SchedulesMinionPanel extends Panel {
 
     const txt = Utils.txtZeroOneMany(keys.length,
       "No schedules", "{0} schedule", "{0} schedules");
-    this.setMsg(txt);
+    this.setMsgTxt(txt);
   }
 
   _addPanelMenuItemScheduleEnableWhenNeeded () {

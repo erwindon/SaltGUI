@@ -62,7 +62,7 @@ export class TemplatesPanel extends Panel {
   updateFooter () {
     const txt = Utils.txtZeroOneMany(this.nrTemplates,
       "No templates", "{0} template", "{0} templates");
-    this.setMsg(txt);
+    this.setMsgTxt(txt);
   }
 
   static _getTemplateCategories (template) {

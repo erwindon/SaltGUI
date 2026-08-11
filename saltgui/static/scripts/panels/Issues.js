@@ -65,7 +65,7 @@ export class IssuesPanel extends Panel {
     allPromise.then(() => {
       // VOID
     }, (_error_Error) => {
-      this.setMsg("(error)");
+      this.setMsgTxt("(error)");
       Utils.addToolTip(this.msgDiv, _error_Error);
     });
   }

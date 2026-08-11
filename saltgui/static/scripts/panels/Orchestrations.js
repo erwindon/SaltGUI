@@ -58,7 +58,7 @@ export class OrchestrationsPanel extends Panel {
       }
       const txt = Utils.txtZeroOneMany(orchestrations.length,
         "No errors", "{0} error", "{0} errors");
-      this.setMsg(txt);
+      this.setMsgTxt(txt);
       return;
     }
 
@@ -78,7 +78,7 @@ export class OrchestrationsPanel extends Panel {
 
     const txt = Utils.txtZeroOneMany(nrOrchestrations,
       "No orchestrations", "{0} orchestration", "{0} orchestrations");
-    this.setMsg(txt);
+    this.setMsgTxt(txt);
   }
 
   _addOrchestration (pOrchestrationName, pOrchestrations) {

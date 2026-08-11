@@ -105,7 +105,7 @@ export class BeaconsMinionPanel extends Panel {
 
   updateFooter () {
     const txt = Utils.txtZeroOneMany(this.nrBeacons, "No beacons", "{0} beacon", "{0} beacons");
-    this.setMsg(txt);
+    this.setMsgTxt(txt);
   }
 
   _handleLocalBeaconsList (pLocalBeaconsListData, pMinionId) {
@@ -132,11 +132,11 @@ export class BeaconsMinionPanel extends Panel {
     }
 
     if (beacons === undefined) {
-      this.setMsg("Unknown minion '" + pMinionId + "'");
+      this.setMsgTxt("Unknown minion '" + pMinionId + "'");
       return;
     }
     if (beacons === false) {
-      this.setMsg("Minion '" + pMinionId + "' did not answer");
+      this.setMsgTxt("Minion '" + pMinionId + "' did not answer");
       return;
     }
 

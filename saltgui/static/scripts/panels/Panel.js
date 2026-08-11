@@ -402,21 +402,21 @@ export class Panel {
     const msgDiv = Utils.createDiv("msg", "", this.key + "-msg");
     this.div.appendChild(msgDiv);
     this.msgDiv = msgDiv;
-    this.setMsg("(loading)");
+    this.setMsgTxt("(loading)");
   }
 
-  setMsg (pText) {
-    this.msgTxt = pText;
-    this._updateMsg();
-  }
-
-  _updateMsg () {
-    if (!this.msgDiv) {
-      // the div is not created yet
-      return;
+  setMsgHtml (pHtml) {
+    if (this.msgDiv) {
+      // only update DOM if the div has been created
+      this.msgDiv.innerHTML = pHtml;
     }
+  }
 
-    this.msgDiv.innerHTML = this.msgTxt;
+  setMsgTxt (pText) {
+    if (this.msgDiv) {
+      // only update DOM if the div has been created
+      this.msgDiv.innerText = pText;
+    }
   }
 
   loadMinionsTxt () {
@@ -1000,7 +1000,7 @@ export class Panel {
 
     txt = txt.replace(/^, /g, "");
 
-    this.setMsg(txt.length > 0 ? txt : "(???)");
+    this.setMsgHtml(txt.length > 0 ? txt : "(???)");
   }
 
   updateOfflineMinion (pMinionId, pMinionsDict) {
@@ -1132,7 +1132,7 @@ export class Panel {
       this.clearTable();
     }
     if (this.msgDiv) {
-      this.setMsg("(loading)");
+      this.setMsgTxt("(loading)");
     }
     if (this.timeField) {
       this.timeField.innerText = Character.NO_BREAK_SPACE;

@@ -60,7 +60,7 @@ export class ReactorsPanel extends Panel {
 
     const txt = Utils.txtZeroOneMany(reactorsArr.length,
       "No reactors", "{0} reactor", "{0} reactors");
-    this.setMsg(txt);
+    this.setMsgTxt(txt);
   }
 
   _addReactor (pEvent, pReactor) {

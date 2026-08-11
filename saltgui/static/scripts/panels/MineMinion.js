@@ -101,11 +101,11 @@ export class MineMinionPanel extends Panel {
     }
 
     if (mine === undefined) {
-      this.setMsg("Unknown minion '" + pMinionId + "'");
+      this.setMsgTxt("Unknown minion '" + pMinionId + "'");
       return;
     }
     if (mine === false) {
-      this.setMsg("Minion '" + pMinionId + "' did not answer");
+      this.setMsgTxt("Minion '" + pMinionId + "' did not answer");
       return;
     }
     const mineNames = Object.keys(mine).sort();

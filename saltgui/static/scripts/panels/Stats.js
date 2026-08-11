@@ -77,7 +77,7 @@ export class StatsPanel extends Panel {
       return;
     }
 
-    this.setMsg(null);
+    this.setMsgTxt(null);
 
     for (const topKey in pStatsData) {
 
