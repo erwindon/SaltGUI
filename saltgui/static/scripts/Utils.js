@@ -400,16 +400,18 @@ export class Utils {
     let regexp;
 
     const errorBox = pTable.parentElement.querySelector(".search-error");
+    errorBox.style.display = "none";
+    errorBox.style.color = "";
+
     if (regExpFlag) {
       try {
         regexp = new RegExp(pSearchText, caseSensitiveFlag ? "" : "i");
       } catch (err) {
-        errorBox.innerText = err.message;
+        errorBox.innerText = Character.WARNING_SIGN + err.message;
         errorBox.style.display = "";
         return;
       }
     }
-    errorBox.style.display = "none";
 
     const searchParam = regExpFlag ? regexp : pSearchText;
     let hasEmptyMatches = false;
@@ -446,10 +448,15 @@ export class Utils {
         block.classList.add("no-filter-match");
       }
     }
-    if (pSearchText && hasEmptyMatches) {
-      const indicator = hasNonEmptyMatches ? "also" : "only";
-      errorBox.innerText = "warning: there were " + indicator + " empty matches, highlighting is not performed";
+    if (invertFlag) {
+      errorBox.innerText = Character.CIRCLED_INFORMATION_SOURCE + Character.NO_BREAK_SPACE + "with 'Invert search', highlighting is never visible";
       errorBox.style.display = "";
+      errorBox.style.color = "inherit";
+    } else if (pSearchText && hasEmptyMatches) {
+      const indicator = hasNonEmptyMatches ? "also" : "only";
+      errorBox.innerText = Character.WARNING_SIGN + Character.NO_BREAK_SPACE + "there were " + indicator + " empty matches, highlighting is not performed";
+      errorBox.style.display = "";
+      errorBox.style.color = "inherit";
       return;
     }
 
