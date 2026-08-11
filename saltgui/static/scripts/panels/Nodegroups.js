@@ -94,16 +94,16 @@ export class NodegroupsPanel extends Panel {
       const minionTd = Utils.createTd();
       minionTd.appendChild(minionSpan);
       let status;
-      if (pWheelKeyListAllSimpleData.minions.indexOf(pMinionId) >= 0) {
+      if (pWheelKeyListAllSimpleData.minions.includes(pMinionId)) {
         // strange, should have found this TR
         status = Utils.createTd(["status", "error"], "error");
-      } else if (pWheelKeyListAllSimpleData.minions_pre.indexOf(pMinionId) >= 0) {
+      } else if (pWheelKeyListAllSimpleData.minions_pre.includes(pMinionId)) {
         status = Utils.createTd(["status", "unaccepted"], "unaccepted");
         this.unaccepted += 1;
-      } else if (pWheelKeyListAllSimpleData.minions_rejected.indexOf(pMinionId) >= 0) {
+      } else if (pWheelKeyListAllSimpleData.minions_rejected.includes(pMinionId)) {
         status = Utils.createTd(["status", "rejected"], "rejected");
         this.rejected += 1;
-      } else if (pWheelKeyListAllSimpleData.minions_denied.indexOf(pMinionId) >= 0) {
+      } else if (pWheelKeyListAllSimpleData.minions_denied.includes(pMinionId)) {
         status = Utils.createTd(["status", "denied"], "denied");
         this.denied += 1;
       } else {
@@ -215,11 +215,11 @@ export class NodegroupsPanel extends Panel {
           offline += 1;
         } else if (minionData.retcode === 0) {
           online += 1;
-        } else if (this.wheelKeyListAllSimpleData.minions_pre.indexOf(minionId) >= 0) {
+        } else if (this.wheelKeyListAllSimpleData.minions_pre.includes(minionId)) {
           nrUnaccepted += 1;
-        } else if (this.wheelKeyListAllSimpleData.minions_rejected.indexOf(minionId) >= 0) {
+        } else if (this.wheelKeyListAllSimpleData.minions_rejected.includes(minionId)) {
           nrRejected += 1;
-        } else if (this.wheelKeyListAllSimpleData.minions_denied.indexOf(minionId) >= 0) {
+        } else if (this.wheelKeyListAllSimpleData.minions_denied.includes(minionId)) {
           nrDenied += 1;
         } else {
           nrUnknown += 1;

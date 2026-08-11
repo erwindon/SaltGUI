@@ -104,7 +104,7 @@ export class CommandBox {
       // item has one category, return when it matches
       return pTemplate.description + keyboardHint;
     }
-    if (pTemplate.categories && pTemplate.categories.indexOf(CommandBox.templateTmplMenu._templateCategory) >= 0) {
+    if (pTemplate.categories && pTemplate.categories.includes(CommandBox.templateTmplMenu._templateCategory)) {
       // item has a list of categories, return when one matches
       return pTemplate.description + keyboardHint;
     }

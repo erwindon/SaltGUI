@@ -49,7 +49,7 @@ export class OutputDocumentation {
     // too many false positives otherwise
     // actually so limited that no one noticed for 5 years
     // e.g. pillar.items
-    if (["sys.doc", "runners.doc.runner", "runners.doc.wheel"].indexOf(pCommandCmd) < 0) {
+    if (!["sys.doc", "runners.doc.runner", "runners.doc.wheel"].includes(pCommandCmd)) {
       return false;
     }
 

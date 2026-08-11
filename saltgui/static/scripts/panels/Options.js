@@ -381,7 +381,7 @@ export class OptionsPanel extends Panel {
       for (const valueArr of valuesArr) {
         for (let i = 1; i < valueArr.length; i++) {
           let label = valueArr[i];
-          if (label.indexOf(":") >= 0) {
+          if (label.includes(":")) {
             label = label.replace(/:.*/, "");
           }
           const id = "option-" + name + "-value-" + valueArr[0] + "-" + label;

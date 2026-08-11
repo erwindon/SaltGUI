@@ -165,7 +165,7 @@ export class MinionsPanel extends Panel {
     const minionIds = pWheelMinionsConnectedData.return[0].data.return;
 
     for (const tr of this.table.tBodies[0].childNodes) {
-      tr.dataset.isConnected = minionIds.indexOf(tr.dataset.minionId) >= 0;
+      tr.dataset.isConnected = minionIds.includes(tr.dataset.minionId);
 
       if (tr.dataset.isConnected) {
         // skip the connected minions
@@ -724,7 +724,7 @@ export class MinionsPanel extends Panel {
       }
       txt += bug;
       cnt -= 1;
-      if (pAllCveKeys.indexOf(bug) < 0) {
+      if (!pAllCveKeys.includes(bug)) {
         pAllCveKeys.push(bug);
       }
     }

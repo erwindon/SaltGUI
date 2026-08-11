@@ -107,7 +107,7 @@ export class StateIssues extends Issues {
 
     for (const minionId in jobData.Result) {
 
-      if (pKeys.indexOf(minionId) < 0) {
+      if (!pKeys.includes(minionId)) {
         // this is no longer a valid minion
         continue;
       }

@@ -155,7 +155,7 @@ export class KeysPanel extends Panel {
           continue;
         }
         const fingerprint = hosts[minionId];
-        if (!fingerprint.match(this.fingerprintPattern)) {
+        if (!this.fingerprintPattern.test(fingerprint)) {
           item.classList.remove("fingerprint");
           Utils.addErrorToTableCell(fingerprintElement, fingerprint);
           continue;

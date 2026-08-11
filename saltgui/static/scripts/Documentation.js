@@ -198,7 +198,7 @@ export class Documentation {
 
         // add the new mapping, prevent duplicates as
         // multiple minions provide (almost) the same answers
-        if (Documentation.PROVIDERS[value].indexOf(key) < 0) {
+        if (!Documentation.PROVIDERS[value].includes(key)) {
           Documentation.PROVIDERS[value].push(key);
         }
       }
@@ -357,7 +357,7 @@ export class Documentation {
       }
     }
 
-    if (cmd.length >= 2 && cmd[0] === "modules" && knownVirtualModules.indexOf(cmd[1]) >= 0) {
+    if (cmd.length >= 2 && cmd[0] === "modules" && knownVirtualModules.includes(cmd[1])) {
       html += "<p>The link below is the overview page of all related virtual package modules.</p>";
       html += "<p><a href='" + Documentation.DOCUMENTATION_URL + cmd[0] + "/all/salt." + cmd[0] + "." + cmd[1] + ".html' target='_blank' rel='noopener'>'" + cmd[0] + "." + cmd[1] + "' modules" + Documentation.EXTERNAL_LINK + "</a></p>";
     }
@@ -419,7 +419,7 @@ export class Documentation {
     const argsObject = {};
     ParseCommandLine.parseCommandLine(commandLine, argsArray, argsObject);
 
-    if (cmd.length >= 3 && cmd[0] === "modules" && cmd[1] === "beacons" && ["add", "modify"].indexOf(cmd[2]) >= 0 && argsArray.length >= 2 && typeof argsArray[1] === "string") {
+    if (cmd.length >= 3 && cmd[0] === "modules" && cmd[1] === "beacons" && ["add", "modify"].includes(cmd[2]) && argsArray.length >= 2 && typeof argsArray[1] === "string") {
       const beaconName = argsArray[1];
       html += "<p>Beacon-name '" + Documentation._escapeHtml(beaconName) + "' cannot be verified. We'll just assume it actually exists. The link below might not work.</p>";
       html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "beacons/all/salt.beacons." + Documentation._escapeHtml(beaconName) + ".html' target='_blank' rel='noopener'>Beacon Module '" + Documentation._escapeHtml(beaconName) + "'" + Documentation.EXTERNAL_LINK + "</a></p>";
