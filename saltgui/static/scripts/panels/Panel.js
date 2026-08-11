@@ -1155,12 +1155,19 @@ export class Panel {
   static _addPrefixImage (pElem, pImageName) {
     const img = Utils.createElem("img", "prefiximage");
     const pngName = pImageName.replaceAll(" ", "-").toLowerCase() + ".png";
-    img.setAttribute("src", "static/images/" + pngName);
-    img.onerror = () => {
-      img.onerror = null;
-      img.title = "Unknown image, please report to SaltGUI team that image '" + pImageName + "' is missing";
-      img.src = "static/images/UNKNOWN.png";
-    };
+
+    // Validate that pngName contains only lowercase letters, hyphens, and .png extension
+    if (/^[a-z-]+\.png$/.test(pngName)) {
+      img.setAttribute("src", "static/images/" + pngName);
+      img.onerror = () => {
+        img.onerror = null;
+        img.title = "Unknown image, please report to SaltGUI team that image '" + pImageName + "' is missing";
+        img.src = "static/images/UNKNOWN.png";
+      };
+    } else {
+      img.setAttribute("src", "static/images/UNKNOWN.png");
+      img.title = "Unknown image, please report to SaltGUI team that image '" + pImageName + "' is invalid";
+    }
     pElem.prepend(img);
   }
 
