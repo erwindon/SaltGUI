@@ -64,7 +64,8 @@ function Hilitor(start, id, tag)
   {
     input = input.replace(endRegExp, "");
     input = input.replace(breakRegExp, "|");
-    input = input.replace(/^\||\|$/g, "");
+    // the caller may have used \|, then this fails
+    // input = input.replace(/^\||\|$/g, "");
     if(input) {
       var re = "(?:" + input + ")";
       if(!this.openLeft) re = "\\b" + re;
