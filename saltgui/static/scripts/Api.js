@@ -420,8 +420,8 @@ export class API {
   }
 
   static getEvents () {
-    const tokenOnSetup = Utils.getStorageItem("session", "token");
-    if (!tokenOnSetup) {
+    // do not attempt event-connection when there is no valid session, e.g. before login or after logout
+    if (!Utils.getStorageItem("session", "token")) {
       return;
     }
 
@@ -433,7 +433,7 @@ export class API {
 
     let source;
     try {
-      source = new EventSource(config.API_URL + "/events?token=" + tokenOnSetup);
+      source = new EventSource(config.API_URL + "/events");
     } catch (err) { // eslint-disable-line no-unused-vars
       Utils.error("Cannot read the Salt-EventBus with this browser version, browser upgrade recommended");
       return;
