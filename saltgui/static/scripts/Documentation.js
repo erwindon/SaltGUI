@@ -10,15 +10,6 @@ import {Utils} from "./Utils.js";
 
 export class Documentation {
 
-  static _escapeHtml (unsafe) {
-    return unsafe
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll("\"", "&quot;")
-      .replaceAll("'", "&#039;");
-  }
-
   // formatting of the documentation is done as a regular output type
   // that is therefore in output.js
 
@@ -257,7 +248,7 @@ export class Documentation {
 
     // title line
     let html = "";
-    html += "<h3>Documentation for '" + Documentation._escapeHtml(cmd.join(".").replace(/^modules[.]/, "")) + "':</h3>";
+    html += "<h3>Documentation for '" + Utils.escapeHtml(cmd.join(".").replace(/^modules[.]/, "")) + "':</h3>";
 
     // level 0
     html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "' target='_blank' rel='noopener'>Salt Module Reference" + Documentation.EXTERNAL_LINK + "</a></p>";
@@ -266,13 +257,13 @@ export class Documentation {
     // Function getKeywordFragments makes sure that
     // the cmd array has at least one element.
     // The default is "modules"
-    let pageTitle = "All '" + Documentation._escapeHtml(cmd[0]) + "' modules";
+    let pageTitle = "All '" + Utils.escapeHtml(cmd[0]) + "' modules";
     if (cmd[0] === "modules") {
       // the page title is different for this page
       // the link to the page must use the same title
       pageTitle = "All 'execution' modules";
     }
-    html += "<p><a href='" + Documentation.DOCUMENTATION_URL + Documentation._escapeHtml(cmd[0]) + "/all/index.html' target='_blank' rel='noopener'>" + Documentation._escapeHtml(pageTitle) + Documentation.EXTERNAL_LINK + "</a></p>";
+    html += "<p><a href='" + Documentation.DOCUMENTATION_URL + Utils.escapeHtml(cmd[0]) + "/all/index.html' target='_blank' rel='noopener'>" + Utils.escapeHtml(pageTitle) + Documentation.EXTERNAL_LINK + "</a></p>";
 
     // When the module is a virtual module, we want
     // to show all relevant concrete modules
@@ -310,15 +301,15 @@ export class Documentation {
 
       switch (concreteModules.length) {
       case 0:
-        html += "<p>'" + Documentation._escapeHtml(cmd[1]) + "' is an unknown module name. We'll just assume it actually exists. The links below (if any) might not work.</p>";
+        html += "<p>'" + Utils.escapeHtml(cmd[1]) + "' is an unknown module name. We'll just assume it actually exists. The links below (if any) might not work.</p>";
         break;
       case 1:
         // simple modules case
         // wheel/runners cases are always simple
         if (cmd[0] !== "modules") {
-          html += "<p>Module-name '" + Documentation._escapeHtml(cmd[0]) + "." + Documentation._escapeHtml(cmd[1]) + "' cannot be verified. We'll just assume it actually exists. The links below might not work.</p>";
+          html += "<p>Module-name '" + Utils.escapeHtml(cmd[0]) + "." + Utils.escapeHtml(cmd[1]) + "' cannot be verified. We'll just assume it actually exists. The links below might not work.</p>";
         } else if (cmd[1] !== concreteModules[0]) {
-          html += "<p>The internal name for '" + Documentation._escapeHtml(cmd[1]) + "' is '" + Documentation._escapeHtml(concreteModules[0]) + "'.</p>";
+          html += "<p>The internal name for '" + Utils.escapeHtml(cmd[1]) + "' is '" + Utils.escapeHtml(concreteModules[0]) + "'.</p>";
         }
         break;
       default:
@@ -421,8 +412,8 @@ export class Documentation {
 
     if (cmd.length >= 3 && cmd[0] === "modules" && cmd[1] === "beacons" && ["add", "modify"].includes(cmd[2]) && argsArray.length >= 2 && typeof argsArray[1] === "string") {
       const beaconName = argsArray[1];
-      html += "<p>Beacon-name '" + Documentation._escapeHtml(beaconName) + "' cannot be verified. We'll just assume it actually exists. The link below might not work.</p>";
-      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "beacons/all/salt.beacons." + Documentation._escapeHtml(beaconName) + ".html' target='_blank' rel='noopener'>Beacon Module '" + Documentation._escapeHtml(beaconName) + "'" + Documentation.EXTERNAL_LINK + "</a></p>";
+      html += "<p>Beacon-name '" + Utils.escapeHtml(beaconName) + "' cannot be verified. We'll just assume it actually exists. The link below might not work.</p>";
+      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "beacons/all/salt.beacons." + Utils.escapeHtml(beaconName) + ".html' target='_blank' rel='noopener'>Beacon Module '" + Utils.escapeHtml(beaconName) + "'" + Documentation.EXTERNAL_LINK + "</a></p>";
     }
 
     const output = document.querySelector(".run-command pre");

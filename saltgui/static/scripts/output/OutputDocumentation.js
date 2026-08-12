@@ -278,7 +278,7 @@ export class OutputDocumentation {
         out = out.replace(/\n\n\n*/gm, "\n\n");
 
         pOutputContainer.innerHTML +=
-          "<div><span class='minion-id'>" + key + "</span>:<br/><pre style='height: initial; overflow-y: initial;'>" + out + "</pre></div>";
+          "<div><span class='minion-id'>" + Utils.escapeHtml(key) + "</span>:<br/><pre style='height: initial; overflow-y: initial;'>" + out + "</pre></div>";
       }
     }
   }
