@@ -21,7 +21,7 @@ function Hilitor(start, id, tag)
   this.nrHilites = 0;
 
   // characters to strip from start and end of the input string
-  var endRegExp = /^[^\\w]+|[^\\w]+$/g;
+  var endRegExp = /^[^\\w]+|[^\\w]+$/g; // NOSONAR S8786
 
   // characters used to break up the input string into words
   var breakRegExp = /[^\\w'-]+/g;

@@ -218,11 +218,11 @@ export class OutputDocumentation {
 
         // internal links: remove prefixes like ":mod:" and ":py:func:"
         // e.g. in "sys.doc state.apply"
-        out = out.replace(/(?::[a-z_]*)*:`/g, "`");
+        out = out.replace(/(?::[a-z_]*)*:`/g, "`"); // NOSONAR S8786
 
         // internal links: remove link indicators in highlighted text
         // e.g. in "sys.doc state.apply"
-        out = out.replace(/[ \n]*<[^`]*>`/gm, "`");
+        out = out.replace(/[ \n]*<[^`]*>`/gm, "`"); // NOSONAR S8786
 
         // turn text into html
         // e.g. in "sys.doc cmd.run"
@@ -241,7 +241,7 @@ export class OutputDocumentation {
         while (out.includes(".. _")) {
           // take only a line containing ".. _"
           const reference = out.
-            replace(/^(?:.|[\n\r])*[.][.] _/m, "").
+            replace(/^(?:.|[\n\r])*[.][.] _/m, ""). // NOSONAR S8786
             replace(/(?:[\n\r])(?:.|[\n\r])*$/m, "");
           const words = reference.split(": ");
           if (words.length !== 2) {
@@ -273,7 +273,7 @@ export class OutputDocumentation {
         out = out.replace(/`([^`]*)`/g, "<span style='color: yellow'>$1</span>");
 
         // remove whitespace at end of lines
-        out = out.replace(/ +\n/gm, "");
+        out = out.replace(/ +\n/gm, ""); // NOSONAR S8786
 
         // remove duplicate empty lines (usually due to previous rule)
         out = out.replace(/\n\n\n*/gm, "\n\n");

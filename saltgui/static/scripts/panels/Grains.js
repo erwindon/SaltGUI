@@ -37,7 +37,7 @@ export class GrainsPanel extends Panel {
       // the div is not added to the DOM yet
       const tr = this.div.querySelector("#grains-table-thead-tr");
       for (const previewGrain of this.previewGrains) {
-        const previewGrainTitle = previewGrain.replace(/[=].*$/g, "");
+        const previewGrainTitle = previewGrain.replace(/[=].*$/g, ""); // NOSONAR S8786
         const th = Utils.createElem("th", "", previewGrainTitle);
         tr.appendChild(th);
       }

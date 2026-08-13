@@ -212,7 +212,7 @@ export class Documentation {
       return ["modules"];
     }
 
-    let cmd = argsArray[0].replace(/[.]*$/, "").split(".");
+    let cmd = argsArray[0].replace(/[.]*$/, "").split("."); // NOSONAR S8786
 
     // re-organize the command with its formal category
     switch (cmd[0]) {

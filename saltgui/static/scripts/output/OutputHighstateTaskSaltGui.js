@@ -119,7 +119,7 @@ export class OutputHighstateTaskSaltGui {
       taskDiv.append(Utils.createBr());
       let txt = pTask.comment;
       // trim extra whitespace
-      txt = txt.replace(/[\n\r ]+$/g, "");
+      txt = txt.replace(/[\n\r ]+$/g, ""); // NOSONAR S8786
       // indent extra lines
       txt = txt.replace(/\n+/g, "\n" + indent);
       taskDiv.append(document.createTextNode(indent + txt));

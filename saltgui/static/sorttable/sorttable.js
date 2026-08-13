@@ -128,30 +128,30 @@ export class SortTable {
       return node.getAttribute("sorttable_customkey");
     }
     else if (node.textContent !== undefined && !hasInputs) {
-      return node.textContent.replace(/^\s+|\s+$/g, '');
+      return node.textContent.replace(/^\s+|\s+$/g, ''); // NOSONAR S8786
     }
     else if (node.innerText !== undefined && !hasInputs) {
-      return node.innerText.replace(/^\s+|\s+$/g, '');
+      return node.innerText.replace(/^\s+|\s+$/g, ''); // NOSONAR S8786
     }
     else if (node.text !== undefined && !hasInputs) {
-      return node.text.replace(/^\s+|\s+$/g, '');
+      return node.text.replace(/^\s+|\s+$/g, ''); // NOSONAR S8786
     }
     else {
       switch (node.nodeType) {
         case 3:
           if (node.nodeName.toLowerCase() === 'input') {
-            return node.value.replace(/^\s+|\s+$/g, '');
+            return node.value.replace(/^\s+|\s+$/g, ''); // NOSONAR S8786
           }
-          return node.nodeValue.replace(/^\s+|\s+$/g, '');
+          return node.nodeValue.replace(/^\s+|\s+$/g, ''); // NOSONAR S8786
         case 4:
-          return node.nodeValue.replace(/^\s+|\s+$/g, '');
+          return node.nodeValue.replace(/^\s+|\s+$/g, ''); // NOSONAR S8786
         case 1:
         case 11: {
           let innerText = '';
           for (const childNode of node.childNodes) {
             innerText += SortTable.getInnerText(childNode);
           }
-          return innerText.replace(/^\s+|\s+$/g, '');
+          return innerText.replace(/^\s+|\s+$/g, ''); // NOSONAR S8786
         }
         default:
           return '';

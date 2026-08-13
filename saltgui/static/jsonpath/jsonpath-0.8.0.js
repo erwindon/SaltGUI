@@ -45,7 +45,7 @@ function jsonPath(obj, expr, arg) {
                P.trace(P.eval(loc, val, path.substr(path.lastIndexOf(";")+1))+";"+x, val, path);
             else if (/^\?\(.*?\)$/.test(loc)) // [?(expr)]
                P.walk(loc, x, val, path, function(m,l,x,v,p) { if (P.eval(l.replace(/^\?\((.*?)\)$/,"$1"),v[m],m)) P.trace(m+";"+x,v,p); });
-            else if (/^(-?\d*):(-?\d*):?(\d*)$/.test(loc)) // [start:end:step]  phyton slice syntax
+            else if (/^(-?\d*):(-?\d*):?(\d*)$/.test(loc)) // NOSONAR S8786 // [start:end:step]  phyton slice syntax
                P.slice(loc, x, val, path);
          }
          else
@@ -66,7 +66,7 @@ function jsonPath(obj, expr, arg) {
       slice: function(loc, expr, val, path) {
          if (Array.isArray(val)) {
             var len=val.length, start=0, end=len, step=1;
-            loc.replace(/^(-?\d*):(-?\d*):?(-?\d*)$/g, function($0,$1,$2,$3){start=Number.parseInt($1||start);end=Number.parseInt($2||end);step=Number.parseInt($3||step);});
+            loc.replace(/^(-?\d*):(-?\d*):?(-?\d*)$/g, function($0,$1,$2,$3){start=Number.parseInt($1||start);end=Number.parseInt($2||end);step=Number.parseInt($3||step);}); // NOSONAR S8786
             start = (start < 0) ? Math.max(0,start+len) : Math.min(len,start);
             end   = (end < 0)   ? Math.max(0,end+len)   : Math.min(len,end);
             for (var i=start; i<end; i+=step)

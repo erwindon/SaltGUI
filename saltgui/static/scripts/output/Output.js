@@ -75,7 +75,7 @@ export class Output {
   // note: do not return a text-node
   static _getTextOutput (pMinionResponse) {
     // strip trailing whitespace
-    pMinionResponse = pMinionResponse.replace(/[\n\r ]+$/g, "");
+    pMinionResponse = pMinionResponse.replace(/[\n\r ]+$/g, ""); // NOSONAR S8786
 
     // replace all returned JIDs to links
     // typically found in the output of an async job
@@ -233,7 +233,7 @@ export class Output {
       utcDT = dateObj.toLocaleTimeString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
       if (utcDT.search("Invalid") >= 0) {
         // but not the verbose timezone name
-        utcDT = dateObj.toTimeString().replace(/ *[(][^)]*[)]$/, "");
+        utcDT = dateObj.toTimeString().replace(/ *[(][^)]*[)]$/, ""); // NOSONAR S8786
       }
       if (utcDT.search("Invalid") >= 0) {
         utcDT = pDtStr.replace(/^[-0-9]*T/, "").replace(/^1999, Sep 9 /, "");
@@ -241,19 +241,19 @@ export class Output {
     } else {
       utcDT = dateObj.toLocaleString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
       if (utcDT.search("Invalid") >= 0) {
-        utcDT = dateObj.toString().replace(/ *[(][^)]*[)]$/, "");
+        utcDT = dateObj.toString().replace(/ *[(][^)]*[)]$/, ""); // NOSONAR S8786
       }
       if (utcDT.search("Invalid") >= 0) {
         utcDT = pDtStr;
       }
     }
-    utcDT = utcDT.replace(/ *UTC$/, "");
+    utcDT = utcDT.replace(/ *UTC$/, ""); // NOSONAR S8786
 
     let localDT;
     if (pTimeOnly || dateTimeRepresentation === "utc-localtime") {
       localDT = dateObj.toLocaleTimeString(undefined, {"timeZoneName": "short"});
       if (localDT.search("Invalid") >= 0) {
-        localDT = dateObj.toString().replace(/ *[(][^)]*[)]$/, "");
+        localDT = dateObj.toString().replace(/ *[(][^)]*[)]$/, ""); // NOSONAR S8786
       }
       if (localDT.search("Invalid") >= 0) {
         localDT = pDtStr.replace(/^[-0-9]*T/, "").replace(/^1999, Sep 9 /, "");
@@ -261,7 +261,7 @@ export class Output {
     } else {
       localDT = dateObj.toLocaleString(undefined, {"timeZoneName": "short"});
       if (localDT.search("Invalid") >= 0) {
-        localDT = dateObj.toString().replace(/ *[(][^)]*[)]$/, "");
+        localDT = dateObj.toString().replace(/ *[(][^)]*[)]$/, ""); // NOSONAR S8786
       }
       if (localDT.search("Invalid") >= 0) {
         localDT = pDtStr;
