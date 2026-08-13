@@ -555,7 +555,7 @@ export class Output {
       // note that really old minions do not return 'retcode'
       return pMinionResponse.retcode === 0;
     }
-    if (pMinionResponse?.Error) {
+    if (pMinionResponse?.Error) { // NOSONAR S1126
       // e.g. runners.jobs.list_job blahblah
       return false;
     }
