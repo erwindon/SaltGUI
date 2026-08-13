@@ -146,12 +146,13 @@ export class SortTable {
         case 4:
           return node.nodeValue.replace(/^\s+|\s+$/g, '');
         case 1:
-        case 11:
+        case 11: {
           let innerText = '';
           for (const childNode of node.childNodes) {
             innerText += SortTable.getInnerText(childNode);
           }
           return innerText.replace(/^\s+|\s+$/g, '');
+        }
         default:
           return '';
       }
