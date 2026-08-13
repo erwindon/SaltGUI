@@ -90,7 +90,7 @@ export class GrainsPanel extends Panel {
       // preliminary dropdown menu
       this._addMenuItemShowGrains(minionTr.dropdownmenu, minionId);
 
-      for (let i = 0; i < this.previewGrains.length; i++) {
+      for (let i = 0; i < this.previewGrains.length; i++) { // NOSONAR S4138
         minionTr.appendChild(Utils.createTd());
       }
 
@@ -112,7 +112,7 @@ export class GrainsPanel extends Panel {
     minionTr.appendChild(Utils.createTd("saltversion"));
     minionTr.appendChild(Utils.createTd("os"));
     minionTr.appendChild(Utils.createTd("graininfo"));
-    for (let i = 0; i < this.previewGrains.length; i++) {
+    for (let i = 0; i < this.previewGrains.length; i++) { // NOSONAR S4138
       minionTr.appendChild(Utils.createTd());
     }
   }
