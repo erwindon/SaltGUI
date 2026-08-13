@@ -1,4 +1,4 @@
-/* global */
+/* global document */
 
 import {Character} from "../Character.js";
 import {DropDownMenu} from "../DropDown.js";
@@ -310,7 +310,10 @@ export class NodegroupsPanel extends Panel {
 
     const titleTd = Utils.createTd();
     if (pNodegroup) {
-      titleTd.innerHTML = Character.EM_DASH + " nodegroup <b>" + pNodegroup + "</b> " + Character.EM_DASH + " (loading) " + Character.EM_DASH;
+      titleTd.appendChild(document.createTextNode(Character.EM_DASH + " nodegroup "));
+      const boldElem = Utils.createElem("b", "", pNodegroup);
+      titleTd.appendChild(boldElem);
+      titleTd.appendChild(document.createTextNode(" " + Character.EM_DASH + " (loading) " + Character.EM_DASH));
     } else {
       titleTd.innerText = Character.EM_DASH + " not in any nodegroup " + Character.EM_DASH + " (loading) " + Character.EM_DASH;
     }
