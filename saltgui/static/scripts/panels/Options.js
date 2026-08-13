@@ -375,7 +375,7 @@ export class OptionsPanel extends Panel {
         value = defaultValue;
       }
 
-      const varr = value.replaceAll("\"", "").split(",");
+      const varr = value.replaceAll("\"", "").split(","); // NOSONAR S7776
 
       // then select the other values
       for (const valueArr of valuesArr) {
