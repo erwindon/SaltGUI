@@ -52,7 +52,10 @@ RUN mkdir -p /etc/ssl/saltgui
 RUN openssl genrsa -out /etc/ssl/saltgui/server.key 2048 && \
     openssl req -new -key /etc/ssl/saltgui/server.key -out /etc/ssl/saltgui/server.csr \
         -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=saltgui" && \
-    openssl x509 -req -days 365 -in /etc/ssl/saltgui/server.csr -signkey /etc/ssl/saltgui/server.key -out /etc/ssl/saltgui/server.crt && \
+    openssl x509 -req -days 365 \
+        -in /etc/ssl/saltgui/server.csr \
+        -signkey /etc/ssl/saltgui/server.key \
+        -out /etc/ssl/saltgui/server.crt && \
     chmod 600 /etc/ssl/saltgui/server.key && \
     chmod 644 /etc/ssl/saltgui/server.crt && \
     rm /etc/ssl/saltgui/server.csr && \
