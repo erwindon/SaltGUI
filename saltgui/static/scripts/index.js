@@ -8,7 +8,7 @@ window.addEventListener("load", () => new Router());
 // Make sure the errors are shown during regression testing
 window.onerror = function (msg, url, lineNo, columnNo, error) {
   /* eslint-disable no-console */
-  console.log("JS Error:" + msg + ",error:" + error + ",url:" + url + "@" + lineNo + ":" + columnNo);
+  console.log("JS Error:" + msg + ",error:" + error + ",url:" + url + "@" + lineNo + ":" + columnNo); // NOSONAR S6551
   /* eslint-enable no-console */
   if (error?.stack) {
     /* eslint-disable no-console */
