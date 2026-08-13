@@ -710,7 +710,7 @@ export class MinionsPanel extends Panel {
     // initial line only has 3 entries due to some initial text on same line
     let cnt = 3;
     for (const bug of bugs) {
-      if (bugs.length > 1 && bug === bugs[bugs.length - 1]) {
+      if (bugs.length > 1 && bug === bugs[bugs.length - 1]) { // NOSONAR S7755
         txt += " and";
       } else if (bug !== bugs[0]) {
         txt += ",";
