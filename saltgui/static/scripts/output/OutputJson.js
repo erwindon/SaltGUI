@@ -20,7 +20,7 @@ export class OutputJson {
     if (typeof pValue === "string") {
       // JSON.stringify does not handle this properly
       // as it may leave numeric-text unquoted
-      return "\"" + pValue.replace(/["\\]/g, "\\$&") + "\"";
+      return "\"" + pValue.replace(/["\\]/g, "\\$&") + "\""; // NOSONAR S7780
     }
 
     if (typeof pValue !== "object") {

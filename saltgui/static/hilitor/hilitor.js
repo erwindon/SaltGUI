@@ -68,8 +68,8 @@ function Hilitor(start, id, tag)
     // input = input.replace(/^\||\|$/g, "");
     if(input) {
       var re = "(?:" + input + ")";
-      if(!this.openLeft) re = "\\b" + re;
-      if(!this.openRight) re = re + "\\b";
+      if(!this.openLeft) re = "\\b" + re; // NOSONAR S7780
+      if(!this.openRight) re = re + "\\b"; // NOSONAR S7780
       try {
         matchRegExp = new RegExp(re, isCaseSensitive ? "" : "i");
       } catch (err) {
