@@ -43,7 +43,7 @@ npm run wait-for-docker
 #export PUPPETEER_DEBUG=1
 # suppress Electron Security Warnings:
 export ELECTRON_DISABLE_SECURITY_WARNINGS=true
-npx puppeteer browsers install chrome
+npx puppeteer browsers install chrome # NOSONAR S6505
 xvfb-run npm run test:functional
 
 # remove the containers
