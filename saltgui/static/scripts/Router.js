@@ -44,7 +44,6 @@ export class Router {
     Router.keyBindings = {};
 
     this._registerPage(new LoginPage(this));
-    /* eslint-disable no-inline-comments,line-comment-position */
     this._registerPage(Router.minionsPage = new MinionsPage(this)); // NOSONAR S1121
     this._registerPage(Router.keysPage = new KeysPage(this)); // NOSONAR S1121
     this._registerPage(Router.grainsPage = new GrainsPage(this)); // NOSONAR S1121
@@ -68,7 +67,6 @@ export class Router {
     this._registerPage(Router.optionsPage = new OptionsPage(this)); // NOSONAR S1121
     this._registerPage(Router.issuesPage = new IssuesPage(this)); // NOSONAR S1121
     this._registerPage(Router.logoutPage = new LogoutPage(this)); // NOSONAR S1121
-    /* eslint-enable no-inline-comments */
 
     this._registerRouterEventListeners();
 
