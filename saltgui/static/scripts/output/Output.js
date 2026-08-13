@@ -1011,7 +1011,7 @@ export class Output {
         minionOutput = Output._getNormalOutput(minionResponse);
         if (minionOutput.tagName === "DIV") {
           minionMultiLine = true;
-        } else if (typeof minionOutput === "string" && Utils.isMultiLineString(minionOutput)) {
+        } else if (typeof minionOutput === "string" && Utils.isMultiLineString(minionOutput)) { // NOSONAR S1871
           minionMultiLine = true;
         }
       }

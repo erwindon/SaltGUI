@@ -369,7 +369,7 @@ export class Utils {
     } else if (pSearchBlock.style.display === "none") {
       Utils._updateTableFilter(pTable, input.value, menuItems);
       pSearchBlock.style.display = "";
-    } else {
+    } else { // NOSONAR S1871
       Utils._updateTableFilter(pTable, "", menuItems);
       pSearchBlock.style.display = "none";
     }
