@@ -49,14 +49,13 @@ RUN rm -rf /var/lib/apt/lists/* ./*.deb \
 RUN mkdir -p /etc/ssl/saltgui
 
 # Generate SSL certificates using a single RUN command
-RUN cd /etc/ssl/saltgui && \
-    openssl genrsa -out server.key 2048 && \
-    openssl req -new -key server.key -out server.csr \
+RUN openssl genrsa -out /etc/ssl/saltgui/server.key 2048 && \
+    openssl req -new -key /etc/ssl/saltgui/server.key -out /etc/ssl/saltgui/server.csr \
         -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=saltgui" && \
-    openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt && \
-    chmod 600 server.key && \
-    chmod 644 server.crt && \
-    rm server.csr && \
+    openssl x509 -req -days 365 -in /etc/ssl/saltgui/server.csr -signkey /etc/ssl/saltgui/server.key -out /etc/ssl/saltgui/server.crt && \
+    chmod 600 /etc/ssl/saltgui/server.key && \
+    chmod 644 /etc/ssl/saltgui/server.crt && \
+    rm /etc/ssl/saltgui/server.csr && \
     echo "SSL certificates generated successfully"
 
 # copy supervisord configuration
