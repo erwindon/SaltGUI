@@ -58,8 +58,8 @@ export class StateIssues extends Issues {
 
     pKeys = pKeys.return[0].data.return.minions;
 
-    let jobs = JobsPanel._jobsToArray(pData.return[0]);
-    JobsPanel._sortJobs(jobs);
+    let jobs = JobsPanel.jobsToArray(pData.return[0]);
+    JobsPanel.sortJobs(jobs);
 
     if (jobs.length > MAX_HIGHSTATE_JOBS) {
       jobs = jobs.slice(0, MAX_HIGHSTATE_JOBS);

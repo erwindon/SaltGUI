@@ -76,7 +76,7 @@ export class Page {
       return true;
     }
 
-    const pages = Router._getPagesList();
+    const pages = Router.getPagesList();
     const page = Router.keyBindings[keyUpEvent.key];
     if (page && (pages.length === 0 || pages.includes(page))) {
       this.router.goTo(page);

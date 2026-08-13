@@ -32,7 +32,7 @@ export class BeaconsIssues extends Issues {
     return localBeaconsListPromise;
   }
 
-  static simplify (beaconData) {
+  static _simplify (beaconData) {
     if (typeof beaconData === "object" && Array.isArray(beaconData)) {
       // beacon data is strange
       // it comes in an array of objects
@@ -66,7 +66,7 @@ export class BeaconsIssues extends Issues {
             Issues.addIssueNav(tr, "beacons-minion", {"minionid": minionId});
           }
         } else {
-          const beaconData = BeaconsIssues.simplify(minionData[beaconName]);
+          const beaconData = BeaconsIssues._simplify(minionData[beaconName]);
           if (beaconData.enabled === false) {
             const tr = Issues.addIssue(pPanel, "disabled-beacon", minionId + "-" + beaconName);
             Issues.addIssueMsg(tr, "Beacon '" + beaconName + "' on '" + minionId + "' is disabled");

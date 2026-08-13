@@ -6,7 +6,8 @@ import {Utils} from "../Utils.js";
 export class OutputDocumentation {
 
   // test whether the returned data matches the requested data
-  static _isDocuKeyMatch (pKey, pFilterKey) {
+  // (other use is in regression tests)
+  static isDocuKeyMatch (pKey, pFilterKey) {
 
     // user may already have typed the "."
     // but does not know what to type next
@@ -89,7 +90,7 @@ export class OutputDocumentation {
         }
 
         // is this what we were looking for?
-        if (OutputDocumentation._isDocuKeyMatch(key, commandArg)) {
+        if (OutputDocumentation.isDocuKeyMatch(key, commandArg)) {
           result = true;
         }
       }
@@ -166,7 +167,7 @@ export class OutputDocumentation {
       for (const key of Object.keys(minionResponse)) {
 
         // is this what we were looking for?
-        if (!OutputDocumentation._isDocuKeyMatch(key, pFilterKey)) {
+        if (!OutputDocumentation.isDocuKeyMatch(key, pFilterKey)) {
           // no match, ignore the whole entry
           delete minionResponse[key];
         }

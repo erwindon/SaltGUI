@@ -148,7 +148,7 @@ export class DropDownMenu {
     return button;
   }
 
-  addMenuSeparator () {
+  _addMenuSeparator () {
     const div = document.createElement("div");
     div.style.padding = 0;
     div.isSeparator = true;
@@ -181,7 +181,7 @@ export class DropDownMenu {
     this.menuDropdown.style.display = "none";
   }
 
-  clearMenu () {
+  _clearMenu () {
     while (this.menuDropdownContent.firstChild) {
       this.menuDropdownContent.firstChild.remove();
     }

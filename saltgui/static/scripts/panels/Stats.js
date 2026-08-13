@@ -31,14 +31,14 @@ export class StatsPanel extends Panel {
       this.statsTd = td;
     }
 
-    this.onShowNow();
+    this._onShowNow();
 
     this.updateStatsInterval = window.setInterval(() => {
-      this.onShowNow();
+      this._onShowNow();
     }, 5000);
   }
 
-  onShowNow () {
+  _onShowNow () {
     const statsPromise = this.api.getStats();
 
     statsPromise.then((ok_Stats) => {

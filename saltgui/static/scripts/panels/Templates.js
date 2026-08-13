@@ -65,7 +65,7 @@ export class TemplatesPanel extends Panel {
     this.setMsg(txt);
   }
 
-  static getTemplateCategories (template) {
+  static _getTemplateCategories (template) {
     const categories = [];
     if (template.category && typeof template.category === "string") {
       categories.push(template.category);
@@ -87,7 +87,7 @@ export class TemplatesPanel extends Panel {
     for (const key of keys) {
     // make unique
       const template = templates[key];
-      categories = categories.concat(TemplatesPanel.getTemplateCategories(template));
+      categories = categories.concat(TemplatesPanel._getTemplateCategories(template));
     }
     // make unique
     categories = categories.filter((element, index, array) => array.indexOf(element) === index);
@@ -117,7 +117,7 @@ export class TemplatesPanel extends Panel {
 
     tr.appendChild(Utils.createTd("name", pTemplateName));
 
-    const categories = TemplatesPanel.getTemplateCategories(template);
+    const categories = TemplatesPanel._getTemplateCategories(template);
     let categoryTd;
     if (categories.length > 1 || categories[0] !== undefined) {
       categoryTd = Utils.createTd("category", categories.join("\n"));

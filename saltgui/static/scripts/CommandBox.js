@@ -135,7 +135,7 @@ export class CommandBox {
       menu.addMenuItem(
         () => CommandBox._templateTmplMenuItemTitle(template),
         () => {
-          CommandBox.applyTemplateByTemplate(template);
+          CommandBox._applyTemplateByTemplate(template);
         }
       );
     }
@@ -255,7 +255,7 @@ export class CommandBox {
       });
   }
 
-  static applyTemplateByProperties (pTargetType, pTarget, pCommand) {
+  static _applyTemplateByProperties (pTargetType, pTarget, pCommand) {
     if (pTargetType) {
       const targetbox = document.getElementById("target-box");
       // show the extended selection controls when
@@ -282,8 +282,8 @@ export class CommandBox {
     }
   }
 
-  static applyTemplateByTemplate (pTemplate) {
-    CommandBox.applyTemplateByProperties(pTemplate.targettype, pTemplate.target, pTemplate.command);
+  static _applyTemplateByTemplate (pTemplate) {
+    CommandBox._applyTemplateByProperties(pTemplate.targettype, pTemplate.target, pTemplate.command);
   }
 
   static applyTemplateByName (pTemplateName) {
@@ -292,10 +292,10 @@ export class CommandBox {
     if (!template) {
       return;
     }
-    CommandBox.applyTemplateByTemplate(template);
+    CommandBox._applyTemplateByTemplate(template);
   }
 
-  static getReadOnlyScreens () {
+  static _getReadOnlyScreens () {
     return [
       "events",
       "options",
@@ -304,7 +304,7 @@ export class CommandBox {
     ];
   }
 
-  static getScreenModifyingCommands () {
+  static _getScreenModifyingCommands () {
     // commands marked with "*" can change any page
     // read-only screens are already filtered out
     return {
@@ -375,8 +375,8 @@ export class CommandBox {
     button.disabled = true;
     output.innerText = "loading" + Character.HORIZONTAL_ELLIPSIS;
 
-    const readOnlyScreens = CommandBox.getReadOnlyScreens();
-    const screenModifyingCommands = CommandBox.getScreenModifyingCommands();
+    const readOnlyScreens = CommandBox._getReadOnlyScreens();
+    const screenModifyingCommands = CommandBox._getScreenModifyingCommands();
     // test whether the command may have caused an update to the list
     const command = commandValue.split(" ")[0];
     if (command in screenModifyingCommands) {
@@ -623,7 +623,7 @@ export class CommandBox {
 
     const localTestProviders = pApi.getLocalTestProviders(target);
     localTestProviders.then((pData) => {
-      Documentation._handleLocalTestProviders(pData);
+      Documentation.handleLocalTestProviders(pData);
     }, () => {
       Documentation.PROVIDERS = {"ERROR": []};
     });
@@ -805,7 +805,7 @@ export class CommandBox {
       output.appendChild(div);
     }
 
-    const isSuccess = Output._getIsSuccess(pData);
+    const isSuccess = Output.getIsSuccess(pData);
     const minionClass = Output.getMinionLabelClass(isSuccess, pData);
 
     const span1 = div.children[0];
@@ -858,7 +858,7 @@ export class CommandBox {
     }
 
     const span = div.children[eventSeqNr + 2];
-    Output._setTaskToolTip(span, task);
+    Output.setTaskToolTip(span, task);
   }
 
   static _prepareForAsyncResults (pResponse) {

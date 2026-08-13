@@ -640,7 +640,7 @@ export class MinionsPanel extends Panel {
     // https://github.com/erwindon/SaltGUI/issues/new?template=add_release.md
   }
 
-  static _getCveBugs (pVersion, pNodeType) {
+  static getCveBugs (pVersion, pNodeType) {
     const found = {};
 
     if (!pVersion) {
@@ -739,7 +739,7 @@ export class MinionsPanel extends Panel {
 
     const versionList = pRunnerManageVersionsData.return[0];
     const masterVersion = versionList["Master"];
-    const masterBugs = MinionsPanel._getCveBugs(masterVersion, MASTER);
+    const masterBugs = MinionsPanel.getCveBugs(masterVersion, MASTER);
 
     for (const outcome in versionList) {
 
@@ -764,7 +764,7 @@ export class MinionsPanel extends Panel {
           // no response for this minion
           continue;
         }
-        const minionBugs = MinionsPanel._getCveBugs(minionVersion, MINION);
+        const minionBugs = MinionsPanel.getCveBugs(minionVersion, MINION);
 
         if (Object.keys(masterBugs).length) {
           Panel.addPrefixIcon(versionSpan, Character.WARNING_SIGN);

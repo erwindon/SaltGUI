@@ -147,7 +147,7 @@ export class Output {
     return true;
   }
 
-  static nDigits (pValue, pNrDigits) {
+  static _nDigits (pValue, pNrDigits) {
     let digits = pValue.toString();
     while (digits.length < pNrDigits) {
       digits = "0" + digits;
@@ -187,7 +187,7 @@ export class Output {
       // assume it is a Date
       // 2019, Jan 26 19:05:22.808348
       const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      pDtStr = pDtStr.getUTCFullYear() + ", " + months[pDtStr.getUTCMonth()] + " " + pDtStr.getUTCDate() + " " + Output.nDigits(pDtStr.getUTCHours(), 2) + ":" + Output.nDigits(pDtStr.getUTCMinutes(), 2) + ":" + Output.nDigits(pDtStr.getUTCSeconds(), 2) + "." + Output.nDigits(pDtStr.getUTCMilliseconds(), 3);
+      pDtStr = pDtStr.getUTCFullYear() + ", " + months[pDtStr.getUTCMonth()] + " " + pDtStr.getUTCDate() + " " + Output._nDigits(pDtStr.getUTCHours(), 2) + ":" + Output._nDigits(pDtStr.getUTCMinutes(), 2) + ":" + Output._nDigits(pDtStr.getUTCSeconds(), 2) + "." + Output._nDigits(pDtStr.getUTCMilliseconds(), 3);
     }
 
     let fractionSecondsPart = pDtStr;
@@ -410,7 +410,7 @@ export class Output {
     return className;
   }
 
-  static _setTaskToolTip (pSpan, pTask) {
+  static setTaskToolTip (pSpan, pTask) {
 
     if (typeof pTask !== "object") {
       return;
@@ -484,7 +484,7 @@ export class Output {
   }
 
   // add the status summary
-  static addHighStateSummary (pMinionRow, pMinionDiv, pMinionId, pTasks) {
+  static _addHighStateSummary (pMinionRow, pMinionDiv, pMinionId, pTasks) {
 
     let nr = 0;
     const summarySpan = Utils.createSpan("task-summary", "");
@@ -495,7 +495,7 @@ export class Output {
 
       const span = Utils.createSpan("", Character.BLACK_CIRCLE);
 
-      Output._setTaskToolTip(span, task);
+      Output.setTaskToolTip(span, task);
 
       const myNr = nr;
       span.addEventListener("click", (pClickEvent) => {
@@ -541,7 +541,7 @@ export class Output {
     pMinionRow.append(summarySpan);
   }
 
-  static _getIsSuccess (pMinionResponse) {
+  static getIsSuccess (pMinionResponse) {
     if (Output._hasProperties(pMinionResponse, ["data", "tag"])) {
       // e.g. wheel.keys.list_all
       pMinionResponse = pMinionResponse.data;
@@ -912,7 +912,7 @@ export class Output {
         minionResponse = Object.values(minionResponse.return.return)[0];
       }
 
-      const isSuccess = Output._getIsSuccess(minionResponse);
+      const isSuccess = Output.getIsSuccess(minionResponse);
       minionResponse = Output._getMinionResponse(pCommand, minionResponse);
       // provide the same (simplified) object for download
       downloadObject[minionId] = minionResponse;
@@ -1048,7 +1048,7 @@ export class Output {
         minionRow.appendChild(triangle);
 
         if (addHighStateSummaryFlag) {
-          Output.addHighStateSummary(minionRow, div, minionId, tasks);
+          Output._addHighStateSummary(minionRow, div, minionId, tasks);
         }
       }
 

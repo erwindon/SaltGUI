@@ -43,7 +43,7 @@ export class CveIssues extends Issues {
     const versionList = pRunnerManageVersionsData.return[0];
 
     const masterVersion = versionList["Master"];
-    const masterBugs = MinionsPanel._getCveBugs(masterVersion, MASTER);
+    const masterBugs = MinionsPanel.getCveBugs(masterVersion, MASTER);
 
     // part 1: CVEs for the master
 
@@ -88,7 +88,7 @@ export class CveIssues extends Issues {
       // part 2b: CVEs for each minion
 
       for (const [minionId,version] of Object.entries(details)) {
-        const minionBugs = MinionsPanel._getCveBugs(version, MINION);
+        const minionBugs = MinionsPanel.getCveBugs(version, MINION);
         for (const bug in minionBugs) {
           const tr = Issues.addIssue(pPanel, "minion-bug", minionId + "-" + bug);
           Issues.addIssueMsg(tr, "Minion '" + minionId + "' is vulnerable due to " + bug + Character.NO_BREAK_SPACE + Character.HEAVY_NORTH_EAST_ARROW);

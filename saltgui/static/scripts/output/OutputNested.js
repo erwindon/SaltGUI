@@ -9,7 +9,7 @@ export class OutputNested {
     return " ".repeat(pIndent) + pPrefix + pTxt + pSuffix;
   }
 
-  static display (pValue, pIndent, pPrefix, pOutArray) {
+  static _display (pValue, pIndent, pPrefix, pOutArray) {
     if (pValue === null) {
       pOutArray.push(OutputNested._ustring(pIndent, "None", pPrefix));
     } else if (pValue === undefined) {
@@ -38,9 +38,9 @@ export class OutputNested {
           } else {
             prefix = "";
           }
-          OutputNested.display(ind, pIndent + 2, prefix, pOutArray);
+          OutputNested._display(ind, pIndent + 2, prefix, pOutArray);
         } else {
-          OutputNested.display(ind, pIndent, "-" + Character.NO_BREAK_SPACE, pOutArray);
+          OutputNested._display(ind, pIndent, "-" + Character.NO_BREAK_SPACE, pOutArray);
         }
       }
     } else if (typeof pValue === "object") {
@@ -56,7 +56,7 @@ export class OutputNested {
         } else if (val === "") {
           // VOID
         } else {
-          OutputNested.display(val, pIndent + 4, "", pOutArray);
+          OutputNested._display(val, pIndent + 4, "", pOutArray);
         }
       }
     }
@@ -64,7 +64,7 @@ export class OutputNested {
   }
 
   static formatNESTED (pValue, pIndentLevel = 0) {
-    const lines = OutputNested.display(pValue, pIndentLevel, "", []);
+    const lines = OutputNested._display(pValue, pIndentLevel, "", []);
     return lines.join("\n");
   }
 

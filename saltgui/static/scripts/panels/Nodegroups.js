@@ -129,13 +129,13 @@ export class NodegroupsPanel extends Panel {
 
       // fix the select logic
       const selectTd = minionTr2.querySelector("td");
-      this._addSelectionCheckbox (minionTr2, "select_minions", selectTd);
+      this.addSelectionCheckbox (minionTr2, "select_minions", selectTd);
 
       // fix the click-to-copy-logic
       const addressSpan = minionTr2.querySelector("td.address span");
       if (addressSpan) {
         addressSpan.addEventListener("click", (pClickEvent) => {
-          Panel._copyAddress(addressSpan, pClickEvent.ctrlKey || pClickEvent.altKey);
+          Panel.copyAddress(addressSpan, pClickEvent.ctrlKey || pClickEvent.altKey);
           pClickEvent.stopPropagation();
         });
         addressSpan.addEventListener("mouseout", () => {
@@ -302,7 +302,7 @@ export class NodegroupsPanel extends Panel {
     tr.dataset.selectKey = pNodegroup;
     tr.style.borderTop = "4px double #ddd";
 
-    this._addSelectionCheckbox (tr, "select_nodegroups");
+    this.addSelectionCheckbox (tr, "select_nodegroups");
 
     const menuTd = Utils.createTd();
     tr.dropdownmenu = new DropDownMenu(menuTd, "smaller");

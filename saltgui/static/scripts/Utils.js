@@ -6,8 +6,9 @@ import {DropDownMenu} from "./DropDown.js";
 export class Utils {
 
   // functions for URL parameters
+  // (other use is from unit tests)
 
-  static _getQueryParam2 (pUrl, pName) {
+  static getQueryParam2 (pUrl, pName) {
     const hashPos = pUrl.indexOf("#");
     if (hashPos > 0) {
       pUrl = pUrl.substring(0, hashPos);
@@ -40,7 +41,7 @@ export class Utils {
       return undefined;
     }
     /* istanbul ignore next */
-    return Utils._getQueryParam2(theWindow.location.href, pName);
+    return Utils.getQueryParam2(theWindow.location.href, pName);
   }
 
   // functions for storage handling

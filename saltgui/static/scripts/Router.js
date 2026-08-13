@@ -141,7 +141,7 @@ export class Router {
     for (const nr of ["1", "2"]) {
       document.getElementById("button-" + pButtonId + nr).
         addEventListener("click", (pClickEvent) => {
-          const pages = Router._getPagesList();
+          const pages = Router.getPagesList();
           if (pUrl && (pButtonId === "logout" || pages.length === 0 || pages.includes(pButtonId))) {
             this.goTo(pUrl);
           }
@@ -246,7 +246,7 @@ export class Router {
     pPage.onRegister();
   }
 
-  static _getPagesList () {
+  static getPagesList () {
     const pages = Utils.getStorageItem("session", "pages");
     if (!pages) {
       return [];
@@ -327,7 +327,7 @@ export class Router {
   }
 
   static updateMainMenu () {
-    const pages = Router._getPagesList();
+    const pages = Router.getPagesList();
 
     Router._showMenuItem(pages, Router.minionsPage, ["grains", "pillars", "mine", "beacons", "schedules", "nodegroups"]);
     Router._showMenuItem(pages, Router.grainsPage);
@@ -366,7 +366,7 @@ export class Router {
       pHash = "login";
     }
 
-    const pages = Router._getPagesList();
+    const pages = Router.getPagesList();
     if (!pHash) {
       // go to the concrete default page
       if (pages.length) {

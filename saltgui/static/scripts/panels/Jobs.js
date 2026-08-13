@@ -122,8 +122,8 @@ export class JobsPanel extends Panel {
       return;
     }
 
-    const jobs = JobsPanel._jobsToArray(pData.return[0]);
-    JobsPanel._sortJobs(jobs);
+    const jobs = JobsPanel.jobsToArray(pData.return[0]);
+    JobsPanel.sortJobs(jobs);
 
     // These jobs are likely started by the SaltGUI
     // do not display them
@@ -239,7 +239,7 @@ export class JobsPanel extends Panel {
     this.setMsg(txt);
   }
 
-  static _jobsToArray (jobs) {
+  static jobsToArray (jobs) {
     if (typeof jobs === "string") {
       // typically when special returner is misconfigured
       // the warning may help solve that too
@@ -260,7 +260,7 @@ export class JobsPanel extends Panel {
     return newArray;
   }
 
-  static _sortJobs (jobs) {
+  static sortJobs (jobs) {
     jobs.sort((aa, bb) => {
       // The id is already a string value based on the date,
       // let's use it to sort the jobs

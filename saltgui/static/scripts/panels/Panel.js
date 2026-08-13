@@ -82,7 +82,7 @@ export class Panel {
       const selectVisible = !Utils.getStorageItemBoolean("session", "select_visible", false);
       Utils.setStorageItem("session", "select_visible", selectVisible);
       // update the table
-      this.showSelectColumn(selectVisible);
+      this._showSelectColumn(selectVisible);
       // update the status line
       this.updateFooter();
       // and stop
@@ -392,7 +392,7 @@ export class Panel {
     }
   }
 
-  addConsole () {
+  _addConsole () {
     const console = Utils.createDiv("output", "", this.key + "-output");
     this.div.appendChild(console);
     this.console = console;
@@ -503,7 +503,7 @@ export class Panel {
 
     // optional select button
     if (this.selectionSessionKeys.includes("select_minions")) {
-      this._addSelectionCheckbox (minionTr, "select_minions");
+      this.addSelectionCheckbox (minionTr, "select_minions");
     }
 
     // drop down menu
@@ -530,7 +530,7 @@ export class Panel {
     return minionTr;
   }
 
-  _addSelectionCheckbox (pMinionTr, pSessionKey, pSelectTd = null) {
+  addSelectionCheckbox (pMinionTr, pSessionKey, pSelectTd = null) {
     let selectTd;
     if (pSelectTd) {
       selectTd = pSelectTd;
@@ -610,7 +610,7 @@ export class Panel {
 
     // (room for) selection box
     if (this.selectionSessionKeys.includes(pSessionKey)) {
-      this._addSelectionCheckbox(minionTr, pSessionKey);
+      this.addSelectionCheckbox(minionTr, pSessionKey);
     }
 
     // drop down menu
@@ -774,7 +774,7 @@ export class Panel {
     }
   }
 
-  static _copyAddress (pTarget, useMultiAddress) {
+  static copyAddress (pTarget, useMultiAddress) {
     if (!navigator.clipboard) {
       Utils.addToolTip(pTarget, "Clipboard not available\nonly for https or localhost");
     } else if (useMultiAddress && pTarget.dataset.multiIpNumber !== pTarget.dataset.singleIpNumber) {
@@ -823,7 +823,7 @@ export class Panel {
       addressTd.setAttribute("tabindex", -1);
       // clipboard may not be available, but we warn for that in the click handler
       addressSpan.addEventListener("click", (pClickEvent) => {
-        Panel._copyAddress(addressSpan, pClickEvent.ctrlKey || pClickEvent.altKey);
+        Panel.copyAddress(addressSpan, pClickEvent.ctrlKey || pClickEvent.altKey);
         pClickEvent.stopPropagation();
       });
       addressSpan.addEventListener("mouseout", () => {
@@ -878,7 +878,7 @@ export class Panel {
         Utils.addErrorToTableCell(td, pMinionData);
       }
       if (typeof pMinionData === "object" && pMinionData.os) {
-        Panel.addPrefixImage(td, "os-" + pMinionData.os);
+        Panel._addPrefixImage(td, "os-" + pMinionData.os);
       }
       minionTr.appendChild(td);
     }
@@ -912,7 +912,7 @@ export class Panel {
     this.updateFooter();
   }
 
-  getFooterForNodeGroups () {
+  _getFooterForNodeGroups () {
     if (this.selectionSessionKeys.includes("select_nodegroups")) {
       const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
       if (selectVisible) {
@@ -927,7 +927,7 @@ export class Panel {
     return "";
   }
 
-  getFooterForMinions () {
+  _getFooterForMinions () {
     if (this.selectionSessionKeys.includes("select_minions")) {
       const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
       if (selectVisible) {
@@ -942,7 +942,7 @@ export class Panel {
     return "";
   }
 
-  getFooterForKeys () {
+  _getFooterForKeys () {
     if (this.selectionSessionKeys.includes("select_keys")) {
       const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
       if (selectVisible) {
@@ -975,9 +975,9 @@ export class Panel {
       txt += ", " + Utils.txtZeroOneMany(this.nrUnaccepted, "{0} unaccepted keys", "{0} unaccepted key", "{0} unaccepted keys");
     }
 
-    txt += this.getFooterForNodeGroups();
-    txt += this.getFooterForMinions();
-    txt += this.getFooterForKeys();
+    txt += this._getFooterForNodeGroups();
+    txt += this._getFooterForMinions();
+    txt += this._getFooterForKeys();
 
     const noprint_b = "<span class='no-print'>";
     const noprint_e = "</span>";
@@ -1026,7 +1026,7 @@ export class Panel {
     minionTr.appendChild(offlineTd);
   }
 
-  static makeCommandString (pCommandStringArray) {
+  static _makeCommandString (pCommandStringArray) {
     let commandString = "";
     let separator = "";
     for (const cmd of pCommandStringArray) {
@@ -1062,7 +1062,7 @@ export class Panel {
   runCommand (pTargetType, pTargetString, pCommandString, pUseSelections = []) {
     if (typeof pCommandString !== "string") {
       // assume it is an array
-      pCommandString = Panel.makeCommandString(pCommandString);
+      pCommandString = Panel._makeCommandString(pCommandString);
     }
 
     // replace with the selection if any
@@ -1123,7 +1123,7 @@ export class Panel {
 
   clearPanel () {
     // whatever the loop was collecting, it was for the previous content
-    this.stopLoop();
+    this._stopLoop();
 
     if (this.title && this.originalTitle.includes(Character.HORIZONTAL_ELLIPSIS)) {
       this.title.innerText = this.originalTitle;
@@ -1152,7 +1152,7 @@ export class Panel {
     }
   }
 
-  static addPrefixImage (pElem, pImageName) {
+  static _addPrefixImage (pElem, pImageName) {
     const img = Utils.createElem("img", "prefiximage");
     const pngName = pImageName.replaceAll(" ", "-").toLowerCase() + ".png";
     img.setAttribute("src", "static/images/" + pngName);
@@ -1205,7 +1205,7 @@ export class Panel {
     }
   }
 
-  showSelectColumn (pShow) {
+  _showSelectColumn (pShow) {
 
     const colNr = 0;
 
@@ -1236,7 +1236,7 @@ export class Panel {
 
   startLoop (pOwner, pIntervalMillis) {
     // never run two loops in the same panel
-    this.stopLoop();
+    this._stopLoop();
     this.loopOwner = pOwner;
     this.loopIntervalMillis = pIntervalMillis;
     this.loopItems = pOwner.loopInit() || [];
@@ -1244,7 +1244,7 @@ export class Panel {
     this._loopStep();
   }
 
-  stopLoop () {
+  _stopLoop () {
     if (this.loopTimeout) {
       // stop the timer when nobody is looking
       window.clearTimeout(this.loopTimeout);
@@ -1268,7 +1268,7 @@ export class Panel {
     }
 
     if (this.loopItems.length === 0) {
-      this.stopLoop();
+      this._stopLoop();
       this.setPlayPauseButton("none");
       owner.loopEnd();
       return;
@@ -1302,11 +1302,11 @@ export class Panel {
   onShow () {
     const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
     if (this.selectionSessionKeys.includes("select_minions")) {
-      this.showSelectColumn(selectVisible);
+      this._showSelectColumn(selectVisible);
     }
   }
 
   onHide () {
-    this.stopLoop();
+    this._stopLoop();
   }
 }

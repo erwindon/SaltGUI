@@ -139,7 +139,7 @@ export class JobPanel extends Panel {
     return true;
   }
 
-  static decodeArgumentsObj (pObj) {
+  static _decodeArgumentsObj (pObj) {
     if (typeof pObj !== "string") {
       return JSON.stringify(pObj);
     }
@@ -165,13 +165,13 @@ export class JobPanel extends Panel {
     if (typeof rawArguments !== "object") {
       // expecting an array (which is an object)
       // just return the representation of anything else
-      return " " + JobPanel.decodeArgumentsObj(rawArguments);
+      return " " + JobPanel._decodeArgumentsObj(rawArguments);
     }
 
     if (!Array.isArray(rawArguments)) {
       // expecting an array
       // just return the representation of anything else
-      return " " + JobPanel.decodeArgumentsObj(rawArguments);
+      return " " + JobPanel._decodeArgumentsObj(rawArguments);
     }
 
     let ret = "";
@@ -185,10 +185,10 @@ export class JobPanel extends Panel {
           if (key === "__kwarg__") {
             continue;
           }
-          ret += " " + key + "=" + JobPanel.decodeArgumentsObj(obj[key]);
+          ret += " " + key + "=" + JobPanel._decodeArgumentsObj(obj[key]);
         }
       } else {
-        ret += " " + JobPanel.decodeArgumentsObj(obj);
+        ret += " " + JobPanel._decodeArgumentsObj(obj);
       }
     }
 

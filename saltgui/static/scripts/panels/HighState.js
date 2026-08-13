@@ -173,8 +173,8 @@ export class HighStatePanel extends Panel {
 
     // due to filter, all jobs are state.apply and/or state.highstate jobs
 
-    let jobs = JobsPanel._jobsToArray(pData.return[0]);
-    JobsPanel._sortJobs(jobs);
+    let jobs = JobsPanel.jobsToArray(pData.return[0]);
+    JobsPanel.sortJobs(jobs);
 
     if (jobs.length > this._maxShowHighstates) {
       jobs = jobs.slice(0, this._maxShowHighstates);
@@ -400,9 +400,9 @@ export class HighStatePanel extends Panel {
         span.style.backgroundColor = "black";
 
         // this also sets the span's class(es)
-        Output._setTaskToolTip(span, data);
+        Output.setTaskToolTip(span, data);
 
-        // add class here again, because it gets lost in _setTaskToolTip
+        // add class here again, because it gets lost in setTaskToolTip
         span.classList.add("task");
 
         if (keys.length > this._maxHighstateStates) {

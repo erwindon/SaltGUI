@@ -61,8 +61,8 @@ export class KeysPanel extends Panel {
     this.nrRejected = 0;
     this.nrRejectedSelected = 0;
 
-    this.showSyndicInfo(false);
-    this.showClusterInfo();
+    this._showSyndicInfo(false);
+    this._showClusterInfo();
 
     this.loadMinionsTxt();
 
@@ -91,7 +91,7 @@ export class KeysPanel extends Panel {
     });
   }
 
-  showSyndicInfo (pSyndicEventFound) {
+  _showSyndicInfo (pSyndicEventFound) {
     const syndicMaster = Utils.getStorageItem("session", "syndic_master", "");
     const orderMasters = Utils.getStorageItemBoolean("session", "order_masters");
 
@@ -119,7 +119,7 @@ export class KeysPanel extends Panel {
     }
   }
 
-  showClusterInfo () {
+  _showClusterInfo () {
     const clusterInfo = Utils.getStorageItem("session", "cluster_info");
     if (clusterInfo) {
       this.setWarningText("info", clusterInfo);
@@ -920,6 +920,6 @@ export class KeysPanel extends Panel {
   }
 
   handleSyndicEvent () {
-    this.showSyndicInfo(true);
+    this._showSyndicInfo(true);
   }
 }

@@ -59,7 +59,7 @@ export class Documentation {
       return null;
     }
 
-    const cmdFragments = Documentation.getKeywordFragments(commandLine);
+    const cmdFragments = Documentation._getKeywordFragments(commandLine);
 
     const category = cmdFragments.shift();
     let arg = "";
@@ -137,7 +137,7 @@ export class Documentation {
 
   // ONLINE DOCUMENTATION
 
-  static _handleLocalTestProviders (data) {
+  static handleLocalTestProviders (data) {
     const providerlists = data.return[0];
     for (const host in providerlists) {
 
@@ -196,7 +196,7 @@ export class Documentation {
     }
   }
 
-  static getKeywordFragments (pCommandLine) {
+  static _getKeywordFragments (pCommandLine) {
 
     const argsArray = [];
     const argsObject = {};
@@ -238,13 +238,13 @@ export class Documentation {
 
   static _manualRunMenuHtmlDocPrepare () {
     const commandLine = document.querySelector(".run-command #command").value;
-    const cmd = Documentation.getKeywordFragments(commandLine);
+    const cmd = Documentation._getKeywordFragments(commandLine);
     return "Online reference for '" + cmd.join(".").replace(/^modules[.]/, "") + "'";
   }
 
   static _manualRunMenuHtmlDocRun () {
     const commandLine = document.querySelector(".run-command #command").value;
-    const cmd = Documentation.getKeywordFragments(commandLine);
+    const cmd = Documentation._getKeywordFragments(commandLine);
 
     // title line
     let html = "";
@@ -254,7 +254,7 @@ export class Documentation {
     html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "' target='_blank' rel='noopener'>Salt Module Reference" + Documentation.EXTERNAL_LINK + "</a></p>";
 
     // level 1
-    // Function getKeywordFragments makes sure that
+    // Function _getKeywordFragments makes sure that
     // the cmd array has at least one element.
     // The default is "modules"
     let pageTitle = "All '" + Utils.escapeHtml(cmd[0]) + "' modules";
