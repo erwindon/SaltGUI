@@ -307,7 +307,13 @@ export class JobPanel extends Panel {
       initialStatus = "(loading)";
       this.jobIsTerminated = false;
     }
-    Output.addResponseOutput(this.output, pJobId, minions, info.Result, info.Function, initialStatus, pMinionId, extraInfo);
+    const outputOptions = {
+      extraInfo: extraInfo,
+      highlightMinionId: pMinionId,
+      initialStatus: initialStatus,
+      jobId: pJobId
+    };
+    Output.addResponseOutput(this.output, minions, info.Result, info.Function, outputOptions);
 
     // replace any jobid
     // Don't do this with output.innerHTML as there are already

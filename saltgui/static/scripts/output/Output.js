@@ -665,7 +665,11 @@ export class Output {
 
   // the orchestrator for the output
   // determines what format should be used and uses that
-  static addResponseOutput (pOutputContainer, pJobId, pMinionData, pResponse, pCommand, pInitialStatus, pHighlightMinionId, pExtraInfo) {
+  static addResponseOutput (pOutputContainer, pMinionData, pResponse, pCommand, pOptions = {}) {
+    const pJobId = pOptions.jobId;
+    const pInitialStatus = pOptions.initialStatus;
+    const pHighlightMinionId = pOptions.highlightMinionId;
+    const pExtraInfo = pOptions.extraInfo;
 
     // remove old content
     pOutputContainer.innerText = "";
