@@ -196,7 +196,7 @@ export class JobPanel extends Panel {
   }
 
   static _getPatEmbeddedJid () {
-    return /\b[2-9][0-9][0-9][0-9][01][0-9][0-3][0-9][0-2][0-9][0-5][0-9][0-5][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\b/g;
+    return /\b[2-9][0-9][0-9][0-9][01][0-9][0-3][0-9][0-2][0-9][0-5][0-9][0-5][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\b/g; // NOSONAR S6353
   }
 
   _handleJobRunnerJobsListJob (pRunnerJobsListJobData, pJobId, pMinionId) {

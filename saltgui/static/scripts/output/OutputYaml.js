@@ -23,7 +23,7 @@ export class OutputYaml {
       let needQuotes = false;
 
       // simple number with extra 0's at the start is still a string
-      if (/^0[0-9]+$/.test(pValue)) {
+      if (/^0[0-9]+$/.test(pValue)) { // NOSONAR S6353
         needQuotes = true;
       }
 

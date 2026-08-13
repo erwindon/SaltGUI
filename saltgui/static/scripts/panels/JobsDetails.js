@@ -45,7 +45,7 @@ export class JobsDetailsPanel extends JobsPanel {
   }
 
   onShow () {
-    const patInteger = /^(?:(?:0)|(?:[-+]?[1-9][0-9]*))$/;
+    const patInteger = /^(?:(?:0)|(?:[-+]?[1-9][0-9]*))$/; // NOSONAR S6353
 
     let cnt = decodeURIComponent(Utils.getQueryParam("cnt", String(MAX_JOBS_DETAILS)));
     if (cnt === "eligible") {

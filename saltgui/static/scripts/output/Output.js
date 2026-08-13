@@ -198,7 +198,7 @@ export class Output {
     // and that all others (if any) are just field separators
     fractionSecondsPart = fractionSecondsPart.replace(/^.*[.]/, "");
     // remove everything after the digits
-    fractionSecondsPart = fractionSecondsPart.replace(/[^0-9].*$/, "");
+    fractionSecondsPart = fractionSecondsPart.replace(/[^0-9].*$/, ""); // NOSONAR S6353
     let originalFractionSecondsPart = fractionSecondsPart;
     // truncate digits to maximum length
     fractionSecondsPart = fractionSecondsPart.substring(0, dateTimeFractionDigits);
@@ -213,7 +213,7 @@ export class Output {
     }
 
     // remove the fraction from the original
-    pDtStr = pDtStr.replace(/[.][0-9]*$/, "");
+    pDtStr = pDtStr.replace(/[.][0-9]*$/, ""); // NOSONAR S6353
 
     // original was formatted as iso-date-time
     if (/T/.test(pDtStr)) {
