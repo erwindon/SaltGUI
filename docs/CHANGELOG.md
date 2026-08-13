@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.34.0 (2026-08-13)
+- FIXED 2 SIMILAR CODE INJECTION PROBLEMS (erwindon, reported by JirayuThongchotchaung)
+- added page for Mine information (erwindon)
+- upgraded to ES2021 with new versoion policy (erwindon)
+- follow dark mode of the browser (erwindon)
+- fixed css selector injection (anupamme)
+- fixed documenmtation (clairem-sl)
+- ugraded several standard packages (erwindon)
+- now allow selection of keys and nodegroups (erwindon)
+- fixed several code inconsistencies (erwindon)
+- various small fixes, cleaups and improvements (erwindon)
+- Several sonarqube fixes (erwindon)
+- Celebrating 625 stars on GitHub
+
+
 ## 1.33.0 (2026-03-29)
 - allow operations on selected minions (erwindon, thx sx98083714)
 - added multi-architecture Docker build support (intekhab1025)
@@ -12,7 +27,7 @@
 - updated known issues section with current status (erwindon)
 - various small fixes, cleaups and improvements (erwindon)
 - Several eslint fixes (erwindon)
-- Celebrating 600+ stars on GitHub
+- Celebrating 600 stars on GitHub
 
 ## 1.32.1 (2025-06-15)
 - updated CVE information (erwindon)
