@@ -17,7 +17,7 @@ export class OutputHighstateTaskSaltGui {
       return;
     }
 
-    for (const key of Object.keys(pTask.changes).sort()) {
+    for (const key of Object.keys(pTask.changes).sort(Utils.mySortFunction)) {
 
       const change = pTask.changes[key];
 
@@ -72,7 +72,7 @@ export class OutputHighstateTaskSaltGui {
           JSON.stringify(change.new)));
       }
       // then show whatever remains
-      for (const taskkey of Object.keys(change).sort()) {
+      for (const taskkey of Object.keys(change).sort(Utils.mySortFunction)) {
 
         // we already provided this as summary: old->new
         if (taskkey === "old" && change["new"] !== undefined) {

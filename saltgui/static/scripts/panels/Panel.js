@@ -890,7 +890,7 @@ export class Panel {
     }
 
     const minions = pData.return[0];
-    const minionIds = Object.keys(minions).sort();
+    const minionIds = Object.keys(minions).sort(Utils.mySortFunction);
     const minionsDict = Utils.getStorageItemObject("session", "minions_txt");
 
     this.nrOnline = 0;

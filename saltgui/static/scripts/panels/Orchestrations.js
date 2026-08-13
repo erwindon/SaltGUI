@@ -70,7 +70,7 @@ export class OrchestrationsPanel extends Panel {
       keys[orchestration.__sls__][key] = orchestration;
     }
     let nrOrchestrations = 0;
-    for (const [key,orchestration] of Object.entries(keys).sort()) {
+    for (const [key,orchestration] of Object.entries(keys).sort(Utils.mySortFunction)) {
       if (this._addOrchestration(key, orchestration)) {
         nrOrchestrations += 1;
       }

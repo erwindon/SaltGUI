@@ -125,7 +125,7 @@ export class CommandBox {
     CommandBox.templateTmplMenu = menu;
     CommandBox.templateTmplMenu._templateCategory = null;
     const templates = Utils.getStorageItemObject("session", "templates");
-    const keys = Object.keys(templates).sort();
+    const keys = Object.keys(templates).sort(Utils.mySortFunction);
     for (const key of keys) {
       const template = templates[key];
       let description = template["description"];
@@ -559,7 +559,7 @@ export class CommandBox {
     optionConnected.value = "##connected";
     targetList.appendChild(optionConnected);
 
-    for (const nodeGroup of Object.keys(nodeGroups).sort()) {
+    for (const nodeGroup of Object.keys(nodeGroups).sort(Utils.mySortFunction)) {
       const option = Utils.createElem("option");
       option.value = "#" + nodeGroup;
       targetList.appendChild(option);

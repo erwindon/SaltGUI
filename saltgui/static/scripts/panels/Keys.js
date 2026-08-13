@@ -225,7 +225,7 @@ export class KeysPanel extends Panel {
         cnt[statusText] += 1;
       }
 
-      for (const key of Object.keys(cnt).sort()) {
+      for (const key of Object.keys(cnt).sort(Utils.mySortFunction)) {
         txt += ", " + Utils.txtZeroOneMany(cnt[key],
           "no " + key + " keys",
           "{0} " + key + " key",

@@ -65,7 +65,7 @@ export class GrainsMinionPanel extends Panel {
       return;
     }
 
-    const grainNames = Object.keys(grains).sort();
+    const grainNames = Object.keys(grains).sort(Utils.mySortFunction);
     for (const grainName of grainNames) {
       const grainTr = Utils.createTr();
 

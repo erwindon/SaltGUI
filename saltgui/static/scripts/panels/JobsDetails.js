@@ -297,7 +297,7 @@ export class JobsDetailsPanel extends JobsPanel {
       summary[key] += 1;
     }
 
-    const keys = Object.keys(summary).sort();
+    const keys = Object.keys(summary).sort(Utils.mySortFunction);
     for (const key of keys) {
       detailsHTML += ", ";
       if (key === "0-0") {

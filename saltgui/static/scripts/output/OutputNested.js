@@ -1,4 +1,5 @@
 import {Character} from "../Character.js";
+import {Utils} from "../Utils.js";
 
 export class OutputNested {
 
@@ -47,7 +48,7 @@ export class OutputNested {
       if (pIndent) {
         pOutArray.push(OutputNested._ustring(pIndent, "----------"));
       }
-      const sortedKeys = Object.keys(pValue).sort((aa, bb) => aa.localeCompare(bb, "en", {"numeric": true}));
+      const sortedKeys = Object.keys(pValue).sort(Utils.mySortFunction);
       for (const key of sortedKeys) {
         const val = pValue[key];
         pOutArray.push(OutputNested._ustring(pIndent, key, pPrefix, ":"));

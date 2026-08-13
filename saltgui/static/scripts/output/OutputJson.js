@@ -1,3 +1,5 @@
+import {Utils} from "../Utils.js";
+
 export class OutputJson {
 
   // format an object as JSON
@@ -82,7 +84,7 @@ export class OutputJson {
     // put each name+value on its own line
     str = "{";
     let oSeparator = "";
-    const sortedKeys = Object.keys(pValue).sort((aa, bb) => aa.localeCompare(bb, "en", {"numeric": true}));
+    const sortedKeys = Object.keys(pValue).sort(Utils.mySortFunction);
     for (const key of sortedKeys) {
       const item = pValue[key];
       str += oSeparator + "\n" + " ".repeat(pIndentLevel + indentStep) + JSON.stringify(key) + ": " +

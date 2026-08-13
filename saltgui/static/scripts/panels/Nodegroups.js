@@ -192,7 +192,7 @@ export class NodegroupsPanel extends Panel {
     return localTestVersion.then((ok_LocalTestVersion) => {
       const retdata = ok_LocalTestVersion.return[0];
       // handle the list in reverse order
-      const nodelist = Object.keys(retdata).sort().
+      const nodelist = Object.keys(retdata).sort(Utils.mySortFunction).
         reverse();
 
       for (const minionId of nodelist) {
@@ -288,8 +288,8 @@ export class NodegroupsPanel extends Panel {
 
   _addNodegroupsRows () {
     const nodegroups = Utils.getStorageItemObject("session", "nodegroups");
-    this.allNodegroups = Object.keys(nodegroups).sort();
-    this.todoNodegroups = Object.keys(nodegroups).sort();
+    this.allNodegroups = Object.keys(nodegroups).sort(Utils.mySortFunction);
+    this.todoNodegroups = Object.keys(nodegroups).sort(Utils.mySortFunction);
     for (const nodegroup of this.allNodegroups) {
       this._addNodegroupRow(nodegroup);
     }

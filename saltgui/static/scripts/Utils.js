@@ -687,4 +687,8 @@ export class Utils {
       .replaceAll("\"", "&quot;")
       .replaceAll("'", "&#039;");
   }
+
+  static mySortFunction (aa, bb) {
+    return aa.localeCompare(bb, "en", {"numeric": true});
+  }
 }

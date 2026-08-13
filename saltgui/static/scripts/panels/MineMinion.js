@@ -108,7 +108,7 @@ export class MineMinionPanel extends Panel {
       this.setMsgTxt("Minion '" + pMinionId + "' did not answer");
       return;
     }
-    const mineNames = Object.keys(mine).sort();
+    const mineNames = Object.keys(mine).sort(Utils.mySortFunction);
     this.nrFunctions = mineNames.length;
     this.mineFunctions = mineNames;
     for (const mineName of mineNames) {

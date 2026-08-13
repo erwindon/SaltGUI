@@ -1,4 +1,5 @@
 import {Character} from "../Character.js";
+import {Utils} from "../Utils.js";
 
 export class OutputYaml {
 
@@ -109,7 +110,7 @@ export class OutputYaml {
     // regular object
     let oOut = "";
     let oSeparator = "";
-    const sortedKeys = Object.keys(pValue).sort((aa, bb) => aa.localeCompare(bb, "en", {"numeric": true}));
+    const sortedKeys = Object.keys(pValue).sort(Utils.mySortFunction);
     for (const key of sortedKeys) {
       const item = pValue[key];
       oOut += oSeparator + key + ":";

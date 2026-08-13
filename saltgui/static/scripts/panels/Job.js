@@ -180,7 +180,7 @@ export class JobPanel extends Panel {
       // not all dicts have __kwarg__ to recognize them
       // in that case, the caller must decide
       if (obj && typeof obj === "object" && (dictsAreKwArgs || "__kwarg__" in obj)) {
-        const keys = Object.keys(obj).sort();
+        const keys = Object.keys(obj).sort(Utils.mySortFunction);
         for (const key of keys) {
           if (key === "__kwarg__") {
             continue;

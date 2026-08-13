@@ -464,7 +464,7 @@ export class HighStatePanel extends Panel {
         let sep = "";
 
         // show the summary when one was build up
-        for (const statKey of Object.keys(stats).sort()) {
+        for (const statKey of Object.keys(stats).sort(Utils.mySortFunction)) {
           const character = statKey.substring(statKey.length - 1);
           const className = statKey.substring(2, statKey.length - 1);
           const sepSpan = Utils.createSpan("", sep + stats[statKey] + Character.MULTIPLICATION_SIGN);

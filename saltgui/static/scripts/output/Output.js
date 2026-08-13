@@ -137,7 +137,7 @@ export class Output {
     if (keys.length !== 2) {
       return false;
     }
-    keys.sort();
+    keys.sort(Utils.mySortFunction);
     if (keys[0] !== "jid") {
       return false;
     }
@@ -741,7 +741,7 @@ export class Output {
         summary[key] += 1;
       }
 
-      const keys = Object.keys(summary).sort();
+      const keys = Object.keys(summary).sort(Utils.mySortFunction);
       for (const key of keys) {
         txt += ", ";
         if (key.startsWith("0-")) {
@@ -905,7 +905,7 @@ export class Output {
 
     // for all other types we consider the output per minion
     // this is more generic and it simplifies the handlers
-    for (const minionId of [...pMinionData].sort()) {
+    for (const minionId of [...pMinionData].sort(Utils.mySortFunction)) {
 
       let minionResponse = pResponse[minionId];
 

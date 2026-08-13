@@ -54,7 +54,7 @@ export class ReactorsPanel extends Panel {
     }
 
     // then populate the table
-    for (const eventTag of Object.keys(reactorsMap).sort()) {
+    for (const eventTag of Object.keys(reactorsMap).sort(Utils.mySortFunction)) {
       this._addReactor(eventTag, reactorsMap[eventTag]);
     }
 

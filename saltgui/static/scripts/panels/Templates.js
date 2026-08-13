@@ -50,7 +50,7 @@ export class TemplatesPanel extends Panel {
     } else {
       templates = {};
     }
-    const keys = Object.keys(templates).sort();
+    const keys = Object.keys(templates).sort(Utils.mySortFunction);
     for (const key of keys) {
       const template = templates[key];
       this._addTemplate(key, template);

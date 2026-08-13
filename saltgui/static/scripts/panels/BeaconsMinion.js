@@ -140,7 +140,7 @@ export class BeaconsMinionPanel extends Panel {
       return;
     }
 
-    const keys = Object.keys(beacons.beacons).sort();
+    const keys = Object.keys(beacons.beacons).sort(Utils.mySortFunction);
     for (const beaconName of keys) {
       const tr = Utils.createTr("", "", "beacon-" + beaconName);
 

@@ -703,7 +703,7 @@ export class MinionsPanel extends Panel {
       return txt;
     }
     txt += "\n" + Character.WARNING_SIGN + pName + " has version " + pVersion + " and is VULNERABLE\nfor exploit";
-    const bugs = Object.keys(pBugs).sort();
+    const bugs = Object.keys(pBugs).sort(Utils.mySortFunction);
     if (bugs.length > 1) {
       txt += "s";
     }

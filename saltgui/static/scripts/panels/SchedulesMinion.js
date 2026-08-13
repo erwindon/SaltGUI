@@ -74,7 +74,7 @@ export class SchedulesMinionPanel extends Panel {
       return;
     }
 
-    const keys = Object.keys(schedules.schedules).sort();
+    const keys = Object.keys(schedules.schedules).sort(Utils.mySortFunction);
     for (const scheduleName of keys) {
 
       const schedule = schedules.schedules[scheduleName];

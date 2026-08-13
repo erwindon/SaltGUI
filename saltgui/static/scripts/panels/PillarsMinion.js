@@ -79,7 +79,7 @@ export class PillarsMinionPanel extends Panel {
       }
     }
 
-    const keys = Object.keys(pillars).sort();
+    const keys = Object.keys(pillars).sort(Utils.mySortFunction);
     for (const pillarName of keys) {
       const pillar = Utils.createTr();
 
