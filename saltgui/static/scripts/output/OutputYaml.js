@@ -31,27 +31,27 @@ export class OutputYaml {
         needQuotes = true;
       }
 
-      if (/^$/.test(pValue)) {
+      if (pValue === "") {
         needQuotes = true;
       }
 
-      if (/^ /.test(pValue)) {
+      if (pValue.startsWith(" ")) {
         needQuotes = true;
       }
-      if (/ $/.test(pValue)) {
+      if (pValue.endsWith(" ")) {
         needQuotes = true;
       }
 
-      if (/^@/.test(pValue)) {
+      if (pValue.startsWith("@")) {
         needQuotes = true;
       }
-      if (/^`/.test(pValue)) {
+      if (pValue.startsWith("`")) {
         needQuotes = true;
       }
       if (/'/.test(pValue)) {
         needQuotes = true;
       }
-      if (/^%/.test(pValue)) {
+      if (pValue.startsWith("%")) {
         needQuotes = true;
       }
 
