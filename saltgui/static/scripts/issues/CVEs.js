@@ -41,59 +41,69 @@ export class CveIssues extends Issues {
 
   static _handleManageVersions (pPanel, pRunnerManageVersionsData) {
     const versionList = pRunnerManageVersionsData.return[0];
-
     const masterVersion = versionList["Master"];
-    const masterBugs = MinionsPanel.getCveBugs(masterVersion, MASTER);
 
-    // part 1: CVEs for the master
+    CveIssues._addMasterBugIssues(pPanel, masterVersion);
+    CveIssues._processCategoryVersions(pPanel, versionList, masterVersion);
+  }
+
+  static _addMasterBugIssues (pPanel, masterVersion) {
+    const masterBugs = MinionsPanel.getCveBugs(masterVersion, MASTER);
 
     for (const bug in masterBugs) {
       const tr = Issues.addIssue(pPanel, "master-bug", bug);
       Issues.addIssueMsg(tr, "Master is vulnerable due to " + bug + Character.NO_BREAK_SPACE + Character.HEAVY_NORTH_EAST_ARROW);
       Issues.addIssueUrl(tr, "CVE report", "https://www.cve.org/CVERecord/SearchResults?query=" + bug);
     }
+  }
 
+  static _processCategoryVersions (pPanel, versionList, masterVersion) {
     for (const cat in versionList) {
       if (cat === "Master") {
-        // Master is not even a category, ignore it
         continue;
       }
 
       const details = versionList[cat];
+      CveIssues._processCategoryVersionDifferences(pPanel, cat, details, masterVersion);
+      CveIssues._processMinionBugIssues(pPanel, details);
+    }
+  }
 
-      // part 1a: differences between master and each minion
+  static _processCategoryVersionDifferences (pPanel, category, details, masterVersion) {
+    if (category === "Up to date" || category === "Minion offline") {
+      return;
+    }
 
-      if (cat === "Up to date") {
-        // nothing to report when in this state
-      } else if (cat === "Minion offline") {
-        // this is already reported elsewhere
-      } else if (cat === "Minion requires update") {
-        for (const [minionId,version] of Object.entries(details)) {
-          const tr = Issues.addIssue(pPanel, "minion-older", minionId);
-          Issues.addIssueMsg(tr, "Minion '" + minionId + "' (" + version + ") is older than the Master (" + masterVersion + ")");
-        }
-      } else if (cat === "Minion newer than master") {
-        for (const [minionId,version] of Object.entries(details)) {
-          const tr = Issues.addIssue(pPanel, "minion-newer", minionId);
-          Issues.addIssueMsg(tr, "Minion '" + minionId + "' (" + version + ") is newer than the Master (" + masterVersion + ")");
-        }
-      } else {
-        // unknown category, just show it
-        for (const [minionId,version] of Object.entries(details)) {
-          const tr = Issues.addIssue(pPanel, "minion-newer", minionId);
-          Issues.addIssueMsg(tr, "Minion '" + minionId + "' (" + version + ") vs Master (" + masterVersion + "): " + cat);
-        }
-      }
+    if (category === "Minion requires update") {
+      CveIssues._addMinionVersionIssues(pPanel, "minion-older", details, masterVersion, "is older than");
+    } else if (category === "Minion newer than master") {
+      CveIssues._addMinionVersionIssues(pPanel, "minion-newer", details, masterVersion, "is newer than");
+    } else {
+      CveIssues._addUnknownCategoryIssues(pPanel, category, details, masterVersion);
+    }
+  }
 
-      // part 2b: CVEs for each minion
+  static _addMinionVersionIssues (pPanel, issueCategory, details, masterVersion, compareText) {
+    for (const [minionId, version] of Object.entries(details)) {
+      const tr = Issues.addIssue(pPanel, issueCategory, minionId);
+      Issues.addIssueMsg(tr, "Minion '" + minionId + "' (" + version + ") " + compareText + " the Master (" + masterVersion + ")");
+    }
+  }
 
-      for (const [minionId,version] of Object.entries(details)) {
-        const minionBugs = MinionsPanel.getCveBugs(version, MINION);
-        for (const bug in minionBugs) {
-          const tr = Issues.addIssue(pPanel, "minion-bug", minionId + "-" + bug);
-          Issues.addIssueMsg(tr, "Minion '" + minionId + "' is vulnerable due to " + bug + Character.NO_BREAK_SPACE + Character.HEAVY_NORTH_EAST_ARROW);
-          Issues.addIssueUrl(tr, "CVE report", "https://www.cve.org/CVERecord/SearchResults?query=" + bug);
-        }
+  static _addUnknownCategoryIssues (pPanel, category, details, masterVersion) {
+    for (const [minionId, version] of Object.entries(details)) {
+      const tr = Issues.addIssue(pPanel, "minion-newer", minionId);
+      Issues.addIssueMsg(tr, "Minion '" + minionId + "' (" + version + ") vs Master (" + masterVersion + "): " + category);
+    }
+  }
+
+  static _processMinionBugIssues (pPanel, details) {
+    for (const [minionId, version] of Object.entries(details)) {
+      const minionBugs = MinionsPanel.getCveBugs(version, MINION);
+      for (const bug in minionBugs) {
+        const tr = Issues.addIssue(pPanel, "minion-bug", minionId + "-" + bug);
+        Issues.addIssueMsg(tr, "Minion '" + minionId + "' is vulnerable due to " + bug + Character.NO_BREAK_SPACE + Character.HEAVY_NORTH_EAST_ARROW);
+        Issues.addIssueUrl(tr, "CVE report", "https://www.cve.org/CVERecord/SearchResults?query=" + bug);
       }
     }
   }
