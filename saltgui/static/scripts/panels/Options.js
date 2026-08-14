@@ -133,109 +133,92 @@ export class OptionsPanel extends Panel {
     if (pValues === null) {
       tdValue.id = "option-" + pName + "-value";
     } else {
-      const span = Utils.createSpan("", "", "option-" + pName + "-value");
-      tdValue.appendChild(span);
-
-      const br1 = Utils.createBr();
-      tdValue.appendChild(br1);
-
-      const br2 = Utils.createBr();
-      tdValue.appendChild(br2);
-
-      let addSep = false;
-      for (const row of pValues) {
-        if (addSep) {
-          const br3 = Utils.createBr();
-          tdValue.appendChild(br3);
-        }
-        addSep = true;
-        for (let i = 1; i < row.length; i++) {
-          let itemValue = row[i];
-          let itemLabel = row[i];
-          const colonPos = row[i].search(":");
-          if (colonPos > 0) {
-            itemValue = row[i].substring(0, colonPos);
-            itemLabel = row[i].substring(colonPos + 1);
-          }
-
-          const radio = Utils.createElem("input");
-          radio.id = "option-" + pName + "-value-" + row[0] + "-" + itemValue;
-          radio.type = "radio";
-          radio.name = "option-" + pName + "-value-" + row[0];
-          radio.value = itemValue;
-          if (pName === "state-verbose") {
-            radio.addEventListener("change", () => {
-              this._newStateVerbose();
-            });
-          } else if (pName === "state-compress-ids") {
-            radio.addEventListener("change", () => {
-              this._newStateCompressIds();
-            });
-          } else if (pName === "state-output") {
-            radio.addEventListener("change", () => {
-              this._newStateOutput();
-            });
-          } else if (pName === "state-output-pct") {
-            radio.addEventListener("change", () => {
-              this._newStateOutputPct();
-            });
-          } else if (pName === "output-formats") {
-            radio.addEventListener("change", () => {
-              this._newOutputFormats();
-            });
-          } else if (pName === "datetime-fraction-digits") {
-            radio.addEventListener("change", () => {
-              this._newDatetimeFractionDigits();
-            });
-          } else if (pName === "skip-wheel-minions-connected") {
-            radio.addEventListener("change", () => {
-              this._newSkipWheelMinionsConnected();
-            });
-          } else if (pName === "datetime-representation") {
-            radio.addEventListener("change", () => {
-              this._newDatetimeRepresentation();
-            });
-          } else if (pName === "tooltip-mode") {
-            radio.addEventListener("change", () => {
-              this._newToolTipMode();
-            });
-          } else if (pName === "full-return") {
-            radio.addEventListener("change", () => {
-              this._newFullReturn();
-            });
-          } else if (pName === "show-all-menuitems") {
-            radio.addEventListener("change", () => {
-              this._newShowAllMenuItems();
-            });
-          } else if (pName === "use-cache-for-grains") {
-            radio.addEventListener("change", () => {
-              this._newUseCacheForGrains();
-            });
-          } else if (pName === "use-cache-for-pillar") {
-            radio.addEventListener("change", () => {
-              this._newUseCacheForPillar();
-            });
-          }
-
-          if (pName === "state-output" && itemValue === "full_id") {
-            tdValue.append(Utils.createBr());
-          }
-
-          const label = Utils.createElem("label", "", itemLabel);
-          label.htmlFor = radio.id;
-
-          const span2 = Utils.createSpan();
-
-          span2.appendChild(radio);
-          span2.appendChild(label);
-          tdValue.append(span2);
-        }
-      }
+      this._addOptionsToTd(tdValue, pName, pValues);
     }
     tr.appendChild(tdValue);
 
     const tbody = this.table.tBodies[0];
     tbody.appendChild(tr);
+  }
+
+  _addOptionsToTd (tdValue, pName, pValues) {
+    const span = Utils.createSpan("", "", "option-" + pName + "-value");
+    tdValue.appendChild(span);
+
+    const br1 = Utils.createBr();
+    tdValue.appendChild(br1);
+
+    const br2 = Utils.createBr();
+    tdValue.appendChild(br2);
+
+    let addSep = false;
+    for (const row of pValues) {
+      if (addSep) {
+        const br3 = Utils.createBr();
+        tdValue.appendChild(br3);
+      }
+      addSep = true;
+      this._addRowOptions(tdValue, pName, row);
+    }
+  }
+
+  _addRowOptions (tdValue, pName, row) {
+    for (let i = 1; i < row.length; i++) {
+      const itemValue = OptionsPanel._extractValue(row[i]);
+      const itemLabel = OptionsPanel._extractLabel(row[i]);
+
+      const radio = Utils.createElem("input");
+      radio.id = "option-" + pName + "-value-" + row[0] + "-" + itemValue;
+      radio.type = "radio";
+      radio.name = "option-" + pName + "-value-" + row[0];
+      radio.value = itemValue;
+
+      this._attachChangeListener(radio, pName);
+
+      if (pName === "state-output" && itemValue === "full_id") {
+        tdValue.append(Utils.createBr());
+      }
+
+      const label = Utils.createElem("label", "", itemLabel);
+      label.htmlFor = radio.id;
+
+      const span2 = Utils.createSpan();
+      span2.appendChild(radio);
+      span2.appendChild(label);
+      tdValue.append(span2);
+    }
+  }
+
+  static _extractValue (item) {
+    const colonPos = item.search(":");
+    return colonPos > 0 ? item.substring(0, colonPos) : item;
+  }
+
+  static _extractLabel (item) {
+    const colonPos = item.search(":");
+    return colonPos > 0 ? item.substring(colonPos + 1) : item;
+  }
+
+  _attachChangeListener (radio, pName) {
+    const handlerMap = {
+      "datetime-fraction-digits": () => this._newDatetimeFractionDigits(),
+      "datetime-representation": () => this._newDatetimeRepresentation(),
+      "full-return": () => this._newFullReturn(),
+      "output-formats": () => this._newOutputFormats(),
+      "show-all-menuitems": () => this._newShowAllMenuItems(),
+      "skip-wheel-minions-connected": () => this._newSkipWheelMinionsConnected(),
+      "state-compress-ids": () => this._newStateCompressIds(),
+      "state-output": () => this._newStateOutput(),
+      "state-output-pct": () => this._newStateOutputPct(),
+      "state-verbose": () => this._newStateVerbose(),
+      "tooltip-mode": () => this._newToolTipMode(),
+      "use-cache-for-grains": () => this._newUseCacheForGrains(),
+      "use-cache-for-pillar": () => this._newUseCacheForPillar()
+    };
+
+    if (handlerMap[pName]) {
+      radio.addEventListener("change", handlerMap[pName]);
+    }
   }
 
   static _enhanceSessionStart (pTd, pSessionStart) {
