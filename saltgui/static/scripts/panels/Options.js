@@ -297,81 +297,90 @@ export class OptionsPanel extends Panel {
       const defaultValue = option[2];
       const valuesArr = option[3];
 
-      let value;
-      if (category === "version") {
-        value = LoginPanel.version;
-      } else if (category === "session") {
-        value = loginResponse[name];
-      } else if (category === null) {
-        value = Utils.getStorageItem("session", name.replaceAll("-", "_"));
-      } else if (category === "saltgui") {
-        value = Utils.getStorageItem("session", name.replaceAll("-", "_"));
-      } else {
-        value = category + "[" + name + "]";
-      }
-
+      const value = OptionsPanel._getOptionValue(name, category, loginResponse);
       const td = this.div.querySelector("#option-" + name + "-value");
-      if (category === "session" && name === "start") {
-        OptionsPanel._enhanceSessionStart(td, value);
-      } else if (category === "session" && name === "expire") {
-        OptionsPanel._enhanceSessionExpire(td, value, sessionStart);
-      } else if (category === "session" && name === "perms") {
-        td.innerText = OutputYaml.formatYAML(value);
-      } else if (category === "session") {
-        td.innerText = value;
-      } else {
-        td.innerText = this._parseAndFormat(name, value);
-      }
 
-      if (category === "session" && name === "start") {
-        this.updateExpiresInterval = window.setInterval(() => {
-          // just redo the whole text-block
-          // nr-digits may have changed
-          OptionsPanel._enhanceSessionStart(td, value, sessionStart);
-        }, 1000);
-      }
-      if (category === "session" && name === "expire") {
-        this.updateExpiresInterval = window.setInterval(() => {
-          // just redo the whole text-block
-          // expiry interval always changes
-          // nr-digits may also have changed
-          OptionsPanel._enhanceSessionExpire(td, value, sessionStart);
-        }, 1000);
-      }
+      this._displayOptionValue(td, name, category, value, sessionStart);
+      this._setupOptionIntervals(td, name, category, value, sessionStart);
 
-      // some rows only display values, skip these
       if (!valuesArr) {
         continue;
       }
 
-      // first select the "none" values
-      for (const valueArr of valuesArr) {
-        const id = "option-" + name + "-value-" + valueArr[0] + "-none";
-        const noneElement = document.getElementById(id);
-        if (noneElement) {
-          noneElement.checked = true;
+      OptionsPanel._selectOptionValues(name, valuesArr, defaultValue, value);
+    }
+  }
+
+  static _getOptionValue (name, category, loginResponse) {
+    if (category === "version") {
+      return LoginPanel.version;
+    } else if (category === "session") {
+      return loginResponse[name];
+    } else if (category === null || category === "saltgui") {
+      return Utils.getStorageItem("session", name.replaceAll("-", "_"));
+    }
+    return category + "[" + name + "]";
+  }
+
+  _displayOptionValue (td, name, category, value, sessionStart) {
+    if (category === "session" && name === "start") {
+      OptionsPanel._enhanceSessionStart(td, value);
+    } else if (category === "session" && name === "expire") {
+      OptionsPanel._enhanceSessionExpire(td, value, sessionStart);
+    } else if (category === "session" && name === "perms") {
+      td.innerText = OutputYaml.formatYAML(value);
+    } else if (category === "session") {
+      td.innerText = value;
+    } else {
+      td.innerText = this._parseAndFormat(name, value);
+    }
+  }
+
+  _setupOptionIntervals (td, name, category, value, sessionStart) {
+    if (category === "session" && name === "start") {
+      this.updateExpiresInterval = window.setInterval(() => {
+        OptionsPanel._enhanceSessionStart(td, value, sessionStart);
+      }, 1000);
+    } else if (category === "session" && name === "expire") {
+      this.updateExpiresInterval = window.setInterval(() => {
+        OptionsPanel._enhanceSessionExpire(td, value, sessionStart);
+      }, 1000);
+    }
+  }
+
+  static _selectOptionValues (name, valuesArr, defaultValue, value) {
+    OptionsPanel._selectNoneValues(name, valuesArr);
+
+    let finalValue = value;
+    if (!finalValue) {
+      finalValue = defaultValue;
+    }
+
+    const varr = finalValue.replaceAll("\"", "").split(","); // NOSONAR S7776
+    OptionsPanel._selectMatchingValues(name, valuesArr, varr);
+  }
+
+  static _selectNoneValues (name, valuesArr) {
+    for (const valueArr of valuesArr) {
+      const id = "option-" + name + "-value-" + valueArr[0] + "-none";
+      const noneElement = document.getElementById(id);
+      if (noneElement) {
+        noneElement.checked = true;
+      }
+    }
+  }
+
+  static _selectMatchingValues (name, valuesArr, selectedValues) {
+    for (const valueArr of valuesArr) {
+      for (let i = 1; i < valueArr.length; i++) {
+        let label = valueArr[i];
+        if (label.includes(":")) {
+          label = label.replace(/:.*/, "");
         }
-      }
-
-      // select the default value when there is no selection
-      if (!value) {
-        value = defaultValue;
-      }
-
-      const varr = value.replaceAll("\"", "").split(","); // NOSONAR S7776
-
-      // then select the other values
-      for (const valueArr of valuesArr) {
-        for (let i = 1; i < valueArr.length; i++) {
-          let label = valueArr[i];
-          if (label.includes(":")) {
-            label = label.replace(/:.*/, "");
-          }
-          const id = "option-" + name + "-value-" + valueArr[0] + "-" + label;
-          const thisElement = document.getElementById(id);
-          if (value && varr.includes(label)) {
-            thisElement.checked = true;
-          }
+        const id = "option-" + name + "-value-" + valueArr[0] + "-" + label;
+        const thisElement = document.getElementById(id);
+        if (selectedValues.includes(label)) {
+          thisElement.checked = true;
         }
       }
     }
