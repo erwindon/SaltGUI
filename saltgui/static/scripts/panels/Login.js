@@ -469,16 +469,16 @@ export class LoginPanel extends Panel {
     }
     Utils.setStorageItem("session", "nodegroups", JSON.stringify(nodeGroups));
 
-    const stateVerbose = wheelConfigValuesData.saltgui_state_verbose;
+    const stateVerbose = wheelConfigValuesData.state_verbose;
     Utils.setStorageItem("session", "state_verbose", JSON.stringify(stateVerbose));
 
     const stateCompressIds = wheelConfigValuesData.state_compress_ids;
     Utils.setStorageItem("session", "state_compress_ids", stateCompressIds);
 
-    const stateOutput = wheelConfigValuesData.saltgui_state_output;
+    const stateOutput = wheelConfigValuesData.state_output;
     Utils.setStorageItem("session", "state_output", stateOutput);
 
-    const stateOutputPct = wheelConfigValuesData.saltgui_state_output_pct;
+    const stateOutputPct = wheelConfigValuesData.state_output_pct;
     Utils.setStorageItem("session", "state_output_pct", stateOutputPct);
 
     const outputFormats = wheelConfigValuesData.saltgui_output_formats;
