@@ -291,56 +291,70 @@ export class Documentation {
     }
 
     let html = "";
-    let concreteModules = [];
+    let concreteModules = Documentation._getConcreteModulesForCmd(cmd);
 
+    const providerWarning = Documentation._getProviderWarning();
+    if (providerWarning) {
+      html += providerWarning;
+      concreteModules = [cmd[1]];
+    }
+
+    html += Documentation._buildConcreteModulesMessage(cmd, concreteModules);
+    html += Documentation._buildModuleAndFunctionLinks(cmd, concreteModules);
+    html += Documentation._buildVirtualModuleLink(cmd);
+
+    return html;
+  }
+
+  static _getConcreteModulesForCmd (cmd) {
     // only 'modules' has a translation table
     // other categories are taken literal
     if (cmd[0] === "modules") {
-      concreteModules = Documentation.PROVIDERS[cmd[1]];
-      if (!concreteModules) {
-        concreteModules = [];
-      }
-    } else {
-      concreteModules = [cmd[1]];
+      return Documentation.PROVIDERS[cmd[1]] || [];
     }
+    return [cmd[1]];
+  }
 
+  static _getProviderWarning () {
     if (Object.keys(Documentation.PROVIDERS).length === 0) {
-      html += "<p>The documentation index has not been retrieved yet. We'll just assume this is a regular command.</p>";
-      concreteModules = [cmd[1]];
-    } else if ("SKIPPED" in Documentation.PROVIDERS) {
-      html += "<p>The documentation index is skipped on this system. We'll just assume this is a regular command.</p>";
-      concreteModules = [cmd[1]];
-    } else if ("ERROR" in Documentation.PROVIDERS) {
-      html += "<p>The documentation index could not be retrieved. We'll just assume this is a regular command.</p>";
-      concreteModules = [cmd[1]];
+      return "<p>The documentation index has not been retrieved yet. We'll just assume this is a regular command.</p>";
     }
+    if ("SKIPPED" in Documentation.PROVIDERS) {
+      return "<p>The documentation index is skipped on this system. We'll just assume this is a regular command.</p>";
+    }
+    if ("ERROR" in Documentation.PROVIDERS) {
+      return "<p>The documentation index could not be retrieved. We'll just assume this is a regular command.</p>";
+    }
+    return "";
+  }
 
+  static _buildConcreteModulesMessage (cmd, concreteModules) {
     switch (concreteModules.length) {
     case 0:
-      html += "<p>'" + Utils.escapeHtml(cmd[1]) + "' is an unknown module name. We'll just assume it actually exists. The links below (if any) might not work.</p>";
-      break;
+      return "<p>'" + Utils.escapeHtml(cmd[1]) + "' is an unknown module name. We'll just assume it actually exists. The links below (if any) might not work.</p>";
     case 1:
       // simple modules case
       // wheel/runners cases are always simple
       if (cmd[0] !== "modules") {
-        html += "<p>Module-name '" + Utils.escapeHtml(cmd[0]) + "." + Utils.escapeHtml(cmd[1]) + "' cannot be verified. We'll just assume it actually exists. The links below might not work.</p>";
-      } else if (cmd[1] !== concreteModules[0]) {
-        html += "<p>The internal name for '" + Utils.escapeHtml(cmd[1]) + "' is '" + Utils.escapeHtml(concreteModules[0]) + "'.</p>";
+        return "<p>Module-name '" + Utils.escapeHtml(cmd[0]) + "." + Utils.escapeHtml(cmd[1]) + "' cannot be verified. We'll just assume it actually exists. The links below might not work.</p>";
       }
-      break;
+      if (cmd[1] !== concreteModules[0]) {
+        return "<p>The internal name for '" + Utils.escapeHtml(cmd[1]) + "' is '" + Utils.escapeHtml(concreteModules[0]) + "'.</p>";
+      }
+      return "";
     default:
-      html += "<p>" + concreteModules.length + " variations of this module seem to be used. These all listed below.</p>";
+      return "<p>" + concreteModules.length + " variations of this module seem to be used. These all listed below.</p>";
+    }
+  }
+
+  static _buildModuleAndFunctionLinks (cmd, concreteModules) {
+    if (cmd.length < 2) {
+      return "";
     }
 
     // See https://docs.saltproject.io/en/latest/ref/modules/all/index.html
-    const knownVirtualModules = ["group", "kernelpkg", "pkg", "service", "shadow", "user"];
-
-    let indent = "";
-    if (concreteModules.length > 1) {
-      // only useful to indent level 3 information
-      // when there are multiple instances available
-      indent = Character.NO_BREAK_SPACE + Character.NO_BREAK_SPACE;
-    }
+    const indent = concreteModules.length > 1 ? Character.NO_BREAK_SPACE + Character.NO_BREAK_SPACE : "";
+    let html = "";
 
     for (const concreteModule of concreteModules) {
       // level 2
@@ -355,12 +369,18 @@ export class Documentation {
       }
     }
 
-    if (cmd.length >= 2 && cmd[0] === "modules" && knownVirtualModules.includes(cmd[1])) {
-      html += "<p>The link below is the overview page of all related virtual package modules.</p>";
-      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + cmd[0] + "/all/salt." + cmd[0] + "." + cmd[1] + ".html' target='_blank' rel='noopener'>'" + cmd[0] + "." + cmd[1] + "' modules" + Documentation.EXTERNAL_LINK + "</a></p>";
-    }
-
     return html;
+  }
+
+  static _buildVirtualModuleLink (cmd) {
+    // See https://docs.saltproject.io/en/latest/ref/modules/all/index.html
+    const knownVirtualModules = ["group", "kernelpkg", "pkg", "service", "shadow", "user"];
+
+    if (cmd.length >= 2 && cmd[0] === "modules" && knownVirtualModules.includes(cmd[1])) {
+      return "<p>The link below is the overview page of all related virtual package modules.</p>" +
+        "<p><a href='" + Documentation.DOCUMENTATION_URL + cmd[0] + "/all/salt." + cmd[0] + "." + cmd[1] + ".html' target='_blank' rel='noopener'>'" + cmd[0] + "." + cmd[1] + "' modules" + Documentation.EXTERNAL_LINK + "</a></p>";
+    }
+    return "";
   }
 
   static _buildSpecialModulesSection (cmd) {
