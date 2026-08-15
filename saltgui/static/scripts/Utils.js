@@ -46,10 +46,41 @@ export class Utils {
 
   // functions for storage handling
 
+  // can be replaced with this when using ES2022
+  // static _dummyStorages = new Map();
+  static _getDummyStorages () {
+    if (!Utils._dummyStoragesMap) {
+      Utils._dummyStoragesMap = new Map();
+    }
+    return Utils._dummyStoragesMap;
+  }
+
+  static _getDummyStorage (pStorage) {
+    const storages = Utils._getDummyStorages();
+    if (!storages.has(pStorage)) {
+      storages.set(pStorage, {
+        clear () {
+          this.data = {};
+        },
+        data: {},
+        getItem (key) {
+          return this.data[key] || null;
+        },
+        removeItem (key) {
+          delete this.data[key];
+        },
+        setItem (key, value) {
+          this.data[key] = value;
+        }
+      });
+    }
+    return storages.get(pStorage);
+  }
+
   static _getStorage (pStorage) {
     // "window" is not defined during unit testing
     if (typeof window === "undefined") {
-      return null;
+      return Utils._getDummyStorage(pStorage);
     }
     /* istanbul ignore next */
     if (pStorage === "local") {
