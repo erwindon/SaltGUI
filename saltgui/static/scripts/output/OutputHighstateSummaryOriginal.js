@@ -3,8 +3,8 @@ import {Utils} from "../Utils.js";
 
 export class OutputHighstateSummaryOriginal {
 
-  static addPercentage (pCount, pTotal) {
-    return (100 * pCount / pTotal).toLocaleString(undefined, {"maximumFractionDigits": 1, "minimumFractionDigits": 1}) + "%";
+  static addPercentage (pLocale = navigator.language, pCount, pTotal) {
+    return (pCount / pTotal).toLocaleString(pLocale, {"maximumFractionDigits": 1, "minimumFractionDigits": 1, "style": "percent"});
   }
 
   static addSummarySpan (pDiv, pMinionId, pSucceeded, pFailed, pSkipped, pTotalMilliSeconds, pChangesSummary) {
@@ -48,11 +48,11 @@ export class OutputHighstateSummaryOriginal {
 
     const stateOutputPct = Utils.getStorageItemBoolean("session", "state_output_pct");
     if (stateOutputPct) {
-      txt = "\nSuccess %: " + OutputHighstateSummaryOriginal.addPercentage(pSucceeded, total);
+      txt = "\nSuccess %: " + OutputHighstateSummaryOriginal.addPercentage(undefined, pSucceeded, total);
       const successSpan = Utils.createSpan("task-success", txt);
       pDiv.append(successSpan);
 
-      txt = "\nFailure %: " + OutputHighstateSummaryOriginal.addPercentage(pFailed, total);
+      txt = "\nFailure %: " + OutputHighstateSummaryOriginal.addPercentage(undefined, pFailed, total);
       const failureSpan = Utils.createSpan("", txt);
       if (pFailed > 0) {
         failureSpan.classList.add("task-failure");

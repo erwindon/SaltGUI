@@ -3,14 +3,14 @@ import {Utils} from "../Utils.js";
 
 export class OutputHighstateSummarySaltGui {
 
-  static addPercentage (pCount, pTotal) {
+  static addPercentage (pLocale = navigator.language, pCount, pTotal) {
     const stateOutputPct = Utils.getStorageItemBoolean("session", "state_output_pct");
 
     if (!stateOutputPct) {
-      return pCount;
+      return pCount + "";
     }
 
-    return pCount + " (" + (100 * pCount / pTotal).toLocaleString(undefined, {"maximumFractionDigits": 1, "minimumFractionDigits": 1}) + "%)";
+    return pCount + " (" + (pCount / pTotal).toLocaleString(pLocale, {"maximumFractionDigits": 1, "minimumFractionDigits": 1, "style": "percent"}) + ")";
   }
 
   static addSummarySpan (pDiv, pSucceeded, pFailed, pSkipped, pTotalMilliSeconds, pChangesDetail, pHidden) {
@@ -21,16 +21,16 @@ export class OutputHighstateSummarySaltGui {
     const total = pSucceeded + pSkipped + pFailed;
 
     if (pSucceeded) {
-      line += ", " + OutputHighstateSummarySaltGui.addPercentage(pSucceeded, total) + " succeeded";
+      line += ", " + OutputHighstateSummarySaltGui.addPercentage(undefined, pSucceeded, total) + " succeeded";
     }
     if (pSkipped) {
-      line += ", " + OutputHighstateSummarySaltGui.addPercentage(pSkipped, total) + " skipped";
+      line += ", " + OutputHighstateSummarySaltGui.addPercentage(undefined, pSkipped, total) + " skipped";
     }
     if (pFailed) {
-      line += ", " + OutputHighstateSummarySaltGui.addPercentage(pFailed, total) + " failed";
+      line += ", " + OutputHighstateSummarySaltGui.addPercentage(undefined, pFailed, total) + " failed";
     }
     if (pHidden) {
-      line += ", " + OutputHighstateSummarySaltGui.addPercentage(pHidden, total) + " hidden";
+      line += ", " + OutputHighstateSummarySaltGui.addPercentage(undefined, pHidden, total) + " hidden";
     }
     if (total !== pSucceeded && total !== pSkipped && total !== pFailed) {
       // not a trivial total
