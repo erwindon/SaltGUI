@@ -442,8 +442,8 @@ export class Documentation {
     return "List standard beacon names";
   }
 
-  static _manualRunMenuBeaconNameRun () {
-    const beaconsList = {
+  static get BEACONS_LIST () {
+    return {
       "adb": `
                 {
                   "states": [
@@ -822,53 +822,78 @@ export class Documentation {
                   "interval": 3600
                 }`
     };
+  }
 
+  static _manualRunMenuBeaconNameRun () {
+    const beaconsList = Documentation.BEACONS_LIST;
     const beaconsListAvailable = Utils.getStorageItemObject("session", "beacons_list_available");
 
     // show the beacon names
     let html = "<p>Choose a template for 'beacons.add'</p>";
     html += "<p>Using a template will completely replace the current command</p>";
 
-    let headerShown1 = false;
+    html += Documentation._buildBeaconsOnAllMinionsSection(beaconsList, beaconsListAvailable);
+    html += Documentation._buildBeaconsOnSomeMinionsSection(beaconsList, beaconsListAvailable);
+    html += Documentation._buildBeaconsWithNoTemplateSection(beaconsList, beaconsListAvailable);
+    html += Documentation._buildBeaconsWithNoAvailabilitySection(beaconsList, beaconsListAvailable);
+    html += Documentation._buildBeaconsStatusMessages(beaconsListAvailable);
+
+    const output = document.querySelector(".run-command pre");
+    output.innerHTML = html;
+
+    Documentation._activateBeaconLinks(output, beaconsList);
+  }
+
+  static _buildBeaconsOnAllMinionsSection (beaconsList, beaconsListAvailable) {
+    let html = "";
+    let headerShown = false;
     for (const beaconName in beaconsList) {
       if (beaconName.startsWith("_")) {
         continue;
       }
       if (beaconName in beaconsListAvailable && beaconsListAvailable[beaconName] === beaconsListAvailable["_cnt"]) {
-        if (!headerShown1) {
+        if (!headerShown) {
           html += "<p>&nbsp;</p>";
           html += "<p>beacons available on all minions:</p>";
-          headerShown1 = true;
+          headerShown = true;
         }
         html += "<p>&nbsp;&nbsp;<a id='beaconname'>" + beaconName + "</a></p>";
       }
     }
+    return html;
+  }
 
-    let headerShown2 = false;
+  static _buildBeaconsOnSomeMinionsSection (beaconsList, beaconsListAvailable) {
+    let html = "";
+    let headerShown = false;
     for (const beaconName in beaconsList) {
       if (beaconName === "_cnt") {
         continue;
       }
       if (beaconName in beaconsListAvailable && beaconsListAvailable[beaconName] !== beaconsListAvailable["_cnt"]) {
-        if (!headerShown2) {
+        if (!headerShown) {
           html += "<p>&nbsp;</p>";
           html += "<p>beacons available on some minions:</p>";
-          headerShown2 = true;
+          headerShown = true;
         }
         html += "<p>&nbsp;&nbsp;<a id='beaconname'>" + beaconName + "</a> (" + beaconsListAvailable[beaconName] + " of " + beaconsListAvailable["_cnt"] + ")</p>";
       }
     }
+    return html;
+  }
 
-    let headerShown3 = false;
+  static _buildBeaconsWithNoTemplateSection (beaconsList, beaconsListAvailable) {
+    let html = "";
+    let headerShown = false;
     for (const beaconName in beaconsListAvailable) {
       if (beaconName.startsWith("_")) {
         continue;
       }
       if (!(beaconName in beaconsList)) {
-        if (!headerShown3) {
+        if (!headerShown) {
           html += "<p>&nbsp;</p>";
           html += "<p>beacons available on one or more minions, but no template available:</p>";
-          headerShown3 = true;
+          headerShown = true;
         }
         html += "<p>&nbsp;&nbsp;" + beaconName;
         if (beaconsListAvailable[beaconName] !== beaconsListAvailable["_cnt"]) {
@@ -877,26 +902,34 @@ export class Documentation {
         html += "</p>";
       }
     }
+    return html;
+  }
 
-    let headerShown4 = false;
+  static _buildBeaconsWithNoAvailabilitySection (beaconsList, beaconsListAvailable) {
+    let html = "";
+    let headerShown = false;
     for (const beaconName in beaconsList) {
       if (beaconName === "_cnt") {
         continue;
       }
       if (!(beaconName in beaconsListAvailable)) {
-        if (!headerShown4) {
+        if (!headerShown) {
           html += "<p>&nbsp;</p>";
           if (beaconsListAvailable.length === 0) {
             html += "<p>all known standard beacons:</p>";
           } else {
             html += "<p>beacons not available on any minion:</p>";
           }
-          headerShown4 = true;
+          headerShown = true;
         }
         html += "<p>&nbsp;&nbsp;<a id='beaconname'>" + beaconName + "</a></p>";
       }
     }
+    return html;
+  }
 
+  static _buildBeaconsStatusMessages (beaconsListAvailable) {
+    let html = "";
     if (beaconsListAvailable.length === 0) {
       html += "<p>&nbsp;</p>";
       html += "<p>no information is available on the availability of the beacon types on the minions, that information is still being loaded in the background</p>";
@@ -904,10 +937,10 @@ export class Documentation {
       html += "<p>&nbsp;</p>";
       html += "<p>some minions are offline and therefore did not provide information about available beacon types</p>";
     }
+    return html;
+  }
 
-    const output = document.querySelector(".run-command pre");
-    output.innerHTML = html;
-
+  static _activateBeaconLinks (output, beaconsList) {
     // activate the links
     for (const atag of output.querySelectorAll("a")) {
       atag.addEventListener("click", (pClickEvent) => {
