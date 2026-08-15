@@ -337,6 +337,26 @@ export class BeaconsMinionPanel extends Panel {
     // original: yyyy-mm-ddThh:mm:ss.ssssss
     stamp = stamp.substring(0, 21);
 
+    const searchBlock = this.div.querySelector(".search-box");
+    Utils.hideShowTableSearchBar(searchBlock, this.table, "refresh");
+
+    const helpText = BeaconsMinionPanel._determineBeaconHelpText(tr, stamp, pTag, pData);
+
+    if (helpText) {
+      Utils.addToolTip(tr.helpButtonSpan, helpText, "bottom-right");
+      tr.helpButtonSpan.style.display = "";
+    } else {
+      tr.helpButtonSpan.style.display = "none";
+    }
+
+    tr.beaconValueTd.innerText = value;
+
+    tr.prevStamp = stamp;
+    tr.prevTag = pTag;
+    tr.prevData = pData;
+  }
+
+  static _determineBeaconHelpText (tr, stamp, pTag, pData) {
     // when the warning-line has been shown, then from then on,
     // show an empty line when there is no warning.
     // this prevents a jumpy screen, while preserving space with
@@ -354,25 +374,11 @@ export class BeaconsMinionPanel extends Panel {
       // duplicate of previous event, never mind for now
     }
 
-    const searchBlock = this.div.querySelector(".search-box");
-    Utils.hideShowTableSearchBar(searchBlock, this.table, "refresh");
-
     if (pData["error"]) {
       // we might be replacing a "multiple-events" warning here
       helpText = "The beacon reported an error";
     }
 
-    if (helpText) {
-      Utils.addToolTip(tr.helpButtonSpan, helpText, "bottom-right");
-      tr.helpButtonSpan.style.display = "";
-    } else {
-      tr.helpButtonSpan.style.display = "none";
-    }
-
-    tr.beaconValueTd.innerText = value;
-
-    tr.prevStamp = stamp;
-    tr.prevTag = pTag;
-    tr.prevData = pData;
+    return helpText;
   }
 }
