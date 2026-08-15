@@ -242,13 +242,27 @@ export class Documentation {
     const commandLine = document.querySelector(".run-command #command").value;
     const cmd = Documentation._getKeywordFragments(commandLine);
 
-    // title line
     let html = "";
+    // title line
     html += "<h3>Documentation for '" + Utils.escapeHtml(cmd.join(".").replace(/^modules[.]/, "")) + "':</h3>";
 
     // level 0
     html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "' target='_blank' rel='noopener'>Salt Module Reference" + Documentation.EXTERNAL_LINK + "</a></p>";
 
+    html += Documentation._buildLevel1Docs(cmd);
+    html += Documentation._buildModulesSection(cmd);
+    html += Documentation._buildSpecialModulesSection(cmd);
+
+    const argsArray = [];
+    const argsObject = {};
+    ParseCommandLine.parseCommandLine(commandLine, argsArray, argsObject);
+    html += Documentation._buildBeaconDetailsSection(cmd, argsArray);
+
+    const output = document.querySelector(".run-command pre");
+    output.innerHTML = html;
+  }
+
+  static _buildLevel1Docs (cmd) {
     // level 1
     // Function _getKeywordFragments makes sure that
     // the cmd array has at least one element.
@@ -259,8 +273,10 @@ export class Documentation {
       // the link to the page must use the same title
       pageTitle = "All 'execution' modules";
     }
-    html += "<p><a href='" + Documentation.DOCUMENTATION_URL + Utils.escapeHtml(cmd[0]) + "/all/index.html' target='_blank' rel='noopener'>" + Utils.escapeHtml(pageTitle) + Documentation.EXTERNAL_LINK + "</a></p>";
+    return "<p><a href='" + Documentation.DOCUMENTATION_URL + Utils.escapeHtml(cmd[0]) + "/all/index.html' target='_blank' rel='noopener'>" + Utils.escapeHtml(pageTitle) + Documentation.EXTERNAL_LINK + "</a></p>";
+  }
 
+  static _buildModulesSection (cmd) {
     // When the module is a virtual module, we want
     // to show all relevant concrete modules
     // only 'modules' can have virtual modules as these
@@ -270,58 +286,54 @@ export class Documentation {
     // Also note that some commands are named differently
     // in their implementation. e.g. "cmd.run" is actually "cmdmod.run".
     // This translation serves both purposes.
+    if (cmd.length < 2) {
+      return "";
+    }
+
+    let html = "";
     let concreteModules = [];
-    if (cmd.length >= 2) {
 
-      // only 'modules' has a translation table
-      // other categories are taken literal
-      if (cmd[0] === "modules") {
-        concreteModules = Documentation.PROVIDERS[cmd[1]];
-        if (!concreteModules) {
-          concreteModules = [];
-        }
-      } else {
-        concreteModules = [cmd[1]];
+    // only 'modules' has a translation table
+    // other categories are taken literal
+    if (cmd[0] === "modules") {
+      concreteModules = Documentation.PROVIDERS[cmd[1]];
+      if (!concreteModules) {
+        concreteModules = [];
       }
+    } else {
+      concreteModules = [cmd[1]];
+    }
 
-      if (Object.keys(Documentation.PROVIDERS).length === 0) {
-        html += "<p>The documentation index has not been retrieved yet. We'll just assume this is a regular command.</p>";
-        concreteModules = [cmd[1]];
-      } else if ("SKIPPED" in Documentation.PROVIDERS) {
-        html += "<p>The documentation index is skipped on this system. We'll just assume this is a regular command.</p>";
-        concreteModules = [cmd[1]];
-      } else if ("ERROR" in Documentation.PROVIDERS) {
-        html += "<p>The documentation index could not be retrieved. We'll just assume this is a regular command.</p>";
-        concreteModules = [cmd[1]];
-      }
+    if (Object.keys(Documentation.PROVIDERS).length === 0) {
+      html += "<p>The documentation index has not been retrieved yet. We'll just assume this is a regular command.</p>";
+      concreteModules = [cmd[1]];
+    } else if ("SKIPPED" in Documentation.PROVIDERS) {
+      html += "<p>The documentation index is skipped on this system. We'll just assume this is a regular command.</p>";
+      concreteModules = [cmd[1]];
+    } else if ("ERROR" in Documentation.PROVIDERS) {
+      html += "<p>The documentation index could not be retrieved. We'll just assume this is a regular command.</p>";
+      concreteModules = [cmd[1]];
+    }
 
-      switch (concreteModules.length) {
-      case 0:
-        html += "<p>'" + Utils.escapeHtml(cmd[1]) + "' is an unknown module name. We'll just assume it actually exists. The links below (if any) might not work.</p>";
-        break;
-      case 1:
-        // simple modules case
-        // wheel/runners cases are always simple
-        if (cmd[0] !== "modules") {
-          html += "<p>Module-name '" + Utils.escapeHtml(cmd[0]) + "." + Utils.escapeHtml(cmd[1]) + "' cannot be verified. We'll just assume it actually exists. The links below might not work.</p>";
-        } else if (cmd[1] !== concreteModules[0]) {
-          html += "<p>The internal name for '" + Utils.escapeHtml(cmd[1]) + "' is '" + Utils.escapeHtml(concreteModules[0]) + "'.</p>";
-        }
-        break;
-      default:
-        html += "<p>" + concreteModules.length + " variations of this module seem to be used. These all listed below.</p>";
+    switch (concreteModules.length) {
+    case 0:
+      html += "<p>'" + Utils.escapeHtml(cmd[1]) + "' is an unknown module name. We'll just assume it actually exists. The links below (if any) might not work.</p>";
+      break;
+    case 1:
+      // simple modules case
+      // wheel/runners cases are always simple
+      if (cmd[0] !== "modules") {
+        html += "<p>Module-name '" + Utils.escapeHtml(cmd[0]) + "." + Utils.escapeHtml(cmd[1]) + "' cannot be verified. We'll just assume it actually exists. The links below might not work.</p>";
+      } else if (cmd[1] !== concreteModules[0]) {
+        html += "<p>The internal name for '" + Utils.escapeHtml(cmd[1]) + "' is '" + Utils.escapeHtml(concreteModules[0]) + "'.</p>";
       }
+      break;
+    default:
+      html += "<p>" + concreteModules.length + " variations of this module seem to be used. These all listed below.</p>";
     }
 
     // See https://docs.saltproject.io/en/latest/ref/modules/all/index.html
-    const knownVirtualModules = [
-      "group",
-      "kernelpkg",
-      "pkg",
-      "service",
-      "shadow",
-      "user"
-    ];
+    const knownVirtualModules = ["group", "kernelpkg", "pkg", "service", "shadow", "user"];
 
     let indent = "";
     if (concreteModules.length > 1) {
@@ -331,7 +343,6 @@ export class Documentation {
     }
 
     for (const concreteModule of concreteModules) {
-
       // level 2
       if (cmd.length >= 2) {
         html += "<p><a href='" + Documentation.DOCUMENTATION_URL + cmd[0] + "/all/salt." + cmd[0] + "." + concreteModule + ".html' target='_blank' rel='noopener'>Module '" + (cmd[0] + "." + concreteModule).replace(/^modules[.]/, "") + "'" + Documentation.EXTERNAL_LINK + "</a></p>";
@@ -349,9 +360,18 @@ export class Documentation {
       html += "<p><a href='" + Documentation.DOCUMENTATION_URL + cmd[0] + "/all/salt." + cmd[0] + "." + cmd[1] + ".html' target='_blank' rel='noopener'>'" + cmd[0] + "." + cmd[1] + "' modules" + Documentation.EXTERNAL_LINK + "</a></p>";
     }
 
-    // grains?
+    return html;
+  }
 
-    if (cmd.length >= 2 && cmd[0] === "modules" && cmd[1] === "grains") {
+  static _buildSpecialModulesSection (cmd) {
+    if (cmd.length < 2 || cmd[0] !== "modules") {
+      return "";
+    }
+
+    let html = "";
+
+    // grains?
+    if (cmd[1] === "grains") {
       html += "<p>It looks you are using grains. The link below gives the overview of the grains modules. </p>";
       html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "grains/all/index.html' target='_blank' rel='noopener'>Grains Modules" + Documentation.EXTERNAL_LINK + "</a></p>";
     }
@@ -361,8 +381,7 @@ export class Documentation {
     // and not for individual grains
 
     // pillars?
-
-    if (cmd.length >= 2 && cmd[0] === "modules" && cmd[1] === "pillar") {
+    if (cmd[1] === "pillar") {
       html += "<p>It looks you are using pillars. The link below gives the overview of the pillar modules. </p>";
       html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "pillar/all/index.html' target='_blank' rel='noopener'>Pillar Modules" + Documentation.EXTERNAL_LINK + "</a></p>";
     }
@@ -372,8 +391,7 @@ export class Documentation {
     // and not for individual pillars
 
     // states?
-
-    if (cmd.length >= 2 && cmd[0] === "modules" && cmd[1] === "state") {
+    if (cmd[1] === "state") {
       html += "<p>It looks you are using states. The link below gives the overview of the state modules. </p>";
       html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "states/all/index.html' target='_blank' rel='noopener'>State Modules" + Documentation.EXTERNAL_LINK + "</a></p>";
     }
@@ -383,8 +401,7 @@ export class Documentation {
     // and not for individual states
 
     // cloud?
-
-    if (cmd.length >= 2 && cmd[0] === "modules" && cmd[1] === "cloud") {
+    if (cmd[1] === "cloud") {
       html += "<p>It looks you are using cloud. The link below gives the overview of the cloud modules. </p>";
       html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "clouds/all/index.html' target='_blank' rel='noopener'>Cloud Modules" + Documentation.EXTERNAL_LINK + "</a></p>";
     }
@@ -394,26 +411,27 @@ export class Documentation {
     // and not for individual clouds
 
     // beacons?
-
-    if (cmd.length >= 2 && cmd[0] === "modules" && cmd[1] === "beacons") {
+    if (cmd[1] === "beacons") {
       html += "<p>It looks you are using beacons. The link below gives the overview of the beacons modules. </p>";
       html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "beacons/all/index.html' target='_blank' rel='noopener'>Beacon Modules" + Documentation.EXTERNAL_LINK + "</a></p>";
     }
 
+    return html;
+  }
+
+  static _buildBeaconDetailsSection (cmd, argsArray) {
     // also provide information about individual beacons
-
-    const argsArray = [];
-    const argsObject = {};
-    ParseCommandLine.parseCommandLine(commandLine, argsArray, argsObject);
-
-    if (cmd.length >= 3 && cmd[0] === "modules" && cmd[1] === "beacons" && ["add", "modify"].includes(cmd[2]) && argsArray.length >= 2 && typeof argsArray[1] === "string") {
-      const beaconName = argsArray[1];
-      html += "<p>Beacon-name '" + Utils.escapeHtml(beaconName) + "' cannot be verified. We'll just assume it actually exists. The link below might not work.</p>";
-      html += "<p><a href='" + Documentation.DOCUMENTATION_URL + "beacons/all/salt.beacons." + Utils.escapeHtml(beaconName) + ".html' target='_blank' rel='noopener'>Beacon Module '" + Utils.escapeHtml(beaconName) + "'" + Documentation.EXTERNAL_LINK + "</a></p>";
+    if (cmd.length < 3 || cmd[0] !== "modules" || cmd[1] !== "beacons") {
+      return "";
     }
 
-    const output = document.querySelector(".run-command pre");
-    output.innerHTML = html;
+    if (!["add", "modify"].includes(cmd[2]) || argsArray.length < 2 || typeof argsArray[1] !== "string") {
+      return "";
+    }
+
+    const beaconName = argsArray[1];
+    return "<p>Beacon-name '" + Utils.escapeHtml(beaconName) + "' cannot be verified. We'll just assume it actually exists. The link below might not work.</p>" +
+      "<p><a href='" + Documentation.DOCUMENTATION_URL + "beacons/all/salt.beacons." + Utils.escapeHtml(beaconName) + ".html' target='_blank' rel='noopener'>Beacon Module '" + Utils.escapeHtml(beaconName) + "'" + Documentation.EXTERNAL_LINK + "</a></p>";
   }
 
   static _manualRunMenuBeaconNamePrepare () {
