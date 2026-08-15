@@ -1,3 +1,5 @@
+/* global navigator */
+
 import {Output} from "./Output.js";
 import {Utils} from "../Utils.js";
 

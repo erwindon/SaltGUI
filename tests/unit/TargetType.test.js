@@ -14,56 +14,103 @@ const testTargetType = function (targetType, targetPattern) {
 
 describe("Unittests for TargetType.js", () => {
 
-  it("test makeTargetText", () => {
+  describe("makeTargetText", () => {
+    it("test with glob target", () => {
+      const result = testTargetType("glob", "*");
+      assert.equal(result, "*");
+    });
 
-    let result;
+    it("test with pcre target", () => {
+      const result = testTargetType("pcre", ".*");
+      assert.equal(result, "pcre .*");
+    });
 
-    // list of target-types from:
-    // https://docs.saltstack.com/en/latest/ref/clients/index.html#salt.client.LocalClient.cmd
+    it("test with list target", () => {
+      const result = testTargetType("list", "a,b,c");
+      assert.equal(result, "a,b,c");
+    });
 
-    // glob - Bash glob completion - Default
-    result = testTargetType("glob", "*");
-    assert.equal(result, "*");
+    it("test with grain target", () => {
+      const result = testTargetType("grain", "os:*");
+      assert.equal(result, "grain os:*");
+    });
 
-    // pcre - Perl style regular expression
-    result = testTargetType("pcre", ".*");
-    assert.equal(result, "pcre .*");
+    it("test with grain_pcre target", () => {
+      const result = testTargetType("grain_pcre", "os:.*");
+      assert.equal(result, "grain_pcre os:.*");
+    });
 
-    // list - Python list of hosts
-    result = testTargetType("list", "a,b,c");
-    assert.equal(result, "a,b,c");
+    it("test with pillar target", () => {
+      const result = testTargetType("pillar", "p1:*");
+      assert.equal(result, "pillar p1:*");
+    });
 
-    // grain - Match based on a grain comparison
-    result = testTargetType("grain", "os:*");
-    assert.equal(result, "grain os:*");
+    it("test with pillar_pcre target", () => {
+      const result = testTargetType("pillar_pcre", "p1:.*");
+      assert.equal(result, "pillar_pcre p1:.*");
+    });
 
-    // grain_pcre - Grain comparison with a regex
-    result = testTargetType("grain_pcre", "os:.*");
-    assert.equal(result, "grain_pcre os:.*");
+    it("test with nodegroup target", () => {
+      const result = testTargetType("nodegroup", "ng3");
+      assert.equal(result, "nodegroup ng3");
+    });
 
-    // pillar - Pillar data comparison
-    result = testTargetType("pillar", "p1:*");
-    assert.equal(result, "pillar p1:*");
+    it("test with range target", () => {
+      const result = testTargetType("range", "a-z");
+      assert.equal(result, "range a-z");
+    });
 
-    // pillar_pcre - Pillar data comparison with a regex
-    result = testTargetType("pillar_pcre", "p1:.*");
-    assert.equal(result, "pillar_pcre p1:.*");
+    it("test with compound target", () => {
+      const result = testTargetType("compound", "webserv* and G@os:Debian or E@web-dc1-srv.*");
+      assert.equal(result, "compound webserv* and G@os:Debian or E@web-dc1-srv.*");
+    });
 
-    // nodegroup - Match on nodegroup
-    result = testTargetType("nodegroup", "ng3");
-    assert.equal(result, "nodegroup ng3");
+    it("test with ipcidr target", () => {
+      const result = testTargetType("ipcidr", "10.0.0.0/24");
+      assert.equal(result, "ipcidr 10.0.0.0/24");
+    });
+  });
 
-    // range - Use a Range server for matching
-    result = testTargetType("range", "a-z");
-    assert.equal(result, "range a-z");
+  describe("getTargetTypeFromTarget", () => {
+    it("test with array", () => {
+      const result = TargetType.getTargetTypeFromTarget(["host1", "host2"]);
+      assert.equal(result, "list");
+    });
 
-    // compound - Pass a compound match string
-    result = testTargetType("compound", "webserv* and G@os:Debian or E@web-dc1-srv.*");
-    assert.equal(result, "compound webserv* and G@os:Debian or E@web-dc1-srv.*");
+    it("test with compound target containing @", () => {
+      const result = TargetType.getTargetTypeFromTarget("L@host1 and G@os:debian");
+      assert.equal(result, "compound");
+    });
 
-    // ipcidr - Match based on Subnet (CIDR notation) or IPv4 address.
-    result = testTargetType("ipcidr", "10.0.0.0/24");
-    assert.equal(result, "ipcidr 10.0.0.0/24");
+    it("test with compound target containing space", () => {
+      const result = TargetType.getTargetTypeFromTarget("host 1");
+      assert.equal(result, "compound");
+    });
+
+    it("test with compound target containing parentheses", () => {
+      const result = TargetType.getTargetTypeFromTarget("(G@os:linux)");
+      assert.equal(result, "compound");
+    });
+
+    it("test with list target", () => {
+      const result = TargetType.getTargetTypeFromTarget("host1,host2,host3");
+      assert.equal(result, "list");
+    });
+
+    it("test with nodegroup", () => {
+      const result = TargetType.getTargetTypeFromTarget("#mygroup");
+      assert.equal(result, "nodegroup");
+    });
+
+    it("test with glob", () => {
+      const result = TargetType.getTargetTypeFromTarget("host*");
+      assert.equal(result, "glob");
+    });
+
+    it("test with simple hostname", () => {
+      const result = TargetType.getTargetTypeFromTarget("host1");
+      assert.equal(result, "glob");
+    });
   });
 
 });
