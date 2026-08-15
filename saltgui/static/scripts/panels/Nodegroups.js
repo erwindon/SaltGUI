@@ -88,95 +88,116 @@ export class NodegroupsPanel extends Panel {
     const nodegroupTr = this.table.querySelector("#" + nodegroupTrId);
 
     if (minionTr === null) {
-      // unknown minion is probably not in accepted state
-      // or totally unknown and still included in the nodegroup
-      const minionSpan = Utils.createSpan("minion-id", pMinionId);
-      const minionTd = Utils.createTd();
-      minionTd.appendChild(minionSpan);
-      let status;
-      if (pWheelKeyListAllSimpleData.minions.includes(pMinionId)) {
-        // strange, should have found this TR
-        status = Utils.createTd(["status", "error"], "error");
-      } else if (pWheelKeyListAllSimpleData.minions_pre.includes(pMinionId)) {
-        status = Utils.createTd(["status", "unaccepted"], "unaccepted");
-        this.unaccepted += 1;
-      } else if (pWheelKeyListAllSimpleData.minions_rejected.includes(pMinionId)) {
-        status = Utils.createTd(["status", "rejected"], "rejected");
-        this.rejected += 1;
-      } else if (pWheelKeyListAllSimpleData.minions_denied.includes(pMinionId)) {
-        status = Utils.createTd(["status", "denied"], "denied");
-        this.denied += 1;
-      } else {
-        status = Utils.createTd(["status", "keyunknown"], "unknown");
-        Panel.addPrefixIcon(minionSpan, Character.WARNING_SIGN);
-        Utils.addToolTip(minionSpan, "This minion is listed for this nodegroup,\nbut the minion is unknown", "bottom-left");
-        this.unknown += 1;
-      }
-      minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), "select_minions", pMinionId);
-      minionTr.appendChild(minionTd);
-      minionTr.appendChild(status);
-      minionTr.appendChild(Utils.createTd());
-      minionTr.appendChild(Utils.createTd());
-      this._addMenuItemShowKeys(minionTr.dropdownmenu);
-      minionTr.offline = true;
+      minionTr = this._createUnknownMinionRow(pMinionId, pWheelKeyListAllSimpleData);
     }
 
     if (minionTr.dataset.moved) {
-      // this minion is already part of a group
-      // duplicate it to put it in its 2nd (3rd,etc) group
-      const minionTr2 = minionTr.cloneNode(true);
-      nodegroupTr.parentNode.insertBefore(minionTr2, nodegroupTr.nextSibling);
-
-      // fix the select logic
-      const selectTd = minionTr2.querySelector("td");
-      this.addSelectionCheckbox (minionTr2, "select_minions", selectTd);
-
-      // fix the click-to-copy-logic
-      const addressSpan = minionTr2.querySelector("td.address span");
-      if (addressSpan) {
-        addressSpan.addEventListener("click", (pClickEvent) => {
-          Panel.copyAddress(addressSpan, pClickEvent.ctrlKey || pClickEvent.altKey);
-          pClickEvent.stopPropagation();
-        });
-        addressSpan.addEventListener("mouseout", () => {
-          Panel.restoreClickToCopy(addressSpan);
-        });
-        Panel.restoreClickToCopy(addressSpan);
-      }
-
-      // fix the row menu
-      const oldMenuButton = minionTr2.querySelector("td div.run-command-button");
-      const minionIsOk = minionTr2.dataset.saltversion !== undefined;
-
-      if (oldMenuButton) {
-        oldMenuButton.parentElement.remove();
-      }
-      const newMenuButton = Utils.createTd();
-      minionTr2.insertBefore(newMenuButton, minionTr2.firstChild.nextSibling);
-      minionTr2.dropdownmenu = new DropDownMenu(newMenuButton, "smaller");
-      if (minionIsOk) {
-        this._addMenuItemStateApplyMinion(minionTr2.dropdownmenu, pMinionId);
-        this._addMenuItemStateApplyTestMinion(minionTr2.dropdownmenu, pMinionId);
-        this._addMenuItemShowGrains(minionTr2.dropdownmenu, pMinionId);
-        this._addMenuItemShowPillars(minionTr2.dropdownmenu, pMinionId);
-        this._addMenuItemShowBeacons(minionTr2.dropdownmenu, pMinionId);
-        this._addMenuItemShowSchedules(minionTr2.dropdownmenu, pMinionId);
-      } else {
-        this._addMenuItemShowKeys(minionTr2.dropdownmenu);
-      }
-
-      if (minionIsOk) {
-        // fix the row as needed
-        minionTr2.addEventListener("click", (pClickEvent) => {
-          const cmdArr = ["state.apply"];
-          this.runCommand("", pMinionId, cmdArr);
-          pClickEvent.stopPropagation();
-        });
-      }
+      this._duplicateMinionToGroup(minionTr, nodegroupTr, pMinionId);
     } else {
       // move the row to its proper place
       nodegroupTr.parentNode.insertBefore(minionTr, nodegroupTr.nextSibling);
       minionTr.dataset.moved = true;
+    }
+  }
+
+  _createUnknownMinionRow (pMinionId, pWheelKeyListAllSimpleData) {
+    // unknown minion is probably not in accepted state
+    // or totally unknown and still included in the nodegroup
+    const minionSpan = Utils.createSpan("minion-id", pMinionId);
+    const minionTd = Utils.createTd();
+    minionTd.appendChild(minionSpan);
+    const status = this._createMinionStatusCell(pMinionId, pWheelKeyListAllSimpleData, minionSpan);
+
+    const minionTr = this.getElement(Utils.getIdFromMinionId(pMinionId), "select_minions", pMinionId);
+    minionTr.appendChild(minionTd);
+    minionTr.appendChild(status);
+    minionTr.appendChild(Utils.createTd());
+    minionTr.appendChild(Utils.createTd());
+    this._addMenuItemShowKeys(minionTr.dropdownmenu);
+    minionTr.offline = true;
+
+    return minionTr;
+  }
+
+  _createMinionStatusCell (pMinionId, pWheelKeyListAllSimpleData, minionSpan) {
+    if (pWheelKeyListAllSimpleData.minions.includes(pMinionId)) {
+      // strange, should have found this TR
+      return Utils.createTd(["status", "error"], "error");
+    } else if (pWheelKeyListAllSimpleData.minions_pre.includes(pMinionId)) {
+      this.unaccepted += 1;
+      return Utils.createTd(["status", "unaccepted"], "unaccepted");
+    } else if (pWheelKeyListAllSimpleData.minions_rejected.includes(pMinionId)) {
+      this.rejected += 1;
+      return Utils.createTd(["status", "rejected"], "rejected");
+    } else if (pWheelKeyListAllSimpleData.minions_denied.includes(pMinionId)) {
+      this.denied += 1;
+      return Utils.createTd(["status", "denied"], "denied");
+    } else {
+      Panel.addPrefixIcon(minionSpan, Character.WARNING_SIGN);
+      Utils.addToolTip(minionSpan, "This minion is listed for this nodegroup,\nbut the minion is unknown", "bottom-left");
+      this.unknown += 1;
+      return Utils.createTd(["status", "keyunknown"], "unknown");
+    }
+  }
+
+  _duplicateMinionToGroup (minionTr, nodegroupTr, pMinionId) {
+    // this minion is already part of a group
+    // duplicate it to put it in its 2nd (3rd,etc) group
+    const minionTr2 = minionTr.cloneNode(true);
+    nodegroupTr.parentNode.insertBefore(minionTr2, nodegroupTr.nextSibling);
+
+    // fix the select logic
+    const selectTd = minionTr2.querySelector("td");
+    this.addSelectionCheckbox (minionTr2, "select_minions", selectTd);
+
+    NodegroupsPanel._fixAddressClickToCopy(minionTr2);
+    const minionIsOk = minionTr2.dataset.saltversion !== undefined;
+    this._setupMinionRowMenu(minionTr2, pMinionId, minionIsOk);
+
+    if (minionIsOk) {
+      // fix the row as needed
+      minionTr2.addEventListener("click", (pClickEvent) => {
+        const cmdArr = ["state.apply"];
+        this.runCommand("", pMinionId, cmdArr);
+        pClickEvent.stopPropagation();
+      });
+    }
+  }
+
+  static _fixAddressClickToCopy (minionTr) {
+    // fix the click-to-copy-logic
+    const addressSpan = minionTr.querySelector("td.address span");
+    if (addressSpan) {
+      addressSpan.addEventListener("click", (pClickEvent) => {
+        Panel.copyAddress(addressSpan, pClickEvent.ctrlKey || pClickEvent.altKey);
+        pClickEvent.stopPropagation();
+      });
+      addressSpan.addEventListener("mouseout", () => {
+        Panel.restoreClickToCopy(addressSpan);
+      });
+      Panel.restoreClickToCopy(addressSpan);
+    }
+  }
+
+  _setupMinionRowMenu (minionTr, pMinionId, minionIsOk) {
+    // fix the row menu
+    const oldMenuButton = minionTr.querySelector("td div.run-command-button");
+
+    if (oldMenuButton) {
+      oldMenuButton.parentElement.remove();
+    }
+    const newMenuButton = Utils.createTd();
+    minionTr.insertBefore(newMenuButton, minionTr.firstChild.nextSibling);
+    minionTr.dropdownmenu = new DropDownMenu(newMenuButton, "smaller");
+    if (minionIsOk) {
+      this._addMenuItemStateApplyMinion(minionTr.dropdownmenu, pMinionId);
+      this._addMenuItemStateApplyTestMinion(minionTr.dropdownmenu, pMinionId);
+      this._addMenuItemShowGrains(minionTr.dropdownmenu, pMinionId);
+      this._addMenuItemShowPillars(minionTr.dropdownmenu, pMinionId);
+      this._addMenuItemShowBeacons(minionTr.dropdownmenu, pMinionId);
+      this._addMenuItemShowSchedules(minionTr.dropdownmenu, pMinionId);
+    } else {
+      this._addMenuItemShowKeys(minionTr.dropdownmenu);
     }
   }
 
