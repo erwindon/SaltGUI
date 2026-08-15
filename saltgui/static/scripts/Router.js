@@ -170,6 +170,7 @@ export class Router {
     }
     if (pButtonId[0] === pKey) {
       pElement.classList.add("menu-item-first-letter");
+      pElement.dataset.hasFirstLetterShortcut = true;
     } else {
       const shortcutContainer = Utils.createSpan("menu-item-shortcut-container");
       shortcutContainer.append(document.createTextNode(" ("));
@@ -295,7 +296,7 @@ export class Router {
       } else {
         item.classList.remove("menu-item-dimmed");
       }
-      if (visible && item.dataset.hasShortcut === "true") {
+      if (visible && item.dataset.hasFirstLetterShortcut) {
         // show the shortcut indicator only when item is enabled
         item.classList.add("menu-item-first-letter");
       } else {
