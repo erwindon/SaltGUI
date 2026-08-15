@@ -82,7 +82,19 @@ export class OrchestrationsPanel extends Panel {
   }
 
   _addOrchestration (pOrchestrationName, pOrchestrations) {
+    const {ok, steps} = OrchestrationsPanel._processOrchestrationSteps(pOrchestrations);
 
+    if (!ok) {
+      // no evidence that this is an orchestration (likely just a highstate)
+      return false;
+    }
+
+    this._addOrchestrationHeaderRow(pOrchestrationName);
+    this._addOrchestrationStepRows(steps);
+    return true;
+  }
+
+  static _processOrchestrationSteps (pOrchestrations) {
     const steps = [];
     let ok = false;
     for (const [name,step] of Object.entries(pOrchestrations)) {
@@ -101,12 +113,10 @@ export class OrchestrationsPanel extends Panel {
       step.salt = [];
       steps.push(step);
     }
+    return {ok, steps};
+  }
 
-    if (!ok) {
-      // no evidence that this is an orchestration (likely just a highstate)
-      return false;
-    }
-
+  _addOrchestrationHeaderRow (pOrchestrationName) {
     const tr0 = Utils.createTr();
 
     const menu = new DropDownMenu(tr0, "smaller");
@@ -126,7 +136,9 @@ export class OrchestrationsPanel extends Panel {
       this.runCommand("", "", cmdArr);
       pClickEvent.stopPropagation();
     });
+  }
 
+  _addOrchestrationStepRows (steps) {
     steps.sort((aa, bb) => aa.order > bb.order);
 
     for (const step of steps) {
@@ -145,61 +157,67 @@ export class OrchestrationsPanel extends Panel {
 
       tr1.appendChild(Utils.createTd("name", Character.NO_BREAK_SPACE.repeat(3) + step.__key__));
 
-      // calculate targettype
-      const targetType = step["tgt_type"];
-      // calculate target
-      const tgt = step["tgt"];
-      if (!targetType && !tgt) {
-        tr1.appendChild(Utils.createTd("target value-none", "(none)"));
-      } else if (!tgt) {
-        // targetType cannot be null here
-        tr1.appendChild(Utils.createTd("target", targetType));
-      } else if (targetType && targetType !== "glob" && targetType !== "list") {
-        // target cannot be null here
-        tr1.appendChild(Utils.createTd("target", targetType + " " + tgt));
-      } else {
-        tr1.appendChild(Utils.createTd("target", tgt));
-      }
-
-      // show command
-      const typeTd = Utils.createTd();
-      const typeSpan = Utils.createSpan("command", step.__type__);
-      typeTd.appendChild(typeSpan);
-      Utils.addToolTip(typeSpan, "salt." + step.__type__);
-      tr1.appendChild(typeTd);
-
-      // show name
-      const nameTd = Utils.createTd();
-      const nameSpan = Utils.createSpan("command", step.name);
-      nameTd.appendChild(nameSpan);
-      tr1.appendChild(nameTd);
-
-      // calculate details
-      // TODO should support ENV
-      delete step["__env__"];
-      delete step["__key__"];
-      delete step["__sls__"];
-      delete step["__type__"];
-      delete step["name"];
-      // the steps are already sorted by this
-      // don't show actual values
-      delete step["order"];
-      // only value for 'salt' seems to be []
-      delete step["salt"];
-      delete step["tgt"];
-      delete step["tgt_type"];
-      if (Object.keys(step).length === 0) {
-        // nothing more to show
-        tr1.appendChild(Utils.createTd("details value-none", "(none)"));
-      } else {
-        const formattedStep = Output.formatObject(step);
-        tr1.appendChild(Utils.createTd("grain-value", formattedStep));
-      }
+      OrchestrationsPanel._addTargetTd(tr1, step);
+      OrchestrationsPanel._addCommandTd(tr1, step);
+      OrchestrationsPanel._addNameTd(tr1, step);
+      OrchestrationsPanel._addDetailsTd(tr1, step);
 
       this.table.tBodies[0].appendChild(tr1);
     }
+  }
 
-    return true;
+  static _addTargetTd (tr1, step) {
+    const targetType = step["tgt_type"];
+    const tgt = step["tgt"];
+    if (!targetType && !tgt) {
+      tr1.appendChild(Utils.createTd("target value-none", "(none)"));
+    } else if (!tgt) {
+      // targetType cannot be null here
+      tr1.appendChild(Utils.createTd("target", targetType));
+    } else if (targetType && targetType !== "glob" && targetType !== "list") {
+      // target cannot be null here
+      tr1.appendChild(Utils.createTd("target", targetType + " " + tgt));
+    } else {
+      tr1.appendChild(Utils.createTd("target", tgt));
+    }
+  }
+
+  static _addCommandTd (tr1, step) {
+    const typeTd = Utils.createTd();
+    const typeSpan = Utils.createSpan("command", step.__type__);
+    typeTd.appendChild(typeSpan);
+    Utils.addToolTip(typeSpan, "salt." + step.__type__);
+    tr1.appendChild(typeTd);
+  }
+
+  static _addNameTd (tr1, step) {
+    const nameTd = Utils.createTd();
+    const nameSpan = Utils.createSpan("command", step.name);
+    nameTd.appendChild(nameSpan);
+    tr1.appendChild(nameTd);
+  }
+
+  static _addDetailsTd (tr1, step) {
+    // TODO should support ENV
+    delete step["__env__"];
+    delete step["__key__"];
+    delete step["__sls__"];
+    delete step["__type__"];
+    delete step["name"];
+    // the steps are already sorted by this
+    // don't show actual values
+    delete step["order"];
+    // only value for 'salt' seems to be []
+    delete step["salt"];
+    delete step["tgt"];
+    delete step["tgt_type"];
+    if (Object.keys(step).length === 0) {
+      // nothing more to show
+      tr1.appendChild(Utils.createTd("details value-none", "(none)"));
+    } else {
+      const formattedStep = Output.formatObject(step);
+      tr1.appendChild(Utils.createTd("grain-value", formattedStep));
+    }
   }
 
   _addMenuItemApplyOrchestration (pMenu, pOrchestrationName) {
