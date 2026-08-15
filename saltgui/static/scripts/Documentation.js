@@ -140,7 +140,6 @@ export class Documentation {
   static handleLocalTestProviders (data) {
     const providerlists = data.return[0];
     for (const host in providerlists) {
-
       // did we (not) get an answer from the minion?
       if (!providerlists[host]) {
         continue;
@@ -148,51 +147,48 @@ export class Documentation {
 
       const providerlist = providerlists[host];
       for (let key in providerlist) {
-
         const value = providerlist[key];
-
-        // Some Windows minions report module names
-        // with this extra part, remove it
-        if (key.endsWith(".cpython-35")) {
-          key = key.substring(0, key.length - 11);
-        }
-
-        // This seems to be returned for the 'vsphere' module.
-        // That is clearly a wrong answer, fix it.
-        // See also https://github.com/saltstack/salt/issues/49332.
-        if (key === "__init__" && value === "vsphere") {
-          key = "vsphere";
-        }
-
-        // This is sometimes returned for the 'win_pkg' module.
-        // That is clearly a wrong answer, fix it.
-        if (key === "functools" && value === "pkg") {
-          key = "win_pkg";
-        }
-
-        // This is sometimes returned for the 'win_lgpo' module.
-        // That is clearly a wrong answer, fix it.
-        if (key === "configparser" && value === "lgpo") {
-          key = "win_lgpo";
-        }
-
-        // This is seems to be returned for the 'travisci' module.
-        // That is clearly a wrong answer, fix it.
-        if ((key === "parse" || key === "urlparse") && value === "travisci") {
-          key = "travisci";
-        }
-
-        // create an initial empty mapping
-        if (!Documentation.PROVIDERS[value]) {
-          Documentation.PROVIDERS[value] = [];
-        }
-
-        // add the new mapping, prevent duplicates as
-        // multiple minions provide (almost) the same answers
-        if (!Documentation.PROVIDERS[value].includes(key)) {
-          Documentation.PROVIDERS[value].push(key);
-        }
+        const correctedKey = Documentation._correctProviderKey(key, value);
+        Documentation._addProvider(value, correctedKey);
       }
+    }
+  }
+
+  static _correctProviderKey (key, value) {
+    // Some Windows minions report module names with extra parts
+    if (key.endsWith(".cpython-35")) {
+      key = key.substring(0, key.length - 11);
+    }
+
+    // Correct known misreported keys
+    const corrections = {
+      "__init__,vsphere": "vsphere",
+      "configparser,lgpo": "win_lgpo",
+      "functools,pkg": "win_pkg"
+    };
+
+    const correction = corrections[key + "," + value];
+    if (correction) {
+      return correction;
+    }
+
+    // Check for travisci module misreporting
+    if ((key === "parse" || key === "urlparse") && value === "travisci") {
+      return "travisci";
+    }
+
+    return key;
+  }
+
+  static _addProvider (value, key) {
+    // Create initial empty mapping if needed
+    if (!Documentation.PROVIDERS[value]) {
+      Documentation.PROVIDERS[value] = [];
+    }
+
+    // Add the provider, preventing duplicates
+    if (!Documentation.PROVIDERS[value].includes(key)) {
+      Documentation.PROVIDERS[value].push(key);
     }
   }
 
