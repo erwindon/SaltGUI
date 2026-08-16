@@ -203,45 +203,45 @@ describe("Unittests for output/OutputHighstateSummaryOriginal.js", () => {
 
   describe("addPercentage", () => {
     it("test with a value", () => {
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("en-US", 50, 100), "50.0%");
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("nl-NL", 50, 100), "50,0%");
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("de-DE", 50, 100), "50,0" + Character.NO_BREAK_SPACE + "%");
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("tr-TR", 50, 100), "%50,0");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(50, 100, "en-US"), "50.0%");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(50, 100, "nl-NL"), "50,0%");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(50, 100, "de-DE"), "50,0" + Character.NO_BREAK_SPACE + "%");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(50, 100, "tr-TR"), "%50,0");
     });
 
     it("test with different value", () => {
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("en-US", 25, 100), "25.0%");
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("nl-NL", 25, 100), "25,0%");
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("de-DE", 25, 100), "25,0" + Character.NO_BREAK_SPACE + "%");
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("tr-TR", 25, 100), "%25,0");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(25, 100, "en-US"), "25.0%");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(25, 100, "nl-NL"), "25,0%");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(25, 100, "de-DE"), "25,0" + Character.NO_BREAK_SPACE + "%");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(25, 100, "tr-TR"), "%25,0");
     });
 
     it("test with fractional result", () => {
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("en-US", 1, 3), "33.3%");
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("nl-NL", 1, 3), "33,3%");
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("de-DE", 1, 3), "33,3" + Character.NO_BREAK_SPACE + "%");
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("tr-TR", 1, 3), "%33,3");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(1, 3, "en-US"), "33.3%");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(1, 3, "nl-NL"), "33,3%");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(1, 3, "de-DE"), "33,3" + Character.NO_BREAK_SPACE + "%");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(1, 3, "tr-TR"), "%33,3");
     });
 
     it("test with zero count", () => {
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("en-US", 0, 100), "0.0%");
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("nl-NL", 0, 100), "0,0%");
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("de-DE", 0, 100), "0,0" + Character.NO_BREAK_SPACE + "%");
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("tr-TR", 0, 100), "%0,0");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(0, 100, "en-US"), "0.0%");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(0, 100, "nl-NL"), "0,0%");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(0, 100, "de-DE"), "0,0" + Character.NO_BREAK_SPACE + "%");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(0, 100, "tr-TR"), "%0,0");
     });
 
     it("test with 100 percent", () => {
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("en-US", 100, 100), "100.0%");
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("nl-NL", 100, 100), "100,0%");
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("de-DE", 100, 100), "100,0" + Character.NO_BREAK_SPACE + "%");
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("tr-TR", 100, 100), "%100,0");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(100, 100, "en-US"), "100.0%");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(100, 100, "nl-NL"), "100,0%");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(100, 100, "de-DE"), "100,0" + Character.NO_BREAK_SPACE + "%");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(100, 100, "tr-TR"), "%100,0");
     });
 
     it("test with small fraction", () => {
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("en-US", 1, 100), "1.0%");
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("nl-NL", 1, 100), "1,0%");
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("de-DE", 1, 100), "1,0" + Character.NO_BREAK_SPACE + "%");
-      assert.equal(OutputHighstateSummaryOriginal.addPercentage("tr-TR", 1, 100), "%1,0");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(1, 100, "en-US"), "1.0%");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(1, 100, "nl-NL"), "1,0%");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(1, 100, "de-DE"), "1,0" + Character.NO_BREAK_SPACE + "%");
+      assert.equal(OutputHighstateSummaryOriginal.addPercentage(1, 100, "tr-TR"), "%1,0");
     });
   });
 
@@ -255,31 +255,31 @@ describe("Unittests for output/OutputHighstateSummarySaltGui.js", () => {
 
   describe("addPercentage", () => {
     it("test without percentage", () => {
-      assert.equal(OutputHighstateSummarySaltGui.addPercentage("en-US", 50, 100), "50");
-      assert.equal(OutputHighstateSummarySaltGui.addPercentage("nl-NL", 50, 100), "50");
-      assert.equal(OutputHighstateSummarySaltGui.addPercentage("de-DE", 50, 100), "50");
-      assert.equal(OutputHighstateSummarySaltGui.addPercentage("tr-TR", 50, 100), "50");
+      assert.equal(OutputHighstateSummarySaltGui.addPercentage(50, 100, "en-US"), "50");
+      assert.equal(OutputHighstateSummarySaltGui.addPercentage(50, 100, "nl-NL"), "50");
+      assert.equal(OutputHighstateSummarySaltGui.addPercentage(50, 100, "de-DE"), "50");
+      assert.equal(OutputHighstateSummarySaltGui.addPercentage(50, 100, "tr-TR"), "50");
     });
 
     it("test with zero count", () => {
-      assert.equal(OutputHighstateSummarySaltGui.addPercentage("en-US", 0, 100), "0");
-      assert.equal(OutputHighstateSummarySaltGui.addPercentage("nl-NL", 0, 100), "0");
-      assert.equal(OutputHighstateSummarySaltGui.addPercentage("de-DE", 0, 100), "0");
-      assert.equal(OutputHighstateSummarySaltGui.addPercentage("tr-TR", 0, 100), "0");
+      assert.equal(OutputHighstateSummarySaltGui.addPercentage(0, 100, "en-US"), "0");
+      assert.equal(OutputHighstateSummarySaltGui.addPercentage(0, 100, "nl-NL"), "0");
+      assert.equal(OutputHighstateSummarySaltGui.addPercentage(0, 100, "de-DE"), "0");
+      assert.equal(OutputHighstateSummarySaltGui.addPercentage(0, 100, "tr-TR"), "0");
     });
 
     it("test with full count", () => {
-      assert.equal(OutputHighstateSummarySaltGui.addPercentage("en-US", 100, 100), "100");
-      assert.equal(OutputHighstateSummarySaltGui.addPercentage("nl-NL", 100, 100), "100");
-      assert.equal(OutputHighstateSummarySaltGui.addPercentage("de-DE", 100, 100), "100");
-      assert.equal(OutputHighstateSummarySaltGui.addPercentage("tr-TR", 100, 100), "100");
+      assert.equal(OutputHighstateSummarySaltGui.addPercentage(100, 100, "en-US"), "100");
+      assert.equal(OutputHighstateSummarySaltGui.addPercentage(100, 100, "nl-NL"), "100");
+      assert.equal(OutputHighstateSummarySaltGui.addPercentage(100, 100, "de-DE"), "100");
+      assert.equal(OutputHighstateSummarySaltGui.addPercentage(100, 100, "tr-TR"), "100");
     });
 
     it("test with single item", () => {
-      assert.equal(OutputHighstateSummarySaltGui.addPercentage("en-US", 1, 1), "1");
-      assert.equal(OutputHighstateSummarySaltGui.addPercentage("nl-NL", 1, 1), "1");
-      assert.equal(OutputHighstateSummarySaltGui.addPercentage("de-DE", 1, 1), "1");
-      assert.equal(OutputHighstateSummarySaltGui.addPercentage("tr-TR", 1, 1), "1");
+      assert.equal(OutputHighstateSummarySaltGui.addPercentage(1, 1, "en-US"), "1");
+      assert.equal(OutputHighstateSummarySaltGui.addPercentage(1, 1, "nl-NL"), "1");
+      assert.equal(OutputHighstateSummarySaltGui.addPercentage(1, 1, "de-DE"), "1");
+      assert.equal(OutputHighstateSummarySaltGui.addPercentage(1, 1, "tr-TR"), "1");
     });
   });
 

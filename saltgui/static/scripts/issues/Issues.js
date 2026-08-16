@@ -84,7 +84,7 @@ export class Issues {
   readyCategory (pPanel, pCatName, pMsg) {
 
     // remove the "loading info..." message
-    if (pMsg && pMsg.parentElement) {
+    if (pMsg?.parentElement) {
       pMsg.remove();
     }
 

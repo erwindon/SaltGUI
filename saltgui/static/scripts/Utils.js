@@ -429,7 +429,7 @@ export class Utils {
     errorBox.style.color = "";
 
     const regexp = Utils._compileSearchRegex(pSearchText, flags.caseSensitiveFlag, flags.regExpFlag, errorBox);
-    if (regexp && regexp.error) {
+    if (regexp?.error) {
       return;
     }
 

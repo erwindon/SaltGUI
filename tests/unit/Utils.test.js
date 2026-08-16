@@ -72,7 +72,7 @@ describe("Unittests for Utils.js", () => {
       assert.deepEqual(result, {"default": true});
     });
 
-    it("test with default value", () => {
+    it("test without default value", () => {
       const result = Utils.getStorageItemObject("session", "nonexistent");
       assert.deepEqual(result, {});
     });

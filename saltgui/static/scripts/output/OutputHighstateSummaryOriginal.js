@@ -5,7 +5,7 @@ import {Utils} from "../Utils.js";
 
 export class OutputHighstateSummaryOriginal {
 
-  static addPercentage (pLocale = navigator.language, pCount, pTotal) {
+  static addPercentage (pCount, pTotal, pLocale = navigator.language) {
     return (pCount / pTotal).toLocaleString(pLocale, {"maximumFractionDigits": 1, "minimumFractionDigits": 1, "style": "percent"});
   }
 
@@ -50,11 +50,11 @@ export class OutputHighstateSummaryOriginal {
 
     const stateOutputPct = Utils.getStorageItemBoolean("session", "state_output_pct");
     if (stateOutputPct) {
-      txt = "\nSuccess %: " + OutputHighstateSummaryOriginal.addPercentage(undefined, pSucceeded, total);
+      txt = "\nSuccess %: " + OutputHighstateSummaryOriginal.addPercentage(pSucceeded, total);
       const successSpan = Utils.createSpan("task-success", txt);
       pDiv.append(successSpan);
 
-      txt = "\nFailure %: " + OutputHighstateSummaryOriginal.addPercentage(undefined, pFailed, total);
+      txt = "\nFailure %: " + OutputHighstateSummaryOriginal.addPercentage(pFailed, total);
       const failureSpan = Utils.createSpan("", txt);
       if (pFailed > 0) {
         failureSpan.classList.add("task-failure");
