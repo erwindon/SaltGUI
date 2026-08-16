@@ -11,28 +11,30 @@ export class SchedulesIssues extends Issues {
     const localScheduleListPromise = this.api.getLocalScheduleList(null);
 
     localScheduleListPromise.then((ok_LocalScheduleList) => {
-      Issues.removeCategory(pPanel, "disabled-schedulers");
-      Issues.removeCategory(pPanel, "disabled-schedules");
-      SchedulesIssues._handleLocalScheduleList(pPanel, ok_LocalScheduleList);
-      Issues.readyCategory(pPanel, msg);
+      this.removeCategory("disabled-schedulers");
+      this.removeCategory("disabled-schedules");
+      this.removeCategory("offline");
+      this._handleLocalScheduleList(ok_LocalScheduleList);
+      this.readyCategory(pPanel, "disabled-schedulers", msg);
+      this.readyCategory(pPanel, "disabled-schedules", msg);
+      this.readyCategory(pPanel, "offline", msg);
       return true;
     }, (_error_LocalScheduleList) => {
-      Issues.removeCategory(pPanel, "disabled-schedulers");
-      const tr1 = Issues.addIssue(pPanel, "disabled-schedulers", "retrieving");
-      Issues.addIssueMsg(tr1, "Could not retrieve list of schedulers");
-      Issues.addIssueErr(tr1, _error_LocalScheduleList);
-      Issues.removeCategory(pPanel, "disabled-schedules");
-      const tr2 = Issues.addIssue(pPanel, "disabled-schedules", "retrieving");
-      Issues.addIssueMsg(tr2, "Could not retrieve list of schedules");
-      Issues.addIssueErr(tr2, _error_LocalScheduleList);
-      Issues.readyCategory(pPanel, msg);
+      this.removeCategory("disabled-schedulers");
+      this.setIssueMsg("disabled-schedulers", "retrieving", "Could not retrieve list of schedulers");
+      this.setIssueErr("disabled-schedulers", "retrieving", _error_LocalScheduleList);
+      this.removeCategory("disabled-schedules");
+      this.setIssueMsg("disabled-schedules", "retrieving", "Could not retrieve list of schedules");
+      this.setIssueErr("disabled-schedules", "retrieving", _error_LocalScheduleList);
+      this.readyCategory(pPanel, "disabled-schedulers", msg);
+      this.readyCategory(pPanel, "disabled-schedules", msg);
       return false;
     });
 
     return localScheduleListPromise;
   }
 
-  static _handleLocalScheduleList (pPanel, pLocalScheduleListData) {
+  _handleLocalScheduleList (pLocalScheduleListData) {
 
     const allSchedules = pLocalScheduleListData.return[0];
 
@@ -40,47 +42,45 @@ export class SchedulesIssues extends Issues {
       const minionData = allSchedules[minionId];
 
       if (!minionData) {
-        SchedulesIssues._handleOfflineMinion(pPanel, minionId);
+        this._handleOfflineMinion(minionId);
         continue;
       }
 
-      SchedulesIssues._handleMinionSchedules(pPanel, minionId, minionData);
+      this._handleMinionSchedules(minionId, minionData);
     }
   }
 
-  static _handleOfflineMinion (pPanel, pMinionId) {
-    const tr = Issues.addIssue(pPanel, "offline", pMinionId);
-    Issues.addIssueMsg(tr, "Minion '" + pMinionId + "' is offline");
+  _handleOfflineMinion (pMinionId) {
+    this.setIssueMsg("offline", pMinionId, "Minion '" + pMinionId + "' is offline");
   }
 
-  static _handleMinionSchedules (pPanel, pMinionId, pMinionData) {
+  _handleMinionSchedules (pMinionId, pMinionData) {
     for (const key in pMinionData) {
       if (key === "enabled") {
         // scheduler flag
-        SchedulesIssues._handleDisabledScheduler(pPanel, pMinionId, pMinionData);
+        this._handleDisabledScheduler(pMinionId, pMinionData);
       } else {
-        SchedulesIssues._handleDisabledSchedule(pPanel, pMinionId, key, pMinionData);
+        this._handleDisabledSchedule(pMinionId, key, pMinionData);
       }
     }
   }
 
-  static _handleDisabledScheduler (pPanel, pMinionId, pMinionData) {
+  _handleDisabledScheduler (pMinionId, pMinionData) {
     if (pMinionData.enabled === false) {
-      const tr = Issues.addIssue(pPanel, "disabled-schedulers", pMinionId);
-      Issues.addIssueMsg(tr, "Scheduler on '" + pMinionId + "' is disabled");
-      Issues.addIssueCmd(tr, "Enable scheduler", pMinionId, ["schedule.enable"]);
-      Issues.addIssueNav(tr, "schedules-minion", {"minionid": pMinionId});
+      this.setIssueMsg("disabled-schedulers", pMinionId, "Scheduler on '" + pMinionId + "' is disabled");
+      this.addIssueCmd("disabled-schedulers", pMinionId, "Enable scheduler", pMinionId, ["schedule.enable"]);
+      this.addIssueNav("disabled-schedulers", pMinionId, "schedules-minion", {"minionid": pMinionId});
     }
   }
 
-  static _handleDisabledSchedule (pPanel, pMinionId, pJobKey, pMinionData) {
+  _handleDisabledSchedule (pMinionId, pJobKey, pMinionData) {
     const jobData = pMinionData[pJobKey];
     if (jobData.enabled === false) {
-      const tr = Issues.addIssue(pPanel, "disabled-schedules", pMinionId + "-" + pJobKey);
-      Issues.addIssueMsg(tr, "Schedule '" + pJobKey + "' on '" + pMinionId + "' is disabled");
-      Issues.addIssueCmd(tr, "Enable schedule", pMinionId, ["schedule.enable_job", pJobKey]);
-      Issues.addIssueCmd(tr, "Delete schedule", pMinionId, ["schedule.delete", pJobKey]);
-      Issues.addIssueNav(tr, "schedules-minion", {"minionid": pMinionId});
+      const issueId = pMinionId + "-" + pJobKey;
+      this.setIssueMsg("disabled-schedules", issueId, "Schedule '" + pJobKey + "' on '" + pMinionId + "' is disabled");
+      this.addIssueCmd("disabled-schedules", issueId, "Enable schedule", pMinionId, ["schedule.enable_job", pJobKey]);
+      this.addIssueCmd("disabled-schedules", issueId, "Delete schedule", pMinionId, ["schedule.delete", pJobKey]);
+      this.addIssueNav("disabled-schedules", issueId, "schedules-minion", {"minionid": pMinionId});
     }
   }
 }

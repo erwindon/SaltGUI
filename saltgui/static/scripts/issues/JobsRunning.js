@@ -11,23 +11,22 @@ export class JobsRunningIssues extends Issues {
     const runnerJobsActivePromise = this.api.getRunnerJobsActive();
 
     runnerJobsActivePromise.then((ok_RunnerJobsActive) => {
-      Issues.removeCategory(pPanel, "active-jobs");
-      JobsRunningIssues._handleRunnerJobsActive(pPanel, ok_RunnerJobsActive);
-      Issues.readyCategory(pPanel, msg);
+      this.removeCategory("active-jobs");
+      this._handleRunnerJobsActive(ok_RunnerJobsActive);
+      this.readyCategory(pPanel, "active-jobs", msg);
       return true;
     }, (_error_RunnerJobsActive) => {
-      Issues.removeCategory(pPanel, "active-jobs");
-      const tr = Issues.addIssue(pPanel, "active-jobs", "retrieving");
-      Issues.addIssueMsg(tr, "Could not retrieve list of jobs");
-      Issues.addIssueErr(tr, _error_RunnerJobsActive);
-      Issues.readyCategory(pPanel, msg);
+      this.removeCategory("active-jobs");
+      this.setIssueMsg("active-jobs", "retrieving", "Could not retrieve list of jobs");
+      this.setIssueErr("active-jobs", "retrieving", _error_RunnerJobsActive);
+      this.readyCategory(pPanel, "active-jobs", msg);
       return false;
     });
 
     return runnerJobsActivePromise;
   }
 
-  static _handleRunnerJobsActive (pPanel, pRunnerJobsActiveJobsData) {
+  _handleRunnerJobsActive (pRunnerJobsActiveJobsData) {
     const allJobsDict = pRunnerJobsActiveJobsData.return[0];
     const then = new Date();
     // ignore jobs that were started less than 60 seconds ago
@@ -46,12 +45,11 @@ export class JobsRunningIssues extends Issues {
         continue;
       }
       const job = allJobsDict[jobId];
-      const tr = Issues.addIssue(pPanel, "active-jobs", jobId);
-      Issues.addIssueMsg(tr, "Job '" + jobId + "' (" + job.Function + ") is still running");
-      Issues.addIssueNav(tr, "job", {"id": jobId});
-      Issues.addIssueCmd(tr, "Terminate job", "*", ["saltutil.term_job", jobId]);
-      Issues.addIssueCmd(tr, "Kill job", "*", ["saltutil.kill_job", jobId]);
-      Issues.addIssueCmd(tr, "Signal job", "*", ["saltutil.signal_job", jobId, "signal=", "<signalnumber>"]);
+      this.setIssueMsg("active-jobs", jobId, "Job '" + jobId + "' (" + job.Function + ") is still running");
+      this.addIssueNav("active-jobs", jobId, "job", {"id": jobId});
+      this.addIssueCmd("active-jobs", jobId, "Terminate job", "*", ["saltutil.term_job", jobId]);
+      this.addIssueCmd("active-jobs", jobId, "Kill job", "*", ["saltutil.kill_job", jobId]);
+      this.addIssueCmd("active-jobs", jobId, "Signal job", "*", ["saltutil.signal_job", jobId, "signal=", "<signalnumber>"]);
     }
   }
 }

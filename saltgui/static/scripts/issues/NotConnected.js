@@ -15,25 +15,23 @@ export class NotConnectedIssues extends Issues {
     const wheelMinionsConnectedPromise = skipWheelMinionsConnected ? null : this.api.getWheelMinionsConnected();
 
     wheelKeyListAllPromise.then((ok_WheelKeyListAll) => {
-      Issues.removeCategory(pPanel, "not-connected");
+      this.removeCategory("not-connected");
       return ok_WheelKeyListAll;
     }, (_error_WheelKeyListAll) => {
-      Issues.removeCategory(pPanel, "not-connected");
-      const tr = Issues.addIssue(pPanel, "not-connected", "retrieving-keys");
-      Issues.addIssueMsg(tr, "Could not retrieve list of keys");
-      Issues.addIssueErr(tr, _error_WheelKeyListAll);
+      this.removeCategory("not-connected");
+      this.setIssueMsg("not-connected", "retrieving-keys", "Could not retrieve list of keys");
+      this.setIssueErr("not-connected", "retrieving-keys", _error_WheelKeyListAll);
       return false;
     });
 
     if (wheelMinionsConnectedPromise != null) {
       wheelMinionsConnectedPromise.then((ok_WheelMinionsConnected) => {
-        Issues.removeCategory(pPanel, "not-connected");
+        this.removeCategory("not-connected");
         return ok_WheelMinionsConnected;
       }, (_error_WheelMinionsConnected) => {
-        Issues.removeCategory(pPanel, "not-connected");
-        const tr = Issues.addIssue(pPanel, "not-connected", "retrieving-connected");
-        Issues.addIssueMsg(tr, "Could not retrieve list of connected minions");
-        Issues.addIssueErr(tr, _error_WheelMinionsConnected);
+        this.removeCategory("not-connected");
+        this.setIssueMsg("not-connected", "retrieving-connected", "Could not retrieve list of connected minions");
+        this.setIssueErr("not-connected", "retrieving-connected", _error_WheelMinionsConnected);
         return false;
       });
     }
@@ -43,12 +41,12 @@ export class NotConnectedIssues extends Issues {
     const allPromise = Promise.all([wheelKeyListAllPromise, wheelMinionsConnectedPromise]);
     /* eslint-enable compat/compat */
     allPromise.then((results) => {
-      Issues.readyCategory(pPanel, msg);
+      this.readyCategory(pPanel, "not-connected", msg);
       const wheelKeyListAllData = results[0];
       const wheelMinionsConnectedData = results[1];
-      NotConnectedIssues._handleNotConnected(pPanel, wheelKeyListAllData, wheelMinionsConnectedData);
+      this._handleNotConnected(wheelKeyListAllData, wheelMinionsConnectedData);
     }, (error) => {
-      Issues.readyCategory(pPanel, msg);
+      this.readyCategory(pPanel, "not-connected", msg);
       /* eslint-disable no-console */
       console.error(error);
       /* eslint-enable no-console */
@@ -57,7 +55,7 @@ export class NotConnectedIssues extends Issues {
     return allPromise;
   }
 
-  static _handleNotConnected (pPanel, pWheelKeyListAllData, pWheelMinionsConnectedData) {
+  _handleNotConnected (pWheelKeyListAllData, pWheelMinionsConnectedData) {
     if (pWheelMinionsConnectedData === null) {
       // with saltgui_skip_wheel_minions_connected=true
       return;
@@ -69,9 +67,8 @@ export class NotConnectedIssues extends Issues {
         continue;
       }
       // no direct commands, we don't know any useful ones
-      const tr = Issues.addIssue(pPanel, "not-connected", minionId);
-      Issues.addIssueMsg(tr, "Minion '" + minionId + "' is not connected");
-      Issues.addIssueNav(tr, "minions", {});
+      this.setIssueMsg("not-connected", minionId, "Minion '" + minionId + "' is not connected");
+      this.addIssueNav("not-connected", minionId, "minions", {});
     }
   }
 }

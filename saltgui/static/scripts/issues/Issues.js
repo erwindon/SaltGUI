@@ -6,28 +6,92 @@ import {Utils} from "../Utils.js";
 
 export class Issues {
 
-  static removeCategory (pPanel, pCatName) {
-    const rows = pPanel.table.tBodies[0].childNodes;
-    for (const tr of rows) {
-      if (tr.myCatName === pCatName) {
-        tr.remove();
-      }
+  constructor () {
+    this.issuesData = new Map();
+  }
+
+  onGetIssues (pPanel, pTitle) {
+    this.api = pPanel.api;
+
+    const msg = Utils.createDiv("msg", "(loading info for " + pTitle + ")");
+    pPanel.msg2.appendChild(msg);
+
+    return msg;
+  }
+
+  removeCategory (pCatName) {
+    this.issuesData.delete(pCatName);
+  }
+
+  removeIssue (pCatName, pIssueName) {
+    const cat = this.issuesData.get(pCatName);
+    if (cat) {
+      cat.delete(pIssueName);
     }
   }
 
-  static removeIssue (pPanel, pCatName, pIssueName) {
-    const rows = pPanel.table.tBodies[0].childNodes;
-    for (const tr of rows) {
-      if (tr.myCatName === pCatName && tr.myIssueName === pIssueName) {
-        tr.remove();
-      }
+  addIssue (pCatName, pIssueName) {
+    if (!this.issuesData.has(pCatName)) {
+      this.issuesData.set(pCatName, new Map());
     }
+    const cat = this.issuesData.get(pCatName);
+
+    // only create new issue if it doesn't exist yet
+    if (!cat.has(pIssueName)) {
+      cat.set(pIssueName, {
+        commands: [],
+        errorMsg: null,
+        message: "",
+        navigations: [],
+        urls: []
+      });
+    }
+
+    return cat.get(pIssueName);
   }
 
-  static readyCategory (pPanel, pMsg) {
+  _removeAndCreateNewIssue (pCatName, pIssueName) {
+    // remove a previous incarnation of the same issue
+    this.removeIssue(pCatName, pIssueName);
+    return this.addIssue(pCatName, pIssueName);
+  }
+
+  setIssueMsg (pCatName, pIssueName, pTitle) {
+    const issueData = this.addIssue(pCatName, pIssueName);
+    issueData.message = pTitle;
+  }
+
+  setIssueErr (pCatName, pIssueName, pErrorMsg) {
+    const issueData = this.addIssue(pCatName, pIssueName);
+    issueData.errorMsg = pErrorMsg;
+  }
+
+  addIssueCmd (pCatName, pIssueName, pTitle, pTarget, pCommand) {
+    const issueData = this.addIssue(pCatName, pIssueName);
+    issueData.commands.push({command: pCommand, target: pTarget, title: pTitle});
+  }
+
+  addIssueNav (pCatName, pIssueName, pPage, pArgs) {
+    const issueData = this.addIssue(pCatName, pIssueName);
+    issueData.navigations.push({args: pArgs, page: pPage});
+  }
+
+  addIssueUrl (pCatName, pIssueName, pTitle, pUrl) {
+    const issueData = this.addIssue(pCatName, pIssueName);
+    issueData.urls.push({title: pTitle, url: pUrl});
+  }
+
+  readyCategory (pPanel, pCatName, pMsg) {
 
     // remove the "loading info..." message
-    pMsg.remove();
+    if (pMsg && pMsg.parentElement) {
+      pMsg.remove();
+    }
+
+    this._renderCategory(pPanel, pCatName);
+
+    // remove the corresponding issueData now that it's been rendered
+    this.removeCategory(pCatName);
 
     pPanel.issuesStatus = Utils.txtZeroOneMany(
       pPanel.table.tBodies[0].children.length,
@@ -43,11 +107,18 @@ export class Issues {
     pPanel.setTableSortable("Description", "asc");
   }
 
-  static addIssue (pPanel, pCatName, pIssueName) {
+  _renderCategory (pPanel, pCatName) {
+    const categoryData = this.issuesData.get(pCatName);
+    if (!categoryData) {
+      return;
+    }
 
-    // remove a previous incarnation of the same issue
-    Issues.removeIssue(pPanel, pCatName, pIssueName);
+    for (const [issueName, issueData] of categoryData) {
+      Issues._renderIssue(pPanel, pCatName, issueName, issueData);
+    }
+  }
 
+  static _renderIssue (pPanel, pCatName, pIssueName, pIssueData) {
     const theTr = Utils.createTr();
 
     const menu = new DropDownMenu(theTr, "smaller");
@@ -55,6 +126,7 @@ export class Issues {
 
     const descTd = Utils.createTd();
     const descSpan = Utils.createSpan("desc");
+    descSpan.innerText = pIssueData.message;
     descTd.appendChild(descSpan);
     theTr.appendChild(descTd);
 
@@ -62,78 +134,66 @@ export class Issues {
     theTr.myIssueName = pIssueName;
     theTr.panel = pPanel;
 
+    // Add error tooltip if present
+    if (pIssueData.errorMsg) {
+      Utils.addToolTip(descSpan, pIssueData.errorMsg);
+    }
+
+    // Add command menu items and click handlers
+    let hasClick = false;
+    for (const cmd of pIssueData.commands) {
+      menu.addMenuItem(cmd.title + "...", () => {
+        theTr.panel.runCommand("", cmd.target, cmd.command);
+      });
+      hasClick = true;
+    }
+
+    // Add navigation menu items and click handlers
+    for (const nav of pIssueData.navigations) {
+      let title;
+      if (nav.page.endsWith("-minion")) {
+        // when unclear, add "for this minion" to title
+        title = "Go to " + nav.page.replace("-minion", "") + " page";
+      } else {
+        title = "Go to " + nav.page + " page";
+      }
+      menu.addMenuItem(title, (pClickEvent) => {
+        theTr.panel.router.goTo(nav.page, nav.args, undefined, pClickEvent);
+      });
+      hasClick = true;
+    }
+
+    // Add URL menu items and click handlers
+    for (const url of pIssueData.urls) {
+      const title = "Go to " + url.title + " " + Character.HEAVY_NORTH_EAST_ARROW;
+      menu.addMenuItem(title, (pClickEvent) => {
+        window.open(url.url, "_blank");
+        pClickEvent.stopPropagation();
+      });
+      hasClick = true;
+    }
+
+    // Add click event to row if there are any menu items
+    if (hasClick) {
+      let clickHandled = false;
+      theTr.addEventListener("click", (pClickEvent) => {
+        if (!clickHandled) {
+          // default action: execute first command or navigate
+          if (pIssueData.commands.length > 0) {
+            const cmd = pIssueData.commands[0];
+            theTr.panel.runCommand("", cmd.target, cmd.command);
+          } else if (pIssueData.navigations.length > 0) {
+            const nav = pIssueData.navigations[0];
+            theTr.panel.router.goTo(nav.page, nav.args);
+          } else if (pIssueData.urls.length > 0) {
+            window.open(pIssueData.urls[0].url, "_blank");
+          }
+          clickHandled = true;
+        }
+        pClickEvent.stopPropagation();
+      });
+    }
+
     pPanel.table.tBodies[0].appendChild(theTr);
-
-    return theTr;
-  }
-
-  static addIssueMsg (pTr, pTitle) {
-    const desc = pTr.querySelector("td .desc");
-    desc.innerText = pTitle;
-  }
-
-  static addIssueErr (pTr, pErrorMsg) {
-    const desc = pTr.querySelector("td .desc");
-    Utils.addToolTip(desc, pErrorMsg);
-  }
-
-  static addIssueCmd (pTr, pTitle, pTarget, pCommand) {
-    pTr.menu.addMenuItem(pTitle + "...", () => {
-      pTr.panel.runCommand("", pTarget, pCommand);
-    });
-
-    if (pTr.hasClick !== true) {
-      pTr.addEventListener("click", (pClickEvent) => {
-        pTr.panel.runCommand("", pTarget, pCommand);
-        pClickEvent.stopPropagation();
-      });
-    }
-    pTr.hasClick = true;
-  }
-
-  static addIssueNav (pTr, pPage, pArgs) {
-    let title;
-    if (pPage.endsWith("-minion")) {
-      // when unclear, add "for this minion" to title
-      title = "Go to " + pPage.replace("-minion", "") + " page";
-    } else {
-      title = "Go to " + pPage + " page";
-    }
-    pTr.menu.addMenuItem(title, (pClickEvent) => {
-      pTr.panel.router.goTo(pPage, pArgs, undefined, pClickEvent);
-    });
-
-    if (pTr.hasClick !== true) {
-      pTr.addEventListener("click", (pClickEvent) => {
-        pTr.panel.router.goTo(pPage, pArgs);
-        pClickEvent.stopPropagation();
-      });
-    }
-    pTr.hasClick = true;
-  }
-
-  static addIssueUrl (pTr, pTitle, pUrl) {
-    const title = "Go to " + pTitle + " " + Character.HEAVY_NORTH_EAST_ARROW;
-    pTr.menu.addMenuItem(title, (pClickEvent) => {
-      window.open(pUrl, "_blank");
-      pClickEvent.stopPropagation();
-    });
-
-    if (pTr.hasClick !== true) {
-      pTr.addEventListener("click", (pClickEvent) => {
-        window.open(pUrl, "_blank");
-        pClickEvent.stopPropagation();
-      });
-    }
-    pTr.hasClick = true;
-  }
-
-  onGetIssues (pPanel, pTitle) {
-    this.api = pPanel.api;
-
-    const msg = Utils.createDiv("msg", "(loading info for " + pTitle + ")");
-    pPanel.msg2.appendChild(msg);
-
-    return msg;
   }
 }

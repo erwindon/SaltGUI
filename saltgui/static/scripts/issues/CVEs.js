@@ -16,94 +16,96 @@ export class CveIssues extends Issues {
     const runnerManageVersionsPromise = this.api.getRunnerManageVersions();
 
     runnerManageVersionsPromise.then((ok_RunnerManageVersions) => {
-      Issues.removeCategory(pPanel, "minion-older");
-      Issues.removeCategory(pPanel, "minion-newer");
-      Issues.removeCategory(pPanel, "minion-bug");
-      Issues.removeCategory(pPanel, "master-bug");
-      Issues.removeCategory(pPanel, "versions");
-      CveIssues._handleManageVersions(pPanel, ok_RunnerManageVersions);
-      Issues.readyCategory(pPanel, msg);
+      this.removeCategory("minion-older");
+      this.removeCategory("minion-newer");
+      this.removeCategory("minion-bug");
+      this.removeCategory("master-bug");
+      this.removeCategory("versions");
+      this._handleManageVersions(ok_RunnerManageVersions);
+      this.readyCategory(pPanel, "minion-older", msg);
+      this.readyCategory(pPanel, "minion-newer", msg);
+      this.readyCategory(pPanel, "minion-bug", msg);
+      this.readyCategory(pPanel, "master-bug", msg);
       return true;
     }, (_error_RunnerManageVersions) => {
-      Issues.removeCategory(pPanel, "minion-older");
-      Issues.removeCategory(pPanel, "minion-newer");
-      Issues.removeCategory(pPanel, "minion-bug");
-      Issues.removeCategory(pPanel, "master-bug");
-      const tr = Issues.addIssue(pPanel, "versions", "retrieving");
-      Issues.addIssueMsg(tr, "Could not retrieve list of versions");
-      Issues.addIssueErr(tr, _error_RunnerManageVersions);
-      Issues.readyCategory(pPanel, msg);
+      this.removeCategory("minion-older");
+      this.removeCategory("minion-newer");
+      this.removeCategory("minion-bug");
+      this.removeCategory("master-bug");
+      this.setIssueMsg("versions", "retrieving", "Could not retrieve list of versions");
+      this.setIssueErr("versions", "retrieving", _error_RunnerManageVersions);
+      this.readyCategory(pPanel, "minion-older", msg);
+      this.readyCategory(pPanel, "minion-newer", msg);
+      this.readyCategory(pPanel, "minion-bug", msg);
+      this.readyCategory(pPanel, "master-bug", msg);
       return false;
     });
 
     return runnerManageVersionsPromise;
   }
 
-  static _handleManageVersions (pPanel, pRunnerManageVersionsData) {
+  _handleManageVersions (pRunnerManageVersionsData) {
     const versionList = pRunnerManageVersionsData.return[0];
     const masterVersion = versionList["Master"];
 
-    CveIssues._addMasterBugIssues(pPanel, masterVersion);
-    CveIssues._processCategoryVersions(pPanel, versionList, masterVersion);
+    this._addMasterBugIssues(masterVersion);
+    this._processCategoryVersions(versionList, masterVersion);
   }
 
-  static _addMasterBugIssues (pPanel, masterVersion) {
+  _addMasterBugIssues (masterVersion) {
     const masterBugs = MinionsPanel.getCveBugs(masterVersion, MASTER);
 
     for (const bug in masterBugs) {
-      const tr = Issues.addIssue(pPanel, "master-bug", bug);
-      Issues.addIssueMsg(tr, "Master is vulnerable due to " + bug + Character.NO_BREAK_SPACE + Character.HEAVY_NORTH_EAST_ARROW);
-      Issues.addIssueUrl(tr, "CVE report", "https://www.cve.org/CVERecord/SearchResults?query=" + bug);
+      this.setIssueMsg("master-bug", bug, "Master is vulnerable due to " + bug + Character.NO_BREAK_SPACE + Character.HEAVY_NORTH_EAST_ARROW);
+      this.addIssueUrl("master-bug", bug, "CVE report", "https://www.cve.org/CVERecord/SearchResults?query=" + bug);
     }
   }
 
-  static _processCategoryVersions (pPanel, versionList, masterVersion) {
+  _processCategoryVersions (versionList, masterVersion) {
     for (const cat in versionList) {
       if (cat === "Master") {
         continue;
       }
 
       const details = versionList[cat];
-      CveIssues._processCategoryVersionDifferences(pPanel, cat, details, masterVersion);
-      CveIssues._processMinionBugIssues(pPanel, details);
+      this._processCategoryVersionDifferences(cat, details, masterVersion);
+      this._processMinionBugIssues(details);
     }
   }
 
-  static _processCategoryVersionDifferences (pPanel, category, details, masterVersion) {
+  _processCategoryVersionDifferences (category, details, masterVersion) {
     if (category === "Up to date" || category === "Minion offline") {
       return;
     }
 
     if (category === "Minion requires update") {
-      CveIssues._addMinionVersionIssues(pPanel, "minion-older", details, masterVersion, "is older than");
+      this._addMinionVersionIssues("minion-older", details, masterVersion, "is older than");
     } else if (category === "Minion newer than master") {
-      CveIssues._addMinionVersionIssues(pPanel, "minion-newer", details, masterVersion, "is newer than");
+      this._addMinionVersionIssues("minion-newer", details, masterVersion, "is newer than");
     } else {
-      CveIssues._addUnknownCategoryIssues(pPanel, category, details, masterVersion);
+      this._addUnknownCategoryIssues(category, details, masterVersion);
     }
   }
 
-  static _addMinionVersionIssues (pPanel, issueCategory, details, masterVersion, compareText) {
+  _addMinionVersionIssues (issueCategory, details, masterVersion, compareText) {
     for (const [minionId, version] of Object.entries(details)) {
-      const tr = Issues.addIssue(pPanel, issueCategory, minionId);
-      Issues.addIssueMsg(tr, "Minion '" + minionId + "' (" + version + ") " + compareText + " the Master (" + masterVersion + ")");
+      this.setIssueMsg(issueCategory, minionId, "Minion '" + minionId + "' (" + version + ") " + compareText + " the Master (" + masterVersion + ")");
     }
   }
 
-  static _addUnknownCategoryIssues (pPanel, category, details, masterVersion) {
+  _addUnknownCategoryIssues (category, details, masterVersion) {
     for (const [minionId, version] of Object.entries(details)) {
-      const tr = Issues.addIssue(pPanel, "minion-newer", minionId);
-      Issues.addIssueMsg(tr, "Minion '" + minionId + "' (" + version + ") vs Master (" + masterVersion + "): " + category);
+      this.setIssueMsg("minion-newer", minionId, "Minion '" + minionId + "' (" + version + ") vs Master (" + masterVersion + "): " + category);
     }
   }
 
-  static _processMinionBugIssues (pPanel, details) {
+  _processMinionBugIssues (details) {
     for (const [minionId, version] of Object.entries(details)) {
       const minionBugs = MinionsPanel.getCveBugs(version, MINION);
       for (const bug in minionBugs) {
-        const tr = Issues.addIssue(pPanel, "minion-bug", minionId + "-" + bug);
-        Issues.addIssueMsg(tr, "Minion '" + minionId + "' is vulnerable due to " + bug + Character.NO_BREAK_SPACE + Character.HEAVY_NORTH_EAST_ARROW);
-        Issues.addIssueUrl(tr, "CVE report", "https://www.cve.org/CVERecord/SearchResults?query=" + bug);
+        const issueId = minionId + "-" + bug;
+        this.setIssueMsg("minion-bug", issueId, "Minion '" + minionId + "' is vulnerable due to " + bug + Character.NO_BREAK_SPACE + Character.HEAVY_NORTH_EAST_ARROW);
+        this.addIssueUrl("minion-bug", issueId, "CVE report", "https://www.cve.org/CVERecord/SearchResults?query=" + bug);
       }
     }
   }
