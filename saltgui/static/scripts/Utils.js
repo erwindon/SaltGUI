@@ -417,6 +417,39 @@ export class Utils {
     const hilitor = new Hilitor(pTable, searchInSelector);
     hilitor.remove();
 
+    const flags = Utils._extractSearchFlags(pMenuItems, pSearchText);
+
+    // find text
+    if (!flags.caseSensitiveFlag && !flags.regExpFlag) {
+      pSearchText = pSearchText.toUpperCase();
+    }
+
+    const errorBox = pTable.parentElement.querySelector(".search-error");
+    errorBox.style.display = "none";
+    errorBox.style.color = "";
+
+    const regexp = Utils._compileSearchRegex(pSearchText, flags.caseSensitiveFlag, flags.regExpFlag, errorBox);
+    if (regexp && regexp.error) {
+      return;
+    }
+
+    const searchParam = flags.regExpFlag ? regexp : pSearchText;
+    const matchInfo = Utils._processSearchBlocks(pTable, searchParam, flags.caseSensitiveFlag, flags.invertFlag);
+
+    if (Utils._showSearchMessages(errorBox, flags.invertFlag, pSearchText, matchInfo)) {
+      return;
+    }
+
+    // show the result
+    hilitor.setMatchType("open");
+    hilitor.setEndRegExp(/^$/);
+    hilitor.setBreakRegExp(/^$/);
+
+    const pattern = Utils._buildHighlightPattern(pSearchText, flags.regExpFlag);
+    hilitor.apply(pattern, flags.caseSensitiveFlag);
+  }
+
+  static _extractSearchFlags (pMenuItems, pSearchText) {
     // values may be undefined, so convert to proper boolean
     const caseSensitiveFlag = pMenuItems.childNodes[0]._value === true;
     const regExpFlag = pMenuItems.childNodes[1]._value === true;
@@ -427,98 +460,114 @@ export class Utils {
       invertFlag = false;
     }
 
-    // find text
-    if (!caseSensitiveFlag && !regExpFlag) {
-      pSearchText = pSearchText.toUpperCase();
+    return {caseSensitiveFlag, invertFlag, regExpFlag};
+  }
+
+  static _compileSearchRegex (pSearchText, pCaseSensitiveFlag, pRegExpFlag, pErrorBox) {
+    if (!pRegExpFlag) {
+      return null;
     }
 
-    let regexp;
-
-    const errorBox = pTable.parentElement.querySelector(".search-error");
-    errorBox.style.display = "none";
-    errorBox.style.color = "";
-
-    if (regExpFlag) {
-      try {
-        regexp = new RegExp(pSearchText, caseSensitiveFlag ? "" : "i");
-      } catch (err) {
-        errorBox.innerText = Character.WARNING_SIGN + err.message;
-        errorBox.style.display = "";
-        return;
-      }
+    try {
+      return new RegExp(pSearchText, pCaseSensitiveFlag ? "" : "i");
+    } catch (err) {
+      pErrorBox.innerText = Character.WARNING_SIGN + err.message;
+      pErrorBox.style.display = "";
+      return {error: true};
     }
+  }
 
-    const searchParam = regExpFlag ? regexp : pSearchText;
+  static _processSearchBlocks (pTable, pSearchParam, pCaseSensitiveFlag, pInvertFlag) {
     let hasEmptyMatches = false;
     let hasNonEmptyMatches = false;
     const blocks = pTable.tagName === "TABLE" ? pTable.tBodies[0].rows : pTable.children;
+
     for (const block of blocks) {
       if (block.classList.contains("no-search")) {
         // e.g. first row of output-panel
         continue;
       }
-      let show = false;
-      const items = block.tagName === "TR" ? block.cells : [block];
-      for (const cell of items) {
-        // do not use "innerText"
-        // that one does not handle hidden text
-        const res = Utils._hasTextContent(cell, searchParam, caseSensitiveFlag);
-        if (res === 1) {
-          hasNonEmptyMatches = true;
-        }
-        if (res === 2) {
-          hasEmptyMatches = true;
-        }
-        // don't exit the loop, there might also be empty matches
-        if (res) {
-          show = true;
-        }
-      }
-      if (invertFlag) {
+
+      const cellResult = Utils._checkBlockCells(block, pSearchParam, pCaseSensitiveFlag);
+      hasEmptyMatches = hasEmptyMatches || cellResult.hasEmptyMatches;
+      hasNonEmptyMatches = hasNonEmptyMatches || cellResult.hasNonEmptyMatches;
+
+      let show = cellResult.matches;
+      if (pInvertFlag) {
         show = !show;
       }
-      if (show) {
-        block.classList.remove("no-filter-match");
-      } else {
-        block.classList.add("no-filter-match");
+      Utils._updateBlockVisibility(block, show);
+    }
+
+    return {hasEmptyMatches, hasNonEmptyMatches};
+  }
+
+  static _checkBlockCells (pBlock, pSearchParam, pCaseSensitiveFlag) {
+    let hasEmptyMatches = false;
+    let hasNonEmptyMatches = false;
+    let matches = false;
+
+    const items = pBlock.tagName === "TR" ? pBlock.cells : [pBlock];
+    for (const cell of items) {
+      // do not use "innerText"
+      // that one does not handle hidden text
+      const res = Utils._hasTextContent(cell, pSearchParam, pCaseSensitiveFlag);
+      if (res === 1) {
+        hasNonEmptyMatches = true;
+      }
+      if (res === 2) {
+        hasEmptyMatches = true;
+      }
+      // don't exit the loop, there might also be empty matches
+      if (res) {
+        matches = true;
       }
     }
-    if (invertFlag) {
-      errorBox.innerText = Character.CIRCLED_INFORMATION_SOURCE + Character.NO_BREAK_SPACE + "with 'Invert search', highlighting is never visible";
-      errorBox.style.display = "";
-      errorBox.style.color = "inherit";
-    } else if (pSearchText && hasEmptyMatches) {
-      const indicator = hasNonEmptyMatches ? "also" : "only";
-      errorBox.innerText = Character.WARNING_SIGN + Character.NO_BREAK_SPACE + "there were " + indicator + " empty matches, highlighting is not performed";
-      errorBox.style.display = "";
-      errorBox.style.color = "inherit";
-      return;
-    }
 
-    // show the result
-    hilitor.setMatchType("open");
-    hilitor.setEndRegExp(/^$/);
-    hilitor.setBreakRegExp(/^$/);
+    return {hasEmptyMatches, hasNonEmptyMatches, matches};
+  }
 
-    let pattern;
-    if (regExpFlag) {
-      pattern = pSearchText;
+  static _updateBlockVisibility (pBlock, pShow) {
+    if (pShow) {
+      pBlock.classList.remove("no-filter-match");
     } else {
-      // turn the text into a regexp
-      pattern = "";
-      for (const chr of pSearchText) {
-        // prevent accidental construction of character classes
-        /* eslint-disable no-extra-parens */
-        if ((chr >= "A" && chr <= "Z") || (chr >= "a" && chr <= "z") || (chr >= "0" && chr <= "9")) {
-          pattern += chr;
-        } else {
-          pattern += "\\" + chr;
-        }
-        /* eslint-enable no-extra-parens */
-      }
+      pBlock.classList.add("no-filter-match");
+    }
+  }
+
+  static _showSearchMessages (pErrorBox, pInvertFlag, pSearchText, pMatchInfo) {
+    if (pInvertFlag) {
+      pErrorBox.innerText = Character.CIRCLED_INFORMATION_SOURCE + Character.NO_BREAK_SPACE + "with 'Invert search', highlighting is never visible";
+      pErrorBox.style.display = "";
+      pErrorBox.style.color = "inherit";
+    } else if (pSearchText && pMatchInfo.hasEmptyMatches) {
+      const indicator = pMatchInfo.hasNonEmptyMatches ? "also" : "only";
+      pErrorBox.innerText = Character.WARNING_SIGN + Character.NO_BREAK_SPACE + "there were " + indicator + " empty matches, highlighting is not performed";
+      pErrorBox.style.display = "";
+      pErrorBox.style.color = "inherit";
+      return true;
+    }
+    return false;
+  }
+
+  static _buildHighlightPattern (pSearchText, pRegExpFlag) {
+    if (pRegExpFlag) {
+      return pSearchText;
     }
 
-    hilitor.apply(pattern, caseSensitiveFlag);
+    // turn the text into a regexp
+    let pattern = "";
+    for (const chr of pSearchText) {
+      // prevent accidental construction of character classes
+      /* eslint-disable no-extra-parens */
+      if ((chr >= "A" && chr <= "Z") || (chr >= "a" && chr <= "z") || (chr >= "0" && chr <= "9")) {
+        pattern += chr;
+      } else {
+        pattern += "\\" + chr;
+      }
+      /* eslint-enable no-extra-parens */
+    }
+    return pattern;
   }
 
   static txtZeroOneMany (pCnt, pZeroText, pOneText, pManyText) {
