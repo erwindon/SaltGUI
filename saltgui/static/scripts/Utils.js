@@ -264,7 +264,10 @@ export class Utils {
       return 0;
     }
 
-    let textValue = pElement.textContent;
+    return Utils._checkTextMatch(pElement.textContent, pSearchText, pCaseSensitiveFlag);
+  }
+
+  static _checkTextMatch (textValue, pSearchText, pCaseSensitiveFlag) {
     if (typeof pSearchText === "string") {
       if (!pCaseSensitiveFlag) {
         textValue = textValue.toUpperCase();
