@@ -113,37 +113,46 @@ export class StateIssues extends Issues {
       }
 
       const minionData = jobData.Result[minionId];
-      if (minionData.out !== "highstate") {
-        // never mind
+      StateIssues._handleMinionStates(pPanel, jobData, minionId, minionData);
+    }
+  }
+
+  static _handleMinionStates (pPanel, pJobData, pMinionId, pMinionData) {
+    if (pMinionData.out !== "highstate") {
+      // never mind
+      return;
+    }
+
+    // the complicating factor is that each state may have multiple tasks
+    for (const stateName in pMinionData.return) {
+      const stateData = pMinionData.return[stateName];
+      if (typeof stateData !== "object") {
+        // e.g. an error string
         continue;
       }
+      const key = pMinionId + "-" + stateData.__sls__ + "-" + stateData.__id__ + "-" + stateData.__run_num__;
+      StateIssues._handleStateIssue(pPanel, pJobData, pMinionId, stateData, key);
+    }
+  }
 
-      // the complicating factor is that each state may have multiple tasks
-      for (const stateName in minionData.return) {
-        const stateData = minionData.return[stateName];
-        if (typeof stateData !== "object") {
-          // e.g. an error string
-          continue;
-        }
-        const key = minionId + "-" + stateData.__sls__ + "-" + stateData.__id__ + "-" + stateData.__run_num__;
-        if (stateData.result === true) {
-          // problem solved in a later execution
-          Issues.removeIssue(pPanel, "state", key);
-          continue;
-        }
-        if (stateData.__sls__ && stateData.__id__ && stateData.__run_num__ !== undefined) {
-          const tr = Issues.addIssue(pPanel, "state", key);
-          Issues.addIssueMsg(tr, "State '" + stateData.__sls__ + "/" + stateData.__id__ + "/" + stateData.__run_num__ + "' on '" + minionId + "' failed");
-          // note that all tasks from the state are applied again, not only the failed ones
-          Issues.addIssueCmd(tr, "Apply state", minionId, ["state.sls_id", stateData.__id__, "mods=", stateData.__sls__]);
-          Issues.addIssueNav(tr, "job", {"id": jobData.jid, "minionid": minionId});
-        } else if (stateData.__id__) {
-          // really old minions do not fill __sls__
-          const tr = Issues.addIssue(pPanel, "state", key);
-          Issues.addIssueMsg(tr, "State '" + stateData.__id__ + "' on '" + minionId + "' failed");
-          Issues.addIssueNav(tr, "job", {"id": jobData.jid, "minionid": minionId});
-        }
-      }
+  static _handleStateIssue (pPanel, pJobData, pMinionId, pStateData, pKey) {
+    if (pStateData.result === true) {
+      // problem solved in a later execution
+      Issues.removeIssue(pPanel, "state", pKey);
+      return;
+    }
+
+    if (pStateData.__sls__ && pStateData.__id__ && pStateData.__run_num__ !== undefined) {
+      const tr = Issues.addIssue(pPanel, "state", pKey);
+      Issues.addIssueMsg(tr, "State '" + pStateData.__sls__ + "/" + pStateData.__id__ + "/" + pStateData.__run_num__ + "' on '" + pMinionId + "' failed");
+      // note that all tasks from the state are applied again, not only the failed ones
+      Issues.addIssueCmd(tr, "Apply state", pMinionId, ["state.sls_id", pStateData.__id__, "mods=", pStateData.__sls__]);
+      Issues.addIssueNav(tr, "job", {"id": pJobData.jid, "minionid": pMinionId});
+    } else if (pStateData.__id__) {
+      // really old minions do not fill __sls__
+      const tr = Issues.addIssue(pPanel, "state", pKey);
+      Issues.addIssueMsg(tr, "State '" + pStateData.__id__ + "' on '" + pMinionId + "' failed");
+      Issues.addIssueNav(tr, "job", {"id": pJobData.jid, "minionid": pMinionId});
     }
   }
 }

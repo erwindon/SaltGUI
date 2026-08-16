@@ -51,31 +51,47 @@ export class BeaconsIssues extends Issues {
       const minionData = allBeacons[minionId];
 
       if (!minionData) {
-        const tr = Issues.addIssue(pPanel, "offline", minionId);
-        Issues.addIssueMsg(tr, "Minion '" + minionId + "' is offline");
+        BeaconsIssues._handleOfflineMinion(pPanel, minionId);
         continue;
       }
 
-      for (const beaconName in minionData) {
-        if (beaconName === "enabled") {
-          // beacons flag
-          if (minionData.enabled === false) {
-            const tr = Issues.addIssue(pPanel, "disabled-beacons", minionId);
-            Issues.addIssueMsg(tr, "Beacons on minion '" + minionId + "' are disabled");
-            Issues.addIssueCmd(tr, "Enable beacons", minionId, ["beacons.enable"]);
-            Issues.addIssueNav(tr, "beacons-minion", {"minionid": minionId});
-          }
-        } else {
-          const beaconData = BeaconsIssues._simplify(minionData[beaconName]);
-          if (beaconData.enabled === false) {
-            const tr = Issues.addIssue(pPanel, "disabled-beacon", minionId + "-" + beaconName);
-            Issues.addIssueMsg(tr, "Beacon '" + beaconName + "' on '" + minionId + "' is disabled");
-            Issues.addIssueCmd(tr, "Enable beacon", minionId, ["beacons.enable_beacon", beaconName]);
-            Issues.addIssueCmd(tr, "Delete beacon", minionId, ["beacons.delete", beaconName]);
-            Issues.addIssueNav(tr, "beacons-minion", {"minionid": minionId});
-          }
-        }
+      BeaconsIssues._handleMinionBeacons(pPanel, minionId, minionData);
+    }
+  }
+
+  static _handleOfflineMinion (pPanel, pMinionId) {
+    const tr = Issues.addIssue(pPanel, "offline", pMinionId);
+    Issues.addIssueMsg(tr, "Minion '" + pMinionId + "' is offline");
+  }
+
+  static _handleMinionBeacons (pPanel, pMinionId, pMinionData) {
+    for (const beaconName in pMinionData) {
+      if (beaconName === "enabled") {
+        // beacons flag
+        BeaconsIssues._handleDisabledBeacons(pPanel, pMinionId, pMinionData);
+      } else {
+        BeaconsIssues._handleDisabledBeacon(pPanel, pMinionId, beaconName, pMinionData);
       }
+    }
+  }
+
+  static _handleDisabledBeacons (pPanel, pMinionId, pMinionData) {
+    if (pMinionData.enabled === false) {
+      const tr = Issues.addIssue(pPanel, "disabled-beacons", pMinionId);
+      Issues.addIssueMsg(tr, "Beacons on minion '" + pMinionId + "' are disabled");
+      Issues.addIssueCmd(tr, "Enable beacons", pMinionId, ["beacons.enable"]);
+      Issues.addIssueNav(tr, "beacons-minion", {"minionid": pMinionId});
+    }
+  }
+
+  static _handleDisabledBeacon (pPanel, pMinionId, pBeaconName, pMinionData) {
+    const beaconData = BeaconsIssues._simplify(pMinionData[pBeaconName]);
+    if (beaconData.enabled === false) {
+      const tr = Issues.addIssue(pPanel, "disabled-beacon", pMinionId + "-" + pBeaconName);
+      Issues.addIssueMsg(tr, "Beacon '" + pBeaconName + "' on '" + pMinionId + "' is disabled");
+      Issues.addIssueCmd(tr, "Enable beacon", pMinionId, ["beacons.enable_beacon", pBeaconName]);
+      Issues.addIssueCmd(tr, "Delete beacon", pMinionId, ["beacons.delete", pBeaconName]);
+      Issues.addIssueNav(tr, "beacons-minion", {"minionid": pMinionId});
     }
   }
 }

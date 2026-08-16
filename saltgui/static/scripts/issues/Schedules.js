@@ -40,31 +40,47 @@ export class SchedulesIssues extends Issues {
       const minionData = allSchedules[minionId];
 
       if (!minionData) {
-        const tr = Issues.addIssue(pPanel, "offline", minionId);
-        Issues.addIssueMsg(tr, "Minion '" + minionId + "' is offline");
+        SchedulesIssues._handleOfflineMinion(pPanel, minionId);
         continue;
       }
 
-      for (const key in minionData) {
-        if (key === "enabled") {
-          // scheduler flag
-          if (minionData.enabled === false) {
-            const tr = Issues.addIssue(pPanel, "disabled-schedulers", minionId);
-            Issues.addIssueMsg(tr, "Scheduler on '" + minionId + "' is disabled");
-            Issues.addIssueCmd(tr, "Enable scheduler", minionId, ["schedule.enable"]);
-            Issues.addIssueNav(tr, "schedules-minion", {"minionid": minionId});
-          }
-        } else {
-          const jobData = minionData[key];
-          if (jobData.enabled === false) {
-            const tr = Issues.addIssue(pPanel, "disabled-schedules", minionId + "-" + key);
-            Issues.addIssueMsg(tr, "Schedule '" + key + "' on '" + minionId + "' is disabled");
-            Issues.addIssueCmd(tr, "Enable schedule", minionId, ["schedule.enable_job", key]);
-            Issues.addIssueCmd(tr, "Delete schedule", minionId, ["schedule.delete", key]);
-            Issues.addIssueNav(tr, "schedules-minion", {"minionid": minionId});
-          }
-        }
+      SchedulesIssues._handleMinionSchedules(pPanel, minionId, minionData);
+    }
+  }
+
+  static _handleOfflineMinion (pPanel, pMinionId) {
+    const tr = Issues.addIssue(pPanel, "offline", pMinionId);
+    Issues.addIssueMsg(tr, "Minion '" + pMinionId + "' is offline");
+  }
+
+  static _handleMinionSchedules (pPanel, pMinionId, pMinionData) {
+    for (const key in pMinionData) {
+      if (key === "enabled") {
+        // scheduler flag
+        SchedulesIssues._handleDisabledScheduler(pPanel, pMinionId, pMinionData);
+      } else {
+        SchedulesIssues._handleDisabledSchedule(pPanel, pMinionId, key, pMinionData);
       }
+    }
+  }
+
+  static _handleDisabledScheduler (pPanel, pMinionId, pMinionData) {
+    if (pMinionData.enabled === false) {
+      const tr = Issues.addIssue(pPanel, "disabled-schedulers", pMinionId);
+      Issues.addIssueMsg(tr, "Scheduler on '" + pMinionId + "' is disabled");
+      Issues.addIssueCmd(tr, "Enable scheduler", pMinionId, ["schedule.enable"]);
+      Issues.addIssueNav(tr, "schedules-minion", {"minionid": pMinionId});
+    }
+  }
+
+  static _handleDisabledSchedule (pPanel, pMinionId, pJobKey, pMinionData) {
+    const jobData = pMinionData[pJobKey];
+    if (jobData.enabled === false) {
+      const tr = Issues.addIssue(pPanel, "disabled-schedules", pMinionId + "-" + pJobKey);
+      Issues.addIssueMsg(tr, "Schedule '" + pJobKey + "' on '" + pMinionId + "' is disabled");
+      Issues.addIssueCmd(tr, "Enable schedule", pMinionId, ["schedule.enable_job", pJobKey]);
+      Issues.addIssueCmd(tr, "Delete schedule", pMinionId, ["schedule.delete", pJobKey]);
+      Issues.addIssueNav(tr, "schedules-minion", {"minionid": pMinionId});
     }
   }
 }
