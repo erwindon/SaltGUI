@@ -146,7 +146,6 @@ export class JobsDetailsPanel extends JobsPanel {
   }
 
   _updateNextJob () {
-
     // user can decide
     // system can decide to remove the play/pause button
     if (this.playOrPause !== "play") {
@@ -157,50 +156,89 @@ export class JobsDetailsPanel extends JobsPanel {
     // find an item still marked as "(click)"
     // but when we find MAX_CNT_LOADING "loading..." items, the system is
     // probably overloaded and we skip a cycle
-    let cntLoading = 0;
-    let workLeft = false;
-    for (const tr of tbody.rows) {
-      const detailsField = tr.querySelector("td.details span");
-      if (!detailsField) {
-        continue;
-      }
-      if (tr.dataset.isLoading === "true") {
-        cntLoading += 1;
-        if (cntLoading >= MAX_CNT_LOADING) {
-          // too many already running
-          return;
-        }
-        continue;
-      }
-      if (tr.dataset.detailsUnknown === undefined) {
-        continue;
-      }
-      if (!JobsDetailsPanel._isInsideViewPort(tr)) {
-        workLeft = true;
-        continue;
-      }
-      detailsField.classList.add("no-job-details");
-      detailsField.innerText = "loading" + Character.HORIZONTAL_ELLIPSIS;
-      tr.dataset.isLoading = "true";
-      const jobId = tr.dataset.jobid;
+    const result = this._findAndProcessNextJob(tbody);
 
-      if (this.nrErrors >= 3) {
-        // don't bother getting more data
-        // may show more then 3 errors when some are still in-flight
-        this._handleJobsRunnerJobsListJob(jobId, "skipped");
-        continue;
-      }
-
-      this._getJobDetails(jobId);
-      // only update one item at a time
-      return;
-    }
-
-    if (!workLeft) {
+    if (!result.workLeft) {
       this.setPlayPauseButton("none");
       this.updateFooter();
       window.clearInterval(this.updateNextJobInterval);
     }
+  }
+
+  _findAndProcessNextJob (pTbody) {
+    let cntLoading = 0;
+    let workLeft = false;
+
+    for (const tr of pTbody.rows) {
+      const detailsField = tr.querySelector("td.details span");
+      if (!detailsField) {
+        continue;
+      }
+
+      const skipResult = JobsDetailsPanel._checkIfShouldSkip(tr, cntLoading);
+      if (skipResult.shouldReturn) {
+        return {workLeft: false};
+      }
+      if (skipResult.shouldContinue) {
+        if (skipResult.isLoading) {
+          cntLoading += 1;
+        } else if (skipResult.isOutOfViewPort) {
+          workLeft = true;
+        }
+        continue;
+      }
+
+      this._processJobRow(tr, detailsField);
+      // only update one item at a time
+      return {workLeft: true};
+    }
+
+    return {workLeft};
+  }
+
+  static _checkIfShouldSkip (pTr, pCntLoading) {
+    if (pTr.dataset.isLoading === "true") {
+      const isOverloaded = pCntLoading >= MAX_CNT_LOADING;
+      return {
+        isLoading: true,
+        isOutOfViewPort: false,
+        shouldContinue: true,
+        shouldReturn: isOverloaded
+      };
+    }
+
+    if (pTr.dataset.detailsUnknown === undefined) {
+      return {
+        isLoading: false,
+        isOutOfViewPort: false,
+        shouldContinue: true,
+        shouldReturn: false
+      };
+    }
+
+    const isOutOfViewPort = !JobsDetailsPanel._isInsideViewPort(pTr);
+    return {
+      isLoading: false,
+      isOutOfViewPort,
+      shouldContinue: isOutOfViewPort,
+      shouldReturn: false
+    };
+  }
+
+  _processJobRow (pTr, pDetailsField) {
+    pDetailsField.classList.add("no-job-details");
+    pDetailsField.innerText = "loading" + Character.HORIZONTAL_ELLIPSIS;
+    pTr.dataset.isLoading = "true";
+    const jobId = pTr.dataset.jobid;
+
+    if (this.nrErrors >= 3) {
+      // don't bother getting more data
+      // may show more then 3 errors when some are still in-flight
+      this._handleJobsRunnerJobsListJob(jobId, "skipped");
+      return;
+    }
+
+    this._getJobDetails(jobId);
   }
 
   _getJobDetails (pJobId) {
