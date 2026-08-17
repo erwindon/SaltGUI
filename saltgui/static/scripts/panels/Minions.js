@@ -759,64 +759,75 @@ export class MinionsPanel extends Panel {
       }
 
       for (const minionId in versionList[outcome]) {
-
-        const versionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
-        if (!versionTr) {
-          continue;
-        }
-        const versionSpan = versionTr.querySelector(".saltversion");
-        if (!versionSpan) {
-          continue;
-        }
-
-        const minionVersion = versionTr.dataset.saltversion;
-        if (!minionVersion) {
-          // no response for this minion
-          continue;
-        }
-        const minionBugs = MinionsPanel.getCveBugs(minionVersion, MINION);
-
-        if (Object.keys(masterBugs).length) {
-          Panel.addPrefixIcon(versionSpan, Character.WARNING_SIGN);
-        } else if (Object.keys(minionBugs).length) {
-          Panel.addPrefixIcon(versionSpan, Character.WARNING_SIGN);
-        } else if (outcome === "Minion requires update") {
-          Panel.addPrefixIcon(versionSpan, Character.WARNING_SIGN);
-        } else if (outcome === "Minion newer than master") {
-          Panel.addPrefixIcon(versionSpan, Character.WARNING_SIGN);
-        } else if (outcome === "Up to date") {
-          // VOID
-        }
-
-        const allCveKeys = Object.keys(masterBugs);
-        let txt = "";
-        txt += MinionsPanel._addCveList("The salt-master", masterVersion, masterBugs, allCveKeys);
-        txt += MinionsPanel._addCveList("This salt-minion", minionVersion, minionBugs, allCveKeys);
-
-        if (outcome === "Minion requires update") {
-          txt += "\n" + Character.WARNING_SIGN + "This salt-minion (" + minionVersion + ") is older than the salt-master (" + masterVersion + ")";
-        } else if (outcome === "Minion newer than master") {
-          txt += "\n" + Character.WARNING_SIGN + "This salt-minion (" + minionVersion + ") is newer than the salt-master (" + masterVersion + ")";
-        }
-
-        if (txt) {
-          txt += "\nUpgrade is highly recommended!";
-          // multi-item search is no longer available on that site
-          // if (allCveKeys.length > 0) {
-          //  txt += "\nClick to show these CVEs on www.cve.org";
-          //  versionSpan.addEventListener("click", (pClickEvent) => {
-          //    let url = "https://www.cve.org/cgi-bin/cvekey.cgi?keyword=";
-          //    for (let i = 0; i < allCveKeys.length; i++) {
-          //      url += (i === 0 ? "" : "%20") + allCveKeys[i];
-          //    }
-          //    window.open(url);
-          //    // prevent the click to open the run-dialog
-          //    pClickEvent.stopPropagation();
-          //  });
-          // }
-          Utils.addToolTip(versionSpan, txt.trim(), "error-bottom-left");
-        }
+        this._processMinionVersion(minionId, outcome, masterVersion, masterBugs);
       }
+    }
+  }
+
+  _processMinionVersion (pMinionId, pOutcome, pMasterVersion, pMasterBugs) {
+    const versionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
+    if (!versionTr) {
+      return;
+    }
+    const versionSpan = versionTr.querySelector(".saltversion");
+    if (!versionSpan) {
+      return;
+    }
+
+    const minionVersion = versionTr.dataset.saltversion;
+    if (!minionVersion) {
+      // no response for this minion
+      return;
+    }
+    const minionBugs = MinionsPanel.getCveBugs(minionVersion, MINION);
+
+    MinionsPanel._addVersionWarnings(versionSpan, pMasterVersion, pMasterBugs, minionVersion, minionBugs, pOutcome);
+  }
+
+  static _addVersionWarnings (pVersionSpan, pMasterVersion, pMasterBugs, pMinionVersion, pMinionBugs, pOutcome) {
+    MinionsPanel._addVersionIcon(pVersionSpan, pMasterBugs, pMinionBugs, pOutcome);
+    MinionsPanel._addVersionToolTip(pVersionSpan, pMasterVersion, pMasterBugs, pMinionVersion, pMinionBugs, pOutcome);
+  }
+
+  static _addVersionIcon (pVersionSpan, pMasterBugs, pMinionBugs, pOutcome) {
+    const needsWarning = Object.keys(pMasterBugs).length ||
+      Object.keys(pMinionBugs).length ||
+      pOutcome === "Minion requires update" ||
+      pOutcome === "Minion newer than master";
+
+    if (needsWarning) {
+      Panel.addPrefixIcon(pVersionSpan, Character.WARNING_SIGN);
+    }
+  }
+
+  static _addVersionToolTip (pVersionSpan, pMasterVersion, pMasterBugs, pMinionVersion, pMinionBugs, pOutcome) {
+    const allCveKeys = Object.keys(pMasterBugs);
+    let txt = "";
+    txt += MinionsPanel._addCveList("The salt-master", pMasterVersion, pMasterBugs, allCveKeys);
+    txt += MinionsPanel._addCveList("This salt-minion", pMinionVersion, pMinionBugs, allCveKeys);
+
+    if (pOutcome === "Minion requires update") {
+      txt += "\n" + Character.WARNING_SIGN + "This salt-minion (" + pMinionVersion + ") is older than the salt-master (" + pMasterVersion + ")";
+    } else if (pOutcome === "Minion newer than master") {
+      txt += "\n" + Character.WARNING_SIGN + "This salt-minion (" + pMinionVersion + ") is newer than the salt-master (" + pMasterVersion + ")";
+    }
+
+    if (txt) {
+      txt += "\nUpgrade is highly recommended!";
+      // multi-item search is no longer available on that site
+      // if (allCveKeys.length > 0) {
+      //  txt += "\nClick to show these CVEs on www.cve.org";
+      //  pVersionSpan.addEventListener("click", (pClickEvent) => {
+      //    let url = "https://www.cve.org/cgi-bin/cvekey.cgi?keyword=";
+      //    for (let i = 0; i < allCveKeys.length; i++) {
+      //      url += (i === 0 ? "" : "%20") + allCveKeys[i];
+      //    }
+      //    window.open(url);
+      //    // prevent the click to open the run-dialog
+      //    pClickEvent.stopPropagation();
+      //  });
+      // }
+      Utils.addToolTip(pVersionSpan, txt.trim(), "error-bottom-left");
     }
   }
 }
