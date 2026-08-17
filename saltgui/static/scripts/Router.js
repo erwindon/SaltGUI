@@ -150,7 +150,7 @@ export class Router {
             dropDownPanel = pClickEvent.target.parentElement;
           } else {
             // may be null when there is no dropdown part
-            dropDownPanel = pClickEvent.target.nextSibling;
+            dropDownPanel = pClickEvent.target.nextElementSibling;
           }
           if (dropDownPanel) {
             dropDownPanel.style.display = "none";
