@@ -812,52 +812,15 @@ export class KeysPanel extends Panel {
   }
 
   handleSaltAuthEvent (pData) {
-
     if (this.playOrPause !== "play") {
       return;
     }
 
-    const tr = this.table.querySelector("tr#" + Utils.getIdFromMinionId(pData.id));
     const minionsDict = Utils.getStorageItemObject("session", "minions_txt");
+    const tr = this.table.querySelector("tr#" + Utils.getIdFromMinionId(pData.id));
+
     if (tr) {
-      const statusTd = tr.querySelector(".status");
-      // drop all other classes (accepted, rejected, etc)
-      // do not update screen when nothing changed; that keeps any search highlight
-      if (pData.act === "accept") {
-        statusTd.className = "status";
-        statusTd.classList.add("accepted");
-        if (statusTd.innerText !== "accepted") {
-          statusTd.innerText = "accepted";
-          KeysPanel._flagMinion(pData.id, statusTd, tr, minionsDict);
-        }
-      } else if (pData.act === "reject") {
-        statusTd.className = "status";
-        statusTd.classList.add("rejected");
-        if (statusTd.innerText !== "rejected") {
-          statusTd.innerText = "rejected";
-          KeysPanel._flagMinion(pData.id, statusTd, tr, minionsDict);
-        }
-      } else if (pData.act === "pend") {
-        statusTd.className = "status";
-        statusTd.classList.add("unaccepted");
-        if (statusTd.innerText !== "unaccepted") {
-          statusTd.innerText = "unaccepted";
-          KeysPanel._flagMinion(pData.id, statusTd, tr, minionsDict);
-        }
-      } else if (pData.act === "delete") {
-        // "-1" due to the <tr> for the header that is inside <thead>
-        tr.parentNode.deleteRow(tr.rowIndex - 1);
-        if (pData.id in minionsDict) {
-          this._addMissingMinion(pData.id, minionsDict);
-        }
-      } else {
-        // unknown status
-        // do not update screen
-      }
-      // keep the fingerprint
-      // update the menu because it may be in a hidden state
-      tr.dropdownmenu.verifyAll();
-      this.panelMenu.verifyAll();
+      this._handleExistingMinion(tr, pData, minionsDict);
     } else if (this.table.querySelector("tr") === null) {
       // only when the full list is already available
       // this prevents a random set of records from appearing
@@ -865,54 +828,121 @@ export class KeysPanel extends Panel {
       // before the full list was received
       return;
     } else {
-      // new items will be added at the bottom of the table
-      // except new pending keys, which come at the top.
-      // so that it gets the proper attention.
-      /* eslint-disable no-lonely-if */
-      if (pData.act === "pend") {
-        this._addPreMinion(pData.id, minionsDict, true);
-      } else if (pData.act === "accept") {
-        this._addAcceptedMinion(pData.id, minionsDict);
-      } else if (pData.act === "reject") {
-        this._addRejectedMinion(pData.id, minionsDict);
-      } else if (pData.act === "delete") {
-        // delete of an unknown minion, never mind
-      } else {
-        // unknown status
-        // do not update screen
-      }
-      /* eslint-enable no-lonely-if */
+      this._handleNewMinion(pData, minionsDict);
     }
 
     const searchBlock = this.div.querySelector(".search-box");
     Utils.hideShowTableSearchBar(searchBlock, this.table, "refresh");
 
     this.updateFooter();
+    this._updateFingerprintIfNeeded(pData);
+  }
 
-    // we do not have the fingerprint yet
-    // pre-fill with a dummy value and then retrieve the actual value
-    const tr2 = this.table.querySelector("tr#" + Utils.getIdFromMinionId(pData.id));
-    if (!tr2) {
+  _handleExistingMinion (pTr, pData, pMinionsDict) {
+    const statusTd = pTr.querySelector(".status");
+    // drop all other classes (accepted, rejected, etc)
+    // do not update screen when nothing changed; that keeps any search highlight
+    this._updateMinionStatus(statusTd, pData, pTr, pMinionsDict);
+
+    if (pData.act === "delete") {
+      // "-1" due to the <tr> for the header that is inside <thead>
+      pTr.parentNode.deleteRow(pTr.rowIndex - 1);
+      if (pData.id in pMinionsDict) {
+        this._addMissingMinion(pData.id, pMinionsDict);
+      }
       return;
     }
-    let fingerprintSpan = tr2.querySelector("td.fingerprint");
+
+    // keep the fingerprint
+    // update the menu because it may be in a hidden state
+    pTr.dropdownmenu.verifyAll();
+    this.panelMenu.verifyAll();
+  }
+
+  _updateMinionStatus (pStatusTd, pData, pTr, pMinionsDict) {
+    const newStatus = this._getNewStatus(pData.act);
+    if (!newStatus) {
+      // unknown status
+      // do not update screen
+      return;
+    }
+
+    pStatusTd.className = "status";
+    pStatusTd.classList.add(newStatus);
+    if (pStatusTd.innerText !== newStatus) {
+      pStatusTd.innerText = newStatus;
+      KeysPanel._flagMinion(pData.id, pStatusTd, pTr, pMinionsDict);
+    }
+  }
+
+  static _getNewStatus (pAction) {
+    switch (pAction) {
+    case "accept":
+      return "accepted";
+    case "reject":
+      return "rejected";
+    case "pend":
+      return "unaccepted";
+    default:
+      return null;
+    }
+  }
+
+  _handleNewMinion (pData, pMinionsDict) {
+    // new items will be added at the bottom of the table
+    // except new pending keys, which come at the top.
+    // so that it gets the proper attention.
+    switch (pData.act) {
+    case "pend":
+      this._addPreMinion(pData.id, pMinionsDict, true);
+      break;
+    case "accept":
+      this._addAcceptedMinion(pData.id, pMinionsDict);
+      break;
+    case "reject":
+      this._addRejectedMinion(pData.id, pMinionsDict);
+      break;
+    case "delete":
+      // delete of an unknown minion, never mind
+      break;
+    default:
+      // unknown status
+      // do not update screen
+      break;
+    }
+  }
+
+  _updateFingerprintIfNeeded (pData) {
+    // we do not have the fingerprint yet
+    // pre-fill with a dummy value and then retrieve the actual value
+    const tr = this.table.querySelector("tr#" + Utils.getIdFromMinionId(pData.id));
+    if (!tr) {
+      return;
+    }
+
+    let fingerprintSpan = tr.querySelector("td.fingerprint");
     if (!fingerprintSpan) {
       // on startup, the field is still classed "os" instead of "fingerprint"
-      fingerprintSpan = tr2.querySelector("td.os");
+      fingerprintSpan = tr.querySelector("td.os");
     }
-    if (!tr2.dataset.fingerprintKnown) {
-      fingerprintSpan.innerText = "(refresh page for fingerprint)";
-      const wheelKeyFingerPromise = this.api.getWheelKeyFinger(pData.id);
-      wheelKeyFingerPromise.then((ok_WheelKeyFinger) => {
-        this._handleWheelKeyFinger(ok_WheelKeyFinger);
-        return true;
-      }, (_error_WheelKeyFinger) => {
-        const wheelKeyFingerData = {"return": [{"data": {"return": {"minions": {}}}}]};
-        wheelKeyFingerData.return[0]["data"]["return"]["minions"][pData.id] = JSON.stringify(_error_WheelKeyFinger);
-        this._handleWheelKeyFinger(wheelKeyFingerData);
-        return false;
-      });
+
+    if (!tr.dataset.fingerprintKnown) {
+      this._fetchAndUpdateFingerprint(pData.id, fingerprintSpan);
     }
+  }
+
+  _fetchAndUpdateFingerprint (pMinionId, pFingerprintSpan) {
+    pFingerprintSpan.innerText = "(refresh page for fingerprint)";
+    const wheelKeyFingerPromise = this.api.getWheelKeyFinger(pMinionId);
+    wheelKeyFingerPromise.then((ok_WheelKeyFinger) => {
+      this._handleWheelKeyFinger(ok_WheelKeyFinger);
+      return true;
+    }, (_error_WheelKeyFinger) => {
+      const wheelKeyFingerData = {"return": [{"data": {"return": {"minions": {}}}}]};
+      wheelKeyFingerData.return[0]["data"]["return"]["minions"][pMinionId] = JSON.stringify(_error_WheelKeyFinger);
+      this._handleWheelKeyFinger(wheelKeyFingerData);
+      return false;
+    });
   }
 
   handleSaltKeyEvent (pData) {
