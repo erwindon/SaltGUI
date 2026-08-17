@@ -204,11 +204,40 @@ export class JobPanel extends Panel {
       return;
     }
 
+    if (!this._validateJobData(pRunnerJobsListJobData, pJobId)) {
+      return;
+    }
+
+    const info = pRunnerJobsListJobData.return[0];
+    this.output.innerText = "";
+
+    this._populateJobProperties(info, pJobId);
+    this.panelMenu.verifyAll();
+
+    const extraInfo = this._buildTitleAndGetExtraInfo(info);
+
+    Output.dateTimeStr(info.StartTime, this.timeField, "bottom-left");
+
+    const minions = this._determineMinionsList(info);
+    const initialStatus = this._determineInitialStatus(info);
+
+    const outputOptions = {
+      extraInfo: extraInfo,
+      highlightMinionId: pMinionId,
+      initialStatus: initialStatus,
+      jobId: pJobId
+    };
+    Output.addResponseOutput(this.output, minions, info.Result, info.Function, outputOptions);
+
+    this._processEmbeddedJobLinks(pJobId);
+  }
+
+  _validateJobData (pRunnerJobsListJobData, pJobId) {
     if (typeof pRunnerJobsListJobData !== "object") {
       this.output.innerText = "";
       Utils.addErrorToTableCell(this.output, pRunnerJobsListJobData, "bottom-left");
       this.updateTitle("ERROR");
-      return;
+      return false;
     }
 
     const info = pRunnerJobsListJobData.return[0];
@@ -217,17 +246,20 @@ export class JobPanel extends Panel {
       this.updateTitle("ERROR");
       this.output.innerText = pJobId + "\n--------------------\n" + info;
       this.timeField.innerText = "";
-      return;
+      return false;
     }
+
     if (info.Error) {
       this.updateTitle("ERROR");
       this.output.innerText = pJobId + "\n--------------------\n" + info.Error;
       Output.dateTimeStr(info.StartTime, this.timeField, "bottom-left");
-      return;
+      return false;
     }
 
-    this.output.innerText = "";
+    return true;
+  }
 
+  _populateJobProperties (info, pJobId) {
     // use same formatter as direct commands
     let argumentsText = JobPanel.decodeArgumentsArray(info.Arguments);
     if (!argumentsText && info.Function.startsWith("runner.")) {
@@ -249,14 +281,18 @@ export class JobPanel extends Panel {
     this.jobid = pJobId;
     this.minions = info.Minions;
     this.result = info.Result;
+  }
 
-    // the panel menu may have been hidden
-    this.panelMenu.verifyAll();
-
-    // ============================
-
+  _buildTitleAndGetExtraInfo (info) {
     const maxTextLength = 50;
     const extraInfo = [];
+
+    let argumentsText = JobPanel.decodeArgumentsArray(info.Arguments);
+    if (!argumentsText && info.Function.startsWith("runner.")) {
+      // runners keep the given arguments elsewhere
+      const fakeMinion = Object.keys(info.Result)[0];
+      argumentsText = JobPanel.decodeArgumentsArray(info.Result[fakeMinion].return.fun_args, true);
+    }
 
     if (argumentsText.length > maxTextLength) {
       // prevent title becoming too wide
@@ -275,46 +311,43 @@ export class JobPanel extends Panel {
 
     this.updateTitle(info.Function + argumentsText + " " + targetText);
 
-    Output.dateTimeStr(info.StartTime, this.timeField, "bottom-left");
+    return extraInfo;
+  }
 
-    let minions;
+  _determineMinionsList (info) {
     if (info.Minions) {
-      minions = info.Minions;
       this.setWarningText();
-    } else if (info.Function.startsWith("wheel.")) {
-      minions = ["WHEEL"];
-      this.setWarningText("info", "WHEEL jobs are not associated with minions");
-    } else if (info.Function.startsWith("runner.")) {
-      if (typeof info.Result === "object") {
-        minions = Object.keys(info.Result);
-      } else {
-        minions = ["RUNNER"];
-      }
-      this.setWarningText("info", "RUNNER jobs are not associated with minions");
-    } else {
-      minions = Object.keys(this.result);
-      this.setWarningText("warn", "minion list is missing in the result, thus cannot determine missing output");
+      return info.Minions;
     }
-    let initialStatus;
+    if (info.Function.startsWith("wheel.")) {
+      this.setWarningText("info", "WHEEL jobs are not associated with minions");
+      return ["WHEEL"];
+    }
+    if (info.Function.startsWith("runner.")) {
+      this.setWarningText("info", "RUNNER jobs are not associated with minions");
+      if (typeof info.Result === "object") {
+        return Object.keys(info.Result);
+      }
+      return ["RUNNER"];
+    }
+    this.setWarningText("warn", "minion list is missing in the result, thus cannot determine missing output");
+    return Object.keys(this.result);
+  }
+
+  _determineInitialStatus (info) {
     if (info.Minions === undefined || Object.keys(info.Result).length >= info.Minions.length) {
       // we have all the results
       // that means we are done
       // don't wait for RunnerJobsActive to also tell us that we are done
       // RunnerJobsActive remains running and will overwrite with the same
-      initialStatus = "done";
       this.jobIsTerminated = true;
-    } else {
-      initialStatus = "(loading)";
-      this.jobIsTerminated = false;
+      return "done";
     }
-    const outputOptions = {
-      extraInfo: extraInfo,
-      highlightMinionId: pMinionId,
-      initialStatus: initialStatus,
-      jobId: pJobId
-    };
-    Output.addResponseOutput(this.output, minions, info.Result, info.Function, outputOptions);
+    this.jobIsTerminated = false;
+    return "(loading)";
+  }
 
+  _processEmbeddedJobLinks (pJobId) {
     // replace any jobid
     // Don't do this with output.innerHTML as there are already
     // event handlers in place, which then will be removed
@@ -329,23 +362,26 @@ export class JobPanel extends Panel {
     const links = this.output.querySelectorAll(".linkjid");
     for (const link of links) {
       const linkToJid = link.id.replace("linkjid", "");
+      this._configureJobLink(link, linkToJid, pJobId);
+    }
+  }
 
-      if (linkToJid === pJobId) {
-        link.classList.add("disabled");
-        Utils.addToolTip(link, "this job");
-      } else {
-        link.addEventListener("click", (pClickEvent) => {
-          this.router.goTo("job", {"id": linkToJid}, undefined, pClickEvent);
-          pClickEvent.stopPropagation();
-        });
-      }
+  _configureJobLink (link, linkToJid, pJobId) {
+    if (linkToJid === pJobId) {
+      link.classList.add("disabled");
+      Utils.addToolTip(link, "this job");
+    } else {
+      link.addEventListener("click", (pClickEvent) => {
+        this.router.goTo("job", {"id": linkToJid}, undefined, pClickEvent);
+        pClickEvent.stopPropagation();
+      });
+    }
 
-      // no longer needed
-      link.removeAttribute("id");
-      link.classList.remove("linkjid");
-      if (!link.classList.length) {
-        link.removeAttribute("class");
-      }
+    // no longer needed
+    link.removeAttribute("id");
+    link.classList.remove("linkjid");
+    if (!link.classList.length) {
+      link.removeAttribute("class");
     }
   }
 
