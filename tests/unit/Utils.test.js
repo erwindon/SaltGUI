@@ -199,4 +199,93 @@ describe("Unittests for Utils.js", () => {
     });
   });
 
+  describe("escapeHtml", () => {
+    it("test with ampersand", () => {
+      const result = Utils.escapeHtml("a & b");
+      assert.equal(result, "a &amp; b");
+    });
+
+    it("test with less than", () => {
+      const result = Utils.escapeHtml("a < b");
+      assert.equal(result, "a &lt; b");
+    });
+
+    it("test with greater than", () => {
+      const result = Utils.escapeHtml("a > b");
+      assert.equal(result, "a &gt; b");
+    });
+
+    it("test with double quotes", () => {
+      const result = Utils.escapeHtml("a \"quoted\" b");
+      assert.equal(result, "a &quot;quoted&quot; b");
+    });
+
+    it("test with single quotes", () => {
+      const result = Utils.escapeHtml("a 'quoted' b");
+      assert.equal(result, "a &#039;quoted&#039; b");
+    });
+
+    it("test with all special characters", () => {
+      const result = Utils.escapeHtml("<script>alert('xss')</script>");
+      assert.equal(result, "&lt;script&gt;alert(&#039;xss&#039;)&lt;/script&gt;");
+    });
+
+    it("test with mixed special characters", () => {
+      const result = Utils.escapeHtml("&\"'<>");
+      assert.equal(result, "&amp;&quot;&#039;&lt;&gt;");
+    });
+
+    it("test with plain text unchanged", () => {
+      const result = Utils.escapeHtml("Hello World");
+      assert.equal(result, "Hello World");
+    });
+  });
+
+  describe("isIncluded", () => {
+    it("test with null item returns true", () => {
+      const result = Utils.isIncluded(null, ["a", "b"], []);
+      assert.equal(result, true);
+    });
+
+    it("test with undefined item returns true", () => {
+      const result = Utils.isIncluded(undefined, ["a", "b"], []);
+      assert.equal(result, true);
+    });
+
+    it("test with allowlist containing item", () => {
+      const result = Utils.isIncluded("a", ["a", "b", "c"], []);
+      assert.equal(result, true);
+    });
+
+    it("test with allowlist not containing item", () => {
+      const result = Utils.isIncluded("x", ["a", "b", "c"], []);
+      assert.equal(result, false);
+    });
+
+    it("test with denylist containing item", () => {
+      const result = Utils.isIncluded("a", [], ["a", "b", "c"]);
+      assert.equal(result, false);
+    });
+
+    it("test with denylist not containing item", () => {
+      const result = Utils.isIncluded("x", [], ["a", "b", "c"]);
+      assert.equal(result, true);
+    });
+
+    it("test with both lists empty", () => {
+      const result = Utils.isIncluded("x", [], []);
+      assert.equal(result, true);
+    });
+
+    it("test with allowlist takes precedence over denylist", () => {
+      const result = Utils.isIncluded("a", ["a"], ["a"]);
+      assert.equal(result, true);
+    });
+
+    it("test with denylist when allowlist is null", () => {
+      const result = Utils.isIncluded("x", null, ["a", "b"]);
+      assert.equal(result, true);
+    });
+  });
+
 });

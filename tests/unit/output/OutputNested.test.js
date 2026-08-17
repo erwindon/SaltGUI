@@ -8,6 +8,71 @@ Character.init();
 
 describe("Unittests for output/OutputNested.js", () => {
 
+  describe("_ustring", () => {
+    it("test with no prefix or suffix", () => {
+      const result = OutputNested._ustring(4, "test");
+      assert.equal(result, "    test");
+    });
+
+    it("test with prefix only", () => {
+      const result = OutputNested._ustring(2, "value", "key:");
+      assert.equal(result, "  key:value");
+    });
+
+    it("test with suffix only", () => {
+      const result = OutputNested._ustring(2, "key", "", ":");
+      assert.equal(result, "  key:");
+    });
+
+    it("test with both prefix and suffix", () => {
+      const result = OutputNested._ustring(4, "value", "[", "]");
+      assert.equal(result, "    [value]");
+    });
+
+    it("test with zero indentation", () => {
+      const result = OutputNested._ustring(0, "text");
+      assert.equal(result, "text");
+    });
+  });
+
+  describe("_display", () => {
+    it("test with null value", () => {
+      const result = [];
+      OutputNested._display(null, 0, "", result);
+      assert.deepEqual(result, ["None"]);
+    });
+
+    it("test with undefined value", () => {
+      const result = [];
+      OutputNested._display(undefined, 0, "", result);
+      assert.deepEqual(result, ["undefined"]);
+    });
+
+    it("test with boolean value", () => {
+      const result = [];
+      OutputNested._display(true, 0, "", result);
+      assert.deepEqual(result, ["true"]);
+    });
+
+    it("test with numeric value", () => {
+      const result = [];
+      OutputNested._display(42, 2, "", result);
+      assert.deepEqual(result, ["  42"]);
+    });
+
+    it("test with single line string", () => {
+      const result = [];
+      OutputNested._display("hello", 0, "", result);
+      assert.deepEqual(result, ["hello"]);
+    });
+
+    it("test with multiline string", () => {
+      const result = [];
+      OutputNested._display("line1\nline2", 0, "", result);
+      assert.deepEqual(result, ["line1", "line2"]);
+    });
+  });
+
   describe("formatNESTED", () => {
     it("test with various input types", () => {
 
