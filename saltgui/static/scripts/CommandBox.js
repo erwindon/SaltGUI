@@ -295,7 +295,7 @@ export class CommandBox {
     CommandBox._applyTemplateByTemplate(template);
   }
 
-  static _getReadOnlyScreens () {
+  static _getReadOnlyPanels () {
     return [
       "events",
       "options",
@@ -375,15 +375,15 @@ export class CommandBox {
     button.disabled = true;
     output.innerText = "loading" + Character.HORIZONTAL_ELLIPSIS;
 
-    const readOnlyScreens = CommandBox._getReadOnlyScreens();
+    const readOnlyPanels = CommandBox._getReadOnlyPanels();
     const screenModifyingCommands = CommandBox._getScreenModifyingCommands();
     // test whether the command may have caused an update to the list
     const command = commandValue.split(" ")[0];
     if (command in screenModifyingCommands) {
       // update panel when it may have changed
       for (const panel of Router.currentPage.panels) {
-        if (readOnlyScreens.includes(panel.key)) {
-          // nothing changed on this screen
+        if (readOnlyPanels.includes(panel.key)) {
+          // nothing changed on this panel
         } else if (screenModifyingCommands[command].includes(panel.key)) {
           // the command may have changed a specific panel
           panel.needsRefresh = true;

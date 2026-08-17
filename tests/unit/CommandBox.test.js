@@ -5,9 +5,9 @@ import {assert} from "chai";
 
 describe("Unittests for CommandBox.js", () => {
 
-  describe("_getReadOnlyScreens", () => {
-    it("test returns array of read-only screens", () => {
-      const result = CommandBox._getReadOnlyScreens();
+  describe("_getReadOnlyPanels", () => {
+    it("test returns array of read-only panels", () => {
+      const result = CommandBox._getReadOnlyPanels();
       assert.isArray(result);
       assert.deepEqual(result, ["events", "options", "reactors", "templates"]);
     });
