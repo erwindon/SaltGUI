@@ -133,37 +133,57 @@ export class KeysPanel extends Panel {
 
     const allKeys = pWheelKeyFingerData.return[0].data.return;
 
-    for (const [property,hosts] of Object.entries(allKeys)) {
+    for (const [property, hosts] of Object.entries(allKeys)) {
       if (property === "local") {
         continue;
       }
-      for (const minionId of Object.keys(hosts)) {
-        const item = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId) + " .os");
-        if (item) {
-          // remove td.os for known minions and add td.fingerprint
-          item.classList.remove("os");
-          item.classList.add("fingerprint");
-        }
-
-        // update td.fingerprint with fingerprint value
-        const fingerprintTr = this.table.querySelector("#" + Utils.getIdFromMinionId(minionId));
-        if (!fingerprintTr) {
-          continue;
-        }
-        const fingerprintElement = fingerprintTr.querySelector(".fingerprint");
-        if (!fingerprintElement) {
-          continue;
-        }
-        const fingerprint = hosts[minionId];
-        if (!this.fingerprintPattern.test(fingerprint)) {
-          item.classList.remove("fingerprint");
-          Utils.addErrorToTableCell(fingerprintElement, fingerprint);
-          continue;
-        }
-        fingerprintTr.dataset.fingerprintKnown = true;
-        fingerprintElement.innerText = fingerprint;
-      }
+      this._processMinionFingerprints(hosts);
     }
+  }
+
+  _processMinionFingerprints (pHosts) {
+    for (const minionId of Object.keys(pHosts)) {
+      this._updateMinionFingerprint(minionId, pHosts[minionId]);
+    }
+  }
+
+  _updateMinionFingerprint (pMinionId, pFingerprint) {
+    const osElement = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId) + " .os");
+    if (osElement) {
+      // remove td.os for known minions and add td.fingerprint
+      osElement.classList.remove("os");
+      osElement.classList.add("fingerprint");
+    }
+
+    // update td.fingerprint with fingerprint value
+    const fingerprintTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
+    if (!fingerprintTr) {
+      return;
+    }
+
+    const fingerprintElement = fingerprintTr.querySelector(".fingerprint");
+    if (!fingerprintElement) {
+      return;
+    }
+
+    if (!this.fingerprintPattern.test(pFingerprint)) {
+      KeysPanel._handleInvalidFingerprint(osElement, fingerprintElement, pFingerprint);
+      return;
+    }
+
+    KeysPanel._handleValidFingerprint(fingerprintTr, fingerprintElement, pFingerprint);
+  }
+
+  static _handleInvalidFingerprint (pOsElement, pFingerprintElement, pFingerprint) {
+    if (pOsElement) {
+      pOsElement.classList.remove("fingerprint");
+    }
+    Utils.addErrorToTableCell(pFingerprintElement, pFingerprint);
+  }
+
+  static _handleValidFingerprint (pFingerprintTr, pFingerprintElement, pFingerprint) {
+    pFingerprintTr.dataset.fingerprintKnown = true;
+    pFingerprintElement.innerText = pFingerprint;
   }
 
   _handleKeysWheelKeyListAll (pWheelKeyListAllData) {
