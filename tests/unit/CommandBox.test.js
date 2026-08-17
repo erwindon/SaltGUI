@@ -9,7 +9,7 @@ describe("Unittests for CommandBox.js", () => {
     it("test returns array of read-only panels", () => {
       const result = CommandBox._getReadOnlyPanels();
       assert.isArray(result);
-      assert.deepEqual(result, ["events", "options", "reactors", "templates"]);
+      assert.deepEqual(result, ["events", "options", "reactors", "stats", "templates"]);
     });
   });
 

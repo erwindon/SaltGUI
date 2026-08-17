@@ -300,6 +300,7 @@ export class CommandBox {
       "events",
       "options",
       "reactors",
+      "stats",
       "templates"
     ];
   }
