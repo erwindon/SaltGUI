@@ -210,63 +210,91 @@ export class KeysPanel extends Panel {
   }
 
   updateFooter () {
+    const cnt = this._countKeyStatuses();
+    let txt = KeysPanel._buildStatusText(cnt);
+    txt = KeysPanel._cleanupText(txt);
+    this._updateKeyCountProperties(cnt);
+    super.updateFooter(txt, false);
+  }
+
+  _countKeyStatuses () {
     const cnt = {};
 
-    let txt = "";
-
-    if (this.table) {
-      const tbody = this.table.tBodies[0];
-      for (const tr of tbody.children) {
-        const statusTd = tr.querySelector(".status");
-        const statusText = statusTd.innerText;
-        if (cnt[statusText] === undefined) {
-          cnt[statusText] = 0;
-        }
-        cnt[statusText] += 1;
-      }
-
-      for (const key of Object.keys(cnt).sort(Utils.mySortFunction)) {
-        txt += ", " + Utils.txtZeroOneMany(cnt[key],
-          "no " + key + " keys",
-          "{0} " + key + " key",
-          "{0} " + key + " keys");
-      }
-
-      const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
-      if (selectVisible) {
-        for (const tr of tbody.children) {
-	  if (tr.firstChild.innerText !== Character.BALLOT_BOX_WITH_CHECK) {
-            continue;
-          }
-          const statusTd = tr.querySelector(".status");
-          const statusText = statusTd.innerText + "-selected";
-          if (cnt[statusText] === undefined) {
-            cnt[statusText] = 0;
-          }
-          cnt[statusText] += 1;
-        }
-      }
+    if (!this.table) {
+      return cnt;
     }
 
-    if (Object.keys(cnt).length === 0) {
+    const tbody = this.table.tBodies[0];
+    KeysPanel._countAllStatuses(tbody, cnt);
+    KeysPanel._countSelectedStatuses(tbody, cnt);
+
+    return cnt;
+  }
+
+  static _countAllStatuses (pTbody, pCnt) {
+    for (const tr of pTbody.children) {
+      const statusTd = tr.querySelector(".status");
+      const statusText = statusTd.innerText;
+      if (pCnt[statusText] === undefined) {
+        pCnt[statusText] = 0;
+      }
+      pCnt[statusText] += 1;
+    }
+  }
+
+  static _countSelectedStatuses (pTbody, pCnt) {
+    const selectVisible = Utils.getStorageItemBoolean("session", "select_visible", false);
+    if (!selectVisible) {
+      return;
+    }
+
+    for (const tr of pTbody.children) {
+      if (tr.firstChild.innerText !== Character.BALLOT_BOX_WITH_CHECK) {
+        continue;
+      }
+      const statusTd = tr.querySelector(".status");
+      const statusText = statusTd.innerText + "-selected";
+      if (pCnt[statusText] === undefined) {
+        pCnt[statusText] = 0;
+      }
+      pCnt[statusText] += 1;
+    }
+  }
+
+  static _buildStatusText (pCnt) {
+    let txt = "";
+
+    for (const key of Object.keys(pCnt).sort(Utils.mySortFunction)) {
+      txt += ", " + Utils.txtZeroOneMany(pCnt[key],
+        "no " + key + " keys",
+        "{0} " + key + " key",
+        "{0} " + key + " keys");
+    }
+
+    if (Object.keys(pCnt).length === 0) {
       txt += ", no keys";
     }
 
+    return txt;
+  }
+
+  static _cleanupText (pTxt) {
     // remove the first comma
-    txt = txt.replace(/^, /, "");
+    let txt = pTxt.replace(/^, /, "");
     // capitalize the first word (can only be "no")
     txt = txt.replace(/^no/, "No");
+    return txt;
+  }
 
-    this.nrUnaccepted = cnt["unaccepted"];
-    this.nrUnacceptedSelected = cnt["unaccepted-selected"];
-    this.nrAccepted = cnt["accepted"];
-    this.nrAcceptedSelected = cnt["accepted-selected"];
-    this.nrDenied = cnt["denied"];
-    this.nrDeniedSelected = cnt["denied-selected"];
-    this.nrRejected = cnt["rejected"];
-    this.nrRejectedSelected = cnt["rejected-selected"];
-
-    super.updateFooter(txt, false);
+  _updateKeyCountProperties (pCnt) {
+    this.nrUnaccepted = pCnt["unaccepted"];
+    this.nrUnacceptedSelected = pCnt["unaccepted-selected"];
+    this.nrAccepted = pCnt["accepted"];
+    this.nrAcceptedSelected = pCnt["accepted-selected"];
+    this.nrDenied = pCnt["denied"];
+    this.nrDeniedSelected = pCnt["denied-selected"];
+    this.nrRejected = pCnt["rejected"];
+    this.nrRejectedSelected = pCnt["rejected-selected"];
   }
 
   static _flagMinion (pMinionId, pStatusField, pMinionTr, pMinionsDict, pIsMissing = false) {
