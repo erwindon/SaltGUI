@@ -671,12 +671,12 @@ export class MinionsPanel extends Panel {
   static _matchesCveEntry (pEntry, pNodeType, pItems) {
     const nodeType = pEntry[1];
 
-    /* eslint-disable no-bitwise */
-    if ((nodeType & pNodeType) !== pNodeType) {
+    // Check if entry supports the requested node type:
+    // either it matches exactly or the entry applies to all types (MASTER+MINION)
+    if (nodeType !== pNodeType && nodeType !== MASTER + MINION) {
       // no, this CVE not valid for this (master/minion)
       return false;
     }
-    /* eslint-enable no-bitwise */
 
     return MinionsPanel._matchesPatterns(pEntry[2], pItems);
   }
