@@ -1189,6 +1189,13 @@ export class Panel {
       img.setAttribute("src", "static/images/UNKNOWN.png");
       img.title = "Unknown image, please report to SaltGUI team that image '" + pImageName + "' is invalid";
     }
+    // Mark OS images that should be inverted in dark mode
+    if (pImageName.startsWith("os-")) {
+      const osName = pImageName.substring(3);
+      if (Panel.getOsImagesToBeInverted().includes(osName)) {
+        img.classList.add("invert-in-dark-mode");
+      }
+    }
     pElem.prepend(img);
   }
 
