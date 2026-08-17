@@ -48,72 +48,98 @@ export class JobsPanel extends Panel {
       return;
     }
 
-    const tbody = this.table.tBodies[0];
-
     if (typeof pData !== "object") {
-      // update all jobs (page) with the error message
-      for (const tr of tbody.rows) {
-        const statusField = tr.querySelector("span.no-job-status");
-        if (!statusField) {
-          continue;
-        }
-        Utils.addErrorToTableCell(statusField.parentElement, pData);
-      }
+      this._markAllJobsWithError(pData);
       return;
     }
 
     const jobs = pData.return[0];
+    this._updateRunningJobs(jobs);
+    this._updateFinishedJobs();
+  }
 
-    // update all running jobs
-    for (const jobId in jobs) {
-      const job = jobs[jobId];
-
-      let targetText = "";
-      const targetField = this.table.querySelector("tr#" + Utils.getIdFromJobId(jobId) + " span.job-status");
-      const maxTextLength = 50;
-      if (targetText.length > maxTextLength) {
-        // prevent column becoming too wide
-        // yes, the addition of running/returned may again make
-        // the string longer than 50 characters, we accept that
-        targetText = targetText.substring(0, maxTextLength) + Character.HORIZONTAL_ELLIPSIS;
-      }
-      // then add the operational statistics
-      if (job.Running && job.Running.length > 0) {
-        targetText += job.Running.length + " running";
-      }
-      if (job.Returned && job.Returned.length > 0) {
-        targetText += ", " + job.Returned.length + " returned";
-      }
-
-      // the field may not (yet) be on the screen
-      if (!targetField) {
-        continue;
-      }
-      targetField.classList.remove("no-job-status");
-      targetField.innerText = targetText;
-      targetField.insertBefore(Utils.createJobStatusSpan(jobId, true), targetField.firstChild);
-      Utils.addToolTip(targetField, "Click to refresh column");
-    }
-
-    // update all finished jobs (page)
+  _markAllJobsWithError (pData) {
+    // update all jobs (page) with the error message
+    const tbody = this.table.tBodies[0];
     for (const tr of tbody.rows) {
       const statusField = tr.querySelector("span.no-job-status");
       if (!statusField) {
         continue;
       }
-      statusField.classList.remove("no-job-status");
-      statusField.innerText = "done";
-      // we show the tooltip here so that the user is invited to click on this
-      // the user then sees other rows being updated without becoming invisible
-      Utils.addToolTip(statusField, "Click to refresh column");
+      Utils.addErrorToTableCell(statusField.parentElement, pData);
+    }
+  }
 
-      // remove the refresh button when it is still there
-      // needed when not all minions have reported their status
-      // but also there are no jobs running anymore
-      const detailsField = tr.querySelector("#status" + tr.dataset.jobid);
-      if (detailsField) {
-        detailsField.remove();
+  _updateRunningJobs (pJobs) {
+    // update all running jobs
+    for (const jobId in pJobs) {
+      const job = pJobs[jobId];
+      const targetField = this.table.querySelector("tr#" + Utils.getIdFromJobId(jobId) + " span.job-status");
+
+      // the field may not (yet) be on the screen
+      if (!targetField) {
+        continue;
       }
+
+      const targetText = JobsPanel._buildJobStatusText(job);
+      JobsPanel._updateJobStatusField(targetField, jobId, targetText);
+    }
+  }
+
+  static _buildJobStatusText (pJob) {
+    let targetText = "";
+    const maxTextLength = 50;
+    if (targetText.length > maxTextLength) {
+      // prevent column becoming too wide
+      // yes, the addition of running/returned may again make
+      // the string longer than 50 characters, we accept that
+      targetText = targetText.substring(0, maxTextLength) + Character.HORIZONTAL_ELLIPSIS;
+    }
+    // then add the operational statistics
+    if (pJob.Running && pJob.Running.length > 0) {
+      targetText += pJob.Running.length + " running";
+    }
+    if (pJob.Returned && pJob.Returned.length > 0) {
+      targetText += ", " + pJob.Returned.length + " returned";
+    }
+    return targetText;
+  }
+
+  static _updateJobStatusField (pTargetField, pJobId, pTargetText) {
+    pTargetField.classList.remove("no-job-status");
+    pTargetField.innerText = pTargetText;
+    pTargetField.insertBefore(Utils.createJobStatusSpan(pJobId, true), pTargetField.firstChild);
+    Utils.addToolTip(pTargetField, "Click to refresh column");
+  }
+
+  _updateFinishedJobs () {
+    // update all finished jobs (page)
+    const tbody = this.table.tBodies[0];
+    for (const tr of tbody.rows) {
+      const statusField = tr.querySelector("span.no-job-status");
+      if (!statusField) {
+        continue;
+      }
+      JobsPanel._markJobAsFinished(statusField);
+      JobsPanel._removeRefreshButton(tr);
+    }
+  }
+
+  static _markJobAsFinished (pStatusField) {
+    pStatusField.classList.remove("no-job-status");
+    pStatusField.innerText = "done";
+    // we show the tooltip here so that the user is invited to click on this
+    // the user then sees other rows being updated without becoming invisible
+    Utils.addToolTip(pStatusField, "Click to refresh column");
+  }
+
+  static _removeRefreshButton (pTr) {
+    // remove the refresh button when it is still there
+    // needed when not all minions have reported their status
+    // but also there are no jobs running anymore
+    const detailsField = pTr.querySelector("#status" + pTr.dataset.jobid);
+    if (detailsField) {
+      detailsField.remove();
     }
   }
 
