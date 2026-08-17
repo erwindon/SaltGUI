@@ -299,12 +299,8 @@ export class JobsPanel extends Panel {
   }
 
   handleSaltJobRetEvent (pData) {
-
     // ignore the most common events until someone complains
-    if (pData.fun === "saltutil.find_job") {
-      return;
-    }
-    if (pData.fun === "saltutil.running") {
+    if (JobsPanel._shouldIgnoreFunction(pData.fun)) {
       return;
     }
 
@@ -314,33 +310,50 @@ export class JobsPanel extends Panel {
       return;
     }
 
-    let newLevel = 0;
-    if (pData.success === true && pData.retcode === 0) {
-      newLevel = 1;
-    } else if (pData.success === true) {
-      newLevel = 2;
-    } else {
-      newLevel = 3;
-    }
+    const newLevel = JobsPanel._calculateResultLevel(pData);
 
     // This element only exists when the user happens to look at the output of that jobId.
     const spans = this.div.querySelectorAll("#status" + jid);
     for (const span of spans) {
-      let oldLevel = span.dataset.level;
-      if (oldLevel === undefined) {
-        oldLevel = 0;
-      }
-      if (newLevel > oldLevel) {
-        span.dataset.level = newLevel;
-        if (newLevel === 1) {
-          span.style.color = "green";
-        } else if (newLevel === 2) {
-          span.style.color = "orange";
-        } else if (newLevel === 3) {
-          span.style.color = "red";
-        }
-      }
-      span.style.removeProperty("display");
+      JobsPanel._updateStatusSpan(span, newLevel);
+    }
+  }
+
+  static _shouldIgnoreFunction (pFunction) {
+    return pFunction === "saltutil.find_job" || pFunction === "saltutil.running";
+  }
+
+  static _calculateResultLevel (pData) {
+    if (pData.success === true && pData.retcode === 0) {
+      return 1;
+    }
+    if (pData.success === true) {
+      return 2;
+    }
+    return 3;
+  }
+
+  static _updateStatusSpan (pSpan, pNewLevel) {
+    let oldLevel = pSpan.dataset.level;
+    if (oldLevel === undefined) {
+      oldLevel = 0;
+    }
+
+    if (pNewLevel > oldLevel) {
+      pSpan.dataset.level = pNewLevel;
+      JobsPanel._setSpanColor(pSpan, pNewLevel);
+    }
+
+    pSpan.style.removeProperty("display");
+  }
+
+  static _setSpanColor (pSpan, pLevel) {
+    if (pLevel === 1) {
+      pSpan.style.color = "green";
+    } else if (pLevel === 2) {
+      pSpan.style.color = "orange";
+    } else if (pLevel === 3) {
+      pSpan.style.color = "red";
     }
   }
 }
