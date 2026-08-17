@@ -24,6 +24,7 @@ import {OrchestrationsPage} from "./pages/Orchestrations.js";
 import {Output} from "./output/Output.js";
 import {PillarsMinionPage} from "./pages/PillarsMinion.js";
 import {PillarsPage} from "./pages/Pillars.js";
+import {QuickviewPage} from "./pages/Quickview.js";
 import {ReactorsPage} from "./pages/Reactors.js";
 import {SchedulesMinionPage} from "./pages/SchedulesMinion.js";
 import {SchedulesPage} from "./pages/Schedules.js";
@@ -66,6 +67,7 @@ export class Router {
     this._registerPage(Router.orchestrationsPage = new OrchestrationsPage(this)); // NOSONAR S1121
     this._registerPage(Router.optionsPage = new OptionsPage(this)); // NOSONAR S1121
     this._registerPage(Router.issuesPage = new IssuesPage(this)); // NOSONAR S1121
+    this._registerPage(Router.quickviewPage = new QuickviewPage(this)); // NOSONAR S1121
     this._registerPage(Router.logoutPage = new LogoutPage(this)); // NOSONAR S1121
 
     this._registerRouterEventListeners();
@@ -235,6 +237,7 @@ export class Router {
 
     // not a menu item, hidden page
     Router.keyBindings["O"] = "options";
+    Router.keyBindings["Q"] = "quickview";
 
     // not a menu item, not a page, but reserve key
     // Router.keyBindings["c"] = "commandbox";

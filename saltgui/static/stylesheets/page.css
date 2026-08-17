@@ -310,6 +310,12 @@ pre .task-failure-changes {
   cursor: pointer;
 }
 
+@media (prefers-color-scheme: dark) {
+  img.invert-in-dark-mode {
+    filter: invert();
+  }
+}
+
 @media print {
   .no-print,
   .no-print * {

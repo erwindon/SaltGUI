@@ -1167,6 +1167,12 @@ export class Panel {
     }
   }
 
+  static getOsImagesToBeInverted () {
+    return [
+      "amazon", "elementary", "elementary-os", "kali", "mageia", "openwrt", "scientificlinux", "steamos"
+    ];
+  }
+
   static _addPrefixImage (pElem, pImageName) {
     const img = Utils.createElem("img", "prefiximage");
     const pngName = pImageName.replaceAll(" ", "-").toLowerCase() + ".png";
