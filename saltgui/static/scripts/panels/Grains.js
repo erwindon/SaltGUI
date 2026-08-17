@@ -122,53 +122,69 @@ export class GrainsPanel extends Panel {
 
     const minionTr = this.table.querySelector("#" + Utils.getIdFromMinionId(pMinionId));
 
+    GrainsPanel._addGrainInfoTd(pMinionData, minionTr);
+    this._addMenuItemShowGrains(minionTr.dropdownmenu, pMinionId);
+    this._addPreviewGrainTds(pMinionData, minionTr);
+  }
+
+  static _addGrainInfoTd (pMinionData, minionTr) {
+    const grainInfoTd = Utils.createTd();
     if (typeof pMinionData === "object") {
       const cnt = Object.keys(pMinionData).length;
       const grainInfoText = cnt + " grains";
-      const grainInfoTd = Utils.createTd("graininfo", grainInfoText);
+      grainInfoTd.classList.add("graininfo");
+      grainInfoTd.innerText = grainInfoText;
       grainInfoTd.setAttribute("sorttable_customkey", cnt);
-      minionTr.appendChild(grainInfoTd);
     } else {
-      const grainInfoTd = Utils.createTd();
       Utils.addErrorToTableCell(grainInfoTd, pMinionData);
-      minionTr.appendChild(grainInfoTd);
     }
+    minionTr.appendChild(grainInfoTd);
+  }
 
-    this._addMenuItemShowGrains(minionTr.dropdownmenu, pMinionId);
-
+  _addPreviewGrainTds (pMinionData, minionTr) {
     // add the preview columns
-    /* eslint-disable max-depth */
     for (const previewGrain of this.previewGrains) {
       const td = Utils.createTd();
       if (typeof pMinionData === "object") {
-        const previewGrainValue = previewGrain.replace(/^[^=]*=/g, "");
-        if (previewGrainValue.startsWith("$")) {
-          // it is a json path
-          const obj = jsonPath(pMinionData, previewGrainValue);
-          if (Array.isArray(obj)) {
-            td.innerText = Output.formatObject(obj[0]);
-            td.classList.add("grain-value");
-          }
-        } else {
-          // a plain grain-name or a path in the grains.get style
-          const grainNames = previewGrainValue.split(":");
-          let obj = pMinionData;
-          for (const grainName of grainNames) {
-            if (obj) {
-              obj = obj[grainName];
-            }
-          }
-          if (obj) {
-            td.innerText = Output.formatObject(obj);
-            td.classList.add("grain-value");
-          }
-        }
+        GrainsPanel._populatePreviewGrainTd(td, previewGrain, pMinionData);
       } else {
         Utils.addErrorToTableCell(td, pMinionData);
       }
       minionTr.appendChild(td);
     }
-    /* eslint-enable max-depth */
+  }
+
+  static _populatePreviewGrainTd (td, previewGrain, pMinionData) {
+    const previewGrainValue = previewGrain.replace(/^[^=]*=/g, "");
+    if (previewGrainValue.startsWith("$")) {
+      // it is a json path
+      GrainsPanel._populateJsonPathGrainTd(td, previewGrainValue, pMinionData);
+    } else {
+      // a plain grain-name or a path in the grains.get style
+      GrainsPanel._populateNamedGrainTd(td, previewGrainValue, pMinionData);
+    }
+  }
+
+  static _populateJsonPathGrainTd (td, previewGrainValue, pMinionData) {
+    const obj = jsonPath(pMinionData, previewGrainValue);
+    if (Array.isArray(obj)) {
+      td.innerText = Output.formatObject(obj[0]);
+      td.classList.add("grain-value");
+    }
+  }
+
+  static _populateNamedGrainTd (td, previewGrainValue, pMinionData) {
+    const grainNames = previewGrainValue.split(":");
+    let obj = pMinionData;
+    for (const grainName of grainNames) {
+      if (obj) {
+        obj = obj[grainName];
+      }
+    }
+    if (obj) {
+      td.innerText = Output.formatObject(obj);
+      td.classList.add("grain-value");
+    }
   }
 
   _addMenuItemShowGrains (pMenu, pMinionId) {
