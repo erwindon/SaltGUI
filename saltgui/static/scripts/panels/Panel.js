@@ -801,40 +801,7 @@ export class Panel {
     const ipNumberField = Utils.getStorageItem("session", "ipnumber_field", "fqdn_ip4");
     const ipNumberPrefix = Utils.getStorageItemList("session", "ipnumber_prefix");
 
-    const bestIpNumber = Panel._getBestIpNumber(pMinionData, pAllMinionsGrains, ipNumberField, ipNumberPrefix);
-    const allIpNumbers = Panel._getAllIpNumbers(pMinionData, ipNumberField, ipNumberPrefix);
-
-    if (bestIpNumber) {
-      const addressTd = Utils.createTd(["status", "address"]);
-      const addressSpan = Utils.createSpan("", bestIpNumber);
-      addressSpan.dataset.singleIpNumber = bestIpNumber;
-      addressSpan.dataset.multiIpNumber = allIpNumbers.join("\n");
-      addressTd.appendChild(addressSpan);
-      // ipnumbers do not sort well, reformat into something sortable
-      const bestIpNumberParts = bestIpNumber.split(".");
-      let sorttableCustomkey = "";
-      if (bestIpNumberParts.length === 4) {
-        // never mind adding '.'; this is only a sort-key
-        for (let i = 0; i < 4; i++) {
-          sorttableCustomkey += bestIpNumberParts[i].padStart(3, "0");
-        }
-        addressTd.setAttribute("sorttable_customkey", sorttableCustomkey);
-      }
-      addressTd.setAttribute("tabindex", -1);
-      // clipboard may not be available, but we warn for that in the click handler
-      addressSpan.addEventListener("click", (pClickEvent) => {
-        Panel.copyAddress(addressSpan, pClickEvent.ctrlKey || pClickEvent.altKey);
-        pClickEvent.stopPropagation();
-      });
-      addressSpan.addEventListener("mouseout", () => {
-        Panel.restoreClickToCopy(addressSpan);
-      });
-      Panel.restoreClickToCopy(addressSpan);
-      minionTr.appendChild(addressTd);
-    } else {
-      const accepted = Utils.createTd(["status", "accepted"], "accepted");
-      minionTr.appendChild(accepted);
-    }
+    Panel._addAddressColumn(minionTr, pMinionData, pAllMinionsGrains, ipNumberField, ipNumberPrefix);
 
     if (minionTr.dataset.isConnected === "false") {
       Panel.addPrefixIcon(minionSpan, Character.WARNING_SIGN);
@@ -846,12 +813,58 @@ export class Panel {
 
     minionTr.dataset.minionId = pMinionId;
 
+    Panel._addSaltversionColumn(minionTr, pMinionData);
+    Panel._addOsColumn(minionTr, pMinionData);
+  }
+
+  static _addAddressColumn (pMinionTr, pMinionData, pAllMinionsGrains, pIpNumberField, pIpNumberPrefix) {
+    const bestIpNumber = Panel._getBestIpNumber(pMinionData, pAllMinionsGrains, pIpNumberField, pIpNumberPrefix);
+    const allIpNumbers = Panel._getAllIpNumbers(pMinionData, pIpNumberField, pIpNumberPrefix);
+
+    if (bestIpNumber) {
+      const addressTd = Utils.createTd(["status", "address"]);
+      const addressSpan = Utils.createSpan("", bestIpNumber);
+      addressSpan.dataset.singleIpNumber = bestIpNumber;
+      addressSpan.dataset.multiIpNumber = allIpNumbers.join("\n");
+      addressTd.appendChild(addressSpan);
+      Panel._setupAddressCell(addressTd, addressSpan, bestIpNumber);
+      pMinionTr.appendChild(addressTd);
+    } else {
+      const accepted = Utils.createTd(["status", "accepted"], "accepted");
+      pMinionTr.appendChild(accepted);
+    }
+  }
+
+  static _setupAddressCell (pAddressTd, pAddressSpan, pBestIpNumber) {
+    // ipnumbers do not sort well, reformat into something sortable
+    const bestIpNumberParts = pBestIpNumber.split(".");
+    let sorttableCustomkey = "";
+    if (bestIpNumberParts.length === 4) {
+      // never mind adding '.'; this is only a sort-key
+      for (let i = 0; i < 4; i++) {
+        sorttableCustomkey += bestIpNumberParts[i].padStart(3, "0");
+      }
+      pAddressTd.setAttribute("sorttable_customkey", sorttableCustomkey);
+    }
+    pAddressTd.setAttribute("tabindex", -1);
+    // clipboard may not be available, but we warn for that in the click handler
+    pAddressSpan.addEventListener("click", (pClickEvent) => {
+      Panel.copyAddress(pAddressSpan, pClickEvent.ctrlKey || pClickEvent.altKey);
+      pClickEvent.stopPropagation();
+    });
+    pAddressSpan.addEventListener("mouseout", () => {
+      Panel.restoreClickToCopy(pAddressSpan);
+    });
+    Panel.restoreClickToCopy(pAddressSpan);
+  }
+
+  static _addSaltversionColumn (pMinionTr, pMinionData) {
     let saltversion = Character.EM_DASH;
     if (typeof pMinionData === "string") {
       saltversion = "";
     } else if (pMinionData?.saltversion) {
       saltversion = pMinionData.saltversion;
-      minionTr.dataset.saltversion = saltversion;
+      pMinionTr.dataset.saltversion = saltversion;
     }
     if (pMinionData) {
       const td = Utils.createTd();
@@ -861,9 +874,11 @@ export class Panel {
       if (typeof pMinionData === "string") {
         Utils.addErrorToTableCell(td, pMinionData);
       }
-      minionTr.appendChild(td);
+      pMinionTr.appendChild(td);
     }
+  }
 
+  static _addOsColumn (pMinionTr, pMinionData) {
     let os = Character.EM_DASH;
     if (typeof pMinionData === "string") {
       os = "";
@@ -880,7 +895,7 @@ export class Panel {
       if (typeof pMinionData === "object" && pMinionData.os) {
         Panel._addPrefixImage(td, "os-" + pMinionData.os);
       }
-      minionTr.appendChild(td);
+      pMinionTr.appendChild(td);
     }
   }
 
