@@ -660,41 +660,51 @@ export class MinionsPanel extends Panel {
     const entries = MinionsPanel._getCveData();
 
     for (const entry of entries) {
-      const id = entry[0];
-      const nodeType = entry[1];
-      const patterns = entry[2];
-
-      /* eslint-disable no-bitwise */
-      if ((nodeType & pNodeType) !== pNodeType) {
-        // no, this CVE not valid for this (master/minion)
-        continue;
-      }
-      /* eslint-enable no-bitwise */
-
-      let fnd = true;
-      for (let i = 0; i < patterns.length; i++) {
-        if (typeof patterns[i] === "string") {
-          patterns[i] = new RegExp("^" + patterns[i] + "$");
-        }
-        if (patterns[i] === null && items[i] === undefined) {
-          continue;
-        }
-        if (patterns[i] === null) {
-          fnd = false;
-          break;
-        }
-        if (patterns[i].test(items[i])) {
-          continue;
-        }
-        fnd = false;
-        break;
-      }
-      if (fnd) {
-        found[id] = true;
+      if (MinionsPanel._matchesCveEntry(entry, pNodeType, items)) {
+        found[entry[0]] = true;
       }
     }
 
     return found;
+  }
+
+  static _matchesCveEntry (pEntry, pNodeType, pItems) {
+    const nodeType = pEntry[1];
+
+    /* eslint-disable no-bitwise */
+    if ((nodeType & pNodeType) !== pNodeType) {
+      // no, this CVE not valid for this (master/minion)
+      return false;
+    }
+    /* eslint-enable no-bitwise */
+
+    return MinionsPanel._matchesPatterns(pEntry[2], pItems);
+  }
+
+  static _matchesPatterns (pPatterns, pItems) {
+    for (let i = 0; i < pPatterns.length; i++) {
+      if (!MinionsPanel._matchesPattern(pPatterns, i, pItems[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  static _matchesPattern (pPatterns, pIndex, pItem) {
+    let pattern = pPatterns[pIndex];
+
+    if (typeof pattern === "string") {
+      pattern = new RegExp("^" + pattern + "$");
+      pPatterns[pIndex] = pattern;
+    }
+
+    if (pattern === null && pItem === undefined) {
+      return true;
+    }
+    if (pattern === null) {
+      return false;
+    }
+    return pattern.test(pItem);
   }
 
   static _addCveList (pName, pVersion, pBugs, pAllCveKeys) {
