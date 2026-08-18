@@ -890,7 +890,7 @@ export class KeysPanel extends Panel {
     const statusTd = pTr.querySelector(".status");
     // drop all other classes (accepted, rejected, etc)
     // do not update screen when nothing changed; that keeps any search highlight
-    this._updateMinionStatus(statusTd, pData, pTr, pMinionsDict);
+    KeysPanel._updateMinionStatus(statusTd, pData, pTr, pMinionsDict);
 
     if (pData.act === "delete") {
       // "-1" due to the <tr> for the header that is inside <thead>
@@ -907,8 +907,8 @@ export class KeysPanel extends Panel {
     this.panelMenu.verifyAll();
   }
 
-  _updateMinionStatus (pStatusTd, pData, pTr, pMinionsDict) {
-    const newStatus = this._getNewStatus(pData.act);
+  static _updateMinionStatus (pStatusTd, pData, pTr, pMinionsDict) {
+    const newStatus = KeysPanel._getNewStatus(pData.act);
     if (!newStatus) {
       // unknown status
       // do not update screen
