@@ -198,6 +198,74 @@ export class OutputDocumentation {
     }
   }
 
+  static _formatDocumentation (pOut) {
+    // internal links: remove the ".. rubric::" prefix
+    // e.g. in "sys.doc state.apply"
+    pOut = pOut.replace(/[.][.] rubric:: */g, "");
+
+    // internal links: remove prefixes like ":mod:" and ":py:func:"
+    // e.g. in "sys.doc state.apply"
+    pOut = pOut.replace(/(?::[a-z_]*)*:`/g, "`"); // NOSONAR S8786
+
+    // internal links: remove link indicators in highlighted text
+    // e.g. in "sys.doc state.apply"
+    pOut = pOut.replace(/[ \n]*<[^`]*>`/gm, "`"); // NOSONAR S8786
+
+    // turn text into html
+    pOut = pOut.replaceAll("&", "&amp;");
+    pOut = pOut.replaceAll("<", "&lt;");
+    pOut = pOut.replaceAll(">", "&gt;");
+
+    // external links
+    // e.g. in "sys.doc pkg.install"
+    while (pOut.includes(".. _")) {
+      // take only a line containing ".. _"
+      const reference = pOut.
+        replace(/^(?:.|[\n\r])*[.][.] _/m, ""). // NOSONAR S8786
+        replace(/(?:[\n\r])(?:.|[\n\r])*$/m, "");
+      const words = reference.split(": ");
+      if (words.length !== 2) {
+        /* istanbul ignore next */
+        Utils.warn("words", words);
+        /* istanbul ignore next */
+        break;
+      }
+      const link = words[0];
+      const target = words[1];
+      // add link to all references
+      while (pOut.includes(link + "_")) {
+        pOut = pOut.replace(
+          link + "_",
+          "<a href='" + target + "' target='_blank' rel='noopener'>" + link + "</a>");
+      }
+      // remove the item from the link table
+      pOut = pOut.replace(".. _" + reference, "");
+    }
+
+    // replace ``......``
+    // e.g. in "sys.doc state.apply"
+    // named groups are only introduced in ES9/2018
+    pOut = pOut.replace(/``([^`]*)``/g, "<span style='background-color: #575757'>$1</span>");
+
+    // replace `......`
+    // e.g. in "sys.doc state.apply"
+    // named groups are only introduced in ES9/2018
+    pOut = pOut.replace(/`([^`]*)`/g, "<span style='color: yellow'>$1</span>");
+
+    // remove whitespace at end of lines
+    pOut = pOut.replace(/ +\n/gm, ""); // NOSONAR S8786
+
+    // remove duplicate empty lines (usually due to previous rule)
+    pOut = pOut.replace(/\n\n\n*/gm, "\n\n");
+
+    return pOut;
+  }
+
+  static _addDocumentationEntry (pOutputContainer, pKey, pOut) {
+    pOutputContainer.innerHTML +=
+      "<div><span class='minion-id'>" + Utils.escapeHtml(pKey) + "</span>:<br/><pre style='height: initial; overflow-y: initial;'>" + pOut + "</pre></div>";
+  }
+
   // add the output of a documentation command to the display
   static addDocumentationOutput (pOutputContainer, pResponse) {
 
@@ -205,81 +273,14 @@ export class OutputDocumentation {
     // as it should have been reduced already
     for (const minionResponse of Object.values(pResponse)) {
 
-      for (let [key,out] of Object.entries(minionResponse).sort(Utils.mySortFunction)) {
+      for (let [key, out] of Object.entries(minionResponse).sort(Utils.mySortFunction)) {
 
         if (out === null) {
           continue;
         }
         out = out.trimEnd();
-
-        // internal links: remove the ".. rubric::" prefix
-        // e.g. in "sys.doc state.apply"
-        out = out.replace(/[.][.] rubric:: */g, "");
-
-        // internal links: remove prefixes like ":mod:" and ":py:func:"
-        // e.g. in "sys.doc state.apply"
-        out = out.replace(/(?::[a-z_]*)*:`/g, "`"); // NOSONAR S8786
-
-        // internal links: remove link indicators in highlighted text
-        // e.g. in "sys.doc state.apply"
-        out = out.replace(/[ \n]*<[^`]*>`/gm, "`"); // NOSONAR S8786
-
-        // turn text into html
-        // e.g. in "sys.doc cmd.run"
-        out = out.replaceAll("&", "&amp;");
-
-        // turn text into html
-        // e.g. in "sys.doc state.template"
-        out = out.replaceAll("<", "&lt;");
-
-        // turn text into html
-        // e.g. in "sys.doc state.template"
-        out = out.replaceAll(">", "&gt;");
-
-        // external links
-        // e.g. in "sys.doc pkg.install"
-        while (out.includes(".. _")) {
-          // take only a line containing ".. _"
-          const reference = out.
-            replace(/^(?:.|[\n\r])*[.][.] _/m, ""). // NOSONAR S8786
-            replace(/(?:[\n\r])(?:.|[\n\r])*$/m, "");
-          const words = reference.split(": ");
-          if (words.length !== 2) {
-            /* istanbul ignore next */
-            Utils.warn("words", words);
-            /* istanbul ignore next */
-            break;
-          }
-          const link = words[0];
-          const target = words[1];
-          // add link to all references
-          while (out.includes(link + "_")) {
-            out = out.replace(
-              link + "_",
-              "<a href='" + target + "' target='_blank' rel='noopener'>" + link + "</a>");
-          }
-          // remove the item from the link table
-          out = out.replace(".. _" + reference, "");
-        }
-
-        // replace ``......``
-        // e.g. in "sys.doc state.apply"
-        // named groups are only introduced in ES9/2018
-        out = out.replace(/``([^`]*)``/g, "<span style='background-color: #575757'>$1</span>");
-
-        // replace `......`
-        // e.g. in "sys.doc state.apply"
-        // named groups are only introduced in ES9/2018
-        out = out.replace(/`([^`]*)`/g, "<span style='color: yellow'>$1</span>");
-
-        // remove whitespace at end of lines
-        out = out.replace(/ +\n/gm, ""); // NOSONAR S8786
-
-        // remove duplicate empty lines (usually due to previous rule)
-        out = out.replace(/\n\n\n*/gm, "\n\n");
-
-        pOutputContainer.innerHTML +=
-          "<div><span class='minion-id'>" + Utils.escapeHtml(key) + "</span>:<br/><pre style='height: initial; overflow-y: initial;'>" + out + "</pre></div>";
+        out = OutputDocumentation._formatDocumentation(out);
+        OutputDocumentation._addDocumentationEntry(pOutputContainer, key, out);
       }
     }
   }
