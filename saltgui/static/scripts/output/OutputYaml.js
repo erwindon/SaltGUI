@@ -3,6 +3,39 @@ import {Utils} from "../Utils.js";
 
 export class OutputYaml {
 
+  static _stringNeedsQuotes (pValue) {
+    // simple number with extra 0's at the start is still a string
+    if (/^0[0-9]+$/.test(pValue)) { // NOSONAR S6353
+      return true;
+    }
+
+    if (!Number.isNaN(Number(pValue))) {
+      return true;
+    }
+
+    if (pValue === "") {
+      return true;
+    }
+
+    if (pValue.startsWith(" ") || pValue.endsWith(" ")) {
+      return true;
+    }
+
+    if (pValue.startsWith("@") || pValue.startsWith("`") || pValue.startsWith("%")) {
+      return true;
+    }
+
+    if (/'/.test(pValue)) {
+      return true;
+    }
+
+    if (!/^[-a-z0-9_()./:+ ]+$/i.test(pValue)) {
+      return true;
+    }
+
+    return false;
+  }
+
   // format an object as YAML
   // returns NULL when it is not a simple object
   // i.e. no multi-line objects, no indentation here
@@ -21,46 +54,7 @@ export class OutputYaml {
     }
 
     if (typeof pValue === "string") {
-      let needQuotes = false;
-
-      // simple number with extra 0's at the start is still a string
-      if (/^0[0-9]+$/.test(pValue)) { // NOSONAR S6353
-        needQuotes = true;
-      }
-
-      if (!Number.isNaN(Number(pValue))) {
-        needQuotes = true;
-      }
-
-      if (pValue === "") {
-        needQuotes = true;
-      }
-
-      if (pValue.startsWith(" ")) {
-        needQuotes = true;
-      }
-      if (pValue.endsWith(" ")) {
-        needQuotes = true;
-      }
-
-      if (pValue.startsWith("@")) {
-        needQuotes = true;
-      }
-      if (pValue.startsWith("`")) {
-        needQuotes = true;
-      }
-      if (/'/.test(pValue)) {
-        needQuotes = true;
-      }
-      if (pValue.startsWith("%")) {
-        needQuotes = true;
-      }
-
-      if (!/^[-a-z0-9_()./:+ ]+$/i.test(pValue)) {
-        needQuotes = true;
-      }
-
-      if (!needQuotes) {
+      if (!OutputYaml._stringNeedsQuotes(pValue)) {
         return pValue;
       }
       return "'" + pValue.replace(/['\\]/g, "\\$&") + "'"; // NOSONAR S7780
