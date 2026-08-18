@@ -35,6 +35,47 @@ export class OutputDocumentation {
   }
 
 
+  static _isValidDocumentationObject (pOutput) {
+    if (!pOutput) {
+      // some commands do not have help-text
+      // e.g. wheel.key.get_key
+      return null;
+    }
+
+    if (typeof pOutput !== "object") {
+      // strange --> no documentation object
+      return false;
+    }
+
+    // arrays are also objects,
+    // but not what we are looking for
+    if (Array.isArray(pOutput)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  static _checkDocumentationMatch (pOutput, pCommandArg) {
+    for (const [key, out] of Object.entries(pOutput)) {
+      // e.g. for "test.rand_str"
+      if (out === null) {
+        continue;
+      }
+
+      // but otherwise it must be a (documentation)string
+      if (typeof out !== "string") {
+        return false;
+      }
+
+      // is this what we were looking for?
+      if (OutputDocumentation.isDocuKeyMatch(key, pCommandArg)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   // we only treat output as documentation output when it sticks to strict rules
   // all minions must return strings
   // and when its key matches the requested documentation
@@ -54,49 +95,20 @@ export class OutputDocumentation {
       return false;
     }
 
-    let result = false;
-
     // reduce the search key to match the data in the response
     const commandArg = OutputDocumentation._reduceFilterKey(pCommandArg);
 
     for (const output of Object.values(pResponse)) {
-
-      if (!output) {
-        // some commands do not have help-text
-        // e.g. wheel.key.get_key
-        continue;
-      }
-
-      if (typeof output !== "object") {
-        // strange --> no documentation object
+      const isValid = OutputDocumentation._isValidDocumentationObject(output);
+      if (isValid === false) {
         return false;
       }
-
-      // arrays are also objects,
-      // but not what we are looking for
-      if (Array.isArray(output)) {
-        return false;
-      }
-
-      for (const [key,out] of Object.entries(output)) {
-        // e.g. for "test.rand_str"
-        if (out === null) {
-          continue;
-        }
-
-        // but otherwise it must be a (documentation)string
-        if (typeof out !== "string") {
-          return false;
-        }
-
-        // is this what we were looking for?
-        if (OutputDocumentation.isDocuKeyMatch(key, commandArg)) {
-          result = true;
-        }
+      if (isValid === true && OutputDocumentation._checkDocumentationMatch(output, commandArg)) {
+        return true;
       }
     }
 
-    return result;
+    return false;
   }
 
 
