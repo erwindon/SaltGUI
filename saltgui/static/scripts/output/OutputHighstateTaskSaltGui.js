@@ -6,6 +6,75 @@ import {Utils} from "../Utils.js";
 
 export class OutputHighstateTaskSaltGui {
 
+  static _shouldSkipChange (pKey, pChange) {
+    /* eslint-disable line-comment-position,no-inline-comments,curly */
+    if (pKey === "out" && pChange === "highstate") return true; // typical for orchestration
+    if (pKey === "retcode" && pChange === 0) return true; // typical for cmd.run
+    if (pKey === "stderr" && pChange === "") return true; // typical for cmd.run
+    if (pKey === "stdout" && pChange === "") return true; // typical for cmd.run
+    /* eslint-enable line-comment-position,no-inline-comments,curly */
+    return false;
+  }
+
+  static _displayMultilineStringChange (pTaskDiv, pKey, pChange, pIndent) {
+    pTaskDiv.append(Utils.createBr());
+    // show multi-line text as a separate block
+    pTaskDiv.append(document.createTextNode(pIndent + pKey + ":"));
+    const lines = pChange.trim().split("\n");
+    for (const line of lines) {
+      pTaskDiv.append(Utils.createBr());
+      pTaskDiv.append(document.createTextNode("      " + line));
+    }
+  }
+
+  static _displayArrayChange (pTaskDiv, pKey, pChange, pIndent) {
+    for (const idx in pChange) {
+      const task = pChange[idx];
+      pTaskDiv.append(Utils.createBr());
+      pTaskDiv.append(document.createTextNode(
+        pIndent + pKey + "[" + idx + "]: " + JSON.stringify(task)));
+    }
+  }
+
+  static _displaySimpleChange (pTaskDiv, pKey, pChange, pIndent) {
+    // show all other non-objects in a simple way
+    pTaskDiv.append(Utils.createBr());
+    pTaskDiv.append(document.createTextNode(
+      pIndent + pKey + ": " +
+      JSON.stringify(pChange)));
+  }
+
+  static _displayObjectChange (pTaskDiv, pKey, pChange, pIndent) {
+    // treat old->new first
+    if (pChange["old"] !== undefined && pChange["new"] !== undefined) {
+      pTaskDiv.append(Utils.createBr());
+      // place changes on one line
+      // don't use arrows here, these are higher than a regular
+      // text-line and disturb the text-flow
+      pTaskDiv.append(document.createTextNode(
+        pIndent + pKey + ": " +
+        JSON.stringify(pChange.old) + " " +
+        Character.BLACK_RIGHT_POINTING_POINTER + " " +
+        JSON.stringify(pChange.new)));
+    }
+    // then show whatever remains
+    for (const taskkey of Object.keys(pChange).sort(Utils.mySortFunction)) {
+
+      // we already provided this as summary: old->new
+      if (taskkey === "old" && pChange["new"] !== undefined) {
+        continue;
+      }
+      if (taskkey === "new" && pChange["old"] !== undefined) {
+        continue;
+      }
+
+      pTaskDiv.append(Utils.createBr());
+      pTaskDiv.append(document.createTextNode(
+        pIndent + pKey + ": " + taskkey + ": " +
+        JSON.stringify(pChange[taskkey])));
+    }
+  }
+
   static _addChangesInfo (pTaskDiv, pTask, pIndent) {
     if (pTask["changes"] === undefined) {
       return;
@@ -21,71 +90,18 @@ export class OutputHighstateTaskSaltGui {
 
       const change = pTask.changes[key];
 
-      /* eslint-disable line-comment-position,no-inline-comments,curly */
-      if (key === "out" && change === "highstate") continue; // typical for orchestration
-      if (key === "retcode" && change === 0) continue; // typical for cmd.run
-      if (key === "stderr" && change === "") continue; // typical for cmd.run
-      if (key === "stdout" && change === "") continue; // typical for cmd.run
-      /* eslint-enable line-comment-position,no-inline-comments,curly */
+      if (OutputHighstateTaskSaltGui._shouldSkipChange(key, change)) {
+        continue;
+      }
 
       if (typeof change === "string" && Utils.isMultiLineString(change)) {
-        pTaskDiv.append(Utils.createBr());
-        // show multi-line text as a separate block
-        pTaskDiv.append(document.createTextNode(pIndent + key + ":"));
-        const lines = change.trim().split("\n");
-        for (const line of lines) {
-          pTaskDiv.append(Utils.createBr());
-          pTaskDiv.append(document.createTextNode("      " + line));
-        }
-        continue;
-      }
-
-      if (Array.isArray(change)) {
-        for (const idx in change) {
-          const task = change[idx];
-          pTaskDiv.append(Utils.createBr());
-          pTaskDiv.append(document.createTextNode(
-            pIndent + key + "[" + idx + "]: " + JSON.stringify(task)));
-        }
-        continue;
-      }
-
-      if (change === null || typeof change !== "object") {
-        // show all other non-objects in a simple way
-        pTaskDiv.append(Utils.createBr());
-        pTaskDiv.append(document.createTextNode(
-          pIndent + key + ": " +
-          JSON.stringify(change)));
-        continue;
-      }
-
-      // treat old->new first
-      if (change["old"] !== undefined && change["new"] !== undefined) {
-        pTaskDiv.append(Utils.createBr());
-        // place changes on one line
-        // don't use arrows here, these are higher than a regular
-        // text-line and disturb the text-flow
-        pTaskDiv.append(document.createTextNode(
-          pIndent + key + ": " +
-          JSON.stringify(change.old) + " " +
-          Character.BLACK_RIGHT_POINTING_POINTER + " " +
-          JSON.stringify(change.new)));
-      }
-      // then show whatever remains
-      for (const taskkey of Object.keys(change).sort(Utils.mySortFunction)) {
-
-        // we already provided this as summary: old->new
-        if (taskkey === "old" && change["new"] !== undefined) {
-          continue;
-        }
-        if (taskkey === "new" && change["old"] !== undefined) {
-          continue;
-        }
-
-        pTaskDiv.append(Utils.createBr());
-        pTaskDiv.append(document.createTextNode(
-          pIndent + key + ": " + taskkey + ": " +
-          JSON.stringify(change[taskkey])));
+        OutputHighstateTaskSaltGui._displayMultilineStringChange(pTaskDiv, key, change, pIndent);
+      } else if (Array.isArray(change)) {
+        OutputHighstateTaskSaltGui._displayArrayChange(pTaskDiv, key, change, pIndent);
+      } else if (change === null || typeof change !== "object") {
+        OutputHighstateTaskSaltGui._displaySimpleChange(pTaskDiv, key, change, pIndent);
+      } else {
+        OutputHighstateTaskSaltGui._displayObjectChange(pTaskDiv, key, change, pIndent);
       }
     }
   }
