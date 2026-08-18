@@ -63,10 +63,10 @@ export class StatsPanel extends Panel {
   // provide a shortened date format for cases
   // where we see the timezone multiple times on one screen
   static _explainDateTime (pDateTimeInMs) {
-    if (pDateTimeInMs === null) {
-      return pDateTimeInMs;
+    if (pDateTimeInMs === null || pDateTimeInMs === undefined) {
+      return null;
     }
-    return pDateTimeInMs + " (=" + Output.dateTimeStr(pDateTimeInMs) + ")";
+    return Output.dateTimeStr(pDateTimeInMs);
   }
 
   _handleStats (pStatsData) {
@@ -121,31 +121,44 @@ export class StatsPanel extends Panel {
     return false;
   }
 
+  static _addDateTimeField (obj, fieldName) {
+    if (obj[fieldName] === null || obj[fieldName] === undefined) {
+      return;
+    }
+    const dateTimeStr = StatsPanel._explainDateTime(obj[fieldName]);
+    if (dateTimeStr) {
+      obj[fieldName + " (SaltGUI)"] = dateTimeStr;
+    }
+  }
+
   static _processCherryPyApplications (pStatsData) {
     const appData = pStatsData["CherryPy Applications"];
     if (!appData) {
       return;
     }
 
-    appData["Current Time"] = StatsPanel._explainDateTime(appData["Current Time"]);
-    appData["Start Time"] = StatsPanel._explainDateTime(appData["Start Time"]);
-    appData["Uptime"] = StatsPanel._explainDateTime(appData["Uptime"]);
+    StatsPanel._addDateTimeField(appData, "Current Time");
+    StatsPanel._addDateTimeField(appData, "Start Time");
+    StatsPanel._addDateTimeField(appData, "Uptime");
+    StatsPanel._addDateTimeField(appData, "Total Time");
+    StatsPanel._addDateTimeField(appData, "Run time");
+    StatsPanel._addDateTimeField(appData, "Work Time");
 
     const requests = appData["Requests"];
     if (requests) {
-      StatsPanel._processDateTimeFields(requests, ["Start Time", "End Time"]);
+      StatsPanel._processDateTimeFields(requests, ["Start Time", "End Time", "Processing Time"]);
     }
 
     const slowQueries = appData["Slow Queries"];
     if (slowQueries) {
-      StatsPanel._processDateTimeFields(slowQueries, ["Start Time", "End Time"]);
+      StatsPanel._processDateTimeFields(slowQueries, ["Start Time", "End Time", "Processing Time"]);
     }
   }
 
   static _processDateTimeFields (collection, dateFields) {
     for (const key in collection) {
       for (const field of dateFields) {
-        collection[key][field] = StatsPanel._explainDateTime(collection[key][field]);
+        StatsPanel._addDateTimeField(collection[key], field);
       }
     }
   }
