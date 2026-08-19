@@ -165,16 +165,92 @@ export class Output {
   // some older browsers cannot produce formatted datetime this way
   // toLocaleString/toLocaleTimeString then return "Invalid Date"
   // silently ignore that, provide an alternative and then do not produce a tooltip
+  static _clampFractionDigits (pDigits) {
+    // stick to the min/max values without complaining
+    if (pDigits < 0) {
+      return 0;
+    }
+    if (pDigits > 6) {
+      return 6;
+    }
+    return pDigits;
+  }
+
+  static _extractFractionSeconds (pDtStr, pFractionDigits) {
+    let fractionSecondsPart = pDtStr.replace(/^[^.]*$/, "");
+    // leave nothing when there are no fractional seconds
+    // remove everything until '.'
+    // assume the last '.' is a decimal separator
+    // and that all others (if any) are just field separators
+    fractionSecondsPart = fractionSecondsPart.replace(/^.*[.]/, "");
+    // remove everything after the digits
+    fractionSecondsPart = fractionSecondsPart.replace(/[^0-9].*$/, ""); // NOSONAR S6353
+    const originalFractionSecondsPart = fractionSecondsPart;
+    // truncate digits to maximum length
+    fractionSecondsPart = fractionSecondsPart.substring(0, pFractionDigits);
+
+    // format the decimal number 1.1 and see which separator is used
+    const decimalSeparator = 1.1.toLocaleString().substring(1, 2);
+    const formatted = fractionSecondsPart !== "" ? decimalSeparator + fractionSecondsPart : "";
+    const formattedOriginal = originalFractionSecondsPart !== "" ? decimalSeparator + originalFractionSecondsPart : "";
+
+    return { formatted, formattedOriginal, original: originalFractionSecondsPart };
+  }
+
+  static _formatDateTime (pDateObj, pDtStr, pTimeOnly, pRepresentationChoice) {
+    const isTimeOnly = pTimeOnly || pRepresentationChoice === "local-utctime";
+    const formatter = isTimeOnly ? "toLocaleTimeString" : "toLocaleString";
+    let dt = pDateObj[formatter](undefined, {"timeZone": "UTC", "timeZoneName": "short"});
+
+    if (dt.search("Invalid") >= 0) {
+      // but not the verbose timezone name
+      dt = isTimeOnly ? pDateObj.toTimeString().replace(/ *[(][^)]*[)]$/, "") : pDateObj.toString().replace(/ *[(][^)]*[)]$/, ""); // NOSONAR S8786
+    }
+
+    if (dt.search("Invalid") >= 0) {
+      dt = pDtStr.replace(/^[-0-9]*T/, "").replace(/^1999, Sep 9 /, "");
+    }
+
+    return dt;
+  }
+
+  static _formatLocalDateTime (pDateObj, pDtStr, pTimeOnly, pRepresentationChoice) {
+    const isTimeOnly = pTimeOnly || pRepresentationChoice === "utc-localtime";
+    const formatter = isTimeOnly ? "toLocaleTimeString" : "toLocaleString";
+    let dt = pDateObj[formatter](undefined, {"timeZoneName": "short"});
+
+    if (dt.search("Invalid") >= 0) {
+      dt = isTimeOnly ? pDateObj.toString().replace(/ *[(][^)]*[)]$/, "") : pDateObj.toString().replace(/ *[(][^)]*[)]$/, ""); // NOSONAR S8786
+    }
+
+    if (dt.search("Invalid") >= 0) {
+      dt = pDtStr.replace(/^[-0-9]*T/, "").replace(/^1999, Sep 9 /, "");
+    }
+
+    return dt;
+  }
+
+  static _formatRepresentation (pUtcDT, pLocalDT, pLocalTZ, pRepresentation) {
+    switch (pRepresentation) {
+    case "utc":
+      return pUtcDT;
+    case "local":
+      return pLocalDT + " " + pLocalTZ;
+    case "utc-localtime":
+      return pUtcDT + " (" + pLocalDT + " " + pLocalTZ + ")";
+    case "local-utctime":
+      return pLocalDT + " " + pLocalTZ + " (" + pUtcDT + ")";
+    default:
+      // unknown format, use traditional representation
+      return pUtcDT;
+    }
+  }
+
   static dateTimeStr (pDtStr, pDateTimeField = null, pDateTimeStyle = "bottom-center", pTimeOnly = false) {
 
     // no available setting, then return the original
     let dateTimeFractionDigits = Utils.getStorageItemInteger("session", "datetime_fraction_digits", 6);
-    // stick to the min/max values without complaining
-    if (dateTimeFractionDigits < 0) {
-      dateTimeFractionDigits = 0;
-    } else if (dateTimeFractionDigits > 6) {
-      dateTimeFractionDigits = 6;
-    }
+    dateTimeFractionDigits = Output._clampFractionDigits(dateTimeFractionDigits);
 
     const dateTimeRepresentation = Utils.getStorageItem("session", "datetime_representation", "utc");
 
@@ -190,27 +266,7 @@ export class Output {
       pDtStr = pDtStr.getUTCFullYear() + ", " + months[pDtStr.getUTCMonth()] + " " + pDtStr.getUTCDate() + " " + Output._nDigits(pDtStr.getUTCHours(), 2) + ":" + Output._nDigits(pDtStr.getUTCMinutes(), 2) + ":" + Output._nDigits(pDtStr.getUTCSeconds(), 2) + "." + Output._nDigits(pDtStr.getUTCMilliseconds(), 3);
     }
 
-    let fractionSecondsPart = pDtStr;
-    // leave nothing when there are no fractional seconds
-    fractionSecondsPart = fractionSecondsPart.replace(/^[^.]*$/, "");
-    // remove everything until '.'
-    // assume the last '.' is a decimal separator
-    // and that all others (if any) are just field separators
-    fractionSecondsPart = fractionSecondsPart.replace(/^.*[.]/, "");
-    // remove everything after the digits
-    fractionSecondsPart = fractionSecondsPart.replace(/[^0-9].*$/, ""); // NOSONAR S6353
-    let originalFractionSecondsPart = fractionSecondsPart;
-    // truncate digits to maximum length
-    fractionSecondsPart = fractionSecondsPart.substring(0, dateTimeFractionDigits);
-
-    // format the decimal number 1.1 and see which separator is used
-    const decimalSeparator = 1.1.toLocaleString().substring(1, 2);
-    if (fractionSecondsPart !== "") {
-      fractionSecondsPart = decimalSeparator + fractionSecondsPart;
-    }
-    if (originalFractionSecondsPart !== "") {
-      originalFractionSecondsPart = decimalSeparator + originalFractionSecondsPart;
-    }
+    const fractionData = Output._extractFractionSeconds(pDtStr, dateTimeFractionDigits);
 
     // remove the fraction from the original
     pDtStr = pDtStr.replace(/[.][0-9]*$/, ""); // NOSONAR S6353
@@ -228,45 +284,10 @@ export class Output {
     const milliSecondsSinceEpoch = Date.parse(pDtStr);
     const dateObj = new Date(milliSecondsSinceEpoch);
 
-    let utcDT;
-    if (pTimeOnly || dateTimeRepresentation === "local-utctime") {
-      utcDT = dateObj.toLocaleTimeString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
-      if (utcDT.search("Invalid") >= 0) {
-        // but not the verbose timezone name
-        utcDT = dateObj.toTimeString().replace(/ *[(][^)]*[)]$/, ""); // NOSONAR S8786
-      }
-      if (utcDT.search("Invalid") >= 0) {
-        utcDT = pDtStr.replace(/^[-0-9]*T/, "").replace(/^1999, Sep 9 /, "");
-      }
-    } else {
-      utcDT = dateObj.toLocaleString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
-      if (utcDT.search("Invalid") >= 0) {
-        utcDT = dateObj.toString().replace(/ *[(][^)]*[)]$/, ""); // NOSONAR S8786
-      }
-      if (utcDT.search("Invalid") >= 0) {
-        utcDT = pDtStr;
-      }
-    }
+    let utcDT = Output._formatDateTime(dateObj, pDtStr, pTimeOnly, dateTimeRepresentation);
     utcDT = utcDT.replace(/ *UTC$/, ""); // NOSONAR S8786
 
-    let localDT;
-    if (pTimeOnly || dateTimeRepresentation === "utc-localtime") {
-      localDT = dateObj.toLocaleTimeString(undefined, {"timeZoneName": "short"});
-      if (localDT.search("Invalid") >= 0) {
-        localDT = dateObj.toString().replace(/ *[(][^)]*[)]$/, ""); // NOSONAR S8786
-      }
-      if (localDT.search("Invalid") >= 0) {
-        localDT = pDtStr.replace(/^[-0-9]*T/, "").replace(/^1999, Sep 9 /, "");
-      }
-    } else {
-      localDT = dateObj.toLocaleString(undefined, {"timeZoneName": "short"});
-      if (localDT.search("Invalid") >= 0) {
-        localDT = dateObj.toString().replace(/ *[(][^)]*[)]$/, ""); // NOSONAR S8786
-      }
-      if (localDT.search("Invalid") >= 0) {
-        localDT = pDtStr;
-      }
-    }
+    let localDT = Output._formatLocalDateTime(dateObj, pDtStr, pTimeOnly, dateTimeRepresentation);
     const localTZ = localDT.replace(/^.* /, "");
     localDT = localDT.replace(/ [^ ]*$/, "");
 
@@ -277,34 +298,17 @@ export class Output {
     }
 
     // put the milliseconds in the proper location
-    const utcDTms = utcDT.replace(/( [a-zA-Z.]*)?( [-A-Z0-9]*|Z)?$/, fractionSecondsPart + "$&");
-    const localDTms = localDT.replace(/( [a-zA-Z.]*)?( [-A-Z0-9]*|Z)?$/, fractionSecondsPart + "$&");
+    const utcDTms = utcDT.replace(/( [a-zA-Z.]*)?( [-A-Z0-9]*|Z)?$/, fractionData.formatted + "$&");
+    const localDTms = localDT.replace(/( [a-zA-Z.]*)?( [-A-Z0-9]*|Z)?$/, fractionData.formatted + "$&");
 
-    let ret;
-    switch (dateTimeRepresentation) {
-    case "utc":
-      ret = utcDTms;
-      break;
-    case "local":
-      ret = localDTms + " " + localTZ;
-      break;
-    case "utc-localtime":
-      ret = utcDTms + " (" + localDT + " " + localTZ + ")";
-      break;
-    case "local-utctime":
-      ret = localDTms + " " + localTZ + " (" + utcDT + ")";
-      break;
-    default:
-      // unknown format, use traditional representation
-      ret = utcDTms;
-    }
+    const ret = Output._formatRepresentation(utcDTms, localDTms, localTZ, dateTimeRepresentation);
 
     if (pDateTimeField) {
       utcDT = dateObj.toLocaleString(undefined, {"timeZone": "UTC", "timeZoneName": "short"});
       // place the milliseconds after the seconds (before am/pm indicator and timezone)
-      utcDT = utcDT.replace(/( [a-zA-Z.]*)? [-A-Z0-9]*$/, originalFractionSecondsPart + "$&");
+      utcDT = utcDT.replace(/( [a-zA-Z.]*)? [-A-Z0-9]*$/, fractionData.formattedOriginal + "$&");
       localDT = dateObj.toLocaleString(undefined, {"timeZoneName": "short"});
-      localDT = localDT.replace(/( [a-zA-Z.]*)? [-A-Z0-9+]*$/, originalFractionSecondsPart + "$&");
+      localDT = localDT.replace(/( [a-zA-Z.]*)? [-A-Z0-9+]*$/, fractionData.formattedOriginal + "$&");
       pDateTimeField.innerText = ret;
       const txt = utcDT + "\n" + localDT;
       if (txt.search("Invalid") < 0) {
@@ -410,12 +414,52 @@ export class Output {
     return className;
   }
 
-  static setTaskToolTip (pSpan, pTask) {
+  static _shouldSkipTaskKey (pKey, pTask) {
+    const skippedKeys = {
+      "___key___": true,
+      "__id__": true,
+      "__jid__": true,
+      "__orchestration__": true,
+      "__run_num__": true,
+      "__sls__": true,
+      "_stamp": true,
+      "changes": true,
+      "comment": true,
+      "duration": true,
+      "fun": true,
+      "id": true,
+      "jid": true,
+      "name": true,
+      "pchanges": true,
+      "return": true,
+      "skip_watch": true,
+      "start_time": true,
+      "success": true,
+    };
 
-    if (typeof pTask !== "object") {
-      return;
+    if (skippedKeys[pKey]) {
+      return true;
     }
 
+    // skip trivial info: result = true or result = null
+    if (pKey === "result" && (pTask[pKey] === true || pTask[pKey] === null)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  static _addTaskPropertyTooltip (pTxt, pKey, pTask) {
+    pTxt += "\n" + pKey + " = ";
+    if (typeof pTask.changes === "object") {
+      pTxt += JSON.stringify(pTask[pKey]);
+    } else {
+      pTxt += pTask[pKey];
+    }
+    return pTxt;
+  }
+
+  static _buildTaskTooltipText (pTask) {
     let txt = "";
 
     if ("__sls__" in pTask && pTask.__sls__) {
@@ -442,45 +486,28 @@ export class Output {
       txt += "\nhidden";
     }
 
+    for (const key in pTask) {
+      if (!Output._shouldSkipTaskKey(key, pTask)) {
+        txt = Output._addTaskPropertyTooltip(txt, key, pTask);
+      }
+    }
+
+    return txt.trim();
+  }
+
+  static setTaskToolTip (pSpan, pTask) {
+
+    if (typeof pTask !== "object") {
+      return;
+    }
+
+    const txt = Output._buildTaskTooltipText(pTask);
+
     pSpan.className = "taskcircle";
     pSpan.classList.add(Output.getTaskClass(pTask));
     pSpan.innerText = Output.getTaskCharacter(pTask);
 
-    for (const key in pTask) {
-      /* eslint-disable curly */
-      if (key === "___key___") continue;
-      if (key === "__id__") continue;
-      if (key === "__jid__") continue;
-      if (key === "__orchestration__") continue;
-      if (key === "__run_num__") continue;
-      if (key === "__sls__") continue;
-      if (key === "_stamp") continue;
-      if (key === "changes") continue;
-      if (key === "comment") continue;
-      if (key === "duration") continue;
-      if (key === "fun") continue;
-      if (key === "id") continue;
-      if (key === "jid") continue;
-      if (key === "name") continue;
-      if (key === "pchanges") continue;
-      if (key === "return") continue;
-      if (key === "skip_watch") continue;
-      if (key === "start_time") continue;
-      if (key === "success") continue;
-      // skip trivial info: result = true
-      if (key === "result" && pTask[key] === true) continue;
-      // skip trivial info: result = null
-      if (key === "result" && pTask[key] === null) continue;
-      /* eslint-enable curly */
-      txt += "\n" + key + " = ";
-      if (typeof pTask.changes === "object") {
-        txt += JSON.stringify(pTask[key]);
-      } else {
-        txt += pTask[key];
-      }
-    }
-
-    Utils.addToolTip(pSpan, txt.trim());
+    Utils.addToolTip(pSpan, txt);
   }
 
   // add the status summary
