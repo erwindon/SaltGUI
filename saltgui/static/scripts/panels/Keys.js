@@ -237,6 +237,30 @@ export class KeysPanel extends Panel {
     super.updateFooter(txt, false);
   }
 
+  _getSelectedKeysWithStatus (...pStatuses) {
+    const selectedKeys = Utils.getStorageItem("session", "select_keys", "");
+    if (!selectedKeys) {
+      return "";
+    }
+
+    const keys = selectedKeys.split(",").filter(key => key);
+    const filteredKeys = [];
+
+    for (const key of keys) {
+      const tr = this.table.querySelector("#" + Utils.getIdFromMinionId(key));
+      if (!tr) {
+        continue;
+      }
+
+      const statusTd = tr.querySelector(".status");
+      if (statusTd && pStatuses.includes(statusTd.innerText)) {
+        filteredKeys.push(key);
+      }
+    }
+
+    return filteredKeys.join(",");
+  }
+
   _countKeyStatuses () {
     const cnt = {};
 
@@ -552,7 +576,8 @@ export class KeysPanel extends Panel {
       return null;
     }, () => {
       const cmdArr = ["wheel.key.accept"];
-      this.runCommand("", "*", cmdArr, ["select_keys"]);
+      const targetKeys = this._getSelectedKeysWithStatus("unaccepted");
+      this.runCommand("", targetKeys, cmdArr);
     });
   }
 
@@ -585,7 +610,8 @@ export class KeysPanel extends Panel {
       return "Accept selected rejected keys...";
     }, () => {
       const cmdArr = ["wheel.key.accept", "include_rejected=", true];
-      this.runCommand("", "*", cmdArr, ["select_keys"]);
+      const targetKeys = this._getSelectedKeysWithStatus("unaccepted", "rejected");
+      this.runCommand("", targetKeys, cmdArr);
     });
   }
 
@@ -618,7 +644,8 @@ export class KeysPanel extends Panel {
       return "Accept selected denied keys...";
     }, () => {
       const cmdArr = ["wheel.key.accept", "include_denied=", true];
-      this.runCommand("", "*", cmdArr, ["select_keys"]);
+      const targetKeys = this._getSelectedKeysWithStatus("unaccepted", "denied");
+      this.runCommand("", targetKeys, cmdArr);
     });
   }
 
@@ -651,7 +678,8 @@ export class KeysPanel extends Panel {
       return "Accept selected denied+rejected keys...";
     }, () => {
       const cmdArr = ["wheel.key.accept", "include_denied=", true, "include_rejected=", true];
-      this.runCommand("", "*", cmdArr, ["select_keys"]);
+      const targetKeys = this._getSelectedKeysWithStatus("unaccepted", "denied", "rejected");
+      this.runCommand("", targetKeys, cmdArr);
     });
   }
 
@@ -716,7 +744,8 @@ export class KeysPanel extends Panel {
       return null;
     }, () => {
       const cmdArr = ["wheel.key.reject"];
-      this.runCommand("", "*", cmdArr, ["select_keys"]);
+      const targetKeys = this._getSelectedKeysWithStatus("unaccepted");
+      this.runCommand("", targetKeys, cmdArr);
     });
   }
 
@@ -749,7 +778,8 @@ export class KeysPanel extends Panel {
       return "Reject selected accepted keys...";
     }, () => {
       const cmdArr = ["wheel.key.reject", "include_accepted=", true];
-      this.runCommand("", "*", cmdArr, ["select_keys"]);
+      const targetKeys = this._getSelectedKeysWithStatus("unaccepted", "accepted");
+      this.runCommand("", targetKeys, cmdArr);
     });
   }
 
@@ -782,7 +812,8 @@ export class KeysPanel extends Panel {
       return "Reject selected denied keys...";
     }, () => {
       const cmdArr = ["wheel.key.reject", "include_denied=", true];
-      this.runCommand("", "*", cmdArr, ["select_keys"]);
+      const targetKeys = this._getSelectedKeysWithStatus("unaccepted", "denied");
+      this.runCommand("", targetKeys, cmdArr);
     });
   }
 
@@ -815,7 +846,8 @@ export class KeysPanel extends Panel {
       return "Reject selected accepted+denied keys...";
     }, () => {
       const cmdArr = ["wheel.key.reject", "include_accepted=", true, "include_denied=", true];
-      this.runCommand("", "*", cmdArr, ["select_keys"]);
+      const targetKeys = this._getSelectedKeysWithStatus("unaccepted", "accepted", "denied");
+      this.runCommand("", targetKeys, cmdArr);
     });
   }
 
@@ -855,7 +887,8 @@ export class KeysPanel extends Panel {
       return null;
     }, () => {
       const cmdArr = ["wheel.key.delete"];
-      this.runCommand("", "*", cmdArr, ["select_keys"]);
+      const targetKeys = this._getSelectedKeysWithStatus("unaccepted", "accepted", "rejected", "denied");
+      this.runCommand("", targetKeys, cmdArr);
     });
   }
 
