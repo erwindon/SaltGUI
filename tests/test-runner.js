@@ -3,14 +3,13 @@
 
 import { spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { dirname, join } from 'path';
 import fs from 'fs';
-import path from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const projectRoot = path.join(__dirname, '..');
-const functionalDir = path.join(__dirname, 'functional');
-const mochaPath = path.join(projectRoot, 'node_modules', '.bin', 'mocha');
+const projectRoot = join(__dirname, '..');
+const functionalDir = join(__dirname, 'functional');
+const mochaPath = join(projectRoot, 'node_modules', '.bin', 'mocha');
 
 // Default test to run when no arguments provided
 const DEFAULT_TEST = 'login.js';
@@ -36,7 +35,7 @@ const showAvailableTests = () => {
   /* eslint-enable no-console */
   const maxLen = Math.max(...availableTests.map(fileName => fileName.replace('.js', '').length));
   availableTests.forEach(file => {
-    const describeName = getDescribeName(path.join(functionalDir, file));
+    const describeName = getDescribeName(join(functionalDir, file));
     const name = file.replace('.js', '').padEnd(maxLen);
     /* eslint-disable no-console */
     console.log(`  ${name}  "${describeName}"`);
@@ -91,7 +90,7 @@ if (testArgs.length > 0) {
 // Show available tests and info if running default
 if (testArgs.length === 0) {
   const defaultTest = DEFAULT_TEST.replace('.js', '');
-  const defaultTestDescription = getDescribeName(path.join(functionalDir, DEFAULT_TEST));
+  const defaultTestDescription = getDescribeName(join(functionalDir, DEFAULT_TEST));
   /* eslint-disable no-console */
   console.log(`ℹ️  Running default: ${defaultTest} "${defaultTestDescription}" only\n`);
   /* eslint-enable no-console */
@@ -100,7 +99,7 @@ if (testArgs.length === 0) {
 
 // Build grep pattern matching any of the selected describe blocks
 const describeNames = testFiles.map(file => {
-  const filePath = path.join(functionalDir, file);
+  const filePath = join(functionalDir, file);
   return getDescribeName(filePath);
 }).filter(Boolean);
 
