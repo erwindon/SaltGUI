@@ -38,6 +38,7 @@ export class BeaconsMinionPanel extends Panel {
 
   onShow () {
     this.nrBeacons = 0;
+    this.missedEvents = 0;
 
     const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
 
@@ -104,8 +105,14 @@ export class BeaconsMinionPanel extends Panel {
   }
 
   updateFooter () {
-    const txt = Utils.txtZeroOneMany(this.nrBeacons, "No beacons", "{0} beacon", "{0} beacons");
+    let txt = Utils.txtZeroOneMany(this.nrBeacons, "No beacons", "{0} beacon", "{0} beacons");
+    if (this.playOrPause === "pause" && this.missedEvents > 0) {
+      txt += ", " + Utils.txtZeroOneMany(this.missedEvents, "", "{0} missed event", "{0} missed events");
+    }
     super.updateFooter(txt);
+    if (this.playOrPause === "play") {
+      this.missedEvents = 0;
+    }
   }
 
   _handleLocalBeaconsList (pLocalBeaconsListData, pMinionId) {
@@ -294,10 +301,6 @@ export class BeaconsMinionPanel extends Panel {
   }
 
   handleSaltBeaconEvent (pTag, pData) {
-    if (this.playOrPause !== "play") {
-      return;
-    }
-
     const minionId = decodeURIComponent(Utils.getQueryParam("minionid"));
     const prefix = "salt/beacon/" + minionId + "/";
     if (!pTag.startsWith(prefix)) {
@@ -309,6 +312,12 @@ export class BeaconsMinionPanel extends Panel {
     const tr = document.getElementById("beacon-" + beaconName);
     if (tr === null) {
       // beacon was unknown when the screen was created
+      return;
+    }
+
+    if (this.playOrPause !== "play") {
+      this.missedEvents += 1;
+      this.updateFooter();
       return;
     }
 
