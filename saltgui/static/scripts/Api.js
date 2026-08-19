@@ -384,32 +384,8 @@ export class API {
           return null;
         }
         if (pResponse.status === 401 && pPage !== "/login") {
-          const loginResponseStr = Utils.getStorageItem("session", "login_response");
-          if (!loginResponseStr) {
-            this.logout().then(() => {
-              this.router.goTo("login", {"reason": "no-session"});
-              return true;
-            }, () => {
-              this.router.goTo("login", {"reason": "no-session"});
-              return false;
-            });
-          }
-
-          const loginResponse = JSON.parse(loginResponseStr);
-          // just in case...
-          if (loginResponse) {
-            const now = Date.now() / 1000;
-            const expireValue = loginResponse.expire;
-            if (now > expireValue) {
-              this.logout().then(() => {
-                this.router.goTo("login", {"reason": "session-expired"});
-                return true;
-              }, () => {
-                this.router.goTo("login", {"reason": "session-expired"});
-                return false;
-              });
-            }
-          }
+          this._handleUnauthorized();
+          return null;
         }
         if (pResponse.status === 404 && pPage.endsWith(".txt")) {
           // ok
@@ -417,6 +393,36 @@ export class API {
         }
         throw new HTTPError(pResponse.status, pResponse.statusText);
       });
+  }
+
+  _handleUnauthorized () {
+    const loginResponseStr = Utils.getStorageItem("session", "login_response");
+    if (!loginResponseStr) {
+      this.logout().then(() => {
+        this.router.goTo("login", {"reason": "no-session"});
+        return true;
+      }, () => {
+        this.router.goTo("login", {"reason": "no-session"});
+        return false;
+      });
+      return;
+    }
+
+    const loginResponse = JSON.parse(loginResponseStr);
+    // just in case...
+    if (loginResponse) {
+      const now = Date.now() / 1000;
+      const expireValue = loginResponse.expire;
+      if (now > expireValue) {
+        this.logout().then(() => {
+          this.router.goTo("login", {"reason": "session-expired"});
+          return true;
+        }, () => {
+          this.router.goTo("login", {"reason": "session-expired"});
+          return false;
+        });
+      }
+    }
   }
 
   static getEvents () {
