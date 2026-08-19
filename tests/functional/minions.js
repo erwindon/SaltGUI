@@ -170,8 +170,8 @@ describe("Minions Page", function () {
 
     it("should have jobs-related content on minions page", async () => {
       const hasJobsContent = await page.evaluate(() => {
-        const page = document.querySelector("#page-minions");
-        return page !== null && page.textContent.toLowerCase().includes("job");
+        const pageElement = document.querySelector("#page-minions");
+        return pageElement?.textContent?.toLowerCase?.().includes?.("job");
       });
 
       assert.isTrue(hasJobsContent, "should have jobs-related content");
