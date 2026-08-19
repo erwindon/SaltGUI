@@ -178,16 +178,14 @@ export class DropDownMenu {
   }
 
   __showMenu () {
+    // Currently unused but present in preparation for branch zzz-batch
+    // This method is then called by CommandBox
     this.menuDropdown.style.display = "inline-block";
   }
 
   __hideMenu () {
+    // Currently unused but present in preparation for branch zzz-batch
+    // This method is then called by CommandBox
     this.menuDropdown.style.display = "none";
-  }
-
-  _clearMenu () {
-    while (this.menuDropdownContent.firstChild) {
-      this.menuDropdownContent.firstChild.remove();
-    }
   }
 }
