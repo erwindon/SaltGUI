@@ -37,29 +37,32 @@ export class ParseCommandLine {
 
     while (pToRun.length > 0) {
       let name = null;
-      let errorMsg = ParseCommandLine._extractNamedParameter(pToRun);
-      if (errorMsg instanceof Object) {
-        ({ name, pToRun } = errorMsg);
-      } else if (errorMsg) {
-        return errorMsg;
+      const paramResult = ParseCommandLine._extractNamedParameter(pToRun);
+      if (paramResult.error) {
+        return paramResult.error;
+      }
+      name = paramResult.name;
+      pToRun = paramResult.pToRun;
+
+      const placeholderResult = ParseCommandLine._checkPlaceholder(pToRun);
+      if (placeholderResult.error) {
+        return placeholderResult.error;
       }
 
-      errorMsg = ParseCommandLine._checkPlaceholder(pToRun);
-      if (errorMsg) {
-        return errorMsg;
-      }
-
-      const parseResult = ParseCommandLine._parseValue(pToRun);
-      if (typeof parseResult === "string") {
-        return parseResult;
+      const jsonType = ParseCommandLine._detectJsonType(pToRun);
+      const parseResult = jsonType.endChar && jsonType.objType
+        ? ParseCommandLine._parseJsonValue(pToRun, jsonType)
+        : ParseCommandLine._parseStringValue(pToRun);
+      if (parseResult.error) {
+        return parseResult.error;
       }
 
       const { value, remaining } = parseResult;
       pToRun = remaining;
 
-      errorMsg = ParseCommandLine._addArgumentToCollections(name, value, pArgsArray, pArgsObject);
-      if (errorMsg) {
-        return errorMsg;
+      const addResult = ParseCommandLine._addArgumentToCollections(name, value, pArgsArray, pArgsObject);
+      if (addResult.error) {
+        return addResult.error;
       }
 
       // ignore the whitespace before the next part
@@ -84,32 +87,20 @@ export class ParseCommandLine {
       name = toRun.substring(0, firstEqualSign);
       toRun = toRun.substring(firstEqualSign + 1);
       if (toRun === "" || toRun[0] === " ") {
-        return "Must have value for named parameter '" + name + "'";
+        return { error: "Must have value for named parameter '" + name + "'" };
       }
     }
 
-    return { name, pToRun: toRun };
+    return { error: null, name, pToRun: toRun };
   }
 
   static _checkPlaceholder (pToRun) {
     const patPlaceHolder = /^<[a-z]+>/;
     if (patPlaceHolder.test(pToRun)) {
       const placeHolder = pToRun.replace(/>.*/, ">");
-      return "Must fill in all placeholders, e.g. " + placeHolder;
+      return { error: "Must fill in all placeholders, e.g. " + placeHolder };
     }
-    return null;
-  }
-
-  static _parseValue (pToRun) {
-    const jsonType = ParseCommandLine._detectJsonType(pToRun);
-    if (jsonType.endChar && jsonType.objType) {
-      const result = ParseCommandLine._parseJsonValue(pToRun, jsonType);
-      if (typeof result === "string") {
-        return result;
-      }
-      return result;
-    }
-    return ParseCommandLine._parseStringValue(pToRun);
+    return { error: null };
   }
 
   static _detectJsonType (pToRun) {
@@ -138,7 +129,7 @@ export class ParseCommandLine {
       let endCharPos = pToRun.indexOf(endChar, charPos);
       if (endCharPos < 0) {
         const extraInfo = ParseCommandLine._getJsonErrorInfo(objType);
-        return "No valid " + objType + " found" + extraInfo;
+        return { error: "No valid " + objType + " found" + extraInfo };
       }
 
       // parse what we have found so far
@@ -146,18 +137,18 @@ export class ParseCommandLine {
       // but that may not be enough, e.g. "{a:{}"
       const parseAttempt = ParseCommandLine._attemptJsonParse(pToRun, beginChar, endCharPos, endChar, objType);
       if (parseAttempt === null) {
-        // parsing failed, try again with more text
+        // JSON parsing failed, try again with more text
         charPos = endCharPos + 1;
         continue;
       }
 
-      if (typeof parseAttempt === "string") {
+      if (parseAttempt.isFatal) {
+        // valid JSON but followed by text - return error immediately
         return parseAttempt;
       }
 
       // successful parse
-      const { newToRun, value } = parseAttempt;
-      return { remaining: newToRun, value };
+      return parseAttempt;
     }
   }
 
@@ -188,12 +179,12 @@ export class ParseCommandLine {
     // the first part of the string is valid JSON
     let endCharPos = pEndCharPos + pEndChar.length;
     if (endCharPos < pToRun.length && pToRun[endCharPos] !== " ") {
-      return "Valid " + pObjType + ", but followed by text:" + pToRun.substring(endCharPos) + Character.HORIZONTAL_ELLIPSIS;
+      return { error: "Valid " + pObjType + ", but followed by text:" + pToRun.substring(endCharPos) + Character.HORIZONTAL_ELLIPSIS, isFatal: true };
     }
 
     // valid JSON and not followed by strange characters
     const newToRun = pToRun.substring(endCharPos);
-    return { newToRun, value };
+    return { error: null, remaining: newToRun, value };
   }
 
   static _parseStringValue (pToRun) {
@@ -209,9 +200,9 @@ export class ParseCommandLine {
 
     const conversionResult = ParseCommandLine._convertStringToValue(str);
     if (conversionResult.error) {
-      return conversionResult.error;
+      return { error: conversionResult.error };
     }
-    return { remaining: toRun, value: conversionResult.value };
+    return { error: null, remaining: toRun, value: conversionResult.value };
   }
 
   static _convertStringToValue (pStr) {
@@ -251,11 +242,11 @@ export class ParseCommandLine {
       pArgsArray.push(pValue);
     } else if (pName in pArgsObject) {
       // named parameter which already exists
-      return "Duplicate named variable '" + pName + "'";
+      return { error: "Duplicate named variable '" + pName + "'" };
     } else {
       // named parameter
       pArgsObject[pName] = pValue;
     }
-    return null;
+    return { error: null };
   }
 }
