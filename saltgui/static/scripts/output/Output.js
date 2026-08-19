@@ -663,135 +663,57 @@ export class Output {
     return false;
   }
 
-  // the orchestrator for the output
-  // determines what format should be used and uses that
-  static addResponseOutput (pOutputContainer, pMinionData, pResponse, pCommand, pOptions = {}) {
-    const pJobId = pOptions.jobId;
-    const pInitialStatus = pOptions.initialStatus;
-    const pHighlightMinionId = pOptions.highlightMinionId;
-    const pExtraInfo = pOptions.extraInfo;
-
-    // remove old content
-    pOutputContainer.innerText = "";
-
-    // reformat runner/wheel output into regular output
-    pResponse = Output._addVirtualMinion(pResponse, pCommand);
-
-    if (typeof pResponse === "string") {
-      // do not format a string as an object
-      pOutputContainer.innerText = pResponse;
+  static _addResponseSummary (pTopSummaryDiv, pCommand, pResponse, pMinionData, pInitialStatus) {
+    if (pCommand.startsWith("runners.") || pCommand.startsWith("wheel.") || Output._isAsyncOutput(pResponse)) {
       return;
     }
 
-    if (typeof pResponse !== "object" || Array.isArray(pResponse)) {
-      pOutputContainer.innerText = Output.formatObject(pResponse);
-      return;
+    const summaryJobsActiveSpan = Utils.createSpan("", pInitialStatus, "summary-jobs-active");
+    const summaryJobsListJobSpan = Utils.createSpan("", "", "summary-list-job");
+    const cntResponses = Object.keys(pResponse).length;
+
+    let txt = Utils.txtZeroOneMany(cntResponses, "", ", {0} response", ", {0} responses");
+
+    const summary = {};
+    for (const minionId in pResponse) {
+      const result = pResponse[minionId];
+      if (result === null || typeof result !== "object" || !("success" in result)) {
+        continue;
+      }
+      const key = (result.success ? "0-" : "1-") + result.retcode;
+      summary[key] = (summary[key] ?? 0) + 1;
     }
 
-    // it might be documentation
-    const commandCmd = pCommand.trim().replace(/ .*/, "");
-    const commandArg = pCommand.trim().replace(/^[a-z.]* */i, "");
-    const isDocumentationOutput = OutputDocumentation.isDocumentationOutput(pResponse, commandCmd, commandArg);
-    if (isDocumentationOutput) {
-      OutputDocumentation.reduceDocumentationOutput(pResponse, commandArg, commandArg);
-      OutputDocumentation.addDocumentationOutput(pOutputContainer, pResponse);
-      return;
+    for (const key of Object.keys(summary).sort(Utils.mySortFunction)) {
+      txt += ", " + (key.startsWith("0-") ?
+        Utils.txtZeroOneMany(summary[key], "", "{0} success", "{0} successes") :
+        Utils.txtZeroOneMany(summary[key], "", "{0} failure", "{0} failures"));
+      if (key !== "0-0" && key !== "1-1") {
+        txt += "(" + key.substring(2) + ")";
+      }
     }
 
-    const topSummaryDiv = Utils.createDiv("no-search");
-    const cntMinions = pMinionData.length;
+    const cntMissingResponses = pMinionData.filter(minionId => !(minionId in pResponse)).length;
+    const cntExtraResponses = Object.keys(pResponse).filter(minionId => !pMinionData.includes(minionId)).length;
 
-    const downloadObject = {};
-
-    if (!pCommand.startsWith("runners.") &&
-       !pCommand.startsWith("wheel.") &&
-       !Output._isAsyncOutput(pResponse)) {
-      // runners/wheel responses are not per minion
-      // Do not produce a #response line for async-start confirmation
-
-      // for the result of jobs.active
-      const summaryJobsActiveSpan = Utils.createSpan("", pInitialStatus, "summary-jobs-active");
-
-      // for the result of jobs.list_job
-      const summaryJobsListJobSpan = Utils.createSpan("", "", "summary-list-job");
-
-      const cntResponses = Object.keys(pResponse).length;
-
-      let txt = Utils.txtZeroOneMany(cntResponses,
-        "", ", {0} response", ", {0} responses");
-
-      const summary = {};
-      for (const minionId in pResponse) {
-        const result = pResponse[minionId];
-        // when full_return is not used, the result is simpler
-        if (result === null) {
-          continue;
-        }
-        if (typeof result !== "object") {
-          continue;
-        }
-        if (!("success" in result)) {
-          continue;
-        }
-        // use keys that can conveniently be sorted
-        const key = (result.success ? "0-" : "1-") + result.retcode;
-        if (summary[key] === undefined) {
-          summary[key] = 0;
-        }
-        summary[key] += 1;
-      }
-
-      const keys = Object.keys(summary).sort(Utils.mySortFunction);
-      for (const key of keys) {
-        txt += ", ";
-        if (key.startsWith("0-")) {
-          txt += Utils.txtZeroOneMany(summary[key],
-            "", "{0} success", "{0} successes");
-        } else {
-          // if (key.startsWith("1-"))
-          txt += Utils.txtZeroOneMany(summary[key],
-            "", "{0} failure", "{0} failures");
-        }
-        if (key !== "0-0" && key !== "1-1") {
-          // don't show the retcode for expected combinations
-          txt += "(" + key.substring(2) + ")";
-        }
-      }
-
-      let cntMissingResponses = 0;
-      for (const minionId of pMinionData) {
-        if (!(minionId in pResponse)) {
-          cntMissingResponses += 1;
-        }
-      }
-
-      let cntExtraResponses = 0;
-      for (const minionId in pResponse) {
-        if (!pMinionData.includes(minionId)) {
-          cntExtraResponses += 1;
-        }
-      }
-
-      if (cntMissingResponses > 0) {
-        txt += Utils.txtZeroOneMany(cntMissingResponses,
-          "", ", {0} no response", ", {0} no responses");
-      }
-      if (cntExtraResponses > 0 && cntExtraResponses !== cntResponses) {
-        txt += Utils.txtZeroOneMany(cntExtraResponses,
-          "", ", {0} unexpected response", ", {0} unexpected responses");
-      }
-
-      const cntTotal = cntResponses + cntMissingResponses;
-      if (cntTotal !== cntResponses && cntTotal !== cntMissingResponses && cntTotal !== cntExtraResponses) {
-        txt += ", " + cntTotal + " total";
-      }
-
-      topSummaryDiv.appendChild(summaryJobsActiveSpan);
-
-      summaryJobsListJobSpan.innerText = txt;
-      topSummaryDiv.appendChild(summaryJobsListJobSpan);
+    if (cntMissingResponses > 0) {
+      txt += Utils.txtZeroOneMany(cntMissingResponses, "", ", {0} no response", ", {0} no responses");
+    }
+    if (cntExtraResponses > 0 && cntExtraResponses !== cntResponses) {
+      txt += Utils.txtZeroOneMany(cntExtraResponses, "", ", {0} unexpected response", ", {0} unexpected responses");
     }
 
+    const cntTotal = cntResponses + cntMissingResponses;
+    if (cntTotal !== cntResponses && cntTotal !== cntMissingResponses && cntTotal !== cntExtraResponses) {
+      txt += ", " + cntTotal + " total";
+    }
+
+    pTopSummaryDiv.appendChild(summaryJobsActiveSpan);
+    summaryJobsListJobSpan.innerText = txt;
+    pTopSummaryDiv.appendChild(summaryJobsListJobSpan);
+  }
+
+  static _addExtraInfo (pOutputContainer, pExtraInfo) {
     if (pExtraInfo) {
       for (const str of pExtraInfo) {
         const div = Utils.createDiv("", str);
@@ -799,303 +721,253 @@ export class Output {
         pOutputContainer.appendChild(div);
       }
     }
+  }
 
+  static _addMasterTriangle (pTopSummaryDiv, pOutputContainer, pCntMinions) {
     const masterTriangle = Utils.createSpan();
-    // use cntMinions instead of cntResponses to be predictable
-    // hide details when there are many minions to show
-    if (cntMinions > 50) {
-      masterTriangle.innerText = Character.WHITE_RIGHT_POINTING_TRIANGLE;
-    } else {
-      masterTriangle.innerText = Character.WHITE_DOWN_POINTING_TRIANGLE;
-    }
+    masterTriangle.innerText = pCntMinions > 50 ?
+      Character.WHITE_RIGHT_POINTING_TRIANGLE :
+      Character.WHITE_DOWN_POINTING_TRIANGLE;
     masterTriangle.style.cursor = "pointer";
-    topSummaryDiv.appendChild(masterTriangle);
-
-    pOutputContainer.appendChild(topSummaryDiv);
+    pTopSummaryDiv.appendChild(masterTriangle);
+    pOutputContainer.appendChild(pTopSummaryDiv);
 
     masterTriangle.addEventListener("click", (pClickEvent) => {
-      if (masterTriangle.innerText === Character.WHITE_DOWN_POINTING_TRIANGLE) {
-        masterTriangle.innerText = Character.WHITE_RIGHT_POINTING_TRIANGLE;
-      } else {
-        masterTriangle.innerText = Character.WHITE_DOWN_POINTING_TRIANGLE;
-      }
+      masterTriangle.innerText = masterTriangle.innerText === Character.WHITE_DOWN_POINTING_TRIANGLE ?
+        Character.WHITE_RIGHT_POINTING_TRIANGLE :
+        Character.WHITE_DOWN_POINTING_TRIANGLE;
 
       for (const div of pOutputContainer.childNodes) {
-        // only click on items that are collapsible
         const childs = div.getElementsByClassName("triangle");
-        if (childs.length !== 1) {
+        if (childs.length !== 1 || childs[0] === masterTriangle) {
           continue;
         }
-        // do not collapse the "all" item again
-        const tr = childs[0];
-        if (tr === masterTriangle) {
+        if (childs[0].innerText === masterTriangle.innerText) {
           continue;
         }
-        // only click on items that are not already the same as "all"
-        if (tr.innerText === masterTriangle.innerText) {
-          continue;
-        }
-        // (un)collapse the minion
         const clickEvent = new MouseEvent("click", {});
-        tr.dispatchEvent(clickEvent);
+        childs[0].dispatchEvent(clickEvent);
       }
       pClickEvent.stopPropagation();
     });
 
-    let nrMultiLineBlocks = 0;
+    return masterTriangle;
+  }
 
-    // convert state.orchestrate output back to regular highstate
-    if (pResponse.RUNNER?.outputter === "highstate") {
-      pResponse = pResponse.RUNNER.data;
-      pMinionData = Object.keys(pResponse);
+  static _prepareResponseData (pContext) {
+    if (pContext.pResponse.RUNNER?.outputter === "highstate") {
+      pContext.pResponse = pContext.pResponse.RUNNER.data;
+      pContext.pMinionData = Object.keys(pContext.pResponse);
     }
 
-    // sometimes the administration is wrong and there are
-    // responses from minions that are not in the list
-    // also show the results of these minions
-    const originalMinionData = [...pMinionData];
-    for (const key in pResponse) {
-      if (pMinionData.includes(key)) {
-        // as expected
-        continue;
+    const originalMinionData = [...pContext.pMinionData];
+    for (const key in pContext.pResponse) {
+      if (!pContext.pMinionData.includes(key)) {
+        pContext.pMinionData.push(key);
       }
-      pMinionData.push(key);
+    }
+    pContext.originalMinionData = originalMinionData;
+
+    let jid;
+    if (Object.values(pContext.pResponse)?.[0]?.jid) {
+      jid = Object.values(pContext.pResponse)[0].jid;
+    } else if (pContext.pResponse.RUNNER?.data?.jid) {
+      pContext.pResponse.RUNNER = pContext.pResponse.RUNNER.data.return;
+    } else if (pContext.pResponse.WHEEL?.data?.jid) {
+      pContext.pResponse.WHEEL = pContext.pResponse.WHEEL.data.return;
     }
 
-    // simplify the output and extract the jid
-    let jid;
-    if (Object.values(pResponse) && Object.values(pResponse)[0]) {
-      // start with runner output
-      jid = Object.values(pResponse)[0].jid;
-      // reducing the response is integrated below
-    } else if (!jid && pResponse.RUNNER && pResponse.RUNNER.data && pResponse.RUNNER.data.jid) {
-      // try the runner output; unfortunatelly the job is not retyrievable later
-      // jid = pResponse.RUNNER.data.jid;
-      pResponse.RUNNER = pResponse.RUNNER.data.return;
-    } else if (!jid && pResponse.WHEEL && pResponse.WHEEL.data && pResponse.WHEEL.data.jid) {
-      // try the wheel output; unfortunatelly the job is not retyrievable later
-      // jid = pResponse.WHEEL.data.jid;
-      pResponse.WHEEL = pResponse.WHEEL.data.return;
-    }
     if (jid) {
-      Output._addJID(topSummaryDiv, jid);
+      Output._addJID(pContext.topSummaryDiv, jid);
       const downloadLabel = Utils.createSpan("", "view as job:");
       downloadLabel.style = "float:right; margin-left: 20px";
-      topSummaryDiv.appendChild(downloadLabel);
+      pContext.topSummaryDiv.appendChild(downloadLabel);
     }
 
-    // in reverse order
-    Output._addDownload(topSummaryDiv, pJobId, downloadObject,
+    Output._addDownload(pContext.topSummaryDiv, pContext.pJobId, pContext.downloadObject,
       JSON.stringify, "RAW-JSON", "application/json", "raw.json");
-    Output._addDownload(topSummaryDiv, pJobId, downloadObject,
+    Output._addDownload(pContext.topSummaryDiv, pContext.pJobId, pContext.downloadObject,
       OutputYaml.formatYAML, "YAML", "text/vnd.yaml", "yaml");
-    Output._addDownload(topSummaryDiv, pJobId, downloadObject,
+    Output._addDownload(pContext.topSummaryDiv, pContext.pJobId, pContext.downloadObject,
       OutputNested.formatNESTED, "NESTED", "text/plain", "nested.txt");
-    Output._addDownload(topSummaryDiv, pJobId, downloadObject,
+    Output._addDownload(pContext.topSummaryDiv, pContext.pJobId, pContext.downloadObject,
       OutputJson.formatJSON, "JSON", "application/json", "json");
 
     const downloadLabel = Utils.createSpan("no-print", "download as:");
     downloadLabel.style = "float:right";
-    topSummaryDiv.appendChild(downloadLabel);
+    pContext.topSummaryDiv.appendChild(downloadLabel);
 
-    if (Output._hasStartTimeField(pResponse)) {
+    if (Output._hasStartTimeField(pContext.pResponse)) {
       const span = Utils.createDiv("", "\n" + Character.CIRCLED_INFORMATION_SOURCE + " start-time of tasks is using local-time from the minion");
-      topSummaryDiv.append(span);
+      pContext.topSummaryDiv.append(span);
     }
+  }
 
-    // for all other types we consider the output per minion
-    // this is more generic and it simplifies the handlers
-    for (const minionId of [...pMinionData].sort(Utils.mySortFunction)) {
-
-      let minionResponse = pResponse[minionId];
-
-      if (commandCmd === "runner.state.orchestrate" && minionResponse.return?.return?.data) {
-        minionResponse = minionResponse.return.return.data[minionId];
-      }
-      if (commandCmd === "runner.state.orchestrate_single" && typeof minionResponse.return?.return === "object") {
-        minionResponse = Object.values(minionResponse.return.return)[0];
-      }
-
-      const isSuccess = Output.getIsSuccess(minionResponse);
-      minionResponse = Output._getMinionResponse(pCommand, minionResponse);
-      // provide the same (simplified) object for download
-      downloadObject[minionId] = minionResponse;
-
-      const minionClass = Output.getMinionLabelClass(isSuccess, minionResponse);
-      let minionLabel = Output.getMinionIdHtml(minionId, minionClass);
-
-      let minionOutput = null;
-      let fndRepresentation = false;
-
-      // implicit !fndRepresentation&&
-      if (pResponse[minionId] === undefined) {
-        minionOutput = Output._getTextOutput("(no response)");
-        minionOutput.classList.add("noresponse");
-        fndRepresentation = true;
-      }
-
-      let minionMultiLine = false;
-
-      if (!fndRepresentation && typeof minionResponse === "string") {
-        minionOutput = Output._getTextOutput(minionResponse);
-        minionMultiLine = Utils.isMultiLineString(minionResponse);
-        fndRepresentation = true;
-      }
-
-      if (!fndRepresentation && typeof minionResponse !== "object") {
-        minionOutput = Output._getNormalOutput(minionResponse);
-        fndRepresentation = true;
-      }
-
-      // null is an object, but treat it separatelly
-      if (!fndRepresentation && minionResponse === null) {
-        minionOutput = Output._getNormalOutput(minionResponse);
-        fndRepresentation = true;
-      }
-
-      // an array is an object, but treat it separatelly
-      if (!fndRepresentation && Array.isArray(minionResponse)) {
-        minionOutput = Output._getNormalOutput(minionResponse);
-        minionMultiLine = minionOutput.tagName === "DIV";
-        fndRepresentation = true;
-      }
-
-      // it might be highstate output
-      const isHighStateOutput = OutputHighstate.isHighStateOutput(commandCmd, minionResponse);
-
-      const tasks = [];
-      if (isHighStateOutput) {
-        // The tasks are in an (unordered) object with uninteresting keys
-        // convert it to an array that is in execution order
-        // first put all the values in an array
-        Object.keys(minionResponse).forEach(
-          (taskKey) => {
-            if (typeof minionResponse[taskKey] === "object") {
-              minionResponse[taskKey].___key___ = taskKey;
-              tasks.push(minionResponse[taskKey]);
-            }
-          }
-        );
-        // then sort the array
-        tasks.sort((aa, bb) => aa.__run_num__ - bb.__run_num__);
-      }
-
-      let addHighStateSummaryFlag = false;
-      // enhanced highstate display
-      if (!fndRepresentation && isHighStateOutput && Output.isOutputFormatAllowed("saltguihighstate")) {
-        minionLabel = OutputHighstate.getHighStateLabel(minionId, minionResponse);
-        minionOutput = OutputHighstate.getHighStateOutput(minionId, tasks, pJobId);
-        minionMultiLine = true;
-        fndRepresentation = true;
-        addHighStateSummaryFlag = true;
-      }
-      // regular highstate display
-      if (!fndRepresentation && isHighStateOutput && Output.isOutputFormatAllowed("highstate")) {
-        minionLabel = OutputHighstate.getHighStateLabel(minionId, minionResponse);
-        minionOutput = OutputHighstate.getHighStateOutput(minionId, tasks, pJobId);
-        minionMultiLine = true;
-        fndRepresentation = true;
-        addHighStateSummaryFlag = true;
-      }
-
-      // show which output is unexpected
-      // unless all output is unexpected
-      // that happens when the minion-list is lost
-      // this happens with some storage backends
-      if (originalMinionData.length > 0 && !originalMinionData.includes(minionId)) {
-        minionLabel.innerText += " (unexpected)";
-      }
-
-      // nothing special? then it is normal output
-      if (!fndRepresentation) {
-        minionOutput = Output._getNormalOutput(minionResponse);
-        if (minionOutput.tagName === "DIV") {
-          minionMultiLine = true;
-        } else if (typeof minionOutput === "string" && Utils.isMultiLineString(minionOutput)) { // NOSONAR S1871
-          minionMultiLine = true;
-        }
-      }
-
-      if (minionMultiLine) {
+  static _processMinionResponses (pContext) {
+    let nrMultiLineBlocks = 0;
+    for (const minionId of [...pContext.pMinionData].sort(Utils.mySortFunction)) {
+      const result = Output._processSingleMinion(pContext, minionId);
+      if (result.minionMultiLine) {
         nrMultiLineBlocks += 1;
       }
+    }
+    return nrMultiLineBlocks;
+  }
 
-      // compose the actual output
-      const div = Utils.createDiv("", "", Utils.getIdFromMinionId(minionId));
+  static _processSingleMinion (pContext, pMinionId) {
+    let minionResponse = pContext.pResponse[pMinionId];
 
-      const minionRow = Utils.createSpan();
-
-      minionRow.append(minionLabel);
-
-      minionRow.appendChild(document.createTextNode(":"));
-
-      // multiple line, collapsible
-      let triangle = null;
-      if (minionMultiLine) {
-        if (minionId === pHighlightMinionId) {
-          // when we chose this minion
-          triangle = Utils.createSpan("triangle", Character.WHITE_DOWN_POINTING_TRIANGLE);
-        } else {
-          triangle = Utils.createSpan("triangle", masterTriangle.innerText);
-        }
-        triangle.style.cursor = "pointer";
-        triangle.addEventListener("click", (pClickEvent) => {
-          if (triangle.innerText === Character.WHITE_DOWN_POINTING_TRIANGLE) {
-            triangle.innerText = Character.WHITE_RIGHT_POINTING_TRIANGLE;
-            minionOutput.style.display = "none";
-          } else {
-            triangle.innerText = Character.WHITE_DOWN_POINTING_TRIANGLE;
-            minionOutput.style.display = "";
-          }
-          pClickEvent.stopPropagation();
-        });
-        minionRow.appendChild(triangle);
-
-        if (addHighStateSummaryFlag) {
-          Output._addHighStateSummary(minionRow, div, minionId, tasks);
-        }
-      }
-
-      div.append(minionRow);
-
-      if (minionMultiLine) {
-        div.appendChild(Utils.createBr());
-      }
-
-      // move back to the top of the host, that makes
-      // it easier to select the next highstate part
-      // or just collapse it and see the next minion
-      if (isHighStateOutput) {
-        minionOutput.addEventListener("click", (pClickEvent) => {
-          // show where we are scrolling back to
-          minionRow.classList.add("highlight-task");
-          window.setTimeout(() => {
-            minionRow.classList.remove("highlight-task");
-            if (!minionRow.classList.length) {
-              minionRow.removeAttribute("class");
-            }
-          }, 1000);
-
-          div.scrollIntoView({"behavior": "smooth", "block": "start"});
-          pClickEvent.stopPropagation();
-        });
-      }
-
-      minionOutput.classList.add(
-        "minion-output",
-        minionMultiLine ? "minion-output-multiple" : "minion-output-single");
-      // hide the per-minion details when we have so many minions
-      if (triangle?.innerText === Character.WHITE_RIGHT_POINTING_TRIANGLE) {
-        minionOutput.style.display = "none";
-      }
-      div.append(minionOutput);
-
-      pOutputContainer.append(div);
+    if (pContext.commandCmd === "runner.state.orchestrate" && minionResponse.return?.return?.data) {
+      minionResponse = minionResponse.return.return.data[pMinionId];
+    }
+    if (pContext.commandCmd === "runner.state.orchestrate_single" && typeof minionResponse.return?.return === "object") {
+      minionResponse = Object.values(minionResponse.return.return)[0];
     }
 
-    if (pHighlightMinionId) {
-      // scroll to this minion
-      const div = pOutputContainer.querySelector("#" + Utils.getIdFromMinionId(pHighlightMinionId));
+    const isSuccess = Output.getIsSuccess(minionResponse);
+    minionResponse = Output._getMinionResponse(pContext.pCommand, minionResponse);
+    pContext.downloadObject[pMinionId] = minionResponse;
+
+    let minionLabel = Output.getMinionIdHtml(pMinionId, Output.getMinionLabelClass(isSuccess, minionResponse));
+    let minionOutput = Output._determineMinionOutput(minionResponse, pContext.pResponse[pMinionId]);
+    let minionMultiLine = false;
+    const isHighStateOutput = OutputHighstate.isHighStateOutput(pContext.commandCmd, minionResponse);
+    const tasks = Output._extractTasks(isHighStateOutput, minionResponse);
+    const { addSummaryFlag, multiLine: isMultiLine, output: finalOutput } = Output._selectMinionOutput(
+      minionOutput, isHighStateOutput, pContext, pMinionId, tasks);
+
+    if (pContext.originalMinionData.length > 0 && !pContext.originalMinionData.includes(pMinionId)) {
+      minionLabel.innerText += " (unexpected)";
+    }
+
+    if (!finalOutput) {
+      minionOutput = Output._getNormalOutput(minionResponse);
+      minionMultiLine = typeof minionOutput === "string" && Utils.isMultiLineString(minionOutput) || minionOutput.tagName === "DIV";
+    } else {
+      minionOutput = finalOutput;
+      minionMultiLine = isMultiLine;
+    }
+
+    Output._renderMinionOutput(pContext, pMinionId, minionLabel, minionOutput, minionMultiLine, isHighStateOutput, tasks, addSummaryFlag);
+
+    return { minionMultiLine };
+  }
+
+  static _determineMinionOutput (pMinionResponse, pOriginalResponse) {
+    if (pOriginalResponse === undefined) {
+      const output = Output._getTextOutput("(no response)");
+      output.classList.add("noresponse");
+      return output;
+    }
+
+    if (typeof pMinionResponse === "string") {
+      return Output._getTextOutput(pMinionResponse);
+    }
+
+    if (typeof pMinionResponse !== "object" || pMinionResponse === null) {
+      return Output._getNormalOutput(pMinionResponse);
+    }
+
+    if (Array.isArray(pMinionResponse)) {
+      return Output._getNormalOutput(pMinionResponse);
+    }
+
+    return null;
+  }
+
+  static _extractTasks (pIsHighState, pMinionResponse) {
+    if (!pIsHighState) {
+      return [];
+    }
+
+    const tasks = [];
+    Object.keys(pMinionResponse).forEach((taskKey) => {
+      if (typeof pMinionResponse[taskKey] === "object") {
+        pMinionResponse[taskKey].___key___ = taskKey;
+        tasks.push(pMinionResponse[taskKey]);
+      }
+    });
+    tasks.sort((aa, bb) => aa.__run_num__ - bb.__run_num__);
+    return tasks;
+  }
+
+  static _selectMinionOutput (pInitialOutput, pIsHighState, pContext, pMinionId, pTasks) {
+    if (pInitialOutput) {
+      return { addSummaryFlag: false, multiLine: false, output: pInitialOutput };
+    }
+
+    if (!pIsHighState) {
+      return { addSummaryFlag: false, multiLine: false, output: null };
+    }
+
+    const usesSaltGuiFormat = Output.isOutputFormatAllowed("saltguihighstate");
+    const usesHighstateFormat = Output.isOutputFormatAllowed("highstate");
+
+    if (usesSaltGuiFormat || usesHighstateFormat) {
+      const minionLabel = OutputHighstate.getHighStateLabel(pMinionId, pContext.pResponse[pMinionId]);
+      const minionOutput = OutputHighstate.getHighStateOutput(pMinionId, pTasks, pContext.pJobId);
+      return { addSummaryFlag: true, minionLabel, multiLine: true, output: minionOutput };
+    }
+
+    return { addSummaryFlag: false, multiLine: false, output: null };
+  }
+
+  static _renderMinionOutput (pContext, pMinionId, pMinionLabel, pMinionOutput, pMinionMultiLine, pIsHighState, pTasks, pAddSummaryFlag) {
+    const div = Utils.createDiv("", "", Utils.getIdFromMinionId(pMinionId));
+    const minionRow = Utils.createSpan();
+    minionRow.append(pMinionLabel);
+    minionRow.appendChild(document.createTextNode(":"));
+
+    if (pMinionMultiLine) {
+      const triangle = pMinionId === pContext.pHighlightMinionId ?
+        Utils.createSpan("triangle", Character.WHITE_DOWN_POINTING_TRIANGLE) :
+        Utils.createSpan("triangle", pContext.masterTriangle.innerText);
+      triangle.style.cursor = "pointer";
+      triangle.addEventListener("click", (pClickEvent) => {
+        if (triangle.innerText === Character.WHITE_DOWN_POINTING_TRIANGLE) {
+          triangle.innerText = Character.WHITE_RIGHT_POINTING_TRIANGLE;
+          pMinionOutput.style.display = "none";
+        } else {
+          triangle.innerText = Character.WHITE_DOWN_POINTING_TRIANGLE;
+          pMinionOutput.style.display = "";
+        }
+        pClickEvent.stopPropagation();
+      });
+      minionRow.appendChild(triangle);
+
+      if (pAddSummaryFlag) {
+        Output._addHighStateSummary(minionRow, div, pMinionId, pTasks);
+      }
+    }
+
+    div.append(minionRow);
+    if (pMinionMultiLine) {
+      div.appendChild(Utils.createBr());
+    }
+
+    if (pIsHighState) {
+      pMinionOutput.addEventListener("click", (pClickEvent) => {
+        minionRow.classList.add("highlight-task");
+        window.setTimeout(() => {
+          minionRow.classList.remove("highlight-task");
+          if (!minionRow.classList.length) {
+            minionRow.removeAttribute("class");
+          }
+        }, 1000);
+
+        div.scrollIntoView({"behavior": "smooth", "block": "start"});
+        pClickEvent.stopPropagation();
+      });
+    }
+
+    pMinionOutput.classList.add("minion-output", pMinionMultiLine ? "minion-output-multiple" : "minion-output-single");
+    div.append(pMinionOutput);
+    pContext.pOutputContainer.append(div);
+  }
+
+  static _finalizeOutput (pContext, pNrMultiLineBlocks) {
+    if (pContext.pHighlightMinionId) {
+      const div = pContext.pOutputContainer.querySelector("#" + Utils.getIdFromMinionId(pContext.pHighlightMinionId));
       if (div) {
         const minionRow = div.querySelector("span");
         minionRow.classList.add("highlight-task");
@@ -1110,15 +982,86 @@ export class Output {
       }
     }
 
-    if (nrMultiLineBlocks <= 1) {
-      // No collapsible elements, hide the master
-      // Also hide with 1 collapsible element
-      masterTriangle.style.display = "none";
+    if (pNrMultiLineBlocks <= 1) {
+      pContext.masterTriangle.style.display = "none";
     }
 
-    // no minions in the result
-    if (!Object.keys(pMinionData).length) {
-      pOutputContainer.innerText = "No minions matched the target. No command was sent, no jid was assigned.\nERROR: No return received";
+    if (!Object.keys(pContext.pMinionData).length) {
+      pContext.pOutputContainer.innerText = "No minions matched the target. No command was sent, no jid was assigned.\nERROR: No return received";
     }
+  }
+
+  // the orchestrator for the output
+  // determines what format should be used and uses that
+  static _handleEarlyReturns (pOutputContainer, pResponse, pCommand) {
+    // reformat runner/wheel output into regular output
+    pResponse = Output._addVirtualMinion(pResponse, pCommand);
+
+    if (typeof pResponse === "string") {
+      // do not format a string as an object
+      pOutputContainer.innerText = pResponse;
+      return { handled: true, response: pResponse };
+    }
+
+    if (typeof pResponse !== "object" || Array.isArray(pResponse)) {
+      pOutputContainer.innerText = Output.formatObject(pResponse);
+      return { handled: true, response: pResponse };
+    }
+
+    // it might be documentation
+    const commandCmd = pCommand.trim().replace(/ .*/, "");
+    const commandArg = pCommand.trim().replace(/^[a-z.]* */i, "");
+    const isDocumentationOutput = OutputDocumentation.isDocumentationOutput(pResponse, commandCmd, commandArg);
+    if (isDocumentationOutput) {
+      OutputDocumentation.reduceDocumentationOutput(pResponse, commandArg, commandArg);
+      OutputDocumentation.addDocumentationOutput(pOutputContainer, pResponse);
+      return { handled: true, response: pResponse };
+    }
+
+    return { commandArg, commandCmd, handled: false, response: pResponse };
+  }
+
+  static addResponseOutput (pOutputContainer, pMinionData, pResponse, pCommand, pOptions = {}) {
+    const pJobId = pOptions.jobId;
+    const pInitialStatus = pOptions.initialStatus;
+    const pHighlightMinionId = pOptions.highlightMinionId;
+    const pExtraInfo = pOptions.extraInfo;
+
+    // remove old content
+    pOutputContainer.innerText = "";
+
+    const earlyReturn = Output._handleEarlyReturns(pOutputContainer, pResponse, pCommand);
+    if (earlyReturn.handled) {
+      return;
+    }
+
+    pResponse = earlyReturn.response;
+    const commandCmd = earlyReturn.commandCmd;
+
+    const topSummaryDiv = Utils.createDiv("no-search");
+    const cntMinions = pMinionData.length;
+    const downloadObject = {};
+
+    Output._addResponseSummary(topSummaryDiv, pCommand, pResponse, pMinionData, pInitialStatus);
+
+    Output._addExtraInfo(pOutputContainer, pExtraInfo);
+    const masterTriangle = Output._addMasterTriangle(topSummaryDiv, pOutputContainer, cntMinions);
+
+    const context = {
+      commandCmd,
+      downloadObject,
+      masterTriangle,
+      pCommand,
+      pHighlightMinionId,
+      pJobId,
+      pMinionData,
+      pOutputContainer,
+      pResponse,
+      topSummaryDiv,
+    };
+
+    Output._prepareResponseData(context);
+    const nrMultiLineBlocks = Output._processMinionResponses(context);
+    Output._finalizeOutput(context, nrMultiLineBlocks);
   }
 }
