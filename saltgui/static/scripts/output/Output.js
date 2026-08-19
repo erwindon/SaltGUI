@@ -885,7 +885,7 @@ export class Output {
       minionMultiLine = isMultiLine;
     }
 
-    Output._renderMinionOutput(pContext, pMinionId, minionLabel, minionOutput, minionMultiLine, isHighStateOutput, tasks, addSummaryFlag);
+    Output._renderMinionOutput(pContext, pMinionId, minionLabel, minionOutput, minionMultiLine, isHighStateOutput, { addSummaryFlag, tasks });
 
     return { minionMultiLine };
   }
@@ -949,7 +949,7 @@ export class Output {
     return { addSummaryFlag: false, multiLine: false, output: null };
   }
 
-  static _renderMinionOutput (pContext, pMinionId, pMinionLabel, pMinionOutput, pMinionMultiLine, pIsHighState, pTasks, pAddSummaryFlag) {
+  static _renderMinionOutput (pContext, pMinionId, pMinionLabel, pMinionOutput, pMinionMultiLine, pIsHighState, pTaskInfo) {
     const div = Utils.createDiv("", "", Utils.getIdFromMinionId(pMinionId));
     const minionRow = Utils.createSpan();
     minionRow.append(pMinionLabel);
@@ -972,8 +972,8 @@ export class Output {
       });
       minionRow.appendChild(triangle);
 
-      if (pAddSummaryFlag) {
-        Output._addHighStateSummary(minionRow, div, pMinionId, pTasks);
+      if (pTaskInfo.addSummaryFlag) {
+        Output._addHighStateSummary(minionRow, div, pMinionId, pTaskInfo.tasks);
       }
     }
 
