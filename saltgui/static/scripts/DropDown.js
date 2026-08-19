@@ -73,32 +73,56 @@ export class DropDownMenu {
   // menu items without verify-callback are always visible
   // separators are only visible when there are visible items before it, and after it
   verifyAll () {
-    let visibleCount = 0;
-    let itemsBeforeSeparator = 0;
-    let theSeparator = null;
     if (!this.menuDropdownContent) {
       this.menuDropdown.style.display = "none";
       return;
     }
+
+    // Phase 1: handle regular menu items
+    let visibleCount = 0;
     for (const chld of this.menuDropdownContent.children) {
-      if (chld.isSeparator) {
-        if (itemsBeforeSeparator > 0) {
-          theSeparator = chld;
-        }
-        itemsBeforeSeparator = 0;
-        chld.style.display = "none";
-      } else if (DropDownMenu._verifyMenuItem(chld, theSeparator)) {
-        theSeparator = null;
+      if (!chld.isSeparator && DropDownMenu._verifyMenuItem(chld)) {
         visibleCount += 1;
-        itemsBeforeSeparator += 1;
       }
     }
+
+    // Phase 2: handle separators
+    let visibleItemCount = 0;
+    let visibleItemsSinceLastShownSeparator = 0;
+    let haveShownAnySeparator = false;
+    for (let i = 0; i < this.menuDropdownContent.children.length; i++) {
+      const chld = this.menuDropdownContent.children[i];
+      if (chld.isSeparator) {
+        const itemsAfterSeparator = this._countVisibleItemsAfter(i + 1);
+        if (visibleItemCount > 0 && itemsAfterSeparator > 0 && (!haveShownAnySeparator || visibleItemsSinceLastShownSeparator > 0)) {
+          chld.style.removeProperty("display");
+          haveShownAnySeparator = true;
+          visibleItemsSinceLastShownSeparator = 0;
+        } else {
+          chld.style.display = "none";
+        }
+      } else if (chld.style.display !== "none") {
+        visibleItemCount += 1;
+        visibleItemsSinceLastShownSeparator += 1;
+      }
+    }
+
     // hide the menu when it has no visible menu-items
     const displayVisible = this.menuDropdown.tagName === "TD" ? "table-cell" : "inline-block";
     this.menuDropdown.style.display = visibleCount > 0 ? displayVisible : "none";
   }
 
-  static _verifyMenuItem (pChild, pPendingSeparator) {
+  _countVisibleItemsAfter (pStartIndex) {
+    for (let i = pStartIndex; i < this.menuDropdownContent.children.length; i++) {
+      const child = this.menuDropdownContent.children[i];
+      if (!child.isSeparator && child.style.display !== "none") {
+        return 1;
+      }
+    }
+    return 0;
+  }
+
+  static _verifyMenuItem (pChild) {
     const verifyCallBack = pChild.verifyCallBack;
     if (verifyCallBack) {
       const title = verifyCallBack(pChild);
@@ -109,10 +133,6 @@ export class DropDownMenu {
       pChild.innerText = DropDownMenu._sanitizeMenuItemTitle(title);
     }
     pChild.style.removeProperty("display");
-    if (pPendingSeparator) {
-      // first entry after a separator, so show it
-      pPendingSeparator.style.removeProperty("display");
-    }
     return true;
   }
 
