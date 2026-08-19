@@ -94,7 +94,7 @@ export class DropDownMenu {
       const chld = this.menuDropdownContent.children[i];
       if (chld.isSeparator) {
         const itemsAfterSeparator = this._countVisibleItemsAfter(i + 1);
-        if (visibleItemCount > 0 && itemsAfterSeparator > 0 && (!haveShownAnySeparator || visibleItemsSinceLastShownSeparator > 0)) {
+        if (DropDownMenu._shouldShowSeparator(visibleItemCount, itemsAfterSeparator, haveShownAnySeparator, visibleItemsSinceLastShownSeparator)) {
           chld.style.removeProperty("display");
           haveShownAnySeparator = true;
           visibleItemsSinceLastShownSeparator = 0;
@@ -110,6 +110,10 @@ export class DropDownMenu {
     // hide the menu when it has no visible menu-items
     const displayVisible = this.menuDropdown.tagName === "TD" ? "table-cell" : "inline-block";
     this.menuDropdown.style.display = visibleCount > 0 ? displayVisible : "none";
+  }
+
+  static _shouldShowSeparator (pVisibleItemCount, pItemsAfterSeparator, pHaveShownAnySeparator, pVisibleItemsSinceLastShownSeparator) {
+    return pVisibleItemCount > 0 && pItemsAfterSeparator > 0 && (!pHaveShownAnySeparator || pVisibleItemsSinceLastShownSeparator > 0);
   }
 
   _countVisibleItemsAfter (pStartIndex) {
