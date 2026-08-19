@@ -60,6 +60,7 @@ export class KeysPanel extends Panel {
     this.nrDeniedSelected = 0;
     this.nrRejected = 0;
     this.nrRejectedSelected = 0;
+    this.missedEvents = 0;
 
     this._showSyndicInfo(false);
     this._showClusterInfo();
@@ -234,7 +235,14 @@ export class KeysPanel extends Panel {
     let txt = KeysPanel._buildStatusText(cnt);
     txt = KeysPanel._cleanupText(txt);
     this._updateKeyCountProperties(cnt);
+    if (this.playOrPause === "pause" && this.missedEvents > 0) {
+      txt += ", " + Utils.txtZeroOneMany(this.missedEvents, "", "{0} missed event", "{0} missed events");
+    }
     super.updateFooter(txt, false);
+    if (this.playOrPause === "play" && this.missedEvents > 0) {
+      this.missedEvents = 0;
+      this.onShow();
+    }
   }
 
   _getSelectedKeysWithStatus (...pStatuses) {
@@ -893,21 +901,25 @@ export class KeysPanel extends Panel {
   }
 
   handleSaltAuthEvent (pData) {
-    if (this.playOrPause !== "play") {
-      return;
-    }
-
     const minionsDict = Utils.getStorageItemObject("session", "minions_txt");
     const tr = this.table.querySelector("tr#" + Utils.getIdFromMinionId(pData.id));
 
-    if (tr) {
-      this._handleExistingMinion(tr, pData, minionsDict);
-    } else if (this.table.querySelector("tr") === null) {
+    if (!tr && this.table.querySelector("tr") === null) {
       // only when the full list is already available
       // this prevents a random set of records from appearing
       // at the top of the table that happen to be received
       // before the full list was received
       return;
+    }
+
+    if (this.playOrPause !== "play") {
+      this.missedEvents += 1;
+      this.updateFooter();
+      return;
+    }
+
+    if (tr) {
+      this._handleExistingMinion(tr, pData, minionsDict);
     } else {
       this._handleNewMinion(pData, minionsDict);
     }
