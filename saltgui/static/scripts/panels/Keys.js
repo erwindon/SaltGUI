@@ -710,7 +710,7 @@ export class KeysPanel extends Panel {
 
   _addPanelMenuItemWheelKeyRejectSelectedUnaccepted () {
     this.panelMenu.addMenuItem(() => {
-      if (this.nrUnacceptedSelectd > 0) {
+      if (this.nrUnacceptedSelected > 0) {
         return "Reject selected unaccepted keys...";
       }
       return null;
