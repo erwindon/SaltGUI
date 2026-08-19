@@ -194,6 +194,7 @@ export class NodegroupsPanel extends Panel {
       this._addMenuItemStateApplyTestMinion(minionTr.dropdownmenu, pMinionId);
       this._addMenuItemShowGrains(minionTr.dropdownmenu, pMinionId);
       this._addMenuItemShowPillars(minionTr.dropdownmenu, pMinionId);
+      this._addMenuItemShowMine(minionTr.dropdownmenu, pMinionId);
       this._addMenuItemShowBeacons(minionTr.dropdownmenu, pMinionId);
       this._addMenuItemShowSchedules(minionTr.dropdownmenu, pMinionId);
     } else {
