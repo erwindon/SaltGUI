@@ -103,7 +103,13 @@ export class ParseCommandLine {
           // Try until the next closing character
           let endCharPos = pToRun.indexOf(endChar, charPos);
           if (endCharPos < 0) {
-            return "No valid " + objType + " found";
+            let extraInfo = "";
+            if (objType === "dictionary") {
+              extraInfo = ", a valid example is: {\"key\": value}";
+            } else if (objType === "array") {
+              extraInfo = ", a valid example is: [1, 2, 3]";
+            }
+            return "No valid " + objType + " found" + extraInfo;
           }
 
           // parse what we have found so far

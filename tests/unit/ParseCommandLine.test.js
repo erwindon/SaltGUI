@@ -46,7 +46,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       args = [];
       params = {};
       result = ParseCommandLine.parseCommandLine("{\"test\"", args, params);
-      assert.equal(result, "No valid dictionary found");
+      assert.isTrue(result.startsWith("No valid dictionary found,"));
 
       // remaining placeholder
       args = [];
@@ -108,7 +108,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       args = [];
       params = {};
       result = ParseCommandLine.parseCommandLine("{\"a}\":1", args, params);
-      assert.equal(result, "No valid dictionary found");
+      assert.isTrue(result.startsWith("No valid dictionary found,"));
 
       // a regular dictionary with } in its name
       // test that the parser is not confused
@@ -138,7 +138,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       args = [];
       params = {};
       result = ParseCommandLine.parseCommandLine("[1,2", args, params);
-      assert.equal(result, "No valid array found");
+      assert.isTrue(result.startsWith("No valid array found,"));
 
       // STRINGS WITHOUT QUOTES
 
