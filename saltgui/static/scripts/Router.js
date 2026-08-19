@@ -456,22 +456,16 @@ export class Router {
       // prevents being detected as "forward navigation"
       // stay on the page, but parameters may have been updated
       window.history.replaceState({}, undefined, pUrl);
-      return false;
-    }
-    if (pForward === 0) {
+    } else if (pForward === 0) {
       return Router._handleForwardNavigation(pRoute, pUrl, pInNewWindow, pParentHash, pParentQuery);
-    }
-    if (pForward === 1) {
+    } else if (pForward === 1) {
       // close-icon on a panel
       // do not save parent details
       // these were already registered on the way forward
       window.history.pushState({}, undefined, pUrl);
-      return false;
-    }
-    if (pForward === 2) {
+    } else if (pForward === 2) {
       // backward navigation from browser
       // do nothing extra
-      return false;
     }
     return false;
   }
