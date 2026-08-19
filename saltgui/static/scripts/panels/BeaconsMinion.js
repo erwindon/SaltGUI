@@ -105,7 +105,7 @@ export class BeaconsMinionPanel extends Panel {
 
   updateFooter () {
     const txt = Utils.txtZeroOneMany(this.nrBeacons, "No beacons", "{0} beacon", "{0} beacons");
-    this.setMsgTxt(txt);
+    super.updateFooter(txt);
   }
 
   _handleLocalBeaconsList (pLocalBeaconsListData, pMinionId) {
