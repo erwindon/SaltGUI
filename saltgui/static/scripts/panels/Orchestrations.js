@@ -1,7 +1,7 @@
 /* global */
 
 import {Character} from "../Character.js";
-import {DropDownMenu} from "../DropDown.js";
+import {DropDownMenuCmd} from "../DropDownCmd.js";
 import {Output} from "../output/Output.js";
 import {Panel} from "./Panel.js";
 import {Utils} from "../Utils.js";
@@ -119,7 +119,7 @@ export class OrchestrationsPanel extends Panel {
   _addOrchestrationHeaderRow (pOrchestrationName) {
     const tr0 = Utils.createTr();
 
-    const menu = new DropDownMenu(tr0, "smaller");
+    const menu = new DropDownMenuCmd(tr0, "smaller");
     this._addMenuItemApplyOrchestration(menu, pOrchestrationName);
     this._addMenuItemApplyOrchestrationTest(menu, pOrchestrationName);
 
@@ -145,7 +145,7 @@ export class OrchestrationsPanel extends Panel {
       const tr1 = Utils.createTr();
 
       // menu per item
-      const smenu = new DropDownMenu(tr1, "smaller");
+      const smenu = new DropDownMenuCmd(tr1, "smaller");
       this._addMenuItemApplyOrchestrationStep(smenu, step);
       this._addMenuItemApplyOrchestrationStepTest(smenu, step);
 
@@ -221,14 +221,14 @@ export class OrchestrationsPanel extends Panel {
   }
 
   _addMenuItemApplyOrchestration (pMenu, pOrchestrationName) {
-    pMenu.addMenuItem("Apply orchestration...", () => {
+    pMenu.addMenuItemCmd("Apply orchestration...", () => {
       const cmdArr = ["runners.state.orchestrate", pOrchestrationName];
       this.runCommand("", "", cmdArr);
     });
   }
 
   _addMenuItemApplyOrchestrationTest (pMenu, pOrchestrationName) {
-    pMenu.addMenuItem("Test orchestration...", () => {
+    pMenu.addMenuItemCmd("Test orchestration...", () => {
       const cmdArr = ["runners.state.orchestrate", "test=", true, pOrchestrationName];
       this.runCommand("", "", cmdArr);
     });
@@ -260,14 +260,14 @@ export class OrchestrationsPanel extends Panel {
 
   _addMenuItemApplyOrchestrationStep (pMenu, pSteps) {
     const cmdArr = OrchestrationsPanel._makeCmdArr(pSteps, false);
-    pMenu.addMenuItem("Apply orchestration step...", () => {
+    pMenu.addMenuItemCmd("Apply orchestration step...", () => {
       this.runCommand("", "", cmdArr);
     });
   }
 
   _addMenuItemApplyOrchestrationStepTest (pMenu, pSteps) {
     const cmdArr = OrchestrationsPanel._makeCmdArr(pSteps, true);
-    pMenu.addMenuItem("Test orchestration step...", () => {
+    pMenu.addMenuItemCmd("Test orchestration step...", () => {
       this.runCommand("", "", cmdArr);
     });
   }
