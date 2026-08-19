@@ -479,9 +479,11 @@ export class API {
       const tag = saltEvent.tag;
       const data = saltEvent.data;
 
-      // shorten the public key value when it is present
-      // it is long and boring (so not because it is a secret)
-      // the sizes are so that the first and last 8 characters of the public key are still shown
+      // shorten the public key value when it is present.
+      // because it is long and boring, not because it is a secret.
+      // the sizes are so that the first and last 8 characters of the public key are still shown.
+      // the character counts include "-----BEGIN PUBLIC KEY-----" at the beginning and
+      // include "-----END PUBLIC KEY-----" at the end.
       if (data.pub && data.pub.length > 75) {
         data.pub = data.pub.substring(0, 35) + Character.HORIZONTAL_ELLIPSIS + data.pub.substring(data.pub.length - 33);
       }
