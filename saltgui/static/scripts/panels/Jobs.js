@@ -262,7 +262,7 @@ export class JobsPanel extends Panel {
     }
     txt += Utils.txtZeroOneMany(this.numberOfJobsPresent,
       "", ", {0} job present", ", {0} jobs present");
-    this.setMsgTxt(txt);
+    super.updateFooter(txt);
   }
 
   static jobsToArray (jobs) {
