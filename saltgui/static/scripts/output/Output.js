@@ -694,16 +694,8 @@ export class Output {
     return false;
   }
 
-  static _addResponseSummary (pTopSummaryDiv, pCommand, pResponse, pMinionData, pInitialStatus) {
-    if (pCommand.startsWith("runners.") || pCommand.startsWith("wheel.") || Output._isAsyncOutput(pResponse)) {
-      return;
-    }
-
-    const summaryJobsActiveSpan = Utils.createSpan("", pInitialStatus, "summary-jobs-active");
-    const summaryJobsListJobSpan = Utils.createSpan("", "", "summary-list-job");
-    const cntResponses = Object.keys(pResponse).length;
-
-    let txt = Utils.txtZeroOneMany(cntResponses, "", ", {0} response", ", {0} responses");
+  static _buildSummaryText (pResponse, pMinionData, pCntResponses) {
+    let txt = Utils.txtZeroOneMany(pCntResponses, "", ", {0} response", ", {0} responses");
 
     const summary = {};
     for (const minionId in pResponse) {
@@ -730,14 +722,28 @@ export class Output {
     if (cntMissingResponses > 0) {
       txt += Utils.txtZeroOneMany(cntMissingResponses, "", ", {0} no response", ", {0} no responses");
     }
-    if (cntExtraResponses > 0 && cntExtraResponses !== cntResponses) {
+    if (cntExtraResponses > 0 && cntExtraResponses !== pCntResponses) {
       txt += Utils.txtZeroOneMany(cntExtraResponses, "", ", {0} unexpected response", ", {0} unexpected responses");
     }
 
-    const cntTotal = cntResponses + cntMissingResponses;
-    if (cntTotal !== cntResponses && cntTotal !== cntMissingResponses && cntTotal !== cntExtraResponses) {
+    const cntTotal = pCntResponses + cntMissingResponses;
+    if (cntTotal !== pCntResponses && cntTotal !== cntMissingResponses && cntTotal !== cntExtraResponses) {
       txt += ", " + cntTotal + " total";
     }
+
+    return txt;
+  }
+
+  static _addResponseSummary (pTopSummaryDiv, pCommand, pResponse, pMinionData, pInitialStatus) {
+    if (pCommand.startsWith("runners.") || pCommand.startsWith("wheel.") || Output._isAsyncOutput(pResponse)) {
+      return;
+    }
+
+    const summaryJobsActiveSpan = Utils.createSpan("", pInitialStatus, "summary-jobs-active");
+    const summaryJobsListJobSpan = Utils.createSpan("", "", "summary-list-job");
+    const cntResponses = Object.keys(pResponse).length;
+
+    const txt = Output._buildSummaryText(pResponse, pMinionData, cntResponses);
 
     pTopSummaryDiv.appendChild(summaryJobsActiveSpan);
     summaryJobsListJobSpan.innerText = txt;
