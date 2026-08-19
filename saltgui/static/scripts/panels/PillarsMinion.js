@@ -97,8 +97,8 @@ export class PillarsMinionPanel extends Panel {
       // initially use the hidden view
       pillarValueTd.appendChild(pillarHiddenDiv);
 
-      const pillarValueShown = Output.formatObject(pillars[pillarName]);
-      const pillarShownDiv = Utils.createDiv("pillar-shown", pillarValueShown);
+      const pillarShownDiv = Utils.createDiv("pillar-shown");
+      Output.setHighlightObject(pillarShownDiv, pillars[pillarName]);
       // initially hide the normal view
       pillarShownDiv.style.display = "none";
       Utils.addToolTip(pillarShownDiv, "Click to hide");
