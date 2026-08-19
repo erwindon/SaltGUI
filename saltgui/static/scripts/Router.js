@@ -357,26 +357,8 @@ export class Router {
     // close the command-box when it is stil open
     CommandBox.hideManualRun();
 
-    if (pHash !== "login" && Utils.getStorageItem("session", "login_response") === null) {
-      // the fact that we don't have a session will be caught later
-      // but this was shows less error messages on the console
-      // but do not destroy the reason when login is already the goal
-
-      // keep the old query parameters, and save the new location
-      pQuery["reason"] = "no-session";
-      pQuery["page"] = pHash;
-      pHash = "login";
-    }
-
-    const pages = Router.getPagesList();
-    if (!pHash) {
-      // go to the concrete default page
-      if (pages.length) {
-        pHash = pages[0];
-      } else {
-        pHash = "minions";
-      }
-    }
+    pHash = Router._resolveLoginRedirect(pHash, pQuery);
+    pHash = Router._resolveDefaultHash(pHash);
 
     // save the details from the parent
     const parentHash = document.location.hash.replace(/^#/, "");
@@ -398,44 +380,9 @@ export class Router {
       }
       // push history state, so that the address bar holds the correct
       // deep-link; and so that we can use the back-button
-      let url = config.NAV_URL ? config.NAV_URL : "/";
-      let sep = "?";
-      for (const key in pQuery) {
-        const value = pQuery[key];
-        if (!value || value === "undefined") {
-          continue;
-        }
-        url += sep + key + "=" + encodeURIComponent(value);
-        sep = "&";
-      }
-      if (inNewWindow) {
-        url += sep + "popup=true";
-      }
-      url += "#" + pHash;
-      if (parentHash === route.path) {
-        // page refresh
-        // prevents being detected as "forward navigation"
-        // stay on the page, but parameters may have been updated
-        window.history.replaceState({}, undefined, url);
-      } else if (pForward === 0) {
-        // forward navigation
-        if (inNewWindow) {
-          // in a new window
-          Router._cancelSelections();
-          window.open(url);
-          return;
-        }
-        window.history.pushState({}, undefined, url);
-        route.parentHash = parentHash;
-        route.parentQuery = parentQuery;
-      } else if (pForward === 1) {
-        // close-icon on a panel
-        // do not save parent details
-        // these were already registered on the way forward
-        window.history.pushState({}, undefined, url);
-      } else if (pForward === 2) {
-        // backward navigation from browser
-        // do nothing extra
+      const url = Router._buildNavigationUrl(pHash, pQuery, inNewWindow);
+      if (Router._handleNavigationState(route, url, pForward, inNewWindow, parentHash, parentQuery)) {
+        return;
       }
       Router._showPage(route);
       return;
@@ -448,6 +395,87 @@ export class Router {
       return;
     }
     this.goTo("");
+  }
+
+  static _resolveLoginRedirect (pHash, pQuery) {
+    if (pHash !== "login" && Utils.getStorageItem("session", "login_response") === null) {
+      // the fact that we don't have a session will be caught later
+      // but this was shows less error messages on the console
+      // but do not destroy the reason when login is already the goal
+
+      // keep the old query parameters, and save the new location
+      pQuery["reason"] = "no-session";
+      pQuery["page"] = pHash;
+      return "login";
+    }
+    return pHash;
+  }
+
+  static _resolveDefaultHash (pHash) {
+    if (pHash) {
+      return pHash;
+    }
+    // go to the concrete default page
+    const pages = Router.getPagesList();
+    return pages.length ? pages[0] : "minions";
+  }
+
+  static _buildNavigationUrl (pHash, pQuery, pInNewWindow) {
+    let url = config.NAV_URL ? config.NAV_URL : "/";
+    let sep = "?";
+    for (const key in pQuery) {
+      const value = pQuery[key];
+      if (!value || value === "undefined") {
+        continue;
+      }
+      url += sep + key + "=" + encodeURIComponent(value);
+      sep = "&";
+    }
+    if (pInNewWindow) {
+      url += sep + "popup=true";
+    }
+    url += "#" + pHash;
+    return url;
+  }
+
+  static _handleNavigationState (pRoute, pUrl, pForward, pInNewWindow, pParentHash, pParentQuery) {
+    if (pParentHash === pRoute.path) {
+      // page refresh
+      // prevents being detected as "forward navigation"
+      // stay on the page, but parameters may have been updated
+      window.history.replaceState({}, undefined, pUrl);
+      return false;
+    }
+    if (pForward === 0) {
+      return Router._handleForwardNavigation(pRoute, pUrl, pInNewWindow, pParentHash, pParentQuery);
+    }
+    if (pForward === 1) {
+      // close-icon on a panel
+      // do not save parent details
+      // these were already registered on the way forward
+      window.history.pushState({}, undefined, pUrl);
+      return false;
+    }
+    if (pForward === 2) {
+      // backward navigation from browser
+      // do nothing extra
+      return false;
+    }
+    return false;
+  }
+
+  static _handleForwardNavigation (pRoute, pUrl, pInNewWindow, pParentHash, pParentQuery) {
+    // forward navigation
+    if (pInNewWindow) {
+      // in a new window
+      Router._cancelSelections();
+      window.open(pUrl);
+      return true;
+    }
+    window.history.pushState({}, undefined, pUrl);
+    pRoute.parentHash = pParentHash;
+    pRoute.parentQuery = pParentQuery;
+    return false;
   }
 
   static _showPage (pPage) {
