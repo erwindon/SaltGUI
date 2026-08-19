@@ -376,36 +376,8 @@ export class CommandBox {
     button.disabled = true;
     output.innerText = "loading" + Character.HORIZONTAL_ELLIPSIS;
 
-    const readOnlyPanels = CommandBox._getReadOnlyPanels();
-    const screenModifyingCommands = CommandBox._getScreenModifyingCommands();
-    // test whether the command may have caused an update to the list
     const command = commandValue.split(" ")[0];
-    if (command in screenModifyingCommands) {
-      // update panel when it may have changed
-      for (const panel of Router.currentPage.panels) {
-        if (readOnlyPanels.includes(panel.key)) {
-          // nothing changed on this panel
-        } else if (screenModifyingCommands[command].includes(panel.key)) {
-          // the command may have changed a specific panel
-          panel.needsRefresh = true;
-        } else if (screenModifyingCommands[command].includes("*")) {
-          // the command may have changed any panel
-          panel.needsRefresh = true;
-        }
-      }
-    }
-    // update panels that show job-statusses
-    for (const panel of Router.currentPage.panels) {
-      if (panel.key !== "job" && panel.key !== "jobs") {
-        // panel does not show jobs (or a job)
-      } else if (command.startsWith("wheel.")) {
-        // wheel commands do not end up in the jobs list
-      } else if (command.startsWith("runners.")) {
-        // runners commands do not end up in the jobs list
-      } else {
-        panel.needsRefresh = true;
-      }
-    }
+    CommandBox._markPanelsForRefresh(command);
 
     func.then((ok_response) => {
       if (ok_response) {
@@ -419,6 +391,46 @@ export class CommandBox {
       CommandBox._showError(JSON.stringify(_error_response));
       return false;
     });
+  }
+
+  static _markPanelsForRefresh (pCommand) {
+    const readOnlyPanels = CommandBox._getReadOnlyPanels();
+    const screenModifyingCommands = CommandBox._getScreenModifyingCommands();
+    // test whether the command may have caused an update to the list
+    if (pCommand in screenModifyingCommands) {
+      CommandBox._markScreenModifyingPanels(pCommand, readOnlyPanels, screenModifyingCommands);
+    }
+    // update panels that show job-statusses
+    CommandBox._markJobPanels(pCommand);
+  }
+
+  static _markScreenModifyingPanels (pCommand, pReadOnlyPanels, pScreenModifyingCommands) {
+    // update panel when it may have changed
+    for (const panel of Router.currentPage.panels) {
+      if (pReadOnlyPanels.includes(panel.key)) {
+        // nothing changed on this panel
+      } else if (pScreenModifyingCommands[pCommand].includes(panel.key)) {
+        // the command may have changed a specific panel
+        panel.needsRefresh = true;
+      } else if (pScreenModifyingCommands[pCommand].includes("*")) {
+        // the command may have changed any panel
+        panel.needsRefresh = true;
+      }
+    }
+  }
+
+  static _markJobPanels (pCommand) {
+    for (const panel of Router.currentPage.panels) {
+      if (panel.key !== "job" && panel.key !== "jobs") {
+        // panel does not show jobs (or a job)
+      } else if (pCommand.startsWith("wheel.")) {
+        // wheel commands do not end up in the jobs list
+      } else if (pCommand.startsWith("runners.")) {
+        // runners commands do not end up in the jobs list
+      } else {
+        panel.needsRefresh = true;
+      }
+    }
   }
 
   static onRunReturn (pResponse, pCommand) {
