@@ -694,9 +694,7 @@ export class Output {
     return false;
   }
 
-  static _buildSummaryText (pResponse, pMinionData, pCntResponses) {
-    let txt = Utils.txtZeroOneMany(pCntResponses, "", ", {0} response", ", {0} responses");
-
+  static _buildSummaryStatistics (pResponse, pMinionData) {
     const summary = {};
     for (const minionId in pResponse) {
       const result = pResponse[minionId];
@@ -707,6 +705,7 @@ export class Output {
       summary[key] = (summary[key] ?? 0) + 1;
     }
 
+    let txt = "";
     for (const key of Object.keys(summary).sort(Utils.mySortFunction)) {
       txt += ", " + (key.startsWith("0-") ?
         Utils.txtZeroOneMany(summary[key], "", "{0} success", "{0} successes") :
@@ -716,8 +715,17 @@ export class Output {
       }
     }
 
-    const cntMissingResponses = pMinionData.filter(minionId => !(minionId in pResponse)).length;
-    const cntExtraResponses = Object.keys(pResponse).filter(minionId => !pMinionData.includes(minionId)).length;
+    return { extraResponses: Object.keys(pResponse).filter(minionId => !pMinionData.includes(minionId)).length, missingResponses: pMinionData.filter(minionId => !(minionId in pResponse)).length, summaryText: txt };
+  }
+
+  static _buildSummaryText (pResponse, pMinionData, pCntResponses) {
+    let txt = Utils.txtZeroOneMany(pCntResponses, "", ", {0} response", ", {0} responses");
+
+    const stats = Output._buildSummaryStatistics(pResponse, pMinionData);
+    txt += stats.summaryText;
+
+    const cntMissingResponses = stats.missingResponses;
+    const cntExtraResponses = stats.extraResponses;
 
     if (cntMissingResponses > 0) {
       txt += Utils.txtZeroOneMany(cntMissingResponses, "", ", {0} no response", ", {0} no responses");
