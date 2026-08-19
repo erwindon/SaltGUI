@@ -2,6 +2,10 @@ td.event-data {
   white-space: pre-wrap;
 }
 
+tr.missed-events td {
+  color: var(--text-light);
+}
+
 #page-events {
   width: 100%;
 }
