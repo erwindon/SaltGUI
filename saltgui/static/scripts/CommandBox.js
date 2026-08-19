@@ -682,24 +682,51 @@ export class CommandBox {
 
     const functionToRun = argsArray.shift();
 
-    if (typeof functionToRun !== "string") {
-      CommandBox._showError("First (unnamed) parameter is the function name, it must be a string, not a " + typeof functionToRun);
+    const validationError = CommandBox._validateFunctionParams(functionToRun, pTarget, pTargetType);
+    if (validationError) {
+      CommandBox._showError(validationError);
       return null;
     }
 
-    // prevent a common spelling error
-    if (functionToRun === "runner" || functionToRun.startsWith("runner.")) {
-      CommandBox._showError("'Runner' commands must be prefixed with 'runners.'");
+    if (functionToRun.startsWith("wheel.") && argsArray.length > 0) {
+      CommandBox._showError("Wheel commands can only take named parameters");
       return null;
+    }
+
+    const fullReturn = pCanUseFullReturn && Utils.getStorageItemBoolean("session", "full_return");
+
+    let params = CommandBox._buildCommandParams(functionToRun, pTarget, pTargetType, argsArray, argsObject, fullReturn);
+
+    const runType = RunType.getRunType();
+    if (!pisRunTypeNormalOnly && runType === "async") {
+      if (params.client !== "local") {
+        CommandBox._showError("Async is not supported for '" + functionToRun + "'");
+        return null;
+      }
+      params.client = "local_async";
+      // return will look like:
+      // { "jid": "20180718173942195461", "minions": [ ... ] }
+    }
+
+    return this.api.apiRequest("POST", "/", params);
+  }
+
+  static _validateFunctionParams (pFunctionToRun, pTarget, pTargetType) {
+    if (typeof pFunctionToRun !== "string") {
+      return "First (unnamed) parameter is the function name, it must be a string, not a " + typeof pFunctionToRun;
+    }
+
+    // prevent a common spelling error
+    if (pFunctionToRun === "runner" || pFunctionToRun.startsWith("runner.")) {
+      return "'Runner' commands must be prefixed with 'runners.'";
     }
 
     // RUNNERS commands do not have a target (MASTER is the target)
     // WHEEL commands also do not have a target
     // but we use the TARGET value to form the usually required MATCH parameter
     // therefore for WHEEL commands it is still required
-    if (pTarget === "" && functionToRun !== "runners" && !functionToRun.startsWith("runners.")) {
-      CommandBox._showError("'Target' field cannot be empty");
-      return null;
+    if (pTarget === "" && pFunctionToRun !== "runners" && !pFunctionToRun.startsWith("runners.")) {
+      return "'Target' field cannot be empty";
     }
 
     // SALT API returns a 500-InternalServerError when it hits an unknown group
@@ -707,65 +734,51 @@ export class CommandBox {
     if (pTargetType === "nodegroup") {
       const nodeGroups = Utils.getStorageItemObject("session", "nodegroups");
       if (!(pTarget in nodeGroups)) {
-        CommandBox._showError("Unknown nodegroup '" + pTarget + "'");
-        return null;
+        return "Unknown nodegroup '" + pTarget + "'";
       }
     }
 
-    const fullReturn = pCanUseFullReturn && Utils.getStorageItemBoolean("session", "full_return");
+    return null;
+  }
 
+  static _buildCommandParams (pFunctionToRun, pTarget, pTargetType, pArgsArray, pArgsObject, pFullReturn) {
     let params = {};
-    if (functionToRun.startsWith("runners.")) {
-      params = argsObject;
+
+    if (pFunctionToRun.startsWith("runners.")) {
+      params = pArgsObject;
       params.client = "runner";
-      params["full_return"] = fullReturn;
+      params["full_return"] = pFullReturn;
       // use only the part after "runners." (8 chars)
-      params.fun = functionToRun.substring(8);
-      if (argsArray.length > 0) {
-        params.arg = argsArray;
+      params.fun = pFunctionToRun.substring(8);
+      if (pArgsArray.length > 0) {
+        params.arg = pArgsArray;
       }
-    } else if (functionToRun.startsWith("wheel.")) {
+    } else if (pFunctionToRun.startsWith("wheel.")) {
       // wheel.key functions are treated slightly different
       // we re-use the "target" field to fill the parameter "match"
       // as used by the salt.wheel.key functions
-      params = argsObject;
+      params = pArgsObject;
       params.client = "wheel";
       // use only the part after "wheel." (6 chars)
-      params.fun = functionToRun.substring(6);
+      params.fun = pFunctionToRun.substring(6);
       params.match = pTarget;
-      if (argsArray.length > 0) {
-        CommandBox._showError("Wheel commands can only take named parameters");
-        return null;
-      }
     } else {
       params.client = "local";
-      params.fun = functionToRun;
+      params.fun = pFunctionToRun;
       params.tgt = pTarget;
-      params["full_return"] = fullReturn;
+      params["full_return"] = pFullReturn;
       if (pTargetType) {
         params["tgt_type"] = pTargetType;
       }
-      if (argsArray.length !== 0) {
-        params.arg = argsArray;
+      if (pArgsArray.length !== 0) {
+        params.arg = pArgsArray;
       }
-      if (Object.keys(argsObject).length > 0) {
-        params.kwarg = argsObject;
-      }
-    }
-
-    const runType = RunType.getRunType();
-    if (!pisRunTypeNormalOnly && runType === "async") {
-      if (params.client === "local" && runType === "async") {
-        params.client = "local_async";
-        // return will look like:
-        // { "jid": "20180718173942195461", "minions": [ ... ] }
-      } else {
-        CommandBox._showError("Async is not supported for '" + functionToRun + "'");
-        return null;
+      if (Object.keys(pArgsObject).length > 0) {
+        params.kwarg = pArgsObject;
       }
     }
 
-    return this.api.apiRequest("POST", "/", params);
+    return params;
   }
 
   static _createNewMinionRow (pMinionId) {
