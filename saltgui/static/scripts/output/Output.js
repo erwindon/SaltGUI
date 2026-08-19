@@ -629,6 +629,16 @@ export class Output {
     pParentDiv.appendChild(downloadA);
   }
 
+  static _checkMinionForStartTime (pMinionResponse) {
+    for (const key in pMinionResponse) {
+      const result = pMinionResponse[key];
+      if (result !== null && typeof result === "object" && !Array.isArray(result) && typeof result.start_time === "string") {
+        return true;
+      }
+    }
+    return false;
+  }
+
   static _hasStartTimeField (pResponse) {
     if (typeof pResponse !== "object" || Array.isArray(pResponse)) {
       // not even a valid response
@@ -649,14 +659,8 @@ export class Output {
         }
       }
 
-      for (const key in minionResponse) {
-        const result = minionResponse[key];
-        if (result === null || typeof result !== "object" || Array.isArray(result)) {
-          continue;
-        }
-        if (typeof result.start_time === "string") {
-          return true;
-        }
+      if (Output._checkMinionForStartTime(minionResponse)) {
+        return true;
       }
     }
 
