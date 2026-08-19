@@ -263,6 +263,18 @@ export class Router {
   }
 
   static _showMenuItem (pPages, pPage, pChildren = []) {
+    const visible = Router._shouldItemBeVisible(pPages, pPage);
+    // still show a menu item when a child is visible
+    const hasVisibleChild = Router._hasVisibleChild(pPages, pChildren);
+
+    // perform the hiding/showing
+    for (let nr = 1; nr <= 2; nr++) {
+      const item = document.getElementById("button-" + pPage.path + nr);
+      Router._updateMenuItemClass(item, visible, hasVisibleChild);
+    }
+  }
+
+  static _shouldItemBeVisible (pPages, pPage) {
     // assume the best
     let visible = true;
 
@@ -282,37 +294,37 @@ export class Router {
       visible = true;
     }
 
-    // still show a menu item when a child is visible
-    let hasVisibleChild = false;
+    return visible;
+  }
+
+  static _hasVisibleChild (pPages, pChildren) {
     for (const page of pChildren) {
       if (pPages.includes(page)) {
-        hasVisibleChild = true;
-        break;
+        return true;
       }
     }
+    return false;
+  }
 
-    // perform the hiding/showing
-    for (let nr = 1; nr <= 2; nr++) {
-      const item = document.getElementById("button-" + pPage.path + nr);
-      if (!visible && hasVisibleChild) {
-        item.classList.add("menu-item-dimmed");
-      } else {
-        item.classList.remove("menu-item-dimmed");
-      }
-      if (visible && item.dataset.hasFirstLetterShortcut) {
-        // show the shortcut indicator only when item is enabled
-        item.classList.add("menu-item-first-letter");
-      } else {
-        // hide the shortcut indicator when item is disabled or hidden
-        item.classList.remove("menu-item-first-letter");
-      }
-      if (visible || hasVisibleChild) {
-        // show the menu item
-        item.classList.remove("menu-item-hidden");
-      } else {
-        // hide the menu item
-        item.classList.add("menu-item-hidden");
-      }
+  static _updateMenuItemClass (pItem, pVisible, pHasVisibleChild) {
+    if (!pVisible && pHasVisibleChild) {
+      pItem.classList.add("menu-item-dimmed");
+    } else {
+      pItem.classList.remove("menu-item-dimmed");
+    }
+    if (pVisible && pItem.dataset.hasFirstLetterShortcut) {
+      // show the shortcut indicator only when item is enabled
+      pItem.classList.add("menu-item-first-letter");
+    } else {
+      // hide the shortcut indicator when item is disabled or hidden
+      pItem.classList.remove("menu-item-first-letter");
+    }
+    if (pVisible || pHasVisibleChild) {
+      // show the menu item
+      pItem.classList.remove("menu-item-hidden");
+    } else {
+      // hide the menu item
+      pItem.classList.add("menu-item-hidden");
     }
   }
 
