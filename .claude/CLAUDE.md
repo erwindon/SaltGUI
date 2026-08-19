@@ -41,3 +41,6 @@ In the GitHub repository the following quality controls are present. The last 2 
 ** pages-build-deployment - builds the public documentation (in GitHub Pages)
 ** CodeQL - for security problems
 ** Node.js CI - for static tests and unit tests
+
+* GIT
+Assistants may NEVER perform git commands that modify either the workspace or the remote repository.
