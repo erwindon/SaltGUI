@@ -1,4 +1,4 @@
-/* global window */
+/* global document setTimeout window */
 
 import {Character} from "../Character.js";
 import {DropDownMenu} from "../DropDown.js";
@@ -71,9 +71,13 @@ export class Issues {
     issueData.commands.push({command: pCommand, target: pTarget, title: pTitle});
   }
 
-  addIssueNav (pCatName, pIssueName, pPage, pArgs) {
+  addIssueNav (pCatName, pIssueName, pPage, pArgs, pLocationId = null) {
     const issueData = this.addIssue(pCatName, pIssueName);
-    issueData.navigations.push({args: pArgs, page: pPage});
+    const nav = {args: pArgs, page: pPage};
+    if (pLocationId) {
+      nav.locationId = pLocationId;
+    }
+    issueData.navigations.push(nav);
   }
 
   addIssueUrl (pCatName, pIssueName, pTitle, pUrl) {
@@ -118,6 +122,18 @@ export class Issues {
     }
   }
 
+  static _navigateAndOptionalScroll (pRouter, pNav, pClickEvent) {
+    pRouter.goTo(pNav.page, pNav.args, undefined, pClickEvent);
+    if (pNav.locationId) {
+      setTimeout(() => {
+        const elem = document.getElementById(pNav.locationId);
+        if (elem) {
+          elem.scrollIntoView({behavior: "smooth"});
+        }
+      }, 100);
+    }
+  }
+
   static _renderIssue (pPanel, pCatName, pIssueName, pIssueData) {
     const theTr = Utils.createTr();
 
@@ -158,7 +174,7 @@ export class Issues {
         title = "Go to " + nav.page + " page";
       }
       menu.addMenuItem(title, (pClickEvent) => {
-        theTr.panel.router.goTo(nav.page, nav.args, undefined, pClickEvent);
+        Issues._navigateAndOptionalScroll(theTr.panel.router, nav, pClickEvent);
       });
       hasClick = true;
     }
@@ -183,8 +199,7 @@ export class Issues {
             const cmd = pIssueData.commands[0];
             theTr.panel.runCommand("", cmd.target, cmd.command);
           } else if (pIssueData.navigations.length > 0) {
-            const nav = pIssueData.navigations[0];
-            theTr.panel.router.goTo(nav.page, nav.args);
+            Issues._navigateAndOptionalScroll(theTr.panel.router, pIssueData.navigations[0], pClickEvent);
           } else if (pIssueData.urls.length > 0) {
             window.open(pIssueData.urls[0].url, "_blank");
           }

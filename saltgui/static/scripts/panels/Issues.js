@@ -2,6 +2,7 @@
 
 import {BeaconsIssues} from "../issues/Beacons.js";
 import {CveIssues} from "../issues/CVEs.js";
+import {FullReturnIssues} from "../issues/FullReturn.js";
 import {JobsRunningIssues} from "../issues/JobsRunning.js";
 import {KeysIssues} from "../issues/Keys.js";
 import {NotConnectedIssues} from "../issues/NotConnected.js";
@@ -42,6 +43,7 @@ export class IssuesPanel extends Panel {
     this.notConnectedIssues = new NotConnectedIssues();
     this.lowStateIssues = new StateIssues();
     this.cveIssues = new CveIssues();
+    this.fullReturnIssues = new FullReturnIssues();
   }
 
   updateFooter () {
@@ -57,10 +59,11 @@ export class IssuesPanel extends Panel {
     const p5 = this.notConnectedIssues.onGetIssues(this);
     const p6 = this.lowStateIssues.onGetIssues(this);
     const p7 = this.cveIssues.onGetIssues(this);
+    const p8 = this.fullReturnIssues.onGetIssues(this);
 
     /* eslint-disable compat/compat */
     /* Promise.all is not supported in op_mini all, IE 11 */
-    const allPromise = Promise.all([p1, p2, p3, p4, p5, p6, p7]);
+    const allPromise = Promise.all([p1, p2, p3, p4, p5, p6, p7, p8]);
     /* eslint-enable compat/compat */
     allPromise.then(() => {
       // VOID
