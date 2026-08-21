@@ -15,7 +15,7 @@
     "eslint-plugin-compat": "^7.0.2",
     "mocha": "^11.8.0",
     "nyc": "^18.0.0",
-    "puppeteer": "^25.7.0",
+    "puppeteer": "^25.8.0",
     "stylelint": "^14.0.1",
     "stylelint-config-standard": "^29.0.0"
   },
