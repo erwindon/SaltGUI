@@ -362,9 +362,15 @@ export class API {
       options.body = JSON.stringify(pParams);
     }
 
+    // simple client-side throttle to avoid flooding the server with rapid requests
+    const now = Date.now();
+    API._requestTimestamps = (API._requestTimestamps || []).filter((pTs) => now - pTs < 1000);
+    const delay = API._requestTimestamps.length >= 20 ? 1000 - (now - API._requestTimestamps[0]) : 0;
+    API._requestTimestamps.push(now);
+
     /* eslint-disable compat/compat */
     /* fetch is not supported in op_mini all, IE 11 */
-    return window.fetch(url, options).
+    return new Promise((pResolve) => setTimeout(pResolve, Math.max(0, delay))).then(() => window.fetch(url, options)).
     /* eslint-enable compat/compat */
       then((pResponse) => {
         if (pResponse.ok && pPage.endsWith(".txt")) {
