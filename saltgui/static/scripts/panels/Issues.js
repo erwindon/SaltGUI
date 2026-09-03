@@ -36,6 +36,8 @@ export class IssuesPanel extends Panel {
     // the data in random order
     // this.setTableSortable("Description", "asc");
 
+    this.existingIssueKeys = new Set();
+
     this.keysIssues = new KeysIssues();
     this.jobsIssues = new JobsRunningIssues();
     this.beaconsIssues = new BeaconsIssues();
@@ -52,6 +54,8 @@ export class IssuesPanel extends Panel {
   }
 
   onShow () {
+    this.existingIssueKeys.clear();
+
     const p1 = this.keysIssues.onGetIssues(this);
     const p2 = this.jobsIssues.onGetIssues(this);
     const p3 = this.beaconsIssues.onGetIssues(this);

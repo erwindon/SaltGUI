@@ -118,7 +118,11 @@ export class Issues {
     }
 
     for (const [issueName, issueData] of categoryData) {
-      Issues._renderIssue(pPanel, pCatName, issueName, issueData);
+      const key = pCatName + "-" + issueName;
+      if (!pPanel.existingIssueKeys.has(key)) {
+        Issues._renderIssue(pPanel, pCatName, issueName, issueData);
+        pPanel.existingIssueKeys.add(key);
+      }
     }
   }
 
