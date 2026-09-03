@@ -70,7 +70,7 @@ export class IssuesPanel extends Panel {
     const allPromise = Promise.all([p1, p2, p3, p4, p5, p6, p7, p8]);
     /* eslint-enable compat/compat */
     allPromise.then(() => {
-      // VOID
+      this.setTableSortable("Description", "asc");
     }, (_error_Error) => {
       this.setMsgTxt("(error)");
       Utils.addToolTip(this.msgDiv, _error_Error);

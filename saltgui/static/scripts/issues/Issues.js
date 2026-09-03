@@ -102,13 +102,6 @@ export class Issues {
       "No issues", "{0} issue", "{0} issues");
     pPanel.updateFooter();
 
-    // any category still loading?
-    if (pPanel.msg2.childNodes.length > 0) {
-      // not yet
-      return;
-    }
-
-    pPanel.setTableSortable("Description", "asc");
   }
 
   _renderCategory (pPanel, pCatName) {
