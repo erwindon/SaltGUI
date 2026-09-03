@@ -167,6 +167,9 @@ h1 {
 .search-box {
   display: block;
   width: 100%;
+
+  /* prevent focus outline clipping on input field */
+  padding-right: 3px;
 }
 
 .search-menu-and-field {
