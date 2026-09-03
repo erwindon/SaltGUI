@@ -167,9 +167,20 @@ h1 {
 .search-box {
   display: block;
   width: 100%;
+  max-height: 150px;
+  opacity: 1;
+  overflow: hidden;
+  transition: max-height 0.6s ease, opacity 0.6s ease;
+  pointer-events: auto;
 
   /* prevent focus outline clipping on input field */
   padding-right: 3px;
+}
+
+.search-box.hidden {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .search-menu-and-field {

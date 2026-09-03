@@ -286,7 +286,7 @@ export class Utils {
   static makeSearchBox (pSearchButton, pTable, pFieldList = null) {
 
     const div = Utils.createDiv("search-box", "");
-    div.style.display = "none";
+    div.classList.add("hidden");
 
     const menuAndFieldDiv = Utils.createDiv("search-menu-and-field", "");
 
@@ -393,21 +393,29 @@ export class Utils {
     };
 
     pTable.parentElement.insertBefore(pSearchBlock, pTable);
-    if (pAction === "refresh" && pSearchBlock.style.display === "none") {
+    if (pAction === "refresh" && pSearchBlock.classList.contains("hidden")) {
       Utils._updateTableFilter(pTable, "", menuItems);
     } else if (pAction === "refresh") {
       Utils._updateTableFilter(pTable, input.value, menuItems);
     } else if (pAction === "hide") {
+      pSearchBlock.style.transition = "max-height 0.3s ease, opacity 0.3s ease";
+      void pSearchBlock.offsetHeight;
+      pSearchBlock.classList.add("hidden");
       Utils._updateTableFilter(pTable, "", menuItems);
-      pSearchBlock.style.display = "none";
-    } else if (pSearchBlock.style.display === "none") {
+    } else if (pSearchBlock.classList.contains("hidden")) {
+      pSearchBlock.style.transition = "max-height 0.6s ease, opacity 0.6s ease";
+      void pSearchBlock.offsetHeight;
+      pSearchBlock.classList.remove("hidden");
       Utils._updateTableFilter(pTable, input.value, menuItems);
-      pSearchBlock.style.display = "";
     } else { // NOSONAR S1871
+      pSearchBlock.style.transition = "max-height 0.3s ease, opacity 0.3s ease";
+      void pSearchBlock.offsetHeight;
+      pSearchBlock.classList.add("hidden");
       Utils._updateTableFilter(pTable, "", menuItems);
-      pSearchBlock.style.display = "none";
     }
-    input.focus();
+    if (!pSearchBlock.classList.contains("hidden")) {
+      input.focus();
+    }
   }
 
   static _updateTableFilter (pTable, pSearchText, pMenuItems) {
