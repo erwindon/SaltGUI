@@ -13,7 +13,7 @@
     "chai": "^6.2.2",
     "eslint": "^10.8.1",
     "eslint-plugin-compat": "^7.0.2",
-    "mocha": "^11.8.0",
+    "mocha": "^12.0.0",
     "nyc": "^18.0.0",
     "puppeteer": "^25.7.0",
     "stylelint": "^14.0.1",
