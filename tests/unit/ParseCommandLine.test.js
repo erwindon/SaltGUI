@@ -257,24 +257,26 @@ describe("Unittests for ParseCommandLine.js", () => {
         "9007199254740993"
       ];
       for (const nr of tooLargeIntegers) {
+        const label = "value " + nr;
         args = [];
         params = {};
         result = ParseCommandLine.parseCommandLine(nr, args, params);
-        assert.equal(result, "Integer argument is too large to be sent exactly", nr);
-        assert.equal(args.length, 0, nr);
+        assert.equal(result, "Integer argument is too large to be sent exactly", label);
+        assert.equal(args.length, 0, label);
       }
 
       // The largest exact integer is still accepted, and a real jobid is matched
       // as a string before the integer branch, so it round-trips unchanged.
       const exactValues = ["9007199254740991", "20180814033130818988"];
       for (const nr of exactValues) {
+        const label = "value " + nr;
         args = [];
         params = {};
         result = ParseCommandLine.parseCommandLine(nr, args, params);
-        assert.isNull(result, nr);
-        assert.equal(args.length, 1, nr);
-        assert.equal(String(args[0]), nr, nr);
-        assert.equal(Object.keys(params).length, 0, nr);
+        assert.isNull(result, label);
+        assert.equal(args.length, 1, label);
+        assert.equal(String(args[0]), nr, label);
+        assert.equal(Object.keys(params).length, 0, label);
       }
 
       // FLOAT
