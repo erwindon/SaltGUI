@@ -224,7 +224,16 @@ export class ParseCommandLine {
       // jobIds look like numbers but must be strings
       return { value: pStr };
     } else if (patInteger.test(pStr)) {
-      return { value: Number.parseInt(pStr, 10) };
+      const value = Number.parseInt(pStr, 10);
+      if (!Number.isSafeInteger(value)) {
+        // JS numbers are IEEE754 doubles, so an integer above 2**53-1 is rounded
+        // on the way in and salt would receive a different number than was typed.
+        // The salt command-line keeps the exact value (as an int, or as a string
+        // once it is long enough), so refusing is the only honest answer here.
+        // Job-ids are matched as strings before this point, see getPatJid().
+        return { error: "Integer argument is too large to be sent exactly" };
+      }
+      return { value };
     } else if (patFloat.test(pStr)) {
       const value = Number.parseFloat(pStr);
       if (!Number.isFinite(value)) {
