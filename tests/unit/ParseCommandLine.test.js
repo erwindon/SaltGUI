@@ -243,52 +243,39 @@ describe("Unittests for ParseCommandLine.js", () => {
       assert.equal(Object.keys(params).length, 0);
 
       // Integers beyond 2**53-1 cannot be sent exactly, so they are refused
-      // rather than silently rounded. These expectations compare against
-      // strings on purpose: written as numeric literals they would be rounded
-      // by the test itself and could not tell a correct value from a wrong one.
+      // rather than silently rounded. Expectations compare against strings on
+      // purpose: written as numeric literals they would be rounded by the test
+      // itself and could not tell a correct value from a wrong one.
+      const tooLargeIntegers = [
+        // almost a jobid, but one digit less
+        "2018082000341133831",
+        // almost a jobid, but one digit more
+        "201808200034113383170",
+        // jobid-shaped, just not a true date-time
+        "20182820003411338317",
+        // the first integer that is no longer exact
+        "9007199254740993"
+      ];
+      for (const nr of tooLargeIntegers) {
+        args = [];
+        params = {};
+        result = ParseCommandLine.parseCommandLine(nr, args, params);
+        assert.equal(result, "Integer argument is too large to be sent exactly", nr);
+        assert.equal(args.length, 0, nr);
+      }
 
-      // an integer that almost looks like a jobid, but one digit less
-      args = [];
-      params = {};
-      result = ParseCommandLine.parseCommandLine("2018082000341133831", args, params);
-      assert.equal(result, "Integer argument is too large to be sent exactly");
-      assert.equal(args.length, 0);
-
-      // an integer that almost looks like a jobid, but one digit more
-      args = [];
-      params = {};
-      result = ParseCommandLine.parseCommandLine("201808200034113383170", args, params);
-      assert.equal(result, "Integer argument is too large to be sent exactly");
-      assert.equal(args.length, 0);
-
-      // an integer that almost looks like a jobid, just not a true date-time
-      args = [];
-      params = {};
-      result = ParseCommandLine.parseCommandLine("20182820003411338317", args, params);
-      assert.equal(result, "Integer argument is too large to be sent exactly");
-      assert.equal(args.length, 0);
-
-      // the largest integer that is still exact, and the first that is not
-      args = [];
-      params = {};
-      result = ParseCommandLine.parseCommandLine("9007199254740991", args, params);
-      assert.isNull(result);
-      assert.equal(args.length, 1);
-      assert.equal(String(args[0]), "9007199254740991");
-
-      args = [];
-      params = {};
-      result = ParseCommandLine.parseCommandLine("9007199254740993", args, params);
-      assert.equal(result, "Integer argument is too large to be sent exactly");
-
-      // a real jobid is matched as a string before the integer branch, so it
-      // still round-trips exactly
-      args = [];
-      params = {};
-      result = ParseCommandLine.parseCommandLine("20180814033130818988", args, params);
-      assert.isNull(result);
-      assert.equal(args.length, 1);
-      assert.equal(args[0], "20180814033130818988");
+      // The largest exact integer is still accepted, and a real jobid is matched
+      // as a string before the integer branch, so it round-trips unchanged.
+      const exactValues = ["9007199254740991", "20180814033130818988"];
+      for (const nr of exactValues) {
+        args = [];
+        params = {};
+        result = ParseCommandLine.parseCommandLine(nr, args, params);
+        assert.isNull(result, nr);
+        assert.equal(args.length, 1, nr);
+        assert.equal(String(args[0]), nr, nr);
+        assert.equal(Object.keys(params).length, 0, nr);
+      }
 
       // FLOAT
 
