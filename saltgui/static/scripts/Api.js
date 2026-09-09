@@ -387,10 +387,6 @@ export class API {
           this._handleUnauthorized();
           return null;
         }
-        if (pResponse.status === 404 && pPage.endsWith(".txt")) {
-          // ok
-          return null;
-        }
         throw new HTTPError(pResponse.status, pResponse.statusText);
       });
   }
