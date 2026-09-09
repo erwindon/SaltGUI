@@ -1182,14 +1182,17 @@ export class Panel {
     // Validate that pngName contains only lowercase letters, hyphens, and .png extension
     if (/^[a-z-]+\.png$/.test(pngName)) {
       img.setAttribute("src", "static/images/" + pngName);
+      img.setAttribute("alt", pImageName);
       img.onerror = () => {
         img.onerror = null;
         img.title = "Unknown image, please report to SaltGUI team that image '" + pImageName + "' is missing";
         img.src = "static/images/UNKNOWN.png";
+        img.setAttribute("alt", "Unknown operating system");
       };
     } else {
       img.setAttribute("src", "static/images/UNKNOWN.png");
-      img.title = "Unknown image, please report to SaltGUI team that image '" + pImageName + "' is invalid";
+      img.setAttribute("alt", "Invalid operating system name");
+      img.title = "Invalid image, please report to SaltGUI team that image name '" + pImageName + "' is invalid";
     }
     // Mark OS images that should be inverted in dark mode
     if (pImageName.startsWith("os-")) {

@@ -45,11 +45,13 @@ export class QuickviewPanel extends Panel {
 
     const blackImg = Utils.createElem("img", "prefiximage");
     blackImg.setAttribute("src", "static/images/GitHub_Invertocat_Black.png");
+    blackImg.setAttribute("alt", "GitHub logo");
     blackImg.style.width = "1em";
     lightTd.appendChild(blackImg);
 
     const whiteImg = Utils.createElem("img", "prefiximage");
     whiteImg.setAttribute("src", "static/images/GitHub_Invertocat_White.png");
+    whiteImg.setAttribute("alt", "GitHub logo");
     whiteImg.style.width = "1em";
     darkTd.appendChild(whiteImg);
 
@@ -74,11 +76,13 @@ export class QuickviewPanel extends Panel {
     const unknownDarkTd = QuickviewPanel._createDarkTd();
     const unknownLightImg = Utils.createElem("img", "prefiximage");
     unknownLightImg.setAttribute("src", "static/images/UNKNOWN.png");
+    unknownLightImg.setAttribute("alt", "Unknown operating system");
     unknownLightImg.style.width = "18px";
     unknownLightImg.style.height = "18px";
     unknownLightTd.appendChild(unknownLightImg);
     const unknownDarkImg = Utils.createElem("img", "prefiximage");
     unknownDarkImg.setAttribute("src", "static/images/UNKNOWN.png");
+    unknownDarkImg.setAttribute("alt", "Unknown operating system");
     unknownDarkImg.style.width = "18px";
     unknownDarkImg.style.height = "18px";
     unknownDarkTd.appendChild(unknownDarkImg);
@@ -115,11 +119,13 @@ export class QuickviewPanel extends Panel {
       const darkTd = QuickviewPanel._createDarkTd();
       const lightImg = Utils.createElem("img", "prefiximage");
       lightImg.setAttribute("src", "static/images/os-" + osName + ".png");
+      lightImg.setAttribute("alt", osName);
       lightImg.style.width = "18px";
       lightImg.style.height = "18px";
       lightTd.appendChild(lightImg);
       const darkImg = Utils.createElem("img", "prefiximage");
       darkImg.setAttribute("src", "static/images/os-" + osName + ".png");
+      darkImg.setAttribute("alt", osName);
       darkImg.style.width = "18px";
       darkImg.style.height = "18px";
       if (Panel.getOsImagesToBeInverted().includes(osName)) {

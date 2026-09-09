@@ -68,6 +68,7 @@ export class LoginPanel extends Panel {
     aa.rel = "noopener";
 
     const img = Utils.createElem("img");
+    img.setAttribute("alt", "GitHub logo");
     const darkModeQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const updateGithubLogo = () => {
       img.src = darkModeQuery.matches ? "static/images/GitHub_Invertocat_White.png" : "static/images/GitHub_Invertocat_Black.png";
