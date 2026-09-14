@@ -285,7 +285,8 @@ export class OutputDocumentation {
     // as it should have been reduced already
     for (const minionResponse of Object.values(pResponse)) {
 
-      for (let [key, out] of Object.entries(minionResponse).sort(Utils.mySortFunction)) {
+      for (const key of Object.keys(minionResponse).sort(Utils.mySortFunction)) {
+        let out = minionResponse[key];
 
         if (out === null) {
           continue;
