@@ -8,7 +8,7 @@
   "type": "module",
   "devDependencies": {
     "@babel/core": "^7.29.7",
-    "@babel/preset-env": "^7.29.7",
+    "@babel/preset-env": "^8.0.5",
     "@babel/register": "^7.29.7",
     "chai": "^6.2.2",
     "eslint": "^10.10.0",
