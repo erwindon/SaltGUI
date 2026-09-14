@@ -225,11 +225,10 @@ export class ParseCommandLine {
       return { value: pStr };
     } else if (patInteger.test(pStr)) {
       const value = Number.parseInt(pStr, 10);
-      // The number is sent as its own decimal rendering, so it survives exactly
-      // when that rendering is the text that was typed. That is a wider range
-      // than isSafeInteger allows: 2**53 and 10**16 render back unchanged, while
-      // 12345678901234567 becomes ...68. Job-ids are matched as strings before
-      // this point, see getPatJid().
+      // The number travels to salt as its own decimal rendering, so it arrives
+      // unchanged exactly when that rendering is the text that was typed.
+      // 12345678901234567 renders back as ...68, and sending a different number
+      // than the one that was typed is worse than refusing it here.
       if (String(value) !== pStr.replace(/^\+/, "")) {
         return { error: "Integer argument is too large to be sent exactly. Make it a string by surrounding it with quotes or make it a float by appending .0" };
       }
