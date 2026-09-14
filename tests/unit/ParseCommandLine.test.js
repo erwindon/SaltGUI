@@ -253,21 +253,34 @@ describe("Unittests for ParseCommandLine.js", () => {
         "201808200034113383170",
         // jobid-shaped, just not a true date-time
         "20182820003411338317",
-        // the first integer that is no longer exact
-        "9007199254740993"
+        // the first integer that no longer renders back as itself
+        "9007199254740993",
+        // loses its last digit: it renders back as ...68
+        "12345678901234567"
       ];
       for (const nr of tooLargeIntegers) {
         const label = "value " + nr;
         args = [];
         params = {};
         result = ParseCommandLine.parseCommandLine(nr, args, params);
-        assert.equal(result, "Integer argument is too large to be sent exactly", label);
+        assert.equal(
+          result,
+          "Integer argument is too large to be sent exactly. Make it a string by surrounding it with quotes or make it a float by appending .0",
+          label);
         assert.equal(args.length, 0, label);
       }
 
-      // The largest exact integer is still accepted, and a real jobid is matched
-      // as a string before the integer branch, so it round-trips unchanged.
-      const exactValues = ["9007199254740991", "20180814033130818988"];
+      // Anything whose decimal rendering is the text that was typed is accepted,
+      // which reaches past isSafeInteger: 2**53, 2**54 and 10**16 all render back
+      // unchanged. A real jobid is matched as a string before the integer branch,
+      // so it survives too.
+      const exactValues = [
+        "9007199254740991",
+        "9007199254740992",
+        "18014398509481984",
+        "10000000000000000",
+        "20180814033130818988"
+      ];
       for (const nr of exactValues) {
         const label = "value " + nr;
         args = [];

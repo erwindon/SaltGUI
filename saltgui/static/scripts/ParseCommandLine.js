@@ -225,13 +225,13 @@ export class ParseCommandLine {
       return { value: pStr };
     } else if (patInteger.test(pStr)) {
       const value = Number.parseInt(pStr, 10);
-      if (!Number.isSafeInteger(value)) {
-        // JS numbers are IEEE754 doubles, so an integer above 2**53-1 is rounded
-        // on the way in and salt would receive a different number than was typed.
-        // The salt command-line keeps the exact value (as an int, or as a string
-        // once it is long enough), so refusing is the only honest answer here.
-        // Job-ids are matched as strings before this point, see getPatJid().
-        return { error: "Integer argument is too large to be sent exactly" };
+      // The number is sent as its own decimal rendering, so it survives exactly
+      // when that rendering is the text that was typed. That is a wider range
+      // than isSafeInteger allows: 2**53 and 10**16 render back unchanged, while
+      // 12345678901234567 becomes ...68. Job-ids are matched as strings before
+      // this point, see getPatJid().
+      if (String(value) !== pStr.replace(/^\+/, "")) {
+        return { error: "Integer argument is too large to be sent exactly. Make it a string by surrounding it with quotes or make it a float by appending .0" };
       }
       return { value };
     } else if (patFloat.test(pStr)) {
