@@ -233,13 +233,13 @@ export class Documentation {
   }
 
   static _manualRunMenuHtmlDocPrepare () {
-    const commandLine = document.querySelector(".run-command #command").value;
+    const commandLine = document.getElementById("command").value;
     const cmd = Documentation._getKeywordFragments(commandLine);
     return "Online reference for '" + cmd.join(".").replace(/^modules[.]/, "") + "'";
   }
 
   static _manualRunMenuHtmlDocRun () {
-    const commandLine = document.querySelector(".run-command #command").value;
+    const commandLine = document.getElementById("command").value;
     const cmd = Documentation._getKeywordFragments(commandLine);
 
     let html = "";
@@ -258,7 +258,7 @@ export class Documentation {
     ParseCommandLine.parseCommandLine(commandLine, argsArray, argsObject);
     html += Documentation._buildBeaconDetailsSection(cmd, argsArray);
 
-    const output = document.querySelector(".run-command pre");
+    const output = document.getElementById("popup-output");
     output.innerHTML = html;
   }
 
@@ -455,7 +455,7 @@ export class Documentation {
   }
 
   static _manualRunMenuBeaconNamePrepare () {
-    const commandLine = document.querySelector(".run-command #command").value;
+    const commandLine = document.getElementById("command").value;
     if (commandLine !== "beacons.add" && !commandLine.startsWith("beacons.add ")) {
       return null;
     }
@@ -858,7 +858,7 @@ export class Documentation {
     html += Documentation._buildBeaconsWithNoAvailabilitySection(beaconsList, beaconsListAvailable);
     html += Documentation._buildBeaconsStatusMessages(beaconsListAvailable);
 
-    const output = document.querySelector(".run-command pre");
+    const output = document.getElementById("popup-output");
     output.innerHTML = html;
 
     Documentation._activateBeaconLinks(output, beaconsList);
@@ -964,7 +964,7 @@ export class Documentation {
     // activate the links
     for (const atag of output.querySelectorAll("a")) {
       atag.addEventListener("click", (pClickEvent) => {
-        const commandLine = document.querySelector(".run-command #command");
+        const commandLine = document.getElementById("command");
         const beaconName = atag.innerText;
         const beaconValue = [JSON.parse(beaconsList[beaconName])];
         if ("interval" in beaconValue[0]) {
@@ -988,7 +988,7 @@ export class Documentation {
 
   static _manualRunMenuCustomHelpRun () {
     const customHelp = Utils.getStorageItem("session", "custom_command_help");
-    const output = document.querySelector(".run-command pre");
+    const output = document.getElementById("popup-output");
     output.innerHTML = customHelp;
   }
 }

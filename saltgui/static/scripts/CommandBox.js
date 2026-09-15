@@ -17,22 +17,8 @@ export class CommandBox {
     this.router = pRouter;
     this.api = pApi;
 
-    const cmdbox = document.getElementById("cmd-box");
-    this.cmdmenu = new DropDownMenu(cmdbox);
-
-    this.documentation = new Documentation(this.router, this);
-    this._registerCommandBoxEventListeners();
-
-    RunType.createMenu();
-    TargetType.createMenu();
-
-    const manualRun = document.getElementById("popup-run-command");
-    Utils.addTableHelp(manualRun, "Click for help", "bottom-center");
-    const helpButton = manualRun.querySelector("#help");
-    helpButton.addEventListener("click", (pClickEvent) => {
-      CommandBox._showHelp();
-      pClickEvent.stopPropagation();
-    });
+    CommandBox.instance = this;
+    CommandBox._registerCommandBoxEventListeners();
   }
 
   static _templateCatMenuItemTitle (pCategory) {
@@ -52,16 +38,17 @@ export class CommandBox {
 
   static _populateTemplateCatMenu () {
     const titleElement = document.getElementById("template-catmenu-here");
-    if (titleElement.childElementCount) {
+    if (!CommandBox.templateCatMenu) {
+      const menu = new DropDownMenu(titleElement);
+      menu.setTitle("");
+      menu.menuButton.classList.add("small-button-left");
+      CommandBox.templateCatMenu = menu;
+    } else {
       // only build one dropdown menu. cannot be done in constructor
       // since the storage-item is then not populated yet.
       CommandBox.templateCatMenu.setTitle("");
       return;
     }
-    const menu = new DropDownMenu(titleElement);
-    menu.setTitle("");
-    menu.menuButton.classList.add("small-button-left");
-    CommandBox.templateCatMenu = menu;
     const templates = Utils.getStorageItemObject("session", "templates");
     const categories = TemplatesPanel.getTemplatesCategories(templates);
     if (categories.length < 2) {
@@ -70,7 +57,7 @@ export class CommandBox {
     }
     categories.unshift(null);
     for (const category of categories) {
-      menu.addMenuItem(
+      CommandBox.templateCatMenu.addMenuItem(
         () => CommandBox._templateCatMenuItemTitle(category),
         () => {
           CommandBox.templateTmplMenu._templateCategory = category;
@@ -113,17 +100,18 @@ export class CommandBox {
 
   static _populateTemplateTmplMenu () {
     const titleElement = document.getElementById("template-tmplmenu-here");
-    if (titleElement.childElementCount) {
+    if (!CommandBox.templateTmplMenu) {
+      const menu = new DropDownMenu(titleElement);
+      menu.menuButton.classList.add("small-button-left");
+      CommandBox.templateTmplMenu = menu;
+      CommandBox.templateTmplMenu._templateCategory = null;
+    } else {
       // only build one dropdown menu. cannot be done in constructor
       // since the storage-item is then not populated yet.
       // but reset the selected template category
       CommandBox.templateTmplMenu._templateCategory = null;
       return;
     }
-    const menu = new DropDownMenu(titleElement);
-    menu.menuButton.classList.add("small-button-left");
-    CommandBox.templateTmplMenu = menu;
-    CommandBox.templateTmplMenu._templateCategory = null;
     const templates = Utils.getStorageItemObject("session", "templates");
     const keys = Object.keys(templates).sort(Utils.mySortFunction);
     for (const key of keys) {
@@ -132,7 +120,7 @@ export class CommandBox {
       if (!description) {
         description = "(" + key + ")";
       }
-      menu.addMenuItem(
+      CommandBox.templateTmplMenu.addMenuItem(
         () => CommandBox._templateTmplMenuItemTitle(template),
         () => {
           CommandBox._applyTemplateByTemplate(template);
@@ -142,7 +130,7 @@ export class CommandBox {
   }
 
   static _showHelp () {
-    const output = document.querySelector(".run-command pre");
+    const output = document.getElementById("popup-output");
     let txt = "";
 
     txt += "<h2>Target field</h2>";
@@ -211,7 +199,7 @@ export class CommandBox {
     output.innerHTML = txt;
   }
 
-  _registerCommandBoxEventListeners () {
+  static _registerCommandBoxEventListeners () {
     document.getElementById("popup-run-command").addEventListener(
       "click", (pClickEvent) => {
         // only close if click is really outside the window
@@ -223,18 +211,21 @@ export class CommandBox {
       });
     document.getElementById("button-manual-run").addEventListener(
       "click", (pClickEvent) => {
-        CommandBox.showManualRun(this.api);
+        CommandBox.showManualRun(CommandBox.instance.api);
         pClickEvent.stopPropagation();
       });
-    document.getElementById("cmd-close-button").addEventListener(
+  }
+
+  static _registerDynamicElementListeners () {
+    document.getElementById("manualrun-close-button").addEventListener(
       "click", (pClickEvent) => {
         CommandBox.hideManualRun();
         pClickEvent.stopPropagation();
       });
 
-    document.querySelector(".run-command input[type='submit']").
+    document.getElementById("run-command").
       addEventListener("click", (pClickEvent) => {
-        this._onRun();
+        CommandBox._onRun();
         pClickEvent.stopPropagation();
       });
 
@@ -251,7 +242,7 @@ export class CommandBox {
 
     document.getElementById("command").
       addEventListener("input", () => {
-        this.cmdmenu.verifyAll();
+        CommandBox.cmdmenu.verifyAll();
       });
   }
 
@@ -344,12 +335,12 @@ export class CommandBox {
     };
   }
 
-  _onRun () {
-    const button = document.querySelector(".run-command input[type='submit']");
+  static _onRun () {
+    const button = document.getElementById("run-command");
     if (button.disabled) {
       return;
     }
-    const output = document.querySelector(".run-command pre");
+    const output = document.getElementById("popup-output");
 
     const targetField = document.getElementById("target");
     const targetValue = targetField.value;
@@ -366,7 +357,7 @@ export class CommandBox {
       return;
     }
 
-    const func = this.getRunParams(targetType, targetValue, commandValue);
+    const func = CommandBox.instance.getRunParams(targetType, targetValue, commandValue);
     if (func === null) {
       return;
     }
@@ -434,7 +425,7 @@ export class CommandBox {
   }
 
   static onRunReturn (pResponse, pCommand) {
-    const outputContainer = document.querySelector(".run-command pre");
+    const outputContainer = document.getElementById("popup-output");
     let minions = Object.keys(pResponse);
     if (pCommand.startsWith("runners.")) {
       minions = ["RUNNER"];
@@ -447,7 +438,7 @@ export class CommandBox {
     Output.addResponseOutput(outputContainer, minions, pResponse, pCommand, outputOptions);
     const targetField = document.getElementById("target");
     const commandField = document.getElementById("command");
-    const button = document.querySelector(".run-command input[type='submit']");
+    const button = document.getElementById("run-command");
     targetField.disabled = false;
     commandField.disabled = false;
     button.disabled = false;
@@ -543,14 +534,36 @@ export class CommandBox {
   }
 
   static showManualRun (pApi) {
+    // Don't show popup if already on the ManualRun page
+    if (Router.currentPage.path === "manualrun") {
+      return;
+    }
+
+    if (!Documentation.PROVIDERS) {
+      Documentation.PROVIDERS = {};
+    }
+
     const manualRun = document.getElementById("popup-run-command");
+    const panel = Router.manualRunPage.manualRunPanel;
+    manualRun.appendChild(panel.div);
+    panel.onShow();
+
+    // Create documentation helper if not already created
+    if (!CommandBox.documentation) {
+      CommandBox.instance.cmdmenu = panel.cmdmenu;
+      CommandBox.documentation = new Documentation(Router.router, CommandBox.instance);
+    }
+
     manualRun.style.display = "block";
 
-    const outputField = document.querySelector(".run-command pre");
-    outputField.innerText = "Waiting for command" + Character.HORIZONTAL_ELLIPSIS;
-
+    const commandField = document.getElementById("command");
     const targetField = document.getElementById("target");
-    TargetType.autoSelectTargetType(targetField.value);
+
+    // give another field (which does not have a list) focus first
+    // because when a field gets focus 2 times in a row,
+    // the dropdown box opens, and we don't want that...
+    commandField.focus();
+    targetField.focus();
 
     document.onkeyup = (keyUpEvent) => {
       if (keyUpEvent.key === "Escape") {
@@ -559,42 +572,6 @@ export class CommandBox {
       }
     };
 
-    RunType.setRunTypeDefault();
-
-    // (re-)populate the dropdown box
-    const targetList = document.getElementById("data-list-target");
-    while (targetList.firstChild) {
-      targetList.firstChild.remove();
-    }
-    const nodeGroups = Utils.getStorageItemObject("session", "nodegroups");
-
-    const optionConnected = Utils.createElem("option");
-    optionConnected.value = "##connected";
-    targetList.appendChild(optionConnected);
-
-    for (const nodeGroup of Object.keys(nodeGroups).sort(Utils.mySortFunction)) {
-      const option = Utils.createElem("option");
-      option.value = "#" + nodeGroup;
-      targetList.appendChild(option);
-    }
-
-    const minions = Utils.getStorageItemList("session", "minions");
-    for (const minionId of [...minions].sort(Utils.mySortFunction)) {
-      const option = Utils.createElem("option");
-      option.value = minionId;
-      targetList.appendChild(option);
-    }
-
-    const commandField = document.getElementById("command");
-
-    // give another field (which does not have a list) focus first
-    // because when a field gets focus 2 times in a row,
-    // the dropdown box opens, and we don't want that...
-    commandField.focus();
-    targetField.focus();
-
-    CommandBox._populateTemplateCatMenu();
-    CommandBox._populateTemplateTmplMenu();
     CommandBox._populateTestProviders(pApi);
 
     let lst = null;
@@ -649,8 +626,10 @@ export class CommandBox {
     manualRun.style.display = "none";
 
     // reset to default, so that its value is initially hidden
-    RunType.setRunTypeDefault();
-    TargetType.setTargetTypeDefault();
+    if (RunType.menuRunType && TargetType.menuTargetType) {
+      RunType.setRunTypeDefault();
+      TargetType.setTargetTypeDefault();
+    }
 
     if (Router.currentPage) {
       Router.currentPage.refreshPage();
@@ -829,7 +808,7 @@ export class CommandBox {
     if (div === null) {
       // for results from unexpected minions
       div = CommandBox._createNewMinionRow(eventMinionId);
-      const output = document.querySelector(".run-command pre");
+      const output = document.getElementById("popup-output");
       output.appendChild(div);
     }
 
@@ -875,7 +854,7 @@ export class CommandBox {
     if (div === null) {
       // for results from unexpected minions
       div = CommandBox._createNewMinionRow(eventMinionId);
-      const output = document.querySelector(".run-command pre");
+      const output = document.getElementById("popup-output");
       output.appendChild(div);
     }
 
@@ -898,7 +877,7 @@ export class CommandBox {
       CommandBox.minionIds = [];
     }
 
-    const output = document.querySelector(".run-command pre");
+    const output = document.getElementById("popup-output");
 
     // fix the JID label
     // it is not a minion-id, so deserves no status

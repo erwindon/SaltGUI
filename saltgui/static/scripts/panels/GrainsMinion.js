@@ -18,7 +18,9 @@ export class GrainsMinionPanel extends Panel {
 
     this.addSearchButton();
     if (Utils.getQueryParam("popup") !== "true") {
-      this.addCloseButton();
+      this.addCloseButton(() => {
+        this.router.goTo(this.route.parentHash, this.route.parentQuery, 1);
+      });
     }
     this.addWarningField();
     this.addTable(["-menu-", "Name", "Value"]);

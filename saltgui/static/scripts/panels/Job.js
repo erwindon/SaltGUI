@@ -15,7 +15,9 @@ export class JobPanel extends Panel {
 
     this.addTitle(Character.HORIZONTAL_ELLIPSIS + " on " + Character.HORIZONTAL_ELLIPSIS);
     if (Utils.getQueryParam("popup") !== "true") {
-      this.addCloseButton();
+      this.addCloseButton(() => {
+        this.router.goTo(this.route.parentHash, this.route.parentQuery, 1);
+      });
     }
     this.addPanelMenu();
     this.addSearchButton();

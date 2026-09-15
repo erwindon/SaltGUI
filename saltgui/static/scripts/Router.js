@@ -15,6 +15,7 @@ import {JobsPage} from "./pages/Jobs.js";
 import {KeysPage} from "./pages/Keys.js";
 import {LoginPage} from "./pages/Login.js";
 import {LogoutPage} from "./pages/Logout.js";
+import {ManualRunPage} from "./pages/ManualRun.js";
 import {MineMinionPage} from "./pages/MineMinion.js";
 import {MinePage} from "./pages/Mine.js";
 import {MinionsPage} from "./pages/Minions.js";
@@ -69,6 +70,7 @@ export class Router {
     this._registerPage(Router.issuesPage = new IssuesPage(this)); // NOSONAR S1121
     this._registerPage(Router.quickviewPage = new QuickviewPage(this)); // NOSONAR S1121
     this._registerPage(Router.logoutPage = new LogoutPage(this)); // NOSONAR S1121
+    this._registerPage(Router.manualRunPage = new ManualRunPage(this)); // NOSONAR S1121
 
     this._registerRouterEventListeners();
 
@@ -234,8 +236,10 @@ export class Router {
     this._registerMenuItem(null, "issues", "issues", "i");
     // no shortcut for logout
     this._registerMenuItem(null, "logout", "logout");
+    this._registerMenuItem(null, "manualrun", "manualrun", "C");
 
     // not a menu item, hidden page
+    // Router.keyBindings["C"] = "manualrun";
     Router.keyBindings["O"] = "options";
     Router.keyBindings["Q"] = "quickview";
 
@@ -366,9 +370,6 @@ export class Router {
   // pForward = 2 --> back navigation using browser
   goTo (pHash, pQuery = {}, pForward = 0, pEvent = null) {
 
-    // close the command-box when it is stil open
-    CommandBox.hideManualRun();
-
     pHash = Router._resolveLoginRedirect(pHash, pQuery);
     pHash = Router._resolveDefaultHash(pHash);
 
@@ -390,13 +391,18 @@ export class Router {
       if (route.path !== pHash) {
         continue;
       }
+      const oldPage = Router.currentPage;
+      Router.currentPage = route;
+      // close the command-box when it is still open
+      CommandBox.hideManualRun();
       // push history state, so that the address bar holds the correct
       // deep-link; and so that we can use the back-button
       const url = Router._buildNavigationUrl(pHash, pQuery, inNewWindow);
       if (Router._handleNavigationState(route, url, pForward, inNewWindow, parentHash, parentQuery)) {
+        Router.currentPage = oldPage;
         return;
       }
-      Router._showPage(route);
+      Router._showPage(route, oldPage);
       return;
     }
 
@@ -484,7 +490,7 @@ export class Router {
     return false;
   }
 
-  static _showPage (pPage) {
+  static _showPage (pPage, pOldPage = null) {
     pPage.clearPage();
 
     pPage.pageElement.style.display = "";
@@ -512,16 +518,15 @@ export class Router {
       elem2.classList.add("menu-item-active");
     }
 
+    if (pOldPage && pOldPage !== pPage) {
+      Router._hidePage(pOldPage);
+    }
+
     pPage.onShow();
 
     // start the event-pipe (again)
     // it is either not started, or needs restarting
     API.getEvents();
-
-    if (Router.currentPage && Router.currentPage !== pPage) {
-      Router._hidePage(Router.currentPage);
-    }
-    Router.currentPage = pPage;
 
     Router.currentPage.pageElement.classList.add("current");
   }

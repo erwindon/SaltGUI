@@ -22,7 +22,9 @@ export class BeaconsMinionPanel extends Panel {
     this.addSearchButton();
     this.addPlayPauseButton();
     if (Utils.getQueryParam("popup") !== "true") {
-      this.addCloseButton();
+      this.addCloseButton(() => {
+        this.router.goTo(this.route.parentHash, this.route.parentQuery, 1);
+      });
     }
     this.addHelpButton([
       "The content of column 'Value' is automatically refreshed.",

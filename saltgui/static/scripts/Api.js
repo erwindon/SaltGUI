@@ -516,9 +516,11 @@ export class API {
         Router.schedulesMinionPage.handleSaltJobRetEvent(data);
         Router.schedulesPage.handleSaltJobRetEvent(data);
         Router.templatesPage.handleSaltJobRetEvent(data);
+        Router.manualRunPage?.constructor.panel?.handleSaltJobRetEvent(tag, data);
       } else if (tag.startsWith("salt/job/") && tag.includes("/prog/")) {
         // progress value (exists only for states)
         CommandBox.handleSaltJobProgEvent(tag, data);
+        Router.manualRunPage?.constructor.panel?.handleSaltJobProgEvent(tag, data);
       } else if (tag.startsWith("syndic/")) {
         Router.keysPage.handleSyndicEvent();
       }

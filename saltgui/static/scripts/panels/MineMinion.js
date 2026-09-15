@@ -12,7 +12,9 @@ export class MineMinionPanel extends Panel {
     super("mine-minion");
 
     this.addTitle("Mine on " + Character.HORIZONTAL_ELLIPSIS);
-    this.addCloseButton();
+    this.addCloseButton(() => {
+      this.router.goTo(this.route.parentHash, this.route.parentQuery, 1);
+    });
     this.addPanelMenu();
     this._addMenuItemMineUpdate();
     this._addMenuItemMineFlush();

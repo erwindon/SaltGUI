@@ -297,16 +297,18 @@ h1 {
   margin: 0 10px 20px 0;
 }
 
-.run-command {
+#manualrun-panel h1 {
+  margin-bottom: 20px;
+}
+
+#popup-run-command > .panel {
   padding: 30px;
-  z-index: 3;
-  background-color: var(--bg-panel);
   position: relative;
   top: 5px;
+  z-index: 3;
+  width: calc(100% - 60px); /* padding: 30px on both sides */
   margin-left: 15px;
   margin-right: 15px;
-  width: calc(100% - 30px); /* padding+margin */
-  color: var(--text-primary);
 }
 
 #run-command {
@@ -320,9 +322,6 @@ pre.output {
   padding: 10px;
   border-radius: 2px;
   white-space: pre-wrap;
-}
-
-.run-command pre.output {
   min-height: 250px;
 }
 

@@ -21,7 +21,9 @@ export class SchedulesMinionPanel extends Panel {
     this._addPanelMenuItemScheduleAddOnce();
     this.addSearchButton();
     if (Utils.getQueryParam("popup") !== "true") {
-      this.addCloseButton();
+      this.addCloseButton(() => {
+        this.router.goTo(this.route.parentHash, this.route.parentQuery, 1);
+      });
     }
     this.addTable(["-menu-", "Name", "Details"]);
     this.setTableSortable("Name", "asc");
