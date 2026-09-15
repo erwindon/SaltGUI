@@ -31,6 +31,7 @@ export class Character {
     Character.BALLOT_BOX_WITH_CHECK = "\u2611";
     Character.GEAR = "\u2699";
     Character.WARNING_SIGN = "\u26A0" + Character._VARIATION_SELECTOR_16;
+    Character.NO_ENTRY_SIGN = "\u26D4" + Character._VARIATION_SELECTOR_16;
     Character.HEAVY_CHECK_MARK = "\u2714";
     Character.HEAVY_MULTIPLICATION_X = "\u2716" + Character._VARIATION_SELECTOR_15;
     Character.BLACK_QUESTION_MARK_ORNAMENT = "\u2753" + Character._VARIATION_SELECTOR_15;
