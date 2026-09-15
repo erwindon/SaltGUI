@@ -16,6 +16,7 @@
 // the dictionary will be filled with one element named "x"
 
 import {Character} from "./Character.js";
+import {Utils} from "./Utils.js";
 
 export class ParseCommandLine {
 
@@ -24,13 +25,14 @@ export class ParseCommandLine {
   }
 
   static getCommandFromCommandLine (pCommandLine) {
+    const tokenArray = [];
     const argsArray = [];
     const argsObject = {};
-    ParseCommandLine.parseCommandLine(pCommandLine, argsArray, argsObject);
+    ParseCommandLine.parseCommandLine(pCommandLine, tokenArray, argsArray, argsObject);
     return argsArray[0];
   }
 
-  static parseCommandLine (pToRun, pArgsArray, pArgsObject) {
+  static parseCommandLine (pToRun, pTokenArray, pArgsArray, pArgsObject) {
     // just in case the user typed some extra whitespace
     // at the start of the line
     pToRun = pToRun.trim();
@@ -57,10 +59,10 @@ export class ParseCommandLine {
         return parseResult.error;
       }
 
-      const { value, remaining } = parseResult;
+      const { value, remaining, token } = parseResult;
       pToRun = remaining;
 
-      const addResult = ParseCommandLine._addArgumentToCollections(name, value, pArgsArray, pArgsObject);
+      const addResult = ParseCommandLine._addArgumentToCollections(name, token, value, pTokenArray, pArgsArray, pArgsObject);
       if (addResult.error) {
         return addResult.error;
       }
@@ -87,7 +89,7 @@ export class ParseCommandLine {
       name = toRun.substring(0, firstEqualSign);
       toRun = toRun.substring(firstEqualSign + 1);
       if (toRun === "" || toRun[0] === " ") {
-        return { error: "Must have value for named parameter '" + name + "'" };
+        return { error: "Must have value for named parameter\nin: " + name + "=" };
       }
     }
 
@@ -98,7 +100,7 @@ export class ParseCommandLine {
     const patPlaceHolder = /^<[a-z]+>/;
     if (patPlaceHolder.test(pToRun)) {
       const placeHolder = pToRun.replace(/>.*/, ">");
-      return { error: "Must fill in all placeholders, e.g. " + placeHolder };
+      return { error: "Must fill in all placeholders\ne.g. " + placeHolder };
     }
     return { error: null };
   }
@@ -129,7 +131,8 @@ export class ParseCommandLine {
       let endCharPos = pToRun.indexOf(endChar, charPos);
       if (endCharPos < 0) {
         const extraInfo = ParseCommandLine._getJsonErrorInfo(objType);
-        return { error: "No valid " + objType + " found" + extraInfo };
+        const problematicToken = Utils.truncateString(pToRun, 50);
+        return { error: "No valid " + objType + " found" + extraInfo + "\nin: " + problematicToken };
       }
 
       // parse what we have found so far
@@ -179,12 +182,14 @@ export class ParseCommandLine {
     // the first part of the string is valid JSON
     let endCharPos = pEndCharPos + pEndChar.length;
     if (endCharPos < pToRun.length && pToRun[endCharPos] !== " ") {
-      return { error: "Valid " + pObjType + ", but followed by text:" + pToRun.substring(endCharPos) + Character.HORIZONTAL_ELLIPSIS, isFatal: true };
+      const problematicToken = Utils.truncateString(pToRun, 50);
+      return { error: "Valid " + pObjType + ", but followed by text\nin: " + problematicToken, isFatal: true };
     }
 
     // valid JSON and not followed by strange characters
     const newToRun = pToRun.substring(endCharPos);
-    return { error: null, remaining: newToRun, value };
+    const token = pToRun.substring(0, endCharPos);
+    return { error: null, remaining: newToRun, token, value };
   }
 
   static _parseStringValue (pToRun) {
@@ -202,7 +207,11 @@ export class ParseCommandLine {
     if (conversionResult.error) {
       return { error: conversionResult.error };
     }
-    return { error: null, remaining: toRun, value: conversionResult.value };
+    const result = { error: null, remaining: toRun, token: str, value: conversionResult.value };
+    if (conversionResult.warning) {
+      result.warning = conversionResult.warning;
+    }
+    return result;
   }
 
   static _convertStringToValue (pStr) {
@@ -211,6 +220,10 @@ export class ParseCommandLine {
     const patNull = /^(?:None|null|Null|NULL)$/;
     const patBooleanFalse = /^(?:false|False|FALSE)$/;
     const patBooleanTrue = /^(?:true|True|TRUE)$/;
+    const patHexadecimal = /^[-+]?0[xX][0-9a-fA-F]+$/;
+    const patBinary = /^[-+]?0[bB][01]+$/;
+    const patOctal = /^[-+]?0[0-7]+$/;
+    const patSexagesimal = /^[-+]?\d+(?::\d+)+$/;
     const patInteger = /^(?:(?:0)|(?:[-+]?[1-9]\d*))$/;
     const patFloat = /^[-+]?(?:\d+[.]?\d*|[.]\d+)(?:[eE][-+]?\d+)?$/; // NOSONAR S8786
 
@@ -223,8 +236,21 @@ export class ParseCommandLine {
     } else if (ParseCommandLine.getPatJid().test(pStr)) {
       // jobIds look like numbers but must be strings
       return { value: pStr };
+    } else if (patHexadecimal.test(pStr)) {
+      const result = ParseCommandLine._parseHexadecimal(pStr);
+      return result;
+    } else if (patBinary.test(pStr)) {
+      const result = ParseCommandLine._parseBinary(pStr);
+      return result;
+    } else if (patOctal.test(pStr)) {
+      const result = ParseCommandLine._parseOctal(pStr);
+      return result;
+    } else if (patSexagesimal.test(pStr)) {
+      const result = ParseCommandLine._parseSexagesimal(pStr);
+      return result;
     } else if (patInteger.test(pStr)) {
-      return { value: Number.parseInt(pStr, 10) };
+      const result = ParseCommandLine._parseDecimalInteger(pStr);
+      return result;
     } else if (patFloat.test(pStr)) {
       const value = Number.parseFloat(pStr);
       if (!Number.isFinite(value)) {
@@ -236,17 +262,119 @@ export class ParseCommandLine {
     }
   }
 
-  static _addArgumentToCollections (pName, pValue, pArgsArray, pArgsObject) {
+  static _check64BitRange (pValue) {
+    const min = -0x8000000000000000n;
+    const max = 0x7FFFFFFFFFFFFFFFn;
+    const bigValue = BigInt(pValue);
+    if (bigValue < min || bigValue > max) {
+      return { isValid: false, warning: "Argument exceeds integer range, it will likely be sent as string" };
+    }
+    return { isValid: true };
+  }
+
+  static _parseHexadecimal (pStr) {
+    const hasNegativeSign = pStr[0] === "-";
+    let cleanStr = pStr;
+    if (pStr[0] === "-" || pStr[0] === "+") {
+      cleanStr = pStr.substring(1);
+    }
+    cleanStr = cleanStr.substring(2);
+    const value = Number.parseInt(cleanStr, 16) * (hasNegativeSign ? -1 : 1);
+    const rangeCheck = ParseCommandLine._check64BitRange(value);
+    if (!rangeCheck.isValid) {
+      return { value, warning: rangeCheck.warning };
+    }
+    return { value };
+  }
+
+  static _parseBinary (pStr) {
+    const hasNegativeSign = pStr[0] === "-";
+    let cleanStr = pStr;
+    if (pStr[0] === "-" || pStr[0] === "+") {
+      cleanStr = pStr.substring(1);
+    }
+    cleanStr = cleanStr.substring(2);
+    const value = Number.parseInt(cleanStr, 2) * (hasNegativeSign ? -1 : 1);
+    const rangeCheck = ParseCommandLine._check64BitRange(value);
+    if (!rangeCheck.isValid) {
+      return { value, warning: rangeCheck.warning };
+    }
+    return { value };
+  }
+
+  static _parseOctal (pStr) {
+    const hasNegativeSign = pStr[0] === "-";
+    let cleanStr = pStr;
+    if (pStr[0] === "-" || pStr[0] === "+") {
+      cleanStr = pStr.substring(1);
+    }
+    cleanStr = cleanStr.substring(1);
+    const value = Number.parseInt(cleanStr, 8) * (hasNegativeSign ? -1 : 1);
+    const rangeCheck = ParseCommandLine._check64BitRange(value);
+    const warning = "Octal numbers are supported here, but usually not in 'salt'";
+    if (!rangeCheck.isValid) {
+      return { value, warning: rangeCheck.warning };
+    }
+    return { value, warning };
+  }
+
+  static _parseSexagesimal (pStr) {
+    const sign = pStr[0] === "-" ? -1 : 1;
+    const cleanStr = pStr.replace(/^[-+]/, "");
+    const parts = cleanStr.split(":");
+
+    // Validate: first part can be any integer, rest must be 0-59
+    for (let i = 1; i < parts.length; i++) {
+      const num = Number.parseInt(parts[i], 10);
+      if (num < 0 || num > 59) {
+        return { error: "Sexagesimal component out of range (must be 0-59 after first component)\nin: " + pStr };
+      }
+    }
+
+    // Calculate the value: treat as mixed-radix base-60
+    let value = 0;
+    const baseMultipliers = [];
+    for (let i = 0; i < parts.length; i++) {
+      baseMultipliers.push(Math.pow(60, parts.length - 1 - i));
+    }
+
+    for (let i = 0; i < parts.length; i++) {
+      value += Number.parseInt(parts[i], 10) * baseMultipliers[i];
+    }
+
+    value = value * sign;
+    const rangeCheck = ParseCommandLine._check64BitRange(value);
+    if (!rangeCheck.isValid) {
+      return { value, warning: rangeCheck.warning };
+    }
+    return { value };
+  }
+
+  static _parseDecimalInteger (pStr) {
+    const value = Number.parseInt(pStr, 10);
+    const rangeCheck = ParseCommandLine._check64BitRange(value);
+    if (!rangeCheck.isValid) {
+      return { value, warning: rangeCheck.warning };
+    }
+    return { value };
+  }
+
+  static _addArgumentToCollections (pName, pToken, pValue, pTokenArray, pArgsArray, pArgsObject) {
     if (pName === null) {
       // anonymous parameter
+      pTokenArray.push(pToken);
       pArgsArray.push(pValue);
     } else if (pName in pArgsObject) {
       // named parameter which already exists
-      return { error: "Duplicate named variable '" + pName + "'" };
+      return { error: "Duplicate named variable\nin: " + pName };
     } else {
       // named parameter
       pArgsObject[pName] = pValue;
     }
     return { error: null };
+  }
+
+  static formatErrorMessage (pMessage) {
+    return pMessage.replaceAll("\n", "\n" + Character.NO_BREAK_SPACE.repeat(5));
   }
 }
