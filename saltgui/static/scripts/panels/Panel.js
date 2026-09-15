@@ -150,9 +150,11 @@ export class Panel {
     }
 
     Utils.addToolTip(span, pHelpTextArr.join("\n"), "bottom-right");
+
+    this.helpButton = span;
   }
 
-  addCloseButton () {
+  addCloseButton (pClickHandler) {
     const span = Utils.createSpan(
       ["small-button", "small-button-right", "small-button-for-click", "no-print"],
       Character.HEAVY_MULTIPLICATION_X,
@@ -160,9 +162,11 @@ export class Panel {
     this.div.appendChild(span);
 
     span.addEventListener("click", (pClickEvent) => {
-      this.router.goTo(this.route.parentHash, this.route.parentQuery, 1);
+      pClickHandler();
       pClickEvent.stopPropagation();
     });
+
+    this.closeButton = span;
   }
 
   addWarningField () {
