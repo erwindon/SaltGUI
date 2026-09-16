@@ -1136,6 +1136,9 @@ export class Panel {
     command.value = pCommandString;
     // the menu may become (in)visible due to content of command field
     this.router.commandbox.cmdmenu.verifyAll();
+    // run validations when panel is opened
+    CommandBox._validateAndDisplayTargetInput(pTargetString);
+    CommandBox._validateAndDisplayCommandInput(pCommandString);
   }
 
   clearPanel () {

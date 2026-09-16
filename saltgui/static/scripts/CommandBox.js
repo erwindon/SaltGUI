@@ -256,6 +256,9 @@ export class CommandBox {
         if (targetField.value === "##connected") {
           // just replace it with the actual value
           targetField.value = Utils.getStorageItem("session", "connected", "");
+          // run validation after programmatic field change
+          CommandBox._validateAndDisplayTargetInput(targetField.value);
+          return;
         }
         const targetType = targetField.value;
         TargetType.autoSelectTargetType(targetType);
@@ -295,6 +298,10 @@ export class CommandBox {
       const commandField = document.getElementById("command");
       commandField.value = pCommand;
     }
+
+    // run validations when template is applied
+    CommandBox._validateAndDisplayTargetInput(pTarget || "");
+    CommandBox._validateAndDisplayCommandInput(pCommand || "");
   }
 
   static _applyTemplateByTemplate (pTemplate) {
@@ -657,6 +664,8 @@ export class CommandBox {
       const targetField = document.getElementById("target");
       targetField.value = lst;
       TargetType.autoSelectTargetType(lst);
+      // run validation after programmatic field change
+      CommandBox._validateAndDisplayTargetInput(lst);
     }
   }
 
