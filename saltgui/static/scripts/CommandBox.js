@@ -376,18 +376,10 @@ export class CommandBox {
     const targetField = document.getElementById("target");
     const targetValue = targetField.value;
     const commandField = document.getElementById("command");
-    const commandValue = commandField.value;
+    let commandValue = commandField.value;
 
     const targetType = TargetType.menuTargetType._value;
     const runType = RunType.getRunType();
-
-    const patWhitespaceAll = /\s/g;
-    const commandValueNoTabs = commandValue.replace(patWhitespaceAll, " ");
-    if (commandValueNoTabs !== commandValue) {
-      commandField.value = commandValueNoTabs;
-      CommandBox._showError("The command contains unsupported whitespace characters.\nThese have now been replaced by regular space characters.\nUse 'Run command' again to run the updated command.");
-      return;
-    }
 
     // Collect all validation errors and warnings from all fields
     const commandValidation = CommandBox._validateCommandField(commandValue);
@@ -409,6 +401,9 @@ export class CommandBox {
       CommandBox._displayValidationOutput({ errors: allErrors, warnings: allWarnings }, output);
       return;
     }
+
+    const patWhitespaceAll = /\s/g;
+    commandValue = commandValue.replace(patWhitespaceAll, " ");
 
     const func = this.getRunParams(targetType, targetValue, commandValue);
     if (func === null) {
@@ -805,6 +800,7 @@ export class CommandBox {
     }
 
     CommandBox._collectWarningsFromParsing(pCommand, warnings);
+    CommandBox._collectUnsupportedWhitespaceWarning(pCommand, warnings);
 
     return { errors, warnings };
   }
@@ -874,6 +870,14 @@ export class CommandBox {
       if (result.warning) {
         pWarnings.push(result.warning + "\nin: " + token);
       }
+    }
+  }
+
+  static _collectUnsupportedWhitespaceWarning (pCommand, pWarnings) {
+    const patWhitespaceAll = /\s/g;
+    const commandValueNoSpaces = pCommand.replace(patWhitespaceAll, " ");
+    if (commandValueNoSpaces !== pCommand) {
+      pWarnings.push("The command contains unsupported whitespace characters\nThese will be replaced by regular space characters when the command is run");
     }
   }
 
