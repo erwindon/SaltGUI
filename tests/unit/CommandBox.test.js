@@ -261,7 +261,9 @@ describe("Unittests for CommandBox.js", () => {
     it("test dictionary followed by text returns error", () => {
       const result = CommandBox._validateCommandField("cmd {\"a\":1}extra");
       assert.isArray(result.errors);
-      assert.isTrue(result.errors.some(err => err.includes("Valid dictionary, but followed by text")));
+      assert.isTrue(result.errors.some(err => err.includes("Valid dictionary, but followed by extra text")));
+      assert.isTrue(result.errors.some(err => err.includes("dictionary:")));
+      assert.isTrue(result.errors.some(err => err.includes("extra:")));
     });
 
     it("test valid named parameter returns no error", () => {
