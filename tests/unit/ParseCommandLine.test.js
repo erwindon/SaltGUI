@@ -138,8 +138,9 @@ describe("Unittests for ParseCommandLine.js", () => {
       params = {};
       tokens = [];
       result = ParseCommandLine.parseCommandLine("{\"a}\":1}}", tokens, args, params);
-      assert.isTrue(result.startsWith("Valid dictionary, but followed by text\n"));
-      assert.isTrue(result.includes("in: {\"a}\":1"));
+      assert.isTrue(result.startsWith("Valid dictionary, but followed by extra text\n"));
+      assert.isTrue(result.includes("dictionary: {\"a}\":1}"));
+      assert.isTrue(result.includes("extra: }"));
 
       // ARRAYS
 

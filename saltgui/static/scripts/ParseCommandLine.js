@@ -146,7 +146,7 @@ export class ParseCommandLine {
       }
 
       if (parseAttempt.isFatal) {
-        // valid JSON but followed by text - return error immediately
+        // valid JSON but followed by other text - return error immediately
         return parseAttempt;
       }
 
@@ -182,8 +182,9 @@ export class ParseCommandLine {
     // the first part of the string is valid JSON
     let endCharPos = pEndCharPos + pEndChar.length;
     if (endCharPos < pToRun.length && pToRun[endCharPos] !== " ") {
-      const problematicToken = Utils.truncateString(pToRun, 50);
-      return { error: "Valid " + pObjType + ", but followed by text\nin: " + problematicToken, isFatal: true };
+      const validPart = Utils.truncateString(pToRun.substring(0, endCharPos), 50);
+      const extraText = Utils.truncateString(pToRun.substring(endCharPos), 50);
+      return { error: "Valid " + pObjType + ", but followed by extra text\n" + pObjType + ": " + validPart + "\nextra: " + extraText, isFatal: true };
     }
 
     // valid JSON and not followed by strange characters
