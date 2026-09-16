@@ -405,6 +405,7 @@ export class CommandBox {
     ];
 
     if (allErrors.length > 0) {
+      CommandBox._displayFormValidationIndicator(formValidation);
       CommandBox._displayValidationOutput({ errors: allErrors, warnings: allWarnings }, output);
       return;
     }
@@ -1051,7 +1052,7 @@ export class CommandBox {
   }
 
   static _displayFormValidationIndicator (pValidationResult) {
-    const indicatorElement = document.getElementById("cross-validation-indicator");
+    const indicatorElement = document.getElementById("form-validation-indicator");
     if (!indicatorElement) {
       // element may not exist in test context
       return;
