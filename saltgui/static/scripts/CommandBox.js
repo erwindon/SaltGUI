@@ -735,8 +735,12 @@ export class CommandBox {
     const outputField = document.getElementById("popup-output");
     const outputText = outputField.innerText;
 
-    // only update if output panel is showing validation (contains validation icons)
-    const isShowingValidation = outputText.includes(Character.NO_ENTRY_SIGN) || outputText.includes(Character.WARNING_SIGN) || outputText.includes(Character.HEAVY_CHECK_MARK);
+    // only update if output panel is showing validation (starts with validation icons or waiting)
+    const isShowingValidation =
+      outputText.startsWith(Character.NO_ENTRY_SIGN) ||
+      outputText.startsWith(Character.WARNING_SIGN) ||
+      outputText.startsWith(Character.HEAVY_CHECK_MARK) ||
+      outputText.startsWith("Waiting for command");
     if (!isShowingValidation) {
       return;
     }
@@ -1085,11 +1089,9 @@ export class CommandBox {
       output += Character.WARNING_SIGN + " " + ParseCommandLine.formatErrorMessage(wrn) + "\n";
     }
 
-    if (errors.length === 0 && warnings.length === 0) {
-      output = Character.HEAVY_CHECK_MARK + " all checks passed";
-    }
+    output += "\nWaiting for command" + Character.HORIZONTAL_ELLIPSIS;
 
-    pOutputElement.innerText = output;
+    pOutputElement.innerText = output.trimStart();
   }
 
   getRunParams (pTargetType, pTarget, pToRun, pisRunTypeNormalOnly = false, pCanUseFullReturn = true) {
