@@ -836,16 +836,17 @@ export class CommandBox {
     const isSuccess = Output.getIsSuccess(pData);
     const minionClass = Output.getMinionLabelClass(isSuccess, pData);
 
+    div.classList.remove("output-pending");
+
     const span1 = div.children[0];
-    span1.classList.remove("host-unknown");
     span1.classList.add("minion-id", minionClass);
 
     const span2 = div.children[1];
     span2.innerText = div.children.length > 2 ? ": " : "";
 
-    const anyUnknown = document.querySelector(".host-unknown");
-    if (anyUnknown === null) {
-      // no more unknowns, so there were no unresponsive minions, so stop warnimng for that
+    const anyPending = document.querySelector(".output-pending");
+    if (anyPending === null) {
+      // no more pending, so all minions have responded, therefore stop warning for unresponsive minions
       const unresponsive = document.getElementById("unresponsive");
       unresponsive.style.display = "none";
     }
@@ -922,6 +923,7 @@ export class CommandBox {
     // add new minions list to track progress of this state command
     for (const minionId of CommandBox.minionIds) {
       const div = CommandBox._createNewMinionRow(minionId);
+      div.classList.add("output-pending");
       output.appendChild(div);
     }
 
