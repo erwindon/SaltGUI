@@ -1098,12 +1098,6 @@ export class CommandBox {
 
     const functionToRun = argsArray.shift();
 
-    const validationError = CommandBox._validateFunctionParams(functionToRun, pTarget, pTargetType);
-    if (validationError) {
-      CommandBox._showError(validationError);
-      return null;
-    }
-
     const fullReturn = pCanUseFullReturn && Utils.getStorageItemBoolean("session", "full_return");
 
     let params = CommandBox._buildCommandParams(functionToRun, pTarget, pTargetType, argsArray, argsObject, fullReturn);
@@ -1120,36 +1114,6 @@ export class CommandBox {
     }
 
     return this.api.apiRequest("POST", "/", params);
-  }
-
-  static _validateFunctionParams (pFunctionToRun, pTarget, pTargetType) {
-    if (typeof pFunctionToRun !== "string") {
-      return "First (unnamed) parameter must be the function name, it must be a string, not a " + typeof pFunctionToRun;
-    }
-
-    // prevent a common spelling error
-    if (pFunctionToRun === "runner" || pFunctionToRun.startsWith("runner.")) {
-      return "Runner commands must be prefixed with 'runners.'\nin: " + pFunctionToRun;
-    }
-
-    // RUNNERS commands do not have a target (MASTER is the target)
-    // WHEEL commands also do not have a target
-    // but we use the TARGET value to form the usually required MATCH parameter
-    // therefore for WHEEL commands it is still required
-    if (pTarget === "" && pFunctionToRun !== "runners" && !pFunctionToRun.startsWith("runners.")) {
-      return "Target cannot be empty for this command\nin: " + pFunctionToRun;
-    }
-
-    // SALT API returns a 500-InternalServerError when it hits an unknown group
-    // Let's improve on that
-    if (pTargetType === "nodegroup") {
-      const nodeGroups = Utils.getStorageItemObject("session", "nodegroups");
-      if (!(pTarget in nodeGroups)) {
-        return "Unknown nodegroup\nin: " + pTarget;
-      }
-    }
-
-    return null;
   }
 
   static _buildCommandParams (pFunctionToRun, pTarget, pTargetType, pArgsArray, pArgsObject, pFullReturn) {
