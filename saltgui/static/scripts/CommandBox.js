@@ -1104,11 +1104,9 @@ export class CommandBox {
 
     const runType = RunType.getRunType();
     if (!pisRunTypeNormalOnly && runType === "async") {
-      if (params.client !== "local") {
-        CommandBox._showError("Async is not supported for '" + functionToRun + "'");
-        return null;
-      }
-      params.client = "local_async";
+      // Async mode - primary validation is in _validateForm()
+      // which ensures async is only used with local (non-runners/wheel) commands
+      params.client += "_async";
       // return will look like:
       // { "jid": "20180718173942195461", "minions": [ ... ] }
     }
