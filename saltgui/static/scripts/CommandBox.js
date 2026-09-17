@@ -913,31 +913,6 @@ export class CommandBox {
     return tokens;
   }
 
-  static _validateAsyncWithCommand (pCommand) {
-    const errors = [];
-
-    const runType = RunType.getRunType();
-    if (runType === "async") {
-      const tokenArray = [];
-      const argsArray = [];
-      const argsObject = {};
-      ParseCommandLine.parseCommandLine(pCommand, tokenArray, argsArray, argsObject);
-
-      if (argsArray.length > 0) {
-        const firstArg = argsArray[0];
-        if (typeof firstArg === "string") {
-          const isRunners = firstArg === "runners" || firstArg.startsWith("runners.");
-          const isWheel = firstArg === "wheel" || firstArg.startsWith("wheel.");
-          if (isRunners || isWheel) {
-            errors.push("Async is not supported for '" + firstArg + "'");
-          }
-        }
-      }
-    }
-
-    return { errors, warnings: [] };
-  }
-
   static _validateForm (pCommand, pTarget, pRunType) {
     const errors = [];
     const validators = [
