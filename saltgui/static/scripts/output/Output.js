@@ -1032,6 +1032,7 @@ export class Output {
     }
 
     if (!Object.keys(pContext.pMinionData).length) {
+      // this is the same error-text as the 'salt' commandline uses
       pContext.pOutputContainer.innerText = "No minions matched the target. No command was sent, no jid was assigned.\nERROR: No return received";
     }
   }
