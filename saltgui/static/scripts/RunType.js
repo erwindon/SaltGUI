@@ -18,6 +18,7 @@ export class RunType {
 
   static _updateRunTypeText () {
     const runType = RunType.getRunType();
+    RunType._notifyRunTypeChange();
 
     switch (runType) {
     case "normal":
@@ -64,5 +65,11 @@ export class RunType {
       runType = Utils.getStorageItem("local", "runtype", "normal");
     }
     return runType;
+  }
+
+  static _notifyRunTypeChange () {
+    if (RunType.onRunTypeChange) {
+      RunType.onRunTypeChange();
+    }
   }
 }

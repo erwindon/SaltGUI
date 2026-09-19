@@ -1,6 +1,5 @@
 /* global config EventSource window */
 
-import {Character} from "./Character.js";
 import {CommandBox} from "./CommandBox.js";
 import {Router} from "./Router.js";
 import {TargetType} from "./TargetType.js";
@@ -481,7 +480,7 @@ export class API {
       // the character counts include "-----BEGIN PUBLIC KEY-----" at the beginning and
       // include "-----END PUBLIC KEY-----" at the end.
       if (data.pub && data.pub.length > 75) {
-        data.pub = data.pub.substring(0, 35) + Character.HORIZONTAL_ELLIPSIS + data.pub.substring(data.pub.length - 33);
+        data.pub = Utils.truncateString(data.pub, 35, 33);
       }
 
       // salt/beacon/<minion>/<beacon>/

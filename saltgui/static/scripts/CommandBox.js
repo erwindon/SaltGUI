@@ -26,6 +26,18 @@ export class CommandBox {
     RunType.createMenu();
     TargetType.createMenu();
 
+    // Re-validate target when target type changes
+    const targetField = document.getElementById("target");
+    TargetType.onTargetTypeChange = () => {
+      CommandBox._validateAndDisplayTargetInput(targetField.value);
+    };
+
+    // Re-validate command when run type (Normal/Async) changes
+    const commandField = document.getElementById("command");
+    RunType.onRunTypeChange = () => {
+      CommandBox._validateAndDisplayCommandInput(commandField.value);
+    };
+
     const manualRun = document.getElementById("popup-run-command");
     Utils.addTableHelp(manualRun, "Click for help", "bottom-center");
     const helpButton = manualRun.querySelector("#help");
@@ -244,14 +256,20 @@ export class CommandBox {
         if (targetField.value === "##connected") {
           // just replace it with the actual value
           targetField.value = Utils.getStorageItem("session", "connected", "");
+          // run validation after programmatic field change
+          CommandBox._validateAndDisplayTargetInput(targetField.value);
+          return;
         }
         const targetType = targetField.value;
         TargetType.autoSelectTargetType(targetType);
+        CommandBox._validateAndDisplayTargetInput(targetField.value);
       });
 
     document.getElementById("command").
       addEventListener("input", () => {
         this.cmdmenu.verifyAll();
+        const commandField = document.getElementById("command");
+        CommandBox._validateAndDisplayCommandInput(commandField.value);
       });
   }
 
@@ -280,6 +298,10 @@ export class CommandBox {
       const commandField = document.getElementById("command");
       commandField.value = pCommand;
     }
+
+    // run validations when template is applied
+    CommandBox._validateAndDisplayTargetInput(pTarget || "");
+    CommandBox._validateAndDisplayCommandInput(pCommand || "");
   }
 
   static _applyTemplateByTemplate (pTemplate) {
@@ -354,17 +376,34 @@ export class CommandBox {
     const targetField = document.getElementById("target");
     const targetValue = targetField.value;
     const commandField = document.getElementById("command");
-    const commandValue = commandField.value;
+    let commandValue = commandField.value;
 
     const targetType = TargetType.menuTargetType._value;
+    const runType = RunType.getRunType();
 
-    const patWhitespaceAll = /\s/g;
-    const commandValueNoTabs = commandValue.replace(patWhitespaceAll, " ");
-    if (commandValueNoTabs !== commandValue) {
-      commandField.value = commandValueNoTabs;
-      CommandBox._showError("The command contains unsupported whitespace characters.\nThese have now been replaced by regular space characters.\nUse 'Run command' again to run the updated command.");
+    // Collect all validation errors and warnings from all fields
+    const commandValidation = CommandBox._validateCommandField(commandValue);
+    const targetValidation = CommandBox._validateTargetField(targetValue, targetType);
+    const formValidation = CommandBox._validateForm(commandValue, targetValue, runType);
+
+    const allErrors = [
+      ...commandValidation.errors,
+      ...targetValidation.errors,
+      ...formValidation.errors
+    ];
+    const allWarnings = [
+      ...commandValidation.warnings,
+      ...targetValidation.warnings
+    ];
+
+    if (allErrors.length > 0) {
+      CommandBox._displayFormValidationIndicator(formValidation);
+      CommandBox._displayValidationOutput({ errors: allErrors, warnings: allWarnings }, output);
       return;
     }
+
+    const patWhitespaceAll = /\s/g;
+    commandValue = commandValue.replace(patWhitespaceAll, " ");
 
     const func = this.getRunParams(targetType, targetValue, commandValue);
     if (func === null) {
@@ -621,6 +660,8 @@ export class CommandBox {
       const targetField = document.getElementById("target");
       targetField.value = lst;
       TargetType.autoSelectTargetType(lst);
+      // run validation after programmatic field change
+      CommandBox._validateAndDisplayTargetInput(lst);
     }
   }
 
@@ -661,6 +702,378 @@ export class CommandBox {
     CommandBox.onRunReturn("ERROR:\n\n" + pMessage, "");
   }
 
+  static _validateAndDisplayCommandInput (pCommand) {
+    const validationResult = CommandBox._validateCommandField(pCommand);
+    CommandBox._displayCmdValidationIndicator(validationResult);
+    const targetField = document.getElementById("target");
+    if (targetField) {
+      const runType = RunType.getRunType();
+      const formValidation = CommandBox._validateForm(pCommand, targetField.value, runType);
+      CommandBox._displayFormValidationIndicator(formValidation);
+    }
+    CommandBox._updateContinuousValidationOutput(validationResult, null);
+  }
+
+  static _validateAndDisplayTargetInput (pTarget) {
+    const targetType = TargetType.menuTargetType._value;
+    const validationResult = CommandBox._validateTargetField(pTarget, targetType);
+    CommandBox._displayTargetValidationIndicator(validationResult);
+    const commandField = document.getElementById("command");
+    if (commandField) {
+      const runType = RunType.getRunType();
+      const formValidation = CommandBox._validateForm(commandField.value, pTarget, runType);
+      CommandBox._displayFormValidationIndicator(formValidation);
+    }
+    CommandBox._updateContinuousValidationOutput(null, validationResult);
+  }
+
+  static _updateContinuousValidationOutput (pCommandValidation, pTargetValidation) {
+    const outputField = document.getElementById("popup-output");
+    const outputText = outputField.innerText;
+
+    // only update if output panel is showing validation (starts with validation icons or waiting)
+    const isShowingValidation =
+      outputText.startsWith(Character.NO_ENTRY_SIGN) ||
+      outputText.startsWith(Character.WARNING_SIGN) ||
+      outputText.startsWith(Character.HEAVY_CHECK_MARK) ||
+      outputText.startsWith("Waiting for command");
+    if (!isShowingValidation) {
+      return;
+    }
+
+    const commandField = document.getElementById("command");
+    const targetField = document.getElementById("target");
+
+    // use provided validation or recalculate if not provided
+    const commandValidation = pCommandValidation || CommandBox._validateCommandField(commandField.value);
+    const targetType = CommandBox._getTargetType();
+    const targetValidation = pTargetValidation || CommandBox._validateTargetField(targetField.value, targetType);
+    const runType = RunType.getRunType();
+    const formValidation = CommandBox._validateForm(commandField.value, targetField.value, runType);
+    CommandBox._displayFormValidationIndicator(formValidation);
+
+    const allErrors = [
+      ...commandValidation.errors,
+      ...targetValidation.errors,
+      ...formValidation.errors
+    ];
+    const allWarnings = [
+      ...commandValidation.warnings,
+      ...targetValidation.warnings
+    ];
+
+    CommandBox._displayValidationOutput({ errors: allErrors, warnings: allWarnings }, outputField);
+  }
+
+  static _getTargetType () {
+    return TargetType._getTargetType();
+  }
+
+  static _validateCommandField (pCommand) {
+    const errors = [];
+    const warnings = [];
+
+    if (pCommand.trim() === "") {
+      return { errors, warnings };
+    }
+
+    const validators = [
+      CommandBox._validateCommandFieldParseError,
+      CommandBox._validateCommandFieldFunctionNameExists,
+      CommandBox._validateCommandFieldFunctionNameIsString,
+      CommandBox._validateCommandFieldRunnerPrefix,
+      CommandBox._validateCommandFieldWheelParameters
+    ];
+
+    const tokenArray = [];
+    const argsArray = [];
+    const argsObject = {};
+
+    const parseResult = ParseCommandLine.parseCommandLine(pCommand, tokenArray, argsArray, argsObject);
+
+    for (const validator of validators) {
+      const result = validator(parseResult, tokenArray, argsArray);
+      if (result) {
+        errors.push(result);
+        break;
+      }
+    }
+
+    CommandBox._collectWarningsFromParsing(pCommand, warnings);
+    CommandBox._collectUnsupportedWhitespaceWarning(pCommand, warnings);
+
+    return { errors, warnings };
+  }
+
+  static _validateCommandFieldParseError (pParseResult, pTokenArrayUnused, pArgsArrayUnused) { // eslint-disable-line no-unused-vars
+    if (pParseResult !== null) {
+      return pParseResult;
+    }
+    return null;
+  }
+
+  static _validateCommandFieldFunctionNameExists (pParseResult, pTokenArrayUnused, pArgsArray) { // eslint-disable-line no-unused-vars
+    if (pParseResult !== null) {
+      return null;
+    }
+    if (pArgsArray.length === 0) {
+      return "First (unnamed) parameter must be the function name, it is mandatory";
+    }
+    return null;
+  }
+
+  static _validateCommandFieldFunctionNameIsString (pParseResult, pTokenArrayUnused, pArgsArray) { // eslint-disable-line no-unused-vars
+    if (pParseResult !== null || pArgsArray.length === 0) {
+      return null;
+    }
+    const firstArg = pArgsArray[0];
+    if (typeof firstArg !== "string") {
+      const truncatedToken = Utils.truncateString(String(firstArg), 50);
+      return "First (unnamed) parameter must be the function name, it must be a string\nin: (" + typeof firstArg + ") " + truncatedToken;
+    }
+    return null;
+  }
+
+  static _validateCommandFieldRunnerPrefix (pParseResult, pTokenArrayUnused, pArgsArray) { // eslint-disable-line no-unused-vars
+    if (pParseResult !== null || pArgsArray.length === 0) {
+      return null;
+    }
+    const firstArg = pArgsArray[0];
+    if (typeof firstArg !== "string") {
+      return null;
+    }
+    if (firstArg === "runner" || firstArg.startsWith("runner.")) {
+      return "Runner commands must be prefixed with 'runners.'\nin: " + firstArg;
+    }
+    return null;
+  }
+
+  static _validateCommandFieldWheelParameters (pParseResult, pTokenArray, pArgsArray) {
+    if (pParseResult !== null || pArgsArray.length === 0) {
+      return null;
+    }
+    const firstArg = pArgsArray[0];
+    if (typeof firstArg !== "string") {
+      return null;
+    }
+    if (firstArg.startsWith("wheel.") && pArgsArray.length > 1) {
+      return "Wheel commands can only take named parameters\nin: " + pTokenArray[1];
+    }
+    return null;
+  }
+
+  static _collectWarningsFromParsing (pCommand, pWarnings) {
+    const tokens = CommandBox._extractTokensFromCommand(pCommand);
+
+    for (const token of tokens) {
+      const result = ParseCommandLine._convertStringToValue(token);
+      if (result.warning) {
+        pWarnings.push(result.warning + "\nin: " + token);
+      }
+    }
+  }
+
+  static _collectUnsupportedWhitespaceWarning (pCommand, pWarnings) {
+    const patWhitespaceAll = /\s/g;
+    const commandValueNoSpaces = pCommand.replace(patWhitespaceAll, " ");
+    if (commandValueNoSpaces !== pCommand) {
+      pWarnings.push("The command contains unsupported whitespace characters\nThese will be replaced by regular space characters when the command is run");
+    }
+  }
+
+  static _extractTokensFromCommand (pCommand) {
+    const tokens = [];
+    let currentToken = "";
+
+    for (const char of pCommand) {
+      if (char === " ") {
+        if (currentToken) {
+          tokens.push(currentToken);
+          // for named parameters, also add the value part for validation
+          const equalSignIndex = currentToken.indexOf("=");
+          if (equalSignIndex > 0) {
+            tokens.push(currentToken.substring(equalSignIndex + 1));
+          }
+          currentToken = "";
+        }
+      } else {
+        currentToken += char;
+      }
+    }
+
+    if (currentToken) {
+      tokens.push(currentToken);
+      // for named parameters, also add the value part for validation
+      const equalSignIndex = currentToken.indexOf("=");
+      if (equalSignIndex > 0) {
+        tokens.push(currentToken.substring(equalSignIndex + 1));
+      }
+    }
+
+    return tokens;
+  }
+
+  static _validateForm (pCommand, pTarget, pRunType) {
+    const errors = [];
+    const validators = [
+      CommandBox._validateFormTargetNotEmpty,
+      CommandBox._validateFormAsyncCompatibility
+    ];
+
+    const tokenArray = [];
+    const argsArray = [];
+    const argsObject = {};
+
+    ParseCommandLine.parseCommandLine(pCommand, tokenArray, argsArray, argsObject);
+
+    if (argsArray.length > 0 && typeof argsArray[0] === "string") {
+      const functionName = argsArray[0];
+      for (const validator of validators) {
+        const result = validator(functionName, pTarget, pRunType);
+        if (result) {
+          errors.push(result);
+        }
+      }
+    }
+
+    return { errors, warnings: [] };
+  }
+
+  static _validateFormTargetNotEmpty (pFunctionName, pTarget, pRunTypeUnused) { // eslint-disable-line no-unused-vars
+    const isRunners = pFunctionName === "runners" || pFunctionName.startsWith("runners.");
+    // RUNNERS commands do not have a target (MASTER is the target)
+    // WHEEL commands also do not have a target
+    // but we use the TARGET value to form the usually required MATCH parameter
+    // therefore for WHEEL commands it is still required
+    if (pTarget === "" && !isRunners) {
+      return "Target cannot be empty for this command\nin: " + pFunctionName;
+    }
+    return null;
+  }
+
+  static _validateFormAsyncCompatibility (pFunctionName, pTargetUnused, pRunType) { // eslint-disable-line no-unused-vars
+    const isRunners = pFunctionName === "runners" || pFunctionName.startsWith("runners.");
+    const isWheel = pFunctionName === "wheel" || pFunctionName.startsWith("wheel.");
+    // Async validation - runners and wheel do not support async
+    if (pRunType === "async" && (isRunners || isWheel)) {
+      return "Async is not supported for '" + pFunctionName + "'";
+    }
+    return null;
+  }
+
+  static _validateTargetField (pTarget, pTargetType) {
+    const errors = [];
+    const validators = [
+      CommandBox._validateTargetFieldNodegroupExists
+    ];
+
+    for (const validator of validators) {
+      const result = validator(pTarget, pTargetType);
+      if (result) {
+        errors.push(result);
+      }
+    }
+
+    return { errors, warnings: [] };
+  }
+
+  static _validateTargetFieldNodegroupExists (pTarget, pTargetType) {
+    if (pTarget.trim() !== "" && pTargetType === "nodegroup") {
+      const nodeGroups = Utils.getStorageItemObject("session", "nodegroups");
+      if (!(pTarget in nodeGroups)) {
+        return "Unknown nodegroup\nin: " + pTarget;
+      }
+    }
+    return null;
+  }
+
+  static _displayCmdValidationIndicator (pValidationResult) {
+    const indicatorElement = document.getElementById("cmd-validation-indicator");
+
+    if (pValidationResult.errors.length === 0 && pValidationResult.warnings.length === 0) {
+      indicatorElement.textContent = "";
+      Utils.addToolTip(indicatorElement, "");
+      return;
+    }
+
+    const hasErrors = pValidationResult.errors.length > 0;
+    const messages = [
+      ...pValidationResult.errors,
+      ...pValidationResult.warnings
+    ];
+
+    const tooltipText = messages.join("\n");
+    indicatorElement.textContent = hasErrors ? Character.NO_ENTRY_SIGN : Character.WARNING_SIGN;
+    indicatorElement.style.color = hasErrors ? "red" : "orange";
+    Utils.addToolTip(indicatorElement, tooltipText, "bottom-center");
+  }
+
+  static _displayTargetValidationIndicator (pValidationResult) {
+    const indicatorElement = document.getElementById("target-validation-indicator");
+
+    if (pValidationResult.errors.length === 0 && pValidationResult.warnings.length === 0) {
+      indicatorElement.textContent = "";
+      Utils.addToolTip(indicatorElement, "");
+      return;
+    }
+
+    const hasErrors = pValidationResult.errors.length > 0;
+    const messages = [
+      ...pValidationResult.errors,
+      ...pValidationResult.warnings
+    ];
+
+    indicatorElement.textContent = hasErrors ? Character.NO_ENTRY_SIGN : Character.WARNING_SIGN;
+    indicatorElement.style.color = hasErrors ? "red" : "orange";
+
+    const tooltipText = messages.join("\n");
+    Utils.addToolTip(indicatorElement, tooltipText, "bottom-center");
+  }
+
+  static _displayFormValidationIndicator (pValidationResult) {
+    const indicatorElement = document.getElementById("form-validation-indicator");
+    if (!indicatorElement) {
+      // element may not exist in test context
+      return;
+    }
+
+    if (pValidationResult.errors.length === 0 && pValidationResult.warnings.length === 0) {
+      indicatorElement.textContent = "";
+      Utils.addToolTip(indicatorElement, "");
+      return;
+    }
+
+    const hasErrors = pValidationResult.errors.length > 0;
+    const messages = [
+      ...pValidationResult.errors,
+      ...pValidationResult.warnings
+    ];
+
+    indicatorElement.textContent = hasErrors ? Character.NO_ENTRY_SIGN : Character.WARNING_SIGN;
+    indicatorElement.style.color = hasErrors ? "red" : "orange";
+
+    const tooltipText = messages.join("\n");
+    Utils.addToolTip(indicatorElement, tooltipText, "bottom-center");
+  }
+
+  static _displayValidationOutput (pValidationResult, pOutputElement) {
+    const errors = pValidationResult.errors || [];
+    const warnings = pValidationResult.warnings || [];
+    let output = "";
+
+    for (const err of errors) {
+      output += Character.NO_ENTRY_SIGN + " " + ParseCommandLine.formatErrorMessage(err) + "\n";
+    }
+
+    for (const wrn of warnings) {
+      output += Character.WARNING_SIGN + " " + ParseCommandLine.formatErrorMessage(wrn) + "\n";
+    }
+
+    output += "\nWaiting for command" + Character.HORIZONTAL_ELLIPSIS;
+
+    pOutputElement.innerText = output.trimStart();
+  }
+
   getRunParams (pTargetType, pTarget, pToRun, pisRunTypeNormalOnly = false, pCanUseFullReturn = true) {
 
     // The leading # was used to indicate a nodegroup
@@ -669,41 +1082,21 @@ export class CommandBox {
       pTarget = pTarget.substring(1);
     }
 
-    if (pToRun === "") {
-      CommandBox._showError("'Command' field cannot be empty");
-      return null;
-    }
-
     // collection for unnamed parameters
+    const tokenArray = [];
     const argsArray = [];
 
     // collection for named parameters
     const argsObject = {};
 
-    const ret = ParseCommandLine.parseCommandLine(pToRun, argsArray, argsObject);
+    const ret = ParseCommandLine.parseCommandLine(pToRun, tokenArray, argsArray, argsObject);
     if (ret !== null) {
       // that is an error message being returned
       CommandBox._showError(ret);
       return null;
     }
 
-    if (argsArray.length === 0) {
-      CommandBox._showError("First (unnamed) parameter is the function name, it is mandatory");
-      return null;
-    }
-
     const functionToRun = argsArray.shift();
-
-    const validationError = CommandBox._validateFunctionParams(functionToRun, pTarget, pTargetType);
-    if (validationError) {
-      CommandBox._showError(validationError);
-      return null;
-    }
-
-    if (functionToRun.startsWith("wheel.") && argsArray.length > 0) {
-      CommandBox._showError("Wheel commands can only take named parameters");
-      return null;
-    }
 
     const fullReturn = pCanUseFullReturn && Utils.getStorageItemBoolean("session", "full_return");
 
@@ -711,46 +1104,14 @@ export class CommandBox {
 
     const runType = RunType.getRunType();
     if (!pisRunTypeNormalOnly && runType === "async") {
-      if (params.client !== "local") {
-        CommandBox._showError("Async is not supported for '" + functionToRun + "'");
-        return null;
-      }
-      params.client = "local_async";
+      // Async mode - primary validation is in _validateForm()
+      // which ensures async is only used with local (non-runners/wheel) commands
+      params.client += "_async";
       // return will look like:
       // { "jid": "20180718173942195461", "minions": [ ... ] }
     }
 
     return this.api.apiRequest("POST", "/", params);
-  }
-
-  static _validateFunctionParams (pFunctionToRun, pTarget, pTargetType) {
-    if (typeof pFunctionToRun !== "string") {
-      return "First (unnamed) parameter is the function name, it must be a string, not a " + typeof pFunctionToRun;
-    }
-
-    // prevent a common spelling error
-    if (pFunctionToRun === "runner" || pFunctionToRun.startsWith("runner.")) {
-      return "'Runner' commands must be prefixed with 'runners.'";
-    }
-
-    // RUNNERS commands do not have a target (MASTER is the target)
-    // WHEEL commands also do not have a target
-    // but we use the TARGET value to form the usually required MATCH parameter
-    // therefore for WHEEL commands it is still required
-    if (pTarget === "" && pFunctionToRun !== "runners" && !pFunctionToRun.startsWith("runners.")) {
-      return "'Target' field cannot be empty";
-    }
-
-    // SALT API returns a 500-InternalServerError when it hits an unknown group
-    // Let's improve on that
-    if (pTargetType === "nodegroup") {
-      const nodeGroups = Utils.getStorageItemObject("session", "nodegroups");
-      if (!(pTarget in nodeGroups)) {
-        return "Unknown nodegroup '" + pTarget + "'";
-      }
-    }
-
-    return null;
   }
 
   static _buildCommandParams (pFunctionToRun, pTarget, pTargetType, pArgsArray, pArgsObject, pFullReturn) {
