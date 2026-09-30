@@ -979,8 +979,12 @@ export class CommandBox {
 
   static _validateTargetFieldNodegroupExists (pTarget, pTargetType) {
     if (pTarget.trim() !== "" && pTargetType === "nodegroup") {
+      let nodeGroupName = pTarget;
+      if (nodeGroupName.startsWith("#")) {
+        nodeGroupName = nodeGroupName.substring(1);
+      }
       const nodeGroups = Utils.getStorageItemObject("session", "nodegroups");
-      if (!(pTarget in nodeGroups)) {
+      if (!(nodeGroupName in nodeGroups)) {
         return "Unknown nodegroup\nin: " + pTarget;
       }
     }
