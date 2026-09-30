@@ -780,10 +780,12 @@ export class Panel {
     if (!navigator.clipboard) {
       Utils.addToolTip(pTarget, "Clipboard not available\nonly for https or localhost");
     } else if (useMultiAddress && pTarget.dataset.multiIpNumber !== pTarget.dataset.singleIpNumber) {
-      navigator.clipboard.writeText(pTarget.dataset.multiIpNumber);
+      // clipboard write is fire-and-forget, tooltip shows immediately
+      Utils.ignorePromise(navigator.clipboard.writeText(pTarget.dataset.multiIpNumber));
       Utils.addToolTip(pTarget, "Copied all!");
     } else {
-      navigator.clipboard.writeText(pTarget.dataset.singleIpNumber);
+      // clipboard write is fire-and-forget, tooltip shows immediately
+      Utils.ignorePromise(navigator.clipboard.writeText(pTarget.dataset.singleIpNumber));
       Utils.addToolTip(pTarget, "Copied!");
     }
   }
