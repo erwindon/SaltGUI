@@ -95,9 +95,6 @@ export class EventsPanel extends Panel {
         this.missedEventsRowTimestampSpan = stampSpan;
       } else {
         const stampSpan = this.missedEventsRowTimestampSpan;
-        while (stampSpan.firstChild) {
-          stampSpan.removeChild(stampSpan.firstChild);
-        }
         const stampDate = new Date();
         Output.dateTimeStr(stampDate, stampSpan, "bottom-left", true);
         this.missedEventsRowDataTd.innerText = missedTxt;
