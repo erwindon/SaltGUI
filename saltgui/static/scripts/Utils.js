@@ -399,17 +399,20 @@ export class Utils {
       Utils._updateTableFilter(pTable, input.value, menuItems);
     } else if (pAction === "hide") {
       pSearchBlock.style.transition = "max-height 0.3s ease, opacity 0.3s ease";
-      void pSearchBlock.offsetHeight;
+      // accessing offsetHeight forces a reflow so the transition animates properly
+      pSearchBlock.offsetHeight;
       pSearchBlock.classList.add("hidden");
       Utils._updateTableFilter(pTable, "", menuItems);
     } else if (pSearchBlock.classList.contains("hidden")) {
       pSearchBlock.style.transition = "max-height 0.6s ease, opacity 0.6s ease";
-      void pSearchBlock.offsetHeight;
+      // accessing offsetHeight forces a reflow so the transition animates properly
+      pSearchBlock.offsetHeight;
       pSearchBlock.classList.remove("hidden");
       Utils._updateTableFilter(pTable, input.value, menuItems);
     } else { // NOSONAR S1871
       pSearchBlock.style.transition = "max-height 0.3s ease, opacity 0.3s ease";
-      void pSearchBlock.offsetHeight;
+      // accessing offsetHeight forces a reflow so the transition animates properly
+      pSearchBlock.offsetHeight;
       pSearchBlock.classList.add("hidden");
       Utils._updateTableFilter(pTable, "", menuItems);
     }
