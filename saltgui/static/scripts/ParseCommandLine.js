@@ -268,7 +268,7 @@ export class ParseCommandLine {
     const max = 0x7FFFFFFFFFFFFFFFn;
     const bigValue = BigInt(pValue);
     if (bigValue < min || bigValue > max) {
-      return { isValid: false, warning: "Argument exceeds integer range, it will likely be sent as string" };
+      return { isValid: false, warning: "Argument exceeds integer range, it will be sent as string" };
     }
     return { isValid: true };
   }
@@ -283,7 +283,7 @@ export class ParseCommandLine {
     const value = Number.parseInt(cleanStr, 16) * (hasNegativeSign ? -1 : 1);
     const rangeCheck = ParseCommandLine._check64BitRange(value);
     if (!rangeCheck.isValid) {
-      return { value, warning: rangeCheck.warning };
+      return { value: pStr, warning: rangeCheck.warning };
     }
     return { value };
   }
@@ -298,7 +298,7 @@ export class ParseCommandLine {
     const value = Number.parseInt(cleanStr, 2) * (hasNegativeSign ? -1 : 1);
     const rangeCheck = ParseCommandLine._check64BitRange(value);
     if (!rangeCheck.isValid) {
-      return { value, warning: rangeCheck.warning };
+      return { value: pStr, warning: rangeCheck.warning };
     }
     return { value };
   }
@@ -314,7 +314,7 @@ export class ParseCommandLine {
     const rangeCheck = ParseCommandLine._check64BitRange(value);
     const warning = "Octal numbers are supported here, but usually not in 'salt'";
     if (!rangeCheck.isValid) {
-      return { value, warning: rangeCheck.warning };
+      return { value: pStr, warning: rangeCheck.warning };
     }
     return { value, warning };
   }
@@ -346,7 +346,7 @@ export class ParseCommandLine {
     value = value * sign;
     const rangeCheck = ParseCommandLine._check64BitRange(value);
     if (!rangeCheck.isValid) {
-      return { value, warning: rangeCheck.warning };
+      return { value: pStr, warning: rangeCheck.warning };
     }
     return { value };
   }
@@ -355,7 +355,7 @@ export class ParseCommandLine {
     const value = Number.parseInt(pStr, 10);
     const rangeCheck = ParseCommandLine._check64BitRange(value);
     if (!rangeCheck.isValid) {
-      return { value, warning: rangeCheck.warning };
+      return { value: pStr, warning: rangeCheck.warning };
     }
     return { value };
   }

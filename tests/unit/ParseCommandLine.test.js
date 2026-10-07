@@ -307,6 +307,16 @@ describe("Unittests for ParseCommandLine.js", () => {
       assert.equal(args[0], 20182820003411338317);
       assert.equal(Object.keys(params).length, 0);
 
+      // max int64 value (exceeds safe integer range)
+      args = [];
+      params = {};
+      tokens = [];
+      result = ParseCommandLine.parseCommandLine("9223372036854775807", tokens, args, params);
+      assert.isNull(result);
+      assert.equal(args.length, 1);
+      assert.equal(args[0], "9223372036854775807");
+      assert.equal(Object.keys(params).length, 0);
+
       // FLOAT
 
       args = [];
