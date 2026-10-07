@@ -266,7 +266,12 @@ export class ParseCommandLine {
   static _check64BitRange (pValue) {
     const min = -0x8000000000000000n;
     const max = 0x7FFFFFFFFFFFFFFFn;
-    const bigValue = BigInt(pValue);
+    let bigValue;
+    try {
+      bigValue = BigInt(pValue);
+    } catch (err) { // eslint-disable-line no-unused-vars
+      return { isValid: false, warning: err };
+    }
     if (bigValue < min || bigValue > max) {
       return { isValid: false, warning: "Argument exceeds integer range, it will be sent as string" };
     }

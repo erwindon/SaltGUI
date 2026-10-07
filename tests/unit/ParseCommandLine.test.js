@@ -453,6 +453,17 @@ describe("Unittests for ParseCommandLine.js", () => {
       assert.equal(args[0], 0);
       assert.equal(Object.keys(params).length, 0);
 
+      // very large hexadecimal (256 times 'f', exceeds 64-bit range)
+      args = [];
+      params = {};
+      tokens = [];
+      const veryLargeHex = "0x" + "f".repeat(256);
+      result = ParseCommandLine.parseCommandLine(veryLargeHex, tokens, args, params);
+      assert.isNull(result);
+      assert.equal(args.length, 1);
+      assert.equal(args[0], veryLargeHex);
+      assert.equal(Object.keys(params).length, 0);
+
       // BINARY
 
       args = [];
