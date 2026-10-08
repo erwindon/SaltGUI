@@ -306,6 +306,9 @@ export class ParseCommandLine {
     if (rangeCheck.warning) {
       return { value: value, warning: rangeCheck.warning };
     }
+    if (cleanStr[1] === "X") {
+      return { value, warning: "Hexadecimal numbers with 'X' are supported here, but usually not in 'salt'" };
+    }
     return { value };
   }
 
@@ -327,6 +330,9 @@ export class ParseCommandLine {
     }
     if (rangeCheck.warning) {
       return { value: value, warning: rangeCheck.warning };
+    }
+    if (cleanStr[1] === "B") {
+      return { value, warning: "Binary numbers with 'B' are supported here, but usually not in 'salt'" };
     }
     return { value };
   }
