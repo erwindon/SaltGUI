@@ -156,8 +156,8 @@ describe("Unittests for CommandBox.js", () => {
 
     it("test sexagesimal out of range returns error", () => {
       const result = CommandBox._validateCommandField("cmd 1:99");
-      assert.isArray(result.errors);
-      assert.isTrue(result.errors.some(err => err.includes("Sexagesimal")));
+      assert.isArray(result.warnings);
+      assert.isTrue(result.warnings.some(err => err.includes("Sexagesimal")));
     });
 
     it("test valid sexagesimal returns no error", () => {

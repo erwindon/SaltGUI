@@ -369,7 +369,7 @@ export class ParseCommandLine {
     for (let i = 1; i < parts.length; i++) {
       const num = Number.parseInt(parts[i], 10);
       if (num < 0 || num > 59) {
-        return { error: "Sexagesimal component out of range (must be 0-59 after first component)\nin: " + pStr };
+        return { value: pStr, warning: "Sexagesimal component out of range (must be 0-59 after first component),\nassuming string value" };
       }
     }
 
