@@ -281,7 +281,7 @@ export class ParseCommandLine {
     const minSafeInt = BigInt(Number.MIN_SAFE_INTEGER);
     const maxSafeInt = BigInt(Number.MAX_SAFE_INTEGER);
     if (bigValue < minSafeInt || bigValue > maxSafeInt) {
-      return { isValid: true, warning: "Argument exceeds safe-integer range, precision will not be lost in the request, but similar values will loose precision in the response" }
+      return { isValid: true, warning: "Argument exceeds safe-integer range, precision will not be lost in the request,\nbut similar values will loose precision in the response" }
     }
 
     return { isValid: true };
