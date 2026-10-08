@@ -185,25 +185,25 @@ describe("Unittests for CommandBox.js", () => {
     it("test first unnamed argument as hexadecimal number returns error", () => {
       const result = CommandBox._validateCommandField("0xFF arg");
       assert.isArray(result.errors);
-      assert.isTrue(result.errors.some(err => err.includes("must be a string") && err.includes("(number)")));
+      assert.isTrue(result.errors.some(err => err.includes("must be a string") && err.includes("(bigint)")));
     });
 
     it("test first unnamed argument as binary number returns error", () => {
       const result = CommandBox._validateCommandField("0b1010");
       assert.isArray(result.errors);
-      assert.isTrue(result.errors.some(err => err.includes("must be a string") && err.includes("(number)")));
+      assert.isTrue(result.errors.some(err => err.includes("must be a string") && err.includes("(bigint)")));
     });
 
     it("test first unnamed argument as octal number returns error", () => {
       const result = CommandBox._validateCommandField("010");
       assert.isArray(result.errors);
-      assert.isTrue(result.errors.some(err => err.includes("must be a string") && err.includes("(number)")));
+      assert.isTrue(result.errors.some(err => err.includes("must be a string") && err.includes("(bigint)")));
     });
 
     it("test first unnamed argument as decimal number returns error", () => {
       const result = CommandBox._validateCommandField("123 arg");
       assert.isArray(result.errors);
-      assert.isTrue(result.errors.some(err => err.includes("must be a string") && err.includes("(number)")));
+      assert.isTrue(result.errors.some(err => err.includes("must be a string") && err.includes("(bigint)")));
     });
 
     it("test first unnamed argument as quoted string returns no error", () => {

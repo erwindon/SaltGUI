@@ -274,7 +274,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("0", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], 0);
+      assert.equal(args[0], 0n);
       assert.equal(Object.keys(params).length, 0);
 
       // an integer that almost looks like a jobid, but one digit less
@@ -284,7 +284,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("2018082000341133831", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], 2018082000341133831);
+      assert.equal(args[0], 2018082000341133831n);
       assert.equal(Object.keys(params).length, 0);
 
       // an integer that almost looks like a jobid, but one digit more
@@ -294,7 +294,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("201808200034113383170", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], 201808200034113383170);
+      assert.equal(args[0], 201808200034113383170n);
       assert.equal(Object.keys(params).length, 0);
 
       // an integer that almost looks like a jobid, just not a true date-time
@@ -307,14 +307,26 @@ describe("Unittests for ParseCommandLine.js", () => {
       assert.equal(args[0], 20182820003411338317);
       assert.equal(Object.keys(params).length, 0);
 
-      // max int64 value (exceeds safe integer range)
+      // max int64 value
       args = [];
       params = {};
       tokens = [];
+      // 9223372036854775807 = 0x7FFFFFFFFFFFFFFF
       result = ParseCommandLine.parseCommandLine("9223372036854775807", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], "9223372036854775807");
+      assert.equal(args[0], 9223372036854775807n);
+      assert.equal(Object.keys(params).length, 0);
+
+      // beyond max int64 value
+      args = [];
+      params = {};
+      tokens = [];
+      // 9223372036854775808 = 0x8000000000000000
+      result = ParseCommandLine.parseCommandLine("9223372036854775808", tokens, args, params);
+      assert.isNull(result);
+      assert.equal(args.length, 1);
+      assert.equal(args[0], "9223372036854775808");
       assert.equal(Object.keys(params).length, 0);
 
       // FLOAT
@@ -423,7 +435,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("0xFF", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], 255);
+      assert.equal(args[0], 255n);
       assert.equal(Object.keys(params).length, 0);
 
       args = [];
@@ -432,7 +444,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("0x10", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], 16);
+      assert.equal(args[0], 16n);
       assert.equal(Object.keys(params).length, 0);
 
       args = [];
@@ -441,7 +453,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("-0x10", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], -16);
+      assert.equal(args[0], -16n);
       assert.equal(Object.keys(params).length, 0);
 
       args = [];
@@ -450,7 +462,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("0x0", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], 0);
+      assert.equal(args[0], 0n);
       assert.equal(Object.keys(params).length, 0);
 
       // very large hexadecimal (256 times 'f', exceeds 64-bit range)
@@ -472,7 +484,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("0b1010", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], 10);
+      assert.equal(args[0], 10n);
       assert.equal(Object.keys(params).length, 0);
 
       args = [];
@@ -481,7 +493,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("0b101", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], 5);
+      assert.equal(args[0], 5n);
       assert.equal(Object.keys(params).length, 0);
 
       args = [];
@@ -490,7 +502,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("-0b101", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], -5);
+      assert.equal(args[0], -5n);
       assert.equal(Object.keys(params).length, 0);
 
       args = [];
@@ -499,7 +511,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("0b0", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], 0);
+      assert.equal(args[0], 0n);
       assert.equal(Object.keys(params).length, 0);
 
       // OCTAL
@@ -510,7 +522,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("077", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], 63);
+      assert.equal(args[0], 63n);
       assert.equal(Object.keys(params).length, 0);
 
       args = [];
@@ -519,7 +531,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("010", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], 8);
+      assert.equal(args[0], 8n);
       assert.equal(Object.keys(params).length, 0);
 
       args = [];
@@ -528,7 +540,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("-010", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], -8);
+      assert.equal(args[0], -8n);
       assert.equal(Object.keys(params).length, 0);
 
       args = [];
@@ -537,7 +549,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("00", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], 0);
+      assert.equal(args[0], 0n);
       assert.equal(Object.keys(params).length, 0);
 
       // SEXAGESIMAL
@@ -548,7 +560,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("1:30", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], 90);
+      assert.equal(args[0], 90n);
       assert.equal(Object.keys(params).length, 0);
 
       args = [];
@@ -557,7 +569,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("1:30:45", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], 5445);
+      assert.equal(args[0], 5445n);
       assert.equal(Object.keys(params).length, 0);
 
       args = [];
@@ -566,7 +578,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("99:00", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], 5940);
+      assert.equal(args[0], 5940n);
       assert.equal(Object.keys(params).length, 0);
 
       args = [];
@@ -575,7 +587,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("-1:30", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], -90);
+      assert.equal(args[0], -90n);
       assert.equal(Object.keys(params).length, 0);
 
       args = [];
