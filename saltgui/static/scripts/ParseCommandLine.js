@@ -264,17 +264,26 @@ export class ParseCommandLine {
   }
 
   static _check64BitRange (pValue) {
-    const min = -0x8000000000000000n;
-    const max = 0x7FFFFFFFFFFFFFFFn;
     let bigValue;
+
     try {
       bigValue = BigInt(pValue);
     } catch (err) {
       return { isValid: false, warning: err };
     }
-    if (bigValue < min || bigValue > max) {
+
+    const min64 = -0x8000000000000000n;
+    const max64 = 0x7FFFFFFFFFFFFFFFn;
+    if (bigValue < min64 || bigValue > max64) {
       return { isValid: false, warning: "Argument exceeds integer range, it will be sent as string" };
     }
+
+    const minSafeInt = BigInt(Number.MIN_SAFE_INTEGER);
+    const maxSafeInt = BigInt(Number.MAX_SAFE_INTEGER);
+    if (bigValue < minSafeInt || bigValue > maxSafeInt) {
+      return { isValid: true, warning: "Argument exceeds safe-integer range, precision will not be lost in the request, but similar values will loose precision in the response" }
+    }
+
     return { isValid: true };
   }
 
@@ -294,6 +303,9 @@ export class ParseCommandLine {
     if (!rangeCheck.isValid) {
       return { value: pStr, warning: rangeCheck.warning };
     }
+    if (rangeCheck.warning) {
+      return { value: value, warning: rangeCheck.warning };
+    }
     return { value };
   }
 
@@ -312,6 +324,9 @@ export class ParseCommandLine {
     const rangeCheck = ParseCommandLine._check64BitRange(value);
     if (!rangeCheck.isValid) {
       return { value: pStr, warning: rangeCheck.warning };
+    }
+    if (rangeCheck.warning) {
+      return { value: value, warning: rangeCheck.warning };
     }
     return { value };
   }
@@ -333,6 +348,9 @@ export class ParseCommandLine {
     if (!rangeCheck.isValid) {
       return { value: pStr, warning: rangeCheck.warning };
     }
+    if (rangeCheck.warning) {
+      return { value: value, warning: rangeCheck.warning };
+    }
     return { value, warning };
   }
 
@@ -352,7 +370,11 @@ export class ParseCommandLine {
     // Calculate the value: treat as mixed-radix base-60
     let value = 0n;
     for (let i = 0; i < parts.length; i++) {
-      const baseMultiplier = 60n ** BigInt(parts.length - 1 - i);
+      let baseMultiplier = 1n;
+      const exponent = parts.length - 1 - i;
+      for (let step = 0; step < exponent; step++) {
+        baseMultiplier *= 60n;
+      }
       value += BigInt(parts[i]) * baseMultiplier;
     }
 
@@ -360,6 +382,9 @@ export class ParseCommandLine {
     const rangeCheck = ParseCommandLine._check64BitRange(value);
     if (!rangeCheck.isValid) {
       return { value: pStr, warning: rangeCheck.warning };
+    }
+    if (rangeCheck.warning) {
+      return { value: value, warning: rangeCheck.warning };
     }
     return { value };
   }
@@ -374,6 +399,9 @@ export class ParseCommandLine {
     const rangeCheck = ParseCommandLine._check64BitRange(value);
     if (!rangeCheck.isValid) {
       return { value: pStr, warning: rangeCheck.warning };
+    }
+    if (rangeCheck.warning) {
+      return { value: value, warning: rangeCheck.warning };
     }
     return { value };
   }
