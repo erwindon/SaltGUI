@@ -575,6 +575,15 @@ describe("Unittests for ParseCommandLine.js", () => {
       args = [];
       params = {};
       tokens = [];
+      result = ParseCommandLine.parseCommandLine("1:02", tokens, args, params);
+      assert.isNull(result);
+      assert.equal(args.length, 1);
+      assert.equal(args[0], 62n);
+      assert.equal(Object.keys(params).length, 0);
+
+      args = [];
+      params = {};
+      tokens = [];
       result = ParseCommandLine.parseCommandLine("99:00", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
@@ -601,6 +610,24 @@ describe("Unittests for ParseCommandLine.js", () => {
       tokens = [];
       result = ParseCommandLine.parseCommandLine("1:30:99", tokens, args, params);
       assert.isTrue(result.startsWith("Sexagesimal component out of range (must be 0-59 after first component)"));
+
+      args = [];
+      params = {};
+      tokens = [];
+      result = ParseCommandLine.parseCommandLine("0:30", tokens, args, params);
+      assert.isNull(result);
+      assert.equal(args.length, 1);
+      assert.equal(args[0], 30n);
+      assert.equal(Object.keys(params).length, 0);
+
+      args = [];
+      params = {};
+      tokens = [];
+      result = ParseCommandLine.parseCommandLine("01:30", tokens, args, params);
+      assert.isNull(result);
+      assert.equal(args.length, 1);
+      assert.equal(args[0], 90n);
+      assert.equal(Object.keys(params).length, 0);
 
       // NULL
 

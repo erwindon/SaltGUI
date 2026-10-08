@@ -386,6 +386,9 @@ export class ParseCommandLine {
     if (rangeCheck.warning) {
       return { value: value, warning: rangeCheck.warning };
     }
+    if (cleanStr[0] === "0") {
+      return { value, warning: "Sexagesimal numbers with leading zero are supported here, but usually not in 'salt'" };
+    }
     return { value };
   }
 
