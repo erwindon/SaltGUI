@@ -358,7 +358,15 @@ export class API {
     };
 
     if (pMethod === "POST") {
-      options.body = JSON.stringify(pParams);
+      // BigInt is not JSON-serializable; convert to marker string so JSON.stringify
+      // can process it, then regex removes quotes to produce unquoted JSON numbers.
+      // Use \x00 (null byte) as delimiter since it cannot be typed, preventing collisions.
+      options.body = JSON.stringify(pParams, (_key, value) => { // eslint-disable-line no-unused-vars
+        if (typeof value === 'bigint') {
+          return `\x00BIGINT${value.toString()}\x00`;
+        }
+        return value;
+      }).replace(/"\\u0000BIGINT(-?\d+)\\u0000"/g, '$1');
     }
 
     /* eslint-disable compat/compat */

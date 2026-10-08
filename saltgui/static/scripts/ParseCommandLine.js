@@ -269,7 +269,7 @@ export class ParseCommandLine {
     let bigValue;
     try {
       bigValue = BigInt(pValue);
-    } catch (err) { // eslint-disable-line no-unused-vars
+    } catch (err) {
       return { isValid: false, warning: err };
     }
     if (bigValue < min || bigValue > max) {
@@ -284,8 +284,12 @@ export class ParseCommandLine {
     if (pStr[0] === "-" || pStr[0] === "+") {
       cleanStr = pStr.substring(1);
     }
-    cleanStr = cleanStr.substring(2);
-    const value = Number.parseInt(cleanStr, 16) * (hasNegativeSign ? -1 : 1);
+    let value;
+    try {
+      value = BigInt(cleanStr) * (hasNegativeSign ? -1n : 1n);
+    } catch (err) { // eslint-disable-line no-unused-vars
+      return { value: pStr, warning: "Invalid hexadecimal format" };
+    }
     const rangeCheck = ParseCommandLine._check64BitRange(value);
     if (!rangeCheck.isValid) {
       return { value: pStr, warning: rangeCheck.warning };
@@ -299,8 +303,12 @@ export class ParseCommandLine {
     if (pStr[0] === "-" || pStr[0] === "+") {
       cleanStr = pStr.substring(1);
     }
-    cleanStr = cleanStr.substring(2);
-    const value = Number.parseInt(cleanStr, 2) * (hasNegativeSign ? -1 : 1);
+    let value;
+    try {
+      value = BigInt(cleanStr) * (hasNegativeSign ? -1n : 1n);
+    } catch (err) { // eslint-disable-line no-unused-vars
+      return { value: pStr, warning: "Invalid binary format" };
+    }
     const rangeCheck = ParseCommandLine._check64BitRange(value);
     if (!rangeCheck.isValid) {
       return { value: pStr, warning: rangeCheck.warning };
@@ -314,8 +322,12 @@ export class ParseCommandLine {
     if (pStr[0] === "-" || pStr[0] === "+") {
       cleanStr = pStr.substring(1);
     }
-    cleanStr = cleanStr.substring(1);
-    const value = Number.parseInt(cleanStr, 8) * (hasNegativeSign ? -1 : 1);
+    let value;
+    try {
+      value = BigInt("0o" + cleanStr.substring(1)) * (hasNegativeSign ? -1n : 1n);
+    } catch (err) { // eslint-disable-line no-unused-vars
+      return { value: pStr, warning: "Invalid octal format" };
+    }
     const rangeCheck = ParseCommandLine._check64BitRange(value);
     const warning = "Octal numbers are supported here, but usually not in 'salt'";
     if (!rangeCheck.isValid) {
@@ -325,7 +337,7 @@ export class ParseCommandLine {
   }
 
   static _parseSexagesimal (pStr) {
-    const sign = pStr[0] === "-" ? -1 : 1;
+    const sign = pStr[0] === "-" ? -1n : 1n;
     const cleanStr = pStr.replace(/^[-+]/, "");
     const parts = cleanStr.split(":");
 
@@ -338,14 +350,10 @@ export class ParseCommandLine {
     }
 
     // Calculate the value: treat as mixed-radix base-60
-    let value = 0;
-    const baseMultipliers = [];
+    let value = 0n;
     for (let i = 0; i < parts.length; i++) {
-      baseMultipliers.push(Math.pow(60, parts.length - 1 - i));
-    }
-
-    for (let i = 0; i < parts.length; i++) {
-      value += Number.parseInt(parts[i], 10) * baseMultipliers[i];
+      const baseMultiplier = 60n ** BigInt(parts.length - 1 - i);
+      value += BigInt(parts[i]) * baseMultiplier;
     }
 
     value = value * sign;
@@ -357,7 +365,12 @@ export class ParseCommandLine {
   }
 
   static _parseDecimalInteger (pStr) {
-    const value = Number.parseInt(pStr, 10);
+    let value;
+    try {
+      value = BigInt(pStr);
+    } catch (err) { // eslint-disable-line no-unused-vars
+      return { value: pStr, warning: "Invalid integer format" };
+    }
     const rangeCheck = ParseCommandLine._check64BitRange(value);
     if (!rangeCheck.isValid) {
       return { value: pStr, warning: rangeCheck.warning };
