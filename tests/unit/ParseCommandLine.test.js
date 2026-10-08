@@ -603,13 +603,19 @@ describe("Unittests for ParseCommandLine.js", () => {
       params = {};
       tokens = [];
       result = ParseCommandLine.parseCommandLine("1:99", tokens, args, params);
-      assert.isTrue(result.startsWith("Sexagesimal component out of range (must be 0-59 after first component)"));
+      assert.isNull(result);
+      assert.equal(args.length, 1);
+      assert.equal(args[0], "1:99");
+      assert.equal(Object.keys(params).length, 0);
 
       args = [];
       params = {};
       tokens = [];
       result = ParseCommandLine.parseCommandLine("1:30:99", tokens, args, params);
-      assert.isTrue(result.startsWith("Sexagesimal component out of range (must be 0-59 after first component)"));
+      assert.isNull(result);
+      assert.equal(args.length, 1);
+      assert.equal(args[0], "1:30:99");
+      assert.equal(Object.keys(params).length, 0);
 
       args = [];
       params = {};
