@@ -224,7 +224,10 @@ export class ParseCommandLine {
     const patHexadecimal = /^[-+]?0[xX][0-9a-fA-F]+$/;
     const patBinary = /^[-+]?0[bB][01]+$/;
     const patOctal = /^[-+]?0[0-7]+$/;
-    const patSexagesimal = /^[-+]?\d+(?::\d+)+$/;
+    // same as in yaml/resolver.py from PyYaml:
+    const patSexagesimal = /^[-+]?[1-9][0-9_]*(?::[0-5]?[0-9])+$/;
+    // looks like sexagesimal but may not be valid:
+    const patSexagesimalLike = /^[-+]?\d+(?::\d+)+$/;
     const patInteger = /^(?:(?:0)|(?:[-+]?[1-9]\d*))$/;
     const patFloat = /^[-+]?(?:\d+[.]?\d*|[.]\d+)(?:[eE][-+]?\d+)?$/; // NOSONAR S8786
 
@@ -258,6 +261,9 @@ export class ParseCommandLine {
         return { error: "Numeric argument has overflowed or is infinity" };
       }
       return { value };
+    } else if (patSexagesimalLike.test(pStr)) {
+      // Looks like sexagesimal but doesn't match valid pattern
+      return { value: pStr, warning: "Sexagesimal format not recognized by salt,\nassuming string value" };
     } else {
       return { value: pStr };
     }
@@ -364,14 +370,6 @@ export class ParseCommandLine {
     const sign = pStr[0] === "-" ? -1n : 1n;
     const cleanStr = pStr.replace(/^[-+]/, "");
     const parts = cleanStr.split(":");
-
-    // Validate: first part can be any integer, rest must be 0-59
-    for (let i = 1; i < parts.length; i++) {
-      const num = Number.parseInt(parts[i], 10);
-      if (num < 0 || num > 59) {
-        return { value: pStr, warning: "Sexagesimal component out of range (must be 0-59 after first component),\nassuming string value" };
-      }
-    }
 
     // Calculate the value: treat as mixed-radix base-60
     let value = 0n;

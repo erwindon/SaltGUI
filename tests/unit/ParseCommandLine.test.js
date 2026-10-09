@@ -623,7 +623,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("0:30", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], 30n);
+      assert.equal(args[0], "0:30");
       assert.equal(Object.keys(params).length, 0);
 
       args = [];
@@ -632,7 +632,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       result = ParseCommandLine.parseCommandLine("01:30", tokens, args, params);
       assert.isNull(result);
       assert.equal(args.length, 1);
-      assert.equal(args[0], 90n);
+      assert.equal(args[0], "01:30");
       assert.equal(Object.keys(params).length, 0);
 
       // NULL
