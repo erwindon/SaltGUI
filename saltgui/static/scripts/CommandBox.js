@@ -870,6 +870,11 @@ export class CommandBox {
       if (result.warning) {
         pWarnings.push(result.warning + "\nin: " + token);
       }
+      if (result.warnings) {
+        for (const warning of result.warnings) {
+          pWarnings.push(warning + "\nin: " + token);
+        }
+      }
     }
   }
 

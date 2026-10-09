@@ -212,6 +212,9 @@ export class ParseCommandLine {
     if (conversionResult.warning) {
       result.warning = conversionResult.warning;
     }
+    if (conversionResult.warnings) {
+      result.warnings = conversionResult.warnings;
+    }
     return result;
   }
 
@@ -275,7 +278,7 @@ export class ParseCommandLine {
     try {
       bigValue = BigInt(pValue);
     } catch (err) {
-      return { isValid: false, warning: err };
+      return { isValid: false, warning: err.toString() };
     }
 
     const min64 = -0x8000000000000000n;
@@ -309,13 +312,14 @@ export class ParseCommandLine {
     if (!rangeCheck.isValid) {
       return { value: pStr, warning: rangeCheck.warning };
     }
+    const warnings = [];
     if (rangeCheck.warning) {
-      return { value: value, warning: rangeCheck.warning };
+      warnings.push(rangeCheck.warning);
     }
     if (cleanStr[1] === "X") {
-      return { value, warning: "Hexadecimal numbers with 'X' are supported here, but usually not in 'salt'" };
+      warnings.push("Hexadecimal numbers with 'X' are supported here, but usually not in 'salt'");
     }
-    return { value };
+    return { value, warnings };
   }
 
   static _parseBinary (pStr) {
@@ -334,13 +338,14 @@ export class ParseCommandLine {
     if (!rangeCheck.isValid) {
       return { value: pStr, warning: rangeCheck.warning };
     }
+    const warnings = [];
     if (rangeCheck.warning) {
-      return { value: value, warning: rangeCheck.warning };
+      warnings.push(rangeCheck.warning);
     }
     if (cleanStr[1] === "B") {
-      return { value, warning: "Binary numbers with 'B' are supported here, but usually not in 'salt'" };
+      warnings.push("Binary numbers with 'B' are supported here, but usually not in 'salt'");
     }
-    return { value };
+    return { value, warnings };
   }
 
   static _parseOctal (pStr) {
@@ -356,14 +361,14 @@ export class ParseCommandLine {
       return { value: pStr, warning: "Invalid octal format" };
     }
     const rangeCheck = ParseCommandLine._check64BitRange(value);
-    const warning = "Octal numbers are supported here, but usually not in 'salt'";
     if (!rangeCheck.isValid) {
       return { value: pStr, warning: rangeCheck.warning };
     }
+    const warnings = ["Octal numbers are supported here, but usually not in 'salt'"];
     if (rangeCheck.warning) {
-      return { value: value, warning: rangeCheck.warning };
+      warnings.push(rangeCheck.warning);
     }
-    return { value, warning };
+    return { value, warnings };
   }
 
   static _parseSexagesimal (pStr) {
