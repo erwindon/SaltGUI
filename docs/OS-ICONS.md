@@ -1,17 +1,23 @@
-Tux attribution and copyright notice for os-linux.png
+# OS icon attribution
 
-Source image: https://commons.wikimedia.org/wiki/File:Tux.svg
-Original artwork: Larry Ewing (lewing@isc.tamu.edu), created with the GIMP.
-The source SVG also credits Simon Budig and Garrett LeSage.
+This document records the source, authors and usage terms of OS icons.
+These terms apply to the images only and do not change SaltGUI's license.
 
-Larry Ewing permits use of the artwork with attribution to him and the GIMP.
-Simon Budig's redistribution terms require the original README/Copyright
-notice to accompany the artwork. That notice is reproduced below.
-These terms apply to this image, not to the rest of SaltGUI.
+## os-linux.png
 
-Original README: https://www.home.unix-ag.org/simon/penguin/README
+- Filename: `saltgui/static/images/os-linux.png`
+- Original image: <https://commons.wikimedia.org/wiki/File:Tux.svg>
+- Authors: Larry Ewing (original artwork, created with GIMP); Simon Budig and
+  Garrett LeSage (also credited in the source SVG).
+- License / usage terms: <https://commons.wikimedia.org/wiki/File:Tux.svg#Licensing>
+- Original README/Copyright: <https://www.home.unix-ag.org/simon/penguin/README>
 
-------------------------------------------------------------------------
+When redistributing this icon, include this document with the image, including
+in distributions that copy only the `saltgui` directory.
+
+### Original README/Copyright notice
+
+```text
 This is the Linux-penguin again...
 
 Originally drewn by Larry Ewing (http://www.isc.tamu.edu/~lewing/)
@@ -54,3 +60,4 @@ http://www.home.unix-ag.org/simon/
 Simon Budig
 Am Hardtkoeppel 2
 D-61279 Graevenwiesbach
+```
