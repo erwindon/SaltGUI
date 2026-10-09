@@ -227,6 +227,8 @@ export class ParseCommandLine {
     const patHexadecimal = /^[-+]?0[xX][0-9a-fA-F]+$/;
     const patBinary = /^[-+]?0[bB][01]+$/;
     const patOctal = /^[-+]?0[0-7]+$/;
+    // looks like octal but may not be valid (contains 8 or 9):
+    const patOctalLike = /^[-+]?0\d+$/;
     // same as in yaml/resolver.py from PyYaml:
     const patSexagesimal = /^[-+]?[1-9][0-9_]*(?::[0-5]?[0-9])+$/;
     // looks like sexagesimal but may not be valid:
@@ -258,6 +260,9 @@ export class ParseCommandLine {
     } else if (patInteger.test(pStr)) {
       const result = ParseCommandLine._parseDecimalInteger(pStr);
       return result;
+    } else if (patOctalLike.test(pStr)) {
+      // Looks like octal but doesn't match valid pattern (contains 8 or 9)
+      return { value: pStr, warning: "Octal format not recognized by salt,\nassuming string value" };
     } else if (patFloat.test(pStr)) {
       const value = Number.parseFloat(pStr);
       if (!Number.isFinite(value)) {
