@@ -169,7 +169,7 @@ describe("Unittests for CommandBox.js", () => {
     it("test 64-bit overflow returns warning with original argument", () => {
       const result = CommandBox._validateCommandField("cmd 99999999999999999999");
       assert.isArray(result.warnings);
-      assert.isTrue(result.warnings.some(wrn => wrn.includes("exceeds integer range") && wrn.includes("in: 99999999999999999999") && !wrn.startsWith("number")));
+      assert.isTrue(result.warnings.some(wrn => wrn.includes("exceeds integer range") && wrn.includes("in: 99999999999999999999") && !wrn.startsWith("float")));
     });
 
     it("test valid number returns no warning", () => {
@@ -186,25 +186,25 @@ describe("Unittests for CommandBox.js", () => {
     it("test first unnamed argument as hexadecimal number returns error", () => {
       const result = CommandBox._validateCommandField("0xFF arg");
       assert.isArray(result.errors);
-      assert.isTrue(result.errors.some(err => err.includes("must be a string") && err.includes("(bigint)")));
+      assert.isTrue(result.errors.some(err => err.includes("must be a string") && err.includes("(int)")));
     });
 
     it("test first unnamed argument as binary number returns error", () => {
       const result = CommandBox._validateCommandField("0b1010");
       assert.isArray(result.errors);
-      assert.isTrue(result.errors.some(err => err.includes("must be a string") && err.includes("(bigint)")));
+      assert.isTrue(result.errors.some(err => err.includes("must be a string") && err.includes("(int)")));
     });
 
     it("test first unnamed argument as octal number returns error", () => {
       const result = CommandBox._validateCommandField("010");
       assert.isArray(result.errors);
-      assert.isTrue(result.errors.some(err => err.includes("must be a string") && err.includes("(bigint)")));
+      assert.isTrue(result.errors.some(err => err.includes("must be a string") && err.includes("(int)")));
     });
 
     it("test first unnamed argument as decimal number returns error", () => {
       const result = CommandBox._validateCommandField("123 arg");
       assert.isArray(result.errors);
-      assert.isTrue(result.errors.some(err => err.includes("must be a string") && err.includes("(bigint)")));
+      assert.isTrue(result.errors.some(err => err.includes("must be a string") && err.includes("(int)")));
     });
 
     it("test first unnamed argument as quoted string returns no error", () => {

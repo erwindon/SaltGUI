@@ -797,4 +797,15 @@ export class Utils {
     }
     return pStr;
   }
+
+  static getTypeName (pValue) {
+    const typeOfValue = typeof pValue;
+    if (typeOfValue === "bigint") {
+      return "int";
+    }
+    if (typeOfValue === "number") {
+      return "float";
+    }
+    return typeOfValue;
+  }
 }

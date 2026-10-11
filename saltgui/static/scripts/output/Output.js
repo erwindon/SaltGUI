@@ -399,7 +399,8 @@ export class Output {
       return "";
     }
     if (typeof pTask.changes !== "object") {
-      return "\n'changes' has type " + typeof pTask.changes;
+      const typeName = Utils.getTypeName(pTask.changes);
+      return "\n'changes' has type " + typeName;
     }
     if (Array.isArray(pTask.changes)) {
       const nrChanges = pTask.changes.length;
