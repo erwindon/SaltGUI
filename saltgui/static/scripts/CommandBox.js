@@ -828,8 +828,9 @@ export class CommandBox {
     }
     const firstArg = pArgsArray[0];
     if (typeof firstArg !== "string") {
+      const typeName = Utils.getTypeName(firstArg);
       const truncatedToken = Utils.truncateString(String(firstArg), 50);
-      return "First (unnamed) parameter must be the function name, it must be a string\nin: (" + typeof firstArg + ") " + truncatedToken;
+      return "First (unnamed) parameter must be the function name, it must be a string\nin: (" + typeName + ") " + truncatedToken;
     }
     return null;
   }
