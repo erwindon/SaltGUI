@@ -230,9 +230,11 @@ export class ParseCommandLine {
     // looks like octal but may not be valid (contains 8 or 9):
     const patOctalLike = /^[-+]?0\d+$/;
     // same as in yaml/resolver.py from PyYaml:
-    const patSexagesimal = /^[-+]?[1-9][0-9_]*(?::[0-5]?[0-9])+$/;
-    // looks like sexagesimal but may not be valid:
-    const patSexagesimalLike = /^[-+]?\d+(?::\d+)+$/;
+    const patSexagesimalInt = /^[-+]?[1-9][0-9_]*(?::[0-5]?[0-9])+$/;
+    // sexagesimal with fractional part in the last element:
+    const patSexagesimalFloat = /^[-+]?[1-9][0-9_]*(?::[0-5]?[0-9])+\.[0-9]+$/;
+    // looks like sexagesimal but may not be valid (both integer and float):
+    const patSexagesimalLike = /^[-+]?\d+(?::\d+)+(?:\.[0-9]+)?$/;
     const patInteger = /^(?:(?:0)|(?:[-+]?[1-9]\d*))$/;
     const patFloat = /^[-+]?(?:\d+[.]?\d*|[.]\d+)(?:[eE][-+]?\d+)?$/; // NOSONAR S8786
 
@@ -254,8 +256,11 @@ export class ParseCommandLine {
     } else if (patOctal.test(pStr)) {
       const result = ParseCommandLine._parseOctal(pStr);
       return result;
-    } else if (patSexagesimal.test(pStr)) {
-      const result = ParseCommandLine._parseSexagesimal(pStr);
+    } else if (patSexagesimalFloat.test(pStr)) {
+      const result = ParseCommandLine._parseSexagesimalFloat(pStr);
+      return result;
+    } else if (patSexagesimalInt.test(pStr)) {
+      const result = ParseCommandLine._parseSexagesimalInt(pStr);
       return result;
     } else if (patInteger.test(pStr)) {
       const result = ParseCommandLine._parseDecimalInteger(pStr);
@@ -376,7 +381,7 @@ export class ParseCommandLine {
     return { value, warnings };
   }
 
-  static _parseSexagesimal (pStr) {
+  static _parseSexagesimalInt (pStr) {
     const sign = pStr[0] === "-" ? -1n : 1n;
     const cleanStr = pStr.replace(/^[-+]/, "");
     const parts = cleanStr.split(":");
@@ -400,8 +405,29 @@ export class ParseCommandLine {
     if (rangeCheck.warning) {
       return { value: value, warning: rangeCheck.warning };
     }
-    if (cleanStr[0] === "0") {
-      return { value, warning: "Sexagesimal numbers with leading zero are supported here, but usually not in 'salt'" };
+    return { value };
+  }
+
+  static _parseSexagesimalFloat (pStr) {
+    const sign = pStr[0] === "-" ? -1 : 1;
+    const cleanStr = pStr.replace(/^[-+]/, "");
+    const parts = cleanStr.split(":");
+
+    let value = 0;
+    for (let i = 0; i < parts.length - 1; i++) {
+      let baseMultiplier = 1;
+      const exponent = parts.length - 1 - i;
+      for (let step = 0; step < exponent; step++) {
+        baseMultiplier *= 60;
+      }
+      value += Number(parts[i]) * baseMultiplier;
+    }
+
+    value += Number(parts[parts.length - 1]);
+    value = value * sign;
+
+    if (!Number.isFinite(value)) {
+      return { value: pStr, warning: "Invalid sexagesimal format" };
     }
     return { value };
   }

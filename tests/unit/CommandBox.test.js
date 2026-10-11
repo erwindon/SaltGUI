@@ -166,6 +166,21 @@ describe("Unittests for CommandBox.js", () => {
       assert.equal(result.errors.length, 0);
     });
 
+    it("test valid fractional sexagesimal returns no error", () => {
+      const result = CommandBox._validateCommandField("cmd 1:30.5");
+      assert.equal(result.errors.length, 0);
+    });
+
+    it("test multi-part fractional sexagesimal returns no error", () => {
+      const result = CommandBox._validateCommandField("cmd 2:45:30.75");
+      assert.equal(result.errors.length, 0);
+    });
+
+    it("test negative fractional sexagesimal returns no error", () => {
+      const result = CommandBox._validateCommandField("cmd -1:30.5");
+      assert.equal(result.errors.length, 0);
+    });
+
     it("test 64-bit overflow returns warning with original argument", () => {
       const result = CommandBox._validateCommandField("cmd 99999999999999999999");
       assert.isArray(result.warnings);

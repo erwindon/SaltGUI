@@ -635,6 +635,56 @@ describe("Unittests for ParseCommandLine.js", () => {
       assert.equal(args[0], "01:30");
       assert.equal(Object.keys(params).length, 0);
 
+      // SEXAGESIMAL WITH FRACTIONAL PART
+
+      args = [];
+      params = {};
+      tokens = [];
+      result = ParseCommandLine.parseCommandLine("1:30.5", tokens, args, params);
+      assert.isNull(result);
+      assert.equal(args.length, 1);
+      assert.equal(args[0], 90.5);
+      assert.equal(typeof args[0], "number");
+      assert.equal(Object.keys(params).length, 0);
+
+      args = [];
+      params = {};
+      tokens = [];
+      result = ParseCommandLine.parseCommandLine("2:45:30.75", tokens, args, params);
+      assert.isNull(result);
+      assert.equal(args.length, 1);
+      assert.equal(args[0], 9930.75);
+      assert.equal(typeof args[0], "number");
+      assert.equal(Object.keys(params).length, 0);
+
+      args = [];
+      params = {};
+      tokens = [];
+      result = ParseCommandLine.parseCommandLine("-1:30.5", tokens, args, params);
+      assert.isNull(result);
+      assert.equal(args.length, 1);
+      assert.equal(args[0], -90.5);
+      assert.equal(typeof args[0], "number");
+      assert.equal(Object.keys(params).length, 0);
+
+      args = [];
+      params = {};
+      tokens = [];
+      result = ParseCommandLine.parseCommandLine("0:30.5", tokens, args, params);
+      assert.isNull(result);
+      assert.equal(args.length, 1);
+      assert.equal(args[0], "0:30.5");
+      assert.equal(Object.keys(params).length, 0);
+
+      args = [];
+      params = {};
+      tokens = [];
+      result = ParseCommandLine.parseCommandLine("1:.2", tokens, args, params);
+      assert.isNull(result);
+      assert.equal(args.length, 1);
+      assert.equal(args[0], "1:.2");
+      assert.equal(Object.keys(params).length, 0);
+
       // NULL
 
       args = [];
