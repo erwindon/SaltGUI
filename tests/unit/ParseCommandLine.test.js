@@ -379,7 +379,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       args = [];
       params = {};
       tokens = [];
-      result = ParseCommandLine.parseCommandLine("1e99", tokens, args, params);
+      result = ParseCommandLine.parseCommandLine("1.0e+99", tokens, args, params);
       assert.equal(result, null);
       assert.equal(args.length, 1);
       assert.equal(args[0], 1e99);
@@ -388,7 +388,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       args = [];
       params = {};
       tokens = [];
-      result = ParseCommandLine.parseCommandLine("-1e99", tokens, args, params);
+      result = ParseCommandLine.parseCommandLine("-1.0e+99", tokens, args, params);
       assert.equal(result, null);
       assert.equal(args.length, 1);
       assert.equal(args[0], -1e99);
@@ -397,7 +397,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       args = [];
       params = {};
       tokens = [];
-      result = ParseCommandLine.parseCommandLine("+1e99", tokens, args, params);
+      result = ParseCommandLine.parseCommandLine("+1.0e+99", tokens, args, params);
       assert.equal(result, null);
       assert.equal(args.length, 1);
       assert.equal(args[0], 1e99);
@@ -406,7 +406,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       args = [];
       params = {};
       tokens = [];
-      result = ParseCommandLine.parseCommandLine("1e-99", tokens, args, params);
+      result = ParseCommandLine.parseCommandLine("1.0e-99", tokens, args, params);
       assert.equal(result, null);
       assert.equal(args.length, 1);
       assert.equal(args[0], 1e-99);
@@ -415,7 +415,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       args = [];
       params = {};
       tokens = [];
-      result = ParseCommandLine.parseCommandLine("1e+99", tokens, args, params);
+      result = ParseCommandLine.parseCommandLine("1.0e+99", tokens, args, params);
       assert.equal(result, null);
       assert.equal(args.length, 1);
       assert.equal(args[0], 1e99);
@@ -424,7 +424,7 @@ describe("Unittests for ParseCommandLine.js", () => {
       args = [];
       params = {};
       tokens = [];
-      result = ParseCommandLine.parseCommandLine("1e999", tokens, args, params);
+      result = ParseCommandLine.parseCommandLine("1.0e+999", tokens, args, params);
       assert.isTrue(result.startsWith("Numeric argument has overflowed or is infinity"));
 
       // HEXADECIMAL
