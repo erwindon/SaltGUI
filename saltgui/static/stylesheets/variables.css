@@ -9,11 +9,11 @@
   --bg-dropdown: #f9f9f9;
   --bg-output: #272727;
   --bg-output-hover: #484848;
-  --bg-tooltip: rgba(76, 175, 80, 80%);
+  --bg-tooltip: rgb(76 175 80 / 80%);
   --bg-small-button: #eee;
   --bg-table-hover: whitesmoke;
-  --bg-popup-overlay: rgba(0, 0, 0, 86%);
-  --bg-menu-hover: rgba(0, 0, 0, 15%);
+  --bg-popup-overlay: rgb(0 0 0 / 86%);
+  --bg-menu-hover: rgb(0 0 0 / 15%);
   --bg-login-panel: white;
   --bg-warning: yellow;
 
@@ -50,10 +50,10 @@
   --border-color-header: #4caf50;
 
   /* shadow */
-  --shadow-color: rgba(33, 33, 33, 50%);
-  --shadow-dropdown: rgba(0, 0, 0, 20%);
-  --shadow-dropdown-dark: rgba(0, 0, 0, 30%);
-  --shadow-login: rgba(0, 0, 0, 70%);
+  --shadow-color: rgb(33 33 33 / 50%);
+  --shadow-dropdown: rgb(0 0 0 / 20%);
+  --shadow-dropdown-dark: rgb(0 0 0 / 30%);
+  --shadow-login: rgb(0 0 0 / 70%);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -66,11 +66,11 @@
     --bg-dropdown: #3a3a3a;
     --bg-output: #1a1a1a;
     --bg-output-hover: #2a2a2a;
-    --bg-tooltip: rgba(76, 175, 80, 90%);
+    --bg-tooltip: rgb(76 175 80 / 90%);
     --bg-small-button: #3a3a3a;
     --bg-table-hover: #3a3a3a;
-    --bg-popup-overlay: rgba(0, 0, 0, 93%);
-    --bg-menu-hover: rgba(255, 255, 255, 15%);
+    --bg-popup-overlay: rgb(0 0 0 / 93%);
+    --bg-menu-hover: rgb(255 255 255 / 15%);
     --bg-login-panel: #2a2a2a;
     --bg-warning: #650;
 
@@ -107,9 +107,9 @@
     --border-color-header: #4caf50;
 
     /* shadow */
-    --shadow-color: rgba(0, 0, 0, 70%);
-    --shadow-dropdown: rgba(0, 0, 0, 40%);
-    --shadow-dropdown-dark: rgba(0, 0, 0, 50%);
-    --shadow-login: rgba(0, 0, 0, 90%);
+    --shadow-color: rgb(0 0 0 / 70%);
+    --shadow-dropdown: rgb(0 0 0 / 40%);
+    --shadow-dropdown-dark: rgb(0 0 0 / 50%);
+    --shadow-login: rgb(0 0 0 / 90%);
   }
 }

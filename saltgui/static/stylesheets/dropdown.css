@@ -14,7 +14,7 @@ div.search-box .menu-dropdown {
   overflow-y: auto;
   background: var(--bg-dropdown);
   box-shadow: 0 3px 10px -2px var(--shadow-dropdown-dark);
-  border: 1px solid rgba(0, 0, 0, 10%);
+  border: 1px solid rgb(0 0 0 / 10%);
   z-index: 5;
   cursor: pointer;
   text-align: left;
@@ -40,7 +40,7 @@ div.search-box .menu-dropdown {
 
 /* Change color of menu-dropdown links on hover */
 .run-command-button .menu-dropdown-content div.run-command-button:hover {
-  background: rgba(0, 0, 0, 15%);
+  background: rgb(0 0 0 / 15%);
   cursor: pointer;
 }
 
