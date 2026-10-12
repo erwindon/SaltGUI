@@ -19,13 +19,6 @@
     "stylelint": "^14.0.1",
     "stylelint-config-standard": "^29.0.0"
   },
-  "stylelint": {
-    "extends": "stylelint-config-standard",
-    "rules": {
-      "property-no-vendor-prefix": null,
-      "color-function-notation": null
-    }
-  },
   "nyc": {
     "check-coverage": false,
     "per-file": true,
