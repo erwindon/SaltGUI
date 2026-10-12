@@ -1,6 +1,5 @@
 /* global config EventSource window */
 
-import {Character} from "./Character.js";
 import {CommandBox} from "./CommandBox.js";
 import {Router} from "./Router.js";
 import {TargetType} from "./TargetType.js";
@@ -359,7 +358,15 @@ export class API {
     };
 
     if (pMethod === "POST") {
-      options.body = JSON.stringify(pParams);
+      // BigInt is not JSON-serializable; convert to marker string so JSON.stringify
+      // can process it, then regex removes quotes to produce unquoted JSON numbers.
+      // Use \x00 (null byte) as delimiter since it cannot be typed, preventing collisions.
+      options.body = JSON.stringify(pParams, (_key, value) => { // eslint-disable-line no-unused-vars
+        if (typeof value === 'bigint') {
+          return `\x00BIGINT${value.toString()}\x00`;
+        }
+        return value;
+      }).replace(/"\\u0000BIGINT(-?\d+)\\u0000"/g, '$1');
     }
 
     /* eslint-disable compat/compat */
@@ -481,7 +488,7 @@ export class API {
       // the character counts include "-----BEGIN PUBLIC KEY-----" at the beginning and
       // include "-----END PUBLIC KEY-----" at the end.
       if (data.pub && data.pub.length > 75) {
-        data.pub = data.pub.substring(0, 35) + Character.HORIZONTAL_ELLIPSIS + data.pub.substring(data.pub.length - 33);
+        data.pub = Utils.truncateString(data.pub, 35, 33);
       }
 
       // salt/beacon/<minion>/<beacon>/

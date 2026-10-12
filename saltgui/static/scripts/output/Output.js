@@ -43,6 +43,26 @@ export class Output {
     return stateOutput.includes(pRequestedStateOutput);
   }
 
+  static _containsNonSafeIntegers (pValue) {
+    const minSafeInt = Number.MIN_SAFE_INTEGER;
+    const maxSafeInt = Number.MAX_SAFE_INTEGER;
+
+    if (typeof pValue === "number" && Number.isInteger(pValue)) {
+      if (pValue < minSafeInt || pValue > maxSafeInt) {
+        return true;
+      }
+    }
+
+    if (typeof pValue === "object" && pValue !== null) {
+      if (Array.isArray(pValue)) {
+        return pValue.some(item => Output._containsNonSafeIntegers(item));
+      }
+      return Object.values(pValue).some(item => Output._containsNonSafeIntegers(item));
+    }
+
+    return false;
+  }
+
   // Re-organize the output to let it appear as if the output comes
   // from a single node called "RUNNER" or "MASTER".
   // This way all responses are organized by minion
@@ -379,7 +399,8 @@ export class Output {
       return "";
     }
     if (typeof pTask.changes !== "object") {
-      return "\n'changes' has type " + typeof pTask.changes;
+      const typeName = Utils.getTypeName(pTask.changes);
+      return "\n'changes' has type " + typeName;
     }
     if (Array.isArray(pTask.changes)) {
       const nrChanges = pTask.changes.length;
@@ -1032,6 +1053,7 @@ export class Output {
     }
 
     if (!Object.keys(pContext.pMinionData).length) {
+      // this is the same error-text as the 'salt' commandline uses
       pContext.pOutputContainer.innerText = "No minions matched the target. No command was sent, no jid was assigned.\nERROR: No return received";
     }
   }
@@ -1070,7 +1092,7 @@ export class Output {
     const pJobId = pOptions.jobId;
     const pInitialStatus = pOptions.initialStatus;
     const pHighlightMinionId = pOptions.highlightMinionId;
-    const pExtraInfo = pOptions.extraInfo;
+    let pExtraInfo = pOptions.extraInfo;
 
     // remove old content
     pOutputContainer.innerText = "";
@@ -1086,6 +1108,14 @@ export class Output {
     const topSummaryDiv = Utils.createDiv("no-search");
     const cntMinions = pMinionData.length;
     const downloadObject = {};
+
+    if (Output._containsNonSafeIntegers(pResponse)) {
+      if (!pExtraInfo) {
+        pExtraInfo = [];
+      }
+      pExtraInfo = [...pExtraInfo];
+      pExtraInfo.unshift(Character.CIRCLED_INFORMATION_SOURCE + " The response contains integer(s) outside the safe-integer range that may have lost precision");
+    }
 
     Output._addResponseSummary(topSummaryDiv, pCommand, pResponse, pMinionData, pInitialStatus);
 
