@@ -236,7 +236,8 @@ export class ParseCommandLine {
     // looks like sexagesimal but may not be valid (both integer and float):
     const patSexagesimalLike = /^[-+]?\d+(?::\d+)+(?:\.[0-9]+)?$/;
     const patInteger = /^(?:(?:0)|(?:[-+]?[1-9]\d*))$/;
-    const patFloat = /^[-+]?(?:\d+[.]?\d*|[.]\d+)(?:[eE][-+]?\d+)?$/; // NOSONAR S8786
+    const patFloat = /^[-+]?(?:\d+[.]\d*|[.]\d+)(?:[eE][-+]\d+)?$/; // NOSONAR S8786
+    const patFloatLike = /^[-+]?(?:\d+[.]?\d*|[.]\d+)(?:[eE][-+]?\d+)?$/; // NOSONAR S8786
 
     if (patNull.test(pStr)) {
       return { value: null };
@@ -265,15 +266,15 @@ export class ParseCommandLine {
     } else if (patInteger.test(pStr)) {
       const result = ParseCommandLine._parseDecimalInteger(pStr);
       return result;
+    } else if (patFloat.test(pStr)) {
+      const result = ParseCommandLine._parseFloat(pStr);
+      return result;
     } else if (patOctalLike.test(pStr)) {
       // Looks like octal but doesn't match valid pattern (contains 8 or 9)
       return { value: pStr, warning: "Octal format not recognized by salt,\nassuming string value" };
-    } else if (patFloat.test(pStr)) {
-      const value = Number.parseFloat(pStr);
-      if (!Number.isFinite(value)) {
-        return { error: "Numeric argument has overflowed or is infinity" };
-      }
-      return { value };
+    } else if (patFloatLike.test(pStr)) {
+      // Looks like float but doesn't match valid pattern
+      return { value: pStr, warning: "Float format not recognized by salt,\nassuming string value" };
     } else if (patSexagesimalLike.test(pStr)) {
       // Looks like sexagesimal but doesn't match valid pattern
       return { value: pStr, warning: "Sexagesimal format not recognized by salt,\nassuming string value" };
@@ -445,6 +446,14 @@ export class ParseCommandLine {
     }
     if (rangeCheck.warning) {
       return { value: value, warning: rangeCheck.warning };
+    }
+    return { value };
+  }
+
+  static _parseFloat (pStr) {
+    const value = Number.parseFloat(pStr);
+    if (!Number.isFinite(value)) {
+      return { error: "Numeric argument has overflowed or is infinity" };
     }
     return { value };
   }
