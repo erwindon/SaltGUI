@@ -46,9 +46,10 @@ export class Documentation {
     const commandField = document.getElementById("command");
     const commandLine = commandField.value;
 
+    const tokenArray = [];
     const argsArray = [];
     const argsObject = {};
-    ParseCommandLine.parseCommandLine(commandLine, argsArray, argsObject);
+    ParseCommandLine.parseCommandLine(commandLine, tokenArray, argsArray, argsObject);
 
     if (!argsArray.length) {
       // No command entered yet (or only name-value pairs)
@@ -194,9 +195,10 @@ export class Documentation {
 
   static _getKeywordFragments (pCommandLine) {
 
+    const tokenArray = [];
     const argsArray = [];
     const argsObject = {};
-    ParseCommandLine.parseCommandLine(pCommandLine, argsArray, argsObject);
+    ParseCommandLine.parseCommandLine(pCommandLine, tokenArray, argsArray, argsObject);
 
     // empty commandline
     if (!argsArray.length) {
@@ -253,9 +255,10 @@ export class Documentation {
     html += Documentation._buildModulesSection(cmd);
     html += Documentation._buildSpecialModulesSection(cmd);
 
+    const tokenArray = [];
     const argsArray = [];
     const argsObject = {};
-    ParseCommandLine.parseCommandLine(commandLine, argsArray, argsObject);
+    ParseCommandLine.parseCommandLine(commandLine, tokenArray, argsArray, argsObject);
     html += Documentation._buildBeaconDetailsSection(cmd, argsArray);
 
     const output = document.querySelector(".run-command pre");

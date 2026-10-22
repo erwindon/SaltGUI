@@ -72,6 +72,10 @@ export class TargetType {
     TargetType.menuTargetType._value = targetType;
 
     TargetType._setMenuMarker();
+
+    if (TargetType.onTargetTypeChange) {
+      TargetType.onTargetTypeChange();
+    }
   }
 
   static _setMenuMarker () {
