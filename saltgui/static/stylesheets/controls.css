@@ -46,4 +46,11 @@ input:disabled {
   opacity: 0.2;
 }
 
+.cmd-validation-indicator {
+  display: inline-block;
+  font-size: 18px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
 /* end */
