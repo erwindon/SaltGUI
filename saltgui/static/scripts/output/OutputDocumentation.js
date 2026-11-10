@@ -248,7 +248,7 @@ export class OutputDocumentation {
       while (pOut.includes(link + "_")) {
         pOut = pOut.replace(
           link + "_",
-          "<a href='" + target + "' target='_blank' rel='noopener'>" + link + "</a>");
+          "<a href='" + Utils.escapeHtml(target) + "' target='_blank' rel='noopener'>" + link + "</a>");
       }
       // remove the item from the link table
       pOut = pOut.replace(".. _" + reference, "");
