@@ -359,13 +359,13 @@ export class Documentation {
     for (const concreteModule of concreteModules) {
       // level 2
       if (cmd.length >= 2) {
-        html += "<p><a href='" + Documentation.DOCUMENTATION_URL + cmd[0] + "/all/salt." + cmd[0] + "." + concreteModule + ".html' target='_blank' rel='noopener'>Module '" + (cmd[0] + "." + concreteModule).replace(/^modules[.]/, "") + "'" + Documentation.EXTERNAL_LINK + "</a></p>";
+        html += "<p><a href='" + Documentation.DOCUMENTATION_URL + cmd[0] + "/all/salt." + cmd[0] + "." + Utils.escapeHtml(concreteModule) + ".html' target='_blank' rel='noopener'>Module '" + Utils.escapeHtml((cmd[0] + "." + concreteModule).replace(/^modules[.]/, "")) + "'" + Documentation.EXTERNAL_LINK + "</a></p>";
       }
 
       // level 3
       if (cmd.length >= 3) {
-        html += "<p>Function-name '" + cmd[2] + "' cannot be verified here. We'll just assume it actually exists. The link below might not work.</p>";
-        html += "<p>" + indent + "<a href='" + Documentation.DOCUMENTATION_URL + cmd[0] + "/all/salt." + cmd[0] + "." + concreteModule + ".html#salt." + cmd[0] + "." + concreteModule + "." + cmd[2] + "' target='_blank' rel='noopener'>Function '" + (cmd[0] + "." + concreteModule + "." + cmd[2]).replace(/^modules[.]/, "") + "'" + Documentation.EXTERNAL_LINK + "</a></p>";
+        html += "<p>Function-name '" + Utils.escapeHtml(cmd[2]) + "' cannot be verified here. We'll just assume it actually exists. The link below might not work.</p>";
+        html += "<p>" + indent + "<a href='" + Documentation.DOCUMENTATION_URL + cmd[0] + "/all/salt." + cmd[0] + "." + Utils.escapeHtml(concreteModule) + ".html#salt." + cmd[0] + "." + Utils.escapeHtml(concreteModule) + "." + Utils.escapeHtml(cmd[2]) + "' target='_blank' rel='noopener'>Function '" + Utils.escapeHtml((cmd[0] + "." + concreteModule + "." + cmd[2]).replace(/^modules[.]/, "")) + "'" + Documentation.EXTERNAL_LINK + "</a></p>";
       }
     }
 
