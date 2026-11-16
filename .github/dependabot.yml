@@ -1,6 +1,8 @@
 version: 2
 updates:
   - package-ecosystem: npm
+    assignees:
+      - "erwindon"
     directory: "/"
     schedule:
       interval: daily
@@ -8,6 +10,8 @@ updates:
     open-pull-requests-limit: 10
 
   - package-ecosystem: github-actions
+    assignees:
+      - "erwindon"
     directory: "/"
     schedule:
       interval: weekly
