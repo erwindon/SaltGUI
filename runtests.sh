@@ -11,6 +11,9 @@ killall --quiet Xvfb
 
 set -e
 
+# show what version is installed
+node --version
+
 # add testing packages
 npm install --ignore-scripts
 
