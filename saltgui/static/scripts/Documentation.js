@@ -915,7 +915,7 @@ export class Documentation {
           html += "<p>beacons available on one or more minions, but no template available:</p>";
           headerShown = true;
         }
-        html += "<p>&nbsp;&nbsp;" + beaconName;
+        html += "<p>&nbsp;&nbsp;" + Utils.escapeHtml(beaconName);
         if (beaconsListAvailable[beaconName] !== beaconsListAvailable["_cnt"]) {
           html += " (" + beaconsListAvailable[beaconName] + " of " + beaconsListAvailable["_cnt"] + ")";
         }

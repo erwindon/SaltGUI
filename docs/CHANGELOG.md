@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.35.1 (2026-11-16)
+- FIXED XSS VULNERABILITY (erwindon, thx orshih6)
+- prevent sonarqube issues (erwindon)
+- show node version when testing (erwindon)
+
 ## 1.35.0 (2026-11-10)
 - FIXED XSS VULNERABILITY (erwindon, thx NotAFlightRisk)
 - added icon for minions reporting Linux (Natalia)
