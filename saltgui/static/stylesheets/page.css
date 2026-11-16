@@ -319,6 +319,6 @@ pre .task-failure-changes {
 @media print {
   .no-print,
   .no-print * {
-    display: none !important;
+    display: none;
   }
 }

@@ -251,7 +251,7 @@ export class KeysPanel extends Panel {
       return "";
     }
 
-    const keys = selectedKeys.split(",").filter(key => key);
+    const keys = selectedKeys.split(",").filter(Boolean);
     const filteredKeys = [];
 
     for (const key of keys) {

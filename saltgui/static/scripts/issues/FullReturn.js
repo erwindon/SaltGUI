@@ -24,6 +24,10 @@ export class FullReturnIssues extends Issues {
       }
       this.readyCategory(pPanel, "full-return", msg);
       return true;
+    }, () => {
+      this.removeCategory("full-return");
+      this.readyCategory(pPanel, "full-return", msg);
+      return false;
     });
 
     return fullReturnPromise;

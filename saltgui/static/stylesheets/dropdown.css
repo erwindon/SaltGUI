@@ -33,9 +33,9 @@ div.search-box .menu-dropdown {
   width: 100%;
   padding: 15px 30px;
   margin: 0;
-  -webkit-transition: all 0.2s ease-in-out;
-  -moz-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
+  -webkit-transition: background 0.2s ease-in-out;
+  -moz-transition: background 0.2s ease-in-out;
+  transition: background 0.2s ease-in-out;
 }
 
 /* Change color of menu-dropdown links on hover */

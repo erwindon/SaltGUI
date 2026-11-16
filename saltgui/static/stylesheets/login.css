@@ -121,6 +121,12 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  #notice {
+    animation-duration: 0.01s;
+  }
+}
+
 .motd {
   margin-bottom: 15px;
 }
