@@ -785,4 +785,27 @@ export class Utils {
   static mySortFunction (aa, bb) {
     return aa.localeCompare(bb, "en", {"numeric": true});
   }
+
+  static truncateString (pStr, pMaxPrefixLength = 50, pMaxSuffixLength = 0) {
+    const maxTotalLength = pMaxPrefixLength + pMaxSuffixLength;
+    if (pStr.length > maxTotalLength) {
+      if (pMaxSuffixLength > 0) {
+        return pStr.substring(0, pMaxPrefixLength) + Character.HORIZONTAL_ELLIPSIS + pStr.substring(pStr.length - pMaxSuffixLength);
+      } else {
+        return pStr.substring(0, pMaxPrefixLength) + Character.HORIZONTAL_ELLIPSIS;
+      }
+    }
+    return pStr;
+  }
+
+  static getTypeName (pValue) {
+    const typeOfValue = typeof pValue;
+    if (typeOfValue === "bigint") {
+      return "int";
+    }
+    if (typeOfValue === "number") {
+      return "float";
+    }
+    return typeOfValue;
+  }
 }
