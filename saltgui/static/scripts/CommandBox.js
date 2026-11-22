@@ -946,12 +946,13 @@ export class CommandBox {
   }
 
   static _validateFormTargetNotEmpty (pFunctionName, pTarget, pRunTypeUnused) { // eslint-disable-line no-unused-vars
+    const isRunner = pFunctionName === "runner" || pFunctionName.startsWith("runner.");
     const isRunners = pFunctionName === "runners" || pFunctionName.startsWith("runners.");
     // RUNNERS commands do not have a target (MASTER is the target)
     // WHEEL commands also do not have a target
     // but we use the TARGET value to form the usually required MATCH parameter
     // therefore for WHEEL commands it is still required
-    if (pTarget === "" && !isRunners) {
+    if (pTarget === "" && !isRunner && !isRunners) {
       return "Target cannot be empty for this command\nin: " + pFunctionName;
     }
     return null;
