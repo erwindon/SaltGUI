@@ -59,7 +59,7 @@ docker buildx inspect --bootstrap
 
 # Build function for multi-architecture images
 build_multiarch_image() {
-  dockerfile="dockerfile-$1"
+  dockerfile="Dockerfile.$1"
   imagename="erwindon/saltgui-$1"
   echo "Building $imagename for multiple architectures (linux/amd64,linux/arm64)"
   docker buildx build --progress=plain --platform linux/amd64,linux/arm64 \

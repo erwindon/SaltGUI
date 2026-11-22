@@ -636,7 +636,7 @@ Then browse to [http://localhost:3333/](http://localhost:3333/), you can login w
 **For TLS testing:**
 ```
 cd docker
-docker-compose -f docker-compose-tls.yml up
+docker-compose -f docker-compose.tls.yml up
 ```
 Then browse to [https://localhost:3334/](https://localhost:3334/), you can login with `salt:salt`.
 
@@ -648,7 +648,7 @@ For production use or testing with TLS encryption, you can use the TLS-enabled D
 
 ```bash
 cd docker
-docker-compose -f docker-compose-tls.yml up
+docker-compose -f docker-compose.tls.yml up
 ```
 
 This will start:
@@ -665,7 +665,7 @@ This will start:
 **Important Notes for TLS Setup:**
 - The TLS configuration uses self-signed certificates generated during the Docker build
 - For production use, replace the self-signed certificates with proper CA-signed certificates
-- You can mount your own certificates by modifying the `ssl_certs` volume in `docker-compose-tls.yml`
+- You can mount your own certificates by modifying the `ssl_certs` volume in `docker-compose.tls.yml`
 - The TLS master configuration is located in `docker/conf/master-tls`
 
 **Custom SSL Certificates:**

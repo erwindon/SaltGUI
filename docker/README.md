@@ -18,25 +18,25 @@ Commands used to build these docker images (you must be inside `dockerfiles` fol
 
 ## salt master based on ubuntu
 ```
-docker build -f dockerfile-saltmaster --tag erwindon/saltgui-saltmaster:3007.14 .
+docker build -f Dockerfile.saltmaster --tag erwindon/saltgui-saltmaster:3007.14 .
 ```
 
 ## salt minion based on centos
 ```
-docker build -f dockerfile-saltminion-centos --tag erwindon/saltgui-saltminion-centos:3007.14 .
+docker build -f Dockerfile.saltminion-centos --tag erwindon/saltgui-saltminion-centos:3007.14 .
 ```
 
 ## salt minion based on debian
 ```
-docker build -f dockerfile-saltminion-debian --tag erwindon/saltgui-saltminion-debian:3007.14 .
+docker build -f Dockerfile.saltminion-debian --tag erwindon/saltgui-saltminion-debian:3007.14 .
 ```
 
 ## salt minion based on ubuntu
 ```
-docker build -f dockerfile-saltminion-ubuntu --tag erwindon/saltgui-saltminion-ubuntu:3007.14 .
+docker build -f Dockerfile.saltminion-ubuntu --tag erwindon/saltgui-saltminion-ubuntu:3007.14 .
 ```
 
 ## saltgui-nginx (separated) based on ubuntu
 ```
-docker build -f dockerfile-saltgui-nginx --tag erwindon/saltgui-nginx:1.18.0 .
+docker build -f Dockerfile.saltgui-nginx --tag erwindon/saltgui-nginx:1.18.0 .
 ```
