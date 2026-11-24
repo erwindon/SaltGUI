@@ -831,26 +831,27 @@ export class CommandBox {
     return null;
   }
 
-  static _validateCommandFieldFunctionNameIsString (pParseResult, pTokenArrayUnused, pArgsArray) { // eslint-disable-line no-unused-vars
+  static _validateCommandFieldFunctionNameIsString (pParseResult, pTokenArray, pArgsArray) {
     if (pParseResult !== null || pArgsArray.length === 0) {
       return null;
     }
     const firstArg = pArgsArray[0];
     if (typeof firstArg !== "string") {
       const typeName = Utils.getTypeName(firstArg);
-      const truncatedToken = Utils.truncateString(String(firstArg), 50);
-      return "First (unnamed) parameter must be the function name, it must be a string\nin: (" + typeName + ") " + truncatedToken;
+      const userToken = pTokenArray.length > 0 ? pTokenArray[0] : String(firstArg);
+      return "First (unnamed) parameter must be the function name, it must be a string\nin: (" + typeName + ") " + userToken;
     }
     return null;
   }
 
-  static _validateCommandFieldRunnerPrefix (pParseResult, pTokenArrayUnused, pArgsArray) { // eslint-disable-line no-unused-vars
+  static _validateCommandFieldRunnerPrefix (pParseResult, pTokenArray, pArgsArray) {
     if (pParseResult !== null || pArgsArray.length === 0) {
       return null;
     }
     const firstArg = pArgsArray[0];
     if (firstArg === "runner" || firstArg.startsWith("runner.")) {
-      return "Runner commands must be prefixed with 'runners.'\nin: " + firstArg;
+      const userToken = pTokenArray.length > 0 ? pTokenArray[0] : firstArg;
+      return "Runner commands must be prefixed with 'runners.'\nin: " + userToken;
     }
     return null;
   }
