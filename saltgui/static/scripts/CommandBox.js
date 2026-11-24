@@ -378,6 +378,15 @@ export class CommandBox {
     const commandField = document.getElementById("command");
     let commandValue = commandField.value;
 
+    // Command cannot be empty when running
+    if (commandValue.trim() === "") {
+      CommandBox._displayValidationOutput({
+        errors: ["First (unnamed) parameter must be the function name, it is mandatory"],
+        warnings: []
+      }, output);
+      return;
+    }
+
     const targetType = TargetType.menuTargetType._value;
     const runType = RunType.getRunType();
 
