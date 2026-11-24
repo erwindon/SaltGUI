@@ -1,7 +1,6 @@
 /* global console document Hilitor window */
 
 import {Character} from "./Character.js";
-import {DropDownMenu} from "./DropDown.js";
 
 export class Utils {
 
@@ -364,7 +363,6 @@ export class Utils {
   }
 
   static hideShowTableSearchBar (pSearchBlock, pTable, pAction = "toggle") {
-    const startElement = pTable.parentElement;
 
     // remove all highlights
     const searchInSelector = pTable.tagName === "TABLE" ? "tbody" : "";
@@ -377,7 +375,7 @@ export class Utils {
       fm.classList.remove("no-filter-match");
     }
 
-    const menuItems = startElement.querySelector(".search-box .menu-dropdown-content");
+    const menuItems = pSearchBlock.searchOptionsMenu;
 
     // hide/show search box (the block may become more complicated later)
     const input = pSearchBlock.querySelector("input");
@@ -421,14 +419,14 @@ export class Utils {
     }
   }
 
-  static _updateTableFilter (pTable, pSearchText, pMenuItems) {
+  static _updateTableFilter (pTable, pSearchText, pSearchMenu) {
     // remove highlighting before re-comparing
     // as it affects the texts
     const searchInSelector = pTable.tagName === "TABLE" ? "tbody" : "";
     const hilitor = new Hilitor(pTable, searchInSelector);
     hilitor.remove();
 
-    const flags = Utils._extractSearchFlags(pMenuItems, pSearchText);
+    const flags = Utils._extractSearchFlags(pSearchMenu, pSearchText);
 
     // find text
     if (!flags.caseSensitiveFlag && !flags.regExpFlag) {
@@ -460,11 +458,11 @@ export class Utils {
     hilitor.apply(pattern, flags.caseSensitiveFlag);
   }
 
-  static _extractSearchFlags (pMenuItems, pSearchText) {
+  static _extractSearchFlags (pSearchMenu, pSearchText) {
     // values may be undefined, so convert to proper boolean
-    const caseSensitiveFlag = pMenuItems.childNodes[0]._value === true;
-    const regExpFlag = pMenuItems.childNodes[1]._value === true;
-    let invertFlag = pMenuItems.childNodes[2]._value === true;
+    const caseSensitiveFlag = pSearchMenu.isSet("cs");
+    const regExpFlag = pSearchMenu.isSet("re");
+    let invertFlag = pSearchMenu.isSet("is");
 
     // otherwise everything is immediatelly hidden
     if (invertFlag && !pSearchText) {

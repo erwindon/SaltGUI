@@ -10,7 +10,7 @@ import {Utils} from "./Utils.js";
 //    a) sets the title using pMenuItem.innerText = "xyz"
 //    b) arranges the visibility using pMenuItem.style.display = true/false
 // 2: the callback function
-//    called when the menu item is selected: (pClickEvent) => { ... }
+//    called when the menu item is selected: () => { ... }
 // all menu items are re-validated when the menu pops up
 // when all menu items are invisible, the menu-button must be made invisible
 // since this can happen at any time, this cannot be done when the menu is shown
@@ -19,6 +19,8 @@ import {Utils} from "./Utils.js";
 // on the visibility of its menu items. when all menu items are hidden, so is
 // the menu. when at least one item is visible, the menu is visible
 // remember to call verifyApp() when that is potentially the case
+
+// superclass for DropDownMenuRadio, DropDownMenuCheckBox and DropDownMenuCmd
 
 export class DropDownMenu {
 
@@ -81,7 +83,19 @@ export class DropDownMenu {
     // Phase 1: handle regular menu items
     let visibleCount = 0;
     for (const chld of this.menuDropdownContent.children) {
-      if (!chld.isSeparator && DropDownMenu._verifyMenuItem(chld)) {
+      if (chld.isSeparator) {
+        continue;
+      }
+      const titleCallBack = chld._titleCallBack;
+      if (titleCallBack) {
+        const title = titleCallBack(chld);
+        if (!title) {
+          chld.style.display = "none";
+          continue;
+        }
+        chld.innerText = DropDownMenu._sanitizeMenuItemTitle(title);
+      }
+      if (DropDownMenu._verifyMenuItem(chld)) {
         visibleCount += 1;
       }
     }
@@ -106,7 +120,6 @@ export class DropDownMenu {
         visibleItemsSinceLastShownSeparator += 1;
       }
     }
-
     // hide the menu when it has no visible menu-items
     const displayVisible = this.menuDropdown.tagName === "TD" ? "table-cell" : "inline-block";
     this.menuDropdown.style.display = visibleCount > 0 ? displayVisible : "none";
@@ -153,25 +166,49 @@ export class DropDownMenu {
   // function is called each time the menu opens
   // This allows dynamic menuitem titles (use menuitem.innerText)
   // or visibility (use menuitem.style.display = "none"/"inline-block")
-  addMenuItem (pTitle, pCallBack, pValue) {
+  addMenuItem (pValue, pTitle, pSystemCallBack, pUserCallBack) {
+
     const button = Utils.createDiv("run-command-button", Character.HORIZONTAL_ELLIPSIS);
-    if (pValue) {
-      button._value = pValue;
-    }
+
+    button._value = pValue;
+
     if (typeof pTitle === "string") {
       button.innerText = DropDownMenu._sanitizeMenuItemTitle(pTitle);
     } else {
-      button.verifyCallBack = pTitle;
+      button._titleCallBack = pTitle;
     }
+
     button.addEventListener("click", (pClickEvent) => {
+
+      // hide the menu
       pClickEvent.target.parentElement.style.display = "none";
+
+      // "show" the menu again after a short delay
+      // but because the mouse is no longer hovering it,
+      // it will actually remain invisible
       window.setTimeout(() => {
         pClickEvent.target.parentElement.style.display = "";
       }, 500);
-      this._callback(pClickEvent, pCallBack, pValue);
+
+      this._value = pValue;
+
+      if (pSystemCallBack) {
+        pSystemCallBack(pClickEvent.target);
+      }
+
+      if (pUserCallBack) {
+        pUserCallBack(pClickEvent);
+      }
+
+      // all menu items may have become invisible
+      this.verifyAll();
+
       pClickEvent.stopPropagation();
     });
+
     this.menuDropdownContent.appendChild(button);
+
+    // the menu might have become populated enough to get visible
     this.verifyAll();
     return button;
   }
@@ -183,11 +220,6 @@ export class DropDownMenu {
     const hr = document.createElement("hr");
     div.appendChild(hr);
     this.menuDropdownContent.appendChild(div);
-  }
-
-  _callback (pClickEvent, pCallBack, pValue) {
-    this._value = pValue;
-    pCallBack(pClickEvent);
   }
 
   setTitle (pTitle) {
