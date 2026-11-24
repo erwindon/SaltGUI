@@ -840,9 +840,6 @@ export class CommandBox {
       return null;
     }
     const firstArg = pArgsArray[0];
-    if (typeof firstArg !== "string") {
-      return null;
-    }
     if (firstArg === "runner" || firstArg.startsWith("runner.")) {
       return "Runner commands must be prefixed with 'runners.'\nin: " + firstArg;
     }
@@ -854,9 +851,6 @@ export class CommandBox {
       return null;
     }
     const firstArg = pArgsArray[0];
-    if (typeof firstArg !== "string") {
-      return null;
-    }
     if (firstArg.startsWith("wheel.") && pArgsArray.length > 1) {
       return "Wheel commands can only take named parameters\nin: " + pTokenArray[1];
     }
